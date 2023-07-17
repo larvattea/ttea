@@ -53,3 +53,13 @@ ID,Sessao,Hora do Evento,Fase,Nivel,Posicao jogador,Posicao Evento,Tipo de Event
 51,1,11:35:26,1,1,1,2,Colidiu com Alvo
 52,1,11:35:27,1,1,1,2,Trocou de Pista
 53,1,11:35:29,1,1,1,1,Controle UFE: Pause
+54,1,11:42:38,2,2,1,2,Criou Obstaculo
+55,1,11:42:41,2,2,0,1,Trocou de Pista
+56,1,11:42:45,2,2,1,0,Trocou de Pista
+57,1,11:42:46,2,2,2,1,Trocou de Pista
+58,1,11:42:46,2,2,1,2,Trocou de Pista
+59,1,11:42:46,2,2,2,1,Trocou de Pista
+60,1,11:42:47,2,2,2,1,Criou Obstaculo
+61,1,11:42:52,2,2,1,2,Colidiu com Obstaculo
+62,1,11:42:53,2,2,1,2,Trocou de Pista
+63,1,11:42:54,2,2,1,1,Controle UFE: Pause
