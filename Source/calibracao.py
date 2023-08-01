@@ -280,9 +280,10 @@ while not gameExit:
 
                 if contador <= 3:
                     pass
-                if contador>3:
+                if contador==4:
                     calibracao_ok()
                     tela_update()
+                    contador = contador + 1
                     pass
             # Extração de coordenadas de pontos de referência.
             try:

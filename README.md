@@ -9,3 +9,4 @@ Estes equipamentos serão instalados em uma estrutura mecânica de montagem simp
 
 ![hardware](https://user-images.githubusercontent.com/30929090/135135105-c4e4365d-09c5-4398-bc90-e53cc29ec4a9.PNG)
 
+Desenvolvido em Python 3.8.3
