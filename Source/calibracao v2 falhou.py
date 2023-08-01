@@ -1,4 +1,4 @@
-    #################################################################################
+#################################################################################
 ######################### SOFTWARE BASE - PROJETO T-TEA #########################
 #################################################################################
 ################################# VERSÃO 1.0 ####################################
@@ -31,14 +31,14 @@ altura_tela_controle = 480  # Esta tela é usada pelo terapeuta/operador. Altere
 relacao_largura = (largura_projetor / largura_tela_controle)  # Esta relação é usada na correção de perspectiva.
 relacao_altura = (altura_projetor / altura_tela_controle)  # Esta relação é usada na correção de perspectiva.
 tela_de_calibracao = np.zeros((altura_projetor, largura_projetor, 3),
-                              np.uint8)  # Tela que será usada para o projetar o jogo.
+                            np.uint8)  # Tela que será usada para o projetar o jogo.
 tela_de_controle = np.zeros((altura_tela_controle, largura_tela_controle, 3),
                             np.uint8)  # Tela que será usada para o projetar o jogo.
 
-camera = cv2.VideoCapture(settings.CAMERA, cv2.CAP_DSHOW)  # O valor entre parênteses indica qual câmera será utilizada. 0=default; 1,2,3...= câmeras externas.
+
 csv.register_dialect(
     'mydialect',
-    delimiter = ',',
+    delimiter = ';',
     quotechar = '"',
     doublequote = True,
     skipinitialspace = True,
@@ -118,8 +118,6 @@ mp_drawing = mp.solutions.drawing_utils  # Configuração do MediaPipe. Ver http
 mp_pose = mp.solutions.pose  # Configuração do MediaPipe. Ver https://google.github.io/mediapipe/solutions/pose.html para maiores detalhes.
 pontos_calibracao = np.zeros((4, 2), int)  # Matriz para os pontos de calibração de perspectiva - 4 linhas/ 2 colunas
 contador = 0  # Contador utilizado nos 4 pontos de calibração
-game_start=False # Coloca na tela iniciar
-gameExit=False # Sai do completamente do jogo
 figura_selecionada=False # Usada para evitar que o usuário apenas selecione uma vez a figura e não ficar piscando
 lista_sorteio=[] #São as figuras sorteadas pelo computador e colocadas nesta lista, para depois fazer a comparação com as escolhas do usuário
 pontuacao=0 # Pontos conseguidos em durante a rodada
@@ -130,29 +128,194 @@ hud_switch=True
 pausa_switch=False
 tempo_ajuda_switch=False
 tentativa=1
+x_pose = 0
+y_pose = 0
+
+def resetar_vars():
+    
+    global pontos_calibracao, contador
+    
+    #pygame.init()
+  
+    #relacao_largura = (largura_projetor / largura_tela_controle)  # Esta relação é usada na correção de perspectiva.
+    #relacao_altura = (altura_projetor / altura_tela_controle)  # Esta relação é usada na correção de perspectiva.
+    #tela_de_calibracao = np.zeros((altura_projetor, largura_projetor, 3), np.uint8)  # Tela que será usada para o projetar o jogo.
+    #tela_de_controle = np.zeros((altura_tela_controle, largura_tela_controle, 3), np.uint8)  # Tela que será usada para o projetar o jogo.
+
+    #mp_drawing = mp.solutions.drawing_utils  # Configuração do MediaPipe. Ver https://google.github.io/mediapipe/solutions/pose.html para maiores detalhes.
+    #mp_pose = mp.solutions.pose  # Configuração do MediaPipe. Ver https://google.github.io/mediapipe/solutions/pose.html para maiores detalhes.
+    pontos_calibracao = np.zeros((4, 2), int)  # Matriz para os pontos de calibração de perspectiva - 4 linhas/ 2 colunas
+    contador = 0  # Contador utilizado nos 4 pontos de calibração
+    #hud_switch=True
+    #pausa_switch=False
+    #tempo_ajuda_switch=False
+    #tentativa=1
+    #x_pose = 0
+    #y_pose = 0
+
+
+def calibrar_ttea():
+
+    global gameDisplay#, x_pose, y_pose
+
+    resetar_vars()
+
+    camera = cv2.VideoCapture(settings.CAMERA, cv2.CAP_DSHOW)  # O valor entre parênteses indica qual câmera será utilizada. 0=default; 1,2,3...= câmeras externas.
+    gameWarning = pygame.display.set_mode((largura_projetor, altura_projetor))
+    pygame.display.set_caption('T-TEA')
+    pygame.display.set_icon(icone_fig)
+    gameWarning.blit(avisos_fig,(0, 0))
+    pygame.display.update()
+    gameWarning=False
+    gameExit=False # Sai do completamente do jogo
+
+    while not gameWarning:
+        for event in pygame.event.get():
+            # SAIR ou CONCORDO
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_c:
+                    gameDisplay = pygame.display.set_mode((largura_projetor, altura_projetor))
+                    pygame.display.set_caption('T-TEA')
+                    pygame.display.set_icon(icone_fig)
+                    instrucao_calibrar()
+                    pygame.display.update()
+                    gameWarning=True
+                if event.key == pygame.K_q:
+                    gameExit = True
+                    cv2.destroyWindow('tela_de_controle')
+                    pygame.quit()
+                    camera.release()
+                    gameWarning = True
+                    exit()
+
+
+    #################################################################################
+    #################### Inicialização do MediaPipe e Calibração ####################
+    #################################################################################
+    while not gameExit:
+
+        with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
+            if camera.isOpened():
+                ret, frame = camera.read()
+
+                # Tela de Controle para RGB.
+                tela_de_controle = cv2.cvtColor(cv2.flip(frame,1), cv2.COLOR_BGR2RGB)
+                tela_de_controle.flags.writeable = False
+
+                # Detecção.
+                results = pose.process(tela_de_controle)
+
+                # Tela de Controle para BGR.
+                tela_de_controle.flags.writeable = True
+                tela_de_controle = cv2.cvtColor(tela_de_controle, cv2.COLOR_RGB2BGR)
+
+                # Antes da Calibração.
+                if contador <= 3:
+                    calibracao()
+
+                # Depois da Calibração.
+                elif contador == 4:
+                    cv2.line(tela_de_controle, (pontos_calibracao[0]), (pontos_calibracao[1]), (verde), 2)
+                    cv2.line(tela_de_controle, (pontos_calibracao[1]), (pontos_calibracao[3]), (verde), 2)
+                    cv2.line(tela_de_controle, (pontos_calibracao[2]), (pontos_calibracao[0]), (verde), 2)
+                    cv2.line(tela_de_controle, (pontos_calibracao[2]), (pontos_calibracao[3]), (verde), 2)
+
+                    cv2.circle(tela_de_controle, (pontos_calibracao[0]), 5, azul, 3)
+                    cv2.circle(tela_de_controle, (pontos_calibracao[1]), 5, azul, 3)
+                    cv2.circle(tela_de_controle, (pontos_calibracao[2]), 5, azul, 3)
+                    cv2.circle(tela_de_controle, (pontos_calibracao[3]), 5, azul, 3)
+                    gameDisplay = pygame.display.set_mode((largura_projetor, altura_projetor))
+                    pygame.display.set_caption('Calibracao')
+                    pygame.display.set_icon(icone_fig)
+
+                    if contador <= 3:
+                        pass
+                    if contador>3:
+                        calibracao_ok()
+                        tela_update()
+                        pass
+                # Extração de coordenadas de pontos de referência.
+                try:
+                    landmarks = results.pose_landmarks.landmark
+                    #x_pose = landmarks[mp_pose.PoseLandmark.NOSE.value].x  # 33 Pontos de referência do MediaPipe. Ex: RIGHT_FOOT_INDEX; NOSE; RIGHT_INDEX
+                    #y_pose = landmarks[mp_pose.PoseLandmark.NOSE.value].y  # 33 Pontos de referência do MediaPipe. Ex: RIGHT_FOOT_INDEX; NOSE; RIGHT_INDEX
+                    x_pose = (landmarks[mp_pose.PoseLandmark.RIGHT_FOOT_INDEX.value].x + landmarks[
+                        mp_pose.PoseLandmark.LEFT_FOOT_INDEX.value].x) / 2
+                    y_pose = (landmarks[mp_pose.PoseLandmark.RIGHT_FOOT_INDEX.value].y + landmarks[
+                        mp_pose.PoseLandmark.LEFT_FOOT_INDEX.value].y) / 2
+
+                    # Desenho dos pontos de referência
+                    mp_drawing.draw_landmarks(tela_de_controle, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
+                                            mp_drawing.DrawingSpec(color=(0, 255, 0), thickness=2, circle_radius=2),
+                                            mp_drawing.DrawingSpec(color=(0, 0, 255), thickness=2, circle_radius=2)
+                                            )
+
+                except:
+                    pass
+
+                # Atualização das telas
+                cv2.imshow("TELA DE CONTROLE", tela_de_controle)
+                cv2.setMouseCallback("TELA DE CONTROLE", mousePoints)
+
+                # Teclas de Atalho
+                for event in pygame.event.get():
+                    # SAIR
+                    if event.type == pygame.QUIT:
+                        gameExit=True
+                        cv2.destroyWindow("TELA DE CONTROLE")
+                        grava_calibracao()
+                        print('P1: ', pontos_calibracao[0], ' P2: ', pontos_calibracao[1], ' P3: ', pontos_calibracao[2], ' P4: ', pontos_calibracao[3])
+                        pygame.display.quit()
+                        camera.release()
+
+                # SAIR (ESC)
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_q:
+                            gameExit = True
+                            cv2.destroyWindow("TELA DE CONTROLE")
+                            grava_calibracao()
+                            print('P1: ', pontos_calibracao[0], ' P2: ', pontos_calibracao[1], ' P3: ', pontos_calibracao[2], ' P4: ', pontos_calibracao[3])
+                            pygame.display.quit()
+                            camera.release()
+
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_ESCAPE:
+                            gameExit = True
+                            cv2.destroyWindow("TELA DE CONTROLE")
+                            grava_calibracao()
+                            print('P1: ', pontos_calibracao[0], ' P2: ', pontos_calibracao[1], ' P3: ', pontos_calibracao[2], ' P4: ', pontos_calibracao[3])
+                            pygame.display.quit()
+                            camera.release()
 
 #################################################################################
 ################################### FUNÇÕES #####################################
 #################################################################################
 def avisos(): #Tela inicial com os avisos do equipamento
+    global gameDisplay
     gameDisplay.blit(avisos_fig,(0, 0))
 
 def instrucao_calibrar():
+    global gameDisplay
     gameDisplay.blit(instrucao_calibrar_fig, (0, 0))
 
 def ajuda_f1(): #Tela com as teclas de atalho
+    global gameDisplay
     gameDisplay.blit(ajuda_f1_fig, (0, 0))
 
 def posicionamento():
+    global gameDisplay
     gameDisplay.blit(posicionamento_fig, (0, 0))
 
 def sem_sinal():
+    global gameDisplay
     gameDisplay.blit(sem_sinal_fig, (0, 0))
 
 def calibracao_ok():
+    global gameDisplay
     gameDisplay.blit(calibracao_finalizada_fig, (0, 0))
 
 def fill_preto():
+    global gameDisplay
     gameDisplay.fill(preto)
 
 def mousePoints(event, x, y, flags, params):
@@ -172,7 +335,8 @@ def calibracao():
 
 
 def posicao():
-    # Função para determinar a posição do jogador na área de projeçao:
+
+        # Função para determinar a posição do jogador na área de projeçao:
     # Transformação de Perspectiva:
     pts1 = np.float32([pontos_calibracao[0], pontos_calibracao[1], pontos_calibracao[2], pontos_calibracao[3]])
     pts2 = np.float32(
@@ -210,130 +374,3 @@ def grava_calibracao():
         csvwriter = csv.writer(csvfile, dialect='mydialect')
         csvwriter.writerow(Config)
         csvwriter.writerow(Dados)
-
-
-gameWarning = pygame.display.set_mode((largura_projetor, altura_projetor))
-pygame.display.set_caption('T-TEA')
-pygame.display.set_icon(icone_fig)
-gameWarning.blit(avisos_fig,(0, 0))
-pygame.display.update()
-gameWarning=False
-
-while not gameWarning:
-    for event in pygame.event.get():
-        # SAIR ou CONCORDO
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_c:
-                gameDisplay = pygame.display.set_mode((largura_projetor, altura_projetor))
-                pygame.display.set_caption('T-TEA')
-                pygame.display.set_icon(icone_fig)
-                instrucao_calibrar()
-                pygame.display.update()
-                gameWarning=True
-            if event.key == pygame.K_q:
-                gameExit = True
-                #cv2.destroyWindow('TELA DE CONTROLE')
-                pygame.quit()
-                camera.release()
-                exit()
-                gameWarning = True
-
-
-#################################################################################
-#################### Inicialização do MediaPipe e Calibração ####################
-#################################################################################
-while not gameExit:
-
-    with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
-        while camera.isOpened():
-            ret, frame = camera.read()
-
-            # Tela de Controle para RGB.
-            tela_de_controle = cv2.cvtColor(cv2.flip(frame,1), cv2.COLOR_BGR2RGB)
-            tela_de_controle.flags.writeable = False
-
-            # Detecção.
-            results = pose.process(tela_de_controle)
-
-            # Tela de Controle para BGR.
-            tela_de_controle.flags.writeable = True
-            tela_de_controle = cv2.cvtColor(tela_de_controle, cv2.COLOR_RGB2BGR)
-
-            # Antes da Calibração.
-            if contador <= 3:
-                calibracao()
-
-            # Depois da Calibração.
-            elif contador == 4:
-                cv2.line(tela_de_controle, (pontos_calibracao[0]), (pontos_calibracao[1]), (verde), 2)
-                cv2.line(tela_de_controle, (pontos_calibracao[1]), (pontos_calibracao[3]), (verde), 2)
-                cv2.line(tela_de_controle, (pontos_calibracao[2]), (pontos_calibracao[0]), (verde), 2)
-                cv2.line(tela_de_controle, (pontos_calibracao[2]), (pontos_calibracao[3]), (verde), 2)
-
-                cv2.circle(tela_de_controle, (pontos_calibracao[0]), 5, azul, 3)
-                cv2.circle(tela_de_controle, (pontos_calibracao[1]), 5, azul, 3)
-                cv2.circle(tela_de_controle, (pontos_calibracao[2]), 5, azul, 3)
-                cv2.circle(tela_de_controle, (pontos_calibracao[3]), 5, azul, 3)
-                gameDisplay = pygame.display.set_mode((largura_projetor, altura_projetor))
-                pygame.display.set_caption('Calibracao')
-                pygame.display.set_icon(icone_fig)
-
-                if contador <= 3:
-                    pass
-                if contador==4:
-                    calibracao_ok()
-                    tela_update()
-                    contador=contador+1
-                    pass
-            # Extração de coordenadas de pontos de referência.
-            try:
-                landmarks = results.pose_landmarks.landmark
-                #x_pose = landmarks[mp_pose.PoseLandmark.NOSE.value].x  # 33 Pontos de referência do MediaPipe. Ex: RIGHT_FOOT_INDEX; NOSE; RIGHT_INDEX
-                #y_pose = landmarks[mp_pose.PoseLandmark.NOSE.value].y  # 33 Pontos de referência do MediaPipe. Ex: RIGHT_FOOT_INDEX; NOSE; RIGHT_INDEX
-                x_pose = (landmarks[mp_pose.PoseLandmark.RIGHT_FOOT_INDEX.value].x + landmarks[
-                    mp_pose.PoseLandmark.LEFT_FOOT_INDEX.value].x) / 2
-                y_pose = (landmarks[mp_pose.PoseLandmark.RIGHT_FOOT_INDEX.value].y + landmarks[
-                    mp_pose.PoseLandmark.LEFT_FOOT_INDEX.value].y) / 2
-
-                # Desenho dos pontos de referência
-                mp_drawing.draw_landmarks(tela_de_controle, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
-                                          mp_drawing.DrawingSpec(color=(0, 255, 0), thickness=2, circle_radius=2),
-                                          mp_drawing.DrawingSpec(color=(0, 0, 255), thickness=2, circle_radius=2)
-                                          )
-
-            except:
-                pass
-
-            # Atualização das telas
-            cv2.imshow("TELA DE CONTROLE", tela_de_controle)
-            cv2.setMouseCallback("TELA DE CONTROLE", mousePoints)
-
-            # Teclas de Atalho
-            for event in pygame.event.get():
-                # SAIR
-                if event.type == pygame.QUIT:
-                    gameExit=True
-                    cv2.destroyWindow("TELA DE CONTROLE")
-                    grava_calibracao()
-                    print('P1: ', pontos_calibracao[0], ' P2: ', pontos_calibracao[1], ' P3: ', pontos_calibracao[2], ' P4: ', pontos_calibracao[3])
-                    pygame.display.quit()
-                    camera.release()
-
-            # SAIR (ESC)
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_q:
-                        gameExit = True
-                        cv2.destroyWindow("TELA DE CONTROLE")
-                        grava_calibracao()
-                        print('P1: ', pontos_calibracao[0], ' P2: ', pontos_calibracao[1], ' P3: ', pontos_calibracao[2], ' P4: ', pontos_calibracao[3])
-                        pygame.display.quit()
-                        camera.release()
-
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        gameExit = True
-                        cv2.destroyWindow("TELA DE CONTROLE")
-                        grava_calibracao()
-                        print('P1: ', pontos_calibracao[0], ' P2: ', pontos_calibracao[1], ' P3: ', pontos_calibracao[2], ' P4: ', pontos_calibracao[3])
-                        pygame.display.quit()
-                        camera.release()

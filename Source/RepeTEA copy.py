@@ -655,7 +655,7 @@ while not gameExit:
             ret, frame = camera.read()
 
             # Tela de Controle para RGB.
-            tela_de_controle = cv2.cvtColor(cv2.flip(frame,1), cv2.COLOR_BGR2RGB)
+            tela_de_controle = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             tela_de_controle.flags.writeable = False
 
             # Detecção.
@@ -684,16 +684,16 @@ while not gameExit:
 
                 # Depois da Calibração.
                 elif contador == 4:
-                    #cv2.line(tela_de_controle, (pontos_calibracao_repetea[0]), (pontos_calibracao_repetea[1]), (verde), 2)
-                    #cv2.line(tela_de_controle, (pontos_calibracao_repetea[1]), (pontos_calibracao_repetea[3]), (verde), 2)
-                    #cv2.line(tela_de_controle, (pontos_calibracao_repetea[2]), (pontos_calibracao_repetea[0]), (verde), 2)
-                    #cv2.line(tela_de_controle, (pontos_calibracao_repetea[2]), (pontos_calibracao_repetea[3]), (verde), 2)
+                    cv2.line(tela_de_controle, (pontos_calibracao_repetea[0]), (pontos_calibracao_repetea[1]), (verde), 2)
+                    cv2.line(tela_de_controle, (pontos_calibracao_repetea[1]), (pontos_calibracao_repetea[3]), (verde), 2)
+                    cv2.line(tela_de_controle, (pontos_calibracao_repetea[2]), (pontos_calibracao_repetea[0]), (verde), 2)
+                    cv2.line(tela_de_controle, (pontos_calibracao_repetea[2]), (pontos_calibracao_repetea[3]), (verde), 2)
 
-                    #cv2.circle(tela_de_controle, (pontos_calibracao_repetea[0]), 5, azul, 3)
-                    #cv2.circle(tela_de_controle, (pontos_calibracao_repetea[1]), 5, azul, 3)
-                    #cv2.circle(tela_de_controle, (pontos_calibracao_repetea[2]), 5, azul, 3)
-                    #cv2.circle(tela_de_controle, (pontos_calibracao_repetea[3]), 5, azul, 3)
-                    #cv2.destroyWindow("TELA DE CALIBRACAO")
+                    cv2.circle(tela_de_controle, (pontos_calibracao_repetea[0]), 5, azul, 3)
+                    cv2.circle(tela_de_controle, (pontos_calibracao_repetea[1]), 5, azul, 3)
+                    cv2.circle(tela_de_controle, (pontos_calibracao_repetea[2]), 5, azul, 3)
+                    cv2.circle(tela_de_controle, (pontos_calibracao_repetea[3]), 5, azul, 3)
+                    cv2.destroyWindow("TELA DE CALIBRACAO")
                     gameDisplay = pygame.display.set_mode((largura_projetor, altura_projetor))
                     pygame.display.set_caption('RepeTEA')
                     pygame.display.set_icon(icone_fig)
@@ -3011,7 +3011,7 @@ while not gameExit:
 
                         gameExit = True
                         print('QUIT')
-                        #cv2.destroyWindow('tela_de_controle')
+                        cv2.destroyWindow('tela_de_controle')
                         pygame.quit()
                         camera.release()
                         exit()

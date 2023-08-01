@@ -38,7 +38,7 @@ tela_de_controle = np.zeros((altura_tela_controle, largura_tela_controle, 3),
 camera = cv2.VideoCapture(settings.CAMERA, cv2.CAP_DSHOW)  # O valor entre parênteses indica qual câmera será utilizada. 0=default; 1,2,3...= câmeras externas.
 csv.register_dialect(
     'mydialect',
-    delimiter = ',',
+    delimiter = ';',
     quotechar = '"',
     doublequote = True,
     skipinitialspace = True,
@@ -232,7 +232,7 @@ while not gameWarning:
                 gameWarning=True
             if event.key == pygame.K_q:
                 gameExit = True
-                #cv2.destroyWindow('TELA DE CONTROLE')
+                cv2.destroyWindow('tela_de_controle')
                 pygame.quit()
                 camera.release()
                 exit()
@@ -280,10 +280,9 @@ while not gameExit:
 
                 if contador <= 3:
                     pass
-                if contador==4:
+                if contador>3:
                     calibracao_ok()
                     tela_update()
-                    contador=contador+1
                     pass
             # Extração de coordenadas de pontos de referência.
             try:
