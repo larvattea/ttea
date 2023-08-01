@@ -47,7 +47,7 @@ def get_Sessao():
 
 csv.register_dialect(
     'mydialect',
-    delimiter = ',',
+    delimiter = ';',
     quotechar = '"',
     doublequote = True,
     skipinitialspace = True,
@@ -130,7 +130,7 @@ def gravaDados(filename, Dados):# Dados é um vetor com os dados para gravar no 
 
 def grava_Sessao(jogador, fase, nivel, pont, mov, alvos_c, alvos_d, obst_c, obst_d):
     file = 'Jogadores/'+jogador+'_KarTEA_sessao.csv'
-    results = pd.read_csv(file)
+    results = pd.read_csv(file, sep=';')
     id = len(results)
     data = get_Date().strftime("%x")
     hora = get_Date().strftime("%X")
@@ -142,7 +142,7 @@ def grava_Sessao(jogador, fase, nivel, pont, mov, alvos_c, alvos_d, obst_c, obst
 
 def grava_Detalhado(jogador, sessao, fase, nivel, pos_jog, pos_ev, tipo):
     file = 'Jogadores/' + jogador + '_KarTEA_detalhado.csv'
-    results = pd.read_csv(file)
+    results = pd.read_csv(file, sep=';')
     id = len(results)
     hora = get_Date().strftime("%X")
     fields = [id, sessao, hora, fase, nivel, pos_jog, pos_ev, tipo]
@@ -182,7 +182,7 @@ def lerConfigs(filename): #Apenas para os arquivos gerais, nos detalhados retorn
 #Le os pontos de calibração realizados antes do jogo
 def lerCalibracao():
     pontos_calibracao = np.zeros((4, 2), int)
-    df = pd.read_csv('calibracao.csv')
+    df = pd.read_csv('calibracao.csv', sep=';')
 
     # getting value/data
     pontos_calibracao[0][0] = df["Ponto 1 x"].values[0]
@@ -202,7 +202,7 @@ def lerCalibracao():
 #Manipulação de dados das Configs
 def get_K_NOME(filename):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # getting value/data
     ret = df["Nome"].values[0]
@@ -210,19 +210,19 @@ def get_K_NOME(filename):
 
 def set_K_NOME(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # updating the column value/data
     df.loc[0, 'Nome'] = a
 
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     # print(df)
 
 
 def get_K_NASC(filename):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # getting value/data
     ret = df["Data de Nasc."].values[0]
@@ -230,19 +230,19 @@ def get_K_NASC(filename):
 
 def set_K_NASC(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # updating the column value/data
     df.loc[0, 'Data de Nasc.'] = a
 
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     # print(df)
 
 
 def get_K_OBS(filename):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # getting value/data
     ret = df["Observacoes"].values[0]
@@ -250,19 +250,19 @@ def get_K_OBS(filename):
 
 def set_K_OBS(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # updating the column value/data
     df.loc[0, 'Observacoes'] = a
 
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     # print(df)
 
 
 def get_K_FASE(filename):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
     
     # getting value/data
     ret = df["Fase Atual"].values[0]
@@ -270,19 +270,19 @@ def get_K_FASE(filename):
 
 def set_K_FASE(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
     
     # updating the column value/data
     df.loc[0, 'Fase Atual'] = a
     
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     #print(df)
 
 
 def get_K_NIVEL(filename):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # getting value/data
     ret = df["Nivel Atual"].values[0]
@@ -290,19 +290,19 @@ def get_K_NIVEL(filename):
 
 def set_K_NIVEL(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # updating the column value/data
     df.loc[0, 'Nivel Atual'] = a
 
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     # print(df)
 
 
 def get_K_TEMPO_NIVEL(filename):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # getting value/data
     ret = df["Tempo de Nivel"].values[0]
@@ -310,19 +310,19 @@ def get_K_TEMPO_NIVEL(filename):
 
 def set_K_TEMPO_NIVEL(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # updating the column value/data
     df.loc[0, 'Tempo de Nivel'] = a
 
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     # print(df)
 
 
 def get_K_CARRO(filename):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # getting value/data
     ret = df["Carro"].values[0]
@@ -330,19 +330,19 @@ def get_K_CARRO(filename):
 
 def set_K_CARRO(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # updating the column value/data
     df.loc[0, 'Carro'] = a
 
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     # print(df)
 
 
 def get_K_AMBIENTE(filename):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # getting value/data
     ret = df["Ambiente"].values[0]
@@ -350,19 +350,19 @@ def get_K_AMBIENTE(filename):
 
 def set_K_AMBIENTE(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # updating the column value/data
     df.loc[0, 'Ambiente'] = a
 
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     # print(df)
 
 
 def get_K_PALETA(filename):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # getting value/data
     ret = df["Paleta"].values[0]
@@ -370,19 +370,19 @@ def get_K_PALETA(filename):
 
 def set_K_PALETA(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # updating the column value/data
     df.loc[0, 'Paleta'] = a
 
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     # print(df)
 
 
 def get_K_ALVO(filename):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # getting value/data
     ret = df["Alvo"].values[0]
@@ -390,19 +390,19 @@ def get_K_ALVO(filename):
 
 def set_K_ALVO(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # updating the column value/data
     df.loc[0, 'Alvo'] = a
 
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     # print(df)
 
 
 def get_K_OBSTACULO(filename):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # getting value/data
     ret = df["Obstaculo"].values[0]
@@ -410,19 +410,19 @@ def get_K_OBSTACULO(filename):
 
 def set_K_OBSTACULO(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # updating the column value/data
     df.loc[0, 'Obstaculo'] = a
 
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     # print(df)
 
 
 def get_K_IMG_FEED_POS(filename):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # getting value/data
     ret = df["Imagem Feedback Positivo"].values[0]
@@ -430,19 +430,19 @@ def get_K_IMG_FEED_POS(filename):
 
 def set_K_IMG_FEED_POS(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # updating the column value/data
     df.loc[0, 'Imagem Feedback Positivo'] = a
 
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     # print(df)
 
 
 def get_K_IMG_FEED_NEU(filename):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # getting value/data
     ret = df["Imagem Feedback Neutro"].values[0]
@@ -450,19 +450,19 @@ def get_K_IMG_FEED_NEU(filename):
 
 def set_K_IMG_FEED_NEU(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # updating the column value/data
     df.loc[0, 'Imagem Feedback Neutro'] = a
 
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     # print(df)
 
 
 def get_K_IMG_FEED_NEG(filename):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # getting value/data
     ret = df["Imagem Feedback Negativo"].values[0]
@@ -470,19 +470,19 @@ def get_K_IMG_FEED_NEG(filename):
 
 def set_K_IMG_FEED_NEG(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # updating the column value/data
     df.loc[0, 'Imagem Feedback Negativo'] = a
 
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     # print(df)
 
 
 def get_K_SOM_FEED_POS(filename):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # getting value/data
     ret = df["Som Feedback Positivo"].values[0]
@@ -490,19 +490,19 @@ def get_K_SOM_FEED_POS(filename):
 
 def set_K_SOM_FEED_POS(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # updating the column value/data
     df.loc[0, 'Som Feedback Positivo'] = a
 
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     # print(df)
 
 
 def get_K_SOM_FEED_NEU(filename):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # getting value/data
     ret = df["Som Feedback Neutro"].values[0]
@@ -510,19 +510,19 @@ def get_K_SOM_FEED_NEU(filename):
 
 def set_K_SOM_FEED_NEU(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # updating the column value/data
     df.loc[0, 'Som Feedback Neutro'] = a
 
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     # print(df)
 
 
 def get_K_SOM_FEED_NEG(filename):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # getting value/data
     ret = df["Som Feedback Negativo"].values[0]
@@ -530,19 +530,19 @@ def get_K_SOM_FEED_NEG(filename):
 
 def set_K_SOM_FEED_NEG(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # updating the column value/data
     df.loc[0, 'Som Feedback Negativo'] = a
 
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     # print(df)
 
 
 def get_K_HUD(filename):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # getting value/data
     ret = df["HUD"].values[0]
@@ -550,19 +550,19 @@ def get_K_HUD(filename):
 
 def set_K_HUD(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # updating the column value/data
     df.loc[0, 'HUD'] = a
 
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     # print(df)
 
 
 def get_K_SOM(filename):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # getting value/data
     ret = df["Som"].values[0]
@@ -570,13 +570,13 @@ def get_K_SOM(filename):
 
 def set_K_SOM(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # updating the column value/data
     df.loc[0, 'Som'] = a
 
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     # print(df)
 
 ############################################################################################################
@@ -584,7 +584,7 @@ def set_K_SOM(filename, a):
 ############################################################################################################
 def get_R_SESSAO(filename):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # getting value/data
     ret = df["Sessao"].values[0]
@@ -593,20 +593,20 @@ def get_R_SESSAO(filename):
 
 def set_R_SESSAO(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # updating the column value/data
     df.loc[0, 'Sessao'] = a
 
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     # print(df)
 
 
 
 def get_R_FASE(filename):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # getting value/data
     ret = df["Fase Atual"].values[0]
@@ -615,30 +615,30 @@ def get_R_FASE(filename):
 
 def set_R_FASE(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # updating the column value/data
     df.loc[0, 'Fase Atual'] = a
 
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     # print(df)
 
 def set_R_FASE_detalhado(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # updating the column value/data
     df.loc[0, 'Fase'] = a
 
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     # print(df)
 
 
 def get_R_NIVEL(filename):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # getting value/data
     ret = df["Nivel Atual"].values[0]
@@ -647,18 +647,18 @@ def get_R_NIVEL(filename):
 
 def set_R_NIVEL(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # updating the column value/data
     df.loc[0, 'Nivel Atual'] = a
 
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     # print(df)
 
 def get_R_HUD(filename):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # getting value/data
     ret = df["HUD"].values[0]
@@ -667,18 +667,18 @@ def get_R_HUD(filename):
 
 def set_R_HUD(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # updating the column value/data
     df.loc[0, 'HUD'] = a
 
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     # print(df)
 
 def get_R_SOM(filename):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # getting value/data
     ret = df["Som"].values[0]
@@ -687,11 +687,11 @@ def get_R_SOM(filename):
 
 def set_R_SOM(filename, a):
     # reading the csv file
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
 
     # updating the column value/data
     df.loc[0, 'Som'] = a
 
     # writing into the file
-    df.to_csv(filename, index=False)
+    df.to_csv(filename, sep=';', index=False)
     # print(df)

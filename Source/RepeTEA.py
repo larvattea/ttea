@@ -61,7 +61,7 @@ q_omissao=0
 
 csv.register_dialect(
     'mydialect',
-    delimiter = ',',
+    delimiter = ';',
     quotechar = '"',
     doublequote = True,
     skipinitialspace = True,
@@ -85,7 +85,7 @@ print("Pontos de Calibracao do RepeTEA: ", pontos_calibracao_repetea)
 ############################ LEITURA DO ARQUIVO CONFIG.CSV #############################
 ########################################################################################
 with open(jogador_selecionado_config, 'r') as csv_file:
-    csv_reader = csv.reader(csv_file)
+    csv_reader = csv.reader(csv_file, dialect='mydialect')
     linha_1_csv = next(csv_reader)
     linha_2_csv = next(csv_reader)
     sessao = int(linha_2_csv[0])+1

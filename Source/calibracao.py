@@ -38,7 +38,7 @@ tela_de_controle = np.zeros((altura_tela_controle, largura_tela_controle, 3),
 camera = cv2.VideoCapture(settings.CAMERA, cv2.CAP_DSHOW)  # O valor entre parênteses indica qual câmera será utilizada. 0=default; 1,2,3...= câmeras externas.
 csv.register_dialect(
     'mydialect',
-    delimiter = ',',
+    delimiter = ';',
     quotechar = '"',
     doublequote = True,
     skipinitialspace = True,
