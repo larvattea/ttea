@@ -210,30 +210,30 @@ def calibrar_ttea():
                 tela_de_controle = cv2.cvtColor(tela_de_controle, cv2.COLOR_RGB2BGR)
 
                 # Antes da Calibração.
-                if contador <= 3:
-                    calibracao()
-
+                #if contador <= 3:
+                cv2.circle(tela_de_controle, (pontos_calibracao[0]), 5, azul, 3)
+                cv2.circle(tela_de_controle, (pontos_calibracao[1]), 5, azul, 3)
+                cv2.circle(tela_de_controle, (pontos_calibracao[2]), 5, azul, 3)
+                cv2.circle(tela_de_controle, (pontos_calibracao[3]), 5, azul, 3)
+                pygame.display.update()
                 # Depois da Calibração.
-                elif contador == 4:
+                if contador == 4:
                     cv2.line(tela_de_controle, (pontos_calibracao[0]), (pontos_calibracao[1]), (verde), 2)
                     cv2.line(tela_de_controle, (pontos_calibracao[1]), (pontos_calibracao[3]), (verde), 2)
                     cv2.line(tela_de_controle, (pontos_calibracao[2]), (pontos_calibracao[0]), (verde), 2)
                     cv2.line(tela_de_controle, (pontos_calibracao[2]), (pontos_calibracao[3]), (verde), 2)
 
-                    cv2.circle(tela_de_controle, (pontos_calibracao[0]), 5, azul, 3)
-                    cv2.circle(tela_de_controle, (pontos_calibracao[1]), 5, azul, 3)
-                    cv2.circle(tela_de_controle, (pontos_calibracao[2]), 5, azul, 3)
-                    cv2.circle(tela_de_controle, (pontos_calibracao[3]), 5, azul, 3)
+                #    cv2.circle(tela_de_controle, (pontos_calibracao[0]), 5, azul, 3)
+                 #   cv2.circle(tela_de_controle, (pontos_calibracao[1]), 5, azul, 3)
+                  #  cv2.circle(tela_de_controle, (pontos_calibracao[2]), 5, azul, 3)
+                   # cv2.circle(tela_de_controle, (pontos_calibracao[3]), 5, azul, 3)
                     gameDisplay = pygame.display.set_mode((largura_projetor, altura_projetor))
                     pygame.display.set_caption('Calibracao')
                     pygame.display.set_icon(icone_fig)
 
-                    if contador <= 3:
-                        pass
-                    if contador>3:
-                        calibracao_ok()
-                        tela_update()
-                        pass
+                    calibracao_ok()
+                    tela_update()
+                    pass
                 # Extração de coordenadas de pontos de referência.
                 try:
                     landmarks = results.pose_landmarks.landmark
@@ -324,15 +324,6 @@ def mousePoints(event, x, y, flags, params):
     if event == cv2.EVENT_LBUTTONDOWN:
         pontos_calibracao[contador] = x, y
         contador = contador + 1
-
-def calibracao():
-    # Função com os passos para determinar a área de projeçao capturada pela câmera:
-
-    cv2.circle(tela_de_controle, (pontos_calibracao[0]), 5, azul, 3)
-    cv2.circle(tela_de_controle, (pontos_calibracao[1]), 5, azul, 3)
-    cv2.circle(tela_de_controle, (pontos_calibracao[2]), 5, azul, 3)
-    cv2.circle(tela_de_controle, (pontos_calibracao[3]), 5, azul, 3)
-
 
 def posicao():
 

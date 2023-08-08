@@ -9,7 +9,7 @@ import numpy as np
 import settings
 import pygame
 import subprocess
-#import calibracao
+import calibracaov2
 
 
 from tkinter import messagebox
@@ -75,8 +75,8 @@ imagem.pack()
 
 # Calibrar Button
 def CalibrarCallback():
-    import calibracao
-    #calibracao.calibrar_ttea()
+    #import calibracao
+    calibracaov2.calibrar_ttea()
 
 
 B = tk.Button(menu_frame, text ="Calibrar", command = CalibrarCallback)
