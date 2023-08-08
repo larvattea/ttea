@@ -727,6 +727,8 @@ while not gameExit:
                             ####SORTEIO DA JOGADA#####
                             ##########################
                             if tamanho_sequencia>0:
+                                if tentativa>1 and tamanho_sequencia_atual==tamanho_sequencia:
+                                    time.sleep(1.5)
                                 sorteio_perto()
                                 tamanho_sequencia=tamanho_sequencia-1
                                 if tamanho_sequencia<=0:
@@ -1765,6 +1767,8 @@ while not gameExit:
                             ####SORTEIO DA JOGADA#####
                             ##########################
                             if tamanho_sequencia > 0:
+                                if tentativa>1 and tamanho_sequencia_atual==tamanho_sequencia:
+                                    time.sleep(1.5)
                                 sorteio_longe()
                                 tamanho_sequencia = tamanho_sequencia - 1
                                 if tamanho_sequencia <= 0:
@@ -2861,14 +2865,21 @@ while not gameExit:
             for event in pygame.event.get():
                 # SAIR
                 if event.type == pygame.QUIT:
-                    arquivo.set_R_FASE(jogador_selecionado, tamanho_sequencia_atual)
-                    arquivo.set_R_NIVEL(jogador_selecionado, nivel_sequencia_atual)
-                    arquivo.set_R_HUD(jogador_selecionado, hud_switch)
-                    arquivo.set_R_SOM(jogador_selecionado, som_switch)
+                    data = datetime.date.today()
+                    hora_esc = datetime.datetime.now().time()
+
+                    arquivo.set_R_FASE(jogador_selecionado_config, tamanho_sequencia_atual)
+                    arquivo.set_R_NIVEL(jogador_selecionado_config, nivel_sequencia_atual)
+                    arquivo.set_R_HUD(jogador_selecionado_config, hud_switch)
+                    arquivo.set_R_SOM(jogador_selecionado_config, som_switch)
+                    arquivo.set_R_SESSAO(jogador_selecionado_config, sessao)
+
+                    arquivo.gravaDados(jogador_selecionado_detalhado,[sessao, data, hora_esc, tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Sair'])
+                    arquivo.gravaDados(jogador_selecionado,[sessao, data, hora_inicio, hora_esc, tamanho_sequencia_atual, nivel_sequencia_atual,q_acertos,q_acertos_com_ajuda, q_ajudas, q_erros, q_omissao])
 
                     gameExit=True
                     print('QUIT')
-                    cv2.destroyWindow('tela_de_controle')
+                    #cv2.destroyWindow('tela_de_controle')
                     pygame.quit()
                     camera.release()
                     exit()
@@ -2925,7 +2936,7 @@ while not gameExit:
 
                 # SOM ON/OFF (S ou 3)
                     if event.key==pygame.K_s or event.key==pygame.K_3:
-                        fill_preto()
+                        #fill_preto()
                         if som_switch==False:
                             som_ligado()
                             tela_update()
