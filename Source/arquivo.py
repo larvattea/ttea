@@ -128,6 +128,12 @@ def gravaDados(filename, Dados):# Dados é um vetor com os dados para gravar no 
         csvwriter = csv.writer(csvfile, dialect='mydialect')
         csvwriter.writerow(Dados)
 
+def gravaArrayDados(filename, Dados):# Dados é um vetor com os dados para gravar no arquivo 'filename'
+    for linha in Dados:
+        with open(filename, 'a+', newline='') as csvfile:
+            csvwriter = csv.writer(csvfile, dialect='mydialect')
+            csvwriter.writerow(linha)        
+
 def grava_Sessao(jogador, fase, nivel, pont, mov, alvos_c, alvos_d, obst_c, obst_d):
     file = 'Jogadores/'+jogador+'_KarTEA_sessao.csv'
     results = pd.read_csv(file, sep=';')

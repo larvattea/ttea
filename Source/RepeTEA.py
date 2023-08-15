@@ -59,6 +59,9 @@ q_ajudas=0
 q_erros=0
 q_omissao=0
 
+#array apra salvamento dos passos do jogo em no arquivo de dados detalhado 
+dadosDetalhado = []
+
 csv.register_dialect(
     'mydialect',
     delimiter = ';',
@@ -754,6 +757,7 @@ while not gameExit:
                                     silhueta_perto()
 
                                 if tempo_ajuda_switch==True:
+                                    
                                     if lista_sorteio[item_da_lista]==0:
                                         triangulo_perto_selecionado_ajuda()
 
@@ -796,6 +800,7 @@ while not gameExit:
                                     if (jogador[0] > 0 and jogador[0] < 175) and (
                                             jogador[1] > 300 and jogador[1] < 400) and figura_selecionada==False:
                                         #print('triângulo')
+                                        dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Selecionou triângulo'])
                                         triangulo_perto_selecionado()
                                         som_triangulo()
                                         tela_update()
@@ -803,6 +808,7 @@ while not gameExit:
                                         figura_selecionada=True
 
                                         if lista_sorteio[item_da_lista]==0:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Acerto'])
                                             pontuacao=pontuacao+10
                                             feliz()
                                             som_feliz()
@@ -811,6 +817,7 @@ while not gameExit:
                                             delay()
 
                                         if lista_sorteio[item_da_lista]!=0:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Erro'])
                                             triste()
                                             som_triste()
                                             tela_update()
@@ -848,6 +855,7 @@ while not gameExit:
 
                                             if pontuacao_final>= 75:
                                                 #tamanho_sequencia_atual=tamanho_sequencia_atual+1
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Próximo nível'])
                                                 tamanho_sequencia=tamanho_sequencia_atual
                                                 nivel_sequencia_atual=2
                                                 nivel_sequencia=2
@@ -862,6 +870,7 @@ while not gameExit:
 
 
                                             if pontuacao_final>=25 and pontuacao_final<75:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Mantém nível'])
                                                 tamanho_sequencia=tamanho_sequencia_atual
                                                 fill_preto()
                                                 trofeu_50()
@@ -873,6 +882,7 @@ while not gameExit:
                                                 delay()
 
                                             if pontuacao_final<25:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Retrocede nível'])
                                                 if tamanho_sequencia_atual==1:
                                                     tamanho_sequencia=tamanho_sequencia_atual
                                                     fill_preto()
@@ -908,12 +918,14 @@ while not gameExit:
                                     elif (jogador[0] > 175 and jogador[0] < 400) and (
                                             jogador[1] > 180 and jogador[1] < 300) and figura_selecionada==False:
                                         #print('retângulo')
+                                        dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Selecionou retângulo'])
                                         retangulo_perto_selecionado()
                                         som_retangulo()
                                         tela_update()
                                         delay()
                                         figura_selecionada = True
                                         if lista_sorteio[item_da_lista]==1:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Acerto'])
                                             pontuacao=pontuacao+10
                                             feliz()
                                             som_feliz()
@@ -922,6 +934,7 @@ while not gameExit:
                                             delay()
 
                                         if lista_sorteio[item_da_lista]!=1:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Erro'])
                                             triste()
                                             som_triste()
                                             tela_update()
@@ -960,6 +973,7 @@ while not gameExit:
 
                                             if pontuacao_final>= 75:
                                                 #tamanho_sequencia_atual=tamanho_sequencia_atual+1
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Próximo nível'])
                                                 tamanho_sequencia=tamanho_sequencia_atual
                                                 nivel_sequencia_atual=2
                                                 nivel_sequencia=2
@@ -974,6 +988,7 @@ while not gameExit:
 
 
                                             if pontuacao_final>=25 and pontuacao_final<75:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Mantém nível'])
                                                 tamanho_sequencia=tamanho_sequencia_atual
                                                 fill_preto()
                                                 trofeu_50()
@@ -985,6 +1000,7 @@ while not gameExit:
                                                 delay()
 
                                             if pontuacao_final<25:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Retrocede nível'])
                                                 if tamanho_sequencia_atual==1:
                                                     tamanho_sequencia=tamanho_sequencia_atual
                                                     fill_preto()
@@ -1019,6 +1035,7 @@ while not gameExit:
                                     elif (jogador[0] > 400 and jogador[0] < 625) and (
                                             jogador[1] > 180 and jogador[1] < 300) and figura_selecionada==False:
                                         #print('círculo')
+                                        dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Selecionou círculo'])
                                         circulo_perto_selecionado()
                                         som_circulo()
                                         tela_update()
@@ -1026,6 +1043,7 @@ while not gameExit:
                                         figura_selecionada = True
 
                                         if lista_sorteio[item_da_lista]==2:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Acerto'])
                                             pontuacao=pontuacao+10
                                             feliz()
                                             som_feliz()
@@ -1034,6 +1052,7 @@ while not gameExit:
                                             delay()
 
                                         if lista_sorteio[item_da_lista]!=2:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Erro'])
                                             triste()
                                             som_triste()
                                             tela_update()
@@ -1072,6 +1091,7 @@ while not gameExit:
 
                                             if pontuacao_final>= 75:
                                                 #tamanho_sequencia_atual=tamanho_sequencia_atual+1
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Próximo nível'])
                                                 tamanho_sequencia=tamanho_sequencia_atual
                                                 nivel_sequencia_atual=2
                                                 nivel_sequencia = 2
@@ -1086,6 +1106,7 @@ while not gameExit:
 
 
                                             if pontuacao_final>=25 and pontuacao_final<75:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Mantém nível'])
                                                 tamanho_sequencia=tamanho_sequencia_atual
                                                 fill_preto()
                                                 trofeu_50()
@@ -1097,6 +1118,7 @@ while not gameExit:
                                                 delay()
 
                                             if pontuacao_final<25:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Retrocede nível'])
                                                 if tamanho_sequencia_atual==1:
                                                     tamanho_sequencia=tamanho_sequencia_atual
                                                     fill_preto()
@@ -1131,6 +1153,7 @@ while not gameExit:
                                     elif (jogador[0] > 625 and jogador[0] < 800) and (
                                             jogador[1] > 300 and jogador[1] < 400) and figura_selecionada==False:
                                         #print('quadrado')
+                                        dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Selecionou quadrado'])
                                         quadrado_perto_selecionado()
                                         som_quadrado()
                                         tela_update()
@@ -1138,6 +1161,7 @@ while not gameExit:
                                         figura_selecionada = True
 
                                         if lista_sorteio[item_da_lista]==3:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Acerto'])
                                             pontuacao=pontuacao+10
                                             feliz()
                                             som_feliz()
@@ -1146,6 +1170,7 @@ while not gameExit:
                                             delay()
 
                                         if lista_sorteio[item_da_lista]!=3:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Erro'])
                                             triste()
                                             som_triste()
                                             tela_update()
@@ -1184,6 +1209,7 @@ while not gameExit:
 
                                             if pontuacao_final>= 75:
                                                 #tamanho_sequencia_atual=tamanho_sequencia_atual+1
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Próximo nível'])
                                                 tamanho_sequencia=tamanho_sequencia_atual
                                                 nivel_sequencia_atual=2
                                                 nivel_sequencia = 2
@@ -1198,6 +1224,7 @@ while not gameExit:
 
 
                                             if pontuacao_final>=25 and pontuacao_final<75:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Mantém nível'])
                                                 tamanho_sequencia=tamanho_sequencia_atual
                                                 fill_preto()
                                                 trofeu_50()
@@ -1209,6 +1236,7 @@ while not gameExit:
                                                 delay()
 
                                             if pontuacao_final<25:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Retrocede nível'])
                                                 if tamanho_sequencia_atual==1:
                                                     tamanho_sequencia=tamanho_sequencia_atual
                                                     fill_preto()
@@ -1257,6 +1285,7 @@ while not gameExit:
                                 ##########################################################################
                                 if tempo> tempo_ajuda and tempo<=tempo_total:
                                     if tempo_ajuda_switch == False:
+                                        dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Ajuda'])
                                         som_ajuda()
                                         q_ajudas=q_ajudas+1
                                     tempo_ajuda_switch=True
@@ -1265,6 +1294,7 @@ while not gameExit:
                                     if (jogador[0] > 0 and jogador[0] < 175) and (
                                             jogador[1] > 300 and jogador[1] < 400) and figura_selecionada == False:
                                         # print('triângulo')
+                                        dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Selecionou triângulo'])
                                         triangulo_perto_selecionado()
                                         som_triangulo()
                                         tela_update()
@@ -1274,6 +1304,7 @@ while not gameExit:
                                         tempo_ajuda_switch = False
 
                                         if lista_sorteio[item_da_lista] == 0:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Acerto com ajuda'])
                                             pontuacao = pontuacao + 5
                                             feliz()
                                             som_feliz()
@@ -1282,6 +1313,7 @@ while not gameExit:
                                             delay()
 
                                         if lista_sorteio[item_da_lista] != 0:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Erro'])
                                             triste()
                                             som_triste()
                                             tela_update()
@@ -1319,6 +1351,7 @@ while not gameExit:
 
                                             if pontuacao_final >= 75:
                                                 #tamanho_sequencia_atual = tamanho_sequencia_atual + 1
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Próximo nível'])
                                                 tamanho_sequencia = tamanho_sequencia_atual
                                                 nivel_sequencia_atual=2
                                                 nivel_sequencia = 2
@@ -1333,6 +1366,7 @@ while not gameExit:
                                                 nivel_sequencia = 2
 
                                             if pontuacao_final >= 25 and pontuacao_final < 75:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Mantém nível'])
                                                 tamanho_sequencia = tamanho_sequencia_atual
                                                 fill_preto()
                                                 trofeu_50()
@@ -1344,6 +1378,7 @@ while not gameExit:
                                                 delay()
 
                                             if pontuacao_final < 25:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Retrocede nível'])
                                                 if tamanho_sequencia_atual == 1:
                                                     tamanho_sequencia = tamanho_sequencia_atual
                                                     fill_preto()
@@ -1377,6 +1412,7 @@ while not gameExit:
                                     elif (jogador[0] > 175 and jogador[0] < 400) and (
                                             jogador[1] > 180 and jogador[1] < 300) and figura_selecionada == False:
                                         # print('retângulo')
+                                        dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Selecionou retângulo'])
                                         retangulo_perto_selecionado()
                                         som_retangulo()
                                         tela_update()
@@ -1386,6 +1422,7 @@ while not gameExit:
                                         tempo_ajuda_switch = False
 
                                         if lista_sorteio[item_da_lista] == 1:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Acerto com ajuda'])
                                             pontuacao = pontuacao + 5
                                             feliz()
                                             som_feliz()
@@ -1394,6 +1431,7 @@ while not gameExit:
                                             delay()
 
                                         if lista_sorteio[item_da_lista] != 1:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Erro'])
                                             triste()
                                             som_triste()
                                             tela_update()
@@ -1431,6 +1469,7 @@ while not gameExit:
 
                                             if pontuacao_final >= 75:
                                                 #tamanho_sequencia_atual = tamanho_sequencia_atual + 1
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Próximo nível'])
                                                 tamanho_sequencia = tamanho_sequencia_atual
                                                 nivel_sequencia_atual = 2
                                                 nivel_sequencia = 2
@@ -1445,6 +1484,7 @@ while not gameExit:
                                                 nivel_sequencia = 2
 
                                             if pontuacao_final >= 25 and pontuacao_final < 75:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Mantém nível'])
                                                 tamanho_sequencia = tamanho_sequencia_atual
                                                 fill_preto()
                                                 trofeu_50()
@@ -1456,6 +1496,7 @@ while not gameExit:
                                                 delay()
 
                                             if pontuacao_final < 25:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Retrocede nível'])
                                                 if tamanho_sequencia_atual == 1:
                                                     tamanho_sequencia = tamanho_sequencia_atual
                                                     fill_preto()
@@ -1488,6 +1529,7 @@ while not gameExit:
                                     elif (jogador[0] > 400 and jogador[0] < 625) and (
                                             jogador[1] > 180 and jogador[1] < 300) and figura_selecionada == False:
                                         # print('círculo')
+                                        dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Selecionou círculo'])
                                         circulo_perto_selecionado()
                                         som_circulo()
                                         tela_update()
@@ -1497,6 +1539,7 @@ while not gameExit:
                                         tempo_ajuda_switch = False
 
                                         if lista_sorteio[item_da_lista] == 2:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Acerto com ajuda'])
                                             pontuacao = pontuacao + 5
                                             feliz()
                                             som_feliz()
@@ -1505,6 +1548,7 @@ while not gameExit:
                                             delay()
 
                                         if lista_sorteio[item_da_lista] != 2:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Erro'])
                                             triste()
                                             som_triste()
                                             tela_update()
@@ -1542,6 +1586,7 @@ while not gameExit:
 
                                             if pontuacao_final >= 75:
                                                 #tamanho_sequencia_atual = tamanho_sequencia_atual + 1
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Próximo nível'])
                                                 tamanho_sequencia = tamanho_sequencia_atual
                                                 nivel_sequencia_atual = 2
                                                 nivel_sequencia = 2
@@ -1556,6 +1601,7 @@ while not gameExit:
                                                 nivel_sequencia = 2
 
                                             if pontuacao_final >= 25 and pontuacao_final < 75:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Mantém nível'])
                                                 tamanho_sequencia = tamanho_sequencia_atual
                                                 fill_preto()
                                                 trofeu_50()
@@ -1567,6 +1613,7 @@ while not gameExit:
                                                 delay()
 
                                             if pontuacao_final < 25:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Retrocede nível'])
                                                 if tamanho_sequencia_atual == 1:
                                                     tamanho_sequencia = tamanho_sequencia_atual
                                                     fill_preto()
@@ -1599,6 +1646,7 @@ while not gameExit:
                                     elif (jogador[0] > 625 and jogador[0] < 800) and (
                                             jogador[1] > 300 and jogador[1] < 400) and figura_selecionada == False:
                                         # print('quadrado')
+                                        dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Selecionou quadrado'])
                                         quadrado_perto_selecionado()
                                         som_quadrado()
                                         tela_update()
@@ -1608,6 +1656,7 @@ while not gameExit:
                                         tempo_ajuda_switch = False
 
                                         if lista_sorteio[item_da_lista] == 3:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Acerto com ajuda'])
                                             pontuacao = pontuacao + 5
                                             feliz()
                                             som_feliz()
@@ -1616,6 +1665,7 @@ while not gameExit:
                                             delay()
 
                                         if lista_sorteio[item_da_lista] != 3:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Erro'])
                                             triste()
                                             som_triste()
                                             tela_update()
@@ -1653,6 +1703,7 @@ while not gameExit:
 
                                             if pontuacao_final >= 75:
                                                 #tamanho_sequencia_atual = tamanho_sequencia_atual + 1
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Próximo nível'])
                                                 tamanho_sequencia = tamanho_sequencia_atual
                                                 nivel_sequencia_atual = 2
                                                 nivel_sequencia = 2
@@ -1667,6 +1718,7 @@ while not gameExit:
                                                 nivel_sequencia = 2
 
                                             if pontuacao_final >= 25 and pontuacao_final < 75:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Mantém nível'])
                                                 tamanho_sequencia = tamanho_sequencia_atual
                                                 fill_preto()
                                                 trofeu_50()
@@ -1678,6 +1730,7 @@ while not gameExit:
                                                 delay()
 
                                             if pontuacao_final < 25:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Retrocede nível'])
                                                 if tamanho_sequencia_atual == 1:
                                                     tamanho_sequencia = tamanho_sequencia_atual
                                                     nivel_sequencia_atual=1
@@ -1733,6 +1786,7 @@ while not gameExit:
                                 ##########################################################################
 
                                 if tempo>tempo_total:
+                                    dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Omissão do jogador'])
                                     fill_preto()
                                     tempo_max()
                                     som_triste()
@@ -1834,6 +1888,7 @@ while not gameExit:
                                     if (jogador[0] > 0 and jogador[0] < 175) and (
                                             jogador[1] > 125 and jogador[1] < 240) and figura_selecionada == False:
                                         # print('triângulo')
+                                        dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Selecionou triângulo'])
                                         triangulo_longe_selecionado()
                                         som_triangulo()
                                         tela_update()
@@ -1841,6 +1896,7 @@ while not gameExit:
                                         figura_selecionada = True
 
                                         if lista_sorteio[item_da_lista] == 0:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Acerto'])
                                             pontuacao = pontuacao + 10
                                             feliz()
                                             som_feliz()
@@ -1849,6 +1905,7 @@ while not gameExit:
                                             delay()
 
                                         if lista_sorteio[item_da_lista] != 0:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Erro'])
                                             triste()
                                             som_triste()
                                             tela_update()
@@ -1884,6 +1941,7 @@ while not gameExit:
                                             print(pontuacao_final)
 
                                             if pontuacao_final >= 75:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Próximo nível'])
                                                 tamanho_sequencia_atual=tamanho_sequencia_atual+1
                                                 tamanho_sequencia = tamanho_sequencia_atual
                                                 nivel_sequencia_atual = 1
@@ -1899,6 +1957,7 @@ while not gameExit:
 
 
                                             if pontuacao_final >= 25 and pontuacao_final < 75:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Mantém nível'])
                                                 tamanho_sequencia = tamanho_sequencia_atual
                                                 nivel_sequencia = 2
                                                 fill_preto()
@@ -1911,6 +1970,7 @@ while not gameExit:
                                                 delay()
 
                                             if pontuacao_final < 25:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Retrocede nível'])
                                                 if tamanho_sequencia_atual == 1:
                                                     tamanho_sequencia = tamanho_sequencia_atual
                                                     nivel_sequencia_atual = 1
@@ -1948,12 +2008,14 @@ while not gameExit:
                                     elif (jogador[0] > 175 and jogador[0] < 400) and (
                                             jogador[1] > 0 and jogador[1] < 125) and figura_selecionada == False:
                                         # print('retângulo')
+                                        dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Selecionou retângulo'])
                                         retangulo_longe_selecionado()
                                         som_retangulo()
                                         tela_update()
                                         delay()
                                         figura_selecionada = True
                                         if lista_sorteio[item_da_lista] == 1:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Acerto'])
                                             pontuacao = pontuacao + 10
                                             feliz()
                                             som_feliz()
@@ -1962,6 +2024,7 @@ while not gameExit:
                                             delay()
 
                                         if lista_sorteio[item_da_lista] != 1:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Erro'])
                                             triste()
                                             som_triste()
                                             tela_update()
@@ -1998,6 +2061,7 @@ while not gameExit:
                                             print(pontuacao_final)
 
                                             if pontuacao_final >= 75:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Próximo nível'])
                                                 tamanho_sequencia_atual=tamanho_sequencia_atual+1
                                                 tamanho_sequencia = tamanho_sequencia_atual
                                                 nivel_sequencia_atual = 1
@@ -2013,6 +2077,7 @@ while not gameExit:
 
 
                                             if pontuacao_final >= 25 and pontuacao_final < 75:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Mantém nível'])
                                                 tamanho_sequencia = tamanho_sequencia_atual
                                                 nivel_sequencia_atual=2
                                                 nivel_sequencia=2
@@ -2026,6 +2091,7 @@ while not gameExit:
                                                 delay()
 
                                             if pontuacao_final < 25:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Retrocede nível'])
                                                 if tamanho_sequencia_atual == 1:
                                                     tamanho_sequencia = tamanho_sequencia_atual
                                                     nivel_sequencia_atual=1
@@ -2062,6 +2128,7 @@ while not gameExit:
                                     elif (jogador[0] > 400 and jogador[0] < 625) and (
                                             jogador[1] > 0 and jogador[1] < 150) and figura_selecionada == False:
                                         # print('círculo')
+                                        dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Selecionou círculo'])
                                         circulo_longe_selecionado()
                                         som_circulo()
                                         tela_update()
@@ -2069,6 +2136,7 @@ while not gameExit:
                                         figura_selecionada = True
 
                                         if lista_sorteio[item_da_lista] == 2:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Acerto'])
                                             pontuacao = pontuacao + 10
                                             feliz()
                                             som_feliz()
@@ -2077,6 +2145,7 @@ while not gameExit:
                                             delay()
 
                                         if lista_sorteio[item_da_lista] != 2:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Erro'])
                                             triste()
                                             som_triste()
                                             tela_update()
@@ -2113,6 +2182,7 @@ while not gameExit:
                                             print(pontuacao_final)
 
                                             if pontuacao_final >= 75:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Próximo nível'])
                                                 tamanho_sequencia_atual=tamanho_sequencia_atual+1
                                                 tamanho_sequencia = tamanho_sequencia_atual
                                                 nivel_sequencia_atual = 1
@@ -2128,6 +2198,7 @@ while not gameExit:
 
 
                                             if pontuacao_final >= 25 and pontuacao_final < 75:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Mantém nível'])
                                                 tamanho_sequencia = tamanho_sequencia_atual
                                                 nivel_sequencia_atual=2
                                                 nivel_sequencia=2
@@ -2141,6 +2212,7 @@ while not gameExit:
                                                 delay()
 
                                             if pontuacao_final < 25:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Retrocede nível'])
                                                 if tamanho_sequencia_atual == 1:
                                                     tamanho_sequencia = tamanho_sequencia_atual
                                                     nivel_sequencia_atual=1
@@ -2177,6 +2249,7 @@ while not gameExit:
                                     elif (jogador[0] > 625 and jogador[0] < 800) and (
                                             jogador[1] > 125 and jogador[1] < 240) and figura_selecionada == False:
                                         # print('quadrado')
+                                        dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Selecionou quadrado'])
                                         quadrado_longe_selecionado()
                                         som_quadrado()
                                         tela_update()
@@ -2184,6 +2257,7 @@ while not gameExit:
                                         figura_selecionada = True
 
                                         if lista_sorteio[item_da_lista] == 3:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Acerto'])
                                             pontuacao = pontuacao + 10
                                             feliz()
                                             som_feliz()
@@ -2192,6 +2266,7 @@ while not gameExit:
                                             delay()
 
                                         if lista_sorteio[item_da_lista] != 3:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Erro'])
                                             triste()
                                             som_triste()
                                             tela_update()
@@ -2228,6 +2303,7 @@ while not gameExit:
                                             print(pontuacao_final)
 
                                             if pontuacao_final >= 75:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Próximo nível'])
                                                 tamanho_sequencia_atual=tamanho_sequencia_atual+1
                                                 tamanho_sequencia = tamanho_sequencia_atual
                                                 nivel_sequencia_atual = 1
@@ -2243,6 +2319,7 @@ while not gameExit:
 
 
                                             if pontuacao_final >= 25 and pontuacao_final < 75:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Mantém nível'])
                                                 tamanho_sequencia = tamanho_sequencia_atual
                                                 nivel_sequencia_atual=2
                                                 nivel_sequencia=2
@@ -2256,6 +2333,7 @@ while not gameExit:
                                                 delay()
 
                                             if pontuacao_final < 25:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Retrocede nível'])
                                                 if tamanho_sequencia_atual == 1:
                                                     tamanho_sequencia = tamanho_sequencia_atual
                                                     nivel_sequencia_atual=1
@@ -2306,6 +2384,7 @@ while not gameExit:
                                 ##########################################################################
                                 if tempo > tempo_ajuda and tempo <= tempo_total:
                                     if tempo_ajuda_switch==False:
+                                        dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Ajuda'])
                                         som_ajuda()
                                         q_ajudas = q_ajudas + 1
                                     tempo_ajuda_switch = True
@@ -2314,6 +2393,7 @@ while not gameExit:
                                     if (jogador[0] > 0 and jogador[0] < 175) and (
                                             jogador[1] > 125 and jogador[1] < 240) and figura_selecionada == False:
                                         # print('triângulo')
+                                        dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Selecionou triângulo'])
                                         triangulo_longe_selecionado()
                                         som_triangulo()
                                         tela_update()
@@ -2323,6 +2403,7 @@ while not gameExit:
                                         tempo_ajuda_switch = False
 
                                         if lista_sorteio[item_da_lista] == 0:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Acerto com ajuda'])
                                             pontuacao = pontuacao + 5
                                             feliz()
                                             som_feliz()
@@ -2331,6 +2412,7 @@ while not gameExit:
                                             delay()
 
                                         if lista_sorteio[item_da_lista] != 0:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Erro'])
                                             triste()
                                             som_triste()
                                             tela_update()
@@ -2367,6 +2449,7 @@ while not gameExit:
                                             print(pontuacao_final)
 
                                             if pontuacao_final >= 75:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Próximo nível'])
                                                 tamanho_sequencia_atual = tamanho_sequencia_atual + 1
                                                 tamanho_sequencia = tamanho_sequencia_atual
                                                 nivel_sequencia_atual=1
@@ -2382,6 +2465,7 @@ while not gameExit:
 
 
                                             if pontuacao_final >= 25 and pontuacao_final < 75:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Mantém nível'])
                                                 tamanho_sequencia = tamanho_sequencia_atual
                                                 nivel_sequencia_atual=2
                                                 nivel_sequencia=2
@@ -2395,6 +2479,7 @@ while not gameExit:
                                                 delay()
 
                                             if pontuacao_final < 25:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Retrocede nível'])
                                                 if tamanho_sequencia_atual == 1:
                                                     tamanho_sequencia = tamanho_sequencia_atual
                                                     nivel_sequencia_atual=1
@@ -2432,6 +2517,7 @@ while not gameExit:
                                     elif (jogador[0] > 175 and jogador[0] < 400) and (
                                             jogador[1] > 0 and jogador[1] < 125) and figura_selecionada == False:
                                         # print('retângulo')
+                                        dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Selecionou retângulo'])
                                         retangulo_longe_selecionado()
                                         som_retangulo()
                                         tela_update()
@@ -2441,6 +2527,7 @@ while not gameExit:
                                         tempo_ajuda_switch = False
 
                                         if lista_sorteio[item_da_lista] == 1:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Acerto com ajuda'])
                                             pontuacao = pontuacao + 5
                                             feliz()
                                             som_feliz()
@@ -2449,6 +2536,7 @@ while not gameExit:
                                             delay()
 
                                         if lista_sorteio[item_da_lista] != 1:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Erro'])
                                             triste()
                                             som_triste()
                                             tela_update()
@@ -2485,6 +2573,7 @@ while not gameExit:
                                             print(pontuacao_final)
 
                                             if pontuacao_final >= 75:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Próximo nível'])
                                                 tamanho_sequencia_atual = tamanho_sequencia_atual + 1
                                                 tamanho_sequencia = tamanho_sequencia_atual
                                                 nivel_sequencia_atual=1
@@ -2500,6 +2589,7 @@ while not gameExit:
 
 
                                             if pontuacao_final >= 25 and pontuacao_final < 75:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Mantém nível'])
                                                 tamanho_sequencia = tamanho_sequencia_atual
                                                 nivel_sequencia_atual=2
                                                 nivel_sequencia=2
@@ -2513,6 +2603,7 @@ while not gameExit:
                                                 delay()
 
                                             if pontuacao_final < 25:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Retrocede nível'])
                                                 if tamanho_sequencia_atual == 1:
                                                     tamanho_sequencia = tamanho_sequencia_atual
                                                     nivel_sequencia_atual=1
@@ -2549,6 +2640,7 @@ while not gameExit:
                                     elif (jogador[0] > 400 and jogador[0] < 625) and (
                                             jogador[1] > 0 and jogador[1] < 150) and figura_selecionada == False:
                                         # print('círculo')
+                                        dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Selecionou círculo'])
                                         circulo_longe_selecionado()
                                         som_circulo()
                                         tela_update()
@@ -2558,6 +2650,7 @@ while not gameExit:
                                         tempo_ajuda_switch = False
 
                                         if lista_sorteio[item_da_lista] == 2:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Acerto com ajuda'])
                                             pontuacao = pontuacao + 5
                                             feliz()
                                             som_feliz()
@@ -2566,6 +2659,7 @@ while not gameExit:
                                             delay()
 
                                         if lista_sorteio[item_da_lista] != 2:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Erro'])
                                             triste()
                                             som_triste()
                                             tela_update()
@@ -2602,6 +2696,7 @@ while not gameExit:
                                             print(pontuacao_final)
 
                                             if pontuacao_final >= 75:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Próximo nível'])
                                                 tamanho_sequencia_atual = tamanho_sequencia_atual + 1
                                                 tamanho_sequencia = tamanho_sequencia_atual
                                                 nivel_sequencia_atual=1
@@ -2617,6 +2712,7 @@ while not gameExit:
 
 
                                             if pontuacao_final >= 25 and pontuacao_final < 75:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Mantém nível'])
                                                 tamanho_sequencia = tamanho_sequencia_atual
                                                 nivel_sequencia_atual=2
                                                 nivel_sequencia=2
@@ -2630,6 +2726,7 @@ while not gameExit:
                                                 delay()
 
                                             if pontuacao_final < 25:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Retrocede nível'])
                                                 if tamanho_sequencia_atual == 1:
                                                     tamanho_sequencia = tamanho_sequencia_atual
                                                     nivel_sequencia_atual=1
@@ -2666,6 +2763,7 @@ while not gameExit:
                                     elif (jogador[0] > 625 and jogador[0] < 800) and (
                                             jogador[1] > 125 and jogador[1] < 240) and figura_selecionada == False:
                                         # print('quadrado')
+                                        dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Selecionou quadrado'])
                                         quadrado_longe_selecionado()
                                         som_quadrado()
                                         tela_update()
@@ -2675,6 +2773,7 @@ while not gameExit:
                                         tempo_ajuda_switch = False
 
                                         if lista_sorteio[item_da_lista] == 3:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Acerto com ajuda'])
                                             pontuacao = pontuacao + 5
                                             feliz()
                                             som_feliz()
@@ -2683,6 +2782,7 @@ while not gameExit:
                                             delay()
 
                                         if lista_sorteio[item_da_lista] != 3:
+                                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Erro'])
                                             triste()
                                             som_triste()
                                             tela_update()
@@ -2719,6 +2819,7 @@ while not gameExit:
                                             print(pontuacao_final)
 
                                             if pontuacao_final >= 75:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Próximo nível'])
                                                 tamanho_sequencia_atual = tamanho_sequencia_atual + 1
                                                 tamanho_sequencia = tamanho_sequencia_atual
                                                 nivel_sequencia_atual=1
@@ -2734,6 +2835,7 @@ while not gameExit:
                                                 nivel_sequencia = 1
 
                                             if pontuacao_final >= 25 and pontuacao_final < 75:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Mantém nível'])
                                                 tamanho_sequencia = tamanho_sequencia_atual
                                                 nivel_sequencia_atual=2
                                                 nivel_sequencia=2
@@ -2747,6 +2849,7 @@ while not gameExit:
                                                 delay()
 
                                             if pontuacao_final < 25:
+                                                dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Retrocede nível'])
                                                 if tamanho_sequencia_atual == 1:
                                                     tamanho_sequencia = tamanho_sequencia_atual
                                                     nivel_sequencia_atual=1
@@ -2799,6 +2902,7 @@ while not gameExit:
                                 ########################### OMISSÃO PELO JOGADOR #########################
                                 ##########################################################################
                                 if tempo > tempo_total:
+                                    dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Omissão do jogador'])
                                     fill_preto()
                                     tempo_max()
                                     som_triste()
@@ -2874,7 +2978,8 @@ while not gameExit:
                     arquivo.set_R_SOM(jogador_selecionado_config, som_switch)
                     arquivo.set_R_SESSAO(jogador_selecionado_config, sessao)
 
-                    arquivo.gravaDados(jogador_selecionado_detalhado,[sessao, data, hora_esc, tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Sair'])
+                    dadosDetalhado.append([sessao, data, hora_esc, tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Sair'])
+                    arquivo.gravaArrayDados(jogador_selecionado_detalhado,dadosDetalhado)
                     arquivo.gravaDados(jogador_selecionado,[sessao, data, hora_inicio, hora_esc, tamanho_sequencia_atual, nivel_sequencia_atual,q_acertos,q_acertos_com_ajuda, q_ajudas, q_erros, q_omissao])
 
                     gameExit=True
@@ -2886,6 +2991,7 @@ while not gameExit:
                 # AJUDA F1
                 if event.type == pygame.KEYDOWN:
                     if event.key==pygame.K_F1:
+                        dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Abriu Menu de ajuda'])
                         fill_preto()
                         ajuda_f1()
                         pygame.display.update()
@@ -2912,9 +3018,10 @@ while not gameExit:
                             fill_preto()
                             hud_on()
                             pygame.display.update()
-                            data = datetime.date.today()
-                            hora_hud_ligado = datetime.datetime.now().time()
-                            arquivo.gravaDados(jogador_selecionado_detalhado,[sessao, data, hora_hud_ligado, tamanho_sequencia_atual,nivel_sequencia_atual, posicao(), 'HUD Ligado'])
+                            #data = datetime.date.today()
+                            #hora_hud_ligado = datetime.datetime.now().time()
+                            #arquivo.gravaDados(jogador_selecionado_detalhado,[sessao, data, hora_hud_ligado, tamanho_sequencia_atual,nivel_sequencia_atual, posicao(), 'HUD Ligado'])
+                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'HUD Ligado'])
                             delay()
                             delay()
                             delay()
@@ -2923,9 +3030,10 @@ while not gameExit:
                             fill_preto()
                             hud_off()
                             pygame.display.update()
-                            data = datetime.date.today()
-                            hora_hud_desligado = datetime.datetime.now().time()
-                            arquivo.gravaDados(jogador_selecionado_detalhado,[sessao, data, hora_hud_desligado, tamanho_sequencia_atual,nivel_sequencia_atual, posicao(), 'HUD Desligado'])
+                            #data = datetime.date.today()
+                            #hora_hud_desligado = datetime.datetime.now().time()
+                            #arquivo.gravaDados(jogador_selecionado_detalhado,[sessao, data, hora_hud_desligado, tamanho_sequencia_atual,nivel_sequencia_atual, posicao(), 'HUD Desligado'])
+                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'HUD Desligado'])
                             delay()
                             delay()
                             delay()
@@ -2940,18 +3048,20 @@ while not gameExit:
                         if som_switch==False:
                             som_ligado()
                             tela_update()
-                            data = datetime.date.today()
-                            hora_som_ligado = datetime.datetime.now().time()
-                            arquivo.gravaDados(jogador_selecionado_detalhado,[sessao, data, hora_som_ligado, tamanho_sequencia_atual,nivel_sequencia_atual, posicao(), 'Som Ligado'])
+                            #data = datetime.date.today()
+                            #hora_som_ligado = datetime.datetime.now().time()
+                            #arquivo.gravaDados(jogador_selecionado_detalhado,[sessao, data, hora_som_ligado, tamanho_sequencia_atual,nivel_sequencia_atual, posicao(), 'Som Ligado'])
+                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Som Ligado'])
                             delay()
                             delay()
                             delay()
                         if som_switch==True:
                             som_desligado()
                             tela_update()
-                            data = datetime.date.today()
-                            hora_som_desligado = datetime.datetime.now().time()
-                            arquivo.gravaDados(jogador_selecionado_detalhado,[sessao, data, hora_som_desligado, tamanho_sequencia_atual,nivel_sequencia_atual, posicao(), 'Som Desligado'])
+                            #data = datetime.date.today()
+                            #hora_som_desligado = datetime.datetime.now().time()
+                            #arquivo.gravaDados(jogador_selecionado_detalhado,[sessao, data, hora_som_desligado, tamanho_sequencia_atual,nivel_sequencia_atual, posicao(), 'Som Desligado'])
+                            dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Som Desligado'])
                             delay()
                             delay()
                             delay()
@@ -2963,9 +3073,10 @@ while not gameExit:
                     if event.key==pygame.K_UP or event.key==pygame.K_4:
                         fill_preto()
                         fase_acima()
-                        data = datetime.date.today()
-                        hora_fase_acima = datetime.datetime.now().time()
-                        arquivo.gravaDados(jogador_selecionado_detalhado,[sessao, data, hora_fase_acima, tamanho_sequencia_atual,nivel_sequencia_atual, posicao(), 'Fase Acima'])
+                        #data = datetime.date.today()
+                        #hora_fase_acima = datetime.datetime.now().time()
+                        #arquivo.gravaDados(jogador_selecionado_detalhado,[sessao, data, hora_fase_acima, tamanho_sequencia_atual,nivel_sequencia_atual, posicao(), 'Fase Acima'])
+                        dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Fase Acima'])
                         tamanho_sequencia_atual=tamanho_sequencia_atual+1
                         tamanho_sequencia=tamanho_sequencia_atual
                         lista_sorteio=[]
@@ -2979,9 +3090,10 @@ while not gameExit:
                     if event.key==pygame.K_DOWN or event.key==pygame.K_5:
                         fill_preto()
                         fase_abaixo()
-                        data = datetime.date.today()
-                        hora_fase_abaixo = datetime.datetime.now().time()
-                        arquivo.gravaDados(jogador_selecionado_detalhado,[sessao, data, hora_fase_abaixo, tamanho_sequencia_atual,nivel_sequencia_atual, posicao(), 'Fase Abaixo'])
+                        #data = datetime.date.today()
+                        #hora_fase_abaixo = datetime.datetime.now().time()
+                        #arquivo.gravaDados(jogador_selecionado_detalhado,[sessao, data, hora_fase_abaixo, tamanho_sequencia_atual,nivel_sequencia_atual, posicao(), 'Fase Abaixo'])
+                        dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Fase Abaixo'])
                         if tamanho_sequencia_atual>1:
                             tamanho_sequencia_atual=tamanho_sequencia_atual-1
                             tamanho_sequencia=tamanho_sequencia_atual
@@ -2998,9 +3110,10 @@ while not gameExit:
 
                 # PAUSE (ESPAÇO)
                     if event.key == pygame.K_SPACE:
-                        data = datetime.date.today()
-                        hora_pausa = datetime.datetime.now().time()
-                        arquivo.gravaDados(jogador_selecionado_detalhado,[sessao, data, hora_pausa, tamanho_sequencia_atual, nivel_sequencia_atual,posicao(), 'Pausa'])
+                        #data = datetime.date.today()
+                        #hora_pausa = datetime.datetime.now().time()
+                        #arquivo.gravaDados(jogador_selecionado_detalhado,[sessao, data, hora_pausa, tamanho_sequencia_atual, nivel_sequencia_atual,posicao(), 'Pausa'])
+                        dadosDetalhado.append([sessao, datetime.date.today(), datetime.datetime.now().time(), tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Pausa'])
                         t0=int(time.time())
                         pausa_switch= not pausa_switch
 
@@ -3016,8 +3129,8 @@ while not gameExit:
                         arquivo.set_R_HUD(jogador_selecionado_config, hud_switch)
                         arquivo.set_R_SOM(jogador_selecionado_config, som_switch)
                         arquivo.set_R_SESSAO(jogador_selecionado_config, sessao)
-
-                        arquivo.gravaDados(jogador_selecionado_detalhado,[sessao, data, hora_esc, tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Sair'])
+                        dadosDetalhado.append([sessao, data, hora_esc, tamanho_sequencia_atual, nivel_sequencia_atual, posicao(),'Sair'])
+                        arquivo.gravaArrayDados(jogador_selecionado_detalhado,dadosDetalhado)
                         arquivo.gravaDados(jogador_selecionado,[sessao, data, hora_inicio, hora_esc, tamanho_sequencia_atual, nivel_sequencia_atual,q_acertos,q_acertos_com_ajuda, q_ajudas, q_erros, q_omissao])
 
                         gameExit = True
