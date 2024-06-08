@@ -117,6 +117,35 @@ def CadastrarJogador(Nome, Nasc, Obs):
         csvwriter = csv.writer(csvfile, dialect='mydialect')
         csvwriter.writerow(fields)
 
+
+    ########################################################################################################
+    ############################################## VESTEA ##################################################
+    ########################################################################################################
+    Config = ['Sessao', 'Nome', 'Data de Nasc.', 'Observacoes', 'Fase Atual', 'Nivel Atual', 'Tempo de Ajuda',
+              'Tempo Total',
+              'Tempo de Exposicao', 'Tempo Vez do Jogador', 'HUD', 'Som', 'Camera', 'Largura de Projecao',
+              'Altura de Projecao',
+              'Largura Tela de Controle', 'Altura Tela de Controle', 'Cores', 'Sons']
+    Dados = [0, Nome, Nasc, Obs, 1, 1, 5, 10, 0.5, 0.5, True, True, 0, 800, 600, 640, 480, 'padrao', 'padrao']
+    file = 'Jogadores/' + Nome + '_VesTEA_config.csv'
+
+    with open(file, 'w') as csvfile:
+        csvwriter = csv.writer(csvfile, dialect='mydialect')
+        csvwriter.writerow(Config)
+        csvwriter.writerow(Dados)
+
+    fields = ['Sessao', 'Data', 'Hora Inicio', 'Hora Fim', 'Fase Alcancada', 'Nivel Alcancado',
+              'Qt Acertos sem Ajuda', 'Qt Acertos com Ajuda', 'Qt Ajudas', 'Qt Erros', 'Qt Omissões']
+    file = 'Jogadores/' + Nome + '_VesTEA_sessao.csv'
+    with open(file, 'w') as csvfile:
+        csvwriter = csv.writer(csvfile, dialect='mydialect')
+        csvwriter.writerow(fields)
+
+    fields = ['Sessao', 'Data', 'Hora', 'Fase', 'Nivel', 'Posicao jogador', 'Tipo de Evento']
+    file = 'Jogadores/' + Nome + '_VesTEA_detalhado.csv'
+    with open(file, 'w') as csvfile:
+        csvwriter = csv.writer(csvfile, dialect='mydialect')
+        csvwriter.writerow(fields)
 #----------------------------------------------------------------------------------------------------------------------#
 
 def get_Date():

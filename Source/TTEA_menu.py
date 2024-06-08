@@ -1,3 +1,4 @@
+
 import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
@@ -10,7 +11,9 @@ import settings
 import pygame
 import subprocess
 import calibracaov2
-
+#para inserir arquivos de outras pastas 
+from sys import path
+path.insert(1, '/VesTEA')
 
 from tkinter import messagebox
 
@@ -93,7 +96,8 @@ game_cb = ttk.Combobox(menu_frame, textvariable=selected_game)
 game = ''
 
 # set combo values
-game_cb['values'] = ['KARTEA', 'REPETEA']
+game_cb['values'] = ['KARTEA', 'REPETEA', 'VESTEA'
+]
 
 # prevent typing a value
 game_cb['state'] = 'readonly'
@@ -111,9 +115,12 @@ def game_changed(event):
     if game == 'KARTEA':
         fase_cb['values'] = ['1', '2', '3']
         nivel_cb['values'] = ['1', '2', '3', '4', '5', '6']
-    else:
+    elif game == 'REPETEA':
         fase_cb['values'] = ['1', '2', '3','4','5','6','7','8','9','10']
         nivel_cb['values'] = ['1', '2', '3', '4', '5']
+    elif game == 'VESTEA':
+        fase_cb['values'] = ['1', '2', '3']
+        nivel_cb['values'] = ['1', '2', '3', '4', '5','6','7','8','9','10', '11', '12', '13','14','15']
 
     fase_cb['state'] = 'disabled'
     fase_cb.set('')
@@ -149,6 +156,9 @@ def ler_nome_jogadores():
         a = a.replace('_RepeTEA.csv','')
         a = a.replace('_RepeTEA_config.csv','')
         a = a.replace('_RepeTEA_detalhado.csv','')
+        a = a.replace('_VesTEA_sessao.csv','')
+        a = a.replace('_VesTEA_config.csv','')
+        a = a.replace('_VesTEA_detalhado.csv','')
         if a != b:
             arr.append(a)
         b = a
@@ -185,6 +195,10 @@ def jogador_changed(event):
         PLAYER_ARQ = PLAYER + "_RepeTEA_sessao.csv"
         PLAYER_ARQ_CONFIG = PLAYER + "_RepeTEA_config.csv"
         PLAYER_ARQ_DET = PLAYER + "_RepeTEA_detalhado.csv"
+    elif game == 'VESTEA':
+        PLAYER_ARQ = PLAYER + "_VesTEA_sessao.csv"
+        PLAYER_ARQ_CONFIG = PLAYER + "_VesTEA_config.csv"
+        PLAYER_ARQ_DET = PLAYER + "_VesTEA_detalhado.csv"
 
     global FASE, NIVEL
     FASE = arquivo.get_K_FASE(PLAYER_ARQ_CONFIG)
@@ -277,9 +291,12 @@ def JogarCallback():
     if game == 'KARTEA':
         import KarTEA
         KarTEA.main()
-    else:
+    elif game == 'REPETEA':
         import RepeTEA
         # RepeTEA().main
+    elif game == 'VESTEA':
+        #from VesTEA import principal 
+        from VesTEA import vestea_inicio
 
 B = tk.Button(menu_frame, text ="Jogar", command = JogarCallback)
 
