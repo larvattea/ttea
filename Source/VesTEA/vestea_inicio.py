@@ -3,23 +3,21 @@ from pygame import font
 from pygame import display
 from pygame.image import load
 from pygame.transform import scale
-from pygame.sprite import Group, GroupSingle, groupcollide
 from pygame import event
 from pygame.locals import QUIT, KEYUP, K_SPACE
 from pygame.time import Clock
+
+#from VesTEA.pose_tracking import PoseTracking
+
 from VesTEA import botao
-from VesTEA.tela import Tela
-from VesTEA.desafio import Desafio
-from VesTEA.jogador import Jogador
-from VesTEA.inimigo import Inimigo
-import numpy as np
+from VesTEA.jogo import Jogo
 
 
 #se for executar de outra pasta, precisa de:
 #import os
 #os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-class Jogo():
+class Vestea():
     def __init__(self):
         pygame.init()
         self.esta_rodando = True
@@ -48,20 +46,22 @@ class Jogo():
             self.tamanho
         )
 
+        self.jogo = Jogo(self.superficie)
+                
         #self.fundo_inicio = scale(
         #    load('images/title_background.jpg'),
         #    self.tamanho
         #)
 
     def novo_jogo(self):
-        self.grupo_inimigos = Group()
-        self.grupo_tiros = Group()
-        self.jogador = Jogador(self)
-        self.grupo_jogador = GroupSingle(self.jogador) #permite draw
-        self.grupo_inimigos.add(Inimigo(self))
+        #self.grupo_inimigos = Group()
+        #self.grupo_tiros = Group()
+        #self.jogador = Jogador(self)
+        #self.grupo_jogador = GroupSingle(self.jogador) #permite draw
+        #self.grupo_inimigos.add(Inimigo(self))
 
         self.mortes = 0
-        self.round = 0
+        #self.round = 0
     
     def rodar(self):
         #loop do jogo
@@ -74,7 +74,7 @@ class Jogo():
                 if self.estado==1:
                     if evento.type == KEYUP:
                         if evento.key == K_SPACE:
-                            self.jogador.atirar()
+                            self.jogo.jogando = not self.jogo.jogando
 
             # Loop de eventos
             if self.estado==0:    
@@ -91,7 +91,7 @@ class Jogo():
                 
                 if self.botao_inicio.criar(self.superficie):
                     #print('START')
-                    self.novo_jogo()
+                    #self.novo_jogo()
                     self.estado=1
                 if self.botao_sair.criar(self.superficie):
                     #print('EXIT')
@@ -99,14 +99,13 @@ class Jogo():
 
 
             elif self.estado==1:
-                self.fase = 3
-                self.nivel = 1
-                self.desafio = Desafio(self.fase, self.nivel)
-                self.tela = Tela(self.desafio)
+                #self.jogo.jogando = True
+                self.jogo.update()
+                #print(self.estado,' e ',self.jogo.estado)
             display.update()
 
 
-g = Jogo()
+g = Vestea()
 #g.novo_jogo()
 g.rodar()
 
