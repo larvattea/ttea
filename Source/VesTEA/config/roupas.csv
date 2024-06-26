@@ -1,6 +1,9 @@
-Roupa;Corpo;Clima;Local
-camisa1.jpg;1;1;1
-camisa2.jpg;1;2;1
-cueca1.jpg;4;0;1
-saia1.jpg;2;1;1
-tenis1.jpg;3;0;1
+Roupa;Corpo;Clima;Local1;Local2;Local3
+camisa1.jpg;1;1;1;1;0
+camisa2.jpg;1;2;1;1;0
+cueca1.jpg;4;0;0;0;0
+saia1.jpg;2;1;1;1;0
+tenis1.jpg;3;0;1;1;0
+bikini1.jpg;4;1;0;0;1
+chinelo1.jpg;3;1;1;0;1
+calca1.jpg;2;2;1;1;0

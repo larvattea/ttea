@@ -79,9 +79,9 @@ class Tela():
         self.parede_img = pygame.transform.scale(self.parede_img, (self.tilesize, self.tilesize))
         
         #carrega imagens vestimentas
-        self.roupacerta_img = pygame.image.load('Assets/vestea/imgs/roupas/'+desafio.roupa_certa).convert_alpha()
+        self.roupacerta_img = pygame.image.load('Assets/vestea/imgs/roupas/'+desafio.roupa_certa.nome).convert_alpha()
         self.roupacerta_img = pygame.transform.scale(self.roupacerta_img, (self.tilesize*2, self.tilesize*2))
-        self.roupaerrada_img = pygame.image.load('Assets/vestea/imgs/roupas/'+desafio.roupa_errada).convert_alpha()
+        self.roupaerrada_img = pygame.image.load('Assets/vestea/imgs/roupas/'+desafio.roupa_errada.nome).convert_alpha()
         self.roupaerrada_img = pygame.transform.scale(self.roupaerrada_img, (self.tilesize*2, self.tilesize*2))
         mapa = desafio.labirinto
         
