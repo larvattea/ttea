@@ -24,7 +24,7 @@ class Jogo():
 
 
     def carregaDados(self):
-        self.fase = 3
+        self.fase = 1
         self.nivel = 1
         self.jogada = 1
         self.desafio = Desafio(self.fase, self.nivel)
@@ -42,7 +42,7 @@ class Jogo():
         self.cap.load_camera()
         self.cap.frame = self.jogador.scan_feets(self.cap.frame)
         x, y = self.jogador.get_feet_center()
-        print("Jogador em: ",x,"-",y)
+        #print("Jogador em: ",x,"-",y)
         pygame.draw.circle(self.superficie, (255,255,0), [x,y-20], 15)
         self.posicaoJogador = self.desafio.detectaColisao(x,y)
         if self.posicaoJogador == 3 or self.posicaoJogador == 33 or self.posicaoJogador == 4 or self.posicaoJogador == 44:
@@ -101,7 +101,7 @@ class Jogo():
 
             elif self.estado == 4:    
                 #carrega jogada (movimento, colisão...)
-                print("Jogando...")
+                #print("Jogando...")
                 self.gerenciaJogo()
             
             elif self.estado == 5:    

@@ -54,17 +54,17 @@ class Tela():
         #inicia contadora de posicao
         posicao_atual = 0
         #mostra as imagens do desafio
-        if desafio.corpo == 1: 
+        if desafio.corpo >0: 
             self.desafio_corpo = pygame.image.load(f'Assets/vestea/imgs/desafios/Corpo{desafio.corpo}.png').convert_alpha()
             self.desafio_corpo = pygame.transform.scale(self.desafio_corpo, (self.tilesize*2, self.tilesize*2))
             self.display_surface.blit(self.desafio_corpo,posicoes[posicao_atual])
             posicao_atual += 1
-        if desafio.clima == 1: 
+        if desafio.clima >0: 
             self.desafio_clima = pygame.image.load(f'Assets/vestea/imgs/desafios/Clima{desafio.clima}.png').convert_alpha()
             self.desafio_clima = pygame.transform.scale(self.desafio_clima, (self.tilesize*2, self.tilesize*2))
             self.display_surface.blit(self.desafio_clima,posicoes[posicao_atual])
             posicao_atual += 1
-        if desafio.local == 1: 
+        if desafio.local >0: 
             self.desafio_local = pygame.image.load(f'Assets/vestea/imgs/desafios/Local{desafio.local}.jpg').convert_alpha()
             self.desafio_local = pygame.transform.scale(self.desafio_local, (self.tilesize*2, self.tilesize*2))
             self.display_surface.blit(self.desafio_local,posicoes[posicao_atual])
