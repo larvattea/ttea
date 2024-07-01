@@ -172,11 +172,31 @@ class Desafio():
                         self.corpo = 0
                         self.clima = 0
                         return
-                    
         #se fase for 2
+        elif self.fase == 2:
+            while True:
             #repete
                 #gera valor
+                randNum = random.randint(1,3)
                 #se certo for igual errado, zera ele
+                if randNum == 1:
+                    print('Desafio = testa corpo:',self.roupa_certa.corpo,self.roupa_errada.corpo)
+                    if (self.roupa_certa.corpo == self.roupa_errada.corpo):
+                        print('Desafio = remove corpo:',self.roupa_certa.corpo,self.roupa_errada.corpo)
+                        self.corpo = 0
+                        return
+                elif randNum == 2:
+                    print('Desafio = testa clima:',self.roupa_certa.clima,self.roupa_errada.clima)
+                    if (int(self.roupa_certa.clima) + int(self.roupa_errada.clima) > 0 and self.roupa_certa.clima == self.roupa_errada.clima):
+                        print('Desafio = remove clima:',self.roupa_certa.clima,self.roupa_errada.clima)
+                        self.clima = 0
+                        return
+                elif randNum == 3:
+                    print('Desafio = testa local:',self.roupa_certa.local[self.local-1],self.roupa_errada.local[self.local-1])
+                    if (self.roupa_certa.local[self.local-1] == self.roupa_errada.local[self.local-1]):
+                        print('Desafio = remove local:',self.roupa_certa.local[self.local-1],self.roupa_errada.local[self.local-1])
+                        self.local = 0
+                        return
                 
 
         
