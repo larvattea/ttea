@@ -11,8 +11,9 @@ class Roupa():
         self.posicao = posicao #posicao dela no roupas.csv
 
     def getLocais(self, roupa):
-        roupa.pop(0) #remove nome
-        roupa.pop(0) #remove corpo
-        roupa.pop(0) #remove clima
-        return roupa #retorna só locais
+        locais = roupa.copy()
+        locais.pop(0) #remove nome
+        locais.pop(0) #remove corpo
+        locais.pop(0) #remove clima
+        return locais #retorna só locais
 

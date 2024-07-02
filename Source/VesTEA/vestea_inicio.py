@@ -4,7 +4,7 @@ from pygame import display
 from pygame.image import load
 from pygame.transform import scale
 from pygame import event
-from pygame.locals import QUIT, KEYUP, K_SPACE
+from pygame.locals import QUIT, KEYUP, K_SPACE, K_UP, K_DOWN, K_RIGHT
 from pygame.time import Clock
 
 #from VesTEA.pose_tracking import PoseTracking
@@ -75,6 +75,16 @@ class Vestea():
                     if evento.type == KEYUP:
                         if evento.key == K_SPACE:
                             self.jogo.jogando = not self.jogo.jogando
+                        elif evento.key == K_UP:
+                            print('UP')
+                            self.jogo.posicaoJogador = 3
+                            self.jogo.estado += 1
+                        elif evento.key == K_DOWN:
+                            self.jogo.posicaoJogador = 4
+                            self.jogo.estado += 1
+                        elif evento.key == K_RIGHT:
+                            self.jogo.posicaoJogador = 2
+                            self.jogo.estado += 1
 
             # Loop de eventos
             if self.estado==0:    

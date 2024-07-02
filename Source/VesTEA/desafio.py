@@ -34,7 +34,7 @@ class Desafio():
         self.DefineImagensDesafio()
         
     def getLabirinto(self):
-        rand = random.randint(1,3)
+        rand = random.randint(1,6)
         if rand == 1:
             return np.array([
                 [4,44,0,0,0,0,0,0,0,0,0,0,0,0,3,33],
@@ -71,6 +71,42 @@ class Desafio():
                 [0,0,0,0,1,1,3,33,0,0,0,0,0,0,0,0],
                 [0,2,22,0,1,1,33,33,0,0,0,0,0,0,0,0],
             ])
+        elif rand == 4:
+            return np.array([
+                [3,33,0,0,0,0,0,0,0,0,0,0,0,0,4,44],
+                [33,33,1,0,0,0,0,0,0,0,0,0,0,1,44,44],
+                [0,0,1,0,0,0,0,1,1,0,0,0,0,1,0,0],
+                [0,0,1,1,1,0,0,0,0,0,0,1,1,1,0,0],
+                [0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0],
+                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                [1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1],
+                [0,0,0,0,0,0,0,2,22,0,0,0,0,0,0,0],
+            ])
+        elif rand == 5:
+            return np.array([
+                [0,0,0,0,0,0,0,4,44,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,44,44,0,0,0,0,0,0,0],
+                [0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0],
+                [0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0],
+                [0,0,0,0,0,0,0,3,33,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,33,33,0,0,0,0,0,0,0],
+                [0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0],
+                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,2,22,0,0,0,0,0,0,0],
+            ])
+        elif rand == 6:
+            return np.array([
+                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+                [0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0],
+                [0,0,0,0,1,1,3,3,0,0,0,0,0,0,0,0],
+                [0,0,0,0,1,1,33,33,0,0,0,0,0,0,0,0],
+                [0,0,0,0,1,1,0,0,0,1,1,1,1,0,0,0],
+                [0,0,0,0,1,1,0,0,0,1,1,1,1,0,0,0],
+                [0,0,0,0,1,1,4,44,0,0,0,0,0,0,0,0],
+                [0,2,22,0,1,1,44,44,0,0,0,0,0,0,0,0],
+            ])
 
     def getRoupaCerta(self):
         with open('VesTEA/config/roupas.csv', 'r') as csvfile:
@@ -81,21 +117,20 @@ class Desafio():
             print(', '.join(linha))
         #print(len(dados))
         rouparand = random.randint(1,len(dados))-1
-        #print(dados[rouparand])
+        print('Roupa certa:',dados[rouparand])
         #print(dados[rouparand][0])
         return Roupa(dados[rouparand], rouparand)
 
     #1=torso; 2=pernas; 3= pés; 4=roupa de baixo
     def getCorpo(self):
-        print('corpo:',self.roupa_certa.corpo)
+        print('Desafio corpo:',self.roupa_certa.corpo)
         return self.roupa_certa.corpo
 
     #1=calor; 2=frio
     def getClima(self):
-        print('clima:',self.roupa_certa.clima)
         if self.roupa_certa.clima == '0':
             self.roupa_certa.clima = random.randint(1,2)
-            print('clima revisto:',self.roupa_certa.clima)
+        print('Desafio clima:',self.roupa_certa.clima)
         return self.roupa_certa.clima
 
     #1=parque; 2=restaurante; 3=praia
@@ -107,7 +142,7 @@ class Desafio():
             #print(self.roupa_certa.local[localrand])
             #print(self.roupa_certa.local[localrand]=='1')
             if self.roupa_certa.local[localrand] =='1' :
-                print('local:',localrand+1)
+                print('Desafio local:',localrand+1)
                 return localrand+1
 
     def getRoupaErrada(self):
@@ -115,15 +150,17 @@ class Desafio():
             csvreader = csv.reader(csvfile, dialect='mydialect')
             cabecalho = next(csvreader)
             dados = list(csvreader)
-        print ('roupa errada') 
+        #print ('roupa errada') 
         #dados.pop(self.roupa_certa.posicao)
-        print(dados)
+        #print(dados)
         rouparand = ""
         while True:
             #gera roupa errada aleatoria
             rouparand = random.randint(1,len(dados))-1
-            print(rouparand)
+            #print(rouparand)
             print(dados)
+            print('Roupa certa:', dados[self.roupa_certa.posicao])
+            print('Roupa errada:', dados[rouparand])
             roupaSelecionada = Roupa(dados[rouparand], rouparand)
             print(roupaSelecionada.local)
             print('self.local: ',self.local)
@@ -133,6 +170,7 @@ class Desafio():
             diferencas[0] += 1 if roupaSelecionada.corpo!=self.roupa_certa.corpo else 0
             diferencas[1] += 1 if (roupaSelecionada.clima!=self.roupa_certa.clima and self.roupa_certa.clima != '0' and roupaSelecionada.clima != '0') else 0
             diferencas[2] += 1 if roupaSelecionada.local[self.local-1]!='1' else 0 
+            print('diferenças:', diferencas)
             #se tiver ao menos uma diferença, usa essa roupa
             if (diferencas[0] != diferencas[1] or diferencas[1] != diferencas[2]):
                 print ('Roupa é diferente...')
@@ -161,14 +199,14 @@ class Desafio():
                         self.local = 0
                         return
                 elif randNum == 2:
-                    if (int(self.roupa_certa.clima) + int(self.roupa_errada.clima) > 0 and self.roupa_certa.clima != self.roupa_errada.clima):
+                    if (self.roupa_certa.clima != '0' and self.roupa_errada.clima != '0' and self.roupa_certa.clima != self.roupa_errada.clima):
                         print('Desafio = clima:',self.roupa_certa.clima,self.roupa_errada.clima)
                         self.corpo = 0
                         self.local = 0
                         return
                 elif randNum == 3:
-                    if (self.roupa_certa.local[self.local] != self.roupa_errada.local[self.local]):
-                        print('Desafio = local:',self.roupa_certa.local[self.local],self.roupa_errada.local[self.local])
+                    if (self.roupa_certa.local[self.local-1] != self.roupa_errada.local[self.local-1]):
+                        print('Desafio = local:',self.roupa_certa.local[self.local-1],self.roupa_errada.local[self.local-1])
                         self.corpo = 0
                         self.clima = 0
                         return
@@ -180,19 +218,19 @@ class Desafio():
                 randNum = random.randint(1,3)
                 #se certo for igual errado, zera ele
                 if randNum == 1:
-                    print('Desafio = testa corpo:',self.roupa_certa.corpo,self.roupa_errada.corpo)
+                    #print('Desafio = testa corpo:',self.roupa_certa.corpo,self.roupa_errada.corpo)
                     if (self.roupa_certa.corpo == self.roupa_errada.corpo):
                         print('Desafio = remove corpo:',self.roupa_certa.corpo,self.roupa_errada.corpo)
                         self.corpo = 0
                         return
                 elif randNum == 2:
-                    print('Desafio = testa clima:',self.roupa_certa.clima,self.roupa_errada.clima)
+                    #print('Desafio = testa clima:',self.roupa_certa.clima,self.roupa_errada.clima)
                     if (int(self.roupa_certa.clima) + int(self.roupa_errada.clima) > 0 and self.roupa_certa.clima == self.roupa_errada.clima):
                         print('Desafio = remove clima:',self.roupa_certa.clima,self.roupa_errada.clima)
                         self.clima = 0
                         return
                 elif randNum == 3:
-                    print('Desafio = testa local:',self.roupa_certa.local[self.local-1],self.roupa_errada.local[self.local-1])
+                    #print('Desafio = testa local:',self.roupa_certa.local[self.local-1],self.roupa_errada.local[self.local-1])
                     if (self.roupa_certa.local[self.local-1] == self.roupa_errada.local[self.local-1]):
                         print('Desafio = remove local:',self.roupa_certa.local[self.local-1],self.roupa_errada.local[self.local-1])
                         self.local = 0

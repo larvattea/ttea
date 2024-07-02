@@ -8,13 +8,14 @@ from pygame import event
 from pygame.locals import KEYUP, K_SPACE
 from pygame import font
 from VesTEA import botao
+from pygame import display
 
 class Jogo():
     def __init__(self, superficie):
         self.jogando = True
-        self.fase = 0
-        self.nivel = 0
-        self.jogada = 0
+        self.fase = 1
+        self.nivel = 1
+        self.jogada = 1
         self.estado = 1
         #captura do jogador
         self.cap = Camera()
@@ -24,9 +25,6 @@ class Jogo():
 
 
     def carregaDados(self):
-        self.fase = 1
-        self.nivel = 1
-        self.jogada = 1
         self.desafio = Desafio(self.fase, self.nivel)
         self.estado += 1 
     
@@ -49,19 +47,34 @@ class Jogo():
             self.estado += 1
 
     def verificaResultado(self):
+        pygame.draw.rect(self.tela.roupacerta_img, (0,255,0), (0, 0, 100, 100),10)
+        certo_rect = self.tela.roupacerta_img.get_rect(topleft = self.tela.roupacerta_pos)
+        self.superficie.blit(self.tela.roupacerta_img, certo_rect)
+        pygame.draw.rect(self.tela.roupaerrada_img, (255,0,0), (0, 0, 100, 100),10)
+        erro_rect = self.tela.roupaerrada_img.get_rect(topleft = self.tela.roupaerrada_pos)
+        self.superficie.blit(self.tela.roupaerrada_img, erro_rect)
+        display.update()
+        pygame.time.delay(5000)   
         if self.posicaoJogador == 3 or self.posicaoJogador == 33: 
-            print('acerto mizeravi')
+            self.acoesAcerto()
         elif self.posicaoJogador == 4 or self.posicaoJogador == 44:
-            print('errrrou')
+            self.acoesErro()
+        print('passou atraso do resultado') 
+        self.estado = 1    
 
-    def verificaFimNivel(self):
-        return True
+    def acoesAcerto(self):
+        print('acerto mizeravi')
+        if self.fase <3:
+            self.fase += 1
+    
+    def acoesErro(self):
+        print('Errou')
+        if self.fase >1:
+            self.fase -= 1
 
     def carregaTelaPausa(self):
         self.superficie.fill((50, 50, 255))
 
-        #self.superficie.blit(self.fundo_inicio, (0, 0))
-        
         titulo = font.SysFont('comicsans', 80).render(
             'Pausa',
             True,
@@ -108,11 +121,6 @@ class Jogo():
                 #carrega pós jogada (ações de acerto/erro e próx jogada ou fim de nível)
                 print("Carregando resultado...")
                 self.verificaResultado()
-
-            elif self.estado == 6:    
-                #carrega carrega pós-nível (exibir resultado e decidir próximo nível)
-                print("Carregando fim de nível...")
-                self.verificaFimNivel()
 
         elif self.jogando == False:    
             #pausa

@@ -79,8 +79,8 @@ class Jogador:
                 self.results.pose_landmarks,
                 mp_poses.POSE_CONNECTIONS,
                 landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style())
-        else:
-            print ("sem captura")
+        #else:
+            #print ("sem captura")
 
         return image
 
