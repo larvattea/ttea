@@ -77,6 +77,8 @@ class Tela():
         self.inicio_img = pygame.transform.scale(self.inicio_img, (2*self.tilesize, self.tilesize))
         self.parede_img = pygame.image.load('Assets/vestea/imgs/tijolo.jpg').convert_alpha()
         self.parede_img = pygame.transform.scale(self.parede_img, (self.tilesize, self.tilesize))
+        self.paredeatingida_img = pygame.image.load('Assets/vestea/imgs/tijoloAtingido.jpg').convert_alpha()
+        self.paredeatingida_img = pygame.transform.scale(self.paredeatingida_img, (self.tilesize, self.tilesize))
         
         #carrega imagens vestimentas
         self.roupacerta_img = pygame.image.load('Assets/vestea/imgs/roupas/'+desafio.roupa_certa.nome).convert_alpha()
@@ -94,6 +96,8 @@ class Tela():
                 imagem = ''
                 if mapa[row-3,col] == 1:
                     imagem = self.parede_img
+                if mapa[row-3,col] == 11:
+                    imagem = self.paredeatingida_img
                 elif mapa[row-3,col] == 2:
                     imagem = self.inicio_img
                 elif mapa[row-3,col] == 3:

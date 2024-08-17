@@ -45,6 +45,8 @@ class Jogo():
         self.posicaoJogador = self.desafio.detectaColisao(x,y)
         if self.posicaoJogador == 3 or self.posicaoJogador == 33 or self.posicaoJogador == 4 or self.posicaoJogador == 44:
             self.estado += 1
+        if self.posicaoJogador == 1:
+            self.acoesColisao(x,y)
 
     def verificaResultado(self):
         pygame.draw.rect(self.tela.roupacerta_img, (0,255,0), (0, 0, 100, 100),10)
@@ -71,6 +73,15 @@ class Jogo():
         print('Errou')
         if self.fase >1:
             self.fase -= 1
+
+    def acoesColisao(self, x, y):
+        print('Bateu na parede')
+        #pintar o quadrado
+        self.desafio.labirinto = self.desafio.mudaParedeAtingida(x,y,self.desafio.labirinto)
+            #mudar pra outro valor no mapa, pq aí não colide de novo no mesmo local
+        #aguardar sair
+        self.posicaoJogador
+        
 
     def carregaTelaPausa(self):
         self.superficie.fill((50, 50, 255))

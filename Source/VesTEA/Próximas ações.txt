@@ -1,0 +1,18 @@
+colisão com paredes - testar
+progresso de fase/nivel conforme projeto
+	pontuação conforme projeto
+	ler mapa do csv
+melhorar parte superior da tela (texto)
+menu principal
+	subtelas
+	guardar dados do user
+tela de pausa
+	opcoes
+guardar sessão no csv
+menu de escolha do desafio
+	variáveis de desafio
+ajudas do jogo
+
+
+mais roupas
+mais locais
