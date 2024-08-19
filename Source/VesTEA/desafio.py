@@ -243,8 +243,8 @@ class Desafio():
     #captura código do local onde o jogador está no labirinto
     def detectaColisao(self, x, y):
         y = y-150    
-        lin = int(np.floor(x / 50))
-        col = int(np.floor(y / 50))
+        col = int(np.floor(x / 50))
+        lin = int(np.floor(y / 50))
         #print(lin,col)
         if (0 <= lin <= 8) and (0 <= col <= 15):
             #retorna simbolo onde o jogador está
@@ -257,11 +257,11 @@ class Desafio():
     #muda cor do local da parede onde o jogador colidiu
     def mudaParedeAtingida(self, x, y, labirinto):
         #y = y-150    
-        lin = int(np.floor(x / 50))
+        col = int(np.floor(x / 50))
         #lin = 3 #teste
-        col = int(np.floor(y / 50))
+        lin = int(np.floor(y / 50))-3
         #col = 4 #teste
-        #print(lin,col)
+        print(lin,col)
         if (0 <= lin <= 8) and (0 <= col <= 15):
             #altera labirinto para 11, que identifica que bateu nessa parede
             labirinto[lin,col] = 11

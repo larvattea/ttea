@@ -29,9 +29,19 @@ class Jogo():
         self.estado += 1 
     
     def carregaTelaJogo(self):
-        self.estado += 1
+        self.tela = Tela(self.desafio)
+        #inserindo captura do jogador
+        self.cap.load_camera()
+        self.cap.frame = self.jogador.scan_feets(self.cap.frame)
+        x,y = self.jogador.get_feet_center()
+        #print("Jogador em: ",x," - ",y)
+        pygame.draw.circle(self.superficie, (255,255,0), [x,y-20],15)
+        self.posicaoJogador = self.desafio.detectaColisao(x,y)
+        if self.posicaoJogador == 2 or self.posicaoJogador == 22:
+            self.estado += 1
 
     def carregaPartida(self):
+        self.jogador = Jogador()
         self.estado += 1
 
     def gerenciaJogo(self):
@@ -62,6 +72,7 @@ class Jogo():
         elif self.posicaoJogador == 4 or self.posicaoJogador == 44:
             self.acoesErro()
         print('passou atraso do resultado') 
+        self.posicaoJogador = 0
         self.estado = 1    
 
     def acoesAcerto(self):
@@ -93,8 +104,8 @@ class Jogo():
         )
         self.superficie.blit(titulo, (190, 180))
         
-        self.imagem_inicio = pygame.image.load('VesTEA/images/button_inicio.png').convert_alpha()
-        self.botao_inicio = botao.Botao(350, 450, self.imagem_inicio, 0.8)
+        self.imagem_inicio = pygame.image.load('VesTEA/images/button_jogar.png').convert_alpha()
+        self.botao_inicio = botao.Botao(350, 450, self.imagem_inicio, 1)
         if self.botao_inicio.criar(self.superficie):
             #print('START')
             self.estado = 2 #para reiniciar o jogo no mesmo desafio, mas do começo
@@ -115,7 +126,7 @@ class Jogo():
 
             elif self.estado == 2:    
                 #carrega tela
-                print("Carregando tela...")
+                #print("Carregando tela...")
                 self.carregaTelaJogo()
 
             elif self.estado == 3:    

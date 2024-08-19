@@ -82,7 +82,7 @@ class Vestea():
                             self.jogo.estado += 1
                         elif evento.key == K_LEFT:#bateu na parede
                             #self.jogo.posicaoJogador = 1
-                            self.jogo.acoesColisao(175,225)
+                            self.jogo.acoesColisao(225,175)
 
             # Loop de eventos
             #TELA INICIAL

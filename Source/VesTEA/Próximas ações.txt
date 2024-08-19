@@ -1,4 +1,6 @@
-colisão com paredes - testar
+OK colisão com paredes - testar
+efeitos de som
+fase do ponto de partida não mostrar labirinto
 progresso de fase/nivel conforme projeto
 	pontuação conforme projeto
 	ler mapa do csv
