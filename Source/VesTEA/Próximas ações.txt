@@ -1,9 +1,12 @@
 OK colisão com paredes - testar
+progresso de fase/nivel conforme projeto
+	ajudas do jogo
+	gera desafio conforme fase/nivel
+	OK pontuação conforme projeto
+	tela de fim de nível
+	ler mapa do csv
 efeitos de som
 fase do ponto de partida não mostrar labirinto
-progresso de fase/nivel conforme projeto
-	pontuação conforme projeto
-	ler mapa do csv
 melhorar parte superior da tela (texto)
 menu principal
 	subtelas
@@ -13,8 +16,9 @@ tela de pausa
 guardar sessão no csv
 menu de escolha do desafio
 	variáveis de desafio
-ajudas do jogo
 
 
 mais roupas
 mais locais
+
+BUG: QUANDO PAUSA E VOLTA, LABIRINTO FICA COM COLISÕES DESTACADAS

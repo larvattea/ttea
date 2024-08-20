@@ -1,6 +1,7 @@
 import pygame
 from pygame import display
 import numpy as np
+from pygame import font
 
 
 #se for executar de outra pasta, precisa de:
@@ -33,7 +34,23 @@ class Tela():
         self.fundo_desafio = pygame.transform.scale(self.fundo_desafio, self.area_desafio)
         self.display_surface.blit(self.fundo_desafio,(0,0))
 
-         #prepara desafio
+        # carrega frases desafio 
+        fonte = font.SysFont('opensans', 40)
+        texto_fase = fonte.render(
+            f"Fase : {desafio.fase}",
+            True,
+            (250, 250, 250)
+        )
+        self.display_surface.blit(texto_fase, (20, 25))
+        texto_nivel = fonte.render(
+            f"Nivel : {desafio.nivel}",
+            True,
+            (250, 250, 250)
+        )
+        self.display_surface.blit(texto_nivel, (20, 55))
+
+        
+        #prepara desafio
         #!!!!!!!!!!!!!!!!!
         #verifica quantas imagens devem ser mostradas pela fase e prepara posições
         if desafio.fase == 1:

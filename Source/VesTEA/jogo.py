@@ -15,16 +15,25 @@ class Jogo():
         self.jogando = True
         self.fase = 1
         self.nivel = 1
+        #mensuram nível
         self.jogada = 1
+        self.pontos = 0
+        self.colisoes = 0
+        self.ajuda = False
+        #para o fluxo do jogo
         self.estado = 1
         #captura do jogador
         self.cap = Camera()
-        #self.cap.load_camera()
         self.jogador = Jogador()
         self.superficie = superficie
 
 
     def carregaDados(self):
+        #mensuram nível
+        if self.jogada == 1:
+            self.pontos = 0
+        self.colisoes = 0
+        self.ajuda = False
         self.desafio = Desafio(self.fase, self.nivel)
         self.estado += 1 
     
@@ -66,32 +75,62 @@ class Jogo():
         erro_rect = self.tela.roupaerrada_img.get_rect(topleft = self.tela.roupaerrada_pos)
         self.superficie.blit(self.tela.roupaerrada_img, erro_rect)
         display.update()
-        pygame.time.delay(5000)   
+        ######logica antiga de verificação de avanço/volta
+        #if self.posicaoJogador == 3 or self.posicaoJogador == 33: 
+        #    self.acoesAcerto()
+        #elif self.posicaoJogador == 4 or self.posicaoJogador == 44:
+        #    self.acoesErro()
+        ######logica nova de verificacao de avanço/volta
+        ##calcula pontuação
+        #se acertou sem ajuda, 10 ptos, se acertou om ajuda 5 pts    
         if self.posicaoJogador == 3 or self.posicaoJogador == 33: 
-            self.acoesAcerto()
-        elif self.posicaoJogador == 4 or self.posicaoJogador == 44:
-            self.acoesErro()
-        print('passou atraso do resultado') 
+            if self.ajuda == False:
+                self.pontos += 10    
+            else: 
+                self.pontos += 5    
+        #soma pontos por não colidir        
+        self.pontos += 10 - self.colisoes
+        #se for jogada 1, troca pra 2
+        if self.jogada == 1:
+            print("Pontos jogada 1 = ",self.pontos)
+            self.jogada = 2
+        #senão verifica avanço/regresso    
+        else:
+            print("Pontos jogada 2 = ",self.pontos)
+            self.jogada = 1
+            if self.pontos <=10:
+                self.acoesErro()
+            elif self.pontos >= 30:
+                self.acoesAcerto()
+                    
+        pygame.time.delay(5000)   
+        print('passou delay do resultado') 
         self.posicaoJogador = 0
         self.estado = 1    
 
     def acoesAcerto(self):
-        print('acerto mizeravi')
-        if self.fase <3:
+        print('avança')
+        if self.nivel<15:
+            self.nivel += 1
+        elif self.nivel==15 and self.fase <3:
             self.fase += 1
+            self.nivel = 1
     
     def acoesErro(self):
-        print('Errou')
-        if self.fase >1:
+        print('Volta')
+        if self.nivel == 1 and self.fase >1:
             self.fase -= 1
+            self.nivel = 15
+        elif self.nivel > 1:
+            self.nivel -= 1    
 
     def acoesColisao(self, x, y):
         print('Bateu na parede')
         #pintar o quadrado
         self.desafio.labirinto = self.desafio.mudaParedeAtingida(x,y,self.desafio.labirinto)
-            #mudar pra outro valor no mapa, pq aí não colide de novo no mesmo local
-        #aguardar sair
-        self.posicaoJogador
+        #se ainda não tem 10 colisoes, soma mais uma     
+        if self.colisoes < 10:    
+            self.colisoes += 1
         
 
     def carregaTelaPausa(self):
