@@ -1,3 +1,5 @@
+OK remapear tiles e cabecalho
+
 OK colisão com paredes - testar
 progresso de fase/nivel conforme projeto
 	ajudas do jogo
