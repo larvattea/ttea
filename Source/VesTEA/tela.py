@@ -102,6 +102,9 @@ class Tela():
         self.roupacerta_img = pygame.transform.scale(self.roupacerta_img, (self.tilesize*4, self.tilesize*4))
         self.roupaerrada_img = pygame.image.load('Assets/vestea/imgs/roupas/'+desafio.roupa_errada.nome).convert_alpha()
         self.roupaerrada_img = pygame.transform.scale(self.roupaerrada_img, (self.tilesize*4, self.tilesize*4))
+        if desafio.nivel >= 6:
+            self.roupacoringa_img = pygame.image.load('Assets/vestea/imgs/roupas/'+desafio.roupa_coringa.nome).convert_alpha()
+            self.roupacoringa_img = pygame.transform.scale(self.roupacoringa_img, (self.tilesize*4, self.tilesize*4))
         mapa = desafio.labirinto
        
         #self.display_surface.blit(self.topo_img,(0,0))
@@ -125,6 +128,9 @@ class Tela():
                 elif mapa[row-5,col] == 4:# é o inicio da roupa errada
                     imagem = self.roupaerrada_img
                     self.roupaerrada_pos = (col*self.tilesize,row*self.tilesize)
+                elif mapa[row-5,col] == 5 and desafio.nivel >= 6:# é o inicio da roupa coringa
+                    imagem = self.roupacoringa_img
+                    self.roupacoringa_pos = (col*self.tilesize,row*self.tilesize)
                 if imagem != '':
                     self.display_surface.blit(imagem,(col*self.tilesize,row*self.tilesize))
 

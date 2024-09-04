@@ -64,6 +64,9 @@ class Jogo():
         self.posicaoJogador = self.desafio.detectaColisao(x,y)
         if self.posicaoJogador == 3 or self.posicaoJogador == 33 or self.posicaoJogador == 4 or self.posicaoJogador == 44:
             self.estado += 1
+        if self.desafio.nivel >= 6:  
+            if self.posicaoJogador == 5 or self.posicaoJogador == 55:
+                self.estado += 1
         if self.posicaoJogador == 1:
             self.acoesColisao(x,y)
 
@@ -74,6 +77,19 @@ class Jogo():
         pygame.draw.rect(self.tela.roupaerrada_img, (255,0,0), (0, 0, 100, 100),10)
         erro_rect = self.tela.roupaerrada_img.get_rect(topleft = self.tela.roupaerrada_pos)
         self.superficie.blit(self.tela.roupaerrada_img, erro_rect)
+        if self.desafio.roupa_coringa != "":
+            if self.desafio.nivel>=11:    
+                pygame.draw.rect(self.tela.roupacoringa_img, (0,255,0), (0, 0, 100, 100),10)
+            else:
+                pygame.draw.rect(self.tela.roupacoringa_img, (255,0,0), (0, 0, 100, 100),10)
+            coringa_rect = self.tela.roupacoringa_img.get_rect(topleft = self.tela.roupacoringa_pos)
+            self.superficie.blit(self.tela.roupacoringa_img, coringa_rect)
+            if self.desafio.nivel >= 11 and (self.posicaoJogador == 5 or self.posicaoJogador == 55): 
+                if self.ajuda == False:
+                    self.pontos += 10    
+                else: 
+                    self.pontos += 5  
+        
         display.update()
         ######logica antiga de verificação de avanço/volta
         #if self.posicaoJogador == 3 or self.posicaoJogador == 33: 
