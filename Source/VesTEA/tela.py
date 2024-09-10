@@ -2,6 +2,10 @@ import pygame
 from pygame import display
 import numpy as np
 from pygame import font
+import ui
+import image
+from VesTEA.config import Config
+from VesTEA.botao import Botao
 
 
 #se for executar de outra pasta, precisa de:
@@ -132,7 +136,7 @@ class Tela():
                     imagem = self.roupacoringa_img
                     self.roupacoringa_pos = (col*self.tilesize,row*self.tilesize)
                 if imagem != '':
-                    self.display_surface.blit(imagem,(col*self.tilesize,row*self.tilesize))
+                    self.display_surface.blit(imagem,(col*self.tilesize,row*self.tilesize))    
 
 
 

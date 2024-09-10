@@ -1,9 +1,9 @@
 OK remapear tiles e cabecalho
 
 OK colisão com paredes - testar
-progresso de fase/nivel conforme projeto
+ok progresso de fase/nivel conforme projeto
 	ajudas do jogo
-	gera desafio conforme fase/nivel
+	ok gera desafio conforme fase/nivel
 	OK pontuação conforme projeto
 	tela de fim de nível
 	ler mapa do csv
