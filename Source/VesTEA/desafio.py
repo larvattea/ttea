@@ -14,11 +14,12 @@ csv.register_dialect(
     quoting = csv.QUOTE_MINIMAL)
 
 class Desafio():
-    def __init__(self, fase, nivel):
+    def __init__(self, fase, nivel, jogada):
         super().__init__()
         self.tilesize = 25
         self.fase = fase
         self.nivel = nivel
+        self.jogada = jogada
         #print (111)
         self.labirinto = self.getLabirinto()
         #print (222)

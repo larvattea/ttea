@@ -52,6 +52,12 @@ class Tela():
             (250, 250, 250)
         )
         self.display_surface.blit(texto_nivel, (20, 55))
+        texto_desafio = fonte.render(
+            f"Desafio : {desafio.jogada} de 3",
+            True,
+            (250, 250, 250)
+        )
+        self.display_surface.blit(texto_desafio, (20, 85))
 
         
         #prepara desafio
