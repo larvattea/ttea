@@ -1,16 +1,25 @@
+problema com desafio quando o clima é 3
+
 OK remapear tiles e cabecalho
 
 OK colisão com paredes - testar
 ok progresso de fase/nivel conforme projeto
-	ajudas do jogo
+	ok ajudas do jogo
 	ok gera desafio conforme fase/nivel
 	OK pontuação conforme projeto
-	tela de fim de nível
+	ok tela de fim de nível
 	ler mapa do csv
-efeitos de som
-fase do ponto de partida não mostrar labirinto
-melhorar parte superior da tela (texto)
-menu principal
+OK efeitos de som
+imagem da paredes
+Refazer carregamento da tela
+	primeiro esvazia tela e mostra só ponto inicial
+	depois mostra desafio
+	depois mostra labirinto e roupas 
+	depois deixa jogar
+atalhos
+	tecla pra trocar cor de fundo
+OK melhorar parte superior da tela (texto)
+OK menu principal
 	subtelas
 	guardar dados do user
 tela de pausa

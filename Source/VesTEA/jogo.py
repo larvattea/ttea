@@ -17,8 +17,8 @@ import datetime
 class Jogo():
     def __init__(self, superficie):
         self.jogando = True
-        self.fase = 1
-        self.nivel = 1
+        self.fase = 3
+        self.nivel = 6
         #mensuram nível
         self.jogada = 1
         self.pontos = 0

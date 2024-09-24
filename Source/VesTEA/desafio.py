@@ -33,10 +33,8 @@ class Desafio():
         #print (665)
         self.DefineImagensDesafio()
         self.roupa_errada = self.getRoupaErrada()
-        if nivel>=11:
+        if nivel>=6:
             self.roupa_coringa = self.getRoupaCoringa()
-        elif nivel>=6:
-            self.roupa_coringa = self.getRoupaErrada()
         else:
             self.roupa_coringa = ""
         
@@ -168,10 +166,9 @@ class Desafio():
     #1=calor; 2=frio; 3=ambos
     def getClima(self):
         if self.roupa_certa.clima == '3':
-            self.roupa_certa.clima = random.randint(1,2)
+            return random.randint(1,2)
         print('Desafio clima:',self.roupa_certa.clima)
         return self.roupa_certa.clima
-
     #1=parque; 2=restaurante; 3=praia
     def getLocal(self):
         while (True):
@@ -214,10 +211,7 @@ class Desafio():
             #se tiver ao menos uma diferença, usa essa roupa
             if ((self.corpo>0 and diferencas[0] == 1) or (self.clima>0 and diferencas[1] == 1) or (self.local>0 and diferencas[2] == 1)):
                 print ('Roupa é diferente da certa...')
-                if self.nivel>=6 and self.nivel<=10 and roupaSelecionada.nome == self.roupa_errada.nome:
-                    print ('mas é a mesma roupa da errada, buscar de novo...')
-                else: 
-                    return roupaSelecionada
+                return roupaSelecionada
             else:
                 print ('Roupa é igual, buscar de novo...')
                 #dados.pop(rouparand)    
@@ -241,31 +235,55 @@ class Desafio():
             #print(rouparand)
             print(dados)
             print('Roupa certa:', dados[self.roupa_certa.posicao])
-            print('Roupa errada:', dados[rouparand])
+            print('Roupa errada:', dados[self.roupa_errada.posicao])
+            print('Roupa coringa:', dados[rouparand])
+            print('Desafio:', self.corpo, self.clima, self.local)
             roupaSelecionada = Roupa(dados[rouparand], rouparand)
-            print(roupaSelecionada.local)
-            print('self.local: ',self.local)
-            print(roupaSelecionada.local[self.local-1])
+            #print(roupaSelecionada.local)
+            #print('self.local: ',self.local)
+            #print(roupaSelecionada.local[self.local-1])
             #verifica as diferencas
-            diferencas = [0,0,0]
-            diferencas[0] += 1 if roupaSelecionada.corpo!=self.roupa_certa.corpo else 0
-            diferencas[1] += 1 if (roupaSelecionada.clima!=self.roupa_certa.clima and self.roupa_certa.clima != '3' and roupaSelecionada.clima != '3') else 0
-            diferencas[2] += 1 if roupaSelecionada.local[self.local-1]!=self.roupa_certa.local[self.local-1] else 0 
-            print('diferenças:', diferencas)
-            #se não tiver diferença, usa essa roupa
-            if ((self.corpo>0 and diferencas[0] == 0) or self.corpo==0) and ((self.clima>0 and diferencas[1] == 0) or self.clima==0) and ((self.local>0 and diferencas[2] == 0) or self.local==0):
-                print ('Roupa atende ao desafio...')
-                if self.nivel>=11 and self.nivel<=15 and roupaSelecionada.nome == self.roupa_errada.nome:
-                    print ('mas é a mesma roupa da certa, buscar de novo...')
-                else: 
-                    return roupaSelecionada
-            #remove da lista    
-            else:
-                print ('Roupa não atende ao desafio, buscar de novo...')
-                #dados.pop(rouparand)    
-                #if len(dados)<1: 
-                    #print ('Nenhuma roupa é diferente...')
-                    #return
+            #se for entre 6 e 10, roupa tem q ser errada (diferente da certa e não repetir a outra errada)
+            if self.nivel>=6 and self.nivel<=10:
+                diferencas = [0,0,0]
+                diferencas[0] += 1 if roupaSelecionada.corpo!=self.roupa_certa.corpo else 0
+                diferencas[1] += 1 if (roupaSelecionada.clima!=self.roupa_certa.clima and self.roupa_certa.clima != '3' and roupaSelecionada.clima != '3') else 0
+                diferencas[2] += 1 if roupaSelecionada.local[self.local-1]!=self.roupa_certa.local[self.local-1] else 0 
+                print('diferençaErrada:', diferencas)
+                #se tiver ao menos uma diferença, usa essa roupa
+                if ((self.corpo>0 and diferencas[0] == 1) or (self.clima>0 and diferencas[1] == 1) or (self.local>0 and diferencas[2] == 1)):
+                    print ('Roupa atende ao desafio...')
+                    if roupaSelecionada.nome == self.roupa_errada.nome:
+                        print ('mas é a mesma roupa da errada, buscar de novo...')
+                    else: 
+                        return roupaSelecionada
+                #remove da lista    
+                else:
+                    print ('Roupa não atende ao desafio, buscar de novo...')
+                    #dados.pop(rouparand)    
+                    #if len(dados)<1: 
+                        #print ('Nenhuma roupa é diferente...')
+                        #return
+            #se for entre 11 e 15, roupa tem que ser certa (mesmas caracteristicas dod esafio da certa mas não repetir ela)
+            elif self.nivel>=11 and self.nivel<=15: 
+                diferencaCerta = [0,0,0]
+                diferencaCerta[0] += 1 if roupaSelecionada.corpo!=self.roupa_certa.corpo else 0
+                diferencaCerta[1] += 1 if (roupaSelecionada.clima!=self.roupa_certa.clima and self.roupa_certa.clima != '3' and roupaSelecionada.clima != '3') else 0
+                diferencaCerta[2] += 1 if roupaSelecionada.local[self.local-1]!=self.roupa_certa.local[self.local-1] else 0 
+                print('diferençaCerta:', diferencaCerta)
+                if ((self.corpo>0 and diferencaCerta[0] == 0) or self.corpo==0) and ((self.clima>0 and diferencaCerta[1] == 0) or self.clima==0) and ((self.local>0 and diferencaCerta[2] == 0) or self.local==0):
+                    print ('Roupa atende ao desafio...')
+                    if roupaSelecionada.nome == self.roupa_certa.nome:
+                        print ('mas é a mesma roupa da certa, buscar de novo...')
+                    else: 
+                        return roupaSelecionada
+                #remove da lista    
+                else:
+                    print ('Roupa não atende ao desafio, buscar de novo...')
+                    #dados.pop(rouparand)    
+                    #if len(dados)<1: 
+                        #print ('Nenhuma roupa é diferente...')
+                        #return
 
     def DefineImagensDesafio(self):
         print('define desafio')
@@ -275,6 +293,9 @@ class Desafio():
             #repete
                 #gera valor
                 randNum = random.randint(1,3)
+                #se sorteou clima e clima da roupa certa for 'neutro', passa pra parte do corpo
+                if (randNum == 2 and self.roupa_certa.clima == 3):
+                    randNum = 1
                 #zera as outras 2 posições
                 if randNum == 1:
                     print('Desafio = corpo:',self.roupa_certa.corpo)
@@ -296,7 +317,11 @@ class Desafio():
             while True:
             #repete
                 #gera valor
-                randNum = random.randint(1,3)
+                #se clima da roupa certa for 'neutro', passa pra parte do corpo, senão sorteia
+                if (self.roupa_certa.clima == 3):
+                    randNum = 2
+                else:
+                    randNum = random.randint(1,3)
                 #zera posição selecionada
                 if randNum == 1:
                     print('Desafio = clima:',self.roupa_certa.clima,' local:',self.roupa_certa.local[self.local-1])
@@ -310,10 +335,6 @@ class Desafio():
                     print('Desafio = corpo:',self.roupa_certa.corpo,' clima:',self.roupa_certa.clima)
                     self.local = 0
                     return
-                
-
-        
-
 
     #captura código do local onde o jogador está no labirinto
     def detectaColisao(self, x, y):

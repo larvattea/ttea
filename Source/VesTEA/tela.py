@@ -6,7 +6,7 @@ import ui
 import image
 from VesTEA.config import Config
 from VesTEA.botao import Botao
-
+import random
 
 #se for executar de outra pasta, precisa de:
 #import os
@@ -25,7 +25,7 @@ class Tela():
         display.set_caption(
             'VesTEA'
         )
-        self.superficie.fill((50, 50, 255))
+        self.superficie.fill((238, 236, 225))
         
         #pega superficie
         self.display_surface = pygame.display.get_surface()
@@ -74,9 +74,9 @@ class Tela():
             ])    
         elif desafio.fase == 3:
             posicoes = np.array([
-            (150,10),
-            (350,10),
-            (550,10),
+            (300,10),
+            (475,10),
+            (650,10),
             ])    
         #inicia contadora de posicao
         posicao_atual = 0
@@ -87,7 +87,11 @@ class Tela():
             self.display_surface.blit(self.desafio_corpo,posicoes[posicao_atual])
             posicao_atual += 1
         if desafio.clima >0: 
-            self.desafio_clima = pygame.image.load(f'Assets/vestea/imgs/desafios/Clima{desafio.clima}.png').convert_alpha()
+            if desafio.roupa_certa.clima == 3:
+                numClima = random.randint(1,2)
+            else:
+                numClima = desafio.clima
+            self.desafio_clima = pygame.image.load(f'Assets/vestea/imgs/desafios/Clima{numClima}.png').convert_alpha()
             self.desafio_clima = pygame.transform.scale(self.desafio_clima, (self.tilesize*4, self.tilesize*4))
             self.display_surface.blit(self.desafio_clima,posicoes[posicao_atual])
             posicao_atual += 1
