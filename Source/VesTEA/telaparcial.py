@@ -12,9 +12,8 @@ import random
 #import os
 #os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-class Tela():
-    def __init__(self, desafio, status):
-        self.status = status
+class TelaParcial():
+    def __init__(self, desafio):
         self.tamanho = 800, 600
         self.area_desafio = 800, 125
         self.area_jogo = 800, 475
@@ -82,27 +81,6 @@ class Tela():
         #inicia contadora de posicao
         posicao_atual = 0
 
-        if self.status >= 2:
-            #mostra as imagens do desafio
-            if desafio.corpo >0: 
-                self.desafio_corpo = pygame.image.load(f'Assets/vestea/imgs/desafios/Corpo{desafio.corpo}.png').convert_alpha()
-                self.desafio_corpo = pygame.transform.scale(self.desafio_corpo, (self.tilesize*4, self.tilesize*4))
-                self.display_surface.blit(self.desafio_corpo,posicoes[posicao_atual])
-                posicao_atual += 1
-            if desafio.clima >0: 
-                if desafio.roupa_certa.clima == 3:
-                    numClima = random.randint(1,2)
-                else:
-                    numClima = desafio.clima
-                self.desafio_clima = pygame.image.load(f'Assets/vestea/imgs/desafios/Clima{numClima}.png').convert_alpha()
-                self.desafio_clima = pygame.transform.scale(self.desafio_clima, (self.tilesize*4, self.tilesize*4))
-                self.display_surface.blit(self.desafio_clima,posicoes[posicao_atual])
-                posicao_atual += 1
-            if desafio.local >0: 
-                self.desafio_local = pygame.image.load(f'Assets/vestea/imgs/desafios/Local{desafio.local}.jpg').convert_alpha()
-                self.desafio_local = pygame.transform.scale(self.desafio_local, (self.tilesize*4, self.tilesize*4))
-                self.display_surface.blit(self.desafio_local,posicoes[posicao_atual])
-
         ###############################
         #PARTE INFERIOR
         ###############################
@@ -135,21 +113,6 @@ class Tela():
                 imagem = ''
                 if mapa[row-5,col] == 2 or mapa[row-5,col] == '2':# é o inicio do ponto inicial
                     imagem = self.inicio_img
-                elif self.status >=3:
-                    if mapa[row-5,col] == 1 or mapa[row-5,col] == '1':# é a parede
-                        imagem = self.parede_img
-                    elif mapa[row-5,col] == 11 or mapa[row-5,col] == '11':# é a parede já atingida
-                        imagem = self.paredeatingida_img
-                    
-                    elif mapa[row-5,col] == 3 or mapa[row-5,col] == '3':# é o inicio da roupa certa
-                        imagem = self.roupacerta_img
-                        self.roupacerta_pos = (col*self.tilesize,row*self.tilesize)
-                    elif mapa[row-5,col] == 4 or mapa[row-5,col] == '4':# é o inicio da roupa errada
-                        imagem = self.roupaerrada_img
-                        self.roupaerrada_pos = (col*self.tilesize,row*self.tilesize)
-                    elif (mapa[row-5,col] == 5  or mapa[row-5,col] == '5') and desafio.nivel >= 6:# é o inicio da roupa coringa
-                        imagem = self.roupacoringa_img
-                        self.roupacoringa_pos = (col*self.tilesize,row*self.tilesize)
                 if imagem != '':
                     self.display_surface.blit(imagem,(col*self.tilesize,row*self.tilesize))    
 

@@ -21,7 +21,8 @@ class Desafio():
         self.nivel = nivel
         self.jogada = jogada
         #print (111)
-        self.labirinto = self.getLabirinto()
+        self.labirinto = self.getLabirintoCsv()
+        print('labirinto:',self.labirinto)
         #print (222)
         self.roupa_certa = self.getRoupaCerta()
         #print (333)
@@ -37,7 +38,16 @@ class Desafio():
             self.roupa_coringa = self.getRoupaCoringa()
         else:
             self.roupa_coringa = ""
-        
+
+    def getLabirintoCsv(self): 
+        dificuldade = self.nivel%5
+        if dificuldade == 0:
+            dificuldade = 5
+        #mapa = np.array()
+        with open(f'VesTEA/labirintos/mapa{dificuldade}01.csv', 'r') as csvfile:
+            csvreader = csv.reader(csvfile, dialect='mydialect')
+            mapa = np.array(list(csvreader))
+        return mapa 
         
     def getLabirinto(self):
         rand = random.randint(1,3)

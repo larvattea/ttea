@@ -1,4 +1,4 @@
-problema com desafio quando o clima é 3
+ok problema com desafio quando o clima é 3
 
 OK remapear tiles e cabecalho
 
@@ -8,14 +8,14 @@ ok progresso de fase/nivel conforme projeto
 	ok gera desafio conforme fase/nivel
 	OK pontuação conforme projeto
 	ok tela de fim de nível
-	ler mapa do csv
+	ok ler mapa do csv
 OK efeitos de som
-imagem da paredes
-Refazer carregamento da tela
-	primeiro esvazia tela e mostra só ponto inicial
-	depois mostra desafio
-	depois mostra labirinto e roupas 
-	depois deixa jogar
+OK imagem da paredes
+OK Refazer carregamento da tela
+	OK primeiro esvazia tela e mostra só ponto inicial
+	OK depois mostra desafio
+	OK depois mostra labirinto e roupas 
+	OK depois deixa jogar
 atalhos
 	tecla pra trocar cor de fundo
 OK melhorar parte superior da tela (texto)
@@ -27,7 +27,6 @@ tela de pausa
 guardar sessão no csv
 menu de escolha do desafio
 	variáveis de desafio
-
 
 mais roupas
 mais locais

@@ -8,7 +8,7 @@ from pygame.locals import QUIT, KEYUP, K_SPACE, K_UP, K_DOWN, K_RIGHT, K_LEFT
 from pygame.time import Clock
 
 #from VesTEA.pose_tracking import PoseTracking
-
+from VesTEA import arquivo as arq
 from VesTEA import botao
 from VesTEA.jogo import Jogo
 
@@ -18,15 +18,15 @@ from VesTEA.jogo import Jogo
 #os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 class Vestea():
-    def __init__(self):
+    def __init__(self, jogador):
         pygame.init()
+        arq.set_Player(jogador)
         self.esta_rodando = True
         self.estado = 0
         self.tamanho = 800, 600
         self.clock = Clock()
         self.fonte = font.SysFont('opensans', 40)
         self.fonte_destaque = font.SysFont('opensans', 80)
-
         self.superficie = display.set_mode(
             size=self.tamanho,
             display=0
@@ -41,8 +41,7 @@ class Vestea():
             self.tamanho
         )
 
-        self.jogo = Jogo(self.superficie)
-                
+        self.jogo = Jogo(self.superficie, arq.get_V_FASE(), arq.get_V_NIVEL())
         #self.fundo_inicio = scale(
         #    load('images/title_background.jpg'),
         #    self.tamanho
@@ -144,13 +143,14 @@ class Vestea():
                 #print(self.estado,' e ',self.jogo.estado)
             display.update()
 
+def main(jogador):
+    g = Vestea(jogador)
+    
+    #g.novo_jogo()
+    g.rodar()
 
-g = Vestea()
-#g.novo_jogo()
-g.rodar()
-
-#print("saiu")
-pygame.quit()
-exit()
+    #print("saiu")
+    pygame.quit()
+    exit()
 
 

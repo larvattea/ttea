@@ -295,8 +295,9 @@ def JogarCallback():
         import RepeTEA
         # RepeTEA().main
     elif game == 'VESTEA':
-        #from VesTEA import principal 
         from VesTEA import vestea_inicio
+        vestea_inicio.main(jogador)
+
 
 B = tk.Button(menu_frame, text ="Jogar", command = JogarCallback)
 

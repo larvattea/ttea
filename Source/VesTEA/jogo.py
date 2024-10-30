@@ -2,6 +2,7 @@ import pygame
 import numpy as np
 from VesTEA.desafio import Desafio
 from VesTEA.tela import Tela
+from VesTEA.telaparcial import TelaParcial
 from VesTEA.jogador import Jogador
 from camera import Camera
 from pygame import event
@@ -12,13 +13,14 @@ from VesTEA.config import Config
 import ui
 import image
 from VesTEA.botao import Botao
+from VesTEA import arquivo as arq
 import datetime
 
 class Jogo():
-    def __init__(self, superficie):
+    def __init__(self, superficie, fase, nivel):
         self.jogando = True
-        self.fase = 3
-        self.nivel = 6
+        self.fase = fase
+        self.nivel = nivel
         #mensuram nível
         self.jogada = 1
         self.pontos = 0
@@ -51,6 +53,7 @@ class Jogo():
             self.totalTempo = datetime.datetime.now()
             self.totalAjudas = 0
             self.trofeu = 2
+        self.tempoSemMovimento = 0    
         self.colisoes = 0
         self.ajuda = False
         self.desafio = Desafio(self.fase, self.nivel, self.jogada)
@@ -59,7 +62,7 @@ class Jogo():
          
     
     def carregaTelaJogo(self):
-        self.tela = Tela(self.desafio)
+        self.tela = Tela(self.desafio, 1)
         #inserindo captura do jogador
         self.cap.load_camera()
         self.cap.frame = self.jogador.scan_feets(self.cap.frame)
@@ -71,14 +74,26 @@ class Jogo():
             self.estado += 1
 
     def carregaPartida(self):
-        Config.som_vez_do_jogador_1.play()
-        pygame.time.delay(500)   
-        Config.som_vez_do_jogador_2.play()
-        self.jogador = Jogador()
-        self.estado += 1
+        self.cap.load_camera()
+        self.cap.frame = self.jogador.scan_feets(self.cap.frame)
+        x,y = self.jogador.get_feet_center()
+        #print("Jogador em: ",x," - ",y)
+        pygame.draw.circle(self.superficie, (255,255,0), [x,y-20],15)
+        #self.posicaoJogador = self.desafio.detectaColisao(x,y)
+        if self.tempoSemMovimento == 0:
+            self.tela = Tela(self.desafio, 2)
+            self.tempoSemMovimento = datetime.datetime.now() 
+        if (datetime.datetime.now() - self.tempoSemMovimento).seconds > 2:    
+            self.tela = Tela(self.desafio, 3)
+        if (datetime.datetime.now() - self.tempoSemMovimento).seconds > 4 and self.posicaoJogador == 2 or self.posicaoJogador == 22:     
+            Config.som_vez_do_jogador_1.play()
+            pygame.time.delay(500)   
+            Config.som_vez_do_jogador_2.play()
+            self.jogador = Jogador()
+            self.estado += 1
 
     def gerenciaJogo(self):
-        self.tela = Tela(self.desafio)
+        self.tela = Tela(self.desafio, 3)
         #inserindo captura do jogador
         self.cap.load_camera()
         self.cap.frame = self.jogador.scan_feets(self.cap.frame)
@@ -225,6 +240,10 @@ class Jogo():
         self.botao_inicio = Botao(350, 450, self.imagem_inicio, 1)
         if self.botao_inicio.criar(self.superficie):
             #print('START')
+            self.tempoSemMovimento = 0    
+            self.colisoes = 0
+            self.ajuda = False
+            self.ultimaPosicao = [-9999,-9999]
             self.estado = 2 #para reiniciar o jogo no mesmo desafio, mas do começo
             self.jogando = True
         

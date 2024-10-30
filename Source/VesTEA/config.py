@@ -11,7 +11,8 @@ class Config():
     som_vez_do_jogador_1 = mixer.Sound('Assets/Repetea_Sons/padrao/10_vez_do_jogador_1.wav')
     som_vez_do_jogador_2 = mixer.Sound('Assets/Repetea_Sons/padrao/10_vez_do_jogador_2.wav')
     som_ajuda = mixer.Sound('Assets/Repetea_Sons/padrao/11_ajuda.wav')
-
+    teste = "certo"
+    
     # IMAGENS
 
     # VARIAVEIS GLOBAIS

@@ -121,12 +121,13 @@ def CadastrarJogador(Nome, Nasc, Obs):
     ########################################################################################################
     ############################################## VESTEA ##################################################
     ########################################################################################################
-    Config = ['Sessao', 'Nome', 'Data de Nasc.', 'Observacoes', 'Fase Atual', 'Nivel Atual', 'Tempo de Ajuda',
-              'Tempo Total',
-              'Tempo de Exposicao', 'Tempo Vez do Jogador', 'HUD', 'Som', 'Camera', 'Largura de Projecao',
-              'Altura de Projecao',
-              'Largura Tela de Controle', 'Altura Tela de Controle', 'Cores', 'Sons']
-    Dados = [0, Nome, Nasc, Obs, 1, 1, 5, 10, 0.5, 0.5, True, True, 0, 800, 600, 640, 480, 'padrao', 'padrao']
+    Config = ['Nome', 'Data de Nasc.', 'Observacoes', 'Fase Atual', 
+              'Nivel Atual', 'Sessao', 'Tempo de Ajuda', 'Tempo Total',
+              'Tempo de Exposicao', 'Tempo Vez do Jogador', 'HUD', 'Som', 
+              'Camera', 'Largura de Projecao', 'Altura de Projecao',
+              'Largura Tela de Controle', 'Altura Tela de Controle', 
+              'Cores', 'Sons']
+    Dados = [Nome, Nasc, Obs, 1, 1, 0, 5, 10, 0.5, 0.5, True, True, 0, 800, 600, 640, 480, 'padrao', 'padrao']
     file = 'Jogadores/' + Nome + '_VesTEA_config.csv'
 
     with open(file, 'w') as csvfile:
@@ -134,18 +135,18 @@ def CadastrarJogador(Nome, Nasc, Obs):
         csvwriter.writerow(Config)
         csvwriter.writerow(Dados)
 
-    fields = ['Sessao', 'Data', 'Hora Inicio', 'Hora Fim', 'Fase Alcancada', 'Nivel Alcancado',
+    sessao = ['Sessao', 'Data', 'Hora Inicio', 'Hora Fim', 'Fase Alcancada', 'Nivel Alcancado',
               'Qt Acertos sem Ajuda', 'Qt Acertos com Ajuda', 'Qt Ajudas', 'Qt Erros', 'Qt Omissões']
     file = 'Jogadores/' + Nome + '_VesTEA_sessao.csv'
     with open(file, 'w') as csvfile:
         csvwriter = csv.writer(csvfile, dialect='mydialect')
-        csvwriter.writerow(fields)
+        csvwriter.writerow(sessao)
 
-    fields = ['Sessao', 'Data', 'Hora', 'Fase', 'Nivel', 'Posicao jogador', 'Tipo de Evento']
+    detalhado = ['Sessao', 'Data', 'Hora', 'Fase', 'Nivel', 'Posicao jogador', 'Tipo de Evento']
     file = 'Jogadores/' + Nome + '_VesTEA_detalhado.csv'
     with open(file, 'w') as csvfile:
         csvwriter = csv.writer(csvfile, dialect='mydialect')
-        csvwriter.writerow(fields)
+        csvwriter.writerow(detalhado)
 #----------------------------------------------------------------------------------------------------------------------#
 
 def get_Date():
