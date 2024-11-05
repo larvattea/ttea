@@ -78,24 +78,24 @@ def gravaArrayDados(filename, Dados):# Dados é um vetor com os dados para grava
             csvwriter = csv.writer(csvfile, dialect='mydialect')
             csvwriter.writerow(linha)        
 
-def grava_Sessao(jogador, hora_inicio, fase, nivel, acertos, acertos_ajuda, ajudas, erros, omissoes):
+def grava_Sessao(jogador, hora_inicio, fase, nivel, acertos, acertos_ajuda, ajudas, erros, omissoes, colisoes):
     file = 'Jogadores/'+jogador+'_VesTEA_sessao.csv'
     results = pd.read_csv(file, sep=';')
     id = len(results)
     data = get_Date().strftime("%x")
     hora = get_Date().strftime("%X")
-    fields = [id, data, hora_inicio, hora, fase, nivel, acertos, acertos_ajuda, ajudas, erros, omissoes]
+    fields = [id, data, hora_inicio, hora, fase, nivel, acertos, erros, acertos_ajuda, ajudas, omissoes, colisoes]
     with open(file,'a+', newline='') as csvfile:
         csvwriter = csv.writer(csvfile, dialect='mydialect')
         csvwriter.writerow(fields)
     set_Sessao(id + 1)
 
-def grava_Detalhado(jogador, data, fase, nivel, pos_jog, tipo):
+def grava_Detalhado(jogador, data, fase, nivel, pos_jog, tipo, obs):
     file = 'Jogadores/' + jogador + '_Player_Vestea_detalhado.csv'
     results = pd.read_csv(file, sep=';')
     id = len(results)
     hora = get_Date().strftime("%X")
-    fields = [id, data, hora, fase, nivel, pos_jog, tipo]
+    fields = [id, data, hora, fase, nivel, pos_jog, tipo, obs]
     with open(file, 'a+', newline='') as csvfile:
         csvwriter = csv.writer(csvfile, dialect='mydialect')
         csvwriter.writerow(fields)
@@ -109,12 +109,13 @@ def lerConfigs(filename): #Apenas para os arquivos gerais, nos detalhados retorn
               'Tempo Total',
               'Tempo de Exposicao', 'Tempo Vez do Jogador', 'HUD', 'Som', 'Camera', 'Largura de Projecao',
               'Altura de Projecao',
-              'Largura Tela de Controle', 'Altura Tela de Controle', 'Cores', 'Sons']
+              'Largura Tela de Controle', 'Altura Tela de Controle', 'Cores', 'Sons', 
+              'Cor do ponto', 'Imagem do ponto', 'Parte do corpo']
 
     Player_Vestea_sessao.csv = ['Sessao', 'Data', 'Hora Inicio', 'Hora Fim', 'Fase Alcancada', 'Nivel Alcancado',
-              'Qt Acertos sem Ajuda', 'Qt Acertos com Ajuda', 'Qt Ajudas', 'Qt Erros', 'Qt Omissões']
+              'Qt Acertos sem Ajuda', 'Qt Erros', 'Qt Acertos com Ajuda', 'Qt Ajudas', 'Qt Omissões', 'Qt Colisões']
 
-    Player_Vestea_detalhado = ['Sessao', 'Data', 'Hora', 'Fase', 'Nivel', 'Posicao jogador', 'Tipo de Evento']
+    Player_Vestea_detalhado = ['Sessao', 'Data', 'Hora', 'Fase', 'Nivel', 'Posicao jogador', 'Tipo de Evento', 'Obs.']
 
     Fases = ['', ]
 

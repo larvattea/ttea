@@ -100,12 +100,12 @@ class Jogo():
         x, y = self.jogador.get_feet_center()
         #verifica se precisa de ajuda
         print(f"Tempo parado:{(datetime.datetime.now() - self.tempoSemMovimento).seconds} segundos")
-        #se ainda não atualizou ultima posição ou se jogador se moveu mais que 25px para qualquer direção e ainda não teve ajuda, atualiza última posição
-        if (self.ultimaPosicao == [-9999,-9999] or (x > self.ultimaPosicao[0] + 25 or x < self.ultimaPosicao[0] - 25 or y > self.ultimaPosicao[1] + 25 or y < self.ultimaPosicao[1] - 25) and self.ajuda == False):
+        #se ainda não atualizou ultima posição ou se jogador se moveu mais que 25px para qualquer direção, atualiza última posição
+        if (self.ultimaPosicao == [-9999,-9999] or (x > self.ultimaPosicao[0] + 25 or x < self.ultimaPosicao[0] - 25 or y > self.ultimaPosicao[1] + 25 or y < self.ultimaPosicao[1] - 25)):
             self.ultimaPosicao = [x,y] 
             self.tempoSemMovimento = datetime.datetime.now()            
         #senão, se passou mais do que 5 segundos e ainda não teve ajuda, dá ajuda
-        elif ((datetime.datetime.now() - self.tempoSemMovimento).seconds > 5 and (datetime.datetime.now() - self.tempoSemMovimento).seconds < 10):
+        elif ((datetime.datetime.now() - self.tempoSemMovimento).seconds > 5 and (datetime.datetime.now() - self.tempoSemMovimento).seconds < 10 and self.ajuda == False):
             #se ainda está false, toca som e muda ajuda pra true (pra tocar som uma vez apenas)
             if self.ajuda == False:
                 Config.som_ajuda.play()
@@ -115,6 +115,9 @@ class Jogo():
             pygame.draw.rect(self.tela.roupacerta_img, (0,255,0), (0, 0, 100, 100),10)
             certo_rect = self.tela.roupacerta_img.get_rect(topleft = self.tela.roupacerta_pos)
             self.superficie.blit(self.tela.roupacerta_img, certo_rect)
+        #senão, entra em pausa    
+        elif ((datetime.datetime.now() - self.tempoSemMovimento).seconds > 10):
+            self.jogando = False
             
         #print("Jogador em: ",x,"-",y)
         pygame.draw.circle(self.superficie, (255,255,0), [x,y-20], 15)

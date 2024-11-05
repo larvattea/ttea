@@ -43,8 +43,9 @@ class Desafio():
         dificuldade = self.nivel%5
         if dificuldade == 0:
             dificuldade = 5
-        #mapa = np.array()
-        with open(f'VesTEA/labirintos/mapa{dificuldade}01.csv', 'r') as csvfile:
+        rand = random.randint(1,6)
+        print(f'Labirinto: mapa{dificuldade}0{rand}.csv')
+        with open(f'VesTEA/labirintos/mapa{dificuldade}0{rand}.csv', 'r') as csvfile:
             csvreader = csv.reader(csvfile, dialect='mydialect')
             mapa = np.array(list(csvreader))
         return mapa 

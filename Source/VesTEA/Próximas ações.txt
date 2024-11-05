@@ -9,6 +9,7 @@ ok progresso de fase/nivel conforme projeto
 	OK pontuação conforme projeto
 	ok tela de fim de nível
 	ok ler mapa do csv
+	OK gerar labirinto aleatório
 OK efeitos de som
 OK imagem da paredes
 OK Refazer carregamento da tela
@@ -16,19 +17,50 @@ OK Refazer carregamento da tela
 	OK depois mostra desafio
 	OK depois mostra labirinto e roupas 
 	OK depois deixa jogar
-atalhos
+Ações pós-escolha da roupa pelo jogador
+	Labirinto some
+	roupa errada some
+		se foi selecionada surge imagem de X (erro) em seu lugar
+	destaca roupa correta
+	surge emoji alegre/triste
+	surge ponto inicial
+tutorial!!!
+	sem labirinto e sem desafio (1 roupa)
+	com labirinto e sem desafio
+	sem labirinto e com desafio
+Outras dinâmicas
+	OK pausa por demora prolongada
+	pausa por sair da tela de jogo
+controle do profissional
+	hud
+	som
+	troca fase/nivel
+	sair do jogo
 	tecla pra trocar cor de fundo
 OK melhorar parte superior da tela (texto)
 OK menu principal
-	subtelas
-	guardar dados do user
+	tela de configurar jogo
+		cor da parede do labirinto
+		cor do fundo
+	tela de config do jogador
+		cor/imagem do seu item
+		som
+		tempos de jogo
+		referência do movimento (parte do corpo)
 tela de pausa
-	opcoes
+	continua, avança, volta
+	voltar ao menu
+	sair
+	pecs atuais
+	mostrar atalhos
 guardar sessão no csv
+
 menu de escolha do desafio
-	variáveis de desafio
+	Corpo
+	Clima
+	Ocasião
 
 mais roupas
-mais locais
+OK mais locais
 
 BUG: QUANDO PAUSA E VOLTA, LABIRINTO FICA COM COLISÕES DESTACADAS
