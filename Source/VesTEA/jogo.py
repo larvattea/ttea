@@ -105,7 +105,7 @@ class Jogo():
             self.ultimaPosicao = [x,y] 
             self.tempoSemMovimento = datetime.datetime.now()            
         #senão, se passou mais do que 5 segundos e ainda não teve ajuda, dá ajuda
-        elif ((datetime.datetime.now() - self.tempoSemMovimento).seconds > 5 and (datetime.datetime.now() - self.tempoSemMovimento).seconds < 10 and self.ajuda == False):
+        elif ((datetime.datetime.now() - self.tempoSemMovimento).seconds > 5 and (datetime.datetime.now() - self.tempoSemMovimento).seconds < 10):
             #se ainda está false, toca som e muda ajuda pra true (pra tocar som uma vez apenas)
             if self.ajuda == False:
                 Config.som_ajuda.play()
@@ -131,12 +131,17 @@ class Jogo():
             self.acoesColisao(x,y)
 
     def verificaResultado(self):
+        #some o labirinto
+        self.tela = Tela(self.desafio, 4)
+        #desenha retangulo na roupa certa
         pygame.draw.rect(self.tela.roupacerta_img, (0,255,0), (0, 0, 100, 100),10)
         certo_rect = self.tela.roupacerta_img.get_rect(topleft = self.tela.roupacerta_pos)
         self.superficie.blit(self.tela.roupacerta_img, certo_rect)
+        #desenha retangulo na roupa errada
         pygame.draw.rect(self.tela.roupaerrada_img, (255,0,0), (0, 0, 100, 100),10)
         erro_rect = self.tela.roupaerrada_img.get_rect(topleft = self.tela.roupaerrada_pos)
         self.superficie.blit(self.tela.roupaerrada_img, erro_rect)
+        #desenha retangulo na roupa coringa
         if self.desafio.roupa_coringa != "":
             if self.desafio.nivel>=11:    
                 pygame.draw.rect(self.tela.roupacoringa_img, (0,255,0), (0, 0, 100, 100),10)
@@ -147,9 +152,9 @@ class Jogo():
         
         ######logica antiga de verificação de avanço/volta
         #if self.posicaoJogador == 3 or self.posicaoJogador == 33: 
-        #    self.acoesAcerto()
+        #    self.acoesAvancaNivel()
         #elif self.posicaoJogador == 4 or self.posicaoJogador == 44:
-        #    self.acoesErro()
+        #    self.acoesVoltaNivel()
         ######logica nova de verificacao de avanço/volta
         ##calcula pontuação
         #se acertou sem ajuda, 10 ptos, se acertou om ajuda 5 pts    
@@ -167,41 +172,66 @@ class Jogo():
                 self.pontos += 10    
             else: 
                 self.pontos += 5  
-        else:
+        elif self.posicaoJogador == 4 or self.posicaoJogador == 44:
             Config.som_erro.play()
-
         display.update()
         #soma pontos por não colidir        
         self.pontos += 10 - self.colisoes
-        
-        
-        pygame.time.delay(3000)   
-        print('passou delay do resultado') 
-        #se for jogada 1 ou 2, troca pra seguinte
-        if self.jogada < 3:
-            print("Pontos jogada ",self.jogada," = ",self.pontos)
-            self.jogada += 1
-            self.posicaoJogador = 0
-            self.estado = 1
-        #senão verifica avanço/regresso    
-        else:
+        pygame.time.delay(1500)
+        self.estado += 1
+
+    def exibeRoupasCertas(self):
+        #some roupa errada
+        self.tela = Tela(self.desafio, 5)   
+        #desenha retangulo na roupa certa
+        pygame.draw.rect(self.tela.roupacerta_img, (0,255,0), (0, 0, 100, 100),10)
+        certo_rect = self.tela.roupacerta_img.get_rect(topleft = self.tela.roupacerta_pos)
+        self.superficie.blit(self.tela.roupacerta_img, certo_rect)
+        #desenha retangulo na roupa coringa se for certa
+        if self.desafio.roupa_coringa != "":
+            if self.desafio.nivel>=11:    
+                pygame.draw.rect(self.tela.roupacoringa_img, (0,255,0), (0, 0, 100, 100),10)
+                coringa_rect = self.tela.roupacoringa_img.get_rect(topleft = self.tela.roupacoringa_pos)
+                self.superficie.blit(self.tela.roupacoringa_img, coringa_rect)
+        display.update()
+        pygame.time.delay(3000)
+        self.estado += 1
+
+    def finalizaJogada(self):
+
+        #se for terceira jogada, exibe tela de resultado
+        if self.jogada == 3 :
             Config.som_trofeu.play()
             print("Pontos jogada 3 = ",self.pontos)
             self.totalTempo = datetime.datetime.now() - self.totalTempo
             self.jogada = 1
             self.posicaoJogador = 0
             if self.pontos <=20:
-                self.acoesErro()
+                self.trofeu = 1
             elif self.pontos >= 40:
-                self.acoesAcerto()
-            self.jogando = False   
+                self.trofeu = 3
+            self.jogando = False
+        #senão, se jogador não estiver no ponto inicial, verifica sua posição    
+        elif self.posicaoJogador != 2 and self.posicaoJogador != 22:
+            #inserindo captura do jogador
+            self.cap.load_camera()
+            self.cap.frame = self.jogador.scan_feets(self.cap.frame)
+            x,y = self.jogador.get_feet_center()
+            #print("Jogador em: ",x," - ",y)
+            pygame.draw.circle(self.superficie, (255,255,0), [x,y-20],15)
+            self.posicaoJogador = self.desafio.detectaColisao(x,y)
+        #se jogador voltar pro ponto inicial
+        else:
+            #se for jogada 1 ou 2, troca pra seguinte
+            print("Pontos jogada ",self.jogada," = ",self.pontos)
+            self.jogada += 1
+            self.posicaoJogador = 0
+            self.estado = 1
+               
+        display.update()
 
-
-
-
-
-    def acoesAcerto(self):
-        self.trofeu = 3
+    def acoesAvancaNivel(self):
+        
         print('avança')
         if self.nivel<15:
             self.nivel += 1
@@ -209,9 +239,9 @@ class Jogo():
             self.fase += 1
             self.nivel = 1
     
-    def acoesErro(self):
+    def acoesVoltaNivel(self):
         print('Volta')
-        self.trofeu = 1
+        
         if self.nivel == 1 and self.fase >1:
             self.fase -= 1
             self.nivel = 15
@@ -289,6 +319,10 @@ class Jogo():
         self.botao_inicio = Botao(350, 450, self.imagem_inicio, 1)
         if self.botao_inicio.criar(self.superficie):
             #print('START')
+            if self.trofeu == 1:
+                self.acoesVoltaNivel()
+            elif self.trofeu == 3:
+                self.acoesAvancaNivel()
             self.jogando = True             
             self.posicaoJogador = 0
             self.estado = 1 #para reiniciar o jogo no desafio desejado
@@ -321,13 +355,23 @@ class Jogo():
                 self.gerenciaJogo()
             
             elif self.estado == 5:    
-                #carrega pós jogada (ações de acerto/erro e próx jogada ou fim de nível)
+                #carrega pós jogada 
                 print("Carregando resultado...")
                 self.verificaResultado()
 
+            elif self.estado == 6:    
+                #exibe roupas certas
+                print("Exibe roupas certas...")
+                self.exibeRoupasCertas()
+
+            elif self.estado == 7:    
+                #executa pós jogada (ações de acerto/erro e próx jogada ou fim de nível)
+                print("Trocando a jogada...")
+                self.finalizaJogada()                
+
         elif self.jogando == False:    
             #pausa
-            if self.estado == 5:  
+            if self.estado == 7:  
                 self.carregaTelaFeedback()
             else:
                 print("Pausa...")

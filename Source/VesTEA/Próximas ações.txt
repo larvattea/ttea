@@ -18,10 +18,11 @@ OK Refazer carregamento da tela
 	OK depois mostra labirinto e roupas 
 	OK depois deixa jogar
 Ações pós-escolha da roupa pelo jogador
-	Labirinto some
-	roupa errada some
+	ocultar ponto inicial
+	OK Labirinto some
+	OK roupa errada some
 		se foi selecionada surge imagem de X (erro) em seu lugar
-	destaca roupa correta
+	OK destaca roupa correta
 	surge emoji alegre/triste
 	surge ponto inicial
 tutorial!!!

@@ -14,6 +14,12 @@ import random
 
 class Tela():
     def __init__(self, desafio, status):
+        #status de tela: 
+        # 1 = só hud e posição inicial
+        # 2 = 1 + desafio
+        # 3 = 2 + roupas e labirinto
+        # 4 = 3 - labirinto
+        # 5 = 4 - roupa errada
         self.status = status
         self.tamanho = 800, 600
         self.area_desafio = 800, 125
@@ -136,18 +142,19 @@ class Tela():
                 if mapa[row-5,col] == 2 or mapa[row-5,col] == '2':# é o inicio do ponto inicial
                     imagem = self.inicio_img
                 elif self.status >=3:
-                    if mapa[row-5,col] == 1 or mapa[row-5,col] == '1':# é a parede
+
+                    if (mapa[row-5,col] == 1 or mapa[row-5,col] == '1') and self.status == 3:# é a parede
                         imagem = self.parede_img
-                    elif mapa[row-5,col] == 11 or mapa[row-5,col] == '11':# é a parede já atingida
+                    elif (mapa[row-5,col] == 11 or mapa[row-5,col] == '11') and self.status == 3:# é a parede já atingida
                         imagem = self.paredeatingida_img
                     
                     elif mapa[row-5,col] == 3 or mapa[row-5,col] == '3':# é o inicio da roupa certa
                         imagem = self.roupacerta_img
                         self.roupacerta_pos = (col*self.tilesize,row*self.tilesize)
-                    elif mapa[row-5,col] == 4 or mapa[row-5,col] == '4':# é o inicio da roupa errada
+                    elif (mapa[row-5,col] == 4 or mapa[row-5,col] == '4') and self.status < 5:# é o inicio da roupa errada
                         imagem = self.roupaerrada_img
                         self.roupaerrada_pos = (col*self.tilesize,row*self.tilesize)
-                    elif (mapa[row-5,col] == 5  or mapa[row-5,col] == '5') and desafio.nivel >= 6:# é o inicio da roupa coringa
+                    elif (mapa[row-5,col] == 5  or mapa[row-5,col] == '5') and (desafio.nivel >= 11 or (desafio.nivel >= 6 and self.status<5)):# é o inicio da roupa coringa
                         imagem = self.roupacoringa_img
                         self.roupacoringa_pos = (col*self.tilesize,row*self.tilesize)
                 if imagem != '':

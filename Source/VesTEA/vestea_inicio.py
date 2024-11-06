@@ -74,11 +74,14 @@ class Vestea():
                             self.jogo.posicaoJogador = 3
                             self.jogo.estado += 1
                         elif evento.key == K_DOWN:#retroagiu a fase
+                            print('down')
                             self.jogo.posicaoJogador = 4
                             self.jogo.estado += 1
                         elif evento.key == K_RIGHT:#se posicionou no inicio
+                            print('side')
                             self.jogo.posicaoJogador = 2
-                            self.jogo.estado += 1
+                            if self.jogo.estado < 7:
+                                self.jogo.estado += 1
                         elif evento.key == K_LEFT:#bateu na parede
                             #self.jogo.posicaoJogador = 1
                             self.jogo.acoesColisao(225,175)
