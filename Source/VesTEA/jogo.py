@@ -68,30 +68,50 @@ class Jogo():
         self.cap.frame = self.jogador.scan_feets(self.cap.frame)
         x,y = self.jogador.get_feet_center()
         #print("Jogador em: ",x," - ",y)
-        pygame.draw.circle(self.superficie, (255,255,0), [x,y-20],15)
+        pygame.draw.circle(self.superficie, (255,255,0), [x,y-90],15)
         self.posicaoJogador = self.desafio.detectaColisao(x,y)
-        if self.posicaoJogador == 2 or self.posicaoJogador == 22:
+        print("Jogador em: ",self.posicaoJogador)
+        #print(self.posicaoJogador == '2' or self.posicaoJogador == '22')
+        if self.posicaoJogador == '2' or self.posicaoJogador == '22':
+            #self.posicaoJogador = '99'
+            #print("Jogador em: ",self.posicaoJogador)
+            #mostrar só desafio     
+            self.tela = Tela(self.desafio, 2)
+            display.update()
+            self.tempoSemMovimento = datetime.datetime.now() 
+            #print(f"Tempo parado 1:{(datetime.datetime.now() - self.tempoSemMovimento).seconds} segundos")
+            pygame.time.delay(3000)   
+            #mostrar labirinto e roupas
+            #print(f"Tempo parado 2:{(datetime.datetime.now() - self.tempoSemMovimento).seconds} segundos")
+            self.tela = Tela(self.desafio, 3)
+            display.update()
+            pygame.time.delay(2000)
+            self.cap.load_camera()
             self.estado += 1
 
     def carregaPartida(self):
+        #self.posicaoJogador = '99'
+        self.tela = Tela(self.desafio, 3)
+        #print("Jogador 2 em: ",self.posicaoJogador)
         self.cap.load_camera()
         self.cap.frame = self.jogador.scan_feets(self.cap.frame)
         x,y = self.jogador.get_feet_center()
         #print("Jogador em: ",x," - ",y)
-        pygame.draw.circle(self.superficie, (255,255,0), [x,y-20],15)
-        #self.posicaoJogador = self.desafio.detectaColisao(x,y)
-        if self.tempoSemMovimento == 0:
-            self.tela = Tela(self.desafio, 2)
-            self.tempoSemMovimento = datetime.datetime.now() 
-        if (datetime.datetime.now() - self.tempoSemMovimento).seconds > 2:    
-            self.tela = Tela(self.desafio, 3)
-        if (datetime.datetime.now() - self.tempoSemMovimento).seconds > 4 and self.posicaoJogador == 2 or self.posicaoJogador == 22:     
+        pygame.draw.circle(self.superficie, (255,255,0), [x,y-90],15)
+        self.posicaoJogador = self.desafio.detectaColisao(x,y)
+        #print("Jogador 2.5 em: ",self.posicaoJogador)
+        display.update()
+        #se o jogador ainda estiver na posição inicial, começa a partida
+        if self.posicaoJogador == '2' or self.posicaoJogador == '22': 
+            #print("Jogador 3 em: ",self.posicaoJogador)
+            #print(f"Tempo parado 3:{(datetime.datetime.now() - self.tempoSemMovimento).seconds} segundos")
             Config.som_vez_do_jogador_1.play()
             pygame.time.delay(500)   
             Config.som_vez_do_jogador_2.play()
             self.jogador = Jogador()
             self.estado += 1
-
+        
+        
     def gerenciaJogo(self):
         self.tela = Tela(self.desafio, 3)
         #inserindo captura do jogador
@@ -99,7 +119,7 @@ class Jogo():
         self.cap.frame = self.jogador.scan_feets(self.cap.frame)
         x, y = self.jogador.get_feet_center()
         #verifica se precisa de ajuda
-        print(f"Tempo parado:{(datetime.datetime.now() - self.tempoSemMovimento).seconds} segundos")
+        #print(f"Tempo parado:{(datetime.datetime.now() - self.tempoSemMovimento).seconds} segundos")
         #se ainda não atualizou ultima posição ou se jogador se moveu mais que 25px para qualquer direção, atualiza última posição
         if (self.ultimaPosicao == [-9999,-9999] or (x > self.ultimaPosicao[0] + 25 or x < self.ultimaPosicao[0] - 25 or y > self.ultimaPosicao[1] + 25 or y < self.ultimaPosicao[1] - 25)):
             self.ultimaPosicao = [x,y] 
@@ -120,14 +140,14 @@ class Jogo():
             self.jogando = False
             
         #print("Jogador em: ",x,"-",y)
-        pygame.draw.circle(self.superficie, (255,255,0), [x,y-20], 15)
+        pygame.draw.circle(self.superficie, (255,255,0), [x,y-90], 15)
         self.posicaoJogador = self.desafio.detectaColisao(x,y)
-        if self.posicaoJogador == 3 or self.posicaoJogador == 33 or self.posicaoJogador == 4 or self.posicaoJogador == 44:
+        if self.posicaoJogador == '3' or self.posicaoJogador == '33' or self.posicaoJogador == '4' or self.posicaoJogador == '44':
             self.estado += 1
         if self.desafio.nivel >= 6:  
-            if self.posicaoJogador == 5 or self.posicaoJogador == 55:
+            if self.posicaoJogador == '5' or self.posicaoJogador == '55':
                 self.estado += 1
-        if self.posicaoJogador == 1:
+        if self.posicaoJogador == '1':
             self.acoesColisao(x,y)
 
     def verificaResultado(self):
@@ -158,26 +178,27 @@ class Jogo():
         ######logica nova de verificacao de avanço/volta
         ##calcula pontuação
         #se acertou sem ajuda, 10 ptos, se acertou om ajuda 5 pts    
-        if self.posicaoJogador == 3 or self.posicaoJogador == 33: 
+        if self.posicaoJogador == '3' or self.posicaoJogador == '33': 
             Config.som_acerto.play()
             self.totalAcertos += 1
             if self.ajuda == False:
                 self.pontos += 10    
             else: 
                 self.pontos += 5    
-        elif self.desafio.nivel >= 11 and (self.posicaoJogador == 5 or self.posicaoJogador == 55): 
+        elif self.desafio.nivel >= 11 and (self.posicaoJogador == '5' or self.posicaoJogador == '55'): 
             Config.som_acerto.play()
             self.totalAcertos += 1
             if self.ajuda == False:
                 self.pontos += 10    
             else: 
                 self.pontos += 5  
-        elif self.posicaoJogador == 4 or self.posicaoJogador == 44:
+        elif self.posicaoJogador == '4' or self.posicaoJogador == '44':
             Config.som_erro.play()
-        display.update()
+        #display.update()
         #soma pontos por não colidir        
         self.pontos += 10 - self.colisoes
-        pygame.time.delay(1500)
+        display.update()
+        pygame.time.delay(2500)
         self.estado += 1
 
     def exibeRoupasCertas(self):
@@ -195,10 +216,22 @@ class Jogo():
                 self.superficie.blit(self.tela.roupacoringa_img, coringa_rect)
         display.update()
         pygame.time.delay(3000)
+        self.cap.load_camera()
         self.estado += 1
 
     def finalizaJogada(self):
-
+        #some roupa errada
+        self.tela = Tela(self.desafio, 6)   
+        #desenha retangulo na roupa certa
+        pygame.draw.rect(self.tela.roupacerta_img, (0,255,0), (0, 0, 100, 100),10)
+        certo_rect = self.tela.roupacerta_img.get_rect(topleft = self.tela.roupacerta_pos)
+        self.superficie.blit(self.tela.roupacerta_img, certo_rect)
+        #desenha retangulo na roupa coringa se for certa
+        if self.desafio.roupa_coringa != "":
+            if self.desafio.nivel>=11:    
+                pygame.draw.rect(self.tela.roupacoringa_img, (0,255,0), (0, 0, 100, 100),10)
+                coringa_rect = self.tela.roupacoringa_img.get_rect(topleft = self.tela.roupacoringa_pos)
+                self.superficie.blit(self.tela.roupacoringa_img, coringa_rect)
         #se for terceira jogada, exibe tela de resultado
         if self.jogada == 3 :
             Config.som_trofeu.play()
@@ -212,22 +245,22 @@ class Jogo():
                 self.trofeu = 3
             self.jogando = False
         #senão, se jogador não estiver no ponto inicial, verifica sua posição    
-        elif self.posicaoJogador != 2 and self.posicaoJogador != 22:
+        elif self.posicaoJogador != '2' and self.posicaoJogador != '22':
             #inserindo captura do jogador
             self.cap.load_camera()
             self.cap.frame = self.jogador.scan_feets(self.cap.frame)
             x,y = self.jogador.get_feet_center()
             #print("Jogador em: ",x," - ",y)
-            pygame.draw.circle(self.superficie, (255,255,0), [x,y-20],15)
+            pygame.draw.circle(self.superficie, (255,255,0), [x,y-90],15)
             self.posicaoJogador = self.desafio.detectaColisao(x,y)
         #se jogador voltar pro ponto inicial
         else:
             #se for jogada 1 ou 2, troca pra seguinte
             print("Pontos jogada ",self.jogada," = ",self.pontos)
             self.jogada += 1
-            self.posicaoJogador = 0
-            self.estado = 1
-               
+            self.posicaoJogador = '0'
+            pygame.time.delay(1000)
+            self.estado = 1      
         display.update()
 
     def acoesAvancaNivel(self):
@@ -324,7 +357,7 @@ class Jogo():
             elif self.trofeu == 3:
                 self.acoesAvancaNivel()
             self.jogando = True             
-            self.posicaoJogador = 0
+            self.posicaoJogador = '0'
             self.estado = 1 #para reiniciar o jogo no desafio desejado
             
     def update(self):
@@ -374,7 +407,7 @@ class Jogo():
             if self.estado == 7:  
                 self.carregaTelaFeedback()
             else:
-                print("Pausa...")
+                #print("Pausa...")
                 self.carregaTelaPausa()
         
             

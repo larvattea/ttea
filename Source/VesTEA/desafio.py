@@ -349,7 +349,7 @@ class Desafio():
 
     #captura código do local onde o jogador está no labirinto
     def detectaColisao(self, x, y):
-        y = y-125    
+        y = y-195    
         col = int(np.floor(x / 25))
         lin = int(np.floor(y / 25))
         #print(lin,col)

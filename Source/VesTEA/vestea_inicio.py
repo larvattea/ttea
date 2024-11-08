@@ -71,15 +71,15 @@ class Vestea():
                             self.jogo.jogando = not self.jogo.jogando
                         elif evento.key == K_UP:#passou de fase
                             print('UP')
-                            self.jogo.posicaoJogador = 3
+                            self.jogo.posicaoJogador = '3'
                             self.jogo.estado += 1
                         elif evento.key == K_DOWN:#retroagiu a fase
                             print('down')
-                            self.jogo.posicaoJogador = 4
+                            self.jogo.posicaoJogador = '4'
                             self.jogo.estado += 1
                         elif evento.key == K_RIGHT:#se posicionou no inicio
                             print('side')
-                            self.jogo.posicaoJogador = 2
+                            self.jogo.posicaoJogador = '2'
                             if self.jogo.estado < 7:
                                 self.jogo.estado += 1
                         elif evento.key == K_LEFT:#bateu na parede

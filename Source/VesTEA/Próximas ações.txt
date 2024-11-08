@@ -18,13 +18,13 @@ OK Refazer carregamento da tela
 	OK depois mostra labirinto e roupas 
 	OK depois deixa jogar
 Ações pós-escolha da roupa pelo jogador
-	ocultar ponto inicial
+	OK ocultar ponto inicial
 	OK Labirinto some
 	OK roupa errada some
 		se foi selecionada surge imagem de X (erro) em seu lugar
 	OK destaca roupa correta
 	surge emoji alegre/triste
-	surge ponto inicial
+	OK surge ponto inicial
 tutorial!!!
 	sem labirinto e sem desafio (1 roupa)
 	com labirinto e sem desafio
@@ -49,7 +49,9 @@ OK menu principal
 		tempos de jogo
 		referência do movimento (parte do corpo)
 tela de pausa
-	continua, avança, volta
+	OK continua, 
+	avança, 
+	volta
 	voltar ao menu
 	sair
 	pecs atuais

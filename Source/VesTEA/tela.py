@@ -139,7 +139,7 @@ class Tela():
             #for row in range (3,12):
             for row in range (5,24):
                 imagem = ''
-                if mapa[row-5,col] == 2 or mapa[row-5,col] == '2':# é o inicio do ponto inicial
+                if (mapa[row-5,col] == 2 or mapa[row-5,col] == '2') and self.status != 4 and self.status != 5:# é o inicio do ponto inicial
                     imagem = self.inicio_img
                 elif self.status >=3:
 
