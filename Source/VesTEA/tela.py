@@ -70,21 +70,11 @@ class Tela():
         #prepara desafio
         #!!!!!!!!!!!!!!!!!
         #verifica quantas imagens devem ser mostradas pela fase e prepara posições
-        if desafio.fase == 1:
-            posicoes = np.array([
-            (350,10)
-            ])
-        elif desafio.fase == 2:
-            posicoes = np.array([
-            (250,10),
-            (450,10),
-            ])    
-        elif desafio.fase == 3:
-            posicoes = np.array([
-            (300,10),
-            (475,10),
-            (650,10),
-            ])    
+        posicoes = np.array([
+        (425,10),
+        (550,10),
+        (675,10),
+        ])    
         #inicia contadora de posicao
         posicao_atual = 0
 
@@ -133,7 +123,7 @@ class Tela():
         #self.display_surface.blit(self.topo_img,(0,0))
         #self.display_surface.blit(self.jogo_img,(0,100))
         
-        #posiciona imagens conforme mapa (-3 por causa do topo reservado para o desafio . se mudar o tamanho, vai mudar esse valor)
+        #posiciona imagens conforme mapa (-5 por causa do topo reservado para o desafio . se mudar o tamanho, vai mudar esse valor)
         #for col in range (16):
         for col in range (32):
             #for row in range (3,12):

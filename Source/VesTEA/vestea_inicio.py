@@ -11,6 +11,7 @@ from pygame.time import Clock
 from VesTEA import arquivo as arq
 from VesTEA import botao
 from VesTEA.jogo import Jogo
+from VesTEA.tutorial import Tutorial
 
 
 #se for executar de outra pasta, precisa de:
@@ -35,13 +36,13 @@ class Vestea():
             'VesTEA'
         )
 
-       
         self.fundo = scale(
             load('VesTEA/images/space.jpg'),
             self.tamanho
         )
 
         self.jogo = Jogo(self.superficie, arq.get_V_FASE(), arq.get_V_NIVEL())
+        self.tutorial = Tutorial(self.superficie)
         #self.fundo_inicio = scale(
         #    load('images/title_background.jpg'),
         #    self.tamanho
@@ -65,26 +66,35 @@ class Vestea():
                 if evento.type == QUIT:
                     #print("clicou em fechar")
                     self.esta_rodando = False
-                if self.estado==1:
+                if self.estado==1 or self.estado==2:
                     if evento.type == KEYUP:
                         if evento.key == K_SPACE:
                             self.jogo.jogando = not self.jogo.jogando
+                            self.tutorial.jogando = not self.tutorial.jogando
                         elif evento.key == K_UP:#passou de fase
                             print('UP')
                             self.jogo.posicaoJogador = '3'
                             self.jogo.estado += 1
+                            self.tutorial.posicaoJogador = '3'
+                            self.tutorial.estado += 1
                         elif evento.key == K_DOWN:#retroagiu a fase
                             print('down')
                             self.jogo.posicaoJogador = '4'
                             self.jogo.estado += 1
+                            self.tutorial.posicaoJogador = '4'
+                            self.tutorial.estado += 1
                         elif evento.key == K_RIGHT:#se posicionou no inicio
                             print('side')
                             self.jogo.posicaoJogador = '2'
                             if self.jogo.estado < 7:
                                 self.jogo.estado += 1
+                            self.tutorial.posicaoJogador = '2'
+                            if self.tutorial.estado < 7:
+                                self.tutorial.estado += 1
                         elif evento.key == K_LEFT:#bateu na parede
                             #self.jogo.posicaoJogador = 1
                             self.jogo.acoesColisao(225,175)
+                            self.tutorial.acoesColisao(225,175)
 
             # Loop de eventos
             #TELA INICIAL
@@ -130,7 +140,8 @@ class Vestea():
                     #self.novo_jogo()
                     self.estado=1
                 if self.botao_tutorial.criar(self.superficie):
-                    print('NÃO IMPLEMENTADO')
+                    #print('NÃO IMPLEMENTADO')
+                    self.estado=2
                 if self.botao_opcoes.criar(self.superficie):
                     print('NÃO IMPLEMENTADO')
                 if self.botao_personalizar.criar(self.superficie):
@@ -143,6 +154,20 @@ class Vestea():
             elif self.estado==1:
                 #self.jogo.jogando = True
                 self.jogo.update()
+                #se sair do jogo, volta pro menu
+                if self.jogo.estado == 99:
+                    self.jogo = Jogo(self.superficie, arq.get_V_FASE(), arq.get_V_NIVEL())
+                    self.tutorial = Tutorial(self.superficie)
+                    self.estado = 0
+                #print(self.estado,' e ',self.jogo.estado)
+            elif self.estado==2:
+                #self.jogo.jogando = True
+                self.tutorial.update()
+                #se terminar tutorial, volta pro menu
+                if self.tutorial.estado == 99:
+                    self.jogo = Jogo(self.superficie, arq.get_V_FASE(), arq.get_V_NIVEL())
+                    self.tutorial = Tutorial(self.superficie)
+                    self.estado = 0
                 #print(self.estado,' e ',self.jogo.estado)
             display.update()
 

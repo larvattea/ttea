@@ -12,8 +12,15 @@ import random
 #import os
 #os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-class TelaParcial():
-    def __init__(self, desafio):
+class TelaTutorial():
+    def __init__(self, desafio, status):
+        #status de tela: 
+        # 1 = só hud e posição inicial
+        # 2 = 1 + desafio
+        # 3 = 2 + roupas e labirinto
+        # 4 = 3 - labirinto
+        # 5 = 4 - roupa errada
+        self.status = status
         self.tamanho = 800, 600
         self.area_desafio = 800, 125
         self.area_jogo = 800, 475
@@ -41,7 +48,7 @@ class TelaParcial():
         # carrega frases desafio 
         fonte = font.SysFont('opensans', 40)
         texto_fase = fonte.render(
-            f"Fase : {desafio.fase}",
+            f"Fase : Tutorial",
             True,
             (250, 250, 250)
         )
@@ -52,35 +59,17 @@ class TelaParcial():
             (250, 250, 250)
         )
         self.display_surface.blit(texto_nivel, (20, 55))
-        texto_desafio = fonte.render(
-            f"Desafio : {desafio.jogada} de 3",
-            True,
-            (250, 250, 250)
-        )
-        self.display_surface.blit(texto_desafio, (20, 85))
-
         
         #prepara desafio
         #!!!!!!!!!!!!!!!!!
-        #verifica quantas imagens devem ser mostradas pela fase e prepara posições
-        if desafio.fase == 1:
-            posicoes = np.array([
-            (350,10)
-            ])
-        elif desafio.fase == 2:
-            posicoes = np.array([
-            (250,10),
-            (450,10),
-            ])    
-        elif desafio.fase == 3:
-            posicoes = np.array([
-            (300,10),
-            (475,10),
-            (650,10),
-            ])    
-        #inicia contadora de posicao
-        posicao_atual = 0
 
+        if self.status >= 2:
+            #mostra as imagens do desafio
+            if desafio.nivel==3: 
+                self.desafio_corpo = pygame.image.load(f'Assets/vestea/imgs/desafios/Corpo{desafio.corpo}.png').convert_alpha()
+                self.desafio_corpo = pygame.transform.scale(self.desafio_corpo, (self.tilesize*4, self.tilesize*4))
+                self.display_surface.blit(self.desafio_corpo,(425,10))
+        
         ###############################
         #PARTE INFERIOR
         ###############################
@@ -97,22 +86,32 @@ class TelaParcial():
         self.roupacerta_img = pygame.transform.scale(self.roupacerta_img, (self.tilesize*4, self.tilesize*4))
         self.roupaerrada_img = pygame.image.load('Assets/vestea/imgs/roupas/'+desafio.roupa_errada.nome).convert_alpha()
         self.roupaerrada_img = pygame.transform.scale(self.roupaerrada_img, (self.tilesize*4, self.tilesize*4))
-        if desafio.nivel >= 6:
-            self.roupacoringa_img = pygame.image.load('Assets/vestea/imgs/roupas/'+desafio.roupa_coringa.nome).convert_alpha()
-            self.roupacoringa_img = pygame.transform.scale(self.roupacoringa_img, (self.tilesize*4, self.tilesize*4))
         mapa = desafio.labirinto
         #print(desafio.labirinto)
         #self.display_surface.blit(self.topo_img,(0,0))
         #self.display_surface.blit(self.jogo_img,(0,100))
         
-        #posiciona imagens conforme mapa (-3 por causa do topo reservado para o desafio . se mudar o tamanho, vai mudar esse valor)
+        #posiciona imagens conforme mapa (-5 por causa do topo reservado para o desafio . se mudar o tamanho, vai mudar esse valor)
         #for col in range (16):
         for col in range (32):
             #for row in range (3,12):
             for row in range (5,24):
                 imagem = ''
-                if mapa[row-5,col] == 2 or mapa[row-5,col] == '2':# é o inicio do ponto inicial
+                if (mapa[row-5,col] == 2 or mapa[row-5,col] == '2') and self.status != 4 and self.status != 5:# é o inicio do ponto inicial
                     imagem = self.inicio_img
+                elif self.status >=3:
+
+                    if (mapa[row-5,col] == 1 or mapa[row-5,col] == '1') and self.status == 3:# é a parede
+                        imagem = self.parede_img
+                    elif (mapa[row-5,col] == 11 or mapa[row-5,col] == '11') and self.status == 3:# é a parede já atingida
+                        imagem = self.paredeatingida_img
+                    
+                    elif mapa[row-5,col] == 3 or mapa[row-5,col] == '3':# é o inicio da roupa certa
+                        imagem = self.roupacerta_img
+                        self.roupacerta_pos = (col*self.tilesize,row*self.tilesize)
+                    elif (mapa[row-5,col] == 4 or mapa[row-5,col] == '4') and self.status < 5:# é o inicio da roupa errada
+                        imagem = self.roupaerrada_img
+                        self.roupaerrada_pos = (col*self.tilesize,row*self.tilesize)
                 if imagem != '':
                     self.display_surface.blit(imagem,(col*self.tilesize,row*self.tilesize))    
 

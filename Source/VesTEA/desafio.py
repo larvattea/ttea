@@ -363,7 +363,7 @@ class Desafio():
 
     #muda cor do local da parede onde o jogador colidiu
     def mudaParedeAtingida(self, x, y, labirinto):
-        y = y-125    
+        y = y-195    
         col = int(np.floor(x / 25))
         #lin = 3 #teste
         lin = int(np.floor(y / 25))

@@ -17,18 +17,18 @@ OK Refazer carregamento da tela
 	OK depois mostra desafio
 	OK depois mostra labirinto e roupas 
 	OK depois deixa jogar
-Ações pós-escolha da roupa pelo jogador
+ok Ações pós-escolha da roupa pelo jogador
 	OK ocultar ponto inicial
 	OK Labirinto some
 	OK roupa errada some
-		se foi selecionada surge imagem de X (erro) em seu lugar
+		ok se foi selecionada surge imagem de X (erro) em seu lugar
 	OK destaca roupa correta
-	surge emoji alegre/triste
+	ok surge emoji alegre/triste
 	OK surge ponto inicial
-tutorial!!!
-	sem labirinto e sem desafio (1 roupa)
-	com labirinto e sem desafio
-	sem labirinto e com desafio
+OK tutorial!!!
+	OK sem labirinto e sem desafio (1 roupa)
+	OK com labirinto e sem desafio
+	OK sem labirinto e com desafio
 Outras dinâmicas
 	OK pausa por demora prolongada
 	pausa por sair da tela de jogo
