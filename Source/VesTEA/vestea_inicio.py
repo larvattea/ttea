@@ -64,7 +64,10 @@ class Vestea():
             #print(evento)
             for evento in event.get():  # Events
                 if evento.type == QUIT:
-                    #print("clicou em fechar")
+                    print("clicou em fechar")
+                    arq.grava_Sessao(self.jogo.sessaoInicio, self.jogo.fase, self.jogo.nivel, self.jogo.sessaoAcertos, 
+                                     self.jogo.sessaoAcertosAjuda, self.jogo.sessaoAjudas, 
+                                     self.jogo.sessaoErros, self.jogo.sessaoOmissoes, self.jogo.totalColisoes)
                     self.esta_rodando = False
                 if self.estado==1 or self.estado==2:
                     if evento.type == KEYUP:
@@ -93,8 +96,8 @@ class Vestea():
                                 self.tutorial.estado += 1
                         elif evento.key == K_LEFT:#bateu na parede
                             #self.jogo.posicaoJogador = 1
-                            self.jogo.acoesColisao(225,175)
-                            self.tutorial.acoesColisao(225,175)
+                            self.jogo.acoesColisao(225,245)
+                            #self.tutorial.acoesColisao(225,245)
 
             # Loop de eventos
             #TELA INICIAL
@@ -156,8 +159,10 @@ class Vestea():
                 self.jogo.update()
                 #se sair do jogo, volta pro menu
                 if self.jogo.estado == 99:
+                    arq.grava_Sessao(self.jogo.sessaoInicio, self.jogo.fase, self.jogo.nivel, self.jogo.sessaoAcertos, 
+                                     self.jogo.sessaoAcertosAjuda, self.jogo.sessaoAjudas, 
+                                     self.jogo.sessaoErros, self.jogo.sessaoOmissoes, self.jogo.totalColisoes)    
                     self.jogo = Jogo(self.superficie, arq.get_V_FASE(), arq.get_V_NIVEL())
-                    self.tutorial = Tutorial(self.superficie)
                     self.estado = 0
                 #print(self.estado,' e ',self.jogo.estado)
             elif self.estado==2:
@@ -165,7 +170,6 @@ class Vestea():
                 self.tutorial.update()
                 #se terminar tutorial, volta pro menu
                 if self.tutorial.estado == 99:
-                    self.jogo = Jogo(self.superficie, arq.get_V_FASE(), arq.get_V_NIVEL())
                     self.tutorial = Tutorial(self.superficie)
                     self.estado = 0
                 #print(self.estado,' e ',self.jogo.estado)

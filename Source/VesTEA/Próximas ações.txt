@@ -36,7 +36,7 @@ controle do profissional
 	hud
 	som
 	troca fase/nivel
-	sair do jogo
+	OK sair do jogo
 	tecla pra trocar cor de fundo
 OK melhorar parte superior da tela (texto)
 OK menu principal
@@ -52,11 +52,11 @@ tela de pausa
 	OK continua, 
 	avança, 
 	volta
-	voltar ao menu
-	sair
+	OK voltar ao menu
 	pecs atuais
 	mostrar atalhos
-guardar sessão no csv
+OK guardar sessão no csv
+guardar detalhado no csv
 
 menu de escolha do desafio
 	Corpo

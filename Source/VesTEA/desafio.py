@@ -176,10 +176,9 @@ class Desafio():
 
     #1=calor; 2=frio; 3=ambos
     def getClima(self):
-        if self.roupa_certa.clima == '3':
-            return random.randint(1,2)
         print('Desafio clima:',self.roupa_certa.clima)
         return self.roupa_certa.clima
+    
     #1=parque; 2=restaurante; 3=praia
     def getLocal(self):
         while (True):
@@ -209,7 +208,8 @@ class Desafio():
             print('Roupa certa:', dados[self.roupa_certa.posicao])
             print('Roupa errada:', dados[rouparand])
             roupaSelecionada = Roupa(dados[rouparand], rouparand)
-            print(roupaSelecionada.local)
+            print('self.corpo: ', self.corpo)
+            print('self.clima: ',self.clima)
             print('self.local: ',self.local)
             print(roupaSelecionada.local[self.local-1])
             #verifica as diferencas
@@ -305,7 +305,7 @@ class Desafio():
                 #gera valor
                 randNum = random.randint(1,3)
                 #se sorteou clima e clima da roupa certa for 'neutro', passa pra parte do corpo
-                if (randNum == 2 and self.roupa_certa.clima == 3):
+                if (randNum == 2 and self.clima == 3):
                     randNum = 1
                 #zera as outras 2 posições
                 if randNum == 1:
@@ -329,7 +329,7 @@ class Desafio():
             #repete
                 #gera valor
                 #se clima da roupa certa for 'neutro', passa pra parte do corpo, senão sorteia
-                if (self.roupa_certa.clima == 3):
+                if (self.clima == 3):
                     randNum = 2
                 else:
                     randNum = random.randint(1,3)

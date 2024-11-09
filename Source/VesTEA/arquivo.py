@@ -78,8 +78,9 @@ def gravaArrayDados(filename, Dados):# Dados é um vetor com os dados para grava
             csvwriter = csv.writer(csvfile, dialect='mydialect')
             csvwriter.writerow(linha)        
 
-def grava_Sessao(jogador, hora_inicio, fase, nivel, acertos, acertos_ajuda, ajudas, erros, omissoes, colisoes):
-    file = 'Jogadores/'+jogador+'_VesTEA_sessao.csv'
+def grava_Sessao(hora_inicio, fase, nivel, acertos, acertos_ajuda, ajudas, erros, omissoes, colisoes):
+    file = 'Jogadores/'+Player+'_VesTEA_sessao.csv'
+    print('Arquivo: ',file)
     results = pd.read_csv(file, sep=';')
     id = len(results)
     data = get_Date().strftime("%x")
@@ -89,6 +90,9 @@ def grava_Sessao(jogador, hora_inicio, fase, nivel, acertos, acertos_ajuda, ajud
         csvwriter = csv.writer(csvfile, dialect='mydialect')
         csvwriter.writerow(fields)
     set_Sessao(id + 1)
+    set_K_FASE(fase)
+    set_K_NIVEL(nivel)
+    set_R_SESSAO(id)
 
 def grava_Detalhado(jogador, data, fase, nivel, pos_jog, tipo, obs):
     file = 'Jogadores/' + jogador + '_Player_Vestea_detalhado.csv'

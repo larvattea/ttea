@@ -5,7 +5,7 @@ from VesTEA.tela import Tela
 from VesTEA.jogador import Jogador
 from camera import Camera
 from pygame import event
-from pygame.locals import KEYUP, K_SPACE
+from pygame.locals import QUIT, KEYUP, K_SPACE
 from pygame import font
 from pygame import display
 from VesTEA.config import Config
@@ -36,10 +36,20 @@ class Jogo():
         self.superficie = superficie
         #total de um nivel
         self.totalAcertos = 0
+        self.totalAcertosAjuda = 0
+        self.totalOmissoes = 0
         self.totalColisoes = 0
         self.totalTempo = 0
         self.totalAjudas = 0
         self.trofeu = 2
+        #total da sessão
+        self.sessaoInicio = datetime.datetime.now().strftime("%X")
+        self.sessaoAcertos = 0
+        self.sessaoAcertosAjuda = 0 
+        self.sessaoOmissoes = 0 
+        self.sessaoAjudas = 0
+        self.sessaoErros = 0
+        self.sessaoColisoes = 0
         #imagens
         self.emoji = ""
         self.erro = pygame.image.load(f'Assets/vestea/imgs/erro.png').convert_alpha()
@@ -52,6 +62,8 @@ class Jogo():
         if self.jogada == 1:
             self.pontos = 0
             self.totalAcertos = 0
+            self.totalAcertosAjuda = 0
+            self.totalOmissoes = 0
             self.totalColisoes = 0
             self.totalTempo = datetime.datetime.now()
             self.totalAjudas = 0
@@ -140,6 +152,7 @@ class Jogo():
             self.superficie.blit(self.tela.roupacerta_img, certo_rect)
         #senão, entra em pausa    
         elif ((datetime.datetime.now() - self.tempoSemMovimento).seconds > 10):
+            self.totalOmissoes += 1
             self.jogando = False
             
         #print("Jogador em: ",x,"-",y)
@@ -189,6 +202,7 @@ class Jogo():
             if self.ajuda == False:
                 self.pontos += 10    
             else: 
+                self.totalAcertosAjuda += 1
                 self.pontos += 5    
         elif self.desafio.nivel >= 11 and (self.posicaoJogador == '5' or self.posicaoJogador == '55'): 
             self.emoji = pygame.image.load(f'Assets/vestea/imgs/feliz.webp').convert_alpha()
@@ -198,6 +212,7 @@ class Jogo():
             if self.ajuda == False:
                 self.pontos += 10    
             else: 
+                self.totalAcertosAjuda += 1
                 self.pontos += 5  
         elif self.posicaoJogador == '4' or self.posicaoJogador == '44':
             self.emoji = pygame.image.load(f'Assets/vestea/imgs/triste.webp').convert_alpha()
@@ -250,6 +265,13 @@ class Jogo():
         if self.jogada == 3 :
             Config.som_trofeu.play()
             print("Pontos jogada 3 = ",self.pontos)
+            #atualiza dados da sessão
+            self.sessaoAcertos += self.totalAcertos 
+            self.sessaoAcertosAjuda += self.totalAcertosAjuda
+            self.sessaoOmissoes += self.totalOmissoes
+            self.sessaoAjudas += self.totalAjudas
+            self.sessaoErros += 3 - self.totalAcertos 
+            self.sessaoColisoes += self.totalColisoes
             self.totalTempo = datetime.datetime.now() - self.totalTempo
             self.jogada = 1
             self.posicaoJogador = 0
@@ -257,6 +279,7 @@ class Jogo():
                 self.trofeu = 1
             elif self.pontos >= 40:
                 self.trofeu = 3
+            #muda pra false pra mostrar tela de fim de nível
             self.jogando = False
         #senão, se jogador não estiver no ponto inicial, verifica sua posição    
         elif self.posicaoJogador != '2' and self.posicaoJogador != '22':
@@ -352,28 +375,51 @@ class Jogo():
         ui.draw_text(self.superficie, f"{self.totalAcertos} de 3", (650, 190), (38, 61, 39), font=pygame.font.Font(None, 25),
                          shadow=False)
 
-        ui.draw_text(self.superficie, "Ajudas", (450, 220), (38, 61, 39), font=pygame.font.Font(None, 25),
+        ui.draw_text(self.superficie, "Acertos com ajuda", (450, 220), (38, 61, 39), font=pygame.font.Font(None, 25),
                          shadow=False)
-        ui.draw_text(self.superficie, f"{self.totalAjudas}", (650, 220), (38, 61, 39), font=pygame.font.Font(None, 25),
-                         shadow=False)
-
-        ui.draw_text(self.superficie, "Paredes Colididas", (450, 250), (38, 61, 39), font=pygame.font.Font(None, 25),
-                         shadow=False)
-        ui.draw_text(self.superficie, str(self.totalColisoes), (650, 250), (38, 61, 39), font=pygame.font.Font(None, 25),
+        ui.draw_text(self.superficie, f"{self.totalAcertosAjuda}", (650, 220), (38, 61, 39), font=pygame.font.Font(None, 25),
                          shadow=False)
 
+        ui.draw_text(self.superficie, "Ajudas", (450, 250), (38, 61, 39), font=pygame.font.Font(None, 25),
+                         shadow=False)
+        ui.draw_text(self.superficie, f"{self.totalAjudas}", (650, 250), (38, 61, 39), font=pygame.font.Font(None, 25),
+                         shadow=False)
+
+        ui.draw_text(self.superficie, "Paredes Colididas", (450, 280), (38, 61, 39), font=pygame.font.Font(None, 25),
+                         shadow=False)
+        ui.draw_text(self.superficie, f"{self.totalColisoes}", (650, 280), (38, 61, 39), font=pygame.font.Font(None, 25),
+                         shadow=False)
+
+        ui.draw_text(self.superficie, "Omissões", (450, 310), (38, 61, 39), font=pygame.font.Font(None, 25),
+                         shadow=False)
+        ui.draw_text(self.superficie, str(self.totalOmissoes), (650, 310), (38, 61, 39), font=pygame.font.Font(None, 25),
+                         shadow=False)
+
+        #botão JOGAR
         self.imagem_inicio = pygame.image.load('VesTEA/images/button_jogar.png').convert_alpha()
         self.botao_inicio = Botao(350, 450, self.imagem_inicio, 1)
         if self.botao_inicio.criar(self.superficie):
-            #print('START')
             if self.trofeu == 1:
                 self.acoesVoltaNivel()
             elif self.trofeu == 3:
                 self.acoesAvancaNivel()
+            #print('START')
             self.jogando = True             
             self.posicaoJogador = '0'
             self.estado = 1 #para reiniciar o jogo no desafio desejado
-            
+        #botão SAIR
+        self.imagem_sair = pygame.image.load('VesTEA/images/button_sair.png').convert_alpha()
+        self.botao_sair = Botao(350, 510, self.imagem_sair, 1)
+        if self.botao_sair.criar(self.superficie):
+            if self.trofeu == 1:
+                self.acoesVoltaNivel()
+            elif self.trofeu == 3:
+                self.acoesAvancaNivel()
+            self.jogando = True
+            self.posicaoJogador = '0'
+            self.cap.close_camera()
+            self.estado = 99
+
     def update(self):
         if self.jogando == True:
             
