@@ -222,29 +222,42 @@ class Tutorial():
             self.colisoes += 1
             self.totalColisoes += 1
         
-
+    ################################    
+    ##       TELA  PAUSA          ##
+    ################################   
     def carregaTelaTutorialPausa(self):
-        self.superficie.fill((50, 50, 255))
+        self.superficie.fill((238, 236, 225))
 
-        titulo = font.SysFont('comicsans', 80).render(
+        titulo = font.SysFont('opensans', 80).render(
             'Pausa',
             True,
-            (255, 165, 0)
+            (50, 50, 50)
         )
-        self.superficie.blit(titulo, (190, 180))
+        self.superficie.blit(titulo, (110, 50))
         
         self.imagem_inicio = pygame.image.load('VesTEA/images/button_jogar.png').convert_alpha()
-        self.botao_inicio = Botao(350, 450, self.imagem_inicio, 1)
+        self.botao_inicio = Botao(135, 250, self.imagem_inicio, 1)
         if self.botao_inicio.criar(self.superficie):
-            #print('START')
-            self.tempoSemMovimento = 0    
-            self.colisoes = 0
-            self.ajuda = False
             self.ultimaPosicao = [-9999,-9999]
-            self.estado = 2 #para reiniciar o jogo no mesmo desafioTutorial, mas do começo
             self.jogando = True
-        
 
+        #mostra os atalhos
+        ui.draw_text(self.superficie, "Atalhos:", (450, 200), (38, 61, 39), font=pygame.font.Font(None, 50), shadow=False)
+        ui.draw_text(self.superficie, "Som: Tecla 'S'", (450, 280), (38, 61, 39), font=pygame.font.Font(None, 35), shadow=False)
+        ui.draw_text(self.superficie, "Hud: Tecla 'H'", (450, 330), (38, 61, 39), font=pygame.font.Font(None, 35), shadow=False)
+        #botão SAIR
+        self.imagem_sair = pygame.image.load('VesTEA/images/button_sair.png').convert_alpha()
+        self.botao_sair = Botao(152, 470, self.imagem_sair, 1)
+        if self.botao_sair.criar(self.superficie):
+            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Acao profissional', 'Botao Sair para Menu')
+            self.cap.close_camera()
+            self.posicaoJogador = '0'
+            self.estado = 99
+            self.jogando = True
+
+    ################################    
+    ##      TELA  FEEDBACK        ##
+    ################################   
     def carregaTelaTutorialFeedback(self):
         self.superficie.fill((238, 236, 225))
         trofeu = image.load(f"VesTEA/images/trofeu3.png")
@@ -274,8 +287,8 @@ class Tutorial():
         ui.draw_text(self.superficie, str(self.totalColisoes), (650, 250), (38, 61, 39), font=pygame.font.Font(None, 25),
                          shadow=False)
 
-        self.imagem_inicio = pygame.image.load('VesTEA/images/button_jogar.png').convert_alpha()
-        self.botao_inicio = Botao(350, 450, self.imagem_inicio, 1)
+        self.imagem_inicio = pygame.image.load('VesTEA/images/button_sair.png').convert_alpha()
+        self.botao_inicio = Botao(340, 450, self.imagem_inicio, 1)
         if self.botao_inicio.criar(self.superficie):
             self.posicaoJogador = '0'
             self.cap.close_camera()
@@ -326,7 +339,7 @@ class Tutorial():
 
         elif self.jogando == False:    
             #pausa
-            if self.estado == 7:  
+            if self.estado == 7 and self.nivel == 3:  
                 self.carregaTelaTutorialFeedback()
             else:
                 #print("Pausa...")

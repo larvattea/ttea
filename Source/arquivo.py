@@ -127,7 +127,7 @@ def CadastrarJogador(Nome, Nasc, Obs):
               'Camera', 'Largura de Projecao', 'Altura de Projecao',
               'Largura Tela de Controle', 'Altura Tela de Controle', 
               'Cores', 'Sons', 'Cor do ponto', 'Imagem do ponto', 'Parte do corpo']
-    Dados = [Nome, Nasc, Obs, 1, 1, 0, 5, 10, 0.5, 0.5, True, True, 0, 800, 600, 640, 480, 'padrao', 'padrao', '(255,255,0)', 'Meio dos pes']
+    Dados = [Nome, Nasc, Obs, 1, 1, 0, 5, 10, 0.5, 0.5, True, True, 0, 800, 600, 640, 480, 'padrao', 'padrao', '(255,255,0)', '', 'Meio dos pes']
     file = 'Jogadores/' + Nome + '_VesTEA_config.csv'
 
     with open(file, 'w') as csvfile:

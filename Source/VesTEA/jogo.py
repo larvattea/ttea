@@ -58,7 +58,8 @@ class Jogo():
 
     def carregaDados(self):
         #mensuram nível
-        Config.som_inicio.play()
+        if arq.get_V_SOM():
+            Config.som_inicio.play()
         if self.jogada == 1:
             arq.grava_Detalhado(self.fase, self.nivel, 0, 'Inicio Nivel', '')
             self.pontos = 0
@@ -165,9 +166,10 @@ class Jogo():
             #print("Jogador 3 em: ",self.posicaoJogador)
             #print(f"Tempo parado 3:{(datetime.datetime.now() - self.tempoSemMovimento).seconds} segundos")
             arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Inicio da movimentacao', '')
-            Config.som_vez_do_jogador_1.play()
-            pygame.time.delay(500)   
-            Config.som_vez_do_jogador_2.play()
+            if arq.get_V_SOM():
+                Config.som_vez_do_jogador_1.play()
+                pygame.time.delay(500)   
+                Config.som_vez_do_jogador_2.play()
             self.jogador = Jogador()
             self.estado += 1
         
@@ -182,22 +184,26 @@ class Jogo():
         #print(f"Tempo parado:{(datetime.datetime.now() - self.tempoSemMovimento).seconds} segundos")
         #se ainda não atualizou ultima posição ou se jogador se moveu mais que 25px para qualquer direção, atualiza última posição
         if (self.ultimaPosicao == [-9999,-9999] or (x > self.ultimaPosicao[0] + 25 or x < self.ultimaPosicao[0] - 25 or y > self.ultimaPosicao[1] + 25 or y < self.ultimaPosicao[1] - 25)):
+            print('inicio contador movimento')
             self.ultimaPosicao = [x,y] 
             self.tempoSemMovimento = datetime.datetime.now()            
         #senão, se passou mais do que 5 segundos e ainda não teve ajuda, dá ajuda
         elif ((datetime.datetime.now() - self.tempoSemMovimento).seconds > 5 and (datetime.datetime.now() - self.tempoSemMovimento).seconds < 10):
+            print('contador ajuda')
             #se ainda está false, toca som e muda ajuda pra true (pra tocar som uma vez apenas)
             if self.ajuda == False:
                 arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Ajuda', '')
-                Config.som_ajuda.play()
+                if arq.get_V_SOM():
+                    Config.som_ajuda.play()
                 self.ajuda = True
                 self.totalAjudas += 1
             #destaca imagem roupa certa
             pygame.draw.rect(self.tela.roupacerta_img, (0,255,0), (0, 0, 100, 100),10)
             certo_rect = self.tela.roupacerta_img.get_rect(topleft = self.tela.roupacerta_pos)
             self.superficie.blit(self.tela.roupacerta_img, certo_rect)
-        #senão, entra em pausa    
+        #senão, entra em pausa por omissao   
         elif ((datetime.datetime.now() - self.tempoSemMovimento).seconds > 10):
+            print('contador omissao')
             arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Omissao', '')
             self.totalOmissoes += 1
             self.jogando = False
@@ -246,7 +252,8 @@ class Jogo():
             arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Escolheu Roupa Certa', '')
             self.emoji = pygame.image.load(f'Assets/vestea/imgs/feliz.webp').convert_alpha()
             self.emoji = pygame.transform.scale(self.emoji, (self.tela.tilesize*4, self.tela.tilesize*4))
-            Config.som_acerto.play()
+            if arq.get_V_SOM():
+                Config.som_acerto.play()
             self.totalAcertos += 1
             if self.ajuda == False:
                 self.pontos += 10    
@@ -258,7 +265,8 @@ class Jogo():
             self.emoji = pygame.image.load(f'Assets/vestea/imgs/triste.webp').convert_alpha()
             self.emoji = pygame.transform.scale(self.emoji, (self.tela.tilesize*4, self.tela.tilesize*4))
             self.superficie.blit(self.erro,self.tela.roupaerrada_pos) 
-            Config.som_erro.play()
+            if arq.get_V_SOM():
+                Config.som_erro.play()
         #display.update()
         #soma pontos por não colidir        
         self.pontos += 10 - self.colisoes
@@ -303,7 +311,8 @@ class Jogo():
                 self.superficie.blit(self.tela.roupacoringa_img, coringa_rect)
         #se for terceira jogada, exibe tela de resultado
         if self.jogada == 3 :
-            Config.som_trofeu.play()
+            if arq.get_V_SOM():
+                Config.som_trofeu.play()
             print("Pontos jogada 3 = ",self.pontos)
             #atualiza dados da sessão
             self.sessaoAcertos += self.totalAcertos 
@@ -313,7 +322,6 @@ class Jogo():
             self.sessaoErros += 3 - self.totalAcertos 
             self.sessaoColisoes += self.totalColisoes
             self.totalTempo = datetime.datetime.now() - self.totalTempo
-            self.jogada = 1
             self.posicaoJogador = 0
             if self.pontos <=20:
                 self.trofeu = 1
@@ -369,7 +377,8 @@ class Jogo():
             self.nivel -= 1    
 
     def acoesColisao(self, x, y):
-        Config.som_erro.play()
+        if arq.get_V_SOM():
+            Config.som_erro.play()
         print('Bateu na parede')
         #pintar o quadrado
         self.desafio.labirinto = self.desafio.mudaParedeAtingida(x,y,self.desafio.labirinto)
@@ -377,31 +386,81 @@ class Jogo():
         if self.colisoes < 10:    
             self.colisoes += 1
             self.totalColisoes += 1
-        
 
+    ################################    
+    ##       TELA  PAUSA          ##
+    ################################    
     def carregaTelaPausa(self):
-        self.superficie.fill((50, 50, 255))
+        self.superficie.fill((238, 236, 225))
 
-        titulo = font.SysFont('comicsans', 80).render(
+        titulo = font.SysFont('opensans', 80).render(
             'Pausa',
             True,
-            (255, 165, 0)
+            (50, 50, 50)
         )
-        self.superficie.blit(titulo, (190, 180))
+        self.superficie.blit(titulo, (110, 50))
         
-        self.imagem_inicio = pygame.image.load('VesTEA/images/button_jogar.png').convert_alpha()
-        self.botao_inicio = Botao(350, 450, self.imagem_inicio, 1)
-        if self.botao_inicio.criar(self.superficie):
-            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Acao profissional', 'Saiu da pausa')
-            #print('START')
+        #mostra as pecs
+        self.tela.mostraDesafio()
+        #mostra os atalhos
+        ui.draw_text(self.superficie, "Atalhos:", (450, 200), (38, 61, 39), font=pygame.font.Font(None, 50), shadow=False)
+        ui.draw_text(self.superficie, "Som: Tecla 'S'", (450, 280), (38, 61, 39), font=pygame.font.Font(None, 35), shadow=False)
+        ui.draw_text(self.superficie, "Hud: Tecla 'H'", (450, 330), (38, 61, 39), font=pygame.font.Font(None, 35), shadow=False)
+        #botao jogar
+        self.imagem_jogar = pygame.image.load('VesTEA/images/button_jogar.png').convert_alpha()
+        self.botao_jogar = Botao(135, 250, self.imagem_jogar, 1)
+        if self.botao_jogar.criar(self.superficie):
+            print('continuar')
+            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Acao profissional', 'Botao Jogar')
+            self.ultimaPosicao == [-9999,-9999]  
+            self.jogando = True
+        #botao voltar
+        self.imagem_voltar = pygame.image.load('VesTEA/images/button_voltar.png').convert_alpha()
+        self.botao_voltar = Botao(50, 350, self.imagem_voltar, 0.15)
+        if self.botao_voltar.criar(self.superficie):
+            print('voltar')
+            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Acao profissional', 'Botao Voltar Nivel')
+            self.acoesVoltaNivel()
+            self.jogando = True             
+            self.posicaoJogador = '0'
+            self.jogada = 1
+            self.estado = 1
+        #botao reiniciar
+        self.imagem_reiniciar = pygame.image.load('VesTEA/images/button_reiniciar.png').convert_alpha()
+        self.botao_reiniciar = Botao(180, 350, self.imagem_reiniciar, 0.3)
+        if self.botao_reiniciar.criar(self.superficie):
+            print('reiniciar')
+            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Acao profissional', 'Botao Reiniciar Nivel')
             self.tempoSemMovimento = 0    
             self.colisoes = 0
             self.ajuda = False
             self.ultimaPosicao = [-9999,-9999]
             self.estado = 2 #para reiniciar o jogo no mesmo desafio, mas do começo
             self.jogando = True
-        
+        #botao avancar
+        self.imagem_avancar = pygame.image.load('VesTEA/images/button_avancar.png').convert_alpha()
+        self.botao_avancar = Botao(300, 350, self.imagem_avancar, 0.15)
+        if self.botao_avancar.criar(self.superficie):
+            print('avancar')
+            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Acao profissional', 'Botao Avancar Nivel')
+            self.acoesAvancaNivel()
+            self.jogando = True             
+            self.posicaoJogador = '0'
+            self.jogada = 1
+            self.estado = 1
+        #botão SAIR
+        self.imagem_sair = pygame.image.load('VesTEA/images/button_sair.png').convert_alpha()
+        self.botao_sair = Botao(152, 470, self.imagem_sair, 1)
+        if self.botao_sair.criar(self.superficie):
+            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Acao profissional', 'Botao Sair para Menu')
+            self.cap.close_camera()
+            self.posicaoJogador = '0'
+            self.estado = 99
+            self.jogando = True
 
+    ################################    
+    ##      TELA  FEEDBACK        ##
+    ################################    
     def carregaTelaFeedback(self):
         self.superficie.fill((238, 236, 225))
         trofeu = image.load(f"VesTEA/images/trofeu{self.trofeu}.png")
@@ -449,7 +508,7 @@ class Jogo():
                 
         #botão JOGAR
         self.imagem_inicio = pygame.image.load('VesTEA/images/button_jogar.png').convert_alpha()
-        self.botao_inicio = Botao(350, 450, self.imagem_inicio, 1)
+        self.botao_inicio = Botao(322, 420, self.imagem_inicio, 1)
         if self.botao_inicio.criar(self.superficie):
             arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Acao profissional', 'Botao Jogar')
             if self.trofeu == 1:
@@ -459,12 +518,35 @@ class Jogo():
             #print('START')
             self.jogando = True             
             self.posicaoJogador = '0'
-            self.estado = 1 #para reiniciar o jogo no desafio desejado
+            self.jogada = 1
+            self.estado = 1 
+        #botao voltar
+        self.imagem_voltar = pygame.image.load('VesTEA/images/button_voltar.png').convert_alpha()
+        self.botao_voltar = Botao(220, 410, self.imagem_voltar, 0.15)
+        if self.botao_voltar.criar(self.superficie):
+            print('voltar')
+            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Acao profissional', 'Botao Voltar Nivel')
+            self.acoesVoltaNivel()
+            self.jogando = True             
+            self.posicaoJogador = '0'
+            self.jogada = 1
+            self.estado = 1
+        #botao avancar
+        self.imagem_avancar = pygame.image.load('VesTEA/images/button_avancar.png').convert_alpha()
+        self.botao_avancar = Botao(500, 410, self.imagem_avancar, 0.15)
+        if self.botao_avancar.criar(self.superficie):
+            print('avancar')
+            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Acao profissional', 'Botao Avancar Nivel')
+            self.acoesAvancaNivel()
+            self.jogando = True             
+            self.posicaoJogador = '0'
+            self.jogada = 1
+            self.estado = 1
         #botão SAIR
         self.imagem_sair = pygame.image.load('VesTEA/images/button_sair.png').convert_alpha()
-        self.botao_sair = Botao(350, 510, self.imagem_sair, 1)
+        self.botao_sair = Botao(340, 500, self.imagem_sair, 1)
         if self.botao_sair.criar(self.superficie):
-            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Acao profissional', 'Botao Sair')
+            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Acao profissional', 'Botao Sair para Menu')
             if self.trofeu == 1:
                 self.acoesVoltaNivel()
             elif self.trofeu == 3:
@@ -518,7 +600,7 @@ class Jogo():
 
         elif self.jogando == False:    
             #pausa
-            if self.estado == 7:  
+            if self.estado == 7 and self.jogada == 3:  
                 self.carregaTelaFeedback()
             else:
                 #print("Pausa...")

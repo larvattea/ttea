@@ -6,6 +6,7 @@ import ui
 import image
 from VesTEA.config import Config
 from VesTEA.botao import Botao
+from VesTEA import arquivo as arq
 import random
 
 #se for executar de outra pasta, precisa de:
@@ -21,6 +22,7 @@ class Tela():
         # 4 = 3 - labirinto
         # 5 = 4 - roupa errada
         self.status = status
+        self.desafio = desafio
         self.tamanho = 800, 600
         self.area_desafio = 800, 125
         self.area_jogo = 800, 475
@@ -45,59 +47,33 @@ class Tela():
         self.fundo_desafio = pygame.transform.scale(self.fundo_desafio, self.area_desafio)
         self.display_surface.blit(self.fundo_desafio,(0,0))
 
-        # carrega frases desafio 
-        fonte = font.SysFont('opensans', 40)
-        texto_fase = fonte.render(
-            f"Fase : {desafio.fase}",
-            True,
-            (250, 250, 250)
-        )
-        self.display_surface.blit(texto_fase, (20, 25))
-        texto_nivel = fonte.render(
-            f"Nivel : {desafio.nivel}",
-            True,
-            (250, 250, 250)
-        )
-        self.display_surface.blit(texto_nivel, (20, 55))
-        texto_desafio = fonte.render(
-            f"Desafio : {desafio.jogada} de 3",
-            True,
-            (250, 250, 250)
-        )
-        self.display_surface.blit(texto_desafio, (20, 85))
+        #se hud estiver habilitado
+        if arq.get_V_HUD():
+            # carrega frases desafio 
+            fonte = font.SysFont('opensans', 40)
+            texto_fase = fonte.render(
+                f"Fase : {desafio.fase}",
+                True,
+                (250, 250, 250)
+            )
+            self.display_surface.blit(texto_fase, (20, 25))
+            texto_nivel = fonte.render(
+                f"Nivel : {desafio.nivel}",
+                True,
+                (250, 250, 250)
+            )
+            self.display_surface.blit(texto_nivel, (20, 55))
+            texto_desafio = fonte.render(
+                f"Desafio : {desafio.jogada} de 3",
+                True,
+                (250, 250, 250)
+            )
+            self.display_surface.blit(texto_desafio, (20, 85))
 
         
         #prepara desafio
         #!!!!!!!!!!!!!!!!!
-        #verifica quantas imagens devem ser mostradas pela fase e prepara posições
-        posicoes = np.array([
-        (425,10),
-        (550,10),
-        (675,10),
-        ])    
-        #inicia contadora de posicao
-        posicao_atual = 0
-
-        if self.status >= 2:
-            #mostra as imagens do desafio
-            if desafio.corpo >0: 
-                self.desafio_corpo = pygame.image.load(f'Assets/vestea/imgs/desafios/Corpo{desafio.corpo}.png').convert_alpha()
-                self.desafio_corpo = pygame.transform.scale(self.desafio_corpo, (self.tilesize*4, self.tilesize*4))
-                self.display_surface.blit(self.desafio_corpo,posicoes[posicao_atual])
-                posicao_atual += 1
-            if desafio.clima >0: 
-                if desafio.roupa_certa.clima == 3:
-                    numClima = random.randint(1,2)
-                else:
-                    numClima = desafio.clima
-                self.desafio_clima = pygame.image.load(f'Assets/vestea/imgs/desafios/Clima{numClima}.png').convert_alpha()
-                self.desafio_clima = pygame.transform.scale(self.desafio_clima, (self.tilesize*4, self.tilesize*4))
-                self.display_surface.blit(self.desafio_clima,posicoes[posicao_atual])
-                posicao_atual += 1
-            if desafio.local >0: 
-                self.desafio_local = pygame.image.load(f'Assets/vestea/imgs/desafios/Local{desafio.local}.jpg').convert_alpha()
-                self.desafio_local = pygame.transform.scale(self.desafio_local, (self.tilesize*4, self.tilesize*4))
-                self.display_surface.blit(self.desafio_local,posicoes[posicao_atual])
+        self.mostraDesafio()
 
         ###############################
         #PARTE INFERIOR
@@ -105,7 +81,7 @@ class Tela():
         #carrega imagens padrão
         self.inicio_img = pygame.image.load('Assets/vestea/imgs/inicio.png').convert_alpha()
         self.inicio_img = pygame.transform.scale(self.inicio_img, (2*self.tilesize, 2*self.tilesize))
-        self.parede_img = pygame.image.load('Assets/vestea/imgs/tijolo.jpg').convert_alpha()
+        self.parede_img = pygame.image.load('Assets/vestea/imgs/tijolo1.jpg').convert_alpha()
         self.parede_img = pygame.transform.scale(self.parede_img, (self.tilesize, self.tilesize))
         self.paredeatingida_img = pygame.image.load('Assets/vestea/imgs/tijoloAtingido.jpg').convert_alpha()
         self.paredeatingida_img = pygame.transform.scale(self.paredeatingida_img, (self.tilesize, self.tilesize))
@@ -152,3 +128,33 @@ class Tela():
 
 
 
+    def mostraDesafio(self):
+        #verifica quantas imagens devem ser mostradas pela fase e prepara posições
+        posicoes = np.array([
+        (425,10),
+        (550,10),
+        (675,10),
+        ])    
+        #inicia contadora de posicao
+        posicao_atual = 0
+
+        if self.status >= 2:
+            #mostra as imagens do desafio
+            if self.desafio.corpo >0: 
+                self.desafio_corpo = pygame.image.load(f'Assets/vestea/imgs/desafios/Corpo{self.desafio.corpo}.png').convert_alpha()
+                self.desafio_corpo = pygame.transform.scale(self.desafio_corpo, (self.tilesize*4, self.tilesize*4))
+                self.display_surface.blit(self.desafio_corpo,posicoes[posicao_atual])
+                posicao_atual += 1
+            if self.desafio.clima >0: 
+                if self.desafio.roupa_certa.clima == 3:
+                    numClima = random.randint(1,2)
+                else:
+                    numClima = self.desafio.clima
+                self.desafio_clima = pygame.image.load(f'Assets/vestea/imgs/desafios/Clima{numClima}.png').convert_alpha()
+                self.desafio_clima = pygame.transform.scale(self.desafio_clima, (self.tilesize*4, self.tilesize*4))
+                self.display_surface.blit(self.desafio_clima,posicoes[posicao_atual])
+                posicao_atual += 1
+            if self.desafio.local >0: 
+                self.desafio_local = pygame.image.load(f'Assets/vestea/imgs/desafios/Local{self.desafio.local}.jpg').convert_alpha()
+                self.desafio_local = pygame.transform.scale(self.desafio_local, (self.tilesize*4, self.tilesize*4))
+                self.display_surface.blit(self.desafio_local,posicoes[posicao_atual])

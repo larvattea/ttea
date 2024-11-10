@@ -4,7 +4,7 @@ from pygame import display
 from pygame.image import load
 from pygame.transform import scale
 from pygame import event
-from pygame.locals import QUIT, KEYUP, K_SPACE, K_UP, K_DOWN, K_RIGHT, K_LEFT
+from pygame.locals import QUIT, KEYUP, K_SPACE, K_UP, K_DOWN, K_RIGHT, K_LEFT, K_s, K_h
 from pygame.time import Clock
 
 #from VesTEA.pose_tracking import PoseTracking
@@ -76,8 +76,23 @@ class Vestea():
                             arq.grava_Detalhado(self.jogo.fase, self.jogo.nivel, 0, 'Acao profissional', 'Botao ESPACO')
                             if self.jogo.jogando == True:
                                 arq.grava_Detalhado(self.jogo.fase, self.jogo.nivel, 0, 'Acao profissional', 'Pausa')
+                            else:
+                                arq.grava_Detalhado(self.jogo.fase, self.jogo.nivel, 0, 'Acao profissional', 'Saiu da Pausa')
                             self.jogo.jogando = not self.jogo.jogando
                             self.tutorial.jogando = not self.tutorial.jogando
+                        #ATIVA/DESATIVA SOM    
+                        elif evento.key == K_s:
+                            arq.set_R_SOM(not(bool(arq.get_V_SOM())))
+                            arq.grava_Detalhado(self.jogo.fase, self.jogo.nivel, 0, 'Acao profissional', f'Som {arq.get_V_SOM()}')
+                            #print('som: ', bool(arq.get_V_SOM()))
+                        #ATIVA/DESATIVA HUD    
+                        elif evento.key == K_h:
+                            arq.set_R_HUD(not(bool(arq.get_V_HUD())))
+                            arq.grava_Detalhado(self.jogo.fase, self.jogo.nivel, 0, 'Acao profissional', f'HUD {arq.get_V_HUD()}')
+                            #print('HUD: ', bool(arq.get_V_HUD()))
+                        #################################
+                        #  PARA TESTES MANUAIS          # 
+                        #################################
                         elif evento.key == K_UP:#passou de fase
                             print('UP')
                             self.jogo.posicaoJogador = '3'
@@ -146,10 +161,14 @@ class Vestea():
                 if self.botao_jogar.criar(self.superficie):
                     #print('START')
                     #self.novo_jogo()
+                    self.jogo.jogando = True
+                    self.jogo.estado = 1
                     self.estado=1
                 if self.botao_tutorial.criar(self.superficie):
                     #print('NÃO IMPLEMENTADO')
                     arq.grava_Detalhado(self.jogo.fase, self.jogo.nivel, 0, 'Inicio Tutorial', '')
+                    self.tutorial.jogando = True
+                    self.tutorial.estado = 1
                     self.estado=2
                 if self.botao_opcoes.criar(self.superficie):
                     print('NÃO IMPLEMENTADO')
@@ -169,7 +188,6 @@ class Vestea():
                                      self.jogo.sessaoAcertosAjuda, self.jogo.sessaoAjudas, 
                                      self.jogo.sessaoErros, self.jogo.sessaoOmissoes, self.jogo.totalColisoes)    
                     self.jogo = Jogo(self.superficie, arq.get_V_FASE(), arq.get_V_NIVEL())
-                    self.tutorial.estado = 1
                     self.estado = 0
                 #print(self.estado,' e ',self.jogo.estado)
             elif self.estado==2:
@@ -179,7 +197,6 @@ class Vestea():
                 if self.tutorial.estado == 99:
                     arq.grava_Detalhado(self.jogo.fase, self.jogo.nivel, 0, 'Fim tutorial', '')
                     self.tutorial = Tutorial(self.superficie)
-                    self.jogo.estado = 1
                     self.estado = 0
                 #print(self.estado,' e ',self.jogo.estado)
             display.update()
