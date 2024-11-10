@@ -17,14 +17,14 @@ ArquivoConfig = ''
 ArquivoDetalhado = ''
 
 def set_Player(A):
-    global Player
+    global Player, ArquivoSessao, ArquivoConfig, ArquivoDetalhado, Fase, Nivel, Sessao
     Player = A
-    global ArquivoSessao
-    global ArquivoConfig
-    global ArquivoDetalhado
     ArquivoConfig = 'Jogadores/' + Player + '_VesTEA_config.csv'
     ArquivoSessao = 'Jogadores/' + Player + '_VesTEA_sessao.csv'
     ArquivoDetalhado = 'Jogadores/' + Player + '_VesTEA_detalhado.csv'
+    Fase = get_V_FASE()
+    Nivel = get_V_NIVEL()
+    Sessao = get_V_SESSAO()+1
 
 def get_Player():
     global Player
@@ -92,12 +92,12 @@ def grava_Sessao(hora_inicio, fase, nivel, acertos, acertos_ajuda, ajudas, erros
     set_Sessao(id + 1)
     set_K_FASE(fase)
     set_K_NIVEL(nivel)
-    set_R_SESSAO(id)
+    set_R_SESSAO(Sessao)
 
-def grava_Detalhado(jogador, data, fase, nivel, pos_jog, tipo, obs):
-    file = 'Jogadores/' + jogador + '_Player_Vestea_detalhado.csv'
-    results = pd.read_csv(file, sep=';')
-    id = len(results)
+def grava_Detalhado(fase, nivel, pos_jog, tipo, obs):
+    file = 'Jogadores/' + Player + '_Vestea_detalhado.csv'
+    id = get_Sessao()
+    data = get_Date().strftime("%x")
     hora = get_Date().strftime("%X")
     fields = [id, data, hora, fase, nivel, pos_jog, tipo, obs]
     with open(file, 'a+', newline='') as csvfile:

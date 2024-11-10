@@ -179,7 +179,7 @@ class Desafio():
         print('Desafio clima:',self.roupa_certa.clima)
         return self.roupa_certa.clima
     
-    #1=parque; 2=restaurante; 3=praia
+    #1=parque; 2=restaurante; 3=praia; 4=compras; 5=piscina; 6=esporte; 7=escola; 8=festa
     def getLocal(self):
         while (True):
             localrand = random.randint(1,len(self.roupa_certa.local))-1

@@ -277,10 +277,10 @@ class Tutorial():
         self.imagem_inicio = pygame.image.load('VesTEA/images/button_jogar.png').convert_alpha()
         self.botao_inicio = Botao(350, 450, self.imagem_inicio, 1)
         if self.botao_inicio.criar(self.superficie):
-            self.jogando = True             
             self.posicaoJogador = '0'
             self.cap.close_camera()
             self.estado = 99 #para voltar ao menu
+            self.jogando = True             
             
     def update(self):
         if self.jogando == True:

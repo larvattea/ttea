@@ -60,6 +60,7 @@ class Jogo():
         #mensuram nível
         Config.som_inicio.play()
         if self.jogada == 1:
+            arq.grava_Detalhado(self.fase, self.nivel, 0, 'Inicio Nivel', '')
             self.pontos = 0
             self.totalAcertos = 0
             self.totalAcertosAjuda = 0
@@ -72,6 +73,49 @@ class Jogo():
         self.colisoes = 0
         self.ajuda = False
         self.desafio = Desafio(self.fase, self.nivel, self.jogada)
+        arq.grava_Detalhado(self.fase, self.nivel, 0, 'Inicio da jogada', self.jogada)
+        arq.grava_Detalhado(self.fase, self.nivel, 0, 'Roupa certa', self.desafio.roupa_certa.nome)
+        arq.grava_Detalhado(self.fase, self.nivel, 0, 'Roupa errada', self.desafio.roupa_errada.nome)
+        if self.nivel>=6:
+            tipoCoringa = 'certa'
+            if self.nivel<11:
+                tipoCoringa = 'errada'
+            arq.grava_Detalhado(self.fase, self.nivel, 0, f'Roupa {tipoCoringa} 2', self.desafio.roupa_coringa.nome)
+        if self.desafio.corpo > 0:
+            if self.desafio.corpo == 1:
+                txtCorpo = 'Torso'
+            elif self.desafio.corpo == 2:
+                txtCorpo = 'Pernas'
+            elif self.desafio.corpo == 3:
+                txtCorpo = 'Pes'
+            elif self.desafio.corpo == 4:
+                txtCorpo = 'Roupa de baixo'
+            arq.grava_Detalhado(self.fase, self.nivel, 0, 'Desafio: corpo', txtCorpo)        
+        if self.desafio.clima > 0:
+            if self.desafio.clima == 1:
+                txtClima = 'Calor'
+            elif self.desafio.clima == 2:
+                txtClima = 'Frio'
+            arq.grava_Detalhado(self.fase, self.nivel, 0, 'Desafio: clima', txtClima)        
+        #1=parque; 2=restaurante; 3=praia; 4=compras; 5=piscina; 6=esporte; 7=escola; 8=festa
+        if self.desafio.local > 0:
+            if self.desafio.local == 1:
+                txtLocal = 'Parque'
+            elif self.desafio.local == 2:
+                txtLocal = 'Restaurante'
+            elif self.desafio.local == 3:
+                txtLocal = 'Praia'
+            elif self.desafio.local == 4:
+                txtLocal = 'Compras'
+            elif self.desafio.local == 5:
+                txtLocal = 'Piscina'
+            elif self.desafio.local == 6:
+                txtLocal = 'Esporte'
+            elif self.desafio.local == 7:
+                txtLocal = 'Escola'
+            elif self.desafio.local == 8:
+                txtLocal = 'Festa'
+            arq.grava_Detalhado(self.fase, self.nivel, 0, 'Desafio: local', txtLocal)    
         self.estado += 1
         self.ultimaPosicao = [-9999,-9999]
          
@@ -120,6 +164,7 @@ class Jogo():
         if self.posicaoJogador == '2' or self.posicaoJogador == '22': 
             #print("Jogador 3 em: ",self.posicaoJogador)
             #print(f"Tempo parado 3:{(datetime.datetime.now() - self.tempoSemMovimento).seconds} segundos")
+            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Inicio da movimentacao', '')
             Config.som_vez_do_jogador_1.play()
             pygame.time.delay(500)   
             Config.som_vez_do_jogador_2.play()
@@ -143,6 +188,7 @@ class Jogo():
         elif ((datetime.datetime.now() - self.tempoSemMovimento).seconds > 5 and (datetime.datetime.now() - self.tempoSemMovimento).seconds < 10):
             #se ainda está false, toca som e muda ajuda pra true (pra tocar som uma vez apenas)
             if self.ajuda == False:
+                arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Ajuda', '')
                 Config.som_ajuda.play()
                 self.ajuda = True
                 self.totalAjudas += 1
@@ -152,6 +198,7 @@ class Jogo():
             self.superficie.blit(self.tela.roupacerta_img, certo_rect)
         #senão, entra em pausa    
         elif ((datetime.datetime.now() - self.tempoSemMovimento).seconds > 10):
+            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Omissao', '')
             self.totalOmissoes += 1
             self.jogando = False
             
@@ -164,6 +211,7 @@ class Jogo():
             if self.posicaoJogador == '5' or self.posicaoJogador == '55':
                 self.estado += 1
         if self.posicaoJogador == '1':
+            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Colidiu com parede', '')
             self.acoesColisao(x,y)
 
     def verificaResultado(self):
@@ -194,17 +242,8 @@ class Jogo():
         ######logica nova de verificacao de avanço/volta
         ##calcula pontuação
         #se acertou sem ajuda, 10 ptos, se acertou om ajuda 5 pts    
-        if self.posicaoJogador == '3' or self.posicaoJogador == '33': 
-            self.emoji = pygame.image.load(f'Assets/vestea/imgs/feliz.webp').convert_alpha()
-            self.emoji = pygame.transform.scale(self.emoji, (self.tela.tilesize*4, self.tela.tilesize*4))
-            Config.som_acerto.play()
-            self.totalAcertos += 1
-            if self.ajuda == False:
-                self.pontos += 10    
-            else: 
-                self.totalAcertosAjuda += 1
-                self.pontos += 5    
-        elif self.desafio.nivel >= 11 and (self.posicaoJogador == '5' or self.posicaoJogador == '55'): 
+        if (self.posicaoJogador == '3' or self.posicaoJogador == '33') or (self.desafio.nivel >= 11 and (self.posicaoJogador == '5' or self.posicaoJogador == '55')): 
+            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Escolheu Roupa Certa', '')
             self.emoji = pygame.image.load(f'Assets/vestea/imgs/feliz.webp').convert_alpha()
             self.emoji = pygame.transform.scale(self.emoji, (self.tela.tilesize*4, self.tela.tilesize*4))
             Config.som_acerto.play()
@@ -214,7 +253,8 @@ class Jogo():
             else: 
                 self.totalAcertosAjuda += 1
                 self.pontos += 5  
-        elif self.posicaoJogador == '4' or self.posicaoJogador == '44':
+        elif (self.posicaoJogador == '4' or self.posicaoJogador == '44') or (self.desafio.nivel >= 6 and (self.posicaoJogador == '5' or self.posicaoJogador == '55')):
+            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Escolheu Roupa Errada', '')
             self.emoji = pygame.image.load(f'Assets/vestea/imgs/triste.webp').convert_alpha()
             self.emoji = pygame.transform.scale(self.emoji, (self.tela.tilesize*4, self.tela.tilesize*4))
             self.superficie.blit(self.erro,self.tela.roupaerrada_pos) 
@@ -279,6 +319,16 @@ class Jogo():
                 self.trofeu = 1
             elif self.pontos >= 40:
                 self.trofeu = 3
+            #grava no detalhado
+            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Concluiu Nivel', '')
+            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Pontuacao', self.pontos)
+            if self.trofeu == 1:
+                textoResultado = 'Retrocede nivel'
+            elif self.trofeu == 2:
+                textoResultado = 'Permanece nivel'
+            elif self.trofeu == 3:
+                textoResultado = 'Avanca nivel'
+            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Resultado', textoResultado)
             #muda pra false pra mostrar tela de fim de nível
             self.jogando = False
         #senão, se jogador não estiver no ponto inicial, verifica sua posição    
@@ -342,6 +392,7 @@ class Jogo():
         self.imagem_inicio = pygame.image.load('VesTEA/images/button_jogar.png').convert_alpha()
         self.botao_inicio = Botao(350, 450, self.imagem_inicio, 1)
         if self.botao_inicio.criar(self.superficie):
+            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Acao profissional', 'Saiu da pausa')
             #print('START')
             self.tempoSemMovimento = 0    
             self.colisoes = 0
@@ -394,11 +445,13 @@ class Jogo():
                          shadow=False)
         ui.draw_text(self.superficie, str(self.totalOmissoes), (650, 310), (38, 61, 39), font=pygame.font.Font(None, 25),
                          shadow=False)
-
+        
+                
         #botão JOGAR
         self.imagem_inicio = pygame.image.load('VesTEA/images/button_jogar.png').convert_alpha()
         self.botao_inicio = Botao(350, 450, self.imagem_inicio, 1)
         if self.botao_inicio.criar(self.superficie):
+            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Acao profissional', 'Botao Jogar')
             if self.trofeu == 1:
                 self.acoesVoltaNivel()
             elif self.trofeu == 3:
@@ -411,14 +464,15 @@ class Jogo():
         self.imagem_sair = pygame.image.load('VesTEA/images/button_sair.png').convert_alpha()
         self.botao_sair = Botao(350, 510, self.imagem_sair, 1)
         if self.botao_sair.criar(self.superficie):
+            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Acao profissional', 'Botao Sair')
             if self.trofeu == 1:
                 self.acoesVoltaNivel()
             elif self.trofeu == 3:
                 self.acoesAvancaNivel()
-            self.jogando = True
-            self.posicaoJogador = '0'
             self.cap.close_camera()
+            self.posicaoJogador = '0'
             self.estado = 99
+            self.jogando = True
 
     def update(self):
         if self.jogando == True:
@@ -470,7 +524,10 @@ class Jogo():
                 #print("Pausa...")
                 self.carregaTelaPausa()
         
-            
+    def setSuperficie(self, superficie):
+        print('superficie')
+        self.superficie = superficie      
+        #self.cap.__init__() 
         
             
         

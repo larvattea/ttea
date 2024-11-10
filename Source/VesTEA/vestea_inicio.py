@@ -65,6 +65,7 @@ class Vestea():
             for evento in event.get():  # Events
                 if evento.type == QUIT:
                     print("clicou em fechar")
+                    arq.grava_Detalhado(self.jogo.fase, self.jogo.nivel, 0, 'Acao profissional', 'Botao X Fechar')
                     arq.grava_Sessao(self.jogo.sessaoInicio, self.jogo.fase, self.jogo.nivel, self.jogo.sessaoAcertos, 
                                      self.jogo.sessaoAcertosAjuda, self.jogo.sessaoAjudas, 
                                      self.jogo.sessaoErros, self.jogo.sessaoOmissoes, self.jogo.totalColisoes)
@@ -72,6 +73,9 @@ class Vestea():
                 if self.estado==1 or self.estado==2:
                     if evento.type == KEYUP:
                         if evento.key == K_SPACE:
+                            arq.grava_Detalhado(self.jogo.fase, self.jogo.nivel, 0, 'Acao profissional', 'Botao ESPACO')
+                            if self.jogo.jogando == True:
+                                arq.grava_Detalhado(self.jogo.fase, self.jogo.nivel, 0, 'Acao profissional', 'Pausa')
                             self.jogo.jogando = not self.jogo.jogando
                             self.tutorial.jogando = not self.tutorial.jogando
                         elif evento.key == K_UP:#passou de fase
@@ -96,6 +100,7 @@ class Vestea():
                                 self.tutorial.estado += 1
                         elif evento.key == K_LEFT:#bateu na parede
                             #self.jogo.posicaoJogador = 1
+                            arq.grava_Detalhado(self.jogo.fase, self.jogo.nivel, 0, 'Colidiu na parede', '')
                             self.jogo.acoesColisao(225,245)
                             #self.tutorial.acoesColisao(225,245)
 
@@ -144,6 +149,7 @@ class Vestea():
                     self.estado=1
                 if self.botao_tutorial.criar(self.superficie):
                     #print('NÃO IMPLEMENTADO')
+                    arq.grava_Detalhado(self.jogo.fase, self.jogo.nivel, 0, 'Inicio Tutorial', '')
                     self.estado=2
                 if self.botao_opcoes.criar(self.superficie):
                     print('NÃO IMPLEMENTADO')
@@ -163,6 +169,7 @@ class Vestea():
                                      self.jogo.sessaoAcertosAjuda, self.jogo.sessaoAjudas, 
                                      self.jogo.sessaoErros, self.jogo.sessaoOmissoes, self.jogo.totalColisoes)    
                     self.jogo = Jogo(self.superficie, arq.get_V_FASE(), arq.get_V_NIVEL())
+                    self.tutorial.estado = 1
                     self.estado = 0
                 #print(self.estado,' e ',self.jogo.estado)
             elif self.estado==2:
@@ -170,7 +177,9 @@ class Vestea():
                 self.tutorial.update()
                 #se terminar tutorial, volta pro menu
                 if self.tutorial.estado == 99:
+                    arq.grava_Detalhado(self.jogo.fase, self.jogo.nivel, 0, 'Fim tutorial', '')
                     self.tutorial = Tutorial(self.superficie)
+                    self.jogo.estado = 1
                     self.estado = 0
                 #print(self.estado,' e ',self.jogo.estado)
             display.update()
