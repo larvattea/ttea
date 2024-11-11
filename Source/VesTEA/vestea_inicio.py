@@ -4,7 +4,7 @@ from pygame import display
 from pygame.image import load
 from pygame.transform import scale
 from pygame import event
-from pygame.locals import QUIT, KEYUP, K_SPACE, K_UP, K_DOWN, K_RIGHT, K_LEFT, K_s, K_h
+from pygame.locals import QUIT, KEYUP, K_SPACE, K_UP, K_DOWN, K_RIGHT, K_LEFT, K_s, K_h, K_f
 from pygame.time import Clock
 
 #from VesTEA.pose_tracking import PoseTracking
@@ -90,6 +90,17 @@ class Vestea():
                             arq.set_R_HUD(not(bool(arq.get_V_HUD())))
                             arq.grava_Detalhado(self.jogo.fase, self.jogo.nivel, 0, 'Acao profissional', f'HUD {arq.get_V_HUD()}')
                             #print('HUD: ', bool(arq.get_V_HUD()))
+                        #ALTERA COR DE FUNDO   
+                        elif evento.key == K_f:
+                            fundoSelecionado = arq.get_V_FUNDO()
+                            if f'{fundoSelecionado}' == '(238, 236, 225)':
+                                arq.set_K_FUNDO('(217, 217, 217)')
+                            elif f'{fundoSelecionado}' == '(217, 217, 217)':
+                                arq.set_K_FUNDO('(199, 199, 199)')
+                            elif f'{fundoSelecionado}' == '(199, 199, 199)':
+                                arq.set_K_FUNDO('(238, 236, 225)') 
+                            arq.grava_Detalhado(self.jogo.fase, self.jogo.nivel, 0, 'Acao profissional', f'Cor de Fundo {arq.get_V_FUNDO()}')
+                            #print('HUD: ', bool(arq.get_V_HUD()))
                         #################################
                         #  PARA TESTES MANUAIS          # 
                         #################################
@@ -120,7 +131,9 @@ class Vestea():
                             #self.tutorial.acoesColisao(225,245)
 
             # Loop de eventos
-            #TELA INICIAL
+            #################################
+            #         TELA INICIAL          # 
+            #################################     
             if self.estado==0:    
                 self.superficie.fill((238, 236, 225))
                 #CRIA TÍTULO
@@ -171,14 +184,17 @@ class Vestea():
                     self.tutorial.estado = 1
                     self.estado=2
                 if self.botao_opcoes.criar(self.superficie):
-                    print('NÃO IMPLEMENTADO')
+                    pygame.time.delay(1000)
+                    self.estado = 3
                 if self.botao_personalizar.criar(self.superficie):
                     print('NÃO IMPLEMENTADO')
                 if self.botao_sair.criar(self.superficie):
                     #print('EXIT')
                     self.esta_rodando = False
 
-            #JOGO
+            #################################
+            #             JOGO              # 
+            #################################     
             elif self.estado==1:
                 #self.jogo.jogando = True
                 self.jogo.update()
@@ -190,6 +206,9 @@ class Vestea():
                     self.jogo = Jogo(self.superficie, arq.get_V_FASE(), arq.get_V_NIVEL())
                     self.estado = 0
                 #print(self.estado,' e ',self.jogo.estado)
+            #################################
+            #           TUTORIAL            # 
+            #################################     
             elif self.estado==2:
                 #self.jogo.jogando = True
                 self.tutorial.update()
@@ -199,6 +218,89 @@ class Vestea():
                     self.tutorial = Tutorial(self.superficie)
                     self.estado = 0
                 #print(self.estado,' e ',self.jogo.estado)
+            #################################
+            #         CONFIG GERAL          # 
+            #################################     
+            elif self.estado==3:
+                self.superficie.fill((238, 236, 225))
+                #CRIA TÍTULO
+                titulo = self.fonte_destaque.render(
+                    'Configurações gerais',
+                    True,
+                    (50, 50, 50)
+                )
+                self.superficie.blit(titulo, (150, 60))
+                #TEXTOS
+                texto_opcoes = self.fonte.render(
+                    'Imagem da parede',
+                    True,
+                    (50, 50, 50)
+                )
+                self.superficie.blit(texto_opcoes, (50, 165))
+                texto_personalizar = self.fonte.render(
+                    'Cor do fundo',
+                    True,
+                    (50, 50, 50)
+                )
+                self.superficie.blit(texto_personalizar, (50, 345))
+                #botoes opções de tijolo
+                self.imagem_tijolo1 = pygame.image.load('Assets/vestea/imgs/tijolo1.jpg').convert_alpha()
+                self.botao_tijolo1 = botao.Botao(320, 150, self.imagem_tijolo1, 1)
+                self.imagem_tijolo2 = pygame.image.load('Assets/vestea/imgs/tijolo2.jpg').convert_alpha()
+                self.botao_tijolo2 = botao.Botao(470, 150, self.imagem_tijolo2, 1)
+                self.imagem_tijolo3 = pygame.image.load('Assets/vestea/imgs/tijolo3.jpg').convert_alpha()
+                self.botao_tijolo3 = botao.Botao(620, 150, self.imagem_tijolo3, 1)
+                if self.botao_tijolo1.criar(self.superficie):
+                    arq.set_K_TIJOLO(1)
+                elif self.botao_tijolo2.criar(self.superficie):
+                    arq.set_K_TIJOLO(2)
+                elif self.botao_tijolo3.criar(self.superficie):
+                    arq.set_K_TIJOLO(3)
+                #destaca imagem do tijolo selecionado
+                tijoloSelecionado = arq.get_V_TIJOLO()
+                if tijoloSelecionado == 1:
+                    tijoloSelecionado = self.imagem_tijolo1
+                    posicaotijolo = self.botao_tijolo1.rect.topleft
+                elif tijoloSelecionado == 2:
+                    tijoloSelecionado = self.imagem_tijolo2
+                    posicaotijolo = self.botao_tijolo2.rect.topleft
+                elif tijoloSelecionado == 3:
+                    tijoloSelecionado = self.imagem_tijolo3
+                    posicaotijolo = self.botao_tijolo3.rect.topleft
+                pygame.draw.rect(tijoloSelecionado, (0,255,0), (0, 0, 119, 121),10)
+                self.superficie.blit(tijoloSelecionado, tijoloSelecionado.get_rect(topleft = posicaotijolo))
+                #botoes cores de fundo
+                self.imagem_cor1 = pygame.image.load('Assets/vestea/imgs/fundo1.jpg').convert_alpha()
+                self.botao_cor1 = botao.Botao(320, 330, self.imagem_cor1, 1)
+                self.imagem_cor2 = pygame.image.load('Assets/vestea/imgs/fundo2.jpg').convert_alpha()
+                self.botao_cor2 = botao.Botao(470, 330, self.imagem_cor2, 1)
+                self.imagem_cor3 = pygame.image.load('Assets/vestea/imgs/fundo3.jpg').convert_alpha()
+                self.botao_cor3 = botao.Botao(620, 330, self.imagem_cor3, 1)
+                if self.botao_cor1.criar(self.superficie):
+                    arq.set_K_FUNDO('(238, 236, 225)')
+                elif self.botao_cor2.criar(self.superficie):
+                    arq.set_K_FUNDO('(217, 217, 217)')
+                elif self.botao_cor3.criar(self.superficie):
+                    arq.set_K_FUNDO('(199, 199, 199)')
+                #destaca imagem do fundo selecionado
+                fundoSelecionado = arq.get_V_FUNDO()
+                if f'{fundoSelecionado}' == '(238, 236, 225)':
+                    fundoSelecionado = self.imagem_cor1
+                    posicaofundo = self.botao_cor1.rect.topleft
+                elif f'{fundoSelecionado}' == '(217, 217, 217)':
+                    fundoSelecionado = self.imagem_cor2
+                    posicaofundo = self.botao_cor2.rect.topleft
+                elif f'{fundoSelecionado}' == '(199, 199, 199)':
+                    fundoSelecionado = self.imagem_cor3
+                    posicaofundo = self.botao_cor3.rect.topleft
+                pygame.draw.rect(fundoSelecionado, (0,255,0), (0, 0, 119, 121),10)
+                self.superficie.blit(fundoSelecionado, fundoSelecionado.get_rect(topleft = posicaofundo))
+                #botao sair    
+                self.imagem_sair = pygame.image.load('VesTEA/images/button_sair.png').convert_alpha()
+                self.botao_sair = botao.Botao(339, 520, self.imagem_sair, 1)
+                if self.botao_sair.criar(self.superficie):
+                    pygame.time.delay(1000)
+                    self.estado = 0
             display.update()
 
 def main(jogador):

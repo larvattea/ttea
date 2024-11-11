@@ -406,13 +406,15 @@ class Jogo():
         ui.draw_text(self.superficie, "Atalhos:", (450, 200), (38, 61, 39), font=pygame.font.Font(None, 50), shadow=False)
         ui.draw_text(self.superficie, "Som: Tecla 'S'", (450, 280), (38, 61, 39), font=pygame.font.Font(None, 35), shadow=False)
         ui.draw_text(self.superficie, "Hud: Tecla 'H'", (450, 330), (38, 61, 39), font=pygame.font.Font(None, 35), shadow=False)
+        ui.draw_text(self.superficie, "Cor de fundo: Tecla 'F'", (450, 380), (38, 61, 39), font=pygame.font.Font(None, 35), shadow=False)
         #botao jogar
         self.imagem_jogar = pygame.image.load('VesTEA/images/button_jogar.png').convert_alpha()
         self.botao_jogar = Botao(135, 250, self.imagem_jogar, 1)
         if self.botao_jogar.criar(self.superficie):
             print('continuar')
             arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Acao profissional', 'Botao Jogar')
-            self.ultimaPosicao == [-9999,-9999]  
+            self.ultimaPosicao == [-9999,-9999] 
+            self.tempoSemMovimento = datetime.datetime.now() 
             self.jogando = True
         #botao voltar
         self.imagem_voltar = pygame.image.load('VesTEA/images/button_voltar.png').convert_alpha()

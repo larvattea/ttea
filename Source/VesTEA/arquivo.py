@@ -15,13 +15,15 @@ Sessao = 1
 ArquivoSessao = ''
 ArquivoConfig = ''
 ArquivoDetalhado = ''
+ArquivoGeral = ''
 
 def set_Player(A):
-    global Player, ArquivoSessao, ArquivoConfig, ArquivoDetalhado, Fase, Nivel, Sessao
+    global Player, ArquivoSessao, ArquivoConfig, ArquivoDetalhado, ArquivoGeral, Fase, Nivel, Sessao
     Player = A
     ArquivoConfig = 'Jogadores/' + Player + '_VesTEA_config.csv'
     ArquivoSessao = 'Jogadores/' + Player + '_VesTEA_sessao.csv'
     ArquivoDetalhado = 'Jogadores/' + Player + '_VesTEA_detalhado.csv'
+    ArquivoGeral = 'VesTEA\config\geral.csv'
     Fase = get_V_FASE()
     Nivel = get_V_NIVEL()
     Sessao = get_V_SESSAO()+1
@@ -153,6 +155,7 @@ def lerCalibracao():
 
 
 #----------------------------------------------------------------------------------------------------------------------#
+############ USUARIO #################
 
 #Manipulação de dados das Configs
 def get_V_NOME():
@@ -315,3 +318,47 @@ def set_R_SOM(a):
     # writing into the file
     df.to_csv(ArquivoConfig, sep=';', index=False)
     # print(df)
+
+#----------------------------------------------------------------------------------------------------------------------#
+############ GERAL (PROFISSIONAL) #################
+
+def get_V_TIJOLO():
+    # reading the csv file
+    df = pd.read_csv(ArquivoGeral, sep=';')
+
+    # getting value/data
+    ret = df["Tijolo"].values[0]
+    return ret
+
+def set_K_TIJOLO(a):
+    # reading the csv file
+    df = pd.read_csv(ArquivoGeral, sep=';')
+
+    # updating the column value/data
+    df.loc[0, 'Tijolo'] = a
+
+    # writing into the file
+    df.to_csv(ArquivoGeral, sep=';', index=False)
+    # print(df)
+
+
+def get_V_FUNDO():
+    # reading the csv file
+    df = pd.read_csv(ArquivoGeral, sep=';')
+
+    # getting value/data
+    ret = df["Fundo"].values[0]
+    #manipulado para ser entendido como uma cor
+    return eval(ret)
+
+def set_K_FUNDO(a):
+    # reading the csv file
+    df = pd.read_csv(ArquivoGeral, sep=';')
+
+    # updating the column value/data
+    df.loc[0, 'Fundo'] = a
+
+    # writing into the file
+    df.to_csv(ArquivoGeral, sep=';', index=False)
+    # print(df)
+

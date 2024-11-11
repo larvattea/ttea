@@ -6,6 +6,7 @@ import ui
 import image
 from VesTEA.config import Config
 from VesTEA.botao import Botao
+from VesTEA import arquivo as arq
 import random
 
 #se for executar de outra pasta, precisa de:
@@ -32,7 +33,7 @@ class TelaTutorial():
         display.set_caption(
             'VesTEA'
         )
-        self.superficie.fill((238, 236, 225))
+        self.superficie.fill(arq.get_V_FUNDO())
         
         #pega superficie
         self.display_surface = pygame.display.get_surface()
@@ -76,7 +77,7 @@ class TelaTutorial():
         #carrega imagens padrão
         self.inicio_img = pygame.image.load('Assets/vestea/imgs/inicio.png').convert_alpha()
         self.inicio_img = pygame.transform.scale(self.inicio_img, (2*self.tilesize, 2*self.tilesize))
-        self.parede_img = pygame.image.load('Assets/vestea/imgs/tijolo.jpg').convert_alpha()
+        self.parede_img = pygame.image.load(f'Assets/vestea/imgs/tijolo{arq.get_V_TIJOLO()}.jpg').convert_alpha()
         self.parede_img = pygame.transform.scale(self.parede_img, (self.tilesize, self.tilesize))
         self.paredeatingida_img = pygame.image.load('Assets/vestea/imgs/tijoloAtingido.jpg').convert_alpha()
         self.paredeatingida_img = pygame.transform.scale(self.paredeatingida_img, (self.tilesize, self.tilesize))

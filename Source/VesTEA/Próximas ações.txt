@@ -32,16 +32,16 @@ OK tutorial!!!
 Outras dinâmicas
 	OK pausa por demora prolongada
 	pausa por sair da tela de jogo
-controle do profissional
+ok controle do profissional
 	ok hud
 	ok som
 	OK sair do jogo
-	tecla pra trocar cor de fundo
+	ok tecla pra trocar cor de fundo
 OK melhorar parte superior da tela (texto)
 OK menu principal
-	tela de configurar jogo
-		cor da parede do labirinto
-		cor do fundo
+	OK tela de configurar jogo
+		OK cor da parede do labirinto
+		OK cor do fundo
 	tela de config do jogador
 		cor/imagem do seu item
 		som

@@ -245,11 +245,12 @@ class Tutorial():
         ui.draw_text(self.superficie, "Atalhos:", (450, 200), (38, 61, 39), font=pygame.font.Font(None, 50), shadow=False)
         ui.draw_text(self.superficie, "Som: Tecla 'S'", (450, 280), (38, 61, 39), font=pygame.font.Font(None, 35), shadow=False)
         ui.draw_text(self.superficie, "Hud: Tecla 'H'", (450, 330), (38, 61, 39), font=pygame.font.Font(None, 35), shadow=False)
+        ui.draw_text(self.superficie, "Cor de fundo: Tecla 'F'", (450, 380), (38, 61, 39), font=pygame.font.Font(None, 35), shadow=False)
         #botão SAIR
         self.imagem_sair = pygame.image.load('VesTEA/images/button_sair.png').convert_alpha()
         self.botao_sair = Botao(152, 470, self.imagem_sair, 1)
         if self.botao_sair.criar(self.superficie):
-            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Acao profissional', 'Botao Sair para Menu')
+            arq.grava_Detalhado(0, self.nivel, 0, 'Acao profissional', 'Botao Sair para Menu')
             self.cap.close_camera()
             self.posicaoJogador = '0'
             self.estado = 99
