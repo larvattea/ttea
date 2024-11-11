@@ -164,7 +164,7 @@ class Vestea():
                 )
                 self.superficie.blit(texto_opcoes, (50, 365))
                 texto_personalizar = self.fonte.render(
-                    'Jogador: Vestea',
+                    f'Jogador: {arq.get_Player()}',
                     True,
                     (50, 50, 50)
                 )
@@ -187,7 +187,8 @@ class Vestea():
                     pygame.time.delay(1000)
                     self.estado = 3
                 if self.botao_personalizar.criar(self.superficie):
-                    print('NÃO IMPLEMENTADO')
+                    pygame.time.delay(1000)
+                    self.estado = 4
                 if self.botao_sair.criar(self.superficie):
                     #print('EXIT')
                     self.esta_rodando = False
@@ -295,6 +296,101 @@ class Vestea():
                     posicaofundo = self.botao_cor3.rect.topleft
                 pygame.draw.rect(fundoSelecionado, (0,255,0), (0, 0, 119, 121),10)
                 self.superficie.blit(fundoSelecionado, fundoSelecionado.get_rect(topleft = posicaofundo))
+                #botao sair    
+                self.imagem_sair = pygame.image.load('VesTEA/images/button_sair.png').convert_alpha()
+                self.botao_sair = botao.Botao(339, 520, self.imagem_sair, 1)
+                if self.botao_sair.criar(self.superficie):
+                    pygame.time.delay(1000)
+                    self.estado = 0
+            #################################
+            #        CONFIG JOGADOR         # 
+            #################################     
+            elif self.estado==4:
+                self.superficie.fill((238, 236, 225))
+                #CRIA TÍTULO
+                titulo = self.fonte_destaque.render(
+                    f'Configurações por jogador:',
+                    True,
+                    (50, 50, 50)
+                )
+                self.superficie.blit(titulo, (50, 20))
+                texto_nome = self.fonte.render(
+                    f'{arq.get_Player()}',
+                    True,
+                    (50, 50, 50)
+                )
+                self.superficie.blit(texto_nome, (350, 100))
+                #TEXTOS
+                texto_opcoes = self.fonte.render(
+                    'Cor do ponto',
+                    True,
+                    (50, 50, 50)
+                )
+                self.superficie.blit(texto_opcoes, (50, 180))
+                texto_personalizar = self.fonte.render(
+                    'Som',
+                    True,
+                    (50, 50, 50)
+                )
+                self.superficie.blit(texto_personalizar, (50, 300))
+                texto_personalizar = self.fonte.render(
+                    'Hud (texto)',
+                    True,
+                    (50, 50, 50)
+                )
+                self.superficie.blit(texto_personalizar, (50, 420))
+                #botoes opções de cor do ponto
+                self.imagem_ponto1 = pygame.image.load('Assets/vestea/imgs/corponto1.jpg').convert_alpha()
+                self.botao_ponto1 = botao.Botao(320, 170, self.imagem_ponto1, 1)
+                self.imagem_ponto2 = pygame.image.load('Assets/vestea/imgs/corponto2.jpg').convert_alpha()
+                self.botao_ponto2 = botao.Botao(400, 170, self.imagem_ponto2, 1)
+                self.imagem_ponto3 = pygame.image.load('Assets/vestea/imgs/corponto3.jpg').convert_alpha()
+                self.botao_ponto3 = botao.Botao(480, 170, self.imagem_ponto3, 1)
+                self.imagem_ponto4 = pygame.image.load('Assets/vestea/imgs/corponto4.jpg').convert_alpha()
+                self.botao_ponto4 = botao.Botao(560, 170, self.imagem_ponto4, 1)
+                if self.botao_ponto1.criar(self.superficie):
+                    arq.set_R_COR_PONTO('(255, 255, 0)')
+                elif self.botao_ponto2.criar(self.superficie):
+                    arq.set_R_COR_PONTO('(255, 127, 39)')
+                elif self.botao_ponto3.criar(self.superficie):
+                    arq.set_R_COR_PONTO('(37, 34, 255)')
+                elif self.botao_ponto4.criar(self.superficie):
+                    arq.set_R_COR_PONTO('(234, 68, 188)')
+                #destaca imagem do ponto selecionado
+                pontoSelecionado = arq.get_V_COR_PONTO()
+                if f'{pontoSelecionado}' == '(255, 255, 0)':
+                    pontoSelecionado = self.imagem_ponto1
+                    posicaoponto = self.botao_ponto1.rect.topleft
+                elif f'{pontoSelecionado}' == '(255, 127, 39)':
+                    pontoSelecionado = self.imagem_ponto2
+                    posicaoponto = self.botao_ponto2.rect.topleft
+                elif f'{pontoSelecionado}' == '(37, 34, 255)':
+                    pontoSelecionado = self.imagem_ponto3
+                    posicaoponto = self.botao_ponto3.rect.topleft
+                elif f'{pontoSelecionado}' == '(234, 68, 188)':
+                    pontoSelecionado = self.imagem_ponto4
+                    posicaoponto = self.botao_ponto4.rect.topleft
+                pygame.draw.rect(pontoSelecionado, (0,255,0), (0, 0, 60, 60),10)
+                self.superficie.blit(pontoSelecionado, pontoSelecionado.get_rect(topleft = posicaoponto))
+                #botão som
+                if arq.get_V_SOM():
+                    self.imagem_som = pygame.image.load('Assets/vestea/imgs/on.png').convert_alpha()
+                else:
+                    self.imagem_som = pygame.image.load('Assets/vestea/imgs/off.png').convert_alpha()
+                self.botao_som = botao.Botao(320, 300, self.imagem_som, 0.2)
+                if self.botao_som.criar(self.superficie):
+                    pygame.time.delay(300)
+                    arq.set_R_SOM(not arq.get_V_SOM())
+                #botoes hud
+                if arq.get_V_HUD():
+                    self.imagem_hud = pygame.image.load('Assets/vestea/imgs/on.png').convert_alpha()
+                else:
+                    self.imagem_hud = pygame.image.load('Assets/vestea/imgs/off.png').convert_alpha()
+                self.botao_hud = botao.Botao(320, 420, self.imagem_hud, 0.2)
+                if self.botao_hud.criar(self.superficie):
+                    pygame.time.delay(300)
+                    arq.set_R_HUD(not arq.get_V_HUD())
+                
                 #botao sair    
                 self.imagem_sair = pygame.image.load('VesTEA/images/button_sair.png').convert_alpha()
                 self.botao_sair = botao.Botao(339, 520, self.imagem_sair, 1)

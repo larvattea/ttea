@@ -85,7 +85,7 @@ def grava_Sessao(hora_inicio, fase, nivel, acertos, acertos_ajuda, ajudas, erros
     print('Arquivo: ',file)
     results = pd.read_csv(file, sep=';')
     id = len(results)
-    data = get_Date().strftime("%x")
+    data = get_Date().strftime("%d/%m/%Y")
     hora = get_Date().strftime("%X")
     fields = [id, data, hora_inicio, hora, fase, nivel, acertos, erros, acertos_ajuda, ajudas, omissoes, colisoes]
     with open(file,'a+', newline='') as csvfile:
@@ -319,6 +319,25 @@ def set_R_SOM(a):
     df.to_csv(ArquivoConfig, sep=';', index=False)
     # print(df)
 
+def get_V_COR_PONTO():
+    # reading the csv file
+    df = pd.read_csv(ArquivoConfig, sep=';')
+
+    # getting value/data
+    ret = df["Cor do ponto"].values[0]
+    return eval(ret)
+
+
+def set_R_COR_PONTO(a):
+    # reading the csv file
+    df = pd.read_csv(ArquivoConfig, sep=';')
+
+    # updating the column value/data
+    df.loc[0, 'Cor do ponto'] = a
+
+    # writing into the file
+    df.to_csv(ArquivoConfig, sep=';', index=False)
+    # print(df)
 #----------------------------------------------------------------------------------------------------------------------#
 ############ GERAL (PROFISSIONAL) #################
 

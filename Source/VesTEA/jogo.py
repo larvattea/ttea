@@ -128,7 +128,7 @@ class Jogo():
         self.cap.frame = self.jogador.scan_feets(self.cap.frame)
         x,y = self.jogador.get_feet_center()
         #print("Jogador em: ",x," - ",y)
-        pygame.draw.circle(self.superficie, (255,255,0), [x,y-90],15)
+        pygame.draw.circle(self.superficie, arq.get_V_COR_PONTO(), [x,y-90],15)
         self.posicaoJogador = self.desafio.detectaColisao(x,y)
         print("Jogador em: ",self.posicaoJogador)
         #print(self.posicaoJogador == '2' or self.posicaoJogador == '22')
@@ -157,7 +157,7 @@ class Jogo():
         self.cap.frame = self.jogador.scan_feets(self.cap.frame)
         x,y = self.jogador.get_feet_center()
         #print("Jogador em: ",x," - ",y)
-        pygame.draw.circle(self.superficie, (255,255,0), [x,y-90],15)
+        pygame.draw.circle(self.superficie, arq.get_V_COR_PONTO(), [x,y-90],15)
         self.posicaoJogador = self.desafio.detectaColisao(x,y)
         #print("Jogador 2.5 em: ",self.posicaoJogador)
         display.update()
@@ -209,7 +209,7 @@ class Jogo():
             self.jogando = False
             
         #print("Jogador em: ",x,"-",y)
-        pygame.draw.circle(self.superficie, (255,255,0), [x,y-90], 15)
+        pygame.draw.circle(self.superficie, arq.get_V_COR_PONTO(), [x,y-90], 15)
         self.posicaoJogador = self.desafio.detectaColisao(x,y)
         if self.posicaoJogador == '3' or self.posicaoJogador == '33' or self.posicaoJogador == '4' or self.posicaoJogador == '44':
             self.estado += 1
@@ -346,7 +346,7 @@ class Jogo():
             self.cap.frame = self.jogador.scan_feets(self.cap.frame)
             x,y = self.jogador.get_feet_center()
             #print("Jogador em: ",x," - ",y)
-            pygame.draw.circle(self.superficie, (255,255,0), [x,y-90],15)
+            pygame.draw.circle(self.superficie, arq.get_V_COR_PONTO(), [x,y-90],15)
             self.posicaoJogador = self.desafio.detectaColisao(x,y)
         #se jogador voltar pro ponto inicial
         else:

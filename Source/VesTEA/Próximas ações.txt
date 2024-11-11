@@ -31,7 +31,7 @@ OK tutorial!!!
 	OK sem labirinto e com desafio
 Outras dinâmicas
 	OK pausa por demora prolongada
-	pausa por sair da tela de jogo
+	pausa por sair da tela de jogo - recomendado não fazer pela primeira conversa
 ok controle do profissional
 	ok hud
 	ok som
@@ -43,9 +43,10 @@ OK menu principal
 		OK cor da parede do labirinto
 		OK cor do fundo
 	tela de config do jogador
-		cor/imagem do seu item
-		som
-		hud
+		ok cor do ponto
+		imagem do ponto
+		ok som
+		ok hud
 		tempos de jogo
 		referência do movimento (parte do corpo)
 ok tela de pausa
@@ -71,7 +72,7 @@ menu de escolha do desafio
 	Clima
 	Ocasião
 
-mais roupas
+ok mais roupas
 OK mais locais
 
 BUG: QUANDO PAUSA E VOLTA, LABIRINTO FICA COM COLISÕES DESTACADAS
