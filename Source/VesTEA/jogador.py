@@ -39,8 +39,6 @@ class Jogador:
         self.results = None
         self.pose_closed = False
 
-
-
     def scan_feets(self, image):
         rows, cols, _ = image.shape
 

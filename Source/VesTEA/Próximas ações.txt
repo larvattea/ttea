@@ -67,10 +67,12 @@ OK Ajustar telas do tutorial
 	ok pausa
 	ok feedback final
 
-menu de escolha do desafio
-	Corpo
-	Clima
-	Ocasião
+ok menu de escolha do desafio
+	ok Corpo
+	ok Clima
+	ok Ocasião
+
+Aplicar alterações da tela de desafio no jogo
 
 ok mais roupas
 OK mais locais

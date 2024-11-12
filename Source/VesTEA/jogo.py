@@ -9,6 +9,7 @@ from pygame.locals import QUIT, KEYUP, K_SPACE
 from pygame import font
 from pygame import display
 from VesTEA.config import Config
+from VesTEA.config_desafio import ConfigDesafio
 import ui
 import image
 from VesTEA.botao import Botao
@@ -20,6 +21,7 @@ class Jogo():
         self.jogando = True
         self.fase = fase
         self.nivel = nivel
+        self.configDesafio = ConfigDesafio()
         #mensuram nível
         self.jogada = 1
         self.pontos = 0
