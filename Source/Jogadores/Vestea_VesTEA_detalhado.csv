@@ -4939,3 +4939,43 @@ Sessao;Data;Hora;Fase;Nivel;Posicao jogador;Tipo de Evento;Obs.
 137;02/16/25;09:44:53;3;13;0;Pontuacao;55
 137;02/16/25;09:44:53;3;13;0;Resultado;Avanca nivel
 137;02/16/25;09:44:57;3;13;2;Acao profissional;Botao Sair para Menu
+138;02/16/25;09:50:22;3;11;0;Acao profissional;Botao X Fechar
+139;02/16/25;09:51:06;3;11;0;Acao profissional;Botao X Fechar
+140;02/16/25;09:59:53;3;11;0;Inicio Nivel;
+140;02/16/25;09:59:53;3;11;0;Inicio da jogada;1
+140;02/16/25;09:59:53;3;11;0;Roupa certa;tenis10.png
+140;02/16/25;09:59:53;3;11;0;Roupa errada;calcao7.png
+140;02/16/25;09:59:53;3;11;0;Roupa certa 2;meias9.png
+140;02/16/25;09:59:53;3;11;0;Desafio: corpo;Pes
+140;02/16/25;09:59:53;3;11;0;Desafio: clima;Ambos
+140;02/16/25;09:59:53;3;11;0;Desafio: local;Restaurante
+140;02/16/25;09:59:56;3;11;0;Acao profissional;Botao X Fechar
+141;02/16/25;10:01:24;3;11;0;Inicio Nivel;
+141;02/16/25;10:01:24;3;11;0;Inicio da jogada;1
+141;02/16/25;10:01:24;3;11;0;Roupa certa;chinelo10.png
+141;02/16/25;10:01:24;3;11;0;Roupa errada;casaco6.png
+141;02/16/25;10:01:24;3;11;0;Roupa certa 2;chinelo8.png
+141;02/16/25;10:01:24;3;11;0;Desafio: corpo;Pes
+141;02/16/25;10:01:24;3;11;0;Desafio: clima;Calor
+141;02/16/25;10:01:24;3;11;0;Desafio: local;Parque
+141;02/16/25;10:01:26;3;11;0;Acao profissional;Botao X Fechar
+142;02/16/25;10:09:12;3;11;0;Inicio Nivel;
+142;02/16/25;10:09:12;3;11;0;Inicio da jogada;1
+142;02/16/25;10:09:12;3;11;0;Roupa certa;calca23.png
+142;02/16/25;10:09:12;3;11;0;Roupa errada;camisa19.png
+142;02/16/25;10:09:12;3;11;0;Roupa certa 2;calca3.png
+142;02/16/25;10:09:12;3;11;0;Desafio: corpo;Pernas
+142;02/16/25;10:09:12;3;11;0;Desafio: clima;Frio
+142;02/16/25;10:09:12;3;11;0;Desafio: local;Parque
+142;02/16/25;10:09:14;3;11;0;Acao profissional;Botao X Fechar
+143;02/16/25;10:14:50;3;11;0;Inicio Nivel;
+143;02/16/25;10:14:51;3;11;0;Inicio da jogada;1
+143;02/16/25;10:14:51;3;11;0;Roupa certa;vestido3.png
+143;02/16/25;10:14:51;3;11;0;Roupa errada;tenis13.png
+143;02/16/25;10:14:51;3;11;0;Roupa certa 2;camisa23.png
+143;02/16/25;10:14:51;3;11;0;Desafio: corpo;Torso
+143;02/16/25;10:14:51;3;11;0;Desafio: clima;Calor
+143;02/16/25;10:14:51;3;11;0;Desafio: local;Festa
+143;02/16/25;10:14:53;3;11;0;Acao profissional;Botao ESPACO
+143;02/16/25;10:14:53;3;11;0;Acao profissional;Pausa
+143;02/16/25;10:16:09;3;11;-1;Acao profissional;Botao Sair para Menu

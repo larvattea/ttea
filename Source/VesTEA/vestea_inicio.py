@@ -44,7 +44,7 @@ class Vestea():
             self.tamanho
         )
 
-        self.jogo = Jogo(self.superficie, arq.get_V_FASE(), arq.get_V_NIVEL())
+        self.jogo = Jogo(self.superficie, arq.get_V_FASE(), arq.get_V_NIVEL(), self.configdesafio)
         self.tutorial = Tutorial(self.superficie)
         #self.fundo_inicio = scale(
         #    load('images/title_background.jpg'),
@@ -209,7 +209,7 @@ class Vestea():
                     arq.grava_Sessao(self.jogo.sessaoInicio, self.jogo.fase, self.jogo.nivel, self.jogo.sessaoAcertos, 
                                      self.jogo.sessaoAcertosAjuda, self.jogo.sessaoAjudas, 
                                      self.jogo.sessaoErros, self.jogo.sessaoOmissoes, self.jogo.totalColisoes)    
-                    self.jogo = Jogo(self.superficie, arq.get_V_FASE(), arq.get_V_NIVEL())
+                    self.jogo = Jogo(self.superficie, arq.get_V_FASE(), arq.get_V_NIVEL(), self.configdesafio)
                     self.estado = 0
                 #print(self.estado,' e ',self.jogo.estado)
             #################################
@@ -768,10 +768,10 @@ class Vestea():
                     self.configdesafio.ocasiao["2"] = True
                     self.configdesafio.ocasiao["3"] = True
                     self.configdesafio.ocasiao["4"] = True
-                    self.configdesafio.ocasiao["5"] = False
-                    self.configdesafio.ocasiao["6"] = False
-                    self.configdesafio.ocasiao["7"] = False
-                    self.configdesafio.ocasiao["8"] = False
+                    self.configdesafio.ocasiao["5"] = True
+                    self.configdesafio.ocasiao["6"] = True
+                    self.configdesafio.ocasiao["7"] = True
+                    self.configdesafio.ocasiao["8"] = True
                 if botao_ocasiao1.criar(self.superficie):
                     #print('botao 1')
                     pygame.time.delay(300)
@@ -903,6 +903,7 @@ class Vestea():
                 self.imagem_jogar = pygame.image.load('VesTEA/images/button_jogar.png').convert_alpha()
                 self.botao_jogar = botao.Botao(600, 530, self.imagem_jogar, 1)
                 if self.botao_jogar.criar(self.superficie):
+                    self.jogo.configDesafio = self.configdesafio
                     pygame.time.delay(500)
                     self.estado = 1  
             #atualiza a tela         

@@ -14,12 +14,14 @@ csv.register_dialect(
     quoting = csv.QUOTE_MINIMAL)
 
 class Desafio():
-    def __init__(self, fase, nivel, jogada):
+    def __init__(self, fase, nivel, jogada, configdesafio):
         super().__init__()
         self.tilesize = 25
         self.fase = fase
         self.nivel = nivel
         self.jogada = jogada
+        self.configDesafio = configdesafio
+        self.configDesafio.print()
         #print (111)
         self.labirinto = self.getLabirintoCsv()
         print('labirinto:',self.labirinto)
@@ -101,7 +103,7 @@ class Desafio():
             #gera roupa errada aleatoria
             rouparand = random.randint(1,len(dados))-1
             #print(rouparand)
-            print(dados)
+            #print(dados)
             print('Roupa certa:', dados[self.roupa_certa.posicao])
             print('Roupa errada:', dados[rouparand])
             roupaSelecionada = Roupa(dados[rouparand], rouparand)

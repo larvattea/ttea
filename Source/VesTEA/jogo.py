@@ -17,11 +17,11 @@ from VesTEA import arquivo as arq
 import datetime
 
 class Jogo():
-    def __init__(self, superficie, fase, nivel):
+    def __init__(self, superficie, fase, nivel, configdesafio):
         self.jogando = True
         self.fase = fase
         self.nivel = nivel
-        self.configDesafio = ConfigDesafio()
+        self.configDesafio = configdesafio
         #mensuram nível
         self.jogada = 1
         self.pontos = 0
@@ -75,7 +75,7 @@ class Jogo():
         self.tempoSemMovimento = 0    
         self.colisoes = 0
         self.ajuda = False
-        self.desafio = Desafio(self.fase, self.nivel, self.jogada)
+        self.desafio = Desafio(self.fase, self.nivel, self.jogada, self.configDesafio)
         arq.grava_Detalhado(self.fase, self.nivel, 0, 'Inicio da jogada', self.jogada)
         arq.grava_Detalhado(self.fase, self.nivel, 0, 'Roupa certa', self.desafio.roupa_certa.nome)
         arq.grava_Detalhado(self.fase, self.nivel, 0, 'Roupa errada', self.desafio.roupa_errada.nome)
