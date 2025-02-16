@@ -4721,3 +4721,221 @@ Sessao;Data;Hora;Fase;Nivel;Posicao jogador;Tipo de Evento;Obs.
 129;11/11/24;21:14:33;1;10;0;Pontuacao;43
 129;11/11/24;21:14:33;1;10;0;Resultado;Avanca nivel
 129;11/11/24;21:20:20;1;10;0;Acao profissional;Botao Sair para Menu
+130;11/28/24;18:57:57;1;11;0;Inicio Nivel;
+130;11/28/24;18:57:57;1;11;0;Inicio da jogada;1
+130;11/28/24;18:57:57;1;11;0;Roupa certa;biquini7.png
+130;11/28/24;18:57:57;1;11;0;Roupa errada;casaco18.png
+130;11/28/24;18:57:57;1;11;0;Roupa certa 2;cueca3.png
+130;11/28/24;18:57:57;1;11;0;Desafio: clima;Calor
+130;11/28/24;18:59:01;1;11;0;Acao profissional;Botao ESPACO
+130;11/28/24;18:59:01;1;11;0;Acao profissional;Pausa
+130;11/28/24;18:59:02;1;11;-1;Acao profissional;Botao Sair para Menu
+130;11/28/24;19:04:53;1;11;0;Inicio Nivel;
+130;11/28/24;19:04:53;1;11;0;Inicio da jogada;1
+130;11/28/24;19:04:53;1;11;0;Roupa certa;calca26.png
+130;11/28/24;19:04:53;1;11;0;Roupa errada;camisa23.png
+130;11/28/24;19:04:53;1;11;0;Roupa certa 2;casaco18.png
+130;11/28/24;19:04:53;1;11;0;Desafio: clima;Frio
+130;11/28/24;19:07:44;1;11;0;Acao profissional;Botao ESPACO
+130;11/28/24;19:07:44;1;11;0;Acao profissional;Pausa
+130;11/28/24;19:07:45;1;11;-1;Acao profissional;Botao Sair para Menu
+131;11/28/24;19:14:09;1;11;0;Inicio Nivel;
+131;11/28/24;19:14:09;1;11;0;Inicio da jogada;1
+131;11/28/24;19:14:09;1;11;0;Roupa certa;biquini1.png
+131;11/28/24;19:14:09;1;11;0;Roupa errada;saia14.png
+131;11/28/24;19:14:09;1;11;0;Roupa certa 2;sunga12.png
+131;11/28/24;19:14:09;1;11;0;Desafio: corpo;Roupa de baixo
+131;11/28/24;19:16:01;1;11;0;Acao profissional;Botao ESPACO
+131;11/28/24;19:16:01;1;11;0;Acao profissional;Pausa
+131;11/28/24;19:16:03;1;11;-1;Acao profissional;Botao Sair para Menu
+132;11/28/24;19:16:54;1;11;0;Inicio Nivel;
+132;11/28/24;19:16:54;1;11;0;Inicio da jogada;1
+132;11/28/24;19:16:54;1;11;0;Roupa certa;meias2.png
+132;11/28/24;19:16:54;1;11;0;Roupa errada;calca3.png
+132;11/28/24;19:16:54;1;11;0;Roupa certa 2;tenis32.png
+132;11/28/24;19:16:54;1;11;0;Desafio: corpo;Pes
+132;11/28/24;19:17:36;1;11;3;Escolheu Roupa Certa;
+132;11/28/24;19:17:44;1;11;0;Inicio da jogada;2
+132;11/28/24;19:17:44;1;11;0;Roupa certa;cueca11.png
+132;11/28/24;19:17:44;1;11;0;Roupa errada;calcao16.png
+132;11/28/24;19:17:44;1;11;0;Roupa certa 2;calca8.png
+132;11/28/24;19:17:44;1;11;0;Desafio: local;Festa
+132;11/28/24;19:20:26;1;11;0;Acao profissional;Botao ESPACO
+132;11/28/24;19:20:26;1;11;0;Acao profissional;Pausa
+132;11/28/24;19:20:34;1;11;-1;Acao profissional;Botao Avancar Nivel
+132;11/28/24;19:20:34;1;12;0;Inicio Nivel;
+132;11/28/24;19:20:34;1;12;0;Inicio da jogada;1
+132;11/28/24;19:20:34;1;12;0;Roupa certa;casaco25.png
+132;11/28/24;19:20:34;1;12;0;Roupa errada;sunga13.png
+132;11/28/24;19:20:34;1;12;0;Roupa certa 2;casaco15.png
+132;11/28/24;19:20:34;1;12;0;Desafio: local;Compras
+132;11/28/24;19:20:37;1;12;0;Acao profissional;Botao ESPACO
+132;11/28/24;19:20:37;1;12;0;Acao profissional;Pausa
+132;11/28/24;19:20:38;1;12;-1;Acao profissional;Botao Avancar Nivel
+132;11/28/24;19:20:38;1;13;0;Inicio Nivel;
+132;11/28/24;19:20:39;1;13;0;Inicio da jogada;1
+132;11/28/24;19:20:39;1;13;0;Roupa certa;meias12.png
+132;11/28/24;19:20:39;1;13;0;Roupa errada;cueca12.png
+132;11/28/24;19:20:39;1;13;0;Roupa certa 2;meias1.png
+132;11/28/24;19:20:39;1;13;0;Desafio: corpo;Pes
+132;11/28/24;19:20:40;1;13;0;Acao profissional;Botao ESPACO
+132;11/28/24;19:20:40;1;13;0;Acao profissional;Pausa
+132;11/28/24;19:20:41;1;13;-1;Acao profissional;Botao Avancar Nivel
+132;11/28/24;19:20:41;1;14;0;Inicio Nivel;
+132;11/28/24;19:20:41;1;14;0;Inicio da jogada;1
+132;11/28/24;19:20:41;1;14;0;Roupa certa;chinelo4.png
+132;11/28/24;19:20:41;1;14;0;Roupa errada;camisa10.png
+132;11/28/24;19:20:41;1;14;0;Roupa certa 2;chinelo18.png
+132;11/28/24;19:20:41;1;14;0;Desafio: clima;Calor
+132;11/28/24;19:20:42;1;14;0;Acao profissional;Botao ESPACO
+132;11/28/24;19:20:42;1;14;0;Acao profissional;Pausa
+132;11/28/24;19:20:43;1;14;-1;Acao profissional;Botao Avancar Nivel
+132;11/28/24;19:20:43;1;15;0;Inicio Nivel;
+132;11/28/24;19:20:43;1;15;0;Inicio da jogada;1
+132;11/28/24;19:20:43;1;15;0;Roupa certa;tenis13.png
+132;11/28/24;19:20:43;1;15;0;Roupa errada;sunga3.png
+132;11/28/24;19:20:43;1;15;0;Roupa certa 2;saia5.png
+132;11/28/24;19:20:43;1;15;0;Desafio: local;Festa
+132;11/28/24;19:21:21;1;15;-1;Ajuda;
+132;11/28/24;19:21:24;1;15;3;Escolheu Roupa Certa;
+132;11/28/24;19:21:39;1;15;0;Inicio da jogada;2
+132;11/28/24;19:21:39;1;15;0;Roupa certa;camisa28.png
+132;11/28/24;19:21:39;1;15;0;Roupa errada;calca12.png
+132;11/28/24;19:21:39;1;15;0;Roupa certa 2;biquini2.png
+132;11/28/24;19:21:39;1;15;0;Desafio: clima;Calor
+132;11/28/24;19:21:44;1;15;3;Escolheu Roupa Certa;
+132;11/28/24;19:21:50;1;15;0;Inicio da jogada;3
+132;11/28/24;19:21:50;1;15;0;Roupa certa;calcao5.png
+132;11/28/24;19:21:50;1;15;0;Roupa errada;sunga2.png
+132;11/28/24;19:21:50;1;15;0;Roupa certa 2;calcao15.png
+132;11/28/24;19:21:50;1;15;0;Desafio: corpo;Pernas
+132;11/28/24;19:21:53;1;15;3;Escolheu Roupa Certa;
+132;11/28/24;19:21:59;1;15;0;Concluiu Nivel;
+132;11/28/24;19:21:59;1;15;0;Pontuacao;55
+132;11/28/24;19:21:59;1;15;0;Resultado;Avanca nivel
+132;11/28/24;19:22:24;1;15;0;Acao profissional;Botao Jogar
+132;11/28/24;19:22:24;2;1;0;Inicio Nivel;
+132;11/28/24;19:22:24;2;1;0;Inicio da jogada;1
+132;11/28/24;19:22:24;2;1;0;Roupa certa;chinelo9.png
+132;11/28/24;19:22:24;2;1;0;Roupa errada;chinelo2.png
+132;11/28/24;19:22:24;2;1;0;Desafio: clima;Calor
+132;11/28/24;19:22:24;2;1;0;Desafio: local;Piscina
+132;11/28/24;19:24:28;2;1;0;Acao profissional;Botao ESPACO
+132;11/28/24;19:24:28;2;1;0;Acao profissional;Pausa
+132;11/28/24;19:24:29;2;1;-1;Acao profissional;Botao Sair para Menu
+133;11/28/24;19:24:30;2;1;0;Acao profissional;Botao X Fechar
+135;11/28/24;20:10:44;2;1;0;Acao profissional;Botao X Fechar
+136;02/16/25;09:23:32;3;11;0;Inicio Nivel;
+136;02/16/25;09:23:33;3;11;0;Inicio da jogada;1
+136;02/16/25;09:23:33;3;11;0;Roupa certa;calca2.png
+136;02/16/25;09:23:33;3;11;0;Roupa errada;vestido4.png
+136;02/16/25;09:23:33;3;11;0;Roupa certa 2;calca11.png
+136;02/16/25;09:23:33;3;11;0;Desafio: corpo;Pernas
+136;02/16/25;09:23:33;3;11;0;Desafio: clima;Frio
+136;02/16/25;09:23:33;3;11;0;Desafio: local;Compras
+136;02/16/25;09:23:47;3;11;3;Escolheu Roupa Certa;
+136;02/16/25;09:24:15;3;11;0;Acao profissional;Botao X Fechar
+137;02/16/25;09:24:33;3;11;0;Inicio Nivel;
+137;02/16/25;09:24:33;3;11;0;Inicio da jogada;1
+137;02/16/25;09:24:33;3;11;0;Roupa certa;tenis34.png
+137;02/16/25;09:24:33;3;11;0;Roupa errada;sunga4.png
+137;02/16/25;09:24:33;3;11;0;Roupa certa 2;tenis5.png
+137;02/16/25;09:24:33;3;11;0;Desafio: corpo;Pes
+137;02/16/25;09:37:35;3;11;0;Inicio Nivel;
+137;02/16/25;09:37:35;3;11;0;Inicio da jogada;1
+137;02/16/25;09:37:35;3;11;0;Roupa certa;calcao7.png
+137;02/16/25;09:37:35;3;11;0;Roupa errada;calca18.png
+137;02/16/25;09:37:35;3;11;0;Roupa certa 2;saia11.png
+137;02/16/25;09:37:35;3;11;0;Desafio: corpo;Pernas
+137;02/16/25;09:37:35;3;11;0;Desafio: clima;Calor
+137;02/16/25;09:37:35;3;11;0;Desafio: local;Compras
+137;02/16/25;09:37:45;3;11;3;Escolheu Roupa Certa;
+137;02/16/25;09:37:53;3;11;0;Inicio da jogada;2
+137;02/16/25;09:37:53;3;11;0;Roupa certa;tenis9.png
+137;02/16/25;09:37:53;3;11;0;Roupa errada;chinelo14.png
+137;02/16/25;09:37:53;3;11;0;Roupa certa 2;tenis22.png
+137;02/16/25;09:37:53;3;11;0;Desafio: corpo;Pes
+137;02/16/25;09:37:53;3;11;0;Desafio: clima;Ambos
+137;02/16/25;09:37:53;3;11;0;Desafio: local;Escola
+137;02/16/25;09:42:25;3;11;0;Inicio Nivel;
+137;02/16/25;09:42:25;3;11;0;Inicio da jogada;1
+137;02/16/25;09:42:25;3;11;0;Roupa certa;vestido3.png
+137;02/16/25;09:42:25;3;11;0;Roupa errada;casaco20.png
+137;02/16/25;09:42:25;3;11;0;Roupa certa 2;camisa18.png
+137;02/16/25;09:42:25;3;11;0;Desafio: corpo;Torso
+137;02/16/25;09:42:25;3;11;0;Desafio: clima;Calor
+137;02/16/25;09:42:25;3;11;0;Desafio: local;Parque
+137;02/16/25;09:42:35;3;11;3;Escolheu Roupa Certa;
+137;02/16/25;09:42:42;3;11;0;Inicio da jogada;2
+137;02/16/25;09:42:42;3;11;0;Roupa certa;camisa21.png
+137;02/16/25;09:42:42;3;11;0;Roupa errada;chinelo16.png
+137;02/16/25;09:42:42;3;11;0;Roupa certa 2;camisa16.png
+137;02/16/25;09:42:42;3;11;0;Desafio: corpo;Torso
+137;02/16/25;09:42:42;3;11;0;Desafio: clima;Calor
+137;02/16/25;09:42:42;3;11;0;Desafio: local;Restaurante
+137;02/16/25;09:42:52;3;11;3;Escolheu Roupa Certa;
+137;02/16/25;09:43:03;3;11;2;Omissao;
+137;02/16/25;09:43:07;3;11;-1;Acao profissional;Botao Jogar
+137;02/16/25;09:43:14;3;11;0;Concluiu Nivel;
+137;02/16/25;09:43:14;3;11;0;Pontuacao;50
+137;02/16/25;09:43:14;3;11;0;Resultado;Avanca nivel
+137;02/16/25;09:43:17;3;11;0;Acao profissional;Botao Jogar
+137;02/16/25;09:43:17;3;12;0;Inicio Nivel;
+137;02/16/25;09:43:17;3;12;0;Inicio da jogada;1
+137;02/16/25;09:43:17;3;12;0;Roupa certa;sunga14.png
+137;02/16/25;09:43:17;3;12;0;Roupa errada;tenis34.png
+137;02/16/25;09:43:17;3;12;0;Roupa certa 2;biquini2.png
+137;02/16/25;09:43:17;3;12;0;Desafio: corpo;Roupa de baixo
+137;02/16/25;09:43:17;3;12;0;Desafio: clima;Calor
+137;02/16/25;09:43:17;3;12;0;Desafio: local;Piscina
+137;02/16/25;09:43:26;3;12;3;Escolheu Roupa Certa;
+137;02/16/25;09:43:34;3;12;0;Inicio da jogada;2
+137;02/16/25;09:43:34;3;12;0;Roupa certa;biquini7.png
+137;02/16/25;09:43:34;3;12;0;Roupa errada;tenis9.png
+137;02/16/25;09:43:34;3;12;0;Roupa certa 2;sunga15.png
+137;02/16/25;09:43:34;3;12;0;Desafio: corpo;Roupa de baixo
+137;02/16/25;09:43:34;3;12;0;Desafio: clima;Calor
+137;02/16/25;09:43:34;3;12;0;Desafio: local;Piscina
+137;02/16/25;09:43:40;3;12;3;Escolheu Roupa Certa;
+137;02/16/25;09:43:48;3;12;0;Inicio da jogada;3
+137;02/16/25;09:43:48;3;12;0;Roupa certa;casaco26.png
+137;02/16/25;09:43:48;3;12;0;Roupa errada;chinelo9.png
+137;02/16/25;09:43:48;3;12;0;Roupa certa 2;casaco2.png
+137;02/16/25;09:43:48;3;12;0;Desafio: corpo;Torso
+137;02/16/25;09:43:48;3;12;0;Desafio: clima;Frio
+137;02/16/25;09:43:48;3;12;0;Desafio: local;Festa
+137;02/16/25;09:43:56;3;12;3;Escolheu Roupa Certa;
+137;02/16/25;09:44:02;3;12;0;Concluiu Nivel;
+137;02/16/25;09:44:02;3;12;0;Pontuacao;60
+137;02/16/25;09:44:02;3;12;0;Resultado;Avanca nivel
+137;02/16/25;09:44:05;3;12;2;Acao profissional;Botao Jogar
+137;02/16/25;09:44:05;3;13;0;Inicio Nivel;
+137;02/16/25;09:44:05;3;13;0;Inicio da jogada;1
+137;02/16/25;09:44:05;3;13;0;Roupa certa;camisa7.png
+137;02/16/25;09:44:05;3;13;0;Roupa errada;casaco7.png
+137;02/16/25;09:44:05;3;13;0;Roupa certa 2;camisa3.png
+137;02/16/25;09:44:05;3;13;0;Desafio: corpo;Torso
+137;02/16/25;09:44:05;3;13;0;Desafio: clima;Calor
+137;02/16/25;09:44:05;3;13;0;Desafio: local;Compras
+137;02/16/25;09:44:12;3;13;3;Escolheu Roupa Certa;
+137;02/16/25;09:44:21;3;13;0;Inicio da jogada;2
+137;02/16/25;09:44:21;3;13;0;Roupa certa;sunga13.png
+137;02/16/25;09:44:21;3;13;0;Roupa errada;chinelo8.png
+137;02/16/25;09:44:21;3;13;0;Roupa certa 2;sunga2.png
+137;02/16/25;09:44:21;3;13;0;Desafio: corpo;Roupa de baixo
+137;02/16/25;09:44:21;3;13;0;Desafio: clima;Calor
+137;02/16/25;09:44:21;3;13;0;Desafio: local;Praia
+137;02/16/25;09:44:29;3;13;3;Escolheu Roupa Certa;
+137;02/16/25;09:44:37;3;13;0;Inicio da jogada;3
+137;02/16/25;09:44:37;3;13;0;Roupa certa;calca2.png
+137;02/16/25;09:44:37;3;13;0;Roupa errada;tenis28.png
+137;02/16/25;09:44:37;3;13;0;Roupa certa 2;calca19.png
+137;02/16/25;09:44:37;3;13;0;Desafio: corpo;Pernas
+137;02/16/25;09:44:37;3;13;0;Desafio: clima;Frio
+137;02/16/25;09:44:37;3;13;0;Desafio: local;Festa
+137;02/16/25;09:44:46;3;13;-1;Ajuda;
+137;02/16/25;09:44:48;3;13;3;Escolheu Roupa Certa;
+137;02/16/25;09:44:53;3;13;0;Concluiu Nivel;
+137;02/16/25;09:44:53;3;13;0;Pontuacao;55
+137;02/16/25;09:44:53;3;13;0;Resultado;Avanca nivel
+137;02/16/25;09:44:57;3;13;2;Acao profissional;Botao Sair para Menu

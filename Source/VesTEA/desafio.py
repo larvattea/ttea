@@ -25,6 +25,9 @@ class Desafio():
         print('labirinto:',self.labirinto)
         #print (222)
         self.roupa_certa = self.getRoupaCerta()
+        while (self.roupa_certa.clima == 3 and self.fase == 3):
+            print('Clima é 3, resorteia a certa:',self.clima)
+            self.roupa_certa = self.getRoupaCerta()
         #print (333)
         self.corpo = int(self.getCorpo())
         #print (444)
@@ -138,7 +141,7 @@ class Desafio():
             #gera roupa errada aleatoria
             rouparand = random.randint(1,len(dados))-1
             #print(rouparand)
-            print(dados)
+            #print(dados)
             print('Roupa certa:', dados[self.roupa_certa.posicao])
             print('Roupa errada:', dados[self.roupa_errada.posicao])
             print('Roupa coringa:', dados[rouparand])

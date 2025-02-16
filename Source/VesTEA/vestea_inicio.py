@@ -180,7 +180,8 @@ class Vestea():
                     self.jogo.configDesafio = self.configdesafio
                     self.jogo.jogando = True
                     self.jogo.estado = 1
-                    self.estado=1
+                    #self.estado: 9 é a tela de seleção de desafios, 1 é o jogo 
+                    self.estado=9
                 if self.botao_tutorial.criar(self.superficie):
                     #print('NÃO IMPLEMENTADO')
                     arq.grava_Detalhado(self.jogo.fase, self.jogo.nivel, 0, 'Inicio Tutorial', '')

@@ -99,6 +99,8 @@ class Jogo():
                 txtClima = 'Calor'
             elif self.desafio.clima == 2:
                 txtClima = 'Frio'
+            elif self.desafio.clima == 3:
+                txtClima = 'Ambos'
             arq.grava_Detalhado(self.fase, self.nivel, 0, 'Desafio: clima', txtClima)        
         #1=parque; 2=restaurante; 3=praia; 4=compras; 5=piscina; 6=esporte; 7=escola; 8=festa
         if self.desafio.local > 0:
