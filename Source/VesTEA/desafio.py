@@ -26,17 +26,37 @@ class Desafio():
         self.labirinto = self.getLabirintoCsv()
         print('labirinto:',self.labirinto)
         #print (222)
-        self.roupa_certa = self.getRoupaCerta()
-        while (self.roupa_certa.clima == 3 and self.fase == 3):
-            print('Clima é 3, resorteia a certa:',self.clima)
+        while (True):
+            print ("while da roupa sem bloqueios")
             self.roupa_certa = self.getRoupaCerta()
-        #print (333)
-        self.corpo = int(self.getCorpo())
-        #print (444)
-        self.clima = int(self.getClima())
-        #print (555)
-        self.local = int(self.getLocal())
-        #print (665)
+            #print (333)
+            self.corpo = int(self.getCorpo())
+            #print (444)
+            self.clima = int(self.getClima())
+            #print (555)
+            self.local = int(self.getLocal())
+            #print (665)
+            self.bloqueios = self.bloqueiosRoupaCerta()
+            # lógica dos bloqueios inicial, mas desorganizada
+            #elif ((self.fase == 3 and (bloqueios['qtde'] > 0 or self.roupa_certa.clima == 3)) or
+            #      (self.fase == 2 and (bloqueios['qtde'] > 1 or (self.roupa_certa.clima == 3 and bloqueios["clima"] == False))) or
+            #      (self.fase == 1 and (bloqueios['qtde'] > 2 or (self.roupa_certa.clima == 3 and bloqueios["clima"] == False and bloqueios['qtde'] == 2)))):
+            if (self.roupa_certa.clima == 3 and self.fase == 3):
+                print('Clima é 3 e fase é 3, resorteia a roupa certa.')
+            elif self.bloqueios["qtde"] == 0:
+                print('Roupa sem bloqueios!')
+                break
+            elif ((self.fase == 3 and self.bloqueios['qtde'] > 0) or
+                  (self.fase == 2 and self.bloqueios['qtde'] > 1) or
+                  (self.fase == 1 and self.bloqueios['qtde'] > 2)):
+                print('Mais bloqueios do que a fase permite, resorteia a roupa certa.')
+            elif (self.roupa_certa.clima == 3 and 
+                  ((self.fase == 2 and self.bloqueios["clima"] == False) or
+                  (self.fase == 1 and self.bloqueios["clima"] == False and self.bloqueios['qtde'] == 2))):
+                print('Clima é 3 e achou bloqueio, resorteia a roupa certa.')
+            else:
+                print('Roupa com bloqueios mas liberada!')
+                break
         self.DefineImagensDesafio()
         self.roupa_errada = self.getRoupaErrada()
         if nivel>=6:
@@ -60,8 +80,8 @@ class Desafio():
             csvreader = csv.reader(csvfile, dialect='mydialect')
             cabecalho = next(csvreader)
             dados = list(csvreader)
-        for linha in dados:
-            print(', '.join(linha))
+        #for linha in dados:
+        #    print(', '.join(linha))
         #print(len(dados))
         rouparand = random.randint(1,len(dados))-1
         print('Roupa certa:',dados[rouparand])
@@ -195,6 +215,28 @@ class Desafio():
                         #print ('Nenhuma roupa é diferente...')
                         #return
 
+    def bloqueiosRoupaCerta(self):
+        bloqueios = {
+            "qtde":0,
+            "corpo":False,
+            "clima":False,
+            "ocasiao":False
+        }
+        if self.configDesafio.corpo[self.roupa_certa.corpo] == False:
+            bloqueios["qtde"] = bloqueios["qtde"] + 1
+            print("Corpo bloqueado")
+            bloqueios["corpo"] = True
+        if self.roupa_certa.clima != "3" and self.configDesafio.clima[self.roupa_certa.clima] == False:
+            bloqueios["qtde"] = bloqueios["qtde"] + 1
+            print("Clima bloqueado")
+            bloqueios["clima"] = True
+        print("Ocasiao sendo observada:",str(self.local))    
+        if self.configDesafio.ocasiao[str(self.local)] == False:
+            bloqueios["qtde"] = bloqueios["qtde"] + 1
+            print("Local bloqueado")
+            bloqueios["ocasiao"] = True  
+        return bloqueios                          
+
     def DefineImagensDesafio(self):
         print('define desafio')
         #se fase for 1
@@ -203,9 +245,14 @@ class Desafio():
             #repete
                 #gera valor
                 randNum = random.randint(1,3)
-                #se sorteou clima e clima da roupa certa for 'neutro', passa pra parte do corpo
-                if (randNum == 2 and self.clima == 3):
-                    randNum = 1
+                #se sorteou algo que cause o bloqueio, resorteia
+                while ((randNum == 1 and self.bloqueios["corpo"] == True) or
+                       (randNum == 2 and (self.clima == 3 or self.bloqueios["clima"] == True)) or
+                       (randNum == 3 and self.bloqueios["ocasiao"] == True)
+                       ):
+                    print('Resorteia imagem porque teve bloqueio!')
+                    randNum = random.randint(1,3)
+                print('Imagem sem bloqueios!')    
                 #zera as outras 2 posições
                 if randNum == 1:
                     print('Desafio = corpo:',self.roupa_certa.corpo)
@@ -227,11 +274,18 @@ class Desafio():
             while True:
             #repete
                 #gera valor
-                #se clima da roupa certa for 'neutro', passa pra parte do corpo, senão sorteia
+                #se clima da roupa certa for 'neutro', seleciona o clima para ser excluído do desafio, senão sorteia
                 if (self.clima == 3):
                     randNum = 2
                 else:
                     randNum = random.randint(1,3)
+                    #se sorteou algo que cause o bloqueio, resorteia
+                    while ((randNum == 1 and (self.bloqueios["ocasiao"] == True and self.bloqueios["clima"] == True)) or
+                       (randNum == 2 and (self.bloqueios["corpo"] == True and self.bloqueios["ocasiao"] == True)) or
+                       (randNum == 3 and (self.bloqueios["corpo"] == True and self.bloqueios["clima"] == True))):
+                        print('Resorteia imagem porque teve bloqueio!')
+                        randNum = random.randint(1,3)
+                print('Imagem sem bloqueios!')    
                 #zera posição selecionada
                 if randNum == 1:
                     print('Desafio = clima:',self.roupa_certa.clima,' local:',self.roupa_certa.local[self.local-1])

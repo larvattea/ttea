@@ -177,6 +177,7 @@ class Vestea():
                 if self.botao_jogar.criar(self.superficie):
                     #print('START')
                     #self.novo_jogo()
+                    pygame.time.delay(1000)
                     self.jogo.configDesafio = self.configdesafio
                     self.jogo.jogando = True
                     self.jogo.estado = 1
@@ -904,8 +905,16 @@ class Vestea():
                 self.botao_jogar = botao.Botao(600, 530, self.imagem_jogar, 1)
                 if self.botao_jogar.criar(self.superficie):
                     self.jogo.configDesafio = self.configdesafio
-                    pygame.time.delay(500)
-                    self.estado = 1  
+                    if (self.jogo.verificaDesafiosDisponiveis(self.jogo.fase) == False):
+                        texto_erro = self.fonte_legenda.render(
+                            f"Não há desafios suficientes para a fase {self.jogo.fase}",
+                            True,
+                            (50, 50, 50)
+                        )
+                        self.superficie.blit(texto_erro, (130, 545))
+                    else:    
+                        pygame.time.delay(500)
+                        self.estado = 1  
             #atualiza a tela         
             display.update()
 

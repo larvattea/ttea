@@ -617,5 +617,17 @@ class Jogo():
         self.superficie = superficie      
         #self.cap.__init__() 
         
-            
+    #verificação para ver se tem desafios suficientes para jogar a fase
+    def verificaDesafiosDisponiveis(self, fase):
+        desafiosindisponiveis = 0
+        if (self.configDesafio.corpo["nenhum"]==True):
+            desafiosindisponiveis = desafiosindisponiveis + 1
+        if (self.configDesafio.clima["nenhum"]==True):
+            desafiosindisponiveis = desafiosindisponiveis + 1
+        if (self.configDesafio.ocasiao["nenhum"]==True):
+            desafiosindisponiveis = desafiosindisponiveis + 1
+        if ((fase == 1 and desafiosindisponiveis >2) or (fase == 2 and desafiosindisponiveis > 1) or (fase == 3 and desafiosindisponiveis > 0)):
+            return False
+        else:
+            return True
         

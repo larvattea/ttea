@@ -31,3 +31,4 @@ class ConfigDesafio():
         print("Corpo: 1 - ",self.corpo["1"],", 2 - ",self.corpo["2"],", 3 - ",self.corpo["3"],", 4 - ",self.corpo["4"])
         print("Clima: 1 - ",self.clima["1"],", 2 - ",self.clima["2"])
         print("Ocasiao: 1 - ",self.ocasiao["1"],", 2 - ",self.ocasiao["2"],", 3 - ",self.ocasiao["3"],", 4 - ",self.ocasiao["4"],", 5 - ",self.ocasiao["5"],", 6 - ",self.ocasiao["6"],", 7 - ",self.ocasiao["7"],", 8 - ",self.ocasiao["8"])
+            
