@@ -368,8 +368,12 @@ class Jogo():
         if self.nivel<15:
             self.nivel += 1
         elif self.nivel==15 and self.fase <3:
-            self.fase += 1
-            self.nivel = 1
+            if (self.nivel == 15 and self.verificaDesafiosDisponiveis(self.fase + 1) == False):
+                ui.draw_text(self.superficie, "Não há desafios suficientes para a próxima fase.", (130, 575), (38, 61, 39), font=pygame.font.Font(None, 25),
+                    shadow=False)
+            else:        
+                self.fase += 1
+                self.nivel = 1
     
     def acoesVoltaNivel(self):
         print('Volta')
@@ -511,6 +515,17 @@ class Jogo():
         ui.draw_text(self.superficie, str(self.totalOmissoes), (650, 310), (38, 61, 39), font=pygame.font.Font(None, 25),
                          shadow=False)
         
+        #botao voltar
+        self.imagem_voltar = pygame.image.load('VesTEA/images/button_voltar.png').convert_alpha()
+        self.botao_voltar = Botao(220, 410, self.imagem_voltar, 0.15)
+        if self.botao_voltar.criar(self.superficie):
+            print('voltar')
+            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Acao profissional', 'Botao Voltar Nivel')
+            self.acoesVoltaNivel()
+            self.jogando = True             
+            self.posicaoJogador = '0'
+            self.jogada = 1
+            self.estado = 1
                 
         #botão JOGAR
         self.imagem_inicio = pygame.image.load('VesTEA/images/button_jogar.png').convert_alpha()
@@ -526,17 +541,6 @@ class Jogo():
             self.posicaoJogador = '0'
             self.jogada = 1
             self.estado = 1 
-        #botao voltar
-        self.imagem_voltar = pygame.image.load('VesTEA/images/button_voltar.png').convert_alpha()
-        self.botao_voltar = Botao(220, 410, self.imagem_voltar, 0.15)
-        if self.botao_voltar.criar(self.superficie):
-            print('voltar')
-            arq.grava_Detalhado(self.fase, self.nivel, self.posicaoJogador, 'Acao profissional', 'Botao Voltar Nivel')
-            self.acoesVoltaNivel()
-            self.jogando = True             
-            self.posicaoJogador = '0'
-            self.jogada = 1
-            self.estado = 1
         #botao avancar
         self.imagem_avancar = pygame.image.load('VesTEA/images/button_avancar.png').convert_alpha()
         self.botao_avancar = Botao(500, 410, self.imagem_avancar, 0.15)
@@ -548,6 +552,7 @@ class Jogo():
             self.posicaoJogador = '0'
             self.jogada = 1
             self.estado = 1
+            
         #botão SAIR
         self.imagem_sair = pygame.image.load('VesTEA/images/button_sair.png').convert_alpha()
         self.botao_sair = Botao(340, 500, self.imagem_sair, 1)
