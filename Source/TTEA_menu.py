@@ -5,17 +5,15 @@ from PIL import Image, ImageTk
 import os
 import arquivo
 from settings import *
-import cv2
 import numpy as np
 import settings
-import pygame
-import subprocess
 import calibracaov2
+
 #para inserir arquivos de outras pastas 
 from sys import path
 path.insert(1, '/VesTEA')
 
-from tkinter import messagebox
+
 
 
 def center_window_on_screen(width, height):
@@ -293,7 +291,7 @@ def JogarCallback():
         KarTEA.main()
     elif game == 'REPETEA':
         import RepeTEA
-        # RepeTEA().main
+        RepeTEA.main()
     elif game == 'VESTEA':
         from VesTEA import vestea_inicio
         vestea_inicio.main(jogador)
