@@ -49,7 +49,7 @@ csv.register_dialect(
 #################################################################################
 ################################## SPRITES ######################################
 #################################################################################
-icone_fig=pygame.image.load('Assets/Repetea_Figuras/icone.png')
+icone_fig=pygame.image.load('Assets/Repetea_Figuras/icone.png') 
 atencao_perto_fig=pygame.image.load('Assets/Repetea_Figuras/atencao_perto.png')
 atencao_longe_fig=pygame.image.load('Assets/Repetea_Figuras/atencao_longe.png')
 trofeu_fig=pygame.image.load('Assets/Repetea_Figuras/trofeu.png')
