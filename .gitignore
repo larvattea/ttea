@@ -1,7 +1,2 @@
-TCC.txt
-*.pyc
-*.pyc
 sonar-project.properties
-.scannerwork/.sonar_lock
-.scannerwork/report-task.txt
-.vscode/settings.json
+*.

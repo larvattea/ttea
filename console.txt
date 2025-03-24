@@ -1,0 +1,3 @@
+-> Uso do console para unir as características comuns dos jogos (estéticas da bolinha [posição do jogador, distância jogador bolinha])
+
+-> Diminiur burocracias.
