@@ -4,12 +4,12 @@ import psutil
 import os
 import traceback
 from datetime import datetime
-from udescjoinvilleisurfaceutil.pathconfig import PathConfig
+from udescjoinvilleiputil.pathconfig import PathConfig
 
 # Classe para criar e gerenciar logs detalhados da aplicação.
 class Log:
 
-    FILE = PathConfig.log("isurfaceapp.log")
+    FILE = PathConfig.log("ipapp.log")
 
     def __init__(self, log_file=None, log_level=logging.DEBUG):
         """Inicializa o logger com um arquivo e nível de log.
@@ -21,6 +21,9 @@ class Log:
          # Usa o arquivo padrão se nenhum for especificado
         self.log_file = log_file if log_file else self.FILE
 
+        # Verifica e cria o diretório de log se não existir
+        self._ensure_log_directory_exists()    
+
         # Configura o logger
         self.logger = logging.getLogger("Log")
         self.logger.setLevel(log_level)
@@ -28,9 +31,6 @@ class Log:
         # Remove handlers existentes para evitar duplicatas
         if self.logger.handlers:
             self.logger.handlers.clear()
-
-        # Verifica e cria o diretório de log se não existir
-        self._ensure_log_directory_exists()    
 
         # Configura o handler para arquivo
         file_handler = logging.FileHandler(log_file)
@@ -49,29 +49,12 @@ class Log:
         # Registra informações iniciais do sistema ao criar o logger
         #self.log_system_info()
 
-    #def _ensure_log_directory_exists(self):
-    #    """Verifica se o diretório do log existe e o cria se necessário."""
-    #    log_dir = os.path.dirname(os.path.abspath(self.log_file))
-    #    if not os.path.exists(log_dir):
-    #        os.makedirs(log_dir)
-    #        self.logger.info(f"Diretório de log criado: {log_dir}")
-
     def _ensure_log_directory_exists(self):
         """Verifica se o diretório do log existe e o cria se necessário."""
         log_dir = os.path.dirname(os.path.abspath(self.log_file))
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
-            # Usa um logger temporário para a mensagem inicial
-            temp_logger = logging.getLogger("TempLog")
-            temp_logger.setLevel(logging.INFO)
-            if not temp_logger.handlers:
-                console_handler = logging.StreamHandler()
-                console_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
-                temp_logger.addHandler(console_handler)
-            temp_logger.info(f"Diretório de log criado: {log_dir}")
-            # Registra também no logger principal após configuração
-            self.logger.info(f"Diretório de log criado: {log_dir}")
-
+    
     def get_system_info(self):
         """Retorna informações do sistema, hardware e memória."""
         process = psutil.Process(os.getpid())

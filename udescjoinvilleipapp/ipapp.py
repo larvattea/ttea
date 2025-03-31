@@ -1,10 +1,10 @@
 from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QPushButton, QMenu, QMenuBar
-from udescjoinvilleisurfaceview.windowconfig import WindowConfig
-from udescjoinvilleisurfaceutil.pathconfig import PathConfig
-from udescjoinvilleisurfaceapp.menuhandler import MenuHandler
+from udescjoinvilleipview.windowconfig import WindowConfig
+from udescjoinvilleiputil.pathconfig import PathConfig
+from udescjoinvilleipapp.menuhandler import MenuHandler
 
-class ISurfaceApp(QMainWindow, WindowConfig):
-    TITLE = "Plataforma ISurface"
+class IPApp(QMainWindow, WindowConfig):
+    TITLE = "Plataforma IPlane"
     ICON_PATH = PathConfig.icon("larva.ico")
     LOGO_PATH = PathConfig.image("ttealogo.png")
     VERSION = "2.0"

@@ -3,7 +3,7 @@ from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
 
 class MenuHandler:
-    """Classe para gerenciar ações do menu (Princípio Single Responsibility)"""
+    """Classe para gerenciar ações do menu"""
     def __init__(self, parent):
         self.parent = parent
         self._is_exiting = False  # Flag para evitar chamadas duplicadas
@@ -14,6 +14,7 @@ class MenuHandler:
         dialog.setLayout(QVBoxLayout())
         dialog.layout().addWidget(QPushButton("Do nothing button"))
         dialog.show()
+        dialog.exec()
 
     def confirm_exit(self, event=None):
         """Confirmação de saída do sistema"""
@@ -25,7 +26,7 @@ class MenuHandler:
 
         msg_box = QMessageBox()
         msg_box.setIcon(QMessageBox.Question)
-        msg_box.setWindowTitle("T-TEA")
+        msg_box.setWindowTitle("IPlane")
         msg_box.setText("Deseja sair do sistema?")
         msg_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
         msg_box.setDefaultButton(QMessageBox.Yes)
