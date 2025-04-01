@@ -16,13 +16,14 @@ class IPApp(QMainWindow, WindowConfig):
         self._setup_menu()
         self._setup_status_bar(self.VERSION)
     
+        
     def _setup_menu(self):
         """Configura o menu principal"""
         menubar = QMenuBar(self)
         self.setMenuBar(menubar)
 
         menu_configs = [
-            ("Cadastro", [("Jogador", self.menu_handler.do_nothing),
+            ("Cadastro", [("Jogador", self.menu_handler.call_register),
                          ("Sair", self.menu_handler.confirm_exit)]),
             ("Exergames", [("KarTEA", self.menu_handler.do_nothing),
                           ("RepeTEA", self.menu_handler.do_nothing),

@@ -1,6 +1,7 @@
 from PySide6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QPushButton, QMessageBox, QLabel)
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
+from udescjoinvilleipapp.register import Register
 
 class MenuHandler:
     """Classe para gerenciar ações do menu"""
@@ -45,6 +46,19 @@ class MenuHandler:
                 QApplication.quit()
         elif event is not None:  # Apenas ignorar se for evento de janela
             event.ignore()
+
+
+    def call_register(self): 
+        
+        register = Register()
+        register.show()
+
+        register.exec()
+
+    def call_KarTEA(): 
+        pass
+        
+
 
     def show_about(self, image):
         """Exibe janela de sobre"""

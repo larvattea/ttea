@@ -3,6 +3,7 @@ import pygame, time, sys, math
 from typing import List
 from settings import *
 from line import Line
+from TTEA.udescjoinvilleiputil.pathconfig import PathConfig
 
 roadW = 400 #Tamanho pista
 segL = 200 # Tamanho segmento
@@ -39,12 +40,16 @@ class Background:
         self.dt = 0
 
         # sprites
-        self.sprite_arv_esq = pygame.image.load("Assets/Kartea/5.png").convert_alpha()
-        self.sprite_arv_dir = pygame.image.load("Assets/Kartea/5,1.png").convert_alpha()
+
+        # self.sprite_arv_esq = pygame.image.load("Assets/Kartea/5.png").convert_alpha()
+        self.sprite_arv_esq = pygame.image.load(PathConfig.kartea_images("5.png")).convert_alpha()
+        # self.sprite_arv_dir = pygame.image.load("Assets/Kartea/5,1.png").convert_alpha()
+        self.sprite_arv_dir = pygame.image.load(PathConfig.kartea_images("5_1.png")).convert_alpha()
 
 
         # background
-        self.background_image = pygame.image.load("Assets/Kartea/bg.png").convert_alpha()
+        #self.background_image = pygame.image.load("Assets/Kartea/bg.png").convert_alpha()
+        self.background_image = pygame.image.load(PathConfig.kartea_images("horizon.png")).convert_alpha()
         self.background_surface = pygame.Surface(
             (self.background_image.get_width() * 2, self.background_image.get_height())
         )
@@ -98,7 +103,7 @@ class Background:
         self.speed = 0
 
     def background_menu(self):
-        self.image = image.load("Assets/Kartea/Background_Menu.png", size=(SCREEN_WIDTH, SCREEN_HEIGHT),convert="default")
+        self.image = image.load(PathConfig.kartea_images("background_menu.png"), size=(SCREEN_WIDTH, SCREEN_HEIGHT),convert="default")
 
     def get_startPos(self):
         return (self.pos // segL) + 200

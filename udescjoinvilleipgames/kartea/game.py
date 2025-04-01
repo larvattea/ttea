@@ -20,21 +20,21 @@ class Game:
         self.background = Background()
         self.pose_tracking = PoseTracking()
         self.car = Car()
-        self.config = 'Jogadores/' + arquivo.get_Player() + '_KarTEA_config.csv'
+        # self.config = 'Jogadores/' + arquivo.get_Player() + '_KarTEA_config.csv'
 
 
         # Load camera
         self.cap = Camera()
 
-        self.sounds = {}
-        self.sounds["slap"] = pygame.mixer.Sound(f"Assets/Kartea/Sounds/point.wav")
-        self.sounds["screaming"] = pygame.mixer.Sound(f"Assets/Kartea/Sounds/miss.wav")
-        if(arquivo.get_K_SOM(self.config)):
-            self.sounds["slap"].set_volume(1)
-            self.sounds["screaming"].set_volume(1)
-        else:
-            self.sounds["slap"].set_volume(0)
-            self.sounds["screaming"].set_volume(0)
+        # self.sounds = {}
+        # # self.sounds["slap"] = pygame.mixer.Sound(f"Assets/Kartea/Sounds/point.wav")
+        # # self.sounds["screaming"] = pygame.mixer.Sound(f"Assets/Kartea/Sounds/miss.wav")
+        # if(arquivo.get_K_SOM(self.config)):
+        #     self.sounds["slap"].set_volume(1)
+        #     self.sounds["screaming"].set_volume(1)
+        # else:
+        #     self.sounds["slap"].set_volume(0)
+        #     self.sounds["screaming"].set_volume(0)
 
 
         settings.TARGETS_MOVE_SPEED = arquivo.get_Nivel()
@@ -68,9 +68,9 @@ class Game:
         settings.obst_d = 0
 
 
-        self.SOM = arquivo.get_K_SOM(self.config)
-        self.HUD = arquivo.get_K_HUD(self.config)
-        settings.GAME_DURATION = arquivo.get_K_TEMPO_NIVEL(self.config)
+        # self.SOM = arquivo.get_K_SOM(self.config)
+        # self.HUD = arquivo.get_K_HUD(self.config)
+        # settings.GAME_DURATION = arquivo.get_K_TEMPO_NIVEL(self.config)
         self.PAUSE = False
 
         self.targets_spawn_timer = 0
@@ -124,7 +124,7 @@ class Game:
             self.targets_spawn_timer = t + settings.TARGETS_SPAWN_TIME
 
             # Pega Fase atual do jogador
-            fase = arquivo.get_K_FASE(self.config)
+            fase = arquivo.get_K_FASE(2)
 
             # Pega posicao atual do jogo
             pos = self.background.get_startPos()
@@ -198,14 +198,7 @@ class Game:
         Y = SCREEN_HEIGHT - CAR_SIZE/2
         self.car.rect.center = (x, Y)
         #print("x: ", x ," y: ", y)
-        """
-        if x < SCREEN_WIDTH/3:
-            self.car.rect.center = (200, 550)
-        elif x >= SCREEN_WIDTH/3 and x <= 2*SCREEN_WIDTH/3:
-            self.car.rect.center = (400, 550)
-        else:
-            self.car.rect.center = (600, 550)
-        """
+
 
     def draw(self):
         # draw the background

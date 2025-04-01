@@ -1,6 +1,6 @@
 import sys
 from udescjoinvilleiputil.log import Log
-from PySide6.QtWidgets import QMessageBox, QApplication 
+from PySide6.QtWidgets import QApplication, QMessageBox
 from udescjoinvilleipapp.ipapp import IPApp
 from udescjoinvilleipview.splashscreen import SplashScreen
 
