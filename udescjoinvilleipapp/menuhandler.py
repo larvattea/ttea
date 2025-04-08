@@ -1,7 +1,15 @@
-from PySide6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QPushButton, QMessageBox, QLabel)
+from PySide6.QtWidgets import (
+    QApplication,
+    QDialog,
+    QVBoxLayout,
+    QPushButton,
+    QMessageBox,
+    QLabel,
+)
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
 from udescjoinvilleipview.registerplayer import RegisterPlayer
+from udescjoinvilleiputil.pathconfig import PathConfig
 
 class MenuHandler:
     """Classe para gerenciar ações do menu"""
@@ -11,11 +19,11 @@ class MenuHandler:
 
     def do_nothing(self):
         """Ação placeholder para funcionalidades não implementadas"""
-        dialog = QWidget()
+        dialog = QDialog(self.parent)  # Usa QDialog e passa o parent
+        dialog.setWindowTitle("Placeholder")
         dialog.setLayout(QVBoxLayout())
         dialog.layout().addWidget(QPushButton("Do nothing button"))
-        dialog.show()
-        dialog.exec()
+        dialog.exec()  # Executa como modal
 
     def confirm_exit(self, event=None):
         """Confirmação de saída do sistema"""
@@ -26,6 +34,7 @@ class MenuHandler:
             return
 
         msg_box = QMessageBox()
+        msg_box.setWindowIcon(self.parent.windowIcon())
         msg_box.setIcon(QMessageBox.Question)
         msg_box.setWindowTitle("IPlane")
         msg_box.setText("Deseja sair do sistema?")
@@ -48,23 +57,25 @@ class MenuHandler:
             event.ignore()
 
 
-    def call_register(self): 
-        
-        register = RegisterPlayer()
-        register.show()
+    def call_register(self):
+        """Chama a janela de registro como modal"""
+        register = RegisterPlayer(self.parent)  # Passa o parent (janela principal)
+        register.exec()  # Executa como modal
 
-        register.exec()
 
-    def call_KarTEA(): 
+    def call_KarTEA(self): 
         pass
         
 
 
-    def show_about(self, image):
-        """Exibe janela de sobre"""
-        about_window = QWidget()
+    def show_about(self, image=None):
+        """Exibe janela de sobre como modal"""
+        about_window = QDialog(self.parent)  # Usa QDialog e passa o parent
         about_window.setWindowTitle("Sobre")
         about_window.setFixedSize(300, 200)
+
+        if image is None:
+            image = PathConfig.image("ttealogo.png")
         
         layout = QVBoxLayout()
         logo = QPixmap(image)
@@ -74,4 +85,4 @@ class MenuHandler:
         layout.addWidget(logo_label)
         
         about_window.setLayout(layout)
-        about_window.show()
+        about_window.exec()  # Executa como modal

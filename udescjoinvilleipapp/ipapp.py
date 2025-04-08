@@ -35,7 +35,7 @@ class IPApp(QMainWindow, WindowConfig):
             ("Ajuda", [("Manual KarTEA", self.menu_handler.do_nothing),
                       ("Manual RepeTEA", self.menu_handler.do_nothing),
                       ("Manual VesTEA", self.menu_handler.do_nothing),
-                      ("Sobre...", self.menu_handler.show_about)])
+                      ("Sobre...", self.menu_handler.show_about)]),
         ]
 
         for menu_name, items in menu_configs:
