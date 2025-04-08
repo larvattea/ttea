@@ -14,27 +14,35 @@ from camera import Camera
 import cv2
 import ui
 
+from udescjoinvilleiputil.pathconfig import PathConfig
+
 class Game:
     def __init__(self, surface):
         self.surface = surface
         self.background = Background()
         self.pose_tracking = PoseTracking()
         self.car = Car()
-        # self.config = 'Jogadores/' + arquivo.get_Player() + '_KarTEA_config.csv'
+        self.config = 'Jogadores/' + arquivo.get_Player() + '_KarTEA_config.csv'
 
 
         # Load camera
         self.cap = Camera()
 
-        # self.sounds = {}
-        # # self.sounds["slap"] = pygame.mixer.Sound(f"Assets/Kartea/Sounds/point.wav")
-        # # self.sounds["screaming"] = pygame.mixer.Sound(f"Assets/Kartea/Sounds/miss.wav")
-        # if(arquivo.get_K_SOM(self.config)):
-        #     self.sounds["slap"].set_volume(1)
-        #     self.sounds["screaming"].set_volume(1)
-        # else:
-        #     self.sounds["slap"].set_volume(0)
-        #     self.sounds["screaming"].set_volume(0)
+        self.sounds = {}
+
+        # self.sounds["slap"] = pygame.mixer.Sound(f"Assets/Kartea/Sounds/point.wav")
+        self.sounds["slap"] = pygame.mixer.Sound(PathConfig.kartea_sound("point.wav"))
+
+        # self.sounds["screaming"] = pygame.mixer.Sound(f"Assets/Kartea/Sounds/miss.wav")
+        self.sounds["screaming"] = pygame.mixer.Sound(PathConfig.kartea_sound("miss.wav"))
+
+
+        if(arquivo.get_K_SOM(self.config)):
+            self.sounds["slap"].set_volume(1)
+            self.sounds["screaming"].set_volume(1)
+        else:
+            self.sounds["slap"].set_volume(0)
+            self.sounds["screaming"].set_volume(0)
 
 
         settings.TARGETS_MOVE_SPEED = arquivo.get_Nivel()
@@ -68,9 +76,9 @@ class Game:
         settings.obst_d = 0
 
 
-        # self.SOM = arquivo.get_K_SOM(self.config)
-        # self.HUD = arquivo.get_K_HUD(self.config)
-        # settings.GAME_DURATION = arquivo.get_K_TEMPO_NIVEL(self.config)
+        self.SOM = arquivo.get_K_SOM(self.config)
+        self.HUD = arquivo.get_K_HUD(self.config)
+        settings.GAME_DURATION = arquivo.get_K_TEMPO_NIVEL(self.config)
         self.PAUSE = False
 
         self.targets_spawn_timer = 0
@@ -91,6 +99,7 @@ class Game:
             settings.TARGETS_SPAWN_TIME = 4
         else:
             settings.TARGETS_SPAWN_TIME = 2
+
 
         self.targets = []
         self.Last_Obj = -1
@@ -186,7 +195,8 @@ class Game:
 
     def spawn_finish(self):
         pos = self.background.get_startPos()
-        self.background.lines[pos].sprite = pygame.image.load("Assets/Kartea/Finish.png").convert_alpha()
+        # self.background.lines[pos].sprite = pygame.image.load("Assets/Kartea/Finish.png").convert_alpha()
+        self.background.lines[pos].sprite = pygame.image.load(PathConfig.images("finish.png")).convert_alpha()
         self.background.lines[pos].spriteX = -0.5
 
     def load_camera(self):

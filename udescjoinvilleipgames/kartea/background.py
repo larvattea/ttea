@@ -18,6 +18,9 @@ light_road = pygame.Color(107,107,107)
 finish_light = pygame.Color(255,255,255)
 finish_dark = pygame.Color(0,0,0)
 
+print()
+
+
 def drawQuad(
         surface: pygame.Surface,
         color: pygame.Color,
@@ -41,15 +44,14 @@ class Background:
 
         # sprites
 
-        # self.sprite_arv_esq = pygame.image.load("Assets/Kartea/5.png").convert_alpha()
-        self.sprite_arv_esq = pygame.image.load(PathConfig.kartea_images("5.png")).convert_alpha()
-        # self.sprite_arv_dir = pygame.image.load("Assets/Kartea/5,1.png").convert_alpha()
-        self.sprite_arv_dir = pygame.image.load(PathConfig.kartea_images("5_1.png")).convert_alpha()
+
+        self.sprite_arv_esq = pygame.image.load(PathConfig.kartea_image("5.png")).convert_alpha()
+        self.sprite_arv_dir = pygame.image.load(PathConfig.kartea_image("5_1.png")).convert_alpha()
 
 
         # background
         #self.background_image = pygame.image.load("Assets/Kartea/bg.png").convert_alpha()
-        self.background_image = pygame.image.load(PathConfig.kartea_images("horizon.png")).convert_alpha()
+        self.background_image = pygame.image.load(PathConfig.kartea_image("horizon.png")).convert_alpha()
         self.background_surface = pygame.Surface(
             (self.background_image.get_width() * 2, self.background_image.get_height())
         )
@@ -103,7 +105,7 @@ class Background:
         self.speed = 0
 
     def background_menu(self):
-        self.image = image.load(PathConfig.kartea_images("background_menu.png"), size=(SCREEN_WIDTH, SCREEN_HEIGHT),convert="default")
+        self.image = image.load(PathConfig.kartea_image("background_menu.png"), size=(SCREEN_WIDTH, SCREEN_HEIGHT),convert="default")
 
     def get_startPos(self):
         return (self.pos // segL) + 200

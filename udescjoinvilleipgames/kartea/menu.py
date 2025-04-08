@@ -7,18 +7,19 @@ from settings import *
 from background import Background
 import ui
 
+from udescjoinvilleiputil.pathconfig import PathConfig
 
 class Menu:
     def __init__(self, surface):
         self.surface = surface
         self.background = Background()
         self.background.background_menu()
-        self.click_sound = pygame.mixer.Sound(f"Assets/Kartea/Sounds/point.wav")
+        self.click_sound = pygame.mixer.Sound(PathConfig.kartea_sound("point.wav"))
 
 
     def draw(self):
         self.background.draw(self.surface)
-        fundo = image.load("Assets/Kartea/Fundo.png", size=(SCREEN_WIDTH,SCREEN_HEIGHT))
+        fundo = image.load(PathConfig.kartea_image("fundo.png"), size=(SCREEN_WIDTH,SCREEN_HEIGHT))
         image.draw(self.surface, fundo, (0,0))
 
     def draw_Feedback(self):
@@ -107,7 +108,7 @@ class Menu:
 
         elif settings.MENU == 'Feedback_1':
 
-            trofeu = image.load("Assets/Kartea/trofeu - 25.png")
+            trofeu = image.load(PathConfig.kartea_image("trofeu_25.png"))
             image.draw(self.surface, trofeu, (0, 0))
 
             self.draw_Feedback()
@@ -121,7 +122,7 @@ class Menu:
 
         elif settings.MENU == 'Feedback_2':
 
-            trofeu = image.load("Assets/Kartea/trofeu - 50.png")
+            trofeu = image.load(PathConfig.kartea_image("trofeu_50.png"))
             image.draw(self.surface, trofeu, (0, 0))
 
             self.draw_Feedback()
@@ -135,7 +136,7 @@ class Menu:
 
         elif settings.MENU == 'Feedback_3':
 
-            trofeu = image.load("Assets/Kartea/trofeu - 75.png")
+            trofeu = image.load(PathConfig.kartea_image("trofeu_75.png"))
             image.draw(self.surface, trofeu, (0, 0))
 
             self.draw_Feedback()

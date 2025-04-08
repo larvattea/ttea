@@ -4,12 +4,19 @@ import arquivo
 import image
 from settings import *
 import cv2
+from udescjoinvilleiputil.pathconfig import PathConfig
 
 class Car:
     def __init__(self):
-        self.orig_image = image.load("Assets/Kartea/Carro.png", size=(CAR_SIZE, CAR_SIZE))
+
+        #self.orig_image = image.load("Assets/Kartea/Carro.png", size=(CAR_SIZE, CAR_SIZE))
+
+        self.orig_image = image.load(PathConfig.kartea_image("carro.png"), size=(CAR_SIZE, CAR_SIZE))
         self.image = self.orig_image.copy()
-        self.image_smaller = image.load("Assets/Kartea/Carro.png", size=(CAR_SIZE, CAR_SIZE))
+        #self.image_smaller = image.load("Assets/Kartea/Carro.png", size=(CAR_SIZE, CAR_SIZE)
+        
+        self.image_smaller = image.load(PathConfig.kartea_image("carro.png"), size=(CAR_SIZE, CAR_SIZE))
+
         self.rect = pygame.Rect(SCREEN_WIDTH//2, SCREEN_HEIGHT//2, CAR_HITBOX_SIZE[0], CAR_HITBOX_SIZE[1])
         self.left_click = False
         #self.hand_tracking = HandTracking()

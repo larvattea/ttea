@@ -12,7 +12,7 @@ class PathConfig:
     kartea = os.path.join(games, "kartea")
     kartea_assets = os.path.join(kartea,"assets")
     kartea_images = os.path.join(kartea_assets, "images")
-    karta_sounds = os.path.join(kartea_assets, "sounds")
+    kartea_sounds = os.path.join(kartea_assets, "sounds")
     kartea_phases = os.path.join(kartea, "phases") 
 
     @classmethod
@@ -35,9 +35,9 @@ class PathConfig:
     #     pass
 
     @classmethod
-    def kartea_images(cls, filename): 
+    def kartea_image(cls, filename): 
         return os.path.join(cls.kartea_images, filename)
     
     @classmethod
-    def kartea_sounds(cls, filename): 
+    def kartea_sound(cls, filename): 
         return os.path.join(cls.kartea_sounds, filename)
