@@ -1,22 +1,16 @@
 from PySide6.QtWidgets import QSplashScreen, QProgressBar, QLabel
 from PySide6.QtCore import Qt, QTimer, QEasingCurve, QPropertyAnimation
-from PySide6.QtCore import Qt, QTimer
 from PySide6.QtGui import QPixmap
 from udescjoinvilleiputil.pathconfig import PathConfig
-from udescjoinvilleipapp.ipapp import IPApp
-
 
 class SplashScreen(QSplashScreen):
     def __init__(self):
-        # Carrega a imagem do splash
         pixmap = QPixmap(PathConfig.image("ttealogo.png"))
         super().__init__(pixmap)
-        
-        # Configurações da janela
+
         self.setWindowFlag(Qt.WindowStaysOnTopHint)
-        self.setAttribute(Qt.WA_TranslucentBackground)  # Fundo transparente
+        self.setAttribute(Qt.WA_TranslucentBackground)
         
-        # Label de status
         self.status_label = QLabel("Iniciando...", self)
         self.status_label.setAlignment(Qt.AlignCenter)
         self.status_label.setStyleSheet("""
@@ -27,12 +21,9 @@ class SplashScreen(QSplashScreen):
             padding: 5px;
         """)
         
-        # Barra de progresso estilizada
         self.progress_bar = QProgressBar(self)
-        self.progress_bar.setTextVisible(False)  # Remove o texto padrão de porcentagem
+        self.progress_bar.setTextVisible(False)
         self.progress_bar.setRange(0, 100)
-        
-        # Estilo personalizado da barra
         self.progress_bar.setStyleSheet("""
             QProgressBar {
                 border: 2px solid #ffffff;
@@ -47,41 +38,35 @@ class SplashScreen(QSplashScreen):
             }
         """)
         
-        # Posicionamento
         self.update_layout()
         
-        # Animação da barra
         self.animation = QPropertyAnimation(self.progress_bar, b"value")
-        self.animation.setDuration(3000)  # 3 segundos de duração
+        self.animation.setDuration(3000)
         self.animation.setStartValue(0)
         self.animation.setEndValue(100)
-        self.animation.setEasingCurve(QEasingCurve.InOutQuad)  # Curva suave
+        self.animation.setEasingCurve(QEasingCurve.InOutQuad)
         
-        # Timer para mensagens de status
         self.progress = 0
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_progress)
-        self.timer.start(750)  # Atualiza status a cada 0.75s
+        self.timer.start(750)
         
-        # Inicia a animação
         self.animation.start()
+        self.main_window = None  # Referência à janela principal, definida externamente
 
     def update_layout(self):
-        """Ajusta o layout dos elementos"""
         pixmap = self.pixmap()
         width = pixmap.width()
         height = pixmap.height()
-        
-        # Posiciona a barra de progresso
-        bar_width = width * 0.6  # 60% da largura da imagem
+
+        bar_width = width * 0.6
         self.progress_bar.setGeometry(
-            int((width - bar_width) / 2),  # Centraliza
-            height - 60,                  # 60px acima do fundo
+            int((width - bar_width) / 2),
+            height - 60,
             int(bar_width),
             20
         )
         
-        # Posiciona o label de status acima da barra
         self.status_label.setGeometry(
             0,
             height - 90,
@@ -90,7 +75,6 @@ class SplashScreen(QSplashScreen):
         )
 
     def update_progress(self):
-        """Atualiza o status durante o carregamento"""
         self.progress += 25
         status_messages = {
             25: "Carregando módulos...",
@@ -104,10 +88,21 @@ class SplashScreen(QSplashScreen):
         
         if self.progress >= 100:
             self.timer.stop()
-            QTimer.singleShot(500, self.finish_loading)  # Delay antes de fechar
+            QTimer.singleShot(500, self.finish_loading)
 
     def finish_loading(self):
-        """Finaliza o splash e abre a janela principal"""
+        """Exibe a janela principal e fecha a splash screen"""
+        if self.main_window and not self.main_window.isVisible():
+            self.main_window.show()  # Exibe a janela principal apenas aqui
         self.close()
-        self.main_window = IPApp()
-        self.main_window.show()
+
+    def finish(self, main_window):
+        """Associa a janela principal, mas não a exibe ainda"""
+        self.main_window = main_window
+        if self.progress >= 100:
+            self.finish_loading()  # Se já terminou, exibe imediatamente
+
+    def show(self):
+        """Garante que a splash seja exibida apenas uma vez"""
+        if not self.isVisible():
+            super().show()
