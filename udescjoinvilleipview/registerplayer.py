@@ -17,7 +17,7 @@ from sys import argv
 from os import listdir
 
 
-class Register(QWidget):
+class RegisterPlayer(QWidget):
     
     def __init__(self, parent = None):
         super().__init__(parent)

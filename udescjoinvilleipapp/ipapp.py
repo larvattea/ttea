@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QPushButton, QMenu, QMenuBar
-from udescjoinvilleipview.windowconfig import WindowConfig
+from udescjoinvilleipapp.windowconfig import WindowConfig
 from udescjoinvilleiputil.pathconfig import PathConfig
 from udescjoinvilleipapp.menuhandler import MenuHandler
 
