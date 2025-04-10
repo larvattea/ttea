@@ -16,8 +16,14 @@ class RegisterPlayerView(QDialog, WindowConfig):
     
     def __init__(self, parent=None):
         super().__init__(parent)
-        self._setup_window(self.TITLE, parent.windowIcon() if parent else None)
-
+        self._setup_window(
+            self.TITLE,                          # positional: title
+            parent.windowIcon() if parent else None,  # positional: icon
+            WindowConfig.DECREMENT_SIZE_PERCENT, # positional: status
+            20,                                  # positional: width
+            20,                                  # positional: height
+            parent                               # positional: parent
+        )
         # Widgets
         self.name_input = QLineEdit()
         self.birth_date_input = QCalendarWidget()
