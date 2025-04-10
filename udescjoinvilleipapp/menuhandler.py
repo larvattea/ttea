@@ -8,7 +8,8 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
-from udescjoinvilleipview.registerplayer import RegisterPlayerView
+from udescjoinvilleipview.registerplayerview import RegisterPlayerView
+from udescjoinvillecontroller.registerplayercontroller import RegisterPlayerController
 from udescjoinvilleiputil.pathconfig import PathConfig
 
 class MenuHandler:
@@ -60,8 +61,8 @@ class MenuHandler:
     def call_register(self):
         """Chama a janela de registro como modal"""
         register = RegisterPlayerView(self.parent)  # Passa o parent (janela principal)
+        #controller = RegisterPlayerController(register)
         register.exec()  # Executa como modal
-
 
     def call_kartea(self): 
         pass

@@ -13,7 +13,7 @@ from datetime import datetime
 class RegisterPlayerView(QDialog, WindowConfig):
     """Visão para o cadastro de jogador."""
     TITLE = "Cadastro de Jogador"
-
+    
     def __init__(self, parent=None):
         super().__init__(parent)
         self._setup_window(self.TITLE, parent.windowIcon() if parent else None)
@@ -53,3 +53,4 @@ class RegisterPlayerView(QDialog, WindowConfig):
         self.name_input.clear()
         self.birth_date_input.setSelectedDate(datetime.now())
         self.observations_input.clear()
+   
