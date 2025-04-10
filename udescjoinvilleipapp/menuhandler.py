@@ -9,6 +9,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
 from udescjoinvilleipview.registerplayerview import RegisterPlayerView
+from udescjoinvilleipview.aboutview import AboutView    
 from udescjoinvillecontroller.registerplayercontroller import RegisterPlayerController
 from udescjoinvilleiputil.pathconfig import PathConfig
 
@@ -68,21 +69,6 @@ class MenuHandler:
         pass
         
         
-    def show_about(self, image=None):
-        """Exibe janela de sobre como modal"""
-        about_window = QDialog(self.parent)  # Usa QDialog e passa o parent
-        about_window.setWindowTitle("Sobre")
-        about_window.setFixedSize(300, 200)
-
-        if image is None:
-            image = PathConfig.image("ttealogo.png")
-        
-        layout = QVBoxLayout()
-        logo = QPixmap(image)
-        logo_label = QLabel()
-        logo_label.setPixmap(logo)
-        logo_label.setAlignment(Qt.AlignCenter)
-        layout.addWidget(logo_label)
-        
-        about_window.setLayout(layout)
-        about_window.exec()  # Executa como modal
+    def show_about(self):
+        about = AboutView(self.parent)  # Passa o parent (janela principal)
+        about.exec()  # Executa como modal
