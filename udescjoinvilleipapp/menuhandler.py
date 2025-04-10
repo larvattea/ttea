@@ -8,7 +8,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
-from udescjoinvilleipview.registerplayer import RegisterPlayer
+from udescjoinvilleipview.registerplayer import RegisterPlayerView
 from udescjoinvilleiputil.pathconfig import PathConfig
 
 class MenuHandler:
@@ -59,15 +59,14 @@ class MenuHandler:
 
     def call_register(self):
         """Chama a janela de registro como modal"""
-        register = RegisterPlayer(self.parent)  # Passa o parent (janela principal)
+        register = RegisterPlayerView(self.parent)  # Passa o parent (janela principal)
         register.exec()  # Executa como modal
 
 
-    def call_KarTEA(self): 
+    def call_kartea(self): 
         pass
         
-
-
+        
     def show_about(self, image=None):
         """Exibe janela de sobre como modal"""
         about_window = QDialog(self.parent)  # Usa QDialog e passa o parent

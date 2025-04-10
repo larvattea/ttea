@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 class PathConfig:
     """Classe para configuração de caminhos de arquivos e diretórios."""
@@ -30,14 +31,21 @@ class PathConfig:
         """Retorna o caminho completo para um arquivo de log."""
         return os.path.join(cls.logfile, filename)    
     
-    # @classmethod
-    # def games(cls, filename): 
-    #     pass
+    @classmethod
+    def path_games(cls): 
+        """Retorna o caminho dos jogos."""
+        # Converte cls.games (string) em um objeto Path
+        dirs = Path(cls.games)
+        # Lista apenas os diretórios dentro de cls.games
+        dirs = [d.name for d in dirs.iterdir() if d.is_dir()]
+        return dirs
 
     @classmethod
     def kartea_image(cls, filename): 
+        """Retorna o caminho completo para um arquivo de imagem do KarTEA."""
         return os.path.join(cls.kartea_images, filename)
     
     @classmethod
     def kartea_sound(cls, filename): 
+        """Retorna o caminho completo para um arquivo de som do KarTEA."""
         return os.path.join(cls.kartea_sounds, filename)

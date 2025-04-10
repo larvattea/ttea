@@ -8,6 +8,8 @@ class IPApp(QMainWindow, WindowConfig):
     ICON_PATH = PathConfig.icon("larva.ico")
     LOGO_PATH = PathConfig.image("ttealogo.png")
     VERSION = "2.0"
+    PLATAFORM_SUFIX = "TEA"
+    PLATAFORM_MANUAL = "Manual"
 
     def __init__(self):
         super().__init__()
@@ -22,20 +24,26 @@ class IPApp(QMainWindow, WindowConfig):
         menubar = QMenuBar(self)
         self.setMenuBar(menubar)
 
+        paths = PathConfig.path_games()
+        games = []
+        helps = []
+
+        for path in paths:
+            path = (path.replace(self.PLATAFORM_SUFIX.lower(), self.PLATAFORM_SUFIX) 
+            if self.PLATAFORM_SUFIX.lower() in path 
+            else path)
+            if path:
+                path = path[0].upper() + path[1:]
+            games.append((path, self.menu_handler.do_nothing))
+            helps.append((self.PLATAFORM_MANUAL+" "+ path, self.menu_handler.do_nothing))  
+
         menu_configs = [
-            ("Cadastro", [("Jogador", self.menu_handler.call_register),
-                         ("Sair", self.menu_handler.confirm_exit)]),
-            ("Exergames", [("KarTEA", self.menu_handler.do_nothing),
-                          ("RepeTEA", self.menu_handler.do_nothing),
-                          ("VesTEA", self.menu_handler.do_nothing)]),
-            ("Configurações", [("KarTEA", self.menu_handler.do_nothing),
-                              ("RepeTEA", self.menu_handler.do_nothing),
-                              ("VesTEA", self.menu_handler.do_nothing),
-                              ("Calibração", self.menu_handler.do_nothing)]),
-            ("Ajuda", [("Manual KarTEA", self.menu_handler.do_nothing),
-                      ("Manual RepeTEA", self.menu_handler.do_nothing),
-                      ("Manual VesTEA", self.menu_handler.do_nothing),
-                      ("Sobre...", self.menu_handler.show_about)]),
+            ("&Cadastro", [("&Jogador", self.menu_handler.call_register),
+                         ("&Sair", self.menu_handler.confirm_exit)]),
+            ("&Exergames", games),             
+            ("C&onfigurações", games + [("&Calibração", self.menu_handler.do_nothing)]),
+            ("&Ajuda", helps +
+                      [("&Sobre...", self.menu_handler.show_about)]),
         ]
 
         for menu_name, items in menu_configs:
@@ -46,7 +54,7 @@ class IPApp(QMainWindow, WindowConfig):
     def _populate_menu(self, menu, items):
         """Preenche um menu com itens (Princípio DRY)"""
         for label, action in items:
-            if label == "Sair" or label == "Sobre...":
+            if label == "&Sair" or label == "&Calibração" or label == "&Sobre...":
                 menu.addSeparator()
             menu.addAction(label, action)
     

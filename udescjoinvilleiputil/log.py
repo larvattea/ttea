@@ -1,6 +1,7 @@
 import logging
 import platform
 import psutil
+import traceback
 from datetime import datetime
 from udescjoinvilleiputil.pathconfig import PathConfig
 import os

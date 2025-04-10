@@ -3,6 +3,8 @@ from udescjoinvilleiputil.log import Log
 from PySide6.QtWidgets import QApplication, QMessageBox
 from udescjoinvilleipapp.ipapp import IPApp
 from udescjoinvilleipview.splashscreen import SplashScreen
+from udescjoinvilleiputil.pathconfig import PathConfig
+from PySide6.QtGui import QIcon
 from PySide6.QtCore import QTimer
 
 class AppLauncher:
@@ -20,7 +22,7 @@ class AppLauncher:
             # Cria e exibe a splash screen
             self.splash = SplashScreen()
             self.splash.show()
-            
+
             # Configura a aplicação após a splash aparecer
             QTimer.singleShot(0, self.setup_application)
             
@@ -51,9 +53,22 @@ class AppLauncher:
         self.logger.log_warning("Aplicação finalizada com erro.")
         self.logger.log_error_with_stack(exception)
         
+        # Fecha a splash screen se ela estiver aberta
+        if self.splash and self.splash.isVisible():
+            self.splash.close()
+            self.splash = None
+
         # Exibe mensagem de erro
-        QMessageBox.critical(None, "Erro", 
-                           f"A aplicação encontrou um erro fatal e será encerrada.\nErro: {str(exception)}")
+        #QMessageBox.critical(self.main_window, "Erro", 
+        #                   f"A aplicação encontrou um erro fatal e será encerrada.\nErro: {str(exception)}")
+        msg = QMessageBox()
+        msg.setWindowIcon(QIcon(IPApp.ICON_PATH))
+        msg.setWindowTitle("Erro")
+        msg.setIcon(QMessageBox.Critical)
+        msg.setText(f"A aplicação encontrou um erro fatal e será encerrada.\nErro: {str(exception)}")
+        msg.setParent(self.main_window)
+        msg.exec()
+
         self.app.quit()
         sys.exit(1)
 
