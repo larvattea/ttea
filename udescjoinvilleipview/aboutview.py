@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QDialog, QVBoxLayout, QLabel, QTextBrowser
+from PySide6.QtWidgets import QDialog, QVBoxLayout, QLabel, QTextBrowser, QPushButton
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
 from datetime import datetime
@@ -16,55 +16,73 @@ class AboutView(QDialog, WindowConfig):
             self.TITLE,                          # title
             parent.windowIcon() if parent else None,  # icon
             WindowConfig.DECREMENT_SIZE_PERCENT, # status
-            20,                                  # width
-            10,                                  # height
+            25,                                  # width
+            0,                                  # height
             parent                               # parent
         )
 
         # Layout principal
         layout = QVBoxLayout()
 
-        # Texto explicativo do projeto (acima)
+        # Texto explicativo do projeto
         project_description = QLabel(
-            "T-TEA é um console para exergames de Chão Interativo " 
-            "voltados ao público com Transtorno do Espectro Autista (TEA), " 
+            "<b>T-TEA</b> é um console para exergames de Chão Interativo "
+            "voltados ao público com Transtorno do Espectro Autista (TEA), "
             "mas não exclusivamente. Desenvolvido pela UDESC Joinville - Larva."
         )
         project_description.setWordWrap(True)
         project_description.setAlignment(Qt.AlignCenter)
         layout.addWidget(project_description)
+        layout.addSpacing(10)  # Espaço reduzido para consistência
 
-        # Imagem centralizada
+        # Imagem ocupando área disponível
         image_path = PathConfig.image("ttealogo.png")
         pixmap = QPixmap(image_path)
         image_label = QLabel()
-        image_label.setPixmap(pixmap.scaled(200, 200, Qt.KeepAspectRatio))  # Redimensiona mantendo proporção
+        image_label.setPixmap(pixmap.scaledToWidth(200, Qt.SmoothTransformation))  # Escala imagem para tamanho fixo
         image_label.setAlignment(Qt.AlignCenter)
-        layout.addWidget(image_label)
+        layout.addWidget(image_label, stretch=1)  # Prioridade à imagem
+        layout.addSpacing(10)  # Espaço consistente após imagem
 
-        # Link clicável (abaixo da imagem)
+        # Link clicável
         link_label = QTextBrowser()
-        link_label.setOpenExternalLinks(True)  # Permite abrir links no navegador
+        link_label.setOpenExternalLinks(True)
         link_label.setText("<a href='https://udescmove2learn.wordpress.com/2023/06/26/t-tea/'>Saiba mais sobre a Plataforma!</a>")
         link_label.setAlignment(Qt.AlignCenter)
-        link_label.setMaximumHeight(30)  # Limita a altura para não ocupar muito espaço
-        link_label.setToolTip("Link plataforma T-TEA")  # Tooltip para indicar que é clicável
+        link_label.setFixedHeight(40)  # Altura fixa para consistência
+        link_label.setToolTip("Link plataforma T-TEA")
         layout.addWidget(link_label)
+        layout.addSpacing(10)  # Espaço consistente após o link
 
-        # Texto com desenvolvedores e data (abaixo do link)
+        # Texto com desenvolvedores e data
         developers_text = (
-            "Desenvolvido por:\n"
-            "1. Marcelo da Silva Hounsell\n"
-            "2. Andre Bonetto Trindade\n"
-            "3. Aluno Kartea\n"
-            "4. Marlow Rodrigo Becker Dickel\n"           
-            "5. Luis Bet\n"
-            "6. Alexandre Altair de Melo\n\n"
-            f"Desde: 2021 - {datetime.now().strftime('%d/%m/%Y')}"
+            "<b>Desenvolvido por:</b><br>"
+            "<span style='font-size: 10px;'>"
+            "1. Marcelo da Silva Hounsell<br>"
+            "2. Andre Bonetto Trindade<br>"
+            "3. Aluno Kartea<br>"
+            "4. Marlow Rodrigo Becker Dickel<br>"
+            "5. Luis Bet<br>"
+            "6. Alexandre Altair de Melo<br>"
+            "<br>"
+            f"<i>Desde: 2021 - {datetime.now().strftime('%Y')}</i>"
+            "</span>"
         )
-        developers_label = QLabel(developers_text)
+        developers_label = QTextBrowser()
+        developers_label.setHtml(developers_text)
         developers_label.setAlignment(Qt.AlignCenter)
+        developers_label.setFixedHeight(120)  # Altura fixa para evitar expansão excessiva
         layout.addWidget(developers_label)
+        layout.addSpacing(10)  # Espaço consistente antes do botão
+
+        # Botão OK centralizado
+        ok_button = QPushButton("OK")
+        ok_button.setFixedWidth(100)
+        ok_button.clicked.connect(self.accept)
+        layout.addWidget(ok_button, alignment=Qt.AlignCenter)
+        
+        # Espaço flexível no final
+        layout.addStretch(1)  # Mantém o layout balanceado
 
         # Configura o layout na janela
         self.setLayout(layout)
@@ -73,11 +91,21 @@ class AboutView(QDialog, WindowConfig):
     def _apply_styles(self):
         """Aplica estilos à interface"""
         self.setStyleSheet("""
-            QLabel { font-size: 14px; padding: 5px; }
+            QLabel { 
+                font-size: 14px; 
+                padding: 5px; 
+                margin: 0px;
+            }
             QTextBrowser { 
                 font-size: 14px; 
                 padding: 5px; 
+                margin: 0px;
                 border: none; 
                 background: transparent; 
+            }
+            QPushButton {
+                font-size: 14px;
+                padding: 5px;
+                margin: 5px;
             }
         """)
