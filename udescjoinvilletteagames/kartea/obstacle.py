@@ -6,7 +6,7 @@ import time
 import settings
 from settings import *
 from target import Target
-from udescjoinvilleiputil.pathconfig import PathConfig
+from udescjoinvilletteautil.pathconfig import PathConfig
 
 class Obstacle(Target):
     def __init__(self):

@@ -8,10 +8,10 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
-from udescjoinvilleipview.registerplayerview import RegisterPlayerView
-from udescjoinvilleipview.aboutview import AboutView    
-from udescjoinvillecontroller.registerplayercontroller import RegisterPlayerController
-from udescjoinvilleiputil.pathconfig import PathConfig
+from udescjoinvilletteaview.registerplayerview import RegisterPlayerView
+from udescjoinvilletteaview.aboutview import AboutView    
+from udescjoinvilletteacontroller.registerplayercontroller import RegisterPlayerController
+from udescjoinvilletteautil.pathconfig import PathConfig
 
 class MenuHandler:
     """Classe para gerenciar ações do menu"""

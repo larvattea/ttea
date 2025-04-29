@@ -4,7 +4,7 @@ import time
 import image
 import settings
 from settings import *
-from udescjoinvilleiputil.pathconfig import PathConfig 
+from udescjoinvilletteautil.pathconfig import PathConfig 
 
 roadW = 400 #Tamanho pista
 segL = 200 # Tamanho segmento

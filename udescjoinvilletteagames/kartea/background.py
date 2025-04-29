@@ -3,7 +3,7 @@ import pygame, time, sys, math
 from typing import List
 from settings import *
 from line import Line
-from udescjoinvilleiputil.pathconfig import PathConfig
+from udescjoinvilletteautil.pathconfig import PathConfig
 
 roadW = 400 #Tamanho pista
 segL = 200 # Tamanho segmento

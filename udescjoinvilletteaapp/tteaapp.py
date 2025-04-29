@@ -1,11 +1,11 @@
 from PySide6.QtWidgets import QApplication, QMainWindow, QMessageBox, QPushButton, QMenu, QMenuBar
 from PySide6.QtGui import QIcon
-from udescjoinvilleipapp.windowconfig import WindowConfig
-from udescjoinvilleiputil.pathconfig import PathConfig
-from udescjoinvilleipapp.menuhandler import MenuHandler
+from udescjoinvilletteaapp.windowconfig import WindowConfig
+from udescjoinvilletteautil.pathconfig import PathConfig
+from udescjoinvilletteaapp.menuhandler import MenuHandler
 
 class IPApp(QMainWindow, WindowConfig):
-    TITLE = "Plataforma IPlane"
+    TITLE = "Plataforma T-TEA"
     ICON_PATH = PathConfig.icon("larva.ico")
     LOGO_PATH = PathConfig.image("ttealogo.png")
     VERSION = "2.0"

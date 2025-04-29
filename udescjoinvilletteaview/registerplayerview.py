@@ -9,7 +9,7 @@ from PySide6.QtWidgets import (
     QMessageBox,
 )
 from PySide6.QtCore import QDate
-from udescjoinvilleipapp.windowconfig import WindowConfig
+from udescjoinvilletteaapp.windowconfig import WindowConfig
 from datetime import datetime
 
 class RegisterPlayerView(QDialog, WindowConfig):

@@ -14,7 +14,7 @@ from camera import Camera
 import cv2
 import ui
 
-from udescjoinvilleiputil.pathconfig import PathConfig
+from udescjoinvilletteautil.pathconfig import PathConfig
 
 class Game:
     def __init__(self, surface):

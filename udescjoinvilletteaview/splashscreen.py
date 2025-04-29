@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QSplashScreen, QProgressBar, QLabel
 from PySide6.QtCore import Qt, QTimer, QEasingCurve, QPropertyAnimation
 from PySide6.QtGui import QPixmap
-from udescjoinvilleiputil.pathconfig import PathConfig
+from udescjoinvilletteautil.pathconfig import PathConfig
 
 class SplashScreen(QSplashScreen):
     def __init__(self):

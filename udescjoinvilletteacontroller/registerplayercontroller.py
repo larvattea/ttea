@@ -1,7 +1,7 @@
 from PySide6.QtCore import QObject, Slot
 from PySide6.QtWidgets import QMessageBox
-from udescjoinvilleipmodel.player import Player
-from udescjoinvilleipview.registerplayerview import RegisterPlayerView
+from udescjoinvilletteamodel.player import Player
+from udescjoinvilletteaview.registerplayerview import RegisterPlayerView
 
 class RegisterPlayerController(QObject):
     """Controlador para o cadastro de jogador."""

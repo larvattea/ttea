@@ -3,7 +3,7 @@ import platform
 import psutil
 import traceback
 from datetime import datetime
-from udescjoinvilleiputil.pathconfig import PathConfig
+from udescjoinvilletteautil.pathconfig import PathConfig
 import os
 
 # Classe para criar e gerenciar logs detalhados da aplicação.

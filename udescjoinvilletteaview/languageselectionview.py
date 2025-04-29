@@ -5,9 +5,9 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtCore import QSize, Qt
-from udescjoinvilleipapp.ipapp import IPApp
-from udescjoinvilleiputil.pathconfig import PathConfig
-from udescjoinvilleipapp.windowconfig import WindowConfig
+from udescjoinvilletteaapp.tteaapp import IPApp
+from udescjoinvilletteautil.pathconfig import PathConfig
+from udescjoinvilletteaapp.windowconfig import WindowConfig
 
 class LanguageSelectionView(QDialog, WindowConfig):
     """Diálogo para seleção de idioma com bandeiras alinhadas ao lado de radio buttons"""

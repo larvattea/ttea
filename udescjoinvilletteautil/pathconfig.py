@@ -9,7 +9,7 @@ class PathConfig:
     images = os.path.join(assets, "images")
     icons = os.path.join(assets, "icons")
     logfile = os.path.join(root, "log")
-    games = os.path.join(root, "udescjoinvilleipgames")
+    games = os.path.join(root, "udescjoinvilletteagames")
     kartea = os.path.join(games, "kartea")
     kartea_assets = os.path.join(kartea,"assets")
     kartea_images = os.path.join(kartea_assets, "images")

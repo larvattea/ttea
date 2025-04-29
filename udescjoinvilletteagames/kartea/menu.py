@@ -7,7 +7,7 @@ from settings import *
 from background import Background
 import ui
 
-from udescjoinvilleiputil.pathconfig import PathConfig
+from udescjoinvilletteautil.pathconfig import PathConfig
 
 class Menu:
     def __init__(self, surface):

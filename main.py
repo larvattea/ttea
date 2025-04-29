@@ -1,13 +1,13 @@
 import sys
 import os
-from udescjoinvilleiputil.log import Log
+from udescjoinvilletteautil.log import Log
 from PySide6.QtWidgets import QApplication, QMessageBox
-from udescjoinvilleipapp.ipapp import IPApp
-from udescjoinvilleipview.languageselectionview import LanguageSelectionView
+from udescjoinvilletteaapp.tteaapp import IPApp
+from udescjoinvilletteaview.languageselectionview import LanguageSelectionView
 from PySide6.QtGui import QIcon
 from PySide6.QtCore import QSettings, QTimer
-from udescjoinvilleiputil.pathconfig import PathConfig  
-from udescjoinvilleipview.splashscreen import SplashScreen
+from udescjoinvilletteautil.pathconfig import PathConfig  
+from udescjoinvilletteaview.splashscreen import SplashScreen
 
 class AppLauncher:
     def __init__(self):

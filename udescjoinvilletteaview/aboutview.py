@@ -2,8 +2,8 @@ from PySide6.QtWidgets import QDialog, QVBoxLayout, QLabel, QTextBrowser, QPushB
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
 from datetime import datetime
-from udescjoinvilleipapp.windowconfig import WindowConfig
-from udescjoinvilleiputil.pathconfig import PathConfig
+from udescjoinvilletteaapp.windowconfig import WindowConfig
+from udescjoinvilletteautil.pathconfig import PathConfig
 
 class AboutView(QDialog, WindowConfig): 
     """Exibe janela de sobre como modal"""
