@@ -9,7 +9,7 @@ import os
 # Classe para criar e gerenciar logs detalhados da aplicação.
 class Log:
 
-    FILE = PathConfig.log("ipapp.log")
+    FILE = PathConfig.log("tteaapp.log")
 
     def __init__(self, log_file=None, log_level=logging.DEBUG):
         """Inicializa o logger com um arquivo e nível de log.
