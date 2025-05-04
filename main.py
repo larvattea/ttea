@@ -29,7 +29,6 @@ class AppLauncher:
             self.splash = SplashScreen()
             self.splash.show()
             QTimer.singleShot(0, self.check_language)
-            10/0
             exit_code = self.app.exec()
             self.logger.log_info("Aplicação finalizada com sucesso.")
             sys.exit(exit_code)
