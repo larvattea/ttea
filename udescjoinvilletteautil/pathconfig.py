@@ -1,42 +1,83 @@
-import os
 from pathlib import Path
+from typing import List
+
 
 class PathConfig:
     """Classe para configuração de caminhos de arquivos e diretórios."""
-    
-    root = os.path.abspath(os.curdir)
-    logfile = os.path.join(root, "log")
-    players = os.path.join(root, "players")
-    games = os.path.join(root, "udescjoinvilletteagames")
-    assets = os.path.join(root, "assets")
-    images = os.path.join(assets, "images")
-    icons = os.path.join(assets, "icons")
+
+    root = Path.cwd()
+    log_dir = root / "log"
+    players_dir = root / "players"
+    games_dir = root / "udescjoinvilletteagames"
+    assets_dir = root / "assets"
+    images_dir = assets_dir / "images"
+    icons_dir = assets_dir / "icons"
 
     @classmethod
-    def icon(cls, filename):
-        """Retorna o caminho completo para um arquivo de ícone."""
-        return os.path.join(cls.icons, filename)
+    def _create_directories(cls) -> None:
+        """Cria todos os diretórios necessários se não existirem."""
+        for directory in [
+            cls.players_dir
+        ]:
+            directory.mkdir(parents=True, exist_ok=True)
 
     @classmethod
-    def image(cls, filename):
-        """Retorna o caminho completo para um arquivo de imagem."""
-        return os.path.join(cls.images, filename)
+    def icon(cls, filename: str) -> str:
+        """Retorna o caminho completo para um arquivo de ícone.
+
+        Args:
+            filename: Nome do arquivo de ícone.
+
+        Returns:
+            Caminho completo para o arquivo de ícone.
+        """
+        return str(cls.icons_dir / filename)
 
     @classmethod
-    def log(cls, filename):
-        """Retorna o caminho completo para um arquivo de log."""
-        return os.path.join(cls.logfile, filename)    
-    
+    def image(cls, filename: str) -> str:
+        """Retorna o caminho completo para um arquivo de imagem.
+
+        Args:
+            filename: Nome do arquivo de imagem.
+
+        Returns:
+            Caminho completo para o arquivo de imagem.
+        """
+        return str(cls.images_dir / filename)
+
     @classmethod
-    def player(cls, filename):
-        """Retorna o caminho completo para um arquivo de jogador."""
-        return os.path.join(cls.players, filename)    
-    
+    def log(cls, filename: str) -> str:
+        """Retorna o caminho completo para um arquivo de log.
+
+        Args:
+            filename: Nome do arquivo de log.
+
+        Returns:
+            Caminho completo para o arquivo de log.
+        """
+        return str(cls.log_dir / filename)
+
     @classmethod
-    def path_games(cls): 
-        """Retorna o caminho dos jogos."""
-        # Converte cls.games (string) em um objeto Path
-        dirs = Path(cls.games)
-        # Lista apenas os diretórios dentro de cls.games
-        dirs = [d.name for d in dirs.iterdir() if d.is_dir()]
-        return dirs
+    def player(cls, filename: str) -> str:
+        """Retorna o caminho completo para um arquivo de jogador.
+
+        Args:
+            filename: Nome do arquivo de jogador.
+
+        Returns:
+            Caminho completo para o arquivo de jogador.
+        """
+        return str(cls.players_dir / filename)
+
+    @classmethod
+    def path_games(cls) -> List[str]:
+        """Retorna uma lista com os nomes dos diretórios de jogos.
+
+        Returns:
+            Lista com os nomes dos diretórios dentro do diretório de jogos.
+
+        Raises:
+            FileNotFoundError: Se o diretório de jogos não existir.
+        """
+        cls._create_directories()
+        return [d.name for d in cls.games_dir.iterdir() if d.is_dir() and d.name != "__pycache__"]

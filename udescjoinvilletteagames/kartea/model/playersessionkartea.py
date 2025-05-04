@@ -7,29 +7,29 @@ from udescjoinvilletteagames.kartea.util.pathconfigkartea import PathConfigKarte
 
 
 def _get_player_attributes(player_instance):
-    """Extrai o nome e o valor do atributo 'identifier' de um objeto Player.
+    """Extrai o nome e o valor do atributo 'player_identifier' de um objeto Player.
 
     Args:
         player_instance: Instância do objeto Player.
 
     Returns:
-        tuple: Lista com o nome 'identifier' e lista com seu valor correspondente.
+        tuple: Lista com o nome 'player_identifier' e lista com seu valor correspondente.
     """
     if not player_instance:
         return [], []
 
     if is_dataclass(player_instance):
-        identifier_field = next((f for f in fields(player_instance) if f.name == "identifier"), None)
+        identifier_field = next((f for f in fields(player_instance) if f.name == "player_identifier"), None)
         if identifier_field:
-            return ["identifier"], [getattr(player_instance, "identifier")]
+            return ["player_identifier"], [getattr(player_instance, "player_identifier")]
         return [], []
 
     if (
-        hasattr(player_instance, "identifier")
-        and not callable(getattr(player_instance, "identifier"))
-        and not "identifier".startswith("_")
+        hasattr(player_instance, "player_identifier")
+        and not callable(getattr(player_instance, "player_identifier"))
+        and not "player_identifier".startswith("_")
     ):
-        return ["identifier"], [getattr(player_instance, "identifier")]
+        return ["player_identifier"], [getattr(player_instance, "player_identifier")]
     return [], []
 
 
@@ -122,13 +122,13 @@ class PlayerSessionKartea:
 
             # Atualiza FILE com o session fornecido e identifier do player
             PlayerSessionKartea.FILE = PathConfigKartea.kartea_player(
-                f"{self.session}_{self.player.identifier}_kartea_session.csv"
+                f"{self.session_identifier}_{self.player.player_identifier}_kartea_session.csv"
             )
 
             # Atualiza PROPERTIES e DATA_PROPERTIES
-            if "identifier" in PlayerSessionKartea.PROPERTIES:
+            if "player_identifier" in PlayerSessionKartea.PROPERTIES:
                 # Atualiza o valor do identifier
-                identifier_index = PlayerSessionKartea.PROPERTIES.index("identifier")
+                identifier_index = PlayerSessionKartea.PROPERTIES.index("player_identifier")
                 PlayerSessionKartea.DATA_PROPERTIES[identifier_index] = player_values[0]
             else:
                 # Adiciona identifier se não estiver presente
@@ -136,22 +136,22 @@ class PlayerSessionKartea:
                 PlayerSessionKartea.DATA_PROPERTIES.extend(player_values)
 
             # Atualiza o valor de session em DATA_PROPERTIES
-            if "session" in PlayerSessionKartea.PROPERTIES:
-                session_index = PlayerSessionKartea.PROPERTIES.index("session")
-                PlayerSessionKartea.DATA_PROPERTIES[session_index] = self.session
+            if "session_identifier" in PlayerSessionKartea.PROPERTIES:
+                session_index = PlayerSessionKartea.PROPERTIES.index("session_identifier")
+                PlayerSessionKartea.DATA_PROPERTIES[session_index] = self.session_identifier
 
 
 # Caso com instância fornecida
-#x = Player(identifier=1, name="Player1")
-#config = PlayerSessionKartea(player=x, session=42)
-#print("Com instância fornecida:")
-#print(PlayerSessionKartea.PROPERTIES)
-#print(PlayerSessionKartea.DATA_PROPERTIES)
-#print(PlayerSessionKartea.FILE)
+x = Player(player_identifier=1, name="Player1")
+config = PlayerSessionKartea(player=x, session_identifier=42)
+print("Com instância fornecida:")
+print(PlayerSessionKartea.PROPERTIES)
+print(PlayerSessionKartea.DATA_PROPERTIES)
+print(PlayerSessionKartea.FILE)
 
 # Caso com valor padrão
-#config_default = PlayerSessionKartea()
-#print("\nCom valor padrão:")
-#print(PlayerSessionKartea.PROPERTIES)
-#print(PlayerSessionKartea.DATA_PROPERTIES)
-#print(PlayerSessionKartea.FILE)
+config_default = PlayerSessionKartea()
+print("\nCom valor padrão:")
+print(PlayerSessionKartea.PROPERTIES)
+print(PlayerSessionKartea.DATA_PROPERTIES)
+print(PlayerSessionKartea.FILE)

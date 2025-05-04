@@ -5,7 +5,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtCore import QSize, Qt
-from udescjoinvilletteaapp.tteaapp import IPApp
+from udescjoinvilletteaapp.tteaapp import TTeaApp
 from udescjoinvilletteautil.pathconfig import PathConfig
 from udescjoinvilletteaapp.windowconfig import WindowConfig
 
@@ -25,13 +25,13 @@ class LanguageSelectionView(QDialog, WindowConfig):
     ]
 
     TITLE = "Seleção de Idioma / Language Selection"
-    ICON_PATH = PathConfig.icon("larva.ico")
+    ICON_APP = PathConfig.icon("larva.ico")
 
     def __init__(self, parent=None):
         super().__init__(parent)
         self._setup_window(
             self.TITLE,                          # title
-            self.ICON_PATH,                      # icon
+            self.ICON_APP,                      # icon
             WindowConfig.DECREMENT_SIZE_PERCENT, # status
             45,                                  # width
             55,                                  # height

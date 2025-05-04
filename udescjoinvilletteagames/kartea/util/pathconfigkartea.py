@@ -2,27 +2,60 @@ import os
 from pathlib import Path
 from udescjoinvilletteautil.pathconfig import PathConfig
 
-class PathConfigKartea(PathConfig):
+
+class KarteaPathConfig(PathConfig):
     """Classe para configuração de caminhos de arquivos e diretórios do KarTEA."""
-    
-    kartea = os.path.join(PathConfig.games, "kartea")
-    kartea_assets = os.path.join(kartea,"assets")
-    kartea_images = os.path.join(kartea_assets, "images")
-    kartea_sounds = os.path.join(kartea_assets, "sounds")
-    kartea_phases = os.path.join(kartea, "phases")
-    kartea_players = os.path.join(kartea, "players") 
+
+    kartea_dir = PathConfig.games_dir / "kartea"
+    kartea_assets_dir = kartea_dir / "assets"
+    kartea_images_dir = kartea_assets_dir / "images"
+    kartea_sounds_dir = kartea_assets_dir / "sounds"
+    kartea_phases_dir = kartea_dir / "phases"
+    kartea_players_dir = kartea_dir / "players"
 
     @classmethod
-    def kartea_image(cls, filename): 
-        """Retorna o caminho completo para um arquivo de imagem do KarTEA."""
-        return os.path.join(cls.kartea_images, filename)
-    
+    def _create_directories(cls) -> None:
+        """Cria todos os diretórios necessários do KarTEA se não existirem."""
+        for directory in [
+            cls.kartea_players_dir,
+        ]:
+            directory.mkdir(parents=True, exist_ok=True)
+
     @classmethod
-    def kartea_sound(cls, filename): 
-        """Retorna o caminho completo para um arquivo de som do KarTEA."""
-        return os.path.join(cls.kartea_sounds, filename)
-    
+    def kartea_image(cls, filename: str) -> str:
+        """Retorna o caminho completo para um arquivo de imagem do KarTEA.
+
+        Args:
+            filename: Nome do arquivo de imagem.
+
+        Returns:
+            Caminho completo para o arquivo de imagem.
+        """
+        cls._create_directories()
+        return str(cls.kartea_images_dir / filename)
+
     @classmethod
-    def kartea_player(cls, filename): 
-        """Retorna o caminho completo para os arquivos de jogador do KarTEA."""
-        return os.path.join(cls.kartea_players, filename)
+    def kartea_sound(cls, filename: str) -> str:
+        """Retorna o caminho completo para um arquivo de som do KarTEA.
+
+        Args:
+            filename: Nome do arquivo de som.
+
+        Returns:
+            Caminho completo para o arquivo de som.
+        """
+        cls._create_directories()
+        return str(cls.kartea_sounds_dir / filename)
+
+    @classmethod
+    def kartea_player(cls, filename: str) -> str:
+        """Retorna o caminho completo para um arquivo de jogador do KarTEA.
+
+        Args:
+            filename: Nome do arquivo de jogador.
+
+        Returns:
+            Caminho completo para o arquivo de jogador.
+        """
+        cls._create_directories()
+        return str(cls.kartea_players_dir / filename)

@@ -38,7 +38,7 @@ class MenuHandler:
         msg_box = QMessageBox()
         msg_box.setWindowIcon(self.parent.windowIcon())
         msg_box.setIcon(QMessageBox.Question)
-        msg_box.setWindowTitle("IPlane")
+        msg_box.setWindowTitle(self.parent.windowTitle())
         msg_box.setText("Deseja sair do sistema?")
         msg_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
         msg_box.setDefaultButton(QMessageBox.Yes)

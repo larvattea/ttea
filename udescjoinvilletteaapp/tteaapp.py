@@ -4,10 +4,10 @@ from udescjoinvilletteaapp.windowconfig import WindowConfig
 from udescjoinvilletteautil.pathconfig import PathConfig
 from udescjoinvilletteaapp.menuhandler import MenuHandler
 
-class IPApp(QMainWindow, WindowConfig):
+class TTeaApp(QMainWindow, WindowConfig):
     TITLE = "Plataforma T-TEA"
-    ICON_PATH = PathConfig.icon("larva.ico")
-    LOGO_PATH = PathConfig.image("ttealogo.png")
+    ICON_APP = PathConfig.icon("larva.ico")
+    LOGO_APP = PathConfig.image("ttealogo.png")
     VERSION = "2.0"
     PLATAFORM_SUFIX = "TEA"
     PLATAFORM_MANUAL = "Manual"
@@ -15,7 +15,7 @@ class IPApp(QMainWindow, WindowConfig):
     def __init__(self):
         super().__init__()
         self.menu_handler = MenuHandler(self)
-        self._setup_window(self.TITLE, self.ICON_PATH)
+        self._setup_window(self.TITLE, self.ICON_APP)
         self._setup_menu()
         self._setup_status_bar(self.VERSION)
     

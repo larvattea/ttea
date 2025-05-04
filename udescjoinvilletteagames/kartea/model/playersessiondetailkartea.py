@@ -4,32 +4,32 @@ import dataclasses
 from typing import ClassVar
 from udescjoinvilletteagames.kartea.model.playersessionkartea import PlayerSessionKartea
 from udescjoinvilletteagames.kartea.util.pathconfigkartea import PathConfigKartea
+from udescjoinvilletteamodel.player import Player
 
 def _get_session_attributes(session_instance):
-    """Extrai o nome e o valor do atributo 'identifier' de um objeto PlayerSessionKartea.
+    """Extrai o nome e o valor do atributo 'session_identifier' de um objeto PlayerSessionKartea.
 
     Args:
-        player_instance: Instância do objeto Player.
+        session_instance: Instância do objeto PlayerSessionKartea.
 
     Returns:
-        tuple: Lista com o nome 'identifier' e lista com seu valor correspondente.
+        tuple: Lista com o nome 'session_identifier' e lista com seu valor correspondente.
     """
     if not session_instance:
         return [], []
 
     if is_dataclass(session_instance):
-        identifier_field = next((f for f in fields(session_instance) if f.name == "session"), None)
+        identifier_field = next((f for f in fields(session_instance) if f.name == "session_identifier"), None)
         if identifier_field:
-            return ["identifier"], [getattr(session_instance, "identifier")]
+            return ["session_identifier"], [getattr(session_instance, "session_identifier")]
         return [], []
 
-    # Para objetos não-dataclass
     if (
-        hasattr(session_instance, "identifier")
-        and not callable(getattr(session_instance, "identifier"))
-        and not "identifier".startswith("_")
+        hasattr(session_instance, "session_identifier")
+        and not callable(getattr(session_instance, "session_identifier"))
+        and not "session_identifier".startswith("_")
     ):
-        return ["identifier"], [getattr(session_instance, "identifier")]
+        return ["session_identifier"], [getattr(session_instance, "session_identifier")]
     return [], []
 
 
@@ -50,9 +50,9 @@ def _get_field_value(field_obj):
 
 
 def initialize_reflexive(cls):
-    """Decorador para inicializar PROPERTIES e DATA_PROPERTIES com base no player.
+    """Decorador para inicializar PROPERTIES e DATA_PROPERTIES com base no session.
 
-    Exclui o atributo 'player' da lista PROPERTIES e inclui o identifier do player.
+    Exclui o atributo 'session' da lista PROPERTIES e inclui o session_identifier.
 
     Args:
         cls: Classe a ser decorada.
@@ -67,17 +67,14 @@ def initialize_reflexive(cls):
         if field_obj.name != "session":
             cls.PROPERTIES.append(field_obj.name)
             cls.DATA_PROPERTIES.append(_get_field_value(field_obj))
-        elif field_obj.name == "session":
-            # Inicializa com a sessão padrão (default_factory) se disponível
-            if field_obj.default_factory is not dataclasses._MISSING_TYPE:
-                session_instance = field_obj.default_factory()
-                player_props, player_values = _get_session_attributes(session_instance)
-                cls.PROPERTIES.extend(player_props)  # Adiciona 'identifier'
-                cls.DATA_PROPERTIES.extend(player_values)  # Adiciona valor do identifier
-                # Inicializa FILE com o player padrão
-                cls.FILE = PathConfigKartea.kartea_player(
-                    f"{session_instance.identifier}_kartea_session_detail.csv"
-                )
+        elif field_obj.name == "session" and field_obj.default_factory is not dataclasses._MISSING_TYPE:
+            session_instance = field_obj.default_factory()
+            session_props, session_values = _get_session_attributes(session_instance)
+            cls.PROPERTIES.extend(session_props)
+            cls.DATA_PROPERTIES.extend(session_values)
+            cls.FILE = PathConfigKartea.kartea_player(
+                f"{session_instance.session_identifier}_kartea_session_detail.csv"
+            )
 
     return cls
 
@@ -85,14 +82,14 @@ def initialize_reflexive(cls):
 @initialize_reflexive
 @dataclass
 class PlayerSessionDetailKartea:
-    """Modelo detalhado os dados da sessao do jogador kartea."""
+    """Modelo detalhado dos dados da sessão do jogador Kartea."""
     
-    # Sesssão do jogador
+    # Sessão do jogador
     session: PlayerSessionKartea = field(default_factory=PlayerSessionKartea)
 
     # Dados da sessão detalhados
-    identifier: int = 0
-    event_time: str = "00:00:00" #@TODO: totalizador de tempo de jogo
+    detail_identifier: int = 0
+    event_time: str = "00:00:00"  # @TODO: totalizador de tempo de jogo
     phase: int = 1
     level: int = 1
     player_position: str = "0,0"
@@ -106,23 +103,48 @@ class PlayerSessionDetailKartea:
         
     def __post_init__(self):
         """Atualiza FILE, PROPERTIES e DATA_PROPERTIES com base na sessão fornecida."""
+        # Inicializa PROPERTIES e DATA_PROPERTIES se necessário
+        if not PlayerSessionDetailKartea.PROPERTIES:
+            PlayerSessionDetailKartea.PROPERTIES = [f.name for f in fields(self) if f.name != "session"]
+            PlayerSessionDetailKartea.DATA_PROPERTIES = [
+                getattr(self, f.name) for f in fields(self) if f.name != "session"
+            ]
+
         if self.session:
             # Obtém propriedades e valores da sessão fornecida
             session_props, session_values = _get_session_attributes(self.session)
             
             # Atualiza FILE com base na sessão fornecida
             PlayerSessionDetailKartea.FILE = PathConfigKartea.kartea_player(
-                f"{self.session.identifier}_kartea_session_detail.csv"
+                f"{self.session.session_identifier}_kartea_session_detail.csv"
             )
             
-            # Atualiza PROPERTIES e DATA_PROPERTIES apenas para o identifier
-            if "identifier" in PlayerSessionDetailKartea.PROPERTIES:
-                # Remove o identifier antigo de DATA_PROPERTIES
-                identifier_index = PlayerSessionDetailKartea.PROPERTIES.index("identifier")
-                if identifier_index < len(PlayerSessionDetailKartea.DATA_PROPERTIES):
+            # Atualiza PROPERTIES e DATA_PROPERTIES com session_identifier
+            if session_props and session_props[0] not in PlayerSessionDetailKartea.PROPERTIES:
+                PlayerSessionDetailKartea.PROPERTIES.append(session_props[0])
+                PlayerSessionDetailKartea.DATA_PROPERTIES.append(session_values[0] if session_values else None)
+            elif session_props:
+                identifier_index = PlayerSessionDetailKartea.PROPERTIES.index(session_props[0])
+                if session_values and identifier_index < len(PlayerSessionDetailKartea.DATA_PROPERTIES):
                     PlayerSessionDetailKartea.DATA_PROPERTIES[identifier_index] = session_values[0]
-            else:
-                # Adiciona identifier se não estiver presente
-                PlayerSessionDetailKartea.PROPERTIES.extend(session_props)
-                PlayerSessionDetailKartea.DATA_PROPERTIES.extend(session_values)
 
+            # Atualiza detail_identifier em DATA_PROPERTIES
+            detail_index = PlayerSessionDetailKartea.PROPERTIES.index("detail_identifier")
+            PlayerSessionDetailKartea.DATA_PROPERTIES[detail_index] = self.detail_identifier
+
+
+# Caso com instância fornecida
+y = Player(player_identifier=1, name="Player1")
+x = PlayerSessionKartea(player=y, session_identifier=30)
+config = PlayerSessionDetailKartea(session=x, detail_identifier=1)
+print("Com instância fornecida:")
+print(PlayerSessionDetailKartea.PROPERTIES)
+print(PlayerSessionDetailKartea.DATA_PROPERTIES)
+print(PlayerSessionDetailKartea.FILE)
+
+# Caso com valor padrão
+config_default = PlayerSessionDetailKartea()
+print("\nCom valor padrão:")
+print(PlayerSessionDetailKartea.PROPERTIES)
+print(PlayerSessionDetailKartea.DATA_PROPERTIES)
+print(PlayerSessionDetailKartea.FILE)
