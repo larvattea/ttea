@@ -37,7 +37,7 @@ class IPApp(QMainWindow, WindowConfig):
                 path = path[0].upper() + path[1:]
             # Mapeamento de ícones por jogo
             game_icons = {
-                "kartea": PathConfig.icon("kartea4.ico")
+                "kartea": PathConfig.icon("kartea4.ico") 
                 # Adicione outros jogos aqui
             }
             # Usa ícone específico ou genérico como fallback
@@ -46,7 +46,7 @@ class IPApp(QMainWindow, WindowConfig):
             helps.append((self.PLATAFORM_MANUAL+" "+ path, self.menu_handler.do_nothing))  
 
         menu_configs = [
-            ("&Cadastro", [("&Jogador", self.menu_handler.call_register),
+            ("&Cadastro", [("&Jogador", self.menu_handler.call_selection),
                          ("&Sair", self.menu_handler.confirm_exit)]),
             ("&Exergames", games),             
             ("C&onfigurações", games + [("&Calibração", self.menu_handler.do_nothing)]),

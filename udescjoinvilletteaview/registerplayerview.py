@@ -38,6 +38,8 @@ class RegisterPlayerView(QDialog, WindowConfig):
         self.observations_input = QTextEdit()
         self.observations_input.setPlaceholderText("Digite observações (opcional)")  # Placeholder
         self.register_button = QPushButton("Cadastrar")
+        
+        
 
         # Layout
         layout = QFormLayout()
@@ -53,7 +55,7 @@ class RegisterPlayerView(QDialog, WindowConfig):
         """Aplica estilos à interface."""
         self.setStyleSheet("""
             QFormLayout {
-                margin: 10px;
+                margin: 10px; 
             }
             QDateEdit {
                 padding: 4px;
@@ -103,8 +105,9 @@ class RegisterPlayerView(QDialog, WindowConfig):
     def clear_fields(self):
         """Limpa os campos do formulário."""
         self.name_input.clear()
-        self.birth_date_input.setDate(QDate.currentDate())  # Reseta para a data atual
+        self.birth_date_input.setDate(QDate.currentDate())  
         self.observations_input.clear()
+
 
     def closeEvent(self, event):
         """Pergunta ao usuário se deseja fechar a janela."""

@@ -8,10 +8,10 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt
-from udescjoinvilletteaview.registerplayerview import RegisterPlayerView
+from udescjoinvilletteaview.selectplayerview import SelectPlayerView
 from udescjoinvilletteaview.aboutview import AboutView    
-from udescjoinvilletteacontroller.registerplayercontroller import RegisterPlayerController
 from udescjoinvilletteautil.pathconfig import PathConfig
+from udescjoinvilletteacontroller.selectplayercontroller import SelectPlayerController
 
 class MenuHandler:
     """Classe para gerenciar ações do menu"""
@@ -59,16 +59,15 @@ class MenuHandler:
             event.ignore()
 
 
-    def call_register(self):
-        """Chama a janela de registro como modal"""
-        register = RegisterPlayerView(self.parent)  # Passa o parent (janela principal)
-        #controller = RegisterPlayerController(register)
-        register.exec()  # Executa como modal
+    def call_selection(self):
 
-    def call_kartea(self): 
-        pass
-        
-        
+        select = SelectPlayerView(self.parent)
+        controller = SelectPlayerController(select, self.parent)
+        select.exec()
+
+    # def call_kartea(self): 
+    #     pass
+          
     def show_about(self):
         about = AboutView(self.parent)  # Passa o parent (janela principal)
         about.exec()  # Executa como modal
