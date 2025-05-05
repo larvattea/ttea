@@ -4,10 +4,10 @@ from udescjoinvilletteaapp.windowconfig import WindowConfig
 from udescjoinvilletteautil.pathconfig import PathConfig
 from udescjoinvilletteaapp.menuhandler import MenuHandler
 
-class TTeaApp(QMainWindow, WindowConfig):
+class IPApp(QMainWindow, WindowConfig):
     TITLE = "Plataforma T-TEA"
-    ICON_APP = PathConfig.icon("larva.ico")
-    LOGO_APP = PathConfig.image("ttealogo.png")
+    ICON_PATH = PathConfig.icon("larva.ico")
+    LOGO_PATH = PathConfig.image("ttealogo.png")
     VERSION = "2.0"
     PLATAFORM_SUFIX = "TEA"
     PLATAFORM_MANUAL = "Manual"
@@ -15,7 +15,7 @@ class TTeaApp(QMainWindow, WindowConfig):
     def __init__(self):
         super().__init__()
         self.menu_handler = MenuHandler(self)
-        self._setup_window(self.TITLE, self.ICON_APP)
+        self._setup_window(self.TITLE, self.ICON_PATH)
         self._setup_menu()
         self._setup_status_bar(self.VERSION)
     
@@ -37,7 +37,7 @@ class TTeaApp(QMainWindow, WindowConfig):
                 path = path[0].upper() + path[1:]
             # Mapeamento de ícones por jogo
             game_icons = {
-                "kartea": PathConfig.icon("kartea4.ico") 
+                "kartea": PathConfig.icon("kartea4.ico")
                 # Adicione outros jogos aqui
             }
             # Usa ícone específico ou genérico como fallback
@@ -46,7 +46,7 @@ class TTeaApp(QMainWindow, WindowConfig):
             helps.append((self.PLATAFORM_MANUAL+" "+ path, self.menu_handler.do_nothing))  
 
         menu_configs = [
-            ("&Cadastro", [("&Jogador", self.menu_handler.call_selection),
+            ("&Cadastro", [("&Jogador", self.menu_handler.call_register),
                          ("&Sair", self.menu_handler.confirm_exit)]),
             ("&Exergames", games),             
             ("C&onfigurações", games + [("&Calibração", self.menu_handler.do_nothing)]),
