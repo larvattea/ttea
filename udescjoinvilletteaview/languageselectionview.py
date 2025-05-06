@@ -1,5 +1,7 @@
 import sys
 import os
+import platform
+import locale
 from PySide6.QtWidgets import (
     QDialog, QVBoxLayout, QRadioButton, QPushButton, QLabel, QHBoxLayout, QMessageBox
 )
@@ -139,3 +141,39 @@ class LanguageSelectionView(QDialog, WindowConfig):
             # Aceita o diálogo para prosseguir ao menu principal
             self.accept()  # Fecha o diálogo com resultado 'Accepted'
             event.accept()  # Garante que o evento de fechamento seja aceito
+
+    def get_system_language(self) -> str:
+        """Obtém o idioma do sistema operacional no formato 'idioma-país' (ex.: 'pt-BR').
+
+        Tenta obter o idioma usando locale.getlocale(), com fallback para métodos
+        específicos do sistema operacional (Windows ou Linux).
+
+        Returns:
+            Código do idioma no formato 'idioma-país' (ex.: 'pt-BR').
+            Retorna 'en-US' como fallback se não for possível determinar o idioma.
+        """
+        # Tenta obter o idioma usando locale.getlocale()
+        system_locale = locale.getlocale()[0]
+        if system_locale:
+            return system_locale.replace('_', '-')  # Normaliza formato (ex.: pt_BR -> pt-BR)
+
+        # Fallback para métodos específicos do sistema operacional
+        os_name = platform.system()
+
+        if os_name == "Windows":
+            import ctypes
+
+            windll = ctypes.windll.kernel32
+            locale_id = windll.GetUserDefaultUILanguage()
+            # Converte o LCID para um código de idioma (ex.: 0x0416 para pt-BR)
+            return locale.windows_locale.get(locale_id, "en-US")
+
+        if os_name == "Linux":
+            # Verifica variáveis de ambiente comuns no Linux
+            for env_var in ("LC_ALL", "LC_MESSAGES", "LANG"):
+                lang = os.getenv(env_var)
+                if lang:
+                    return lang.split(".")[0].replace("_", "-")
+
+        return "en-US"  # Retorno padrão caso nada funcione
+        
