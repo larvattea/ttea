@@ -35,13 +35,14 @@ class Desafio():
             self.clima = int(self.getClima())
             #print (555)
             self.local = int(self.getLocal())
-            #print (665)
+            print ("CLima é 3?",self.roupa_certa.clima == '3')
+            print ("Fase é 3?",self.fase == 3)
             self.bloqueios = self.bloqueiosRoupaCerta()
             # lógica dos bloqueios inicial, mas desorganizada
             #elif ((self.fase == 3 and (bloqueios['qtde'] > 0 or self.roupa_certa.clima == 3)) or
             #      (self.fase == 2 and (bloqueios['qtde'] > 1 or (self.roupa_certa.clima == 3 and bloqueios["clima"] == False))) or
             #      (self.fase == 1 and (bloqueios['qtde'] > 2 or (self.roupa_certa.clima == 3 and bloqueios["clima"] == False and bloqueios['qtde'] == 2)))):
-            if (self.roupa_certa.clima == 3 and self.fase == 3):
+            if (self.roupa_certa.clima == '3' and self.fase == 3):
                 print('Clima é 3 e fase é 3, resorteia a roupa certa.')
             elif self.bloqueios["qtde"] == 0:
                 print('Roupa sem bloqueios!')
