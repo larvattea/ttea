@@ -1,6 +1,8 @@
-from PySide6.QtCore import QObject, Slot
+from PySide6.QtCore import QObject
+from udescjoinvilletteautil.cvshandler import CSVHandler
 from PySide6.QtWidgets import QMessageBox
 from udescjoinvilletteamodel.player import Player
+from udescjoinvilletteautil.pathconfig import PathConfig
 from udescjoinvilletteaview.registerplayerview import RegisterPlayerView
 
 class RegisterPlayerController(QObject):
@@ -11,23 +13,29 @@ class RegisterPlayerController(QObject):
         self.model = Player()
 
 
-    def register_player(self):
+        self.view.register_button.clicked.connect(self.register_player)
 
+    def register_player(self):
+        
+        main_csv = CSVHandler() 
         data = self.view.get_data()
         self.model.name = data["name"]
         self.model.birth_date = data["birth_date"]
         self.model.observations = data["observations"]
 
-        if self.model.is_valid():
-            print(f"Jogador cadastrado: {self.model}")
-            self.view.clear_fields()
-            self.view.accept()  # Fecha o diálogo com sucesso
 
+        if self.model.is_valid():
+
+            self.model.player_identifier = main_csv.get_last_serial(PathConfig.players_dir)
+            self.view.clear_fields()
+            main_csv.write_csv(self.model.update_file(), [data])
+            self.view.accept()  # Fecha o diálogo com sucesso
+            print("jogador_cadastrado")
         else:
             msg = QMessageBox()
-            msg.setWindowIcon(self.view.windowIcon)
+            msg.setWindowIcon(self.view.windowIcon())
             msg.setWindowTitle("Aviso")
-            msg.setIcon(QMessageBox.warning)
+            msg.setIcon(QMessageBox.Icon.Warning)
             msg.setText("Aviso: Nome e data de nascimento são obrigatórios.")
-            msg.setParent(self.main_window)
+            msg.setStandardButtons(QMessageBox.StandardButton.Ok)
             msg.exec()

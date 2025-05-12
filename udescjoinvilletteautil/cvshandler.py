@@ -1,4 +1,6 @@
 import csv
+import os
+from udescjoinvilletteamodel.player import Player
 from typing import List, Dict, Optional, Union
 
 
@@ -37,37 +39,33 @@ class CSVHandler:
         )
         self.dialect = dialect
 
-    def write_csv(
-        self, filename: str, data: List[Union[Dict, List]], headers: Optional[List[str]] = None
-    ) -> None:
-        """Escreve dados em um arquivo CSV.
-
-        Args:
-            filename: Nome do arquivo CSV.
-            data: Lista de dicionários ou listas com os dados.
-            headers: Lista com os cabeçalhos (opcional).
-        """
+    def write_csv(self, filename, data):  
+        
         with open(filename, mode="w", newline="", encoding="utf-8") as file:
-            if headers:
-                writer = csv.DictWriter(file, fieldnames=headers, dialect=self.dialect)
-                writer.writeheader()
-                for row in data:
-                    writer.writerow(row)
-            else:
-                writer = csv.writer(file, dialect=self.dialect)
-                for row in data:
-                    writer.writerow(row)
+            
+            if data != []: 
+                header = list(data[0].keys())
+                w = csv.DictWriter(file, fieldnames= header)
+                w.writeheader()
+                w.writerows(data)
 
-    def read_csv(self, filename: str, as_dict: bool = False) -> List[Union[Dict, List]]:
-        """Lê dados de um arquivo CSV.
 
-        Args:
-            filename: Nome do arquivo CSV.
-            as_dict: Se True, retorna como lista de dicionários.
+    def get_last_serial(self, dir_path):
+        
 
-        Returns:
-            Lista de linhas (ou dicionários, se as_dict=True).
-        """
+        print(dir_path)
+        archives = os.listdir(dir_path)  
+
+        if archives == []: 
+            return 0; 
+
+        else: 
+            last_elem = archives[-1].split("_")
+            return (int(last_elem[0])+1)  
+
+
+    def read_csv(self, filename: str, as_dict: bool = False):
+
         with open(filename, mode="r", newline="", encoding="utf-8") as file:
             if as_dict:
                 reader = csv.DictReader(file, dialect=self.dialect)
@@ -77,29 +75,9 @@ class CSVHandler:
         return []
 
 
-# Exemplo de uso
-if __name__ == "__main__":
-    # Instancia a classe com configurações padrão
-    csv_handler = CSVHandler()
 
-    # Dados de exemplo
-    data = [
-        {"nome": "João", "idade": 30, "cidade": "São Paulo"},
-        {"nome": "Maria", "idade": 25, "cidade": "Rio de Janeiro"},
-    ]
-    headers = ["nome", "idade", "cidade"]
 
-    # Escreve no arquivo CSV
-    csv_handler.write_csv("exemplo.csv", data, headers)
 
-    # Lê como lista de dicionários
-    content_dict = csv_handler.read_csv("exemplo.csv", as_dict=True)
-    print("\nConteúdo lido (dicionários):")
-    for row in content_dict:
-        print(row)
 
-    # Lê como lista de listas
-    content_list = csv_handler.read_csv("exemplo.csv", as_dict=False)
-    print("\nConteúdo lido (listas):")
-    for row in content_list:
-        print(row)
+    
+        

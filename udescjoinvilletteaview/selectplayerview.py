@@ -37,11 +37,17 @@ class TableView(QTableWidget):
         self.setHorizontalHeaderLabels(["ID", "Nome", "Data Nascimento"])
         print(self.row)
 
-        for i in range (0, 2):
-            for j in range(0, 2): 
-                item = QTableWidgetItem("Teste")
+    
+    def update_table_items(self, item_list):
+        
+        size = len(item_list)
+
+        for i in range(size):
+            for j in range(size): 
+                item = QTableWidgetItem(item_list[i])
                 item.setFlags(item.flags() & ~Qt.ItemFlag.ItemIsEditable)
                 self.setItem(i,j, item)
+
 
 
 class RowDatailed(QWidget): 
@@ -132,3 +138,6 @@ class SelectPlayerView(QDialog, WindowConfig):
     def get_insert_button(self): 
 
         return self.rowdetailed.insert_button
+    
+    def update_table(self, values): 
+        return self.table.update_table_items(values) 
