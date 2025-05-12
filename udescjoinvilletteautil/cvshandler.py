@@ -52,14 +52,17 @@ class CSVHandler:
 
     def get_last_serial(self, dir_path):
         
-
         print(dir_path)
-        archives = os.listdir(dir_path)  
+        archives = os.listdir(dir_path)
+        archives.sort()
+
+
+        print(archives)
 
         if archives == []: 
             return 0; 
 
-        else: 
+        else:
             last_elem = archives[-1].split("_")
             return (int(last_elem[0])+1)  
 
