@@ -4,3 +4,4 @@ sonar-project.properties
 *.log
 *.gitignore
 *.ini
+env/
