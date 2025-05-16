@@ -1,4 +1,9 @@
 {    
     "terminal.integrated.env.windows": {
-    "PYTHONPATH": "${workspaceFolder}"}
+    "PYTHONPATH": "${workspaceFolder}"
+},
+"sonarlint.connectedMode.project": {
+    "connectionId": "",
+    "projectKey": ""
+}
 }
