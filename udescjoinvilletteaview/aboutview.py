@@ -1,19 +1,19 @@
 from PySide6.QtWidgets import QDialog, QVBoxLayout, QLabel, QTextBrowser, QPushButton
 from PySide6.QtGui import QPixmap
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QCoreApplication  # Necessário para translate
 from datetime import datetime
 from udescjoinvilletteaapp.windowconfig import WindowConfig
 from udescjoinvilletteautil.pathconfig import PathConfig
 
 class AboutView(QDialog, WindowConfig): 
     """Exibe janela de sobre como modal"""
-    TITLE = "Sobre"
 
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setModal(True)  # Define como modal
+        self.translator = parent.translator if hasattr(parent, "translator") else None
         self._setup_window(
-            self.TITLE,                          # title
+            parent.get_title(),                          # title
             parent.windowIcon() if parent else None,  # icon
             WindowConfig.DECREMENT_SIZE_PERCENT, # status
             25,                                  # width
@@ -26,10 +26,10 @@ class AboutView(QDialog, WindowConfig):
 
         # Texto explicativo do projeto
         project_description = QLabel(
-            "<b>T-TEA</b> é um console para exergames de Chão Interativo "
+            self.tr("<b>T-TEA</b> é um console para exergames de Chão Interativo "
             "voltados ao público com Transtorno do Espectro Autista (TEA), "
             "mas não exclusivamente. Desenvolvido pela UDESC Joinville - Larva."
-        )
+        ))
         project_description.setWordWrap(True)
         project_description.setAlignment(Qt.AlignCenter)
         layout.addWidget(project_description)
@@ -47,27 +47,29 @@ class AboutView(QDialog, WindowConfig):
         # Link clicável
         link_label = QTextBrowser()
         link_label.setOpenExternalLinks(True)
-        link_label.setText("<a href='https://udescmove2learn.wordpress.com/2023/06/26/t-tea/'>Saiba mais sobre a Plataforma!</a>")
+        link_label.setText((
+            "<a href='https://udescmove2learn.wordpress.com/2023/06/26/t-tea/'>{}</a>").format(self.tr("Saiba mais sobre a Plataforma!")))
         link_label.setAlignment(Qt.AlignCenter)
         link_label.setFixedHeight(40)  # Altura fixa para consistência
-        link_label.setToolTip("Link plataforma T-TEA")
+        link_label.setToolTip(self.tr("Link plataforma T-TEA"))
         layout.addWidget(link_label)
         layout.addSpacing(10)  # Espaço consistente após o link
 
         # Texto com desenvolvedores e data
         developers_text = (
-            "<b>Desenvolvido por:</b><br>"
-            "<span style='font-size: 10px;'>"
-            "1. Marcelo da Silva Hounsell<br>"
-            "2. Andre Bonetto Trindade<br>"
-            "3. Gabriel Brunelli Pereira<br>"
-            "4. Marlow Rodrigo Becker Dickel<br>"
-            "5. Luis Eduardo Bet<br>"
-            "6. Alexandre Altair de Melo<br>"
-            "<br>"
-            f"<i>Desde: 2021 - {datetime.now().strftime('%Y')}</i>"
-            "</span>"
-        )
+        "<b>{}</b><br>"
+        "<span style='font-size: 10px;'>"
+        "1. Marcelo da Silva Hounsell<br>"
+        "2. Andre Bonetto Trindade<br>"
+        "3. Gabriel Brunelli Pereira<br>"
+        "4. Marlow Rodrigo Becker Dickel<br>"
+        "5. Luis Eduardo Bet<br>"
+        "6. Alexandre Altair de Melo<br>"
+        "<br>"
+        "<i>{}: 2021 - {}</i>"
+        "</span>"
+        ).format(self.tr("Desenvolvido por:"), self.tr("Desde"), datetime.now().strftime('%Y'))
+        
         developers_label = QTextBrowser()
         developers_label.setHtml(developers_text)
         developers_label.setAlignment(Qt.AlignCenter)

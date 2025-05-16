@@ -10,6 +10,7 @@ class PathConfig:
     players_dir = root / "players"
     games_dir = root / "udescjoinvilletteagames"
     assets_dir = root / "assets"
+    translations_dir = root/"translations"
     images_dir = assets_dir / "images"
     icons_dir = assets_dir / "icons"
 
@@ -68,6 +69,30 @@ class PathConfig:
             Caminho completo para o arquivo de jogador.
         """
         return str(cls.players_dir / filename)
+    
+    @classmethod
+    def translation(cls, filename: str) -> str:
+        """Retorna o caminho completo para um arquivo de tradução.
+
+        Args:
+            filename: Nome do arquivo de tradução.
+
+        Returns:
+            Caminho completo para o arquivo de tradução.
+        """
+        return str(cls.translations_dir / filename)
+    
+    @classmethod
+    def inifile(cls, filename: str) -> str:
+        """Retorna o caminho completo para um arquivo de ini no raiz.
+
+        Args:
+            filename: Nome do arquivo de ini.
+
+        Returns:
+            Caminho completo para o arquivo de ini.
+        """
+        return str(cls.root / filename)
 
     @classmethod
     def path_games(cls) -> List[str]:

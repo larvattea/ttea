@@ -1,9 +1,7 @@
-from PySide6.QtWidgets import QApplication, QStatusBar, QLabel, QMainWindow, QDialog
-from PySide6.QtGui import QIcon, QPixmap
-from PySide6.QtCore import Qt
-from datetime import date
+from PySide6.QtWidgets import QApplication
+from PySide6.QtGui import QIcon
 
-class WindowConfig:
+class WindowConfig():
     STAY_SIZE = 0
     INCREMENT_SIZE_PERCENT = 1
     DECREMENT_SIZE_PERCENT = 2
@@ -59,15 +57,5 @@ class WindowConfig:
             screen = QApplication.primaryScreen().geometry()
             x = (screen.width() - width) // 2
             y = (screen.height() - height) // 2
-        self.setGeometry(x, y, width, height)
+        self.setGeometry(x, y, width, height)   
     
-    def _setup_status_bar(self, version):
-        """Configura a barra de status"""
-        today = date.today().strftime("%d/%m/%Y")
-        status_text = f"Versão da Plataforma: {version} - Data Atual: {today}"
-        status_bar_label = QLabel(status_text)
-        status_bar_label.setAlignment(Qt.AlignRight)
-        status_bar_label.setStyleSheet("border: 1px sunken; padding: 2px;")
-        status_bar = QStatusBar()
-        status_bar.addPermanentWidget(status_bar_label)
-        self.setStatusBar(status_bar)
