@@ -22,7 +22,7 @@ def initialize_reflexive(cls):
 @dataclass
 class Player:
     """Modelo para os dados do jogador."""
-    player_identifier: int = 0 
+    player_identifier: int = 1
     name: str = ""
     birth_date: datetime = datetime.now().strftime("%d-%m-%Y")
     observations: str = ""

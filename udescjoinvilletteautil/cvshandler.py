@@ -59,7 +59,7 @@ class CSVHandler:
         print(archives)
 
         if archives == []: 
-            return 0; 
+            return 1; 
 
         else:
             last_elem = archives[-1].split("_")

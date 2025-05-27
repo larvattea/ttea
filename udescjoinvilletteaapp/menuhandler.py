@@ -62,8 +62,9 @@ class MenuHandler(QObject):  # Herdar de QObject
     def call_selection(self):
         select = SelectPlayerView(self.parent)
         controller = SelectPlayerController(select, self.parent)
-        select.update_table(controller.get_registers())
         
+        controller.update_registers()
+
         select.exec()
 
 

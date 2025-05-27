@@ -11,18 +11,24 @@ class SelectPlayerController():
 
         self.view = view
         self.parent = parent
+    
         self.view.get_insert_button().clicked.connect(self.call_register)
     
 
 
     def call_register(self): 
         register =  RegisterPlayerView(self.view)
-        controller = RegisterPlayerController(register, self.view)
+        controller = RegisterPlayerController(register, self)
+
 
         register.exec()
 
 
-    def get_registers(self): 
+    def update_registers(self):
+
+        self.view.update_table(self.__get_registers())        
+
+    def __get_registers(self): 
 
         register = CSVHandler()
         return register.get_archives(PathConfig.players_dir)
