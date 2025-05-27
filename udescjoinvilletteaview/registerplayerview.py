@@ -98,6 +98,8 @@ class RegisterPlayerView(QDialog, WindowConfig):
             "birth_date": self.birth_date_input.date().toPython(),
             "observations": self.observations_input.toPlainText().strip()
         }
+
+        # Essa verificação deveria estar no controller!! Views tem que ser burras 
         if data["birth_date"] > datetime.now().date():
             raise ValueError("A data de nascimento não pode ser no futuro.")
         return data

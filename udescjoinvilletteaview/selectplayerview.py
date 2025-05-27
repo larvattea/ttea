@@ -39,15 +39,21 @@ class TableView(QTableWidget):
 
     
     def update_table_items(self, item_list):
-        
-        size = len(item_list)
+    
+        row_size = len(item_list)
 
-        for i in range(size):
-            for j in range(size): 
-                item = QTableWidgetItem(item_list[i])
+        for row in range(row_size):
+            
+            values = list(item_list[row].values())
+
+            print(values)
+            for col in range(3): 
+
+                item = QTableWidgetItem(values[col])
                 item.setFlags(item.flags() & ~Qt.ItemFlag.ItemIsEditable)
-                self.setItem(i,j, item)
-
+                self.setItem(row,col, item)
+        
+        
 
 
 class RowDatailed(QWidget): 
@@ -133,7 +139,6 @@ class SelectPlayerView(QDialog, WindowConfig):
     def get_edit_button(self):
 
         return self.rowdetailed.edit_button
-
 
     def get_insert_button(self): 
 

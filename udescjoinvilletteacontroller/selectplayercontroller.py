@@ -1,6 +1,8 @@
 from udescjoinvilletteaview.selectplayerview import SelectPlayerView
 from udescjoinvilletteaview.registerplayerview import RegisterPlayerView
 from udescjoinvilletteacontroller.registerplayercontroller import RegisterPlayerController
+from udescjoinvilletteautil.cvshandler import CSVHandler
+from udescjoinvilletteautil.pathconfig import PathConfig
 
 
 class SelectPlayerController():
@@ -18,3 +20,9 @@ class SelectPlayerController():
         controller = RegisterPlayerController(register, self.view)
 
         register.exec()
+
+
+    def get_registers(self): 
+
+        register = CSVHandler()
+        return register.get_archives(PathConfig.players_dir)

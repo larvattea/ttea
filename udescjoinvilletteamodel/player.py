@@ -4,6 +4,13 @@ from datetime import datetime
 from udescjoinvilletteautil.pathconfig import PathConfig
 
 
+from dataclasses import dataclass, fields
+from typing import ClassVar
+from datetime import datetime
+from typing import Dict, List
+from udescjoinvilletteautil.pathconfig import PathConfig
+
+
 def initialize_reflexive(cls):
     """Decorador para inicializar dados de reflexão do jogador estaticamente."""
     cls.PROPERTIES = [field.name for field in fields(cls)]
@@ -37,3 +44,23 @@ class Player:
         Player.FILE = PathConfig.player(f"{self.player_identifier}_{self.name}_player.csv")
         return Player.FILE
 
+
+    def set__player_data(self, id : int, data: Dict) -> None: 
+        
+        self.player_identifier = id
+        self.name = data ["name"] 
+        self.birth_date =  data["birth_date"]
+        self.observations = data["observations"]
+
+
+    def get_player_data(self) -> List[Dict]: 
+        
+        info = {
+            "id": self.player_identifier,
+            "name": self.name,
+            "birth-date": self.birth_date,
+            "observations": self.observations
+
+            }
+
+        return [info]

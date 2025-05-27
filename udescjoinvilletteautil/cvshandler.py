@@ -1,7 +1,7 @@
 import csv
 import os
 from udescjoinvilletteamodel.player import Player
-from typing import List, Dict, Optional, Union
+from typing import List, Dict, Optional
 
 
 class CSVHandler:
@@ -50,9 +50,8 @@ class CSVHandler:
                 w.writerows(data)
 
 
-    def get_last_serial(self, dir_path):
+    def get_last_serial(self, dir_path) -> int:
         
-        print(dir_path)
         archives = os.listdir(dir_path)
         archives.sort()
 
@@ -66,6 +65,17 @@ class CSVHandler:
             last_elem = archives[-1].split("_")
             return (int(last_elem[0])+1)  
 
+
+    def get_archives(self, dir_path) -> List[Dict]: 
+
+        archives =  os.listdir(dir_path)
+        data = []
+        for archive in archives: 
+            
+            dict_data = self.read_csv(filename  = dir_path / archive, as_dict= True)
+            data.append(dict_data[0])
+
+        return sorted(data, key = lambda x: x['id'])
 
     def read_csv(self, filename: str, as_dict: bool = False):
 
