@@ -13,6 +13,8 @@ class PathConfig:
     translations_dir = root/"translations"
     images_dir = assets_dir / "images"
     icons_dir = assets_dir / "icons"
+    helps_dir = root / "help"
+    helps_dir_pt = helps_dir / "pt"
 
     @classmethod
     def _create_directories(cls) -> None:
@@ -106,3 +108,15 @@ class PathConfig:
         """
         cls._create_directories()
         return [d.name for d in cls.games_dir.iterdir() if d.is_dir() and d.name != "__pycache__"]
+    
+    @classmethod
+    def path_help_pt(cls, filename: str) -> str:
+        """Retorna o caminho completo para um arquivo de help.
+
+        Args:
+            filename: Nome do arquivo de help.
+
+        Returns:
+            Caminho completo para o arquivo de tradução.
+        """
+        return str(cls.helps_dir_pt / filename)

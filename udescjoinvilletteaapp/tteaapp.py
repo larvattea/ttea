@@ -54,7 +54,7 @@ class TTeaApp(QMainWindow, WindowConfig):
             # Usa ícone específico ou genérico como fallback
             icon_path = game_icons.get(path.lower(), PathConfig.image("kartea.png"))
             games.append((path, self.menu_handler.do_nothing, icon_path))
-            helps.append((self.PLATAFORM_MANUAL+" "+ path, self.menu_handler.do_nothing))  
+            helps.append((self.PLATAFORM_MANUAL+" "+ path, self.menu_handler.show_help))  
 
         menu_configs = [
             (self.tr("&Cadastro"), [(self.tr("&Jogador"), self.menu_handler.call_selection),
