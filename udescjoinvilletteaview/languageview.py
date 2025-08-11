@@ -1,28 +1,79 @@
 import os
 from typing import Optional
-from PySide6.QtCore import Qt, QTranslator
-from PySide6.QtGui import QIcon, QPixmap
-from PySide6.QtWidgets import (
-    QDialog,
-    QHBoxLayout,
-    QLabel,
-    QPushButton,
-    QRadioButton,
-    QVBoxLayout,
-    QMessageBox,
-    QApplication,  # Added import for QApplication
-)
 
-from udescjoinvilletteautil.pathconfig import PathConfig
-from udescjoinvilletteaapp.tteaapp import TTeaApp
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QIcon, QPixmap
+from PySide6.QtWidgets import (QApplication, QDialog, QHBoxLayout, QLabel,
+                               QMessageBox, QPushButton, QRadioButton,
+                               QVBoxLayout)
+
+# Local module import
+from udescjoinvilletteaapp import AppConfig
+from udescjoinvilletteautil import PathConfig
+
 
 class LanguageView(QDialog):
-    """Diálogo para seleção de idioma com bandeiras alinhadas ao lado de botões de rádio."""
+    """A dialog for selecting the application language with flag icons next
+    to radio buttons.
 
-    TITLE = TTeaApp.get_title()
-    ICON_APP = PathConfig.icon("larva.ico")
+    This class creates a dialog window allowing users to select a language for
+    the application by choosing from a list of radio buttons, each accompanied
+    by a flag icon. The selected language is applied to the application's
+    interface using a translator object.
+
+    Attributes
+    ----------
+    TITLE : str
+        The title of the dialog window, retrieved from AppConfig.get_title().
+    ICON_APP : str
+        Path to the application icon, retrieved from AppConfig.ICON_APP.
+    translator : QTranslator
+        Translator object used to load and apply language translation files.
+    radio_buttons : list[QRadioButton]
+        List of radio buttons representing available languages.
+    instruction_label : QLabel
+        Label displaying instructions for language selection.
+    languages_layout : QVBoxLayout
+        Layout containing language selection radio buttons and flag icons.
+    confirm_button : QPushButton
+        Button to confirm the selected language.
+
+    Methods
+    -------
+    setup_ui()
+        Configures the user interface layout and widgets.
+    apply_styles()
+        Applies CSS styles to the radio buttons.
+    populate_languages(languages: list[dict[str, str]])
+        Populates the dialog with radio buttons for each language.
+    change_language(language_code: str)
+        Changes the interface language based on the selected language code.
+    update_ui_texts()
+        Updates the interface text elements with the current language.
+    show_warning()
+        Displays a warning if no language is selected.
+    get_checked_language() -> Optional[str]
+        Returns the code of the selected language, or None if no selection
+        is made.
+    """
+
+    TITLE = AppConfig.get_title()
+    ICON_APP = AppConfig.ICON_APP
 
     def __init__(self, translator=None, parent=None) -> None:
+        """Initialize the LanguageView dialog.
+
+        Parameters
+        ----------
+        translator : QTranslator, optional
+            Translator object for loading language files (default is None).
+        parent : QWidget, optional
+            Parent widget of the dialog (default is None).
+
+        Returns
+        -------
+        None
+        """
         super().__init__(parent)
         self.translator = translator  # Objeto tradutor do main.py
         self.setWindowTitle(self.TITLE)
@@ -32,7 +83,15 @@ class LanguageView(QDialog):
         self.apply_styles()
 
     def setup_ui(self) -> None:
-        """Configura a interface do usuário."""
+        """Configure the user interface layout and widgets.
+
+        Sets up a vertical layout with an instruction label, a container
+        for language radio buttons, and a confirm button centered horizontally.
+
+        Returns
+        -------
+        None
+        """
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(20, 20, 20, 20)
         main_layout.setSpacing(15)
@@ -55,7 +114,15 @@ class LanguageView(QDialog):
         main_layout.addWidget(self.confirm_button, alignment=Qt.AlignHCenter)
 
     def apply_styles(self) -> None:
-        """Aplica estilos CSS aos botões de rádio."""
+        """Apply CSS styles to the radio buttons.
+
+        Styles include font size, text color, spacing, and indicator size
+        for radio buttons.
+
+        Returns
+        -------
+        None
+        """
         self.setStyleSheet(
             """
             QRadioButton#languageRadio {
@@ -71,7 +138,25 @@ class LanguageView(QDialog):
         )
 
     def populate_languages(self, languages: list[dict[str, str]]) -> None:
-        """Preenche a interface com botões de rádio para cada idioma."""
+        """Populate the dialog with radio buttons for each language.
+
+        Each language is represented by a radio button with a flag icon
+        and description. The radio buttons are connected
+        to the language change functionality.
+
+        Parameters
+        ----------
+        languages : list[dict[str, str]]
+            List of dictionaries containing language details. Each dictionary
+            must have:
+            - 'code': Language code (e.g., 'en', 'pt').
+            - 'description': Language name (e.g., 'English', 'Português').
+            - 'flag': Path to the flag icon file.
+
+        Returns
+        -------
+        None
+        """
         for lang in languages:
             item_layout = QHBoxLayout()
             item_layout.setSpacing(12)
@@ -88,8 +173,12 @@ class LanguageView(QDialog):
             radio = QRadioButton(lang["description"])
             radio.setProperty("language_code", lang["code"])
             radio.setObjectName("languageRadio")
-            # Conecta o sinal toggled ao método de troca de idioma
-            radio.toggled.connect(lambda checked, code=lang["code"]: self.change_language(code) if checked else None)
+            # Connect the toggled signal to the language switching method
+            radio.toggled.connect(
+                lambda checked, code=lang["code"]: (
+                    self.change_language(code) if checked else None
+                )
+            )
             self.radio_buttons.append(radio)
             item_layout.addWidget(radio)
 
@@ -97,33 +186,74 @@ class LanguageView(QDialog):
             self.languages_layout.addLayout(item_layout)
 
     def change_language(self, language_code: str) -> None:
-        """Troca o idioma da interface quando um radio button é selecionado."""
+        """Change the interface language based on the selected language code.
 
-        # Carrega o arquivo de tradução para o idioma selecionado
+        Loads the translation file for the given language code and applies it
+        to the application. Updates the interface texts accordingly.
+
+        Parameters
+        ----------
+        language_code : str
+            The code of the selected language (e.g., 'en', 'pt').
+
+        Returns
+        -------
+        None
+        """
+
+        # Loads the translation file for the selected language
         translation_file = PathConfig.translation(language_code + ".qm")
-        if os.path.exists(translation_file) and self.translator.load(translation_file):
+        if os.path.exists(translation_file) and self.translator.load(
+            translation_file
+        ):
             QApplication.instance().installTranslator(self.translator)
 
-            # Atualiza os textos da interface
+            # Updates interface texts
             self.update_ui_texts()
 
     def update_ui_texts(self) -> None:
-        """Atualiza os textos da interface com o idioma atual."""
-        self.setWindowTitle(self.tr(TTeaApp.get_title()))
-        self.instruction_label.setText(self.tr("Selecione o idioma da aplicação:"))
+        """Update the interface text elements with the current language.
+
+        Updates the window title, instruction label, and confirm button
+        text using the current translator.
+
+        Returns
+        -------
+        None
+        """
+        self.setWindowTitle(self.tr(AppConfig.get_title()))
+        self.instruction_label.setText(
+            self.tr("Selecione o idioma da aplicação:")
+        )
         self.confirm_button.setText(self.tr("Confirmar"))
 
     def show_warning(self) -> None:
-        """Exibe uma mensagem de aviso se nenhum idioma for selecionado."""
+        """Display a warning message if no language is selected.
+
+        Shows a QMessageBox with a warning indicating that a language
+        must be selected.
+
+        Returns
+        -------
+        None
+        """
         QMessageBox.warning(
             self,
-            TTeaApp.get_title(),
+            # AppConfig.get_title(),
+            self.TITLE,
             self.tr("Você deve selecionar um idioma para continuar."),
             QMessageBox.Ok,
         )
 
     def get_checked_language(self) -> Optional[str]:
-        """Retorna o código do idioma selecionado."""
+        """Return the code of the selected language.
+
+        Returns
+        -------
+        Optional[str]
+            The language code of the selected radio button, or None
+            if no language is selected.
+        """
         for radio in self.radio_buttons:
             if radio.isChecked():
                 return radio.property("language_code")

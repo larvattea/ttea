@@ -1,10 +1,10 @@
 """
-udescjoinvilletteadao
+udescjoinvillettealog
 
-A Python package for Data Access Objects (DAOs) from the T-TEA platform,
-supporting data management and persistence. Developed by the Larva UDESC team.
+A Python package for log functions in the T-TEA platform,
+supporting logging. Developed by the Larva UDESC team.
 
-This package provides the DAO classes for the T-TEA platform.
+This package provides tools for logging.
 
 Attributes
 ----------
@@ -19,10 +19,9 @@ __license__ : str
 
 See Also
 --------
-DAO
-    Data Access Object for managing data persistence and retrieval.
-PlayerCsvDAO
-    Data Access Object for managing player data in CSV format.
+Log
+    Provides logging functionality for the application.
+
 
 Notes
 -----
@@ -33,8 +32,7 @@ https://github.com/larva-udesc/udesc_ttea_view
 
 # Define the __all__ variable
 __all__ = [
-    "DAO",
-    "PlayerCsvDAO",
+    "Log",
 ]
 
 __version__ = "1.0.0"
@@ -43,5 +41,4 @@ __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
 # Import the submodules
-from .dao import DAO
-from .playercsvdao import PlayerCsvDAO
+from .log import Log
