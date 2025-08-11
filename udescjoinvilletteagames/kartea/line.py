@@ -1,6 +1,10 @@
-import image
-import pygame, time, sys, math
+import math
+import sys
+import time
 from typing import List
+
+import image
+import pygame
 from settings import *
 from target import Target
 

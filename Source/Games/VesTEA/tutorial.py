@@ -1,19 +1,19 @@
-import pygame
-import numpy as np
-from VesTEA.desafiotutorial import DesafioTutorial
-from VesTEA.telatutorial import TelaTutorial
-from VesTEA.jogador import Jogador
-from camera import Camera
-from pygame import event
-from pygame.locals import KEYUP, K_SPACE
-from pygame import font
-from pygame import display
-from VesTEA.config import Config
-import ui
-import image
-from VesTEA.botao import Botao
-from VesTEA import arquivo as arq
 import datetime
+
+import image
+import numpy as np
+import pygame
+import ui
+from camera import Camera
+from pygame import display, event, font
+from pygame.locals import K_SPACE, KEYUP
+from VesTEA import arquivo as arq
+from VesTEA.botao import Botao
+from VesTEA.config import Config
+from VesTEA.desafiotutorial import DesafioTutorial
+from VesTEA.jogador import Jogador
+from VesTEA.telatutorial import TelaTutorial
+
 
 class Tutorial():
     def __init__(self, superficie):

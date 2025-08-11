@@ -1,4 +1,5 @@
 import pygame
+
 pygame.init()
 
 SURF_WIDTH, SURF_HEIGHT = 800, 600

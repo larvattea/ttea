@@ -1,9 +1,11 @@
+import csv
+import random
+
+import numpy as np
 import pygame
 from pygame.image import load
-import numpy as np
-import random
 from VesTEA.roupa import Roupa
-import csv
+
 csv.register_dialect(
     'mydialect',
     delimiter = ';',

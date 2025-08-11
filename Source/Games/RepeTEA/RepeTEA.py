@@ -4,15 +4,16 @@
 ################################# VERSÃO 1.0 ####################################
 #################################################################################
 import csv
+import datetime
+import random
+import time
+
+import arquivo
 import cv2
 import mediapipe as mp
 import numpy as np
 import pygame
-import time
-import random
 from pygame import mixer
-import datetime
-import arquivo
 
 pygame.init()
 #################################################################################

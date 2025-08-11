@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+
 from udescjoinvilletteautil.pathconfig import PathConfig
 
 
@@ -14,7 +15,7 @@ class KarteaPathConfig(PathConfig):
     kartea_players_dir = kartea_dir / "players"
 
     @classmethod
-    def _create_directories(cls) -> None:
+    def create_directories(cls) -> None:
         """Cria todos os diretórios necessários do KarTEA se não existirem."""
         for directory in [
             cls.kartea_players_dir,
@@ -31,7 +32,7 @@ class KarteaPathConfig(PathConfig):
         Returns:
             Caminho completo para o arquivo de imagem.
         """
-        cls._create_directories()
+        cls.create_directories()
         return str(cls.kartea_images_dir / filename)
 
     @classmethod
@@ -44,7 +45,7 @@ class KarteaPathConfig(PathConfig):
         Returns:
             Caminho completo para o arquivo de som.
         """
-        cls._create_directories()
+        cls.create_directories()
         return str(cls.kartea_sounds_dir / filename)
 
     @classmethod
@@ -57,5 +58,5 @@ class KarteaPathConfig(PathConfig):
         Returns:
             Caminho completo para o arquivo de jogador.
         """
-        cls._create_directories()
+        cls.create_directories()
         return str(cls.kartea_players_dir / filename)

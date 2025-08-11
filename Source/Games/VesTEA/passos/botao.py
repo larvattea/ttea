@@ -1,5 +1,6 @@
 import pygame
 
+
 #button class
 class Botao():
 	def __init__(self, x, y, image, scale):

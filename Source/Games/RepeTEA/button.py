@@ -1,4 +1,5 @@
-from config import * 
+from config import *
+
 
 class Button: 
     def __init__(self, size, pos, color, label, font = stadart_font):

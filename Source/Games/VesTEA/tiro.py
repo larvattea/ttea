@@ -2,6 +2,7 @@ import pygame
 from pygame.image import load
 from pygame.sprite import Sprite
 
+
 class Tiro(Sprite):
     def __init__(self, x, y, player_width, screen_width):
         super().__init__()

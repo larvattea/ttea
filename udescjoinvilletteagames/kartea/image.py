@@ -1,5 +1,6 @@
 import pygame
 
+
 def load(img_path, size="default", convert="alpha", flip=False):
     if convert == "alpha":
         img = pygame.image.load(img_path).convert_alpha()

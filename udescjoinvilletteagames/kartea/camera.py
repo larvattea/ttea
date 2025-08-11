@@ -1,6 +1,7 @@
 import cv2
 import settings
 
+
 class Camera:
     def __init__(self):
         # Load camera

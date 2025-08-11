@@ -1,19 +1,16 @@
 import pygame
-from pygame import font
-from pygame import display
+from pygame import display, event, font
 from pygame.image import load
-from pygame.transform import scale
-from pygame import event
-from pygame.locals import QUIT, KEYUP, K_SPACE, K_UP, K_DOWN, K_RIGHT, K_LEFT, K_s, K_h, K_f
+from pygame.locals import (K_DOWN, K_LEFT, K_RIGHT, K_SPACE, K_UP, KEYUP, QUIT,
+                           K_f, K_h, K_s)
 from pygame.time import Clock
-
+from pygame.transform import scale
 #from VesTEA.pose_tracking import PoseTracking
 from VesTEA import arquivo as arq
 from VesTEA import botao
+from VesTEA.config_desafio import ConfigDesafio
 from VesTEA.jogo import Jogo
 from VesTEA.tutorial import Tutorial
-from VesTEA.config_desafio import ConfigDesafio
-
 
 #se for executar de outra pasta, precisa de:
 #import os

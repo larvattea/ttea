@@ -5,6 +5,7 @@ Hello World, but with more meat.
 
 import wx
 
+
 class HelloFrame(wx.Frame):
     """
     A Frame that says Hello World

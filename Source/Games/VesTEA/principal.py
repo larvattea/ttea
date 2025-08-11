@@ -1,15 +1,13 @@
 import pygame
-from pygame import font
-from pygame import display
+from pygame import display, event, font
 from pygame.image import load
-from pygame.transform import scale
+from pygame.locals import K_SPACE, KEYUP, QUIT
 from pygame.sprite import Group, GroupSingle, groupcollide
-from pygame import event
-from pygame.locals import QUIT, KEYUP, K_SPACE
 from pygame.time import Clock
+from pygame.transform import scale
 from VesTEA import botao
-from VesTEA.jogador import Jogador
 from VesTEA.inimigo import Inimigo
+from VesTEA.jogador import Jogador
 
 #se for executar de outra pasta, precisa de:
 #import os

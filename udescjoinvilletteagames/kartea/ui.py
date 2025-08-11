@@ -1,6 +1,7 @@
 import pygame
 from settings import *
 
+
 def draw_text(surface, text, pos, color, font=FONTS["medium"], pos_mode="top_left",
                 shadow=False, shadow_color=(0,0,0), shadow_offset=2):
     label = font.render(text, 1, color)

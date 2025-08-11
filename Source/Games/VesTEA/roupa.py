@@ -2,6 +2,7 @@ import pygame
 from pygame.image import load
 from pygame.sprite import Sprite
 
+
 class Roupa():
     def __init__(self, roupa, posicao):
         self.nome = roupa[0]

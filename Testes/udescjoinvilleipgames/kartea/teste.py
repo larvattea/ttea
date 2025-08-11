@@ -1,4 +1,4 @@
-import pygame as pg 
+import pygame as pg
 from udescjoinvilleiputil.pathconfig import PathConfig
 
 

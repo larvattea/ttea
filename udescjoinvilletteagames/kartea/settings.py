@@ -1,7 +1,7 @@
-import pygame
-import numpy as np
-import cv2
 import arquivo
+import cv2
+import numpy as np
+import pygame
 
 #Variáveis do Pygame
 WINDOW_NAME = "KarTEA"

@@ -1,10 +1,11 @@
-import pygame
-
 import arquivo
-import image
-from settings import *
 import cv2
+import image
+import pygame
+from settings import *
+
 from udescjoinvilletteautil.pathconfig import PathConfig
+
 
 class Car:
     def __init__(self):

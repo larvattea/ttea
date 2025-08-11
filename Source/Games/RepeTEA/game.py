@@ -1,9 +1,11 @@
-import pygame
-from Jogador import Player
-from config import * 
-from geometry import *
 from random import choices
-from menu import * 
+
+import pygame
+from config import *
+from geometry import *
+from Jogador import Player
+from menu import *
+
 
 class Jogo: 
     def __init__(self, fase, nivel, screen):

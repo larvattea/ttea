@@ -1,8 +1,8 @@
 import csv
-import pandas as pd
-import numpy as np
 import datetime as dt
 
+import numpy as np
+import pandas as pd
 
 """
 Funções que interagem com os arquivos csv

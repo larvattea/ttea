@@ -1,12 +1,9 @@
-import pygame 
+from random import randint
 
-from random import randint 
+import pygame
+from pygame.image import load
+from pygame.sprite import Sprite
 
-from pygame.image import load 
-
-from pygame.sprite import Sprite 
-
-  
 
 class Inimigo(Sprite): 
 

@@ -1,9 +1,6 @@
-from geometry import * 
 from config import *
-from game import * 
-
-
-
+from game import *
+from geometry import *
 
 screen = pygame.display.set_mode((WIDHT, HEIGHT))
 pygame.display.set_caption("RepeTEA")

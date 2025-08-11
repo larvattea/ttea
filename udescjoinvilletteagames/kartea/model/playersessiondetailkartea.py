@@ -1,10 +1,14 @@
+import dataclasses
 from dataclasses import dataclass, field, fields, is_dataclass
 from datetime import datetime
-import dataclasses
 from typing import ClassVar
-from udescjoinvilletteagames.kartea.model.playersessionkartea import PlayerSessionKartea
-from udescjoinvilletteagames.kartea.util.pathconfigkartea import PathConfigKartea
+
+from udescjoinvilletteagames.kartea.model.playersessionkartea import \
+    PlayerSessionKartea
+from udescjoinvilletteagames.kartea.util.pathconfigkartea import \
+    PathConfigKartea
 from udescjoinvilletteamodel.player import Player
+
 
 def _get_session_attributes(session_instance):
     """Extrai o nome e o valor do atributo 'session_identifier' de um objeto PlayerSessionKartea.

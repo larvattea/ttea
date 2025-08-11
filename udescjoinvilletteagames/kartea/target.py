@@ -1,10 +1,12 @@
-import pygame
 import random
 import time
+
 import image
+import pygame
 import settings
 from settings import *
-from udescjoinvilletteautil.pathconfig import PathConfig 
+
+from udescjoinvilletteautil.pathconfig import PathConfig
 
 roadW = 400 #Tamanho pista
 segL = 200 # Tamanho segmento

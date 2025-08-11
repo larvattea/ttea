@@ -1,8 +1,10 @@
-from dataclasses import dataclass, field, fields, is_dataclass
 import dataclasses
+from dataclasses import dataclass, field, fields, is_dataclass
 from typing import ClassVar
+
+from udescjoinvilletteagames.kartea.util.pathconfigkartea import \
+    PathConfigKartea
 from udescjoinvilletteamodel.player import Player
-from udescjoinvilletteagames.kartea.util.pathconfigkartea import PathConfigKartea
 
 
 def _get_player_attributes(player_instance):

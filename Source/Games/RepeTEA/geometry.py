@@ -1,6 +1,7 @@
+from math import cos, pi, sin, sqrt
+
 import pygame
 from config import *
-from math import sin, cos, pi, sqrt
 
 
 class Geometry:

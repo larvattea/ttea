@@ -1,10 +1,8 @@
-import pygame 
+import pygame
+from pygame.image import load
+from pygame.sprite import Sprite
+from tiro import Tiro
 
-from pygame.image import load 
-
-from pygame.sprite import Sprite 
-
-from tiro import Tiro   
 
 class Jogador(Sprite): 
 

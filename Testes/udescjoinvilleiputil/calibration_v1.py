@@ -1,7 +1,8 @@
-import cv2 as cv
-from PIL import Image
-from numpy import array
 from math import atan2
+
+import cv2 as cv
+from numpy import array
+from PIL import Image
 
 capture = cv.VideoCapture(0); 
 

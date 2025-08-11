@@ -1,14 +1,15 @@
 # Setup Python ----------------------------------------------- #
-import pygame
-import sys
 import os
-import cv2
+import sys
 
 import arquivo
+import cv2
+import pygame
 import settings
-from settings import *
 from game import Game
 from menu import Menu
+from settings import *
+
 from udescjoinvilletteautil.pathconfig import PathConfig
 
 # Setup pygame/window --------------------------------------------- #

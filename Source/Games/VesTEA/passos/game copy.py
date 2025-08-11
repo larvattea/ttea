@@ -1,14 +1,13 @@
 from random import randint
-import pygame
-from pygame import font
-from pygame import display
-from pygame.image import load
-from pygame.transform import scale
-from pygame.sprite import Sprite, Group, GroupSingle, groupcollide
-from pygame import event
-from pygame.locals import QUIT, KEYUP, K_SPACE
-from pygame.time import Clock
+
 import botao
+import pygame
+from pygame import display, event, font
+from pygame.image import load
+from pygame.locals import K_SPACE, KEYUP, QUIT
+from pygame.sprite import Group, GroupSingle, Sprite, groupcollide
+from pygame.time import Clock
+from pygame.transform import scale
 
 #se for executar de outra pasta, precisa de:
 #import os

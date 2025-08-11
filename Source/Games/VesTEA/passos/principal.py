@@ -1,18 +1,14 @@
-import pygame
-from pygame import display
-from pygame import event
-from pygame.locals import QUIT, KEYUP, K_SPACE
-from pygame import font
 import botao
-
+import pygame
+from inimigo import Inimigo
+from jogador import Jogador
+from pygame import display, event, font
+from pygame.image import load
+from pygame.locals import K_SPACE, KEYUP, QUIT
+from pygame.sprite import Group, GroupSingle, groupcollide
 from pygame.time import Clock
 from pygame.transform import scale
-from pygame.image import load
 
-from jogador import Jogador
-from pygame.sprite import GroupSingle, Group, groupcollide
-
-from inimigo import Inimigo
 
 class Jogo(): 
 

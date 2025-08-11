@@ -1,13 +1,14 @@
-import pygame
 import sys
 
 import image
+import pygame
 import settings
-from settings import *
-from background import Background
 import ui
+from background import Background
+from settings import *
 
 from udescjoinvilletteautil.pathconfig import PathConfig
+
 
 class Menu:
     def __init__(self, surface):

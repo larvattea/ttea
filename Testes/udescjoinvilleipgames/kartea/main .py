@@ -1,7 +1,5 @@
-from teste import Target 
-import pygame as pg 
-
-
+import pygame as pg
+from teste import Target
 
 pg.init()
 screen = pg.display.set_mode((800,600), flags= pg.SCALED)

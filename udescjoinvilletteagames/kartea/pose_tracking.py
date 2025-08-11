@@ -1,8 +1,8 @@
 import cv2
 import mediapipe as mp
-from settings import *
 import numpy as np
 import settings as st
+from settings import *
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles

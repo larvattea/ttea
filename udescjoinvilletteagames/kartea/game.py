@@ -1,20 +1,21 @@
-import pygame
-import time
 import random
+import time
 
 import arquivo
-import settings
-from settings import *
-from background import Background
-from car import Car
-from pose_tracking import PoseTracking
-from target import Target
-from obstacle import Obstacle
-from camera import Camera
 import cv2
+import pygame
+import settings
 import ui
+from background import Background
+from camera import Camera
+from car import Car
+from obstacle import Obstacle
+from pose_tracking import PoseTracking
+from settings import *
+from target import Target
 
 from udescjoinvilletteautil.pathconfig import PathConfig
+
 
 class Game:
     def __init__(self, surface):

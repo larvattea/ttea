@@ -1,8 +1,13 @@
-import image
-import pygame, time, sys, math
+import math
+import sys
+import time
 from typing import List
-from settings import *
+
+import image
+import pygame
 from line import Line
+from settings import *
+
 from udescjoinvilletteautil.pathconfig import PathConfig
 
 roadW = 400 #Tamanho pista

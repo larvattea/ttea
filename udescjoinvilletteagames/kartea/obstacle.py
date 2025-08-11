@@ -1,12 +1,14 @@
-import pygame
 import random
-import image
 import time
 
+import image
+import pygame
 import settings
 from settings import *
 from target import Target
+
 from udescjoinvilletteautil.pathconfig import PathConfig
+
 
 class Obstacle(Target):
     def __init__(self):

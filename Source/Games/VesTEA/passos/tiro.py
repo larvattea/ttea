@@ -1,10 +1,7 @@
-import pygame 
+import pygame
+from pygame.image import load
+from pygame.sprite import Sprite
 
-from pygame.image import load 
-
-from pygame.sprite import Sprite 
-
-  
 
 class Tiro(Sprite): 
 

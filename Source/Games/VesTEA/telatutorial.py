@@ -1,13 +1,13 @@
-import pygame
-from pygame import display
-import numpy as np
-from pygame import font
-import ui
-import image
-from VesTEA.config import Config
-from VesTEA.botao import Botao
-from VesTEA import arquivo as arq
 import random
+
+import image
+import numpy as np
+import pygame
+import ui
+from pygame import display, font
+from VesTEA import arquivo as arq
+from VesTEA.botao import Botao
+from VesTEA.config import Config
 
 #se for executar de outra pasta, precisa de:
 #import os

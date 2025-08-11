@@ -1,5 +1,6 @@
 from pygame import mixer
 
+
 class Config():
 
     # SONS

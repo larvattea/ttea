@@ -1,6 +1,7 @@
 import pygame
-from config import * 
-from button import *  
+from button import *
+from config import *
+
 
 class Menu: 
 

@@ -1,8 +1,9 @@
-import customtkinter as ctk
-from tkinter.ttk import Separator
 from os import listdir
-from PIL import Image, ImageTk
+from tkinter.ttk import Separator
+
+import customtkinter as ctk
 from CTkMenuBar import menu_bar
+from PIL import Image, ImageTk
 
 
 class SidebarFrame(ctk.CTkFrame): 

@@ -1,8 +1,8 @@
 #NÃO USAR, USAR O POSE_TRACKING
 
 import arquivo
-import numpy as np
 import cv2
+import numpy as np
 
 
 class Jogador():
