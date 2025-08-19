@@ -2,8 +2,9 @@ import dataclasses
 from dataclasses import dataclass, field, fields, is_dataclass
 from typing import ClassVar
 
-from udescjoinvilletteagames.kartea.util.pathconfigkartea import \
-    PathConfigKartea
+from udescjoinvilletteagames.kartea.util.karteapathconfig import (
+    KarteaPathConfig,
+)
 from udescjoinvilletteamodel.player import Player
 
 
@@ -20,9 +21,18 @@ def _get_player_attributes(player_instance):
         return [], []
 
     if is_dataclass(player_instance):
-        identifier_field = next((f for f in fields(player_instance) if f.name == "player_identifier"), None)
+        identifier_field = next(
+            (
+                f
+                for f in fields(player_instance)
+                if f.name == "player_identifier"
+            ),
+            None,
+        )
         if identifier_field:
-            return ["player_identifier"], [getattr(player_instance, "player_identifier")]
+            return ["player_identifier"], [
+                getattr(player_instance, "player_identifier")
+            ]
         return [], []
 
     # Para objetos não-dataclass
@@ -31,7 +41,9 @@ def _get_player_attributes(player_instance):
         and not callable(getattr(player_instance, "player_identifier"))
         and not "player_identifier".startswith("_")
     ):
-        return ["player_identifier"], [getattr(player_instance, "player_identifier")]
+        return ["player_identifier"], [
+            getattr(player_instance, "player_identifier")
+        ]
     return [], []
 
 
@@ -46,9 +58,13 @@ def _get_field_value(field_obj):
     """
     from dataclasses import _MISSING_TYPE
 
-    if field_obj.default_factory is not _MISSING_TYPE and callable(field_obj.default_factory):
+    if field_obj.default_factory is not _MISSING_TYPE and callable(
+        field_obj.default_factory
+    ):
         return field_obj.default_factory()
-    return field_obj.default if field_obj.default is not _MISSING_TYPE else None
+    return (
+        field_obj.default if field_obj.default is not _MISSING_TYPE else None
+    )
 
 
 def initialize_reflexive(cls):
@@ -73,11 +89,15 @@ def initialize_reflexive(cls):
             # Inicializa com o player padrão (default_factory) se disponível
             if field_obj.default_factory is not dataclasses._MISSING_TYPE:
                 player_instance = field_obj.default_factory()
-                player_props, player_values = _get_player_attributes(player_instance)
+                player_props, player_values = _get_player_attributes(
+                    player_instance
+                )
                 cls.PROPERTIES.extend(player_props)  # Adiciona 'identifier'
-                cls.DATA_PROPERTIES.extend(player_values)  # Adiciona valor do identifier
+                cls.DATA_PROPERTIES.extend(
+                    player_values
+                )  # Adiciona valor do identifier
                 # Inicializa FILE com o player padrão
-                cls.FILE = PathConfigKartea.kartea_player(
+                cls.FILE = KarteaPathConfig.kartea_player(
                     f"{player_instance.player_identifier}_kartea_config.csv"
                 )
 
@@ -99,20 +119,20 @@ class PlayerConfigKartea:
     level_time: int = 120
 
     # Recursos visuais
-    car: str = PathConfigKartea.kartea_image("carro.png")
-    environment: str = PathConfigKartea.kartea_image("ambiente.png")
-    target: str = PathConfigKartea.kartea_image("alvo.png")
-    obstacle: str = PathConfigKartea.kartea_image("obstaculo.png")
+    car: str = KarteaPathConfig.kartea_image("carro.png")
+    environment: str = KarteaPathConfig.kartea_image("ambiente.png")
+    target: str = KarteaPathConfig.kartea_image("alvo.png")
+    obstacle: str = KarteaPathConfig.kartea_image("obstaculo.png")
 
     # Feedback visual
-    positive_feedback_image: str = PathConfigKartea.kartea_image("feliz.png")
-    neutral_feedback_image: str = PathConfigKartea.kartea_image("neutro.png")
-    negative_feedback_image: str = PathConfigKartea.kartea_image("triste.png")
+    positive_feedback_image: str = KarteaPathConfig.kartea_image("feliz.png")
+    neutral_feedback_image: str = KarteaPathConfig.kartea_image("neutro.png")
+    negative_feedback_image: str = KarteaPathConfig.kartea_image("triste.png")
 
     # Feedback sonoro
-    positive_feedback_sound: str = PathConfigKartea.kartea_sound("win.wav")
-    neutral_feedback_sound: str = PathConfigKartea.kartea_sound("miss.wav")
-    negative_feedback_sound: str = PathConfigKartea.kartea_sound("crash.wav")
+    positive_feedback_sound: str = KarteaPathConfig.kartea_sound("win.wav")
+    neutral_feedback_sound: str = KarteaPathConfig.kartea_sound("miss.wav")
+    negative_feedback_sound: str = KarteaPathConfig.kartea_sound("crash.wav")
 
     # Configurações de interface
     palette: int = 0
@@ -129,18 +149,22 @@ class PlayerConfigKartea:
         if self.player:
             # Obtém propriedades e valores do player fornecido
             player_props, player_values = _get_player_attributes(self.player)
-            
+
             # Atualiza FILE com base no player fornecido
-            PlayerConfigKartea.FILE = PathConfigKartea.kartea_player(
+            PlayerConfigKartea.FILE = KarteaPathConfig.kartea_player(
                 f"{self.player.player_identifier}_kartea_config.csv"
             )
-            
+
             # Atualiza PROPERTIES e DATA_PROPERTIES apenas para o player_identifier
             if "player_identifier" in PlayerConfigKartea.PROPERTIES:
                 # Remove o player_identifier antigo de DATA_PROPERTIES
-                identifier_index = PlayerConfigKartea.PROPERTIES.index("player_identifier")
+                identifier_index = PlayerConfigKartea.PROPERTIES.index(
+                    "player_identifier"
+                )
                 if identifier_index < len(PlayerConfigKartea.DATA_PROPERTIES):
-                    PlayerConfigKartea.DATA_PROPERTIES[identifier_index] = player_values[0]
+                    PlayerConfigKartea.DATA_PROPERTIES[identifier_index] = (
+                        player_values[0]
+                    )
             else:
                 # Adiciona identifier se não estiver presente
                 PlayerConfigKartea.PROPERTIES.extend(player_props)

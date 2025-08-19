@@ -1,7 +1,4 @@
-import os
-from pathlib import Path
-
-from udescjoinvilletteautil.pathconfig import PathConfig
+from udescjoinvilletteautil import PathConfig
 
 
 class KarteaPathConfig(PathConfig):

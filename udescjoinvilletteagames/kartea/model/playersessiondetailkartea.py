@@ -3,10 +3,12 @@ from dataclasses import dataclass, field, fields, is_dataclass
 from datetime import datetime
 from typing import ClassVar
 
-from udescjoinvilletteagames.kartea.model.playersessionkartea import \
-    PlayerSessionKartea
-from udescjoinvilletteagames.kartea.util.pathconfigkartea import \
-    PathConfigKartea
+from udescjoinvilletteagames.kartea.model.playersessionkartea import (
+    PlayerSessionKartea,
+)
+from udescjoinvilletteagames.kartea.util.karteapathconfig import (
+    PathConfigKartea,
+)
 from udescjoinvilletteamodel.player import Player
 
 
@@ -23,9 +25,18 @@ def _get_session_attributes(session_instance):
         return [], []
 
     if is_dataclass(session_instance):
-        identifier_field = next((f for f in fields(session_instance) if f.name == "session_identifier"), None)
+        identifier_field = next(
+            (
+                f
+                for f in fields(session_instance)
+                if f.name == "session_identifier"
+            ),
+            None,
+        )
         if identifier_field:
-            return ["session_identifier"], [getattr(session_instance, "session_identifier")]
+            return ["session_identifier"], [
+                getattr(session_instance, "session_identifier")
+            ]
         return [], []
 
     if (
@@ -33,7 +44,9 @@ def _get_session_attributes(session_instance):
         and not callable(getattr(session_instance, "session_identifier"))
         and not "session_identifier".startswith("_")
     ):
-        return ["session_identifier"], [getattr(session_instance, "session_identifier")]
+        return ["session_identifier"], [
+            getattr(session_instance, "session_identifier")
+        ]
     return [], []
 
 
@@ -48,9 +61,13 @@ def _get_field_value(field_obj):
     """
     from dataclasses import _MISSING_TYPE
 
-    if field_obj.default_factory is not _MISSING_TYPE and callable(field_obj.default_factory):
+    if field_obj.default_factory is not _MISSING_TYPE and callable(
+        field_obj.default_factory
+    ):
         return field_obj.default_factory()
-    return field_obj.default if field_obj.default is not _MISSING_TYPE else None
+    return (
+        field_obj.default if field_obj.default is not _MISSING_TYPE else None
+    )
 
 
 def initialize_reflexive(cls):
@@ -71,9 +88,14 @@ def initialize_reflexive(cls):
         if field_obj.name != "session":
             cls.PROPERTIES.append(field_obj.name)
             cls.DATA_PROPERTIES.append(_get_field_value(field_obj))
-        elif field_obj.name == "session" and field_obj.default_factory is not dataclasses._MISSING_TYPE:
+        elif (
+            field_obj.name == "session"
+            and field_obj.default_factory is not dataclasses._MISSING_TYPE
+        ):
             session_instance = field_obj.default_factory()
-            session_props, session_values = _get_session_attributes(session_instance)
+            session_props, session_values = _get_session_attributes(
+                session_instance
+            )
             cls.PROPERTIES.extend(session_props)
             cls.DATA_PROPERTIES.extend(session_values)
             cls.FILE = PathConfigKartea.kartea_player(
@@ -87,7 +109,7 @@ def initialize_reflexive(cls):
 @dataclass
 class PlayerSessionDetailKartea:
     """Modelo detalhado dos dados da sessão do jogador Kartea."""
-    
+
     # Sessão do jogador
     session: PlayerSessionKartea = field(default_factory=PlayerSessionKartea)
 
@@ -99,42 +121,64 @@ class PlayerSessionDetailKartea:
     player_position: str = "0,0"
     event_position: str = "0,0"
     event_type: str = "none"
-    
+
     # Atributos de classe
     PROPERTIES: ClassVar[list[str]] = []
     DATA_PROPERTIES: ClassVar[list] = []
     FILE: ClassVar[str | None] = None
-        
+
     def __post_init__(self):
         """Atualiza FILE, PROPERTIES e DATA_PROPERTIES com base na sessão fornecida."""
         # Inicializa PROPERTIES e DATA_PROPERTIES se necessário
         if not PlayerSessionDetailKartea.PROPERTIES:
-            PlayerSessionDetailKartea.PROPERTIES = [f.name for f in fields(self) if f.name != "session"]
+            PlayerSessionDetailKartea.PROPERTIES = [
+                f.name for f in fields(self) if f.name != "session"
+            ]
             PlayerSessionDetailKartea.DATA_PROPERTIES = [
-                getattr(self, f.name) for f in fields(self) if f.name != "session"
+                getattr(self, f.name)
+                for f in fields(self)
+                if f.name != "session"
             ]
 
         if self.session:
             # Obtém propriedades e valores da sessão fornecida
-            session_props, session_values = _get_session_attributes(self.session)
-            
+            session_props, session_values = _get_session_attributes(
+                self.session
+            )
+
             # Atualiza FILE com base na sessão fornecida
             PlayerSessionDetailKartea.FILE = PathConfigKartea.kartea_player(
                 f"{self.session.session_identifier}_kartea_session_detail.csv"
             )
-            
+
             # Atualiza PROPERTIES e DATA_PROPERTIES com session_identifier
-            if session_props and session_props[0] not in PlayerSessionDetailKartea.PROPERTIES:
+            if (
+                session_props
+                and session_props[0]
+                not in PlayerSessionDetailKartea.PROPERTIES
+            ):
                 PlayerSessionDetailKartea.PROPERTIES.append(session_props[0])
-                PlayerSessionDetailKartea.DATA_PROPERTIES.append(session_values[0] if session_values else None)
+                PlayerSessionDetailKartea.DATA_PROPERTIES.append(
+                    session_values[0] if session_values else None
+                )
             elif session_props:
-                identifier_index = PlayerSessionDetailKartea.PROPERTIES.index(session_props[0])
-                if session_values and identifier_index < len(PlayerSessionDetailKartea.DATA_PROPERTIES):
-                    PlayerSessionDetailKartea.DATA_PROPERTIES[identifier_index] = session_values[0]
+                identifier_index = PlayerSessionDetailKartea.PROPERTIES.index(
+                    session_props[0]
+                )
+                if session_values and identifier_index < len(
+                    PlayerSessionDetailKartea.DATA_PROPERTIES
+                ):
+                    PlayerSessionDetailKartea.DATA_PROPERTIES[
+                        identifier_index
+                    ] = session_values[0]
 
             # Atualiza detail_identifier em DATA_PROPERTIES
-            detail_index = PlayerSessionDetailKartea.PROPERTIES.index("detail_identifier")
-            PlayerSessionDetailKartea.DATA_PROPERTIES[detail_index] = self.detail_identifier
+            detail_index = PlayerSessionDetailKartea.PROPERTIES.index(
+                "detail_identifier"
+            )
+            PlayerSessionDetailKartea.DATA_PROPERTIES[detail_index] = (
+                self.detail_identifier
+            )
 
 
 # Caso com instância fornecida

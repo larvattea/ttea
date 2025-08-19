@@ -38,6 +38,7 @@ menu = Menu(SCREEN)
 # Variables ------------------------------------------------------- #
 state = "menu"
 
+
 # Functions ------------------------------------------------------ #
 def user_events():
     global state
@@ -59,7 +60,7 @@ def update():
             state = "game"
         elif menu.update() == "prev":
             if arquivo.get_Nivel() != 1:
-                arquivo.set_Nivel(arquivo.get_Nivel()-1)
+                arquivo.set_Nivel(arquivo.get_Nivel() - 1)
             game.reset()  # reset the game to start a new game next level
             state = "game"
         elif menu.update() == "rest":
@@ -67,10 +68,10 @@ def update():
             state = "game"
         elif menu.update() == "next":
             if arquivo.get_Nivel() != 6:
-                arquivo.set_Nivel(arquivo.get_Nivel()+1)
+                arquivo.set_Nivel(arquivo.get_Nivel() + 1)
             else:
                 if arquivo.get_Fase() != 3:
-                    arquivo.set_Fase(arquivo.get_Fase()+1)
+                    arquivo.set_Fase(arquivo.get_Fase() + 1)
                     arquivo.set_Nivel(1)
             game.reset()  # reset the game to start a new game prev level
             state = "game"
@@ -81,7 +82,6 @@ def update():
             state = "menu"
 
     pygame.display.update()
-
 
 
 def main():
@@ -101,7 +101,9 @@ def main():
 
         # FPS
         if DRAW_FPS:
-            fps_label = fps_font.render(f"FPS: {int(mainClock.get_fps())}", 1, (255, 200, 20))
+            fps_label = fps_font.render(
+                f"FPS: {int(mainClock.get_fps())}", 1, (255, 200, 20)
+            )
             SCREEN.blit(fps_label, (5, 5))
 
         # Teclas de Atalho
@@ -119,4 +121,3 @@ def main():
                 # Pausar (Space)
                 if event.key == pygame.K_SPACE:
                     print("Space KarTEA.py")
-

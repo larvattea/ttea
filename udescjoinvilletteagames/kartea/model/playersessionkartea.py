@@ -3,8 +3,9 @@ from dataclasses import dataclass, field, fields, is_dataclass
 from datetime import datetime
 from typing import ClassVar
 
-from udescjoinvilletteagames.kartea.util.pathconfigkartea import \
-    PathConfigKartea
+from udescjoinvilletteagames.kartea.util.karteapathconfig import (
+    PathConfigKartea,
+)
 from udescjoinvilletteamodel.player import Player
 
 
@@ -21,9 +22,18 @@ def _get_player_attributes(player_instance):
         return [], []
 
     if is_dataclass(player_instance):
-        identifier_field = next((f for f in fields(player_instance) if f.name == "player_identifier"), None)
+        identifier_field = next(
+            (
+                f
+                for f in fields(player_instance)
+                if f.name == "player_identifier"
+            ),
+            None,
+        )
         if identifier_field:
-            return ["player_identifier"], [getattr(player_instance, "player_identifier")]
+            return ["player_identifier"], [
+                getattr(player_instance, "player_identifier")
+            ]
         return [], []
 
     if (
@@ -31,7 +41,9 @@ def _get_player_attributes(player_instance):
         and not callable(getattr(player_instance, "player_identifier"))
         and not "player_identifier".startswith("_")
     ):
-        return ["player_identifier"], [getattr(player_instance, "player_identifier")]
+        return ["player_identifier"], [
+            getattr(player_instance, "player_identifier")
+        ]
     return [], []
 
 
@@ -46,9 +58,13 @@ def _get_field_value(field_obj):
     """
     from dataclasses import _MISSING_TYPE
 
-    if field_obj.default_factory is not _MISSING_TYPE and callable(field_obj.default_factory):
+    if field_obj.default_factory is not _MISSING_TYPE and callable(
+        field_obj.default_factory
+    ):
         return field_obj.default_factory()
-    return field_obj.default if field_obj.default is not _MISSING_TYPE else None
+    return (
+        field_obj.default if field_obj.default is not _MISSING_TYPE else None
+    )
 
 
 def initialize_reflexive(cls):
@@ -69,10 +85,15 @@ def initialize_reflexive(cls):
         if field_obj.name != "player":
             cls.PROPERTIES.append(field_obj.name)
             cls.DATA_PROPERTIES.append(_get_field_value(field_obj))
-        elif field_obj.name == "player" and field_obj.default_factory is not dataclasses._MISSING_TYPE:
+        elif (
+            field_obj.name == "player"
+            and field_obj.default_factory is not dataclasses._MISSING_TYPE
+        ):
             # Adiciona o identifier do player padrão
             player_instance = field_obj.default_factory()
-            player_props, player_values = _get_player_attributes(player_instance)
+            player_props, player_values = _get_player_attributes(
+                player_instance
+            )
             cls.PROPERTIES.extend(player_props)
             cls.DATA_PROPERTIES.extend(player_values)
 
@@ -89,10 +110,10 @@ class PlayerSessionKartea:
 
     # Dados da sessão
     session_identifier: int = 0
-    
+
     # Player
     player: Player = field(default_factory=Player)
-    
+
     # Dados da sessão continuação
     date_session: str = datetime.now().strftime("%d-%m-%Y")
     time_session: str = "00:00:00"  # @TODO: totalizador de tempo de jogo
@@ -130,8 +151,12 @@ class PlayerSessionKartea:
             # Atualiza PROPERTIES e DATA_PROPERTIES
             if "player_identifier" in PlayerSessionKartea.PROPERTIES:
                 # Atualiza o valor do identifier
-                identifier_index = PlayerSessionKartea.PROPERTIES.index("player_identifier")
-                PlayerSessionKartea.DATA_PROPERTIES[identifier_index] = player_values[0]
+                identifier_index = PlayerSessionKartea.PROPERTIES.index(
+                    "player_identifier"
+                )
+                PlayerSessionKartea.DATA_PROPERTIES[identifier_index] = (
+                    player_values[0]
+                )
             else:
                 # Adiciona identifier se não estiver presente
                 PlayerSessionKartea.PROPERTIES.extend(player_props)
@@ -139,8 +164,12 @@ class PlayerSessionKartea:
 
             # Atualiza o valor de session em DATA_PROPERTIES
             if "session_identifier" in PlayerSessionKartea.PROPERTIES:
-                session_index = PlayerSessionKartea.PROPERTIES.index("session_identifier")
-                PlayerSessionKartea.DATA_PROPERTIES[session_index] = self.session_identifier
+                session_index = PlayerSessionKartea.PROPERTIES.index(
+                    "session_identifier"
+                )
+                PlayerSessionKartea.DATA_PROPERTIES[session_index] = (
+                    self.session_identifier
+                )
 
 
 # Caso com instância fornecida
