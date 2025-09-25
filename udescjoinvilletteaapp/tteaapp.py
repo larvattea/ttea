@@ -130,7 +130,10 @@ class TTeaApp(QMainWindow, WindowConfig):
             icon_path = game_icons.get(
                 path.lower(), PathConfig.image("kartea.png")
             )
-            games.append((path, self.menu_handler.do_nothing, icon_path))
+            # @TODO ver maneira dinâmica de gerar o código dos menus
+            games.append(
+                (path, self.menu_handler.menu_player_kartea_config, icon_path)
+            )
             helps.append(
                 (
                     AppConfig.PLATAFORM_MANUAL + " " + path,

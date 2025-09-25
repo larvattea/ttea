@@ -13,7 +13,6 @@ from obstacle import Obstacle
 from pose_tracking import PoseTracking
 from settings import *
 from target import Target
-
 from util.karteapathconfig import KarteaPathConfig
 
 

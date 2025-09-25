@@ -1,9 +1,9 @@
 """
-model
+dao
 
-A Python package for model in Kartea Game.
+A Python package for data access objects (DAOs) in Kartea Game.
 
-This package provides models for player and session game configuration.
+This package provides the DAO classes for session game configuration.
 
 Attributes
 ----------
@@ -18,8 +18,9 @@ __license__ : str
 
 See Also
 --------
-PlayerKarteaConfig
-    Model for managing player configuration data.
+PlayerKarteaConfigCsvDAO
+    Data Access Object for managing player kartea configuration data
+    in CSV format.
 
 Notes
 -----
@@ -30,11 +31,8 @@ https://github.com/larva-udesc/udesc_ttea_view
 
 # Define the __all__ variable
 __all__ = [
-    "KarteaPhase",
-    "KarteaPhaseLevel",
-    "PlayerKarteaConfig",
-    "PlayerKarteaSession",
-    "PlayerKarteaSessionDetail",
+    "PlayerKarteaSessionCsvDAO",
+    "PlayerKarteaSessionDetailCsvDAO",
 ]
 
 __version__ = "1.0.0"
@@ -43,8 +41,5 @@ __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
 # Import the submodules
-from .karteaphase import KarteaPhase
-from .karteaphaselevel import KarteaPhaseLevel
-from .playerkarteaconfig import PlayerKarteaConfig
-from .playerkarteasession import PlayerKarteaSession
-from .playerkarteasessiondetail import PlayerKarteaSessionDetail
+from .playerkarteasessioncsvdao import PlayerKarteaSessionCsvDAO
+from .playerkarteasessiondetailcsvdao import PlayerKarteaSessionDetailCsvDAO

@@ -33,6 +33,7 @@ https://github.com/larva-udesc/udesc_ttea_view
 
 # Define the __all__ variable
 __all__ = [
+    "AppViewFactory",
     "ViewFactory",
 ]
 
@@ -42,4 +43,5 @@ __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
 # Import the submodules
+from .appviewfactory import AppViewFactory
 from .viewfactory import ViewFactory

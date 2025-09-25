@@ -3,7 +3,6 @@ import cv2
 import image
 import pygame
 from settings import *
-
 from util import KarteaPathConfig
 
 

@@ -1,9 +1,11 @@
 """
-model
+factory
 
-A Python package for model in Kartea Game.
+A Python package for creating and managing views in the Kartea game.
+Developed by the Larva UDESC team.
 
-This package provides models for player and session game configuration.
+This package provides tools for handling view layouts,
+and appearance settings.
 
 Attributes
 ----------
@@ -18,8 +20,8 @@ __license__ : str
 
 See Also
 --------
-PlayerKarteaConfig
-    Model for managing player configuration data.
+ViewFactory
+    Creates view instances for the application.
 
 Notes
 -----
@@ -30,11 +32,7 @@ https://github.com/larva-udesc/udesc_ttea_view
 
 # Define the __all__ variable
 __all__ = [
-    "KarteaPhase",
-    "KarteaPhaseLevel",
-    "PlayerKarteaConfig",
-    "PlayerKarteaSession",
-    "PlayerKarteaSessionDetail",
+    "KarteaViewFactory",
 ]
 
 __version__ = "1.0.0"
@@ -43,8 +41,4 @@ __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
 # Import the submodules
-from .karteaphase import KarteaPhase
-from .karteaphaselevel import KarteaPhaseLevel
-from .playerkarteaconfig import PlayerKarteaConfig
-from .playerkarteasession import PlayerKarteaSession
-from .playerkarteasessiondetail import PlayerKarteaSessionDetail
+from .karteaviewfactory import KarteaViewFactory

@@ -5,22 +5,22 @@ from typing import Optional
 
 from PySide6.QtCore import QObject, Qt
 from PySide6.QtGui import QCloseEvent, QKeySequence, QShortcut
-from PySide6.QtWidgets import (
-    QApplication,
-    QDialog,
-    QMessageBox,
-    QPushButton,
-    QVBoxLayout,
-)
-
-from udescjoinvilletteafactory import ViewFactory
+from PySide6.QtWidgets import (QApplication, QDialog, QMessageBox, QPushButton,
+                               QVBoxLayout)
 
 # Local module imports
+from udescjoinvilletteafactory import ViewFactory
 from udescjoinvilletteautil import PathConfig
 
 
 class MenuHandler(QObject):
-    """Manages menu actions in the application.
+    """
+    Manages menu actions in the application.
+
+    This class handles menu-related actions such as opening dialogs for player
+    selection, Kartea configuration, help, and about information, as well as
+    managing application exit. It uses view factories to create
+    dialog instances and sets up shortcuts for specific actions.
 
     Parameters
     ----------
@@ -35,25 +35,30 @@ class MenuHandler(QObject):
         Translator object for handling translations.
     is_exiting : bool
         Flag to prevent duplicate exit calls.
+    app_view_factory : AppViewFactory
+        Factory for creating application view instances.
+    kartea_view_factory : KarteaViewFactory
+        Factory for creating Kartea game view instances.
 
     Methods
     -------
-    __init__(parent: QObject) -> None
-        Initialize the MenuHandler with a parent QObject.
-    do_nothing() -> None
+    do_nothing()
         Display a placeholder dialog with a button.
-    menu_exit(event: Optional[QCloseEvent] = None) -> None
+    menu_exit(event=None)
         Handle the application exit process.
-    menu_player() -> None
+    menu_player_kartea_config()
+        Open the player selection dialog for Kartea configuration.
+    menu_player()
         Open the player selection dialog.
-    menu_help() -> None
+    menu_help()
         Open the Qt Assistant with the help file.
-    menu_about() -> None
+    menu_about()
         Display the about dialog.
     """
 
     def __init__(self, parent: QObject) -> None:
-        """Initialize the MenuHandler with a parent QObject.
+        """
+        Initialize the MenuHandler with a parent QObject.
 
         Parameters
         ----------
@@ -62,7 +67,8 @@ class MenuHandler(QObject):
 
         Notes
         -----
-        Sets up a shortcut for the F1 key to trigger the help menu.
+        Sets up a shortcut for the F1 key to trigger the help menu and
+        initializes the app and Kartea view factories.
         """
         super().__init__(parent)
         self.parent = parent
@@ -71,13 +77,17 @@ class MenuHandler(QObject):
         )
         # Flag to avoid duplicate calls
         self.is_exiting = False
+        # Initialize the view factory from App and Games
+        self.app_view_factory = ViewFactory.get_app_view_factory()
+        self.kartea_view_factory = ViewFactory.get_kartea_view_factory()
 
         # Setup F1 shortcut for help
         help_shortcut = QShortcut(QKeySequence(Qt.Key_F1), self.parent)
         help_shortcut.activated.connect(self.menu_help)
 
     def do_nothing(self) -> None:
-        """Display a placeholder dialog with a button.
+        """
+        Display a placeholder dialog with a button.
 
         Notes
         -----
@@ -92,18 +102,20 @@ class MenuHandler(QObject):
         dialog.exec()
 
     def menu_exit(self, event: Optional[QCloseEvent] = None) -> None:
-        """Handle the application exit process.
+        """
+        Handle the application exit process.
 
         Parameters
         ----------
         event : Optional[QCloseEvent], optional
-            The close event, if triggered by a window close action.
+            The close event, if triggered by a window close action, by
+            default None.
 
         Notes
         -----
-        Displays a confirmation dialog before exiting the application.
-        If the user confirms, the application quits or accepts the close event.
-        Prevents duplicate exit calls using the `is_exiting` flag.
+        Displays a confirmation dialog before exiting the application. If
+        the user confirms, the application quits or accepts the close
+        event. Prevents duplicate exit calls using the `is_exiting` flag.
         """
         # Check if it is already in the process of leaving to avoid duplication
         if self.is_exiting:
@@ -137,23 +149,43 @@ class MenuHandler(QObject):
             # Just ignore if it's a window event
             event.ignore()
 
-    def menu_player(self) -> None:
-        """Open the player selection dialog.
+    def menu_player_kartea_config(self) -> None:
+        """
+        Open the player selection dialog for Kartea configuration.
 
         Notes
         -----
-        Creates and displays a modal player selection dialog using ViewFactory.
+        Creates and displays a modal player dialog for Kartea
+        configuration using KarteaViewFactory.
         """
-        # Pass the parent (main window)
-        player_list = ViewFactory.create_player_list_view(
+        # Use the stored kartea view factory
+        player_kartea_config_list = self.kartea_view_factory.create_player_kartea_config_list_view(
             self.parent,
-            player_edit_view_factory=ViewFactory.create_player_edit_view,
+            player_kartea_config_edit_view_factory=self.kartea_view_factory.create_player_kartea_config_edit_view,
+        )
+        # Run as modal
+        player_kartea_config_list.exec()
+
+    def menu_player(self) -> None:
+        """
+        Open the player selection dialog.
+
+        Notes
+        -----
+        Creates and displays a modal player selection dialog using
+        AppViewFactory.
+        """
+        # Use the stored app view factory
+        player_list = self.app_view_factory.create_player_list_view(
+            self.parent,
+            player_edit_view=self.app_view_factory.create_player_edit_view,
         )
         # Run as modal
         player_list.exec()
 
     def menu_help(self) -> None:
-        """Open the Qt Assistant with the help file.
+        """
+        Open the Qt Assistant with the help file.
 
         Raises
         ------
@@ -208,13 +240,14 @@ class MenuHandler(QObject):
         )
 
     def menu_about(self) -> None:
-        """Display the about dialog.
+        """
+        Display the about dialog.
 
         Notes
         -----
-        Creates and displays a modal about dialog using ViewFactory.
+        Creates and displays a modal about dialog using AppViewFactory.
         """
-        # Pass the parent (main window)
-        about = ViewFactory.create_about_view(self.parent)
+        # Use the stored app view factory
+        about = self.app_view_factory.create_about_view(self.parent)
         # Run as modal
         about.exec()

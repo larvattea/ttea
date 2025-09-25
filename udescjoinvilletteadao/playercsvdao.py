@@ -162,9 +162,7 @@ class PlayerCsvDAO(DAO):
         self.players[obj.id] = obj
         filename = self.get_filename(obj)
         self.file_map[obj.id] = filename
-        self.csv_handler.write_csv(
-            filename, obj.get_player_data(), Player.PROPERTIES
-        )
+        self.csv_handler.write_csv(filename, obj.get_data(), Player.PROPERTIES)
         return obj.id
 
     def update(self, obj: Player) -> Optional[Union[int, bool]]:
@@ -198,7 +196,7 @@ class PlayerCsvDAO(DAO):
 
         self.players[obj.id] = obj
         self.csv_handler.write_csv(
-            new_filename, obj.get_player_data(), Player.PROPERTIES
+            new_filename, obj.get_data(), Player.PROPERTIES
         )
         return True
 

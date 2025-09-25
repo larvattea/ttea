@@ -70,19 +70,23 @@ class AppConfig:
     '15/07/2025'
     """
 
-    ICON_APP = PathConfig.icon("larva.ico")
-    LOGO_APP = PathConfig.image("ttealogo.png")
-    PLATAFORM_SUFIX = "TEA"
-    PLATAFORM_MANUAL = "Manual"
-    VERSION = "2.0"
+    GAMES_APP: list = [
+        "KarTEA",
+    ]
 
-    DEFAULT_DATE_FORMAT = "%d/%m/%Y"
-    SETTINGS_GERAL = "geral"
-    SETTINGS_GERAL_DATE_MASK = f"{SETTINGS_GERAL}/date_mask"
-    SETTINGS_GERAL_LANGUAGE = f"{SETTINGS_GERAL}/language"
-    SETTINGS_GERAL_VERSION = f"{SETTINGS_GERAL}/version"
-    USA_DATE_FORMAT = "%m/%d/%Y"
-    TRANSLATION_EXTENSION = ".qm"
+    ICON_APP: str = PathConfig.icon("larva.ico")
+    LOGO_APP: str = PathConfig.image("ttealogo.png")
+    PLATAFORM_SUFIX: str = "TEA"
+    PLATAFORM_MANUAL: str = "Manual"
+    VERSION: str = "2.0"
+
+    DEFAULT_DATE_FORMAT: str = "%d/%m/%Y"
+    SETTINGS_GERAL: str = "geral"
+    SETTINGS_GERAL_DATE_MASK: str = f"{SETTINGS_GERAL}/date_mask"
+    SETTINGS_GERAL_LANGUAGE: str = f"{SETTINGS_GERAL}/language"
+    SETTINGS_GERAL_VERSION: str = f"{SETTINGS_GERAL}/version"
+    USA_DATE_FORMAT: str = "%m/%d/%Y"
+    TRANSLATION_EXTENSION: str = ".qm"
 
     @staticmethod
     def get_title() -> str:

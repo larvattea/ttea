@@ -36,7 +36,7 @@ class PlayerEditController:
         Close dialog without saving.
     is_input_valid() -> bool
         Validate input fields.
-    get_player_data(self) -> Dict[str, Union[str, date]]
+    get_data(self) -> Dict[str, Union[str, date]]
         Return player data from input fields.
     """
 
@@ -113,18 +113,18 @@ class PlayerEditController:
         error_message = ""
 
         if not self.view.name_input.text():
-            error_message += "Name is required!\n"
+            error_message += "Nome é obrigatório!\n"
 
         if error_message:
             QMessageBox.critical(
                 self.view,
-                "Invalid Fields",
-                "Please correct invalid fields:\n" + error_message,
+                "Dados inválidos",
+                "Por favor, corrija os dados inválidos:\n" + error_message,
             )
             return False
         return True
 
-    def get_player_data(self) -> Dict[str, Union[str, date]]:
+    def get_data(self) -> Dict[str, Union[str, date]]:
         """Return player data from input fields.
 
         Retrieves the data entered in the dialog's input fields.

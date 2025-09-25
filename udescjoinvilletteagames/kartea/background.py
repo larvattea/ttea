@@ -7,7 +7,6 @@ import image
 import pygame
 from line import Line
 from settings import *
-
 from util import KarteaPathConfig
 
 roadW = 400  # Tamanho pista

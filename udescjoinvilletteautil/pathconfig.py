@@ -66,6 +66,7 @@ class PathConfig:
     icons_dir = assets_dir / "icons"
     helps_dir = root / "help"
     helps_dir_pt = helps_dir / "pt"
+    ui_dir = root / "udescjoinvilletteaui"
 
     @classmethod
     def create_directories(cls) -> None:
@@ -261,3 +262,24 @@ class PathConfig:
         '/path/to/project/help/pt/index.html'
         """
         return str(cls.helps_dir_pt / filename)
+
+    @classmethod
+    def ui(cls, filename: str) -> str:
+        """Get the full path to a UI file.
+
+        Parameters
+        ----------
+        filename : str
+            Name of the UI file.
+
+        Returns
+        -------
+        str
+            Full path to the UI file.
+
+        Examples
+        --------
+        >>> PathConfig.ui("main.ui")
+        '/path/to/project/ui/main.ui'
+        """
+        return str(cls.ui_dir / filename)

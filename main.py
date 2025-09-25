@@ -379,7 +379,7 @@ class AppLauncher:
             self.splash = None
         self.language_controller = LanguageController(
             self.language_model,
-            lambda parent: ViewFactory.create_language_view(
+            lambda parent: ViewFactory.get_app_view_factory().create_language_view(
                 self.translator, parent
             ),
             parent=None,

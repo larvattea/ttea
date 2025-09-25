@@ -14,13 +14,12 @@ def initialize_reflexive(cls):
     Returns
     -------
     type
-        The decorated class with initialized PROPERTIES and DATA_PROPERTIES
-        attributes.
+        The decorated class with initialized PROPERTIES and DATA_PROPERTIES.
 
     Notes
     -----
     - Adds the list of field names to `PROPERTIES`.
-    - Adds the default values of initializable fields to `DATA_PROPERTIES`.
+    - Adds default values of initializable fields to `DATA_PROPERTIES`.
     """
     cls.PROPERTIES = [field.name for field in fields(cls)]
     cls.DATA_PROPERTIES = [
@@ -53,9 +52,9 @@ class Player:
     -------
     is_valid()
         Checks if the player's data is valid.
-    set_player_data(self, data: Dict)
+    set_data(data)
         Updates the player's data from a dictionary.
-    def get_player_data():
+    get_data()
         Returns the player's data as a list of dictionaries.
 
     Examples
@@ -64,15 +63,15 @@ class Player:
     >>> player = Player(id=1, name="John", birth_date=datetime(2000, 1, 1))
     >>> player.is_valid()
     True
-    >>> player.get_player_data()
+    >>> player.get_data()
     [{'id': 1, 'name': 'John', 'birth_date': datetime(2000, 1, 1),
-    'observation': ''}]
+      'observation': ''}]
     """
 
     id: int
     name: str
     birth_date: datetime
-    observation: str = ""
+    observation: str
 
     PROPERTIES: ClassVar[list[str]] = []
     DATA_PROPERTIES: ClassVar[list] = []
@@ -89,17 +88,17 @@ class Player:
         Notes
         -----
         - A player is considered valid if `name` is not an empty string and
-        `birth_date` is not None.
+          `birth_date` is not None.
         """
         return self.name and self.birth_date
 
-    def set_player_data(self, data: Dict) -> None:
+    def set_data(self, data: Dict) -> None:
         """Updates the player's data from a dictionary.
 
         Parameters
         ----------
         data : Dict
-            Dictionary containing player data with the following keys:
+            Dictionary containing player data with keys:
             - 'id': int
             - 'name': str
             - 'birth_date': datetime
@@ -111,24 +110,20 @@ class Player:
 
         Notes
         -----
-        - Replaces the player's attributes with the values provided in
-        the dictionary.
-        - Does not perform validation on the provided data.
+        - Updates attributes using PROPERTIES for dynamic assignment.
+        - No validation is performed on the input data.
         """
+        for prop in self.PROPERTIES:
+            if prop in data:
+                setattr(self, prop, data[prop])
 
-        self.id = data["id"]
-        self.name = data["name"]
-        self.birth_date = data["birth_date"]
-        self.observation = data["observation"]
-
-    def get_player_data(self) -> List[Dict]:
+    def get_data(self) -> List[Dict]:
         """Returns the player's data as a list of dictionaries.
 
         Returns
         -------
         List[Dict]
-            List containing a single dictionary with the player's data,
-            including:
+            List containing a dictionary with player data:
             - 'id': int
             - 'name': str
             - 'birth_date': datetime
@@ -136,14 +131,8 @@ class Player:
 
         Notes
         -----
-        - The method returns a list to maintain consistency with potential
-        future implementations that may return multiple records.
+        - Uses PROPERTIES to dynamically build the data dictionary.
+        - Returns a list for consistency with potential multi-record returns.
         """
-        info = {
-            "id": self.id,
-            "name": self.name,
-            "birth_date": self.birth_date,
-            "observation": self.observation,
-        }
-
+        info = {prop: getattr(self, prop) for prop in self.PROPERTIES}
         return [info]

@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING, Callable, Optional
 
 from PySide6.QtWidgets import QDialog, QMessageBox, QTableWidgetItem
 
+# Local module import
 from udescjoinvilletteadao import PlayerCsvDAO
 from udescjoinvilletteamodel import Player
 
@@ -13,13 +14,10 @@ if TYPE_CHECKING:
 class PlayerListController:
     """Controller to handle UI interactions and business logic for player list.
 
-    Parameters
-    ----------
-    view : PlayerListView
-        The view instance for displaying player data.
-    player_edit_view_factory : Callable[[Optional[QDialog], Optional[Player]],
-                                        PlayerEditView]
-        Factory function to create PlayerEditView instances.
+    This class manages the interaction between the player list view and
+    the data access layer, facilitating operations such as loading,
+    filtering, adding, editing, and deleting players. It uses a CSV-based
+    data access object for persistence.
 
     Attributes
     ----------
@@ -28,24 +26,25 @@ class PlayerListController:
     dao : PlayerCsvDAO
         Data access object for player data operations.
     player_edit_view_factory : Callable[[Optional[QDialog], Optional[Player]],
-                                        PlayerEditView]
-        Factory function to create PlayerEditView instances.
+        PlayerEditView] Factory function to create PlayerEditView instances.
 
     Methods
     -------
-    load_players(search_query: str = "") -> None
-        Load players into the table, optionally filtered by search query.
-    filter_players() -> None
+    __init__(view, player_edit_view_factory)
+        Initialize the controller with view and factory.
+    load_players(search_query="")
+        Load players into the table, optionally filtered.
+    filter_players(text)
         Filter players based on search input and refresh table.
-    handle_new_player() -> None
+    handle_new_player()
         Open dialog to create a new player.
-    handle_edit_player() -> None
+    handle_edit_player()
         Open dialog to edit selected player.
-    delete_player() -> None
-        Delete selected player.
-    show_player_details(player: Optional[Player]) -> None
+    delete_player()
+        Delete selected player after confirmation.
+    show_player_details(player)
         Show details of the selected player in the labels.
-    on_table_selection() -> None
+    on_table_selection()
         Populate details labels when a table row is selected.
     """
 
@@ -56,16 +55,18 @@ class PlayerListController:
             [Optional[QDialog], Optional[Player]], "PlayerEditView"
         ],
     ) -> None:
-        """Initialize the controller with a view and a factory for
-        PlayerEditView.
+        """Initialize the controller with view and factory.
+
+        Sets up the controller with the provided view and factory function
+        for creating edit dialogs, and initializes the data access object.
 
         Parameters
         ----------
         view : PlayerListView
             The view instance for displaying player data.
         player_edit_view_factory : Callable[[Optional[QDialog],
-                                            Optional[Player]], PlayerEditView]
-            Factory function to create PlayerEditView instances.
+            Optional[Player]], PlayerEditView] Factory function
+            to create PlayerEditView instances.
 
         Returns
         -------
@@ -78,25 +79,19 @@ class PlayerListController:
     def load_players(self, search_query: str = "") -> None:
         """Load players into the table, optionally filtered by search query.
 
+        Retrieves players from the DAO, filters them by the search query if
+        provided, and updates the view's table with the player data.
+
         Parameters
         ----------
         search_query : str, optional
-            Query to filter players by name or ID (default is "").
+            Query to filter players by ID or name. Defaults to "".
 
         Returns
         -------
         None
-
-        Notes
-        -----
-        - Filters players if search_query is provided, matching against ID
-            or name.
-        - Updates the table with filtered or all players.
-        - Clears player details display when reloading.
         """
         players = self.dao.list()
-
-        # Filter players by name or ID if search query is provided
         if search_query:
             search_query = search_query.lower()
             players = [
@@ -111,51 +106,46 @@ class PlayerListController:
         for row, player in enumerate(players):
             self.view.table.setItem(row, 0, QTableWidgetItem(str(player.id)))
             self.view.table.setItem(row, 1, QTableWidgetItem(player.name))
-            self.view.table.setItem(
-                row,
-                2,
-                QTableWidgetItem(player.birth_date.strftime("%Y-%m-%d")),
-            )
-            self.view.table.setItem(
-                row, 3, QTableWidgetItem(player.observation)
-            )
-
-        # Clear details when reloading players
         self.show_player_details(None)
 
-    def filter_players(self) -> None:
+    def filter_players(self, text: str) -> None:
         """Filter players based on search input and refresh table.
+
+        Calls load_players with the provided search text to update the
+        table with filtered results.
+
+        Parameters
+        ----------
+        text : str
+            The search text to filter players by ID or name.
 
         Returns
         -------
         None
-
-        Notes
-        -----
-        - Retrieves the search query from the view's search input.
-        - Calls load_players with the search query to update the table.
         """
-        search_query = self.view.search_input.text()
-        self.load_players(search_query)
+        self.load_players(text)
 
     def handle_new_player(self) -> None:
         """Open dialog to create a new player.
 
+        Opens a dialog for entering new player details, assigns a new ID,
+        and inserts the player into the DAO. Displays success or failure
+        message based on the result.
+
+        Parameters
+        ----------
+        None
+
         Returns
         -------
         None
-
-        Notes
-        -----
-        - Creates a new player dialog using the factory.
-        - Inserts new player into the database if dialog is accepted.
-        - Displays success or failure message based on insertion result.
-        - Reloads the player list after successful insertion.
         """
         dialog = self.player_edit_view_factory(self.view)
         if dialog.exec():
-            data = dialog.controller.get_player_data()
-            player_id = len(self.dao.list()) + 1
+            data = dialog.controller.get_data()
+            player_id = (
+                max((player.id for player in self.dao.list()), default=0) + 1
+            )
             player = Player(
                 id=player_id,
                 name=data["name"],
@@ -168,46 +158,52 @@ class PlayerListController:
                 QMessageBox.information(
                     self.view,
                     self.view.parent().get_title(),
-                    "Jogador adicionado com sucesso.",
+                    self.view.tr("Cadastro do jogador realizado com sucesso."),
                 )
             else:
                 QMessageBox.critical(
                     self.view,
                     self.view.parent().get_title(),
-                    "Falha ao adicionar um jogador.",
+                    self.view.tr("Falha ao adicionar o jogador."),
                 )
 
     def handle_edit_player(self) -> None:
         """Open dialog to edit selected player.
 
+        Opens a dialog pre-filled with the selected player's data, updates
+        the player in the DAO if confirmed, and displays success or failure
+        message.
+
+        Parameters
+        ----------
+        None
+
         Returns
         -------
         None
-
-        Notes
-        -----
-        - Checks if a player is selected; shows warning if not.
-        - Retrieves selected player's data and opens edit dialog.
-        - Updates player data if dialog is accepted and saves changes.
-        - Displays success or failure message based on update result.
-        - Reloads the player list after successful update.
         """
         selected = self.view.table.selectedItems()
         if not selected:
             QMessageBox.warning(
                 self.view,
                 self.view.parent().get_title(),
-                "Por favor selecione um jogador para editar.",
+                self.view.tr(
+                    "Por favor selecione um jogador na listagem para editar."
+                ),
             )
             return
         player_id = int(self.view.table.item(selected[0].row(), 0).text())
         player = self.dao.select(player_id)
         if not player:
-            QMessageBox.critical(self.view, "Erro", "Jogador não encontrado.")
+            QMessageBox.critical(
+                self.view,
+                self.view.parent().get_title(),
+                self.view.tr("Jogador não encontrado."),
+            )
             return
         dialog = self.player_edit_view_factory(self.view, player)
         if dialog.exec() and dialog.controller.ok_clicked:
-            data = dialog.controller.get_player_data()
+            data = dialog.controller.get_data()
             updated_player = Player(
                 id=player_id,
                 name=data["name"],
@@ -220,35 +216,38 @@ class PlayerListController:
                 QMessageBox.information(
                     self.view,
                     self.view.parent().get_title(),
-                    "Dados do jogador atualizados.",
+                    self.view.tr("Dados do jogador atualizados."),
                 )
             else:
                 QMessageBox.critical(
                     self.view,
                     self.view.parent().get_title(),
-                    "Falha ao atualizar os dados do jogador.",
+                    self.view.tr("Falha ao atualizar os dados do jogador."),
                 )
 
     def delete_player(self) -> None:
-        """Delete selected player.
+        """Delete selected player after confirmation.
+
+        Prompts the user to confirm deletion of the selected player, removes
+        the player from the DAO if confirmed, and displays success or failure
+        message.
+
+        Parameters
+        ----------
+        None
 
         Returns
         -------
         None
-
-        Notes
-        -----
-        - Checks if a player is selected; shows warning if not.
-        - Prompts user to confirm deletion with player name.
-        - Deletes player if confirmed and displays success or failure message.
-        - Reloads the player list after successful deletion.
         """
         selected = self.view.table.selectedItems()
         if not selected:
             QMessageBox.warning(
                 self.view,
                 self.view.parent().get_title(),
-                "Por favor selecione um jogador para excluir.",
+                self.view.tr(
+                    "Por favor selecione um jogador na listagem para excluir."
+                ),
             )
             return
         player_id = int(self.view.table.item(selected[0].row(), 0).text())
@@ -258,14 +257,12 @@ class PlayerListController:
         msg_box.setIcon(QMessageBox.Question)
         msg_box.setWindowTitle(self.view.parent().windowTitle())
         msg_box.setText(
-            self.view.parent().tr(
-                f"Confirma a exclusão do jogador?\n{player_name}"
-            )
+            self.view.tr(f"Confirma a exclusão do jogador?\n{player_name}")
         )
         msg_box.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
         msg_box.setDefaultButton(QMessageBox.No)
-        msg_box.button(QMessageBox.Yes).setText(self.view.parent().tr("Sim"))
-        msg_box.button(QMessageBox.No).setText(self.view.parent().tr("Não"))
+        msg_box.button(QMessageBox.Yes).setText(self.view.tr("Sim"))
+        msg_box.button(QMessageBox.No).setText(self.view.tr("Não"))
         if msg_box.exec() == QMessageBox.Yes:
             result = self.dao.delete(player_id)
             if result:
@@ -273,31 +270,29 @@ class PlayerListController:
                 QMessageBox.information(
                     self.view,
                     self.view.parent().get_title(),
-                    "Jogador excluído com sucesso.",
+                    self.view.tr("Jogador excluído com sucesso."),
                 )
             else:
                 QMessageBox.critical(
                     self.view,
                     self.view.parent().get_title(),
-                    "Não foi possível excluir o jogador.",
+                    self.view.tr("Não foi possível excluir o jogador."),
                 )
 
     def show_player_details(self, player: Optional[Player]) -> None:
         """Show details of the selected player in the labels.
 
+        Updates the view's labels with the selected player's details or
+        clears them if no player is provided.
+
         Parameters
         ----------
         player : Optional[Player]
-            The player object to display details for, or None to clear.
+            The player whose details are to be displayed, or None to clear.
 
         Returns
         -------
         None
-
-        Notes
-        -----
-        - Displays player ID, name, birth date, and observation in view labels.
-        - Clears labels if no player is provided.
         """
         if player:
             self.view.id_label.setText(str(player.id))
@@ -315,16 +310,17 @@ class PlayerListController:
     def on_table_selection(self) -> None:
         """Populate details labels when a table row is selected.
 
+        Retrieves the selected player's data from the DAO and updates the
+        view's labels with the player's details, or clears them if no player
+        is selected.
+
+        Parameters
+        ----------
+        None
+
         Returns
         -------
         None
-
-        Notes
-        -----
-        - Retrieves selected player's ID from the table.
-        - Fetches player data and updates details labels via
-            show_player_details.
-        - Clears details if no row is selected.
         """
         selected = self.view.table.selectedItems()
         if selected:
