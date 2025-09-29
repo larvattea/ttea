@@ -4,13 +4,10 @@ from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QDialog
 
 from udescjoinvilletteacontroller import PlayerListController
-from udescjoinvilletteagames.kartea.controller import (
-    PlayerKarteaConfigEditController,
-)
-from udescjoinvilletteagames.kartea.view import (
-    PlayerKarteaConfigEditView,
-    PlayerKarteaConfigListView,
-)
+from udescjoinvilletteagames.kartea.controller import \
+    PlayerKarteaConfigEditController
+from udescjoinvilletteagames.kartea.view import (PlayerKarteaConfigEditView,
+                                                 PlayerKarteaConfigListView)
 
 if TYPE_CHECKING:
     from udescjoinvilletteagames.kartea.model import PlayerKarteaConfig

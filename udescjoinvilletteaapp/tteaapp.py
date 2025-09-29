@@ -1,7 +1,7 @@
 from datetime import date
 from typing import Callable, List, Optional, Tuple
 
-from PySide6.QtCore import QSettings, Qt
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QCloseEvent, QIcon
 from PySide6.QtWidgets import QLabel, QMainWindow, QMenu, QMenuBar, QStatusBar
 
@@ -26,8 +26,6 @@ class TTeaApp(QMainWindow, WindowConfig):
         Application instance for accessing settings.
     menu_handler : MenuHandler
         Handler for menu actions and interactions.
-    settings : QSettings
-        Configuration settings loaded from 'config.ini'.
     title : str
         The translated title of the application.
 
@@ -69,7 +67,7 @@ class TTeaApp(QMainWindow, WindowConfig):
         Notes
         -----
         - Inherits from QMainWindow and WindowConfig for GUI and window setup.
-        - Initializes the menu handler and settings from 'config.ini'.
+        - Initializes the menu handler.
         - Calls setup_window, setup_menu, and setup_status_bar
         for initialization.
         """
@@ -77,9 +75,6 @@ class TTeaApp(QMainWindow, WindowConfig):
         self.translator = translator  # Translator object from main.py
         self.app = app
         self.menu_handler = MenuHandler(self)
-        self.settings = QSettings(
-            PathConfig.inifile("config.ini"), QSettings.IniFormat
-        )
         self.title = AppConfig.get_title()  # Set title attribute
         self.setup_window(self.title, AppConfig.ICON_APP)
         self.setup_menu()
@@ -246,12 +241,12 @@ class TTeaApp(QMainWindow, WindowConfig):
 
         Notes
         -----
-        - Retrieves date format from settings (SETTINGS_GERAL_DATE_MASK).
+        - Retrieves date format from AppConfig.
         - Aligns status bar text to the right with a styled border.
         - Displays the platform version and current date.
         """
 
-        mask = self.settings.value(AppConfig.SETTINGS_GERAL_DATE_MASK, None)
+        mask = AppConfig.get_geral_date_mask()
         status_text = ("{} {} - {} {}").format(
             self.tr("Versão da Plataforma:"),
             version,

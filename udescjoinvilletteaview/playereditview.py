@@ -6,6 +6,7 @@ from PySide6.QtWidgets import (QDateEdit, QDialog, QDialogButtonBox,
                                QFormLayout, QLineEdit, QTabWidget, QTextEdit,
                                QVBoxLayout, QWidget)
 
+from udescjoinvilletteaapp import AppConfig
 # Local module import
 from udescjoinvilletteacontroller import PlayerEditController
 
@@ -104,6 +105,11 @@ class PlayerEditView(QDialog, WindowConfig):
         self.birth_date_input = QDateEdit()
         self.birth_date_input.setCalendarPopup(True)
         self.birth_date_input.setDate(QDate.currentDate())
+        self.birth_date_input.setDisplayFormat(
+            AppConfig.convert_strftime_to_qt_format(
+                AppConfig.get_geral_date_mask()
+            )
+        )
 
         self.observation_input = QTextEdit()
         self.observation_input.setPlaceholderText("Observação")

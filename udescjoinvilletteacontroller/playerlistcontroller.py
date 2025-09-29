@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING, Callable, Optional
 
 from PySide6.QtWidgets import QDialog, QMessageBox, QTableWidgetItem
 
+from udescjoinvilletteaapp import AppConfig
 # Local module import
 from udescjoinvilletteadao import PlayerCsvDAO
 from udescjoinvilletteamodel import Player
@@ -297,8 +298,10 @@ class PlayerListController:
         if player:
             self.view.id_label.setText(str(player.id))
             self.view.name_label.setText(player.name)
+            mask = AppConfig.get_geral_date_mask()
             self.view.birth_date_label.setText(
-                player.birth_date.strftime("%Y-%m-%d")
+                # player.birth_date.strftime("%Y-%m-%d")
+                player.birth_date.strftime(mask)
             )
             self.view.observation_label.setText(player.observation)
         else:
