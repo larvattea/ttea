@@ -8,7 +8,7 @@ from PySide6.QtWidgets import QLabel, QMainWindow, QMenu, QMenuBar, QStatusBar
 # Local module imports
 from udescjoinvilletteaapp import AppConfig
 from udescjoinvilletteamenu import MenuHandler
-from udescjoinvilletteautil import PathConfig
+from udescjoinvilletteautil import PathConfig, QtDateFormat
 from udescjoinvilletteawindow import WindowConfig
 
 

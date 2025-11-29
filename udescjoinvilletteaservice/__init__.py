@@ -1,12 +1,12 @@
 """
-udescjoinvilletteautil
+udescjoinvilletteaservice
 
-A Python package for utility functions in the T-TEA platform,
-supporting and configuration management. Developed by the
-Larva UDESC team.
+A Python package for service classes from the T-TEA platform,
+supporting service logic.
+Developed by the Larva UDESC team.
 
-This package provides tools for handling CSV files,
-Message Dialog, Date conversion and central path management.
+This package provides the service classes for controllers,
+for the T-TEA platform.
 
 Attributes
 ----------
@@ -21,10 +21,8 @@ __license__ : str
 
 See Also
 --------
-CSVHandler
-    Handling CSV files with a custom dialect.
-PathConfig
-    Manages file paths and directory structures.
+PlayerService
+    Manages the service logic and data operations related to player entities.
 
 Notes
 -----
@@ -35,10 +33,7 @@ https://github.com/larva-udesc/udesc_ttea_view
 
 # Define the __all__ variable
 __all__ = [
-    "CSVHandler",
-    "MessageService",
-    "QtDateFormat",
-    "PathConfig",
+    "PlayerService",
 ]
 
 __version__ = "1.0.0"
@@ -47,7 +42,4 @@ __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
 # Import the submodules
-from .cvshandler import CSVHandler
-from .messageservice import MessageService
-from .pathconfig import PathConfig
-from .qtdateformat import QtDateFormat
+from .playerservice import PlayerService

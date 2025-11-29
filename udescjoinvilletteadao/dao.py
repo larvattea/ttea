@@ -1,172 +1,104 @@
 from abc import ABC, abstractmethod
-from typing import Any, List, Optional, Union
+from typing import Generic, List, Optional, TypeVar
+
+T = TypeVar("T")
 
 
-class DAO(ABC):
-    """Abstract base class for Data Access Object (DAO) pattern.
+class DAO(ABC, Generic[T]):
+    """Generic interface for CRUD operations on persistent entities.
 
-    This class defines the interface for basic CRUD
-    (Create, Read, Update, Delete) operations and listing functionality
-    for data persistence. Concrete subclasses must implement all
-    abstract methods to provide specific database operations.
+    This abstract base class defines the standard data access object (DAO)
+    pattern with type-safe operations for any entity type ``T``.
+
+    Attributes
+    ----------
+    None
+        This is an interface; concrete implementations may define attributes.
 
     Methods
     -------
-    insert(self) -> Optional[Union[int, str, bool]]
-        Insert a new record into the data storage.
-    update(self) -> Optional[Union[int, bool]]
-        Update an existing record in the data storage.
-    delete(self) -> Optional[Union[int, bool]]
-        Delete a record from the data storage.
-    select(self) -> Optional[Any]:
-        Retrieve a single record from the data storage.
-    list(self) -> List[Any]
-        Retrieve a list of records from the data storage.
-
-    Notes
-    -----
-    - This is an abstract base class and cannot be instantiated directly.
-    - Subclasses should implement database-specific logic for each method.
-    - Methods are designed to be overridden with specific implementations for
-      different data storage systems (e.g., SQL, NoSQL, file-based).
+    insert(obj)
+        Inserts a new object and returns its generated identifier.
+    update(obj)
+        Updates an existing object in the persistent storage.
+    delete(obj_id)
+        Deletes the object identified by the given identifier.
+    select(obj_id)
+        Retrieves an object by its identifier.
+    list()
+        Retrieves all objects of type ``T``.
     """
 
     @abstractmethod
-    def insert(self, obj: object) -> Optional[Union[int, str, bool]]:
-        """Insert a new record into the data storage.
+    def insert(self, obj: T) -> int:
+        """Insere a new object and returns its generated ID.
 
         Parameters
         ----------
-        None
-            Subclasses should define specific parameters (e.g., data object,
-            dictionary, or specific fields).
+        obj : T
+            The object instance to be persisted.
 
         Returns
         -------
-        Optional[Union[int, str, bool]]
-            Subclasses may return an identifier (e.g., ID of the inserted
-            record) or a success indicator.
-
-        Notes
-        -----
-        - Subclasses must handle the insertion logic specific to the
-        data storage.
-        - Should include validation and error handling for the data
-        being inserted.
-
-        Raises
-        ------
-        NotImplementedError
-            If the method is not implemented in a subclass.
+        int
+            The identifier (usually primary key) assigned to the new object.
         """
 
     @abstractmethod
-    def update(self, obj: object) -> Optional[Union[int, bool]]:
-        """Update an existing record in the data storage.
+    def update(self, obj: T) -> bool:
+        """Updates an existing object in the persistent storage.
 
         Parameters
         ----------
-        None
-            Subclasses should define specific parameters (e.g., record ID,
-            updated data fields).
+        obj : T
+            The object with updated values. Its identifier must correspond
+            to an existing record.
 
         Returns
         -------
-        Optional[Union[int, bool]]
-            Subclasses may return a success indicator or number of affected
-            records.
-
-        Notes
-        -----
-        - Subclasses must handle the update logic specific to the data storage.
-        - Should include validation to ensure the record exists before
-        updating.
-
-        Raises
-        ------
-        NotImplementedError
-            If the method is not implemented in a subclass.
+        bool
+            True if the object was successfully updated, False otherwise
+            (e.g., if the object does not exist).
         """
 
     @abstractmethod
-    def delete(self, obj_id: int) -> Optional[Union[int, bool]]:
-        """Delete a record from the data storage.
+    def delete(self, obj_id: int) -> bool:
+        """Removes the object identified by the given ID.
 
         Parameters
         ----------
-        None
-            Subclasses should define specific parameters (e.g., record ID).
+        obj_id : int
+            Identifier of the object to be deleted.
 
         Returns
         -------
-        Optional[Union[int, bool]]
-            Subclasses may return a success indicator or number of deleted
-            records.
+        bool
+            True if the object was successfully deleted, False otherwise
+            (e.g., if no object with the given ID exists).
+        """
+        pass
 
-        Notes
-        -----
-        - Subclasses must handle the deletion logic specific to the data
-        storage.
-        - Should include validation to ensure the record exists before
-        deletion.
+    @abstractmethod
+    def select(self, obj_id: int) -> Optional[T]:
+        """Retrieves an object by its identifier.
 
-        Raises
-        ------
-        NotImplementedError
-            If the method is not implemented in a subclass.
+        Parameters
+        ----------
+        obj_id : int
+            Identifier of the object to retrieve.
+
+        Returns
+        -------
+        Optional[T]
+            The object if found, or None if no object matches the ID.
         """
 
     @abstractmethod
-    def select(self, obj_id: int) -> Optional[Any]:
-        """Retrieve a single record from the data storage.
-
-        Parameters
-        ----------
-        None
-            Subclasses should define specific parameters (e.g., record ID
-            or query criteria).
+    def list(self) -> List[T]:
+        """Returns all persisted objects of type T.
 
         Returns
         -------
-        Optional[Any]
-            Subclasses should return the retrieved record or None if not found.
-
-        Notes
-        -----
-        - Subclasses must implement logic to fetch a specific record based on
-          provided criteria.
-        - Should handle cases where the record is not found.
-
-        Raises
-        ------
-        NotImplementedError
-            If the method is not implemented in a subclass.
-        """
-
-    @abstractmethod
-    def list(self) -> List[Any]:
-        """Retrieve a list of records from the data storage.
-
-        Parameters
-        ----------
-        None
-            Subclasses may define optional parameters (e.g., filters,
-            pagination).
-
-        Returns
-        -------
-        List[Any]
-            Subclasses should return a list of records or an empty list if no
-            records are found.
-
-        Notes
-        -----
-        - Subclasses must implement logic to fetch multiple records,
-          potentially with filtering or pagination.
-        - Should handle cases where no records match the criteria.
-
-        Raises
-        ------
-        NotImplementedError
-            If the method is not implemented in a subclass.
+        List[T]
+            A list containing all objects currently stored.
         """

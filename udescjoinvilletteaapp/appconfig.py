@@ -133,23 +133,3 @@ class AppConfig:
         return QSettings(
             PathConfig.inifile("config.ini"), QSettings.IniFormat
         ).value(AppConfig.SETTINGS_GERAL_DATE_MASK)
-
-    @staticmethod
-    def convert_strftime_to_qt_format(strftime_mask):
-        """Convert a Python strftime date mask to Qt format.
-
-        Parameters
-        ----------
-        strftime_mask : str
-            The Python strftime date format mask (e.g., "%d/%m/%Y").
-
-        Returns
-        -------
-        str
-            The equivalent Qt date format mask (e.g., "dd/MM/yyyy").
-        """
-        mask = strftime_mask.replace("%Y", "yyyy")
-        mask = mask.replace("%y", "yy")
-        mask = mask.replace("%m", "MM")
-        mask = mask.replace("%d", "dd")
-        return mask

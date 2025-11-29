@@ -1,46 +1,56 @@
+# udescjoinvilletteautil/cvshandler.py
 import csv
-from typing import Dict, List, Optional, Union
+import os
+from pathlib import Path
+from typing import Dict, List, Optional, TextIO, Union
 
 
 class CSVHandler:
-    """A class for handling CSV files with a custom dialect.
+    """
+    A class for handling CSV files with a custom dialect.
+
+    Fully integrated with the application's singleton logger. Works with file
+    paths or already-opened file-like objects (e.g., locked via portalocker).
+    Handles common real-world issues: file locked by Excel, wrong
+    encoding, corrupted files, missing directories, permission errors, etc.
+
+    Parameters
+    ----------
+    dialect : str, default "custom_ttea"
+        Name of the CSV dialect to register and use.
+    delimiter : str, default ";"
+        Field delimiter character.
+    quotechar : str, default '"'
+        Character used to quote fields containing special characters.
+    doublequote : bool, default True
+        Controls how quotechar instances inside fields are handled.
+    skipinitialspace : bool, default True
+        When True, whitespace immediately following the delimiter is ignored.
+    lineterminator : str, default "\n"
+        String used to terminate lines produced by the writer.
+    quoting : int, default csv.QUOTE_MINIMAL
+        Controls quoting behavior (one of csv.QUOTE_* constants).
 
     Attributes
     ----------
-    dialect : str, optional
-        The CSV dialect to use (default: 'excel').
-    delimiter : str, optional
-        The character used as a field delimiter (default: ';').
-    quotechar : str, optional
-        The character used for quoting fields (default: '"').
-    doublequote : bool, optional
-        Whether to escape quotes by doubling them (default: True).
-    skipinitialspace : bool, optional
-        Whether to skip initial whitespace after delimiters (default: True).
-    lineterminator : str, optional
-        The character used to terminate lines (default: '\n').
-    quoting : int, optional
-        The quoting style for fields (default: csv.QUOTE_MINIMAL).
+    dialect : str
+        The registered CSV dialect name.
+    log : Log
+        Singleton logger instance used throughout the application.
 
-    Methods:
-    __init__(dialect, delimiter, quotechar, doublequote, skipinitialspace,
-        lineterminator, quoting):
-        Initialize the CSVHandler with custom dialect settings.
-    write_csv(filename, data, headers):
-        Write data to a CSV file.
-    read_csv(filename, as_dict):
-        Read data from a CSV file.
-
-    Notes
-    -----
-    - The class registers a custom CSV dialect upon initialization using the
-    provided parameters.
-    - This dialect is used for all read and write operations.
+    Methods
+    -------
+    __init__(...)
+        Initialise the handler and register the custom CSV dialect.
+    write_csv(file_or_path, data, headers=None)
+        Write data to a CSV file or an already-opened file object.
+    read_csv(filename, as_dict=False)
+        Read a CSV file safely, returning an empty list on any error.
     """
 
     def __init__(
         self,
-        dialect: str = "excel",
+        dialect: str = "custom_ttea",  # custom dialect name to avoid conflicts
         delimiter: str = ";",
         quotechar: str = '"',
         doublequote: bool = True,
@@ -48,35 +58,29 @@ class CSVHandler:
         lineterminator: str = "\n",
         quoting: int = csv.QUOTE_MINIMAL,
     ) -> None:
-        """Initialize the CSVHandler with custom dialect settings.
+        """
+        Register a custom CSV dialect and prepare the handler.
 
         Parameters
         ----------
-        dialect : str, optional
-            The CSV dialect to use (default: 'excel').
-        delimiter : str, optional
-            The character used as a field delimiter (default: ';').
-        quotechar : str, optional
-            The character used for quoting fields (default: '"').
-        doublequote : bool, optional
-            Whether to escape quotes by doubling them (default: True).
-        skipinitialspace : bool, optional
-            Whether to skip initial whitespace after delimiters
-            (default: True).
-        lineterminator : str, optional
-            The character used to terminate lines (default: '\n').
-        quoting : int, optional
-            The quoting style for fields (default: csv.QUOTE_MINIMAL).
-
-        Returns
-        -------
-        None
-
-        Notes
-        -----
-        Registers the specified dialect with the `csv` module for use in
-        read/write operations.
+        dialect : str, default "custom_ttea"
+            Name of the dialect to register.
+        delimiter : str, default ";"
+            Character separating fields.
+        quotechar : str, default '"'
+            Character for quoting fields.
+        doublequote : bool, default True
+            Handling of quotechar inside fields.
+        skipinitialspace : bool, default True
+            Ignore whitespace after delimiter.
+        lineterminator : str, default "\n"
+            Line terminator for writing.
+        quoting : int, default csv.QUOTE_MINIMAL
+            Quoting policy (csv.QUOTE_* constants).
         """
+        # Singleton logger for the application
+        from udescjoinvillettealog import Log
+
         csv.register_dialect(
             dialect,
             delimiter=delimiter,
@@ -87,79 +91,143 @@ class CSVHandler:
             quoting=quoting,
         )
         self.dialect = dialect
+        self.log = Log.get_log()  # Same logger used throughout the application
 
     def write_csv(
         self,
-        filename: str,
+        file_or_path: Union[str, os.PathLike, TextIO],
         data: List[Union[Dict, List]],
         headers: Optional[List[str]] = None,
     ) -> None:
-        """Write data to a CSV file.
+        """
+        Write a list of rows or dictionaries to CSV.
+
+        Creates parent directories if needed. Works with a file path or an
+        already-opened file-like object (e.g., locked with portalocker).
 
         Parameters
         ----------
-        filename : str
-            The name of the CSV file to write to.
-        data : List[Union[Dict, List]]
-            A list of dictionaries or lists containing the data to write.
-        headers : Optional[List[str]], optional
-            A list of header names for the CSV file (default: None).
-
-
-        Returns
-        -------
-        None
+        file_or_path : str, PathLike or file-like
+            Destination file path or an open file object.
+        data : list of dict or list of list
+            Rows to write. Dictionaries require ``headers``.
+        headers : list of str, optional
+            Field names when writing dictionaries. If provided, a header
+            row is written first.
 
         Notes
         -----
-        - If `headers` is provided, the data is expected to be a list of
-        dictionaries,
-          and a header row is written to the CSV file.
-        - If `headers` is None, the data is treated as a list of lists, and no
-        header row is written.
-        - The file is written with UTF-8 encoding and uses the custom dialect.
+        Logs success or raises logged exceptions on failure.
         """
-        with open(filename, mode="w", newline="", encoding="utf-8") as file:
-            if headers:
-                writer = csv.DictWriter(
-                    file, fieldnames=headers, dialect=self.dialect
-                )
-                writer.writeheader()
-                for row in data:
-                    writer.writerow(row)
-            else:
-                writer = csv.writer(file, dialect=self.dialect)
-                for row in data:
-                    writer.writerow(row)
+        if isinstance(file_or_path, (str, os.PathLike)):
+            path = Path(file_or_path)
+            path.parent.mkdir(parents=True, exist_ok=True)
+            try:
+                with open(path, "w", newline="", encoding="utf-8-sig") as f:
+                    self._write_to_file(f, data, headers)
+                self.log.log_info(f"CSV saved successfully: {path.name}")
+            except Exception as e:
+                self.log.log_error(f"Failed to save CSV {path}: {e}")
+                raise
+        else:
+            # File already open (e.g., portalocker.Lock)
+            try:
+                self._write_to_file(file_or_path, data, headers)
+                # Does not log file name here because we don't have the path
+            except Exception as e:
+                self.log.log_error(f"Failed to write to locked CSV file: {e}")
+                raise
+
+    def _write_to_file(
+        self,
+        file: TextIO,
+        data: List[Union[Dict, List]],
+        headers: Optional[List[str]],
+    ) -> None:
+        """Write rows to an already-opened file object using the registered
+        dialect.
+
+        This is an internal helper called by :meth:`write_csv`. It assumes the
+        file is open in text mode with proper encoding and newline=''.
+
+        Parameters
+        ----------
+        file : TextIO
+            Open file object ready for writing.
+        data : list of dict or list of list
+            Data rows to write.
+        headers : list of str or None
+            Field names for DictWriter, or None to write plain rows.
+        """
+        if headers:
+            writer = csv.DictWriter(
+                file, fieldnames=headers, dialect=self.dialect
+            )
+            writer.writeheader()
+            writer.writerows(data)  # Fast then loop
+        else:
+            writer = csv.writer(file, dialect=self.dialect)
+            writer.writerows(data)
 
     def read_csv(
-        self, filename: str, as_dict: bool = False
+        self,
+        filename: Union[str, os.PathLike],
+        as_dict: bool = False,
     ) -> List[Union[Dict, List]]:
-        """Read data from a CSV file.
+        """
+        Read a CSV file with comprehensive error handling.
+
+        Returns an empty list instead of raising exceptions for any problem
+        (file missing, locked by Excel, wrong encoding, corrupted, etc.).
+        This guarantees the application never crashes due to CSV issues.
 
         Parameters
         ----------
-        filename : str
-            The name of the CSV file to read from.
-        as_dict : bool, optional
-            If True, returns data as a list of dictionaries; otherwise,
-            as a list of lists (default: False).
+        filename : str or PathLike
+            Path to the CSV file.
+        as_dict : bool, default False
+            If True, returns a list of dictionaries (using first row as keys).
 
         Returns
         -------
-        List[Union[Dict, List]]
-            A list of rows from the CSV file, either as dictionaries
-            (if `as_dict=True`) or as lists (if `as_dict=False`).
-
-        Notes
-        -----
-        - The file is read with UTF-8 encoding and uses the custom dialect.
-        - If the file cannot be read, an empty list is returned.
+        list
+            List of rows (dicts if ``as_dict=True``, otherwise lists).
+            Empty list on any read error.
         """
-        with open(filename, mode="r", newline="", encoding="utf-8") as file:
-            if as_dict:
-                reader = csv.DictReader(file, dialect=self.dialect)
-            else:
-                reader = csv.reader(file, dialect=self.dialect)
-            return list(reader)
-        return []
+        path = Path(filename)
+
+        if not path.exists():
+            self.log.log_info(
+                f"CSV file does not exist (normal on first run): {path.name}"
+            )
+            return []
+
+        try:
+            with open(path, "r", newline="", encoding="utf-8-sig") as file:
+                if as_dict:
+                    reader = csv.DictReader(file, dialect=self.dialect)
+                else:
+                    reader = csv.reader(file, dialect=self.dialect)
+                rows = list(reader)
+                # Ignora linha de cabeçalho se não for DictReader
+                actual_count = len(rows) - (1 if as_dict and rows else 0)
+                self.log.log_info(
+                    f"CSV loaded: {path.name} -> {actual_count} records"
+                )
+                return rows
+        except PermissionError:
+            self.log.log_warning(
+                f"CSV file locked (probably open in Excel): {path.name}"
+            )
+            return []
+        except UnicodeDecodeError as e:
+            self.log.log_error(
+                f"Could not decode CSV {path.name} with UTF-8 "
+                f"(saved as Latin-1/ANSI?): {e}"
+            )
+            return []
+        except (OSError, csv.Error) as e:
+            self.log.log_error(
+                f"Error reading CSV {path.name}: {type(e).__name__}: {e}"
+            )
+            return []

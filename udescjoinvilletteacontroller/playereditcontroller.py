@@ -2,7 +2,9 @@ from datetime import date
 from typing import TYPE_CHECKING, Dict, Optional, Union
 
 from PySide6.QtCore import QDate
-from PySide6.QtWidgets import QMessageBox
+
+# Local module import
+from udescjoinvilletteautil import MessageService, QtDateFormat
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
@@ -12,98 +14,98 @@ if TYPE_CHECKING:
 
 
 class PlayerEditController:
-    """Controller for managing the PlayerEditView dialog.
+    """Controller for the player edit/create dialog.
 
-    This class handles the logic for editing or creating player data
-    within a dialog, including input validation and data retrieval.
+    Manages the interaction between PlayerEditView and the Player model,
+    including field population, input validation, and data extraction.
 
     Attributes
     ----------
     view : PlayerEditView
-        The dialog view for editing player data.
-    player : Player, optional
-        The player object being edited, if provided.
+        The dialog view containing the input widgets.
+    player : Optional[Player]
+        Player instance being edited, or None when creating a new player.
     ok_clicked : bool
-        Flag indicating if the OK button was clicked.
+        True if the dialog was accepted with valid data.
+    msg : MessageService
+        Service used to display validation/error messages.
 
     Methods
     -------
-    __init__(view: PlayerEditView, player: Optional[Player]=None) -> None
-        Initialize the controller with view and optional player.
-    handle_ok() -> None
-        Validate input and accept dialog if valid.
-    handle_cancel() -> None
-        Close dialog without saving.
-    is_input_valid() -> bool
-        Validate input fields.
-    get_data(self) -> Dict[str, Union[str, date]]
-        Return player data from input fields.
+    __init__(view, player=None, message_service=None)
+        Initialize controller and populate fields if editing.
+    handle_ok()
+        Validate inputs and accept dialog if valid.
+    handle_cancel()
+        Reject dialog without saving changes.
+    is_input_valid()
+        Check required fields and show errors if needed.
+    get_data()
+        Extract entered data as a dictionary.
     """
 
     def __init__(
-        self, view: "PlayerEditView", player: Optional["Player"] = None
+        self,
+        view: "PlayerEditView",
+        player: Optional["Player"] = None,
+        message_service: Optional[MessageService] = None,
     ) -> None:
-        """Initialize the controller with view and optional player.
+        """Initialize the controller and prepare the dialog.
 
-        Sets up the controller by storing the view and player objects,
-        initializing the ok_clicked flag, and populating the view's
-        input fields if a player object is provided.
+        Stores references, sets the ok_clicked flag, and pre-fills the
+        form when editing an existing player. Sets current date as default
+        for new players.
 
         Parameters
         ----------
         view : PlayerEditView
-            The view object associated with the controller.
-        player : Player, optional
-            The player object to edit, if any (default is None).
-
-        Returns
-        -------
-        None
+            The associated dialog view.
+        player : Optional[Player], optional
+            Player object to edit; None creates a new player.
+        message_service : Optional[MessageService], optional
+            Custom message service; defaults to MessageService(view).
         """
         self.view = view
         self.player = player
         self.ok_clicked = False
+        self.msg = message_service or MessageService(view)
 
         # Populate fields if editing
         if player:
             self.view.name_input.setText(player.name)
+
             birth_date = player.birth_date
-            self.view.birth_date_input.setDate(
-                QDate(birth_date.year, birth_date.month, birth_date.day)
-            )
+            qdate = QDate(birth_date.year, birth_date.month, birth_date.day)
+            self.view.birth_date_input.setDate(qdate)
+
             self.view.observation_input.setPlainText(player.observation)
+        else:
+            self.view.birth_date_input.setDate(QDate.currentDate())
+
+        self.view.birth_date_input.setDisplayFormat(QtDateFormat.from_config())
 
     def handle_ok(self) -> None:
-        """Validate input and accept dialog if valid.
+        """Validate input and close dialog with acceptance.
 
-        Checks if the input fields are valid. If valid, sets the
-        ok_clicked flag to True and accepts the dialog. Otherwise,
-        displays an error message.
-
-        Returns
-        -------
-        None
+        If validation passes, sets ok_clicked to True and accepts the
+        dialog. Otherwise shows a critical message with errors.
         """
         if self.is_input_valid():
             self.ok_clicked = True
             self.view.accept()
 
     def handle_cancel(self) -> None:
-        """Close dialog without saving.
+        """Close the dialog without saving changes.
 
-        Rejects the dialog, closing it without saving any changes.
-
-        Returns
-        -------
-        None
+        Rejects the dialog, discarding any entered data.
         """
         self.view.reject()
 
     def is_input_valid(self) -> bool:
-        """Validate input fields.
+        """Validate required fields.
 
-        Checks if the name field is non-empty. Displays an error message
-        if validation fails.
+        Currently checks that the name field is not empty. Shows a
+        critical message listing all errors if validation fails.
 
         Returns
         -------
@@ -113,29 +115,26 @@ class PlayerEditController:
         error_message = ""
 
         if not self.view.name_input.text():
-            error_message += "Nome é obrigatório!\n"
+            error_message += self.view.tr("Nome é obrigatório!\n")
 
         if error_message:
-            QMessageBox.critical(
-                self.view,
-                "Dados inválidos",
-                "Por favor, corrija os dados inválidos:\n" + error_message,
+            self.msg.critical(
+                self.view.tr("Por favor, corrija os dados inválidos:\n")
+                + error_message
             )
             return False
         return True
 
     def get_data(self) -> Dict[str, Union[str, date]]:
-        """Return player data from input fields.
-
-        Retrieves the data entered in the dialog's input fields.
+        """Extract current form values into a dictionary.
 
         Returns
         -------
-        Dict[str, Union[str, date]]
-            Dictionary containing player data with keys:
-            - name: str, the player's name
-            - birth_date: str, the player's birth date
-            - observation: str, the player's observation text
+        dict
+            Mapping with keys:
+            - "name": str from name input
+            - "birth_date": date from date editor
+            - "observation": str from observation text area
         """
         return {
             "name": self.view.name_input.text(),
