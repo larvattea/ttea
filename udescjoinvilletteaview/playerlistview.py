@@ -2,7 +2,13 @@ from typing import TYPE_CHECKING, Callable, List, Optional
 
 import qtawesome as qta
 from PySide6.QtGui import QCloseEvent
-from PySide6.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
+from PySide6.QtWidgets import (
+    QDialog,
+    QHeaderView,
+    QTableWidget,
+    QTableWidgetItem,
+    QAbstractItemView,
+)
 
 # Local module import
 from udescjoinvilletteacontroller import PlayerListController
@@ -122,6 +128,13 @@ class PlayerListView(QDialog, Ui_PlayerListView, WindowConfig):
 
         # Load initial data
         self.controller.load_players()
+        # == CONFIGURATION IMPORTANT FOR ROW SELECTION AND SINGLE SELECTION ==
+        self.table.setSelectionBehavior(
+            QTableWidget.SelectionBehavior.SelectRows
+        )
+        self.table.setSelectionMode(
+            QAbstractItemView.SelectionMode.SingleSelection
+        )
 
     def on_new_button_clicked(self):
         """Handle the 'New' button click.
