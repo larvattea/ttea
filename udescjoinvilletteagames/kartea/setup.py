@@ -2,8 +2,13 @@ from cx_Freeze import Executable, setup
 
 # Dependencies are automatically detected, but they might need fine-tuning.
 build_exe_options = {
-    "include_files": ["Assets/", "Jogadores/", "calibracao.csv", "Kartea Fases/"], 
-    "packages": []
+    "include_files": [
+        "Assets/",
+        "Jogadores/",
+        "calibracao.csv",
+        "Kartea Fases/",
+    ],
+    "packages": [],
 }
 
 setup(

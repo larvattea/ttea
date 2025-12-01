@@ -32,7 +32,9 @@ while running:
     if active:
         time_elapsed += clock.get_time()
         surface.fill("black")
-    time_count, time_count_rect = font.render(str(int(time_elapsed/1000)), "white")
+    time_count, time_count_rect = font.render(
+        str(int(time_elapsed / 1000)), "white"
+    )
     surface.blit(time_label, (10, 10))
     surface.blit(time_count, (25 + time_label_rect.width, 10))
     pygame.display.update()

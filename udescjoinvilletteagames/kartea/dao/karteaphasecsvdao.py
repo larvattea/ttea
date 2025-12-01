@@ -4,10 +4,12 @@ from typing import Any, List, Optional
 
 from udescjoinvilletteadao import DAO
 from udescjoinvilletteagames.kartea.model.karteaphase import KarteaPhase
-from udescjoinvilletteagames.kartea.model.karteaphaselevel import \
-    KarteaPhaseLevel
-from udescjoinvilletteagames.kartea.util.karteapathconfig import \
-    KarteaPathConfig
+from udescjoinvilletteagames.kartea.model.karteaphaselevel import (
+    KarteaPhaseLevel,
+)
+from udescjoinvilletteagames.kartea.util.karteapathconfig import (
+    KarteaPathConfig,
+)
 from udescjoinvilletteautil import CSVHandler
 
 

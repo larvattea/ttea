@@ -10,7 +10,7 @@ class Inimigo(Sprite):
         super().__init__()
 
         self.jogo = jogo
-        self.image = load('VesTEA/images/inimigo.png')
+        self.image = load("VesTEA/images/inimigo.png")
         self.image = pygame.transform.scale(self.image, (80, 80))
         self.rect = self.image.get_rect(
             center=(self.jogo.tamanho[0], randint(20, 580))
@@ -20,6 +20,6 @@ class Inimigo(Sprite):
         self.rect.x -= 1
 
         if self.rect.x == 0:
-            #print("morreu")
+            # print("morreu")
             self.kill()
             self.jogo.estado = 2

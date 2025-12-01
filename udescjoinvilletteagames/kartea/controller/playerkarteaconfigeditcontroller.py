@@ -6,8 +6,9 @@ from udescjoinvilletteacontroller import PlayerListController
 from udescjoinvilletteagames.kartea.dao.config import PlayerKarteaConfigCsvDAO
 from udescjoinvilletteagames.kartea.model import PlayerKarteaConfig
 from udescjoinvilletteagames.kartea.model.karteaphase import KarteaPhase
-from udescjoinvilletteagames.kartea.model.karteaphaselevel import \
-    KarteaPhaseLevel
+from udescjoinvilletteagames.kartea.model.karteaphaselevel import (
+    KarteaPhaseLevel,
+)
 from udescjoinvilletteagames.kartea.util import KarteaPathConfig
 
 if TYPE_CHECKING:

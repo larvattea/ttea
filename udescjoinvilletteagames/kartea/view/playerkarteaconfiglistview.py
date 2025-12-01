@@ -3,12 +3,23 @@ from typing import TYPE_CHECKING, Callable, Optional
 import qtawesome as qta
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QCloseEvent
-from PySide6.QtWidgets import (QDialog, QGridLayout, QHBoxLayout, QHeaderView,
-                               QLabel, QLineEdit, QMessageBox, QPushButton,
-                               QTableWidget, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (
+    QDialog,
+    QGridLayout,
+    QHBoxLayout,
+    QHeaderView,
+    QLabel,
+    QLineEdit,
+    QMessageBox,
+    QPushButton,
+    QTableWidget,
+    QVBoxLayout,
+    QWidget,
+)
 
-from udescjoinvilletteagames.kartea.controller import \
-    PlayerKarteaConfigListController
+from udescjoinvilletteagames.kartea.controller import (
+    PlayerKarteaConfigListController,
+)
 from udescjoinvilletteawindow import WindowConfig
 
 # Type checking to prevent circular import on run time

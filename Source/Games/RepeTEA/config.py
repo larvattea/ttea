@@ -1,7 +1,7 @@
 import pygame
 
 pygame.font.init()
-pygame.init() 
+pygame.init()
 
 # Para a proporção padrão de 16:9, codifique com estas resoluções:
 #     4320p (8K): 7680 x 4320
@@ -16,39 +16,38 @@ pygame.init()
 WIDHT = 800
 HEIGHT = 600
 
-#Frames per Seconds
+# Frames per Seconds
 FPS = 60
 
 
-#Font 
+# Font
 
 
-
-#Colors
-BLUE = (0,0, 255)
-RED  = (255,0,0)
-GREEN = (0,255,0)
-YELLOW =  (255,255,0)
-WHITE = (255,255,255)
-BLACK  = (0,0,0)
+# Colors
+BLUE = (0, 0, 255)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+YELLOW = (255, 255, 0)
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
 TESTE = (252, 163, 17)
 TESTE2 = (229, 229, 229)
 
-#Font
+# Font
 
-stadart_font =  pygame.font.SysFont("Serif", int(HEIGHT * 0.05))
+stadart_font = pygame.font.SysFont("Serif", int(HEIGHT * 0.05))
 
 
-#Images 
-repetea_logo =  pygame.image.load(r"Source\Assets\Repetea_Figuras\repetea_logo.png")
+# Images
+repetea_logo = pygame.image.load(
+    r"Source\Assets\Repetea_Figuras\repetea_logo.png"
+)
 # emoji_feliz = pygame.image.load("Source\Assets\Repetea_Figuras\feliz2.png")
 # emoji_triste = pygame.image.load("Source\Assets\Repetea_Figuras\triste2.png")
 
 
-#Sounds: 
+# Sounds:
 # som_acerto = mixer.Sound(r"Source\Assets\Repetea_Sons\padrao\5_feliz.wav")
 # som_erro  = pygame.mixer.Sound ("Source\Assets\Repetea_Sons\padrao\6_triste.wav")
 # som_ajuda = pygame.mixer.Sound ("Source\Assets\Repetea_Sons\padrao\11_ajuda.wav")
 # som_base  = pygame.mixer.Sound (" ")
-
-

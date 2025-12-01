@@ -3,9 +3,16 @@ from typing import Optional
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon, QPixmap
-from PySide6.QtWidgets import (QApplication, QDialog, QHBoxLayout, QLabel,
-                               QMessageBox, QPushButton, QRadioButton,
-                               QVBoxLayout)
+from PySide6.QtWidgets import (
+    QApplication,
+    QDialog,
+    QHBoxLayout,
+    QLabel,
+    QMessageBox,
+    QPushButton,
+    QRadioButton,
+    QVBoxLayout,
+)
 
 # Local module import
 from udescjoinvilletteaapp import AppConfig

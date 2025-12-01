@@ -10,228 +10,170 @@ from pygame.time import Clock
 from pygame.transform import scale
 
 
-class Jogo(): 
+class Jogo:
 
-    def __init__(self): 
+    def __init__(self):
 
-        pygame.init() 
+        pygame.init()
 
-        self.esta_rodando = True 
+        self.esta_rodando = True
 
-        self.estado = 0 
+        self.estado = 0
 
-        self.tamanho = 800, 600 
+        self.tamanho = 800, 600
 
-        self.superficie = display.set_mode( 
+        self.superficie = display.set_mode(size=self.tamanho, display=0)
 
-            size=self.tamanho, 
+        display.set_caption("Ship Shoot")
 
-            display=0 
+        self.fonte_destaque = font.SysFont("comicsans", 80)
+        self.fonte = font.SysFont("comicsans", 50)
+        self.imagem_inicio = pygame.image.load(
+            "images/button_inicio.png"
+        ).convert_alpha()
 
-        ) 
+        self.imagem_sair = pygame.image.load(
+            "images/button_sair.png"
+        ).convert_alpha()
 
-        display.set_caption( 
+        self.botao_inicio = botao.Botao(30, 450, self.imagem_inicio, 0.8)
 
-            'Ship Shoot' 
+        self.botao_sair = botao.Botao(600, 450, self.imagem_sair, 0.8)
 
-        ) 
+        self.clock = Clock()
 
-        self.fonte_destaque = font.SysFont('comicsans', 80)  
-        self.fonte = font.SysFont('comicsans', 50) 
-        self.imagem_inicio = pygame.image.load('images/button_inicio.png').convert_alpha() 
+        self.fundo = scale(load("images/space.jpg"), self.tamanho)
 
-        self.imagem_sair = pygame.image.load('images/button_sair.png').convert_alpha() 
+    def novo_jogo(self):
 
-        self.botao_inicio = botao.Botao(30, 450, self.imagem_inicio, 0.8) 
+        self.grupo_inimigos = Group()
+        self.grupo_tiros = Group()
 
-        self.botao_sair = botao.Botao(600, 450, self.imagem_sair, 0.8)     
+        self.jogador = Jogador(self)
 
-        self.clock = Clock() 
+        self.grupo_jogador = GroupSingle(self.jogador)
 
- 
+        self.grupo_inimigos.add(Inimigo(self))
 
-        self.fundo = scale( 
+        self.round = 0
+        self.mortes = 0
 
-            load('images/space.jpg'), 
+    def rodar(self):
 
-            self.tamanho 
+        while self.esta_rodando:
 
-        )     
-    def novo_jogo(self): 
+            for evento in event.get():  # Events
 
-        self.grupo_inimigos = Group() 
-        self.grupo_tiros = Group() 
+                if evento.type == QUIT:
 
-        self.jogador = Jogador(self) 
+                    self.esta_rodando = False
+                if self.estado == 1:
 
-        self.grupo_jogador = GroupSingle(self.jogador) 
+                    if evento.type == KEYUP:
 
-        self.grupo_inimigos.add(Inimigo(self)) 
+                        if evento.key == K_SPACE:
 
-        self.round = 0 
-        self.mortes = 0 
+                            self.jogador.atirar()
 
-    def rodar(self): 
+            if self.estado == 0:
 
-        while self.esta_rodando: 
+                self.superficie.fill((50, 50, 255))
+                titulo = self.fonte_destaque.render(
+                    "Ship Shoot", True, (255, 165, 0)
+                )
 
-            for evento in event.get():  # Events 
+                self.superficie.blit(titulo, (190, 180))
+                if self.botao_inicio.criar(self.superficie):
 
-                if evento.type == QUIT: 
+                    # print('START')
+                    self.novo_jogo()
+                    self.estado = 1
 
-                    self.esta_rodando = False 
-                if self.estado==1: 
+                if self.botao_sair.criar(self.superficie):
 
-                    if evento.type == KEYUP: 
+                    # print('EXIT')
 
-                        if evento.key == K_SPACE: 
+                    self.esta_rodando = False
+            elif self.estado == 1:
 
-                            self.jogador.atirar()  
+                self.clock.tick(120)  # FPS
 
-            if self.estado==0:     
+                self.superficie.blit(self.fundo, (0, 0))
+                if self.round % 120 == 0:  # 120 pelo fps
 
-                self.superficie.fill((50, 50, 255)) 
-                titulo = self.fonte_destaque.render( 
+                    # if self.mortes < 20:
 
-                    'Ship Shoot', 
+                    self.grupo_inimigos.add(Inimigo(self))
 
-                    True, 
+                    # for i in range(int(self.mortes / 20)):
 
-                    (255, 165, 0) 
+                    # self.grupo_inimigos.add(Inimigo(self))
 
-                ) 
+                self.grupo_jogador.draw(self.superficie)
+                self.grupo_inimigos.draw(self.superficie)
+                self.grupo_tiros.draw(self.superficie)
 
-                self.superficie.blit(titulo, (190, 180)) 
-                if self.botao_inicio.criar(self.superficie): 
+                self.grupo_tiros.update()
+                self.grupo_jogador.update()
+                self.grupo_inimigos.update()
 
-                    #print('START') 
-                    self.novo_jogo() 
-                    self.estado=1 
+                self.round += 1
+                if groupcollide(
+                    self.grupo_tiros, self.grupo_inimigos, True, True
+                ):
 
-                if self.botao_sair.criar(self.superficie): 
+                    self.mortes += 1
 
-                    #print('EXIT') 
+                fonte_mortes = self.fonte.render(
+                    f"Mortes: {self.mortes}", True, (255, 255, 255)
+                )
 
-                    self.esta_rodando = False  
-            elif self.estado==1: 
+                self.superficie.blit(fonte_mortes, (20, 70))
 
-                self.clock.tick(120)  # FPS 
+                fonte_tiros = self.fonte.render(
+                    f"Tiros: {15 - len(self.jogador.tiros)}",
+                    True,
+                    (255, 255, 255),
+                )
 
-  
+                self.superficie.blit(fonte_tiros, (20, 20))
+            elif self.estado == 2:
 
-                self.superficie.blit(self.fundo, (0, 0)) 
-                if self.round % 120 == 0: #120 pelo fps 
+                self.superficie.fill((202, 150, 150))
 
-                    #if self.mortes < 20: 
+                deu_ruim = self.fonte_destaque.render(
+                    "Você perdeu!", True, (255, 255, 255)
+                )
 
-                    self.grupo_inimigos.add(Inimigo(self)) 
+                self.superficie.blit(deu_ruim, (50, 100))
 
-                    #for i in range(int(self.mortes / 20)): 
+                fonte_mortes = self.fonte.render(
+                    f"Mortes: {self.mortes}", True, (255, 255, 255)
+                )
 
-                        #self.grupo_inimigos.add(Inimigo(self)) 
+                self.superficie.blit(fonte_mortes, (20, 20))
 
-                self.grupo_jogador.draw(self.superficie) 
-                self.grupo_inimigos.draw(self.superficie) 
-                self.grupo_tiros.draw(self.superficie) 
+                if self.botao_inicio.criar(self.superficie):
 
- 
+                    # print('RESTART')
 
-                self.grupo_tiros.update()                 
-                self.grupo_jogador.update()                 
-                self.grupo_inimigos.update() 
+                    self.novo_jogo()
 
-                self.round += 1 
-                if groupcollide(self.grupo_tiros, self.grupo_inimigos, True, True): 
+                    self.estado = 1
 
-                    self.mortes += 1 
+                if self.botao_sair.criar(self.superficie):
 
-   
+                    # print('EXIT')
 
-                fonte_mortes = self.fonte.render( 
+                    self.esta_rodando = False
+            display.update()
 
-                        f'Mortes: {self.mortes}', 
 
-                        True, 
+g = Jogo()
 
-                        (255, 255, 255) 
+g.rodar()
 
-                ) 
 
-  
+pygame.quit()
 
-                self.superficie.blit(fonte_mortes, (20, 70)) 
-
-                fonte_tiros = self.fonte.render( 
-
-                    f'Tiros: {15 - len(self.jogador.tiros)}', 
-
-                    True, 
-
-                    (255, 255, 255) 
-
-                ) 
-
-  
-
-                self.superficie.blit(fonte_tiros, (20, 20))                                
-            elif self.estado==2: 
-
-                self.superficie.fill((202, 150, 150)) 
-
-  
-
-                deu_ruim = self.fonte_destaque.render( 
-
-                    'Você perdeu!', 
-
-                    True, 
-
-                    (255, 255, 255) 
-
-                ) 
-
-                self.superficie.blit(deu_ruim, (50, 100)) 
-
-  
-
-                fonte_mortes = self.fonte.render( 
-
-                        f'Mortes: {self.mortes}', 
-
-                        True, 
-
-                        (255, 255, 255) 
-
-                ) 
-
-  
-
-                self.superficie.blit(fonte_mortes, (20, 20)) 
-
-                 
-
-                if self.botao_inicio.criar(self.superficie): 
-
-                    #print('RESTART') 
-
-                    self.novo_jogo() 
-
-                    self.estado=1 
-
-                if self.botao_sair.criar(self.superficie): 
-
-                    #print('EXIT') 
-
-                    self.esta_rodando = False 
-            display.update() 
-
- 
-g = Jogo() 
-
-g.rodar() 
-
- 
-
-pygame.quit() 
-
-exit() 
+exit()

@@ -136,6 +136,14 @@ class PlayerListView(QDialog, Ui_PlayerListView, WindowConfig):
             QAbstractItemView.SelectionMode.SingleSelection
         )
 
+        # Perfect column widths
+        self.table.horizontalHeader().setSectionResizeMode(
+            0, QHeaderView.ResizeToContents
+        )
+        self.table.horizontalHeader().setSectionResizeMode(
+            1, QHeaderView.Stretch
+        )
+
     def on_new_button_clicked(self):
         """Handle the 'New' button click.
 

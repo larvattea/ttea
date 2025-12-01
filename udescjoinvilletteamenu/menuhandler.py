@@ -5,8 +5,13 @@ from typing import Optional
 
 from PySide6.QtCore import QObject, Qt
 from PySide6.QtGui import QCloseEvent, QKeySequence, QShortcut
-from PySide6.QtWidgets import (QApplication, QDialog, QMessageBox, QPushButton,
-                               QVBoxLayout)
+from PySide6.QtWidgets import (
+    QApplication,
+    QDialog,
+    QMessageBox,
+    QPushButton,
+    QVBoxLayout,
+)
 
 # Local module imports
 from udescjoinvilletteafactory import ViewFactory

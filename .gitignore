@@ -10,4 +10,5 @@ env/
 *.json
 *.txt
 *.json
+*.pyc
 report-task.txt

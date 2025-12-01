@@ -8,7 +8,9 @@ from udescjoinvilletteagames.kartea.model import PlayerKarteaConfig
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
     from udescjoinvilletteagames.kartea.view import (
-        PlayerKarteaConfigEditView, PlayerKarteaConfigListView)
+        PlayerKarteaConfigEditView,
+        PlayerKarteaConfigListView,
+    )
 
 
 class PlayerKarteaConfigListController:

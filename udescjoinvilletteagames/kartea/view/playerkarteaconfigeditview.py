@@ -4,17 +4,29 @@ import qtawesome as qta
 from PySide6.QtCore import Qt, QUrl
 from PySide6.QtGui import QPixmap
 from PySide6.QtMultimedia import QAudioOutput, QMediaPlayer
-from PySide6.QtWidgets import (QCheckBox, QComboBox, QDialog, QDialogButtonBox,
-                               QFormLayout, QHBoxLayout, QLabel, QPushButton,
-                               QSpinBox, QTabWidget, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (
+    QCheckBox,
+    QComboBox,
+    QDialog,
+    QDialogButtonBox,
+    QFormLayout,
+    QHBoxLayout,
+    QLabel,
+    QPushButton,
+    QSpinBox,
+    QTabWidget,
+    QVBoxLayout,
+    QWidget,
+)
 
 from udescjoinvilletteagames.kartea.model import PlayerKarteaConfig
 from udescjoinvilletteagames.kartea.util import KarteaPathConfig
 from udescjoinvilletteawindow import WindowConfig
 
 if TYPE_CHECKING:
-    from udescjoinvilletteagames.kartea.controller import \
-        PlayerKarteaConfigEditController
+    from udescjoinvilletteagames.kartea.controller import (
+        PlayerKarteaConfigEditController,
+    )
     from udescjoinvilletteagames.kartea.model import PlayerKarteaSession
     from udescjoinvilletteamodel import Player
 

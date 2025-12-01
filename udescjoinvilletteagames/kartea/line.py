@@ -8,22 +8,23 @@ import pygame
 from settings import *
 from target import Target
 
-roadW = 400 #Tamanho pista
-segL = 200 # Tamanho segmento
-camD = 3 # camera depth
+roadW = 400  # Tamanho pista
+segL = 200  # Tamanho segmento
+camD = 3  # camera depth
 
-dark_grass = pygame.Color(0,154,0)
-light_grass = pygame.Color(16,200,16)
-dark_rumble = pygame.Color(255,0,0)
-light_rumble = pygame.Color(255,255,255)
-dark_road = pygame.Color(75,75,75)
-light_road = pygame.Color(107,107,107)
+dark_grass = pygame.Color(0, 154, 0)
+light_grass = pygame.Color(16, 200, 16)
+dark_rumble = pygame.Color(255, 0, 0)
+light_rumble = pygame.Color(255, 255, 255)
+dark_road = pygame.Color(75, 75, 75)
+light_road = pygame.Color(107, 107, 107)
+
 
 class Line:
     def __init__(self):
-        self.x = self.y = self.z = 0.0 # posição 3D
-        self.X = self.Y = self.W = 0.0 # posição 2D
-        self.scale = 0.0 # escala de projeção
+        self.x = self.y = self.z = 0.0  # posição 3D
+        self.X = self.Y = self.W = 0.0  # posição 2D
+        self.scale = 0.0  # escala de projeção
         self.curve = 0.0
         self.clip = 0.0
 
@@ -64,10 +65,10 @@ class Line:
         if clipH >= destH:
             return
 
-        if destW > (2*w):
+        if destW > (2 * w):
             return
 
-        scaled_sprite = pygame.transform.scale(self.sprite,(destW, destH))
+        scaled_sprite = pygame.transform.scale(self.sprite, (destW, destH))
         draw_surface.blit(scaled_sprite, (destX, destY))
 
     def drawSprite2(self, draw_surface: pygame.Surface):
@@ -89,12 +90,11 @@ class Line:
         if clipH >= destH:
             return
 
-        if destW > (2*w):
+        if destW > (2 * w):
             return
 
-        scaled_sprite = pygame.transform.scale(self.sprite2,(destW, destH))
+        scaled_sprite = pygame.transform.scale(self.sprite2, (destW, destH))
         draw_surface.blit(scaled_sprite, (destX, destY))
-
 
     def drawTarget(self, draw_surface: pygame.Surface):
         if self.target is None:
@@ -102,7 +102,7 @@ class Line:
         w = self.target.images[0].get_width()
         h = self.target.images[0].get_height()
 
-        #self.target.define_spawn_pos()
+        # self.target.define_spawn_pos()
 
         if self.target.current_road == 0:
             self.targetX = -2.25
@@ -127,12 +127,13 @@ class Line:
         if clipH >= destH:
             return
 
-        if destW > 1.5*w:
+        if destW > 1.5 * w:
             return
 
-        scaled_sprite = pygame.transform.scale(self.target.images[0],(destW, destH))
+        scaled_sprite = pygame.transform.scale(
+            self.target.images[0], (destW, destH)
+        )
         draw_surface.blit(scaled_sprite, (destX, destY))
-        #self.target.move(destX, destY)
+        # self.target.move(destX, destY)
         if DRAW_HITBOX:
             self.target.draw_hitbox(draw_surface)
-

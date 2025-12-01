@@ -3,8 +3,12 @@ from typing import TYPE_CHECKING, Callable, Optional
 from PySide6.QtCore import QObject, QTranslator
 from PySide6.QtWidgets import QDialog
 
-from udescjoinvilletteaview import (AboutView, LanguageView, PlayerEditView,
-                                    PlayerListView)
+from udescjoinvilletteaview import (
+    AboutView,
+    LanguageView,
+    PlayerEditView,
+    PlayerListView,
+)
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
