@@ -43,8 +43,8 @@ class WindowConfig:
 
     def setup_window(
         self,
-        title: str,
-        icon: str,
+        title: Optional[str] = None,
+        icon: Optional[str] = None,
         status: int = STAY_SIZE,
         width: float = 0.0,
         height: float = 0.0,
@@ -89,8 +89,11 @@ class WindowConfig:
           (e.g., 10 means 10%) and are applied only if `status` is
           `INCREMENT_SIZE_PERCENT` or `DECREMENT_SIZE_PERCENT`.
         """
-        self.setWindowTitle(title)
-        self.setWindowIcon(QIcon(icon))
+        if title is not None:
+            self.setWindowTitle(title)
+
+        if icon is not None:
+            self.setWindowIcon(QIcon(icon))
 
         # Calculate the initial base size
         base_width, base_height = self.get_base_size(parent)

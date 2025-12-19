@@ -86,8 +86,8 @@ class AppConfig:
         "KarTEA",
     ]
 
-    ICON_APP: str = PathConfig.icon("larva.ico")
-    LOGO_APP: str = PathConfig.image("ttealogo.png")
+    ICON_APP: str = PathConfig.icon("appicon")
+    LOGO_APP: str = PathConfig.image("ttealogo")
     PLATAFORM_SUFIX: str = "TEA"
     PLATAFORM_MANUAL: str = "Manual"
     VERSION: str = "2.0"
@@ -118,18 +118,19 @@ class AppConfig:
 
     @staticmethod
     def get_geral_date_mask() -> str:
-        """Retrieve the date mask from settings.
+        from udescjoinvilletteamodel import AppModel
 
-        Returns
-        -------
-        str
-            The date mask stored in the configuration settings.
+        settings = QSettings(
+            PathConfig.config("config.ini"), QSettings.IniFormat
+        )
+        saved_mask = settings.value(AppConfig.SETTINGS_GERAL_DATE_MASK)
 
-        Notes
-        -----
-        Reads the date mask from the configuration file (config.ini)
-        using QSettings.
-        """
-        return QSettings(
-            PathConfig.inifile("config.ini"), QSettings.IniFormat
-        ).value(AppConfig.SETTINGS_GERAL_DATE_MASK)
+        if saved_mask:  # Permite override manual futuro
+            return saved_mask
+
+        # Usa o idioma atual já validado e com fallback garantido pelo AppModel
+        return (
+            AppConfig.USA_DATE_FORMAT
+            if AppModel().current_language == "en_US"
+            else AppConfig.DEFAULT_DATE_FORMAT
+        )

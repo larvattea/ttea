@@ -1,285 +1,138 @@
+import os
+import sys
 from pathlib import Path
 from typing import List
 
 
 class PathConfig:
-    """Configuration class for file and directory paths.
-
-    This class provides a centralized way to manage file and directory paths
-    used throughout the application, ensuring consistent path handling and
-    directory creation.
-
-    Attributes
-    ----------
-    root : Path
-        The root directory of the project (current working directory).
-    log_dir : Path
-        Directory for log files.
-    players_dir : Path
-        Directory for player-related files.
-    games_dir : Path
-        Directory containing game subdirectories.
-    assets_dir : Path
-        Directory for asset files.
-    translations_dir : Path
-        Directory for translation files.
-    images_dir : Path
-        Directory for image files, nested under assets.
-    icons_dir : Path
-        Directory for icon files, nested under assets.
-    helps_dir : Path
-        Directory for help files.
-    helps_dir_pt : Path
-        Directory for Portuguese help files, nested under helps_dir.
-
-    Methods
-    -------
-    create_directories() -> None
-        Creates necessary directories (e.g., players_dir) if they do not exist
-        to prevent file access errors.
-    icon(filename: str) -> str
-        Returns the full path to an icon file in the icons_dir.
-    image(filename: str) -> str
-        Returns the full path to an image file in the images_dir.
-    log(filename: str) -> str
-        Returns the full path to a log file in the log_dir.
-    player(filename: str) -> str
-        Returns the full path to a player file in the players_dir.
-    translation(filename: str) -> str
-        Returns the full path to a translation file in the translations_dir.
-    inifile(filename: str) -> str
-        Returns the full path to an ini file in the root directory.
-    path_games() -> List[str]
-        Lists all subdirectory names in the games_dir, excluding special
-        directories like '__pycache__'.
-    path_help_pt(filename: str) -> str
-        Returns the full path to a Portuguese help file in the helps_dir_pt.
+    """
+    Central de caminhos do aplicativo.
+    Separa claramente:
+      • Recursos embutidos (imagens, .ui, .qm) -> :/ (Qt Resource System)
+      • Dados do usuário (logs, jogadores, configs) -> pasta appdata
     """
 
-    root = Path.cwd()
-    log_dir = root / "log"
-    players_dir = root / "players"
-    games_dir = root / "udescjoinvilletteagames"
-    assets_dir = root / "assets"
-    translations_dir = root / "translations"
-    images_dir = assets_dir / "images"
-    icons_dir = assets_dir / "icons"
-    helps_dir = root / "help"
-    helps_dir_pt = helps_dir / "pt"
-    ui_dir = root / "udescjoinvilletteaui"
+    # ===================================================================
+    # 1. PASTA DE DADOS DO USUÁRIO (escrita permitida)
+    # ===================================================================
+    APP_NAME = "ttea"  # <- MUDE AQUI para o nome do seu app
 
+    if sys.platform.startswith("win"):
+        APPDATA_DIR = Path(os.getenv("APPDATA")) / APP_NAME
+    elif sys.platform == "darwin":  # macOS
+        APPDATA_DIR = (
+            Path.home() / "Library" / "Application Support" / APP_NAME
+        )
+    else:  # Linux e outros
+        APPDATA_DIR = Path.home() / ".local" / "share" / APP_NAME
+
+    LOG_DIR = APPDATA_DIR / "log"
+    PLAYERS_DIR = APPDATA_DIR / "players"
+    GAMES_DIR = (
+        APPDATA_DIR / "udescjoinvilletteagames"
+    )  # <- jogos da aplicação
+    CONFIG_DIR = APPDATA_DIR / "config"
+    EXPORTS_DIR = APPDATA_DIR / "exports"  # CSV, relatórios, etc.
+
+    # ===================================================================
+    # 2. PASTA RAIZ DO PROJETO (apenas para desenvolvimento)
+    # ===================================================================
+    if getattr(sys, "frozen", False):
+        # App empacotado (PyInstaller)
+        PROJECT_ROOT = Path(sys.executable).parent
+    else:
+        PROJECT_ROOT = Path(__file__).parent.parent.parent
+
+    RESOURCES_DIR = PROJECT_ROOT / "resources"
+
+    # ===================================================================
+    # 3. MÉTODOS DE RECURSOS EMBUTIDOS (usam :/ -> funcionam no .exe)
+    # ===================================================================
+    @staticmethod
+    def resource(path: str = "") -> str:
+        """Retorna caminho Qt Resource (funciona no .exe)"""
+        return f":/{path}".rstrip("/")
+
+    @staticmethod
+    def icon(name: str) -> str:
+        return f":/icons/{name}"
+
+    @staticmethod
+    def flag(name: str) -> str:
+        return f":/flags/{name}"
+
+    @staticmethod
+    def image(name: str) -> str:
+        return f":/images/{name}"
+
+    @staticmethod
+    def ui(name: str) -> str:
+        return f":/ui/{name}"
+
+    @staticmethod
+    def translation(name: str) -> str:
+        return f":/translations/{name}"
+
+    @staticmethod
+    def help(path: str = "") -> str:
+        return f":/help/{path}".rstrip("/")
+
+    # ===================================================================
+    # 4. MÉTODOS DE DADOS DO USUÁRIO (escrita)
+    # ===================================================================
     @classmethod
-    def create_directories(cls) -> None:
-        """Create necessary directories if they do not exist.
-
-        This method ensures that critical directories (e.g., players_dir) are
-        created to prevent file access errors.
-
-        Returns
-        -------
-        None
-
-        Notes
-        -----
-        Currently, only the `players_dir` is created. Additional directories
-        can be added to the list as needed.
-        """
-        for directory in [cls.players_dir]:
+    def ensure_user_dirs(cls) -> None:
+        """Cria todas as pastas de dados do usuário na primeira execução"""
+        for directory in [
+            cls.APPDATA_DIR,
+            cls.LOG_DIR,
+            cls.PLAYERS_DIR,
+            cls.GAMES_DIR,
+            cls.CONFIG_DIR,
+            cls.EXPORTS_DIR,
+        ]:
             directory.mkdir(parents=True, exist_ok=True)
 
     @classmethod
-    def icon(cls, filename: str) -> str:
-        """Get the full path to an icon file.
-
-        Parameters
-        ----------
-        filename : str
-            Name of the icon file.
-
-        Returns
-        -------
-        str
-            Full path to the icon file.
-
-        Examples
-        --------
-        >>> PathConfig.icon("example.png")
-        '/path/to/project/assets/icons/example.png'
-        """
-        return str(cls.icons_dir / filename)
-
-    @classmethod
-    def image(cls, filename: str) -> str:
-        """Get the full path to an image file.
-
-        Parameters
-        ----------
-        filename : str
-            Name of the image file.
-
-        Returns
-        -------
-        str
-            Full path to the image file.
-
-        Examples
-        --------
-        >>> PathConfig.image("background.jpg")
-        '/path/to/project/assets/images/background.jpg'
-        """
-        return str(cls.images_dir / filename)
-
-    @classmethod
     def log(cls, filename: str) -> str:
-        """Get the full path to a log file.
-
-        Parameters
-        ----------
-        filename : str
-            Name of the log file.
-
-        Returns
-        -------
-        str
-            Full path to the log file.
-
-        Examples
-        --------
-        >>> PathConfig.log("app.log")
-        '/path/to/project/log/app.log'
-        """
-        return str(cls.log_dir / filename)
+        cls.ensure_user_dirs()
+        return str(cls.LOG_DIR / filename)
 
     @classmethod
     def player(cls, filename: str) -> str:
-        """Get the full path to a player file.
-
-        Parameters
-        ----------
-        filename : str
-            Name of the player file.
-
-        Returns
-        -------
-        str
-            Full path to the player file.
-
-        Examples
-        --------
-        >>> PathConfig.player("player1.json")
-        '/path/to/project/players/player1.json'
-        """
-        return str(cls.players_dir / filename)
+        cls.ensure_user_dirs()
+        return str(cls.PLAYERS_DIR / filename)
 
     @classmethod
-    def translation(cls, filename: str) -> str:
-        """Get the full path to a translation file.
-
-        Parameters
-        ----------
-        filename : str
-            Name of the translation file.
-
-        Returns
-        -------
-        str
-            Full path to the translation file.
-
-        Examples
-        --------
-        >>> PathConfig.translation("pt_BR.ts")
-        '/path/to/project/translations/pt_BR.ts'
-        """
-        return str(cls.translations_dir / filename)
+    def game_save(cls, game_name: str, filename: str) -> str:
+        cls.ensure_user_dirs()
+        game_dir = cls.GAMES_DIR / game_name
+        game_dir.mkdir(exist_ok=True)
+        return str(game_dir / filename)
 
     @classmethod
-    def inifile(cls, filename: str) -> str:
-        """Get the full path to an ini file in the root directory.
+    def export(cls, filename: str) -> str:
+        cls.ensure_user_dirs()
+        return str(cls.EXPORTS_DIR / filename)
 
-        Parameters
-        ----------
-        filename : str
-            Name of the ini file.
+    @classmethod
+    def config(cls, filename: str = "config.ini") -> str:
+        cls.ensure_user_dirs()
+        return str(cls.CONFIG_DIR / filename)
 
-        Returns
-        -------
-        str
-            Full path to the ini file.
-
-        Examples
-        --------
-        >>> PathConfig.inifile("config.ini")
-        '/path/to/project/config.ini'
-        """
-        return str(cls.root / filename)
-
+    # ===================================================================
+    # 5. MÉTODOS LEGADOS (mantidos para compatibilidade)
+    # ===================================================================
     @classmethod
     def path_games(cls) -> List[str]:
-        """Get a list of game directory names.
-
-        This method lists all subdirectories in the games_dir, excluding
-        special directories like '__pycache__'.
-
-        Returns
-        -------
-        List[str]
-            List of directory names within the games directory.
-
-        Raises
-        ------
-        FileNotFoundError
-            If the games directory does not exist.
-
-        Examples
-        --------
-        >>> PathConfig.path_games()
-        ['game1', 'game2', 'game3']
-        """
-        cls.create_directories()
+        """Lista jogos salvos pelo usuário (não mais usado agora)"""
+        cls.ensure_user_dirs()
         return [
             d.name
-            for d in cls.games_dir.iterdir()
-            if d.is_dir() and d.name != "__pycache__"
+            for d in cls.GAMES_DIR.iterdir()
+            if d.is_dir() and not d.name.startswith(".")
         ]
 
     @classmethod
     def path_help_pt(cls, filename: str) -> str:
-        """Get the full path to a Portuguese help file.
-
-        Parameters
-        ----------
-        filename : str
-            Name of the help file.
-
-        Returns
-        -------
-        str
-            Full path to the help file.
-
-        Examples
-        --------
-        >>> PathConfig.path_help_pt("index.html")
-        '/path/to/project/help/pt/index.html'
-        """
-        return str(cls.helps_dir_pt / filename)
-
-    @classmethod
-    def ui(cls, filename: str) -> str:
-        """Get the full path to a UI file.
-
-        Parameters
-        ----------
-        filename : str
-            Name of the UI file.
-
-        Returns
-        -------
-        str
-            Full path to the UI file.
-
-        Examples
-        --------
-        >>> PathConfig.ui("main.ui")
-        '/path/to/project/ui/main.ui'
-        """
-        return str(cls.ui_dir / filename)
+        return cls.help(f"pt/{filename}")

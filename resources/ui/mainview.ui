@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainView</class>
+ <widget class="QMainWindow" name="MainView">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1000</width>
+    <height>680</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Plataforma T-TEA</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>:/icons/larva.ico</normaloff>:/icons/larva.ico</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Orientation::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>40</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1000</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_Arquivo">
+    <property name="title">
+     <string>&amp;Cadastro</string>
+    </property>
+    <addaction name="actionGerenciar_Jogadores"/>
+    <addaction name="separator"/>
+    <addaction name="actionSair"/>
+    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="menu_Exergames">
+    <property name="title">
+     <string>&amp;Exergames</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu_Configuracoes">
+    <property name="title">
+     <string>C&amp;onfigurações</string>
+    </property>
+    <addaction name="actionConfiguracao_KarTEA"/>
+    <addaction name="separator"/>
+    <addaction name="actionCalibracao"/>
+    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="menu_Ajuda">
+    <property name="title">
+     <string>&amp;Ajuda</string>
+    </property>
+    <addaction name="actionAjuda"/>
+    <addaction name="separator"/>
+    <addaction name="actionSobre"/>
+   </widget>
+   <addaction name="menu_Arquivo"/>
+   <addaction name="menu_Exergames"/>
+   <addaction name="menu_Configuracoes"/>
+   <addaction name="menu_Ajuda"/>
+  </widget>
+  <action name="actionSair">
+   <property name="text">
+    <string>&amp;Sair</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionGerenciar_Jogadores">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/icons/users.png</normaloff>:/icons/users.png</iconset>
+   </property>
+   <property name="text">
+    <string>Jogador</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+J</string>
+   </property>
+  </action>
+  <action name="actionConfiguracao_KarTEA">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/icons/kartea4.ico</normaloff>:/icons/kartea4.ico</iconset>
+   </property>
+   <property name="text">
+    <string>KarTEA</string>
+   </property>
+  </action>
+  <action name="actionCalibracao">
+   <property name="text">
+    <string>&amp;Calibração</string>
+   </property>
+   <property name="shortcut">
+    <string>F4</string>
+   </property>
+  </action>
+  <action name="actionAjuda">
+   <property name="text">
+    <string>&amp;Ajuda</string>
+   </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
+  </action>
+  <action name="actionSobre">
+   <property name="text">
+    <string>&amp;Sobre...</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

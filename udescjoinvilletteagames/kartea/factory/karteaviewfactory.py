@@ -3,14 +3,10 @@ from typing import TYPE_CHECKING, Callable, Optional
 from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QDialog
 
-from udescjoinvilletteacontroller import PlayerListController
-from udescjoinvilletteagames.kartea.controller import (
-    PlayerKarteaConfigEditController,
-)
-from udescjoinvilletteagames.kartea.view import (
-    PlayerKarteaConfigEditView,
-    PlayerKarteaConfigListView,
-)
+from udescjoinvilletteagames.kartea.controller import \
+    PlayerKarteaConfigEditController
+from udescjoinvilletteagames.kartea.view import (PlayerKarteaConfigEditView,
+                                                 PlayerKarteaConfigListView)
 
 if TYPE_CHECKING:
     from udescjoinvilletteagames.kartea.model import PlayerKarteaConfig
@@ -61,6 +57,8 @@ class KarteaViewFactory:
         PlayerKarteaConfigEditView
             The initialized view with its controller.
         """
+        from udescjoinvilletteacontroller import PlayerListController
+
         player_list_controller = PlayerListController(None, None)
         # Create controller first with temporary None view
         controller = PlayerKarteaConfigEditController(

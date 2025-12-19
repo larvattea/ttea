@@ -40,20 +40,25 @@ class Language:
         Retrieves the operating system's language.
     """
 
-    LANGUAGES: List[Dict[str, str]] = [
+    LANGUAGES = [
         {
-            "code": "pt_BR",
+            "code": "pt_BR",  # Qt espera pt_BR nos .qm
             "description": "Português",
-            "flag": PathConfig.image("brazil.png"),
+            "flag": PathConfig.flag("brazil"),  # -> ":/flags/brazil.png"
+        },
+        {
+            "code": "es_ES",
+            "description": "Español",
+            "flag": PathConfig.flag("spain"),  # -> ":/flags/spain.png"
         },
         {
             "code": "en_US",
             "description": "English",
-            "flag": PathConfig.image("usa.png"),
+            "flag": PathConfig.flag("usa"),  # -> ":/flags/usa.png"
         },
     ]
 
-    DEFAULT_LANGUAGE = "pt_BR"  # Idioma padrão em caso de falha
+    DEFAULT_LANGUAGE = "pt_BR"  # Language code used in case of failure
 
     def __init__(self) -> None:
         """Initializes the Language class instance.

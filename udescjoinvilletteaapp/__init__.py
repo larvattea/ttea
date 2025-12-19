@@ -35,7 +35,6 @@ https://github.com/larva-udesc/udesc_ttea_view
 # Define the __all__ variable
 __all__ = [
     "AppConfig",
-    "TTeaApp",
 ]
 
 __version__ = "1.0.0"
@@ -45,4 +44,3 @@ __license__ = "MIT License"
 
 # Import the submodules
 from .appconfig import AppConfig
-from .tteaapp import TTeaApp

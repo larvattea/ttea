@@ -1,18 +1,15 @@
 from typing import TYPE_CHECKING, Callable, Optional
 
-from PySide6.QtCore import QObject, QTranslator
+from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QDialog
 
-from udescjoinvilletteaview import (
-    AboutView,
-    LanguageView,
-    PlayerEditView,
-    PlayerListView,
-)
+from udescjoinvilletteaview import (AboutView, LanguageView, PlayerEditView,
+                                    PlayerListView)
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
     # Local module import
+    from udescjoinvilletteacontroller import LanguageController
     from udescjoinvilletteamodel import Player
 
 
@@ -103,18 +100,12 @@ class AppViewFactory:
         return AboutView(parent)
 
     @staticmethod
-    def create_language_view(
-        translator: Optional[QTranslator] = None,
-        parent: Optional[QObject] = None,
-    ) -> LanguageView:
+    def create_language_view(parent: Optional[QObject] = None) -> LanguageView:
         """
         Create an instance of LanguageView.
 
         Parameters
         ----------
-        translator : Optional[QTranslator], optional
-            The translator object for handling language settings, by
-            default None.
         parent : Optional[QObject], optional
             The parent object for the LanguageView, by default None.
 
@@ -124,4 +115,4 @@ class AppViewFactory:
             An instance of LanguageView configured with the provided
             translator and parent.
         """
-        return LanguageView(translator, parent)
+        return LanguageView(parent)

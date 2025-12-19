@@ -1,12 +1,7 @@
 import sys
 
-from PySide6.QtWidgets import (
-    QApplication,
-    QGridLayout,
-    QPushButton,
-    QStyle,
-    QWidget,
-)
+from PySide6.QtWidgets import (QApplication, QGridLayout, QPushButton, QStyle,
+                               QWidget)
 
 
 class Window(QWidget):

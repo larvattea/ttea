@@ -6,23 +6,17 @@ from typing import Dict, List, Optional, Union
 # Local module imports
 from udescjoinvilletteadao import DAO
 from udescjoinvilletteadao.playercsvdao import PlayerCsvDAO
-from udescjoinvilletteagames.kartea.dao.karteaphasecsvdao import (
-    KarteaPhaseCsvDAO,
-)
-from udescjoinvilletteagames.kartea.dao.karteaphaselevelcsvdao import (
-    KarteaPhaseLevelCsvDAO,
-)
-from udescjoinvilletteagames.kartea.dao.session import (
-    PlayerKarteaSessionCsvDAO,
-)
-from udescjoinvilletteagames.kartea.model import (
-    KarteaPhase,
-    KarteaPhaseLevel,
-    PlayerKarteaConfig,
-)
-from udescjoinvilletteagames.kartea.util.karteapathconfig import (
-    KarteaPathConfig,
-)
+from udescjoinvilletteagames.kartea.dao.karteaphasecsvdao import \
+    KarteaPhaseCsvDAO
+from udescjoinvilletteagames.kartea.dao.karteaphaselevelcsvdao import \
+    KarteaPhaseLevelCsvDAO
+from udescjoinvilletteagames.kartea.dao.session import \
+    PlayerKarteaSessionCsvDAO
+from udescjoinvilletteagames.kartea.model import (KarteaPhase,
+                                                  KarteaPhaseLevel,
+                                                  PlayerKarteaConfig)
+from udescjoinvilletteagames.kartea.util.karteapathconfig import \
+    KarteaPathConfig
 from udescjoinvilletteautil import CSVHandler
 
 

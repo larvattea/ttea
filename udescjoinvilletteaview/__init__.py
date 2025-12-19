@@ -43,6 +43,7 @@ https://github.com/larva-udesc/udesc_ttea_view
 __all__ = [
     "AboutView",
     "LanguageView",
+    "MainView",
     "PlayerEditView",
     "PlayerListView",
     "SplashScreen",
@@ -56,6 +57,7 @@ __license__ = "MIT License"
 # Import the submodules
 from .aboutview import AboutView
 from .languageview import LanguageView
+from .mainview import MainView
 from .playereditview import PlayerEditView
 from .playerlistview import PlayerListView
 from .splashscreen import SplashScreen

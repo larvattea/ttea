@@ -37,6 +37,7 @@ https://github.com/larva-udesc/udesc_ttea_view
 # Define the __all__ variable
 __all__ = [
     "LanguageController",
+    "MainController",
     "PlayerEditController",
     "PlayerListController",
 ]
@@ -48,5 +49,6 @@ __license__ = "MIT License"
 
 # Import the submodules
 from .languagecontroller import LanguageController
+from .maincontroller import MainController
 from .playereditcontroller import PlayerEditController
 from .playerlistcontroller import PlayerListController

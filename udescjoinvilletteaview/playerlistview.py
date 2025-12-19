@@ -2,16 +2,10 @@ from typing import TYPE_CHECKING, Callable, List, Optional
 
 import qtawesome as qta
 from PySide6.QtGui import QCloseEvent
-from PySide6.QtWidgets import (
-    QDialog,
-    QHeaderView,
-    QTableWidget,
-    QTableWidgetItem,
-    QAbstractItemView,
-)
+from PySide6.QtWidgets import (QAbstractItemView, QDialog, QHeaderView,
+                               QTableWidget, QTableWidgetItem)
 
 # Local module import
-from udescjoinvilletteacontroller import PlayerListController
 from udescjoinvilletteaui import Ui_PlayerListView
 from udescjoinvilletteautil import MessageService
 from udescjoinvilletteawindow import WindowConfig
@@ -83,6 +77,7 @@ class PlayerListView(QDialog, Ui_PlayerListView, WindowConfig):
             Factory function that creates PlayerEditView instances.
             Enables dependency injection (useful for testing).
         """
+        from udescjoinvilletteacontroller import PlayerListController
 
         super().__init__(parent)
         self.setModal(True)

@@ -1,0 +1,40 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <!-- Bandeiras -->
+    <qresource prefix="/flags">
+        <file alias="brazil">flags/brazil.png</file>
+        <file alias="spain">flags/spain.png</file>
+        <file alias="usa">flags/usa.png</file>
+    </qresource>
+
+    <!-- Ícones -->
+    <qresource prefix="/icons">
+        <file alias="appicon">icons/larva.ico</file>
+    </qresource>
+
+    <!-- Imagens -->
+    <qresource prefix="/images">
+        <file alias="cancelicon">images/times_solid.png</file>
+        <file alias="editicon">images/pen_square_solid.png</file>
+        <file alias="kartealogo">images/kartealogo.jpg</file>
+        <file alias="newicon">images/plus_solid.png</file>
+        <file alias="okicon">images/check_solid.png</file>       
+        <file alias="trashicon">images/trash_solid.png</file>
+        <file alias="ttealogo">images/ttealogo.png</file>
+    </qresource>
+
+    <!-- Traduções -->
+    <qresource prefix="/translations">
+        <file alias="pt">translations/pt_BR.qm</file>
+        <file alias="es">translations/es_ES.qm</file>
+        <file alias="en">translations/en_US.qm</file>
+    </qresource>
+
+    <!-- Interfaces (UI) -->
+    <qresource prefix="/ui">
+        <file alias="languageviewui">ui/languageview.ui</file>
+        <file alias="mainviewui">ui/mainview.ui</file>
+        <file alias="playereditviewui">ui/playereditview.ui</file>
+        <file alias="playerlistviewui">ui/playerlistview.ui</file>
+    </qresource>
+</RCC>

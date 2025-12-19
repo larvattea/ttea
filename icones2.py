@@ -1,13 +1,8 @@
 import sys
 
 import qtawesome as qta
-from PySide6.QtWidgets import (
-    QApplication,
-    QHBoxLayout,
-    QPushButton,
-    QVBoxLayout,
-    QWidget,
-)
+from PySide6.QtWidgets import (QApplication, QHBoxLayout, QPushButton,
+                               QVBoxLayout, QWidget)
 
 
 class ActionButtons(QWidget):

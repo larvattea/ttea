@@ -2,16 +2,15 @@ from typing import TYPE_CHECKING, Dict, List, Optional, Union
 
 from PySide6.QtWidgets import QMessageBox
 
-from udescjoinvilletteacontroller import PlayerListController
 from udescjoinvilletteagames.kartea.dao.config import PlayerKarteaConfigCsvDAO
 from udescjoinvilletteagames.kartea.model import PlayerKarteaConfig
 from udescjoinvilletteagames.kartea.model.karteaphase import KarteaPhase
-from udescjoinvilletteagames.kartea.model.karteaphaselevel import (
-    KarteaPhaseLevel,
-)
+from udescjoinvilletteagames.kartea.model.karteaphaselevel import \
+    KarteaPhaseLevel
 from udescjoinvilletteagames.kartea.util import KarteaPathConfig
 
 if TYPE_CHECKING:
+    from udescjoinvilletteacontroller import PlayerListController
     from udescjoinvilletteagames.kartea.model import PlayerKarteaSession
     from udescjoinvilletteagames.kartea.view import PlayerKarteaConfigEditView
     from udescjoinvilletteamodel import Player
@@ -41,10 +40,12 @@ class PlayerKarteaConfigEditController:
         self,
         view: Optional["PlayerKarteaConfigEditView"] = None,
         config: Optional["PlayerKarteaConfig"] = None,
-        player_list_controller: Optional[PlayerListController] = None,
+        player_list_controller: Optional["PlayerListController"] = None,
     ) -> None:
         """Initialize the controller with view, optional configuration,
         and player list controller."""
+        from udescjoinvilletteacontroller import PlayerListController
+
         self.view = view
         self.config = config
         self.ok_clicked = False

@@ -2,9 +2,8 @@ from dataclasses import dataclass, fields
 from typing import TYPE_CHECKING, ClassVar, Dict, List
 
 if TYPE_CHECKING:
-    from udescjoinvilletteagames.kartea.model.karteaphaselevel import (
-        KarteaPhaseLevel,
-    )
+    from udescjoinvilletteagames.kartea.model.karteaphaselevel import \
+        KarteaPhaseLevel
 
 
 def initialize_reflexive(cls):

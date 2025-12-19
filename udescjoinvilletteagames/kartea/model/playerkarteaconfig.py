@@ -3,11 +3,9 @@ from typing import TYPE_CHECKING, ClassVar, Dict, List
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
-    from udescjoinvilletteagames.kartea.model import (
-        KarteaPhase,
-        KarteaPhaseLevel,
-        PlayerKarteaSession,
-    )
+    from udescjoinvilletteagames.kartea.model import (KarteaPhase,
+                                                      KarteaPhaseLevel,
+                                                      PlayerKarteaSession)
     from udescjoinvilletteamodel import Player
 
 

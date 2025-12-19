@@ -1,6 +1,7 @@
 from typing import Optional
 
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QMessageBox, QWidget
 
 
@@ -152,3 +153,14 @@ class MessageService:
         no_btn.setText(self.tr("Não"))
 
         return msg_box.exec() == QMessageBox.Yes
+
+    @staticmethod
+    def critical_global(text: str, title: Optional[str] = None) -> None:
+        """Para uso em exceções globais sem parent real."""
+        from udescjoinvilletteaapp import AppConfig
+
+        window = QWidget()
+        window.setWindowTitle(title or AppConfig.get_title())
+        window.setWindowIcon(QIcon(AppConfig.ICON_APP))
+        MessageService(window).critical(text)
+        window.deleteLater()

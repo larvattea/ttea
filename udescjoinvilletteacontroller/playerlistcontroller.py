@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING, Callable, Optional
 
+# Local module import
 from udescjoinvilletteaservice import PlayerService
 from udescjoinvilletteautil import MessageService
 

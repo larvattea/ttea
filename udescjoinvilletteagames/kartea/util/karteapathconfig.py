@@ -43,7 +43,7 @@ class KarteaPathConfig(PathConfig):
         Reads config values from kartea.ini.
     """
 
-    kartea_dir = PathConfig.games_dir / "kartea"
+    kartea_dir = PathConfig.GAMES_DIR / "kartea"
     kartea_assets_dir = kartea_dir / "assets"
     kartea_images_dir = kartea_assets_dir / "images"
     kartea_sounds_dir = kartea_assets_dir / "sounds"

@@ -1,21 +1,10 @@
 import pygame
 from pygame import display, event, font
 from pygame.image import load
-from pygame.locals import (
-    K_DOWN,
-    K_LEFT,
-    K_RIGHT,
-    K_SPACE,
-    K_UP,
-    KEYUP,
-    QUIT,
-    K_f,
-    K_h,
-    K_s,
-)
+from pygame.locals import (K_DOWN, K_LEFT, K_RIGHT, K_SPACE, K_UP, KEYUP, QUIT,
+                           K_f, K_h, K_s)
 from pygame.time import Clock
 from pygame.transform import scale
-
 # from VesTEA.pose_tracking import PoseTracking
 from VesTEA import arquivo as arq
 from VesTEA import botao
