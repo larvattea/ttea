@@ -8,10 +8,10 @@ from udescjoinvilletteaapp import AppConfig
 from udescjoinvilletteacontroller import LanguageController, MainController
 from udescjoinvilletteafactory import ViewFactory
 from udescjoinvillettealog import Log
-from udescjoinvilletteamodel import AppModel, Language
+from udescjoinvilletteamodel import AppModel
+from udescjoinvilletteaservice import LanguageService  # novo import
 from udescjoinvilletteautil import MessageService, PathConfig
 from udescjoinvilletteaview import MainView, SplashScreen
-from udescjoinvilletteaservice import LanguageService  # novo import
 
 
 def show_critical_error(exception: Exception, translator=None):

@@ -1,4 +1,5 @@
 from typing import Optional
+
 from PySide6.QtCore import QSettings, QTranslator
 from PySide6.QtWidgets import QApplication
 

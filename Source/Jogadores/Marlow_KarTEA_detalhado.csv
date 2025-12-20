@@ -1,9 +1,0 @@
-ID;Sessao;Hora do Evento;Fase;Nivel;Posicao jogador;Posicao Evento;Tipo de Evento
-0;1;16:33:39;1;1;1;0;Criou Alvo
-1;1;16:33:39;1;1;0;1;Trocou de Pista
-2;1;16:33:47;1;1;0;1;Criou Alvo
-3;1;16:33:47;1;1;1;0;Colidiu com Alvo
-4;1;16:33:55;1;1;1;1;Desviou de Alvo
-5;1;16:33:55;1;1;0;2;Criou Alvo
-6;1;16:34:02;1;1;1;2;Desviou de Alvo
-7;1;16:34:03;1;1;0;1;Criou Alvo

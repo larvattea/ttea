@@ -1,14 +1,9 @@
 from typing import Dict, List, Optional
 
-from PySide6.QtCore import Qt, QTranslator, QSize
-from PySide6.QtGui import QPixmap, QIcon
-from PySide6.QtWidgets import (
-    QApplication,
-    QDialog,
-    QWidget,
-)
+from PySide6.QtCore import QSize, Qt
+from PySide6.QtGui import QIcon, QPixmap
+from PySide6.QtWidgets import QDialog, QWidget
 
-from udescjoinvilletteaapp import AppConfig
 from udescjoinvilletteaui import Ui_LanguageView
 from udescjoinvilletteawindow import WindowConfig
 
@@ -47,10 +42,7 @@ class LanguageView(QDialog, Ui_LanguageView, WindowConfig):
                     32, 32, Qt.KeepAspectRatio, Qt.SmoothTransformation
                 )
                 icon.addPixmap(scaled_pixmap)
-            else:
-                icon = QIcon()  # ícone vazio se a bandeira não carregar
 
-            # Armazena o código do idioma como userData
             self.comboBox.addItem(icon, lang["description"], lang["code"])
 
     def set_preselected_language(self, code: str) -> None:
@@ -72,9 +64,3 @@ class LanguageView(QDialog, Ui_LanguageView, WindowConfig):
         MessageService(self).warning(
             self.tr("Por favor, selecione um idioma.")
         )
-
-    # Em languageview.py
-    def apply_translator(self, translator: QTranslator):
-        app = QApplication.instance()
-        app.installTranslator(translator)
-        self.retranslateUi(self)

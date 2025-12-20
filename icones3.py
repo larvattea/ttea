@@ -1,7 +1,8 @@
 import sys
-from PySide6.QtGui import QIcon
+
 import qtawesome as qta
-from PySide6.QtWidgets import QApplication, QPushButton, QWidget, QVBoxLayout
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget
 
 
 def main():
