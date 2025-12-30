@@ -1,7 +1,7 @@
 # udescjoinvilletteaview/mainview.py
 from datetime import date
 
-from PySide6.QtCore import Qt, Signal
+from PySide6.QtCore import Qt, Signal, QCoreApplication, QTranslator
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QLabel, QMainWindow, QStatusBar
 
@@ -26,12 +26,14 @@ class MainView(QMainWindow, Ui_MainView, WindowConfig):
         self.ui = Ui_MainView()
         self.ui.setupUi(self)
 
-        # Configurações básicas da janela
-        self.setWindowTitle(AppConfig.get_title())
-        self.setWindowIcon(QIcon(AppConfig.ICON_APP))
-
-        # Status bar com versão + data atual
-        self._setup_status_bar()
+        self.setup_window(
+            None,
+            None,
+            WindowConfig.DECREMENT_SIZE_PERCENT,
+            5,
+            5,
+            parent,
+        )
 
         # Conexões diretas dos menus (ações já existem no .ui)
         self.ui.actionSair.triggered.connect(self.exit_requested.emit)
@@ -52,31 +54,27 @@ class MainView(QMainWindow, Ui_MainView, WindowConfig):
             self._on_game_action_triggered
         )
         self.msg = MessageService(self)
+        # Status bar com versão + data atual
+        self._setup_status_bar()
 
     def _setup_status_bar(self):
         """Cria o QLabel com versão e data e adiciona permanentemente na status bar"""
         date_mask = AppConfig.get_geral_date_mask() or "%d/%m/%Y"
-        status_text = (
-            f"{self.tr('Versão da Plataforma:')} {AppConfig.VERSION}  •  "
-            f"{self.tr('Data Atual:')} {date.today().strftime(date_mask)}"
-        )
 
-        label = QLabel(status_text)
-        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        label.setStyleSheet(
-            """
-            QLabel {
-                padding: 4px 8px;
-                background: palette(midlight);
-                border: 1px solid palette(mid);
-                border-radius: 4px;
-                font-size: 10pt;
-            }
-        """
-        )
+        version = self.tr("Versão da plataforma: {0}")
+        version = version.format(AppConfig.VERSION)
 
-        # Adiciona como widget permanente (fica à direita)
-        self.statusBar().addPermanentWidget(label)
+        current_date = self.tr("Data atual: {0}")
+        current_date = current_date.format(date.today().strftime(date_mask))
+
+        status_text = version + " - " + current_date
+
+        status_bar_label = QLabel(status_text)
+        status_bar_label.setAlignment(Qt.AlignRight)
+        status_bar_label.setStyleSheet("border: 1px sunken; padding: 2px;")
+        status_bar = QStatusBar()
+        status_bar.addPermanentWidget(status_bar_label)
+        self.setStatusBar(status_bar)
 
     def populate_games_menu(self, games: list[tuple[str, str]]):
         """Preenche o menu Exergames – agora recebe lista já ordenada"""

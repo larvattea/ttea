@@ -1,6 +1,6 @@
 from typing import Optional
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import QCoreApplication
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QMessageBox, QWidget
 
@@ -59,9 +59,6 @@ class MessageService:
         while main_window.parent() is not None:
             main_window = main_window.parent()
         self.title = main_window.windowTitle()
-
-        # Use parent's translation context
-        self.tr = parent.tr
 
     def info(self, text: str, title: Optional[str] = None) -> None:
         """
@@ -137,6 +134,11 @@ class MessageService:
         bool
             True if user clicked "Yes" (Sim), False if "No" (Não).
         """
+        # The "MessageService" context is explicitly specified because
+        # standard QMessageBox buttons do not inherit the translation
+        # context from the parent widget. This ensures that the
+        # translations defined under the MessageService context
+        # in the .ts file are applied.
         msg_box = QMessageBox(self.parent)
         msg_box.setIcon(QMessageBox.Question)
         msg_box.setWindowTitle(title or self.title)
@@ -145,12 +147,12 @@ class MessageService:
         msg_box.setDefaultButton(
             QMessageBox.No if default_no else QMessageBox.Yes
         )
-
-        # Translated buttons
-        yes_btn = msg_box.button(QMessageBox.Yes)
-        no_btn = msg_box.button(QMessageBox.No)
-        yes_btn.setText(self.tr("Sim"))
-        no_btn.setText(self.tr("Não"))
+        msg_box.button(QMessageBox.Yes).setText(
+            QCoreApplication.translate("MessageService", "Sim")
+        )
+        msg_box.button(QMessageBox.No).setText(
+            QCoreApplication.translate("MessageService", "Não")
+        )
 
         return msg_box.exec() == QMessageBox.Yes
 

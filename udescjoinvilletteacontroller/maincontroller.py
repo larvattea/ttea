@@ -8,8 +8,8 @@ from udescjoinvilletteaservice import MainService
 from udescjoinvilletteautil import PathConfig
 
 if TYPE_CHECKING:
-    from udescjoinvillettea.model.appmodel import AppModel
-    from udescjoinvillettea.util.message import MessageService
+    from udescjoinvilletteamodel import AppModel
+    from udescjoinvilletteautil import MessageService
 
 
 class MainController(QObject):

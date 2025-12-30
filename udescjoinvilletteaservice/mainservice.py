@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from PySide6.QtCore import QCoreApplication
 from PySide6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
@@ -16,9 +17,14 @@ class MainService:
 
     def confirm_exit(self) -> bool:
         """Pergunta ao usuário se deseja realmente sair"""
+
         return self.msg.question(
-            text="Deseja sair do sistema?",
-            title="Plataforma T-TEA",
+            text=QCoreApplication.translate(
+                "MainService", "Deseja sair do sistema?"
+            ),
+            title=QCoreApplication.translate(
+                "MainService", "Plataforma T-TEA"
+            ),
             default_no=True,
         )
 

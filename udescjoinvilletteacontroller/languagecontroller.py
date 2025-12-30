@@ -5,6 +5,7 @@ from PySide6.QtCore import QObject, QTranslator
 from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import QApplication
 
+from udescjoinvilletteaapp import AppConfig
 from udescjoinvilletteamodel import Language
 from udescjoinvilletteaservice import LanguageService
 from udescjoinvilletteautil import MessageService, PathConfig
@@ -45,7 +46,7 @@ class LanguageController:
         preferred = (
             self.service.get_saved_language()
             or self.model.get_system_language().replace("-", "_")
-            or "pt_BR"
+            or self.model.DEFAULT_LANGUAGE
         )
         self.view.set_preselected_language(preferred)
 
@@ -56,6 +57,7 @@ class LanguageController:
         self,
     ) -> None:  # Removido o parâmetro 'index' não usado
         """Aplica o idioma selecionado como preview (atualiza UI imediatamente)."""
+
         code = self.view.get_checked_language()
         if not code:
             return
@@ -71,9 +73,12 @@ class LanguageController:
         # Remove todos os tradutores antigos
         for old in app.findChildren(QTranslator):
             app.removeTranslator(old)
+            old.deleteLater()
 
         translator = QTranslator(app)
-        path = PathConfig.translation(f"{code}.qm")
+        path = PathConfig.translation(
+            f"{code}{AppConfig.TRANSLATION_EXTENSION}"
+        )
 
         if translator.load(path):
             app.installTranslator(translator)

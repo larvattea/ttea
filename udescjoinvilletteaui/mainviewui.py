@@ -9,38 +9,35 @@
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                            QMetaObject, QObject, QPoint, QRect, QSize, Qt,
-                            QTime, QUrl)
-from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient, QCursor,
-                           QFont, QFontDatabase, QGradient, QIcon, QImage,
-                           QKeySequence, QLinearGradient, QPainter, QPalette,
-                           QPixmap, QRadialGradient, QTransform)
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
+    QCursor, QFont, QFontDatabase, QGradient,
+    QIcon, QImage, QKeySequence, QLinearGradient,
+    QPainter, QPalette, QPixmap, QRadialGradient,
+    QTransform)
 from PySide6.QtWidgets import (QApplication, QMainWindow, QMenu, QMenuBar,
-                               QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
-
+    QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
 import resources.resources_rc
-
 
 class Ui_MainView(object):
     def setupUi(self, MainView):
         if not MainView.objectName():
             MainView.setObjectName(u"MainView")
-        MainView.resize(1000, 680)
+        MainView.resize(800, 600)
+        MainView.setMaximumSize(QSize(16777214, 16777215))
         icon = QIcon()
-        icon.addFile(u":/icons/larva.ico", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon.addFile(u":/icons/appicon", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         MainView.setWindowIcon(icon)
         self.actionSair = QAction(MainView)
         self.actionSair.setObjectName(u"actionSair")
         self.actionGerenciar_Jogadores = QAction(MainView)
         self.actionGerenciar_Jogadores.setObjectName(u"actionGerenciar_Jogadores")
-        icon1 = QIcon()
-        icon1.addFile(u":/icons/users.png", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        self.actionGerenciar_Jogadores.setIcon(icon1)
         self.actionConfiguracao_KarTEA = QAction(MainView)
         self.actionConfiguracao_KarTEA.setObjectName(u"actionConfiguracao_KarTEA")
-        icon2 = QIcon()
-        icon2.addFile(u":/icons/kartea4.ico", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        self.actionConfiguracao_KarTEA.setIcon(icon2)
+        icon1 = QIcon()
+        icon1.addFile(u":/icons/kartea4.ico", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.actionConfiguracao_KarTEA.setIcon(icon1)
         self.actionCalibracao = QAction(MainView)
         self.actionCalibracao.setObjectName(u"actionCalibracao")
         self.actionAjuda = QAction(MainView)
@@ -58,7 +55,7 @@ class Ui_MainView(object):
         MainView.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainView)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1000, 33))
+        self.menubar.setGeometry(QRect(0, 0, 800, 33))
         self.menu_Arquivo = QMenu(self.menubar)
         self.menu_Arquivo.setObjectName(u"menu_Arquivo")
         self.menu_Exergames = QMenu(self.menubar)

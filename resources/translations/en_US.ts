@@ -34,7 +34,7 @@
     <message>
         <location filename="../ui/languageview.ui" line="14"/>
         <source>Plataforma T-TEA</source>
-        <translation>T-TEA Plataform</translation>
+        <translation>T-TEA Platform</translation>
     </message>
     <message>
         <location filename="../ui/languageview.ui" line="33"/>
@@ -44,7 +44,7 @@
     <message>
         <location filename="../ui/languageview.ui" line="69"/>
         <source>Gravar operação corrente</source>
-        <translation>Record current operation</translation>
+        <translation>Save current operation</translation>
     </message>
     <message>
         <location filename="../ui/languageview.ui" line="72"/>
@@ -52,88 +52,136 @@
         <translation>Confirm</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/languageview.py" line="73"/>
+        <location filename="../../udescjoinvilletteaview/languageview.py" line="65"/>
         <source>Por favor, selecione um idioma.</source>
         <translation>Please select a language.</translation>
     </message>
 </context>
 <context>
-    <name>MainView</name>
+    <name>Main</name>
     <message>
-        <location filename="../ui/mainview.ui" line="14"/>
-        <source>Plataforma T-TEA</source>
-        <translation>T-TEA Plataform</translation>
+        <location filename="../../main.py" line="18"/>
+        <source>Ocorreu um erro inesperado e o aplicativo será encerrado.
+Por favor, entre em contato com o suporte e envie o arquivo de log.
+Detalhes do erro: {0}</source>
+        <translation>An unexpected error occurred and the application will be terminated.
+Please contact support and send the log file.
+Error details: {0}</translation>
+    </message>
+</context>
+<context>
+    <name>MainService</name>
+    <message>
+        <location filename="../../udescjoinvilletteaservice/mainservice.py" line="22"/>
+        <source>Deseja sair do sistema?</source>
+        <translation>Are you sure you want to exit?</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="48"/>
+        <location filename="../../udescjoinvilletteaservice/mainservice.py" line="25"/>
+        <source>Plataforma T-TEA</source>
+        <translation>T-TEA Platform</translation>
+    </message>
+</context>
+<context>
+    <name>MainView</name>
+    <message>
+        <location filename="../ui/mainview.ui" line="20"/>
+        <source>Plataforma T-TEA</source>
+        <translation>T-TEA Platform</translation>
+    </message>
+    <message>
+        <location filename="../ui/mainview.ui" line="54"/>
         <source>&amp;Cadastro</source>
         <translation>&amp;Registration</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="57"/>
+        <location filename="../ui/mainview.ui" line="63"/>
         <source>&amp;Exergames</source>
         <translation>&amp;Exergames</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="62"/>
+        <location filename="../ui/mainview.ui" line="68"/>
         <source>C&amp;onfigurações</source>
         <translation>&amp;Settings</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="71"/>
-        <location filename="../ui/mainview.ui" line="121"/>
+        <location filename="../ui/mainview.ui" line="77"/>
+        <location filename="../ui/mainview.ui" line="123"/>
         <source>&amp;Ajuda</source>
         <translation>&amp;Help</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="84"/>
+        <location filename="../ui/mainview.ui" line="90"/>
         <source>&amp;Sair</source>
         <translation>&amp;Exit</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="87"/>
+        <location filename="../ui/mainview.ui" line="93"/>
         <source>Ctrl+Q</source>
         <translation>Ctrl+Q</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="96"/>
+        <location filename="../ui/mainview.ui" line="98"/>
         <source>Jogador</source>
         <translation>Player</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="99"/>
+        <location filename="../ui/mainview.ui" line="101"/>
         <source>Ctrl+J</source>
         <translation>Ctrl+J</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="108"/>
+        <location filename="../ui/mainview.ui" line="110"/>
         <source>KarTEA</source>
         <translation>KarTEA</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="113"/>
+        <location filename="../ui/mainview.ui" line="115"/>
         <source>&amp;Calibração</source>
         <translation>&amp;Calibration</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="116"/>
+        <location filename="../ui/mainview.ui" line="118"/>
         <source>F4</source>
         <translation>F4</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="124"/>
+        <location filename="../ui/mainview.ui" line="126"/>
         <source>F1</source>
         <translation>F1</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="129"/>
+        <location filename="../ui/mainview.ui" line="131"/>
         <source>&amp;Sobre...</source>
         <translation>&amp;About...</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/mainview.py" line="87"/>
+        <location filename="../../udescjoinvilletteaview/mainview.py" line="64"/>
+        <source>Versão da plataforma: {0}</source>
+        <translation>Platform version: {0}</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteaview/mainview.py" line="67"/>
+        <source>Data atual: {0}</source>
+        <translation>Current date: {0}</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteaview/mainview.py" line="85"/>
         <source>Exergames (nenhum encontrado)</source>
         <translation>Exergames (none found)</translation>
+    </message>
+</context>
+<context>
+    <name>MessageService</name>
+    <message>
+        <location filename="../../udescjoinvilletteautil/messageservice.py" line="149"/>
+        <source>Sim</source>
+        <translation>Yes</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteautil/messageservice.py" line="152"/>
+        <source>Não</source>
+        <translation>No</translation>
     </message>
 </context>
 <context>
@@ -161,7 +209,7 @@
     <message>
         <location filename="../ui/playereditview.ui" line="50"/>
         <source>Data de Nascimento:</source>
-        <translation>Date of birth:</translation>
+        <translation>Date of Birth:</translation>
     </message>
     <message>
         <location filename="../ui/playereditview.ui" line="60"/>
@@ -186,7 +234,7 @@
     <message>
         <location filename="../../udescjoinvilletteaview/playereditview.py" line="92"/>
         <source>Gravar operação corrente</source>
-        <translation>Record current operation</translation>
+        <translation>Save current operation</translation>
     </message>
     <message>
         <location filename="../../udescjoinvilletteaview/playereditview.py" line="96"/>
@@ -196,7 +244,7 @@
     <message>
         <location filename="../../udescjoinvilletteaview/playereditview.py" line="97"/>
         <source>Cancelar operação corrente</source>
-        <translation>Cancel current transaction</translation>
+        <translation>Cancel current operation</translation>
     </message>
 </context>
 <context>
@@ -249,12 +297,12 @@
     <message>
         <location filename="../ui/playerlistview.ui" line="125"/>
         <source>Data de Nascimento:</source>
-        <translation>Date of birth:</translation>
+        <translation>Date of Birth:</translation>
     </message>
     <message>
         <location filename="../ui/playerlistview.ui" line="135"/>
         <source>Data de Nascimento: </source>
-        <translation>Date of birth: </translation>
+        <translation>Date of Birth: </translation>
     </message>
     <message>
         <location filename="../ui/playerlistview.ui" line="145"/>
@@ -334,6 +382,14 @@
         <location filename="../../udescjoinvilletteaview/splashscreen.py" line="102"/>
         <source>Concluído!</source>
         <translation>Completed!</translation>
+    </message>
+</context>
+<context>
+    <name>TTeaApp</name>
+    <message>
+        <location filename="../../udescjoinvilletteaapp/appconfig.py" line="117"/>
+        <source>Plataforma T-TEA</source>
+        <translation>T-TEA Platform</translation>
     </message>
 </context>
 </TS>

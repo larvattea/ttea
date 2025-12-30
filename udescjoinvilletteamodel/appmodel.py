@@ -14,7 +14,6 @@ class AppModel:
         from udescjoinvilletteamodel import Language
 
         self.language_model = Language()  # usado apenas no LanguageController
-        self.current_player_id: Optional[int] = None
 
         # === Carrega o idioma atual salvo nas configurações ===
         settings = QSettings(

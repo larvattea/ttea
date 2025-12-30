@@ -10,7 +10,11 @@ TEMPLATE = aux
 FORMS += ../ui/*.ui
 
 # Python files that must be parsed by lupdate
-SOURCES += ../../udescjoinvilletteaview/*.py
+SOURCES += ../../udescjoinvilletteaapp/*.py \
+            ../../udescjoinvilletteaservice/*.py \            
+            ../../udescjoinvilletteautil/*.py \
+            ../../udescjoinvilletteaview/*.py \
+            ../../*.py 
 
 # Translation files
 TRANSLATIONS += \

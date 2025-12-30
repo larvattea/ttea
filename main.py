@@ -1,7 +1,7 @@
 import sys
 import traceback
 
-from PySide6.QtCore import QTranslator
+from PySide6.QtCore import QCoreApplication
 from PySide6.QtWidgets import QApplication
 
 from udescjoinvilletteaapp import AppConfig
@@ -10,58 +10,46 @@ from udescjoinvilletteafactory import ViewFactory
 from udescjoinvillettealog import Log
 from udescjoinvilletteamodel import AppModel
 from udescjoinvilletteaservice import LanguageService  # novo import
-from udescjoinvilletteautil import MessageService, PathConfig
+from udescjoinvilletteautil import MessageService
 from udescjoinvilletteaview import MainView, SplashScreen
 
 
-def show_critical_error(exception: Exception, translator=None):
-    Log.get_log().log_error_with_stack(exception)
+def show_critical_error(exception: Exception):
+    message = QCoreApplication.translate(
+        "Main",
+        "Ocorreu um erro inesperado e o aplicativo será encerrado.\n"
+        "Por favor, entre em contato com o suporte e envie o arquivo de log.\n"
+        "Detalhes do erro: {0}",
+    ).format(str(exception))
 
-    message = (
-        "Ocorreu um erro crítico e a aplicação será encerrada.\n\n"
-        f"Erro: {exception}\n\n"
-        "Contate o suporte com o arquivo de log."
-    )
-
-    try:
-        app = QApplication.instance() or QApplication(sys.argv)
-        if translator:
-            app.installTranslator(translator)
-        MessageService.critical_global(message)
-    except Exception as e:
-        Log.get_log().log_error(f"Falha ao exibir erro crítico: {e}")
+    MessageService.critical_global(message, None)
 
 
 def global_exception_hook(
     exctype: type, value: Exception, traceback_obj: traceback
 ):
+    Log.get_log().log_error("Untreated global exception")
     Log.get_log().log_error_with_stack(value, traceback_obj=traceback_obj)
-    translator = QTranslator()
-    if translator.load(PathConfig.translation("pt_BR.qm")):
-        QApplication.instance().installTranslator(translator)
-    show_critical_error(value, translator)
+    show_critical_error(value)
     sys.__excepthook__(exctype, value, traceback_obj)
     sys.exit(1)
 
 
 def main():
     sys.excepthook = global_exception_hook
+    Log.get_log().log_info("Application started successfully.")
 
     app = QApplication(sys.argv)
     app.setApplicationName(AppConfig.get_title())
     app.setApplicationVersion(AppConfig.VERSION)
 
-    # === Carrega e aplica o idioma da última sessão ===
+    # === CARREGA O IDIOMA O MAIS CEDO POSSÍVEL ===
     language_service = LanguageService()
-    current_lang = (
-        language_service.get_saved_language()
-    )  # sempre retorna um código válido
-    language_service.apply_language(
-        current_lang
-    )  # instala tradutor + ajusta date_mask
+    initial_lang = language_service.get_initial_language()
+    # language_service.apply_language(initial_lang)
 
     # ======================
-    # SPLASH SCREEN (já traduzida corretamente)
+    # SPLASH SCREEN
     # ======================
     splash = SplashScreen()
     splash.show()
@@ -78,16 +66,17 @@ def main():
 
     result = language_controller.view.exec()
 
-    if result == 0:  # Usuário cancelou
+    if result == 0:
         sys.exit(0)
 
     selected_lang = language_controller.view.get_checked_language()
 
-    # === Se o idioma mudou, aplica o novo ===
-    if selected_lang != current_lang:
+    # Se mudou o idioma, aplica o novo tradutor
+    if selected_lang != initial_lang:
         language_service.apply_language(selected_lang)
+        # O apply_language provavelmente já reinstala o tradutor correto
 
-    # === Janela principal ===
+    # === Resto do app ===
     model = AppModel()
     model.current_language = selected_lang
 
@@ -100,6 +89,7 @@ def main():
         view=main_view, model=model, message_service=message_service
     )
 
+    Log.get_log().log_info("Application finished successfully.")
     sys.exit(app.exec())
 
 
