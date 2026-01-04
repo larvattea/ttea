@@ -86,7 +86,7 @@ class AppConfig:
         "KarTEA",
     ]
 
-    ICON_APP: str = PathConfig.icon("appicon")
+    ICON_APP: str = PathConfig.icon_system("appicon")
     LOGO_APP: str = PathConfig.image("ttealogo")
     PLATAFORM_SUFIX: str = "TEA"
     PLATAFORM_MANUAL: str = "Manual"

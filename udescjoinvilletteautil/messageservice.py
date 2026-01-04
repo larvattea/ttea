@@ -1,6 +1,6 @@
 from typing import Optional
 
-from PySide6.QtCore import QCoreApplication
+from PySide6.QtCore import QCoreApplication, Qt
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QMessageBox, QWidget
 
@@ -165,4 +165,5 @@ class MessageService:
         window.setWindowTitle(title or AppConfig.get_title())
         window.setWindowIcon(QIcon(AppConfig.ICON_APP))
         MessageService(window).critical(text)
+
         window.deleteLater()

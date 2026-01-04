@@ -58,8 +58,12 @@ class PathConfig:
         return f":/{path}".rstrip("/")
 
     @staticmethod
-    def icon(name: str) -> str:
-        return f":/icons/{name}"
+    def icon_system(name: str) -> str:
+        return f":/icons/system/{name}"
+
+    @staticmethod
+    def icon_ui(name: str) -> str:
+        return f":/icons/ui/{name}"
 
     @staticmethod
     def flag(name: str) -> str:

@@ -57,4 +57,6 @@ TRANSLATIONS += \
 # Example Windows direct with no OS Path:
 # & "C:\Qt\6.8.2\mingw_64\bin\lrelease.exe" 
 # translations.pro
+# 
+# 4 - Don't use strings with f to translate
 # -------------------------------------------------

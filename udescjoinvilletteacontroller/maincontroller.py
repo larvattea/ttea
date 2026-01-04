@@ -50,7 +50,7 @@ class MainController(QObject):
             icon_name = (
                 "kartea4.ico" if "kartea" in game_dir.lower() else "game.png"
             )
-            icon_path = PathConfig.icon(icon_name)
+            icon_path = PathConfig.icon_system(icon_name)
 
             games.append((display_name, icon_path))
 

@@ -2,6 +2,7 @@ import sys
 import traceback
 
 from PySide6.QtCore import QCoreApplication
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication, QDialog
 
 from udescjoinvilletteaapp import AppConfig
@@ -41,6 +42,7 @@ def main():
     app = QApplication(sys.argv)
     app.setApplicationName(AppConfig.get_title())
     app.setApplicationVersion(AppConfig.VERSION)
+    app.setWindowIcon(QIcon(AppConfig.ICON_APP))
 
     # === Detecta idioma inicial e aplica ===
     language_service = LanguageService()
