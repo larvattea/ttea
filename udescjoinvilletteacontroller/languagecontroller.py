@@ -1,106 +1,57 @@
-# udescjoinvilletteacontroller/languagecontroller.py
-from typing import Callable, Optional
+from typing import TYPE_CHECKING, Optional
 
-from PySide6.QtCore import QObject, QTranslator
-from PySide6.QtGui import QCloseEvent
-from PySide6.QtWidgets import QApplication
+from PySide6.QtCore import QObject
 
-from udescjoinvilletteaapp import AppConfig
 from udescjoinvilletteamodel import Language
 from udescjoinvilletteaservice import LanguageService
-from udescjoinvilletteautil import MessageService, PathConfig
-from udescjoinvilletteaview import LanguageView
+from udescjoinvilletteautil import MessageService
+
+if TYPE_CHECKING:
+    from udescjoinvilletteaview import LanguageView
 
 
-class LanguageController:
-    """Controller MVCS completo — idêntico ao PlayerListController."""
-
+class LanguageController(QObject):
     def __init__(
-        self,
-        model: Language,
-        language_view_factory: Callable[[Optional[QObject]], LanguageView],
-        parent: Optional[QObject] = None,
+        self, view: "LanguageView", service: Optional[LanguageService] = None
     ):
-        self.model = model
-        self.service = LanguageService()
-        self.view = language_view_factory(parent)
-        self.msg = MessageService(self.view)
+        self.view = view
+        self.service = service or LanguageService()
+        self.model = (
+            view.parent().model.language_model if view.parent() else Language()
+        )  # ou injetar
 
-        # Variável para evitar recarregar o mesmo idioma (evita flicker)
-        self._current_preview_lang: Optional[str] = None
-
-        self._setup_connections()
+        self._current_preview_lang = None
         self._initialize_view()
 
-    def _setup_connections(self) -> None:
-        self.view.btn_confirm.clicked.connect(self.handle_confirm)
-        self.view.closeEvent = self.handle_close_event
-        # Preview imediato ao mudar seleção no ComboBox
-        self.view.comboBox.currentIndexChanged.connect(self._preview_language)
-
-    def _initialize_view(self) -> None:
-        languages = self.model.get_languages()
-        self.view.populate_languages(languages)
-
-        # Prioridade: idioma salvo > idioma do sistema > padrão
-        preferred = (
-            self.service.get_saved_language()
-            or self.model.get_system_language().replace("-", "_")
-            or self.model.DEFAULT_LANGUAGE
-        )
+    def _initialize_view(self):
+        self.view.populate_languages(self.model.get_languages())
+        preferred = self.service.get_initial_language()
         self.view.set_preselected_language(preferred)
-
-        # Define o idioma inicial como o atualmente aplicado no preview
         self._current_preview_lang = preferred
+        # Preview inicial já aplicado via serviço ou main
 
-    def _preview_language(
-        self,
-    ) -> None:  # Removido o parâmetro 'index' não usado
-        """Aplica o idioma selecionado como preview (atualiza UI imediatamente)."""
-
-        code = self.view.get_checked_language()
-        if not code:
+    def handle_preview(self):
+        code = self.view.get_selected_language()
+        if not code or code == self._current_preview_lang:
             return
+        if self.service.preview_language(code):
+            self.view.retranslateUi(self.view)
+            self._current_preview_lang = code
 
-        # Evita recarregar o mesmo idioma (melhora performance e evita flicker)
-        if code == self._current_preview_lang:
-            return
-
-        app = QApplication.instance()
-        if not app:
-            return
-
-        # Remove todos os tradutores antigos
-        for old in app.findChildren(QTranslator):
-            app.removeTranslator(old)
-            old.deleteLater()
-
-        translator = QTranslator(app)
-        path = PathConfig.translation(
-            f"{code}{AppConfig.TRANSLATION_EXTENSION}"
-        )
-
-        if translator.load(path):
-            app.installTranslator(translator)
-            self.view.retranslateUi(self.view)  # Força atualização imediata
-            self._current_preview_lang = (
-                code  # Atualiza o idioma atual do preview
-            )
-        # Se falhar no load, mantém o anterior (silenciosamente)
-
-    def handle_confirm(self) -> None:
-        code = self.view.get_checked_language()
+    def handle_confirm(self):
+        code = self.view.get_selected_language()
         if not code:
             self.view.show_warning()
             return
-
         if self.service.apply_language(code):
             self.view.accept()
         else:
-            self.msg.critical(self.view.tr("Erro ao carregar o idioma."))
+            MessageService(self.view).critical(
+                self.tr("Erro ao carregar o idioma.")
+            )
 
-    def handle_close_event(self, event: QCloseEvent) -> None:
-        code = self.view.get_checked_language()
+    def handle_close_event(self, event):
+        code = self.view.get_selected_language()
         if code and self.service.apply_language(code):
             event.accept()
         else:

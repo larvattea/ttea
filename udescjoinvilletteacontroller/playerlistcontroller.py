@@ -1,5 +1,7 @@
 from typing import TYPE_CHECKING, Callable, Optional
 
+from PySide6.QtCore import QObject
+
 # Local module import
 from udescjoinvilletteaservice import PlayerService
 from udescjoinvilletteautil import MessageService
@@ -9,7 +11,7 @@ if TYPE_CHECKING:
     from udescjoinvilletteaview import PlayerEditView, PlayerListView
 
 
-class PlayerListController:
+class PlayerListController(QObject):
     """
     Lightweight controller that orchestrates PlayerListView and PlayerService.
 
@@ -68,7 +70,7 @@ class PlayerListController:
         """
         self.view = view
         self.factory = player_edit_view_factory
-        self.service = PlayerService()  # ← Serviço injetado
+        self.service = PlayerService()  # <- Serviço injetado
         self.msg = MessageService(view)
 
     def load_players(self, query: str = "") -> None:
@@ -120,22 +122,22 @@ class PlayerListController:
         data = dialog.controller.get_data()
         player = self.service.create_player(data)
         if player:
-            self.load_players(self.view.search_input.text())
+            self.load_players(self.view.led_search.text())
             self.select_and_show_player(player.id)
-            self.msg.info(self.view.tr("Jogador cadastrado com sucesso!"))
+            self.msg.info(self.tr("Jogador cadastrado com sucesso!"))
         else:
-            self.msg.critical(self.view.tr("Erro ao salvar jogador."))
+            self.msg.critical(self.tr("Erro ao salvar jogador."))
 
     def handle_edit_player(self) -> None:
         """Open dialog to edit the selected player and update if accepted."""
         player_id = self.view.get_selected_player_id()
         if not player_id:
-            self.msg.warning(self.view.tr("Selecione um jogador para editar."))
+            self.msg.warning(self.tr("Selecione um jogador para editar."))
             return
 
         player = self.service.find_by_id(player_id)
         if not player:
-            self.msg.critical(self.view.tr("Jogador não encontrado."))
+            self.msg.critical(self.tr("Jogador não encontrado."))
             return
 
         dialog = self.factory(self.view, player)
@@ -144,19 +146,17 @@ class PlayerListController:
 
         data = dialog.controller.get_data()
         if self.service.update_player(player_id, data):
-            self.load_players(self.view.search_input.text())
+            self.load_players(self.view.led_search.text())
             self.select_and_show_player(player_id)
-            self.msg.info(self.view.tr("Jogador atualizado com sucesso."))
+            self.msg.info(self.tr("Jogador atualizado com sucesso."))
         else:
-            self.msg.critical(self.view.tr("Erro ao atualizar jogador."))
+            self.msg.critical(self.tr("Erro ao atualizar jogador."))
 
     def delete_player(self) -> None:
         """Delete the selected player after user confirmation."""
         player_id = self.view.get_selected_player_id()
         if not player_id:
-            self.msg.warning(
-                self.view.tr("Selecione um jogador para excluir.")
-            )
+            self.msg.warning(self.tr("Selecione um jogador para excluir."))
             return
 
         player = self.service.find_by_id(player_id)
@@ -164,11 +164,11 @@ class PlayerListController:
             return
 
         if self.msg.question(
-            self.view.tr(f"Tem certeza que deseja excluir?\n{player.name}")
+            self.tr("Tem certeza que deseja excluir?\n{0}").format(player.name)
         ):
             if self.service.delete_player(player_id):
-                self.load_players(self.view.search_input.text())
+                self.load_players(self.view.led_search.text())
                 self.view.clear_details()
-                self.msg.info(self.view.tr("Jogador excluído com sucesso."))
+                self.msg.info(self.tr("Jogador excluído com sucesso."))
             else:
-                self.msg.critical(self.view.tr("Erro ao excluir jogador."))
+                self.msg.critical(self.tr("Erro ao excluir jogador."))

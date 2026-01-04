@@ -15,7 +15,11 @@ class PathConfig:
     # ===================================================================
     # 1. PASTA DE DADOS DO USUÁRIO (escrita permitida)
     # ===================================================================
-    APP_NAME = "ttea"  # <- MUDE AQUI para o nome do seu app
+    # Nome do app
+    APP_NAME = "ttea"  # Nome do app
+
+    # Nome do arquivo principal de configuração
+    CONFIG_FILENAME = "config.ini"
 
     if sys.platform.startswith("win"):
         APPDATA_DIR = Path(os.getenv("APPDATA")) / APP_NAME
@@ -116,9 +120,22 @@ class PathConfig:
         return str(cls.EXPORTS_DIR / filename)
 
     @classmethod
-    def config(cls, filename: str = "config.ini") -> str:
+    def config(cls, filename: str = CONFIG_FILENAME) -> str:
         cls.ensure_user_dirs()
         return str(cls.CONFIG_DIR / filename)
+
+    @classmethod
+    def config_file_exists(cls, filename: str = CONFIG_FILENAME) -> bool:
+        """Verifica se o arquivo de configuração existe no diretório do usuário.
+
+        Returns
+        -------
+        bool
+            True se o arquivo config.ini existir, False caso contrário.
+        """
+        cls.ensure_user_dirs()  # Garante que as pastas existam (não cria o arquivo)
+        config_path = Path(cls.config(filename))
+        return config_path.exists()
 
     # ===================================================================
     # 5. MÉTODOS LEGADOS (mantidos para compatibilidade)

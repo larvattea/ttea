@@ -3,19 +3,26 @@ from typing import TYPE_CHECKING
 
 from PySide6.QtCore import QObject
 
-from udescjoinvilletteafactory import ViewFactory
 from udescjoinvilletteaservice import MainService
 from udescjoinvilletteautil import PathConfig
 
 if TYPE_CHECKING:
     from udescjoinvilletteamodel import AppModel
     from udescjoinvilletteautil import MessageService
+    from udescjoinvilletteaview.mainview import (
+        MainView,
+    )  # Apenas para type hint
 
 
 class MainController(QObject):
     def __init__(
-        self, view, model: "AppModel", message_service: "MessageService"
+        self,
+        view: "MainView",
+        model: "AppModel",
+        message_service: "MessageService",
     ):
+        from udescjoinvilletteafactory import ViewFactory
+
         super().__init__(parent=view)
         self.view = view
         self.model = model
@@ -30,19 +37,8 @@ class MainController(QObject):
         self.app_factory = ViewFactory.get_app_view_factory()
         self.kartea_factory = ViewFactory.get_kartea_view_factory()
 
-        self._connect_signals()
         self._load_games_menu()  # já ordena uma única vez aqui
-
-    def _connect_signals(self) -> None:
-        self.view.exit_requested.connect(self.handle_exit)
-        self.view.player_list_requested.connect(self.open_player_list)
-        self.view.player_kartea_config_requested.connect(
-            self.open_kartea_player_config
-        )
-        self.view.calibration_requested.connect(self.open_calibration)
-        self.view.help_requested.connect(self.open_help)
-        self.view.about_requested.connect(self.open_about)
-        self.view.game_selected.connect(self.start_game)
+        self._is_quitting = False
 
     def _load_games_menu(self) -> None:
         games = []
@@ -63,8 +59,21 @@ class MainController(QObject):
 
     # ------------------------------------------------------------------
     def handle_exit(self) -> None:
+        if self._is_quitting:
+            return  # já estamos saindo, não faz nada
+
         if self.app_service.confirm_exit():
+            self._is_quitting = True
             self.app_service.quit_application()
+
+    def try_close(self) -> bool:
+        if self._is_quitting:
+            return True
+        if self.app_service.confirm_exit():
+            self._is_quitting = True
+            self.app_service.quit_application()
+            return True
+        return False
 
     def open_player_list(self) -> None:
         dialog = self.app_factory.create_player_list_view(
@@ -91,7 +100,7 @@ class MainController(QObject):
             pass
         except Exception as e:
             self.view.show_critical_error(
-                self.tr("Erro ao abrir ajuda"), str(e)
+                self.tr("Erro ao abrir ajuda."), str(e)
             )
 
     def open_about(self) -> None:

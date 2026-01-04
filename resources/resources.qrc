@@ -1,25 +1,39 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
-    <!-- Bandeiras -->
+    <!-- Flags -->
     <qresource prefix="/flags">
         <file alias="brazil">flags/brazil.png</file>
         <file alias="spain">flags/spain.png</file>
         <file alias="usa">flags/usa.png</file>
     </qresource>
 
-    <!-- Ícones -->
-    <qresource prefix="/icons">
-        <file alias="appicon">icons/larva.ico</file>
+    <!-- Icons -->
+    <qresource prefix="/icons/system">
+        <file alias="appicon">icons/system/larva.ico</file>
     </qresource>
 
+    <qresource prefix="/icons/ui/buttons">
+        <file alias="okicon">icons/ui/buttons/check_solid.png</file>      
+        <file alias="editicon">icons/ui/buttons/pen_square_solid.png</file>
+        <file alias="newicon">icons/ui/buttons/plus_solid.png</file>
+        <file alias="cancelicon">icons/ui/buttons/times_solid.png</file>
+        <file alias="trashicon">icons/ui/buttons/trash_solid.png</file>
+    </qresource>
+
+    <qresource prefix="/icons/ui/menu">
+        <file alias="info">icons/ui/menu/info_circle_solid.png</file>
+        <file alias="info2">icons/ui/menu/info_solid.png</file>
+        <file alias="karteaicon">icons/ui/menu/kartea.ico</file>
+        <file alias="kartea2icon">icons/ui/menu/kartea2.ico</file>
+        <file alias="kartea3icon">icons/ui/menu/kartea3.ico</file>
+        <file alias="kartea4icon">icons/ui/menu/kartea4.ico</file>
+        <file alias="question">icons/ui/menu/question_circle_solid.png</file>
+        <file alias="question2">icons/ui/menu/question_solid.png</file>
+    </qresource>          
+
     <!-- Imagens -->
-    <qresource prefix="/images">
-        <file alias="cancelicon">images/times_solid.png</file>
-        <file alias="editicon">images/pen_square_solid.png</file>
-        <file alias="kartealogo">images/kartealogo.jpg</file>
-        <file alias="newicon">images/plus_solid.png</file>
-        <file alias="okicon">images/check_solid.png</file>       
-        <file alias="trashicon">images/trash_solid.png</file>
+    <qresource prefix="/images">        
+        <file alias="kartealogo">images/kartealogo.jpg</file>        
         <file alias="ttealogo">images/ttealogo.png</file>
     </qresource>
 

@@ -11,6 +11,7 @@ FORMS += ../ui/*.ui
 
 # Python files that must be parsed by lupdate
 SOURCES += ../../udescjoinvilletteaapp/*.py \
+            ../../udescjoinvilletteacontroller/*.py \
             ../../udescjoinvilletteaservice/*.py \            
             ../../udescjoinvilletteautil/*.py \
             ../../udescjoinvilletteaview/*.py \

@@ -79,9 +79,9 @@ class AboutView(QDialog, WindowConfig):
         """
         super().__init__(parent)
         self.setModal(True)  # Set as modal
-        self.translator = (
-            parent.translator if hasattr(parent, "translator") else None
-        )
+        # self.translator = (
+        #    parent.translator if hasattr(parent, "translator") else None
+        # )
         self.setup_window(
             parent.get_title(),  # title
             parent.windowIcon() if parent else None,  # icon

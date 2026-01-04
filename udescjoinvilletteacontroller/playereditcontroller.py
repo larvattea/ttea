@@ -1,7 +1,7 @@
 from datetime import date
 from typing import TYPE_CHECKING, Dict, Optional, Union
 
-from PySide6.QtCore import QDate
+from PySide6.QtCore import QDate, QObject
 
 # Local module import
 from udescjoinvilletteautil import MessageService, QtDateFormat
@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from udescjoinvilletteaview import PlayerEditView
 
 
-class PlayerEditController:
+class PlayerEditController(QObject):
     """Controller for the player edit/create dialog.
 
     Manages the interaction between PlayerEditView and the Player model,
@@ -72,17 +72,17 @@ class PlayerEditController:
 
         # Populate fields if editing
         if player:
-            self.view.name_input.setText(player.name)
+            self.view.led_name.setText(player.name)
 
             birth_date = player.birth_date
             qdate = QDate(birth_date.year, birth_date.month, birth_date.day)
-            self.view.birth_date_input.setDate(qdate)
+            self.view.ded_birth_date.setDate(qdate)
 
-            self.view.observation_input.setPlainText(player.observation)
+            self.view.ted_observation.setPlainText(player.observation)
         else:
-            self.view.birth_date_input.setDate(QDate.currentDate())
+            self.view.ded_birth_date.setDate(QDate.currentDate())
 
-        self.view.birth_date_input.setDisplayFormat(QtDateFormat.from_config())
+        self.view.ded_birth_date.setDisplayFormat(QtDateFormat.from_config())
 
     def handle_ok(self) -> None:
         """Validate input and close dialog with acceptance.
@@ -114,12 +114,12 @@ class PlayerEditController:
         """
         error_message = ""
 
-        if not self.view.name_input.text():
-            error_message += self.view.tr("Nome é obrigatório!\n")
+        if not self.view.led_name.text():
+            error_message += self.tr("Nome é obrigatório!\n")
 
         if error_message:
             self.msg.critical(
-                self.view.tr("Por favor, corrija os dados inválidos:\n")
+                self.tr("Por favor, corrija os dados inválidos:\n")
                 + error_message
             )
             return False
@@ -137,7 +137,7 @@ class PlayerEditController:
             - "observation": str from observation text area
         """
         return {
-            "name": self.view.name_input.text(),
-            "birth_date": self.view.birth_date_input.date().toPython(),
-            "observation": self.view.observation_input.toPlainText(),
+            "name": self.view.led_name.text(),
+            "birth_date": self.view.ded_birth_date.date().toPython(),
+            "observation": self.view.ted_observation.toPlainText(),
         }

@@ -94,9 +94,9 @@ class PlayerKarteaConfigListView(QDialog, WindowConfig):
         super().__init__(parent)
         # Make dialog modal
         self.setModal(True)
-        self.translator = (
-            parent.translator if hasattr(parent, "translator") else None
-        )
+        # self.translator = (
+        #    parent.translator if hasattr(parent, "translator") else None
+        # )
         self.setup_window(
             parent.title,  # title
             parent.windowIcon() if parent else None,  # icon

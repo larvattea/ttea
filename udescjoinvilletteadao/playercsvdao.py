@@ -86,7 +86,7 @@ class PlayerCsvDAO(DAO[Player]):
         headers : List[str]
             Ordered list of column names.
         """
-        PathConfig.create_directories()
+        PathConfig.ensure_user_dirs()
         with portalocker.Lock(filepath, mode="w", timeout=10) as f:
             self.csv_handler.write_csv(f, data, headers)
 
@@ -235,8 +235,8 @@ class PlayerCsvDAO(DAO[Player]):
         Scans the players directory, parses each matching CSV file,
         converts data types appropriately, and populates the cache.
         """
-        PathConfig.create_directories()
-        for file_path in PathConfig.players_dir.glob("*_player.csv"):
+        PathConfig.ensure_user_dirs()
+        for file_path in PathConfig.PLAYERS_DIR.glob("*_player.csv"):
             player_data = self.csv_handler.read_csv(
                 str(file_path), as_dict=True
             )

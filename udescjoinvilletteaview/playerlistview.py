@@ -1,9 +1,7 @@
 from typing import TYPE_CHECKING, Callable, List, Optional
 
-import qtawesome as qta
 from PySide6.QtGui import QCloseEvent
-from PySide6.QtWidgets import (QAbstractItemView, QDialog, QHeaderView,
-                               QTableWidget, QTableWidgetItem)
+from PySide6.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 
 # Local module import
 from udescjoinvilletteaui import Ui_PlayerListView
@@ -80,10 +78,6 @@ class PlayerListView(QDialog, Ui_PlayerListView, WindowConfig):
         from udescjoinvilletteacontroller import PlayerListController
 
         super().__init__(parent)
-        self.setModal(True)
-        self.translator = (
-            parent.translator if hasattr(parent, "translator") else None
-        )
 
         # Setup UI interface Ui_PlayerListView
         self.setupUi(self)
@@ -91,8 +85,8 @@ class PlayerListView(QDialog, Ui_PlayerListView, WindowConfig):
 
         # Set up window properties
         self.setup_window(
-            parent.title + " - Jogador",
-            parent.windowIcon() if parent else None,
+            self.windowTitle(),
+            self.windowIcon(),
             WindowConfig.DECREMENT_SIZE_PERCENT,
             10,
             5,
@@ -103,39 +97,27 @@ class PlayerListView(QDialog, Ui_PlayerListView, WindowConfig):
         self.controller = PlayerListController(self, player_edit_view_factory)
 
         # Set up table properties not fully handled by .ui file
-        self.table.horizontalHeader().setSectionResizeMode(
+        self.tbl_player.horizontalHeader().setSectionResizeMode(
             QHeaderView.ResizeToContents
         )
 
-        # Set up button icons
-        self.new_button.setIcon(qta.icon("fa6s.plus", color="blue"))
-        self.edit_button.setIcon(qta.icon("fa6s.pen-to-square", color="black"))
-        self.delete_button.setIcon(qta.icon("fa6s.trash", color="red"))
-
         # Events signals and slots
-        self.new_button.clicked.connect(self.on_new_button_clicked)
-        self.edit_button.clicked.connect(self.on_edit_button_clicked)
-        self.delete_button.clicked.connect(self.on_delete_button_clicked)
-        self.search_input.textChanged.connect(self.on_search_input_textChanged)
-        self.table.selectionModel().selectionChanged.connect(
+        self.pb_new.clicked.connect(self.on_new_button_clicked)
+        self.pb_edit.clicked.connect(self.on_edit_button_clicked)
+        self.pb_delete.clicked.connect(self.on_delete_button_clicked)
+        self.led_search.textChanged.connect(self.on_search_input_textChanged)
+        self.tbl_player.selectionModel().selectionChanged.connect(
             self.on_table_selection_changed
         )
 
         # Load initial data
         self.controller.load_players()
-        # == CONFIGURATION IMPORTANT FOR ROW SELECTION AND SINGLE SELECTION ==
-        self.table.setSelectionBehavior(
-            QTableWidget.SelectionBehavior.SelectRows
-        )
-        self.table.setSelectionMode(
-            QAbstractItemView.SelectionMode.SingleSelection
-        )
 
         # Perfect column widths
-        self.table.horizontalHeader().setSectionResizeMode(
+        self.tbl_player.horizontalHeader().setSectionResizeMode(
             0, QHeaderView.ResizeToContents
         )
-        self.table.horizontalHeader().setSectionResizeMode(
+        self.tbl_player.horizontalHeader().setSectionResizeMode(
             1, QHeaderView.Stretch
         )
 
@@ -184,23 +166,23 @@ class PlayerListView(QDialog, Ui_PlayerListView, WindowConfig):
 
     def populate_table(self, players: List["Player"]) -> None:
         """Fill the table with a list of players."""
-        self.table.blockSignals(True)
-        self.table.setRowCount(0)
+        self.tbl_player.blockSignals(True)
+        self.tbl_player.setRowCount(0)
 
         for player in players:
-            row = self.table.rowCount()
-            self.table.insertRow(row)
-            self.table.setItem(row, 0, QTableWidgetItem(str(player.id)))
-            self.table.setItem(row, 1, QTableWidgetItem(player.name))
+            row = self.tbl_player.rowCount()
+            self.tbl_player.insertRow(row)
+            self.tbl_player.setItem(row, 0, QTableWidgetItem(str(player.id)))
+            self.tbl_player.setItem(row, 1, QTableWidgetItem(player.name))
 
-        self.table.blockSignals(False)
+        self.tbl_player.blockSignals(False)
 
     def clear_details(self) -> None:
         """Clear all fields in the details panel."""
-        self.id_label.setText("")
-        self.name_label.setText("")
-        self.birth_date_label.setText("")
-        self.observation_label.setText("")
+        self.lbl_id_value.setText("")
+        self.lbl_name_value.setText("")
+        self.lbl_birth_date_value.setText("")
+        self.lbl_observation_value.setText("")
 
     def display_player_details(self, player: Optional["Player"]) -> None:
         """Show the selected player's details in the right panel."""
@@ -210,15 +192,15 @@ class PlayerListView(QDialog, Ui_PlayerListView, WindowConfig):
             self.clear_details()
             return
 
-        self.id_label.setText(str(player.id))
-        self.name_label.setText(player.name)
+        self.lbl_id_value.setText(str(player.id))
+        self.lbl_name_value.setText(player.name)
         mask = AppConfig.get_geral_date_mask()
-        self.birth_date_label.setText(player.birth_date.strftime(mask))
-        self.observation_label.setText(player.observation or "—")
+        self.lbl_birth_date_value.setText(player.birth_date.strftime(mask))
+        self.lbl_observation_value.setText(player.observation or "—")
 
     def get_selected_player_id(self) -> Optional[int]:
         """Return the ID of the currently selected player or None."""
-        items = self.table.selectedItems()
+        items = self.tbl_player.selectedItems()
         if not items:
             return None
         try:
@@ -228,14 +210,14 @@ class PlayerListView(QDialog, Ui_PlayerListView, WindowConfig):
 
     def select_row_by_id(self, player_id: int) -> None:
         """Programmatically select the row with the given player ID."""
-        self.table.blockSignals(True)
-        for row in range(self.table.rowCount()):
-            item = self.table.item(row, 0)
+        self.tbl_player.blockSignals(True)
+        for row in range(self.tbl_player.rowCount()):
+            item = self.tbl_player.item(row, 0)
             if item and int(item.text()) == player_id:
-                self.table.selectRow(row)
-                self.table.scrollToItem(item)
+                self.tbl_player.selectRow(row)
+                self.tbl_player.scrollToItem(item)
                 break
-        self.table.blockSignals(False)
+        self.tbl_player.blockSignals(False)
 
     def closeEvent(self, event: QCloseEvent) -> None:
         """Override close event to confirm exit.

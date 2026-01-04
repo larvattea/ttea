@@ -1,15 +1,14 @@
 from typing import TYPE_CHECKING, Callable, Optional
 
 from PySide6.QtCore import QObject
-from PySide6.QtWidgets import QDialog
+from PySide6.QtWidgets import QDialog, QWidget
 
-from udescjoinvilletteaview import (AboutView, LanguageView, PlayerEditView,
-                                    PlayerListView)
+from udescjoinvilletteaview import (AboutView, LanguageView, MainView,
+                                    PlayerEditView, PlayerListView)
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
     # Local module import
-    from udescjoinvilletteacontroller import LanguageController
     from udescjoinvilletteamodel import Player
 
 
@@ -116,3 +115,21 @@ class AppViewFactory:
             translator and parent.
         """
         return LanguageView(parent)
+
+    @staticmethod
+    def create_main_view(parent: Optional[QWidget] = None) -> MainView:
+        """
+        Create an instance of MainView.
+
+        Parameters
+        ----------
+        parent : Optional[QObject], optional
+            The parent object for the MainView, by default None.
+
+        Returns
+        -------
+        MainView
+            An instance of MainView configured with the provided
+            translator and parent.
+        """
+        return MainView(parent)

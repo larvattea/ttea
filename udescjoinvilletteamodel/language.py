@@ -5,10 +5,7 @@ from udescjoinvilletteautil import PathConfig
 
 
 class Language:
-    """Model for managing language data.
-
-    Responsável apenas pelos dados estáticos dos idiomas suportados
-    e pelo idioma selecionado pelo usuário (em memória).
+    """Model responsável apenas pelos dados estáticos dos idiomas suportados.
 
     Attributes
     ----------
@@ -38,17 +35,6 @@ class Language:
 
     DEFAULT_LANGUAGE = "pt_BR"
 
-    def __init__(self) -> None:
-        self.selected_language: str | None = None
-
     def get_languages(self) -> List[Dict[str, str]]:
         """Retorna a lista de idiomas disponíveis."""
         return self.LANGUAGES
-
-    def set_selected_language(self, language_code: str) -> None:
-        """Define o idioma selecionado pelo usuário (em memória)."""
-        self.selected_language = language_code
-
-    def get_selected_language(self) -> str | None:
-        """Retorna o idioma selecionado pelo usuário."""
-        return self.selected_language

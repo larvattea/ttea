@@ -19,179 +19,195 @@ from PySide6.QtWidgets import (QAbstractItemView, QApplication, QDialog, QGridLa
     QHBoxLayout, QHeaderView, QLabel, QLineEdit,
     QPushButton, QSizePolicy, QSpacerItem, QTabWidget,
     QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
+import resources.resources_rc
 
 class Ui_PlayerListView(object):
     def setupUi(self, PlayerListView):
         if not PlayerListView.objectName():
             PlayerListView.setObjectName(u"PlayerListView")
-        PlayerListView.setProperty(u"modal", False)
         PlayerListView.resize(600, 400)
+        icon = QIcon()
+        icon.addFile(u":/icons/system/appicon", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        PlayerListView.setWindowIcon(icon)
+        PlayerListView.setModal(True)
         self.mainLayout = QHBoxLayout(PlayerListView)
         self.mainLayout.setObjectName(u"mainLayout")
-        self.leftLayout = QVBoxLayout()
-        self.leftLayout.setObjectName(u"leftLayout")
-        self.searchLayout = QHBoxLayout()
-        self.searchLayout.setObjectName(u"searchLayout")
-        self.search_label = QLabel(PlayerListView)
-        self.search_label.setObjectName(u"search_label")
+        self.lay_left = QVBoxLayout()
+        self.lay_left.setObjectName(u"lay_left")
+        self.lay_search = QHBoxLayout()
+        self.lay_search.setObjectName(u"lay_search")
+        self.lbl_search = QLabel(PlayerListView)
+        self.lbl_search.setObjectName(u"lbl_search")
 
-        self.searchLayout.addWidget(self.search_label)
+        self.lay_search.addWidget(self.lbl_search)
 
-        self.search_input = QLineEdit(PlayerListView)
-        self.search_input.setObjectName(u"search_input")
+        self.led_search = QLineEdit(PlayerListView)
+        self.led_search.setObjectName(u"led_search")
 
-        self.searchLayout.addWidget(self.search_input)
+        self.lay_search.addWidget(self.led_search)
 
 
-        self.leftLayout.addLayout(self.searchLayout)
+        self.lay_left.addLayout(self.lay_search)
 
-        self.table = QTableWidget(PlayerListView)
-        if (self.table.columnCount() < 2):
-            self.table.setColumnCount(2)
+        self.tbl_player = QTableWidget(PlayerListView)
+        if (self.tbl_player.columnCount() < 2):
+            self.tbl_player.setColumnCount(2)
         __qtablewidgetitem = QTableWidgetItem()
-        self.table.setHorizontalHeaderItem(0, __qtablewidgetitem)
+        self.tbl_player.setHorizontalHeaderItem(0, __qtablewidgetitem)
         __qtablewidgetitem1 = QTableWidgetItem()
-        self.table.setHorizontalHeaderItem(1, __qtablewidgetitem1)
-        self.table.setObjectName(u"table")
-        self.table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
-        self.table.setAlternatingRowColors(True)
-        self.table.setColumnCount(2)
-        self.table.horizontalHeader().setStretchLastSection(True)
+        self.tbl_player.setHorizontalHeaderItem(1, __qtablewidgetitem1)
+        self.tbl_player.setObjectName(u"tbl_player")
+        self.tbl_player.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+        self.tbl_player.setAlternatingRowColors(True)
+        self.tbl_player.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
+        self.tbl_player.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        self.tbl_player.setSortingEnabled(True)
+        self.tbl_player.setColumnCount(2)
+        self.tbl_player.horizontalHeader().setStretchLastSection(True)
 
-        self.leftLayout.addWidget(self.table)
+        self.lay_left.addWidget(self.tbl_player)
 
 
-        self.mainLayout.addLayout(self.leftLayout)
+        self.mainLayout.addLayout(self.lay_left)
 
-        self.rightLayout = QVBoxLayout()
-        self.rightLayout.setObjectName(u"rightLayout")
-        self.tabWidget = QTabWidget(PlayerListView)
-        self.tabWidget.setObjectName(u"tabWidget")
-        self.details_tab = QWidget()
-        self.details_tab.setObjectName(u"details_tab")
-        self.detailsLayout = QVBoxLayout(self.details_tab)
+        self.lay_right = QVBoxLayout()
+        self.lay_right.setObjectName(u"lay_right")
+        self.tab_player = QTabWidget(PlayerListView)
+        self.tab_player.setObjectName(u"tab_player")
+        self.lay_detail = QWidget()
+        self.lay_detail.setObjectName(u"lay_detail")
+        self.detailsLayout = QVBoxLayout(self.lay_detail)
         self.detailsLayout.setObjectName(u"detailsLayout")
-        self.detailsGrid = QGridLayout()
-        self.detailsGrid.setObjectName(u"detailsGrid")
-        self.label_id = QLabel(self.details_tab)
-        self.label_id.setObjectName(u"label_id")
-        self.label_id.setAlignment(Qt.AlignmentFlag.AlignLeading)
+        self.grd_detail = QGridLayout()
+        self.grd_detail.setObjectName(u"grd_detail")
+        self.lbl_id = QLabel(self.lay_detail)
+        self.lbl_id.setObjectName(u"lbl_id")
+        self.lbl_id.setAlignment(Qt.AlignmentFlag.AlignLeading)
 
-        self.detailsGrid.addWidget(self.label_id, 0, 0, 1, 1)
+        self.grd_detail.addWidget(self.lbl_id, 0, 0, 1, 1)
 
-        self.id_label = QLabel(self.details_tab)
-        self.id_label.setObjectName(u"id_label")
-        self.id_label.setAlignment(Qt.AlignmentFlag.AlignLeading)
+        self.lbl_id_value = QLabel(self.lay_detail)
+        self.lbl_id_value.setObjectName(u"lbl_id_value")
+        self.lbl_id_value.setAlignment(Qt.AlignmentFlag.AlignLeading)
 
-        self.detailsGrid.addWidget(self.id_label, 0, 1, 1, 1)
+        self.grd_detail.addWidget(self.lbl_id_value, 0, 1, 1, 1)
 
-        self.label_name = QLabel(self.details_tab)
-        self.label_name.setObjectName(u"label_name")
-        self.label_name.setAlignment(Qt.AlignmentFlag.AlignLeading)
+        self.lbl_name = QLabel(self.lay_detail)
+        self.lbl_name.setObjectName(u"lbl_name")
+        self.lbl_name.setAlignment(Qt.AlignmentFlag.AlignLeading)
 
-        self.detailsGrid.addWidget(self.label_name, 1, 0, 1, 1)
+        self.grd_detail.addWidget(self.lbl_name, 1, 0, 1, 1)
 
-        self.name_label = QLabel(self.details_tab)
-        self.name_label.setObjectName(u"name_label")
-        self.name_label.setAlignment(Qt.AlignmentFlag.AlignLeading)
+        self.lbl_name_value = QLabel(self.lay_detail)
+        self.lbl_name_value.setObjectName(u"lbl_name_value")
+        self.lbl_name_value.setAlignment(Qt.AlignmentFlag.AlignLeading)
 
-        self.detailsGrid.addWidget(self.name_label, 1, 1, 1, 1)
+        self.grd_detail.addWidget(self.lbl_name_value, 1, 1, 1, 1)
 
-        self.label_birth_date = QLabel(self.details_tab)
-        self.label_birth_date.setObjectName(u"label_birth_date")
-        self.label_birth_date.setAlignment(Qt.AlignmentFlag.AlignLeading)
+        self.lbl_birth_date = QLabel(self.lay_detail)
+        self.lbl_birth_date.setObjectName(u"lbl_birth_date")
+        self.lbl_birth_date.setAlignment(Qt.AlignmentFlag.AlignLeading)
 
-        self.detailsGrid.addWidget(self.label_birth_date, 2, 0, 1, 1)
+        self.grd_detail.addWidget(self.lbl_birth_date, 2, 0, 1, 1)
 
-        self.birth_date_label = QLabel(self.details_tab)
-        self.birth_date_label.setObjectName(u"birth_date_label")
-        self.birth_date_label.setAlignment(Qt.AlignmentFlag.AlignLeading)
+        self.lbl_birth_date_value = QLabel(self.lay_detail)
+        self.lbl_birth_date_value.setObjectName(u"lbl_birth_date_value")
+        self.lbl_birth_date_value.setAlignment(Qt.AlignmentFlag.AlignLeading)
 
-        self.detailsGrid.addWidget(self.birth_date_label, 2, 1, 1, 1)
+        self.grd_detail.addWidget(self.lbl_birth_date_value, 2, 1, 1, 1)
 
-        self.label_observation = QLabel(self.details_tab)
-        self.label_observation.setObjectName(u"label_observation")
-        self.label_observation.setAlignment(Qt.AlignmentFlag.AlignLeading)
+        self.lbl_observation = QLabel(self.lay_detail)
+        self.lbl_observation.setObjectName(u"lbl_observation")
+        self.lbl_observation.setAlignment(Qt.AlignmentFlag.AlignLeading)
 
-        self.detailsGrid.addWidget(self.label_observation, 3, 0, 1, 1)
+        self.grd_detail.addWidget(self.lbl_observation, 3, 0, 1, 1)
 
-        self.observation_label = QLabel(self.details_tab)
-        self.observation_label.setObjectName(u"observation_label")
-        self.observation_label.setAlignment(Qt.AlignmentFlag.AlignLeading)
+        self.lbl_observation_value = QLabel(self.lay_detail)
+        self.lbl_observation_value.setObjectName(u"lbl_observation_value")
+        self.lbl_observation_value.setAlignment(Qt.AlignmentFlag.AlignLeading)
 
-        self.detailsGrid.addWidget(self.observation_label, 3, 1, 1, 1)
-
-
-        self.detailsLayout.addLayout(self.detailsGrid)
-
-        self.detailsSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-
-        self.detailsLayout.addItem(self.detailsSpacer)
-
-        self.tabWidget.addTab(self.details_tab, "")
-
-        self.rightLayout.addWidget(self.tabWidget)
-
-        self.buttonLayout = QHBoxLayout()
-        self.buttonLayout.setObjectName(u"buttonLayout")
-        self.new_button = QPushButton(PlayerListView)
-        self.new_button.setObjectName(u"new_button")
-
-        self.buttonLayout.addWidget(self.new_button)
-
-        self.edit_button = QPushButton(PlayerListView)
-        self.edit_button.setObjectName(u"edit_button")
-
-        self.buttonLayout.addWidget(self.edit_button)
-
-        self.delete_button = QPushButton(PlayerListView)
-        self.delete_button.setObjectName(u"delete_button")
-
-        self.buttonLayout.addWidget(self.delete_button)
+        self.grd_detail.addWidget(self.lbl_observation_value, 3, 1, 1, 1)
 
 
-        self.rightLayout.addLayout(self.buttonLayout)
+        self.detailsLayout.addLayout(self.grd_detail)
+
+        self.sp_detail = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.detailsLayout.addItem(self.sp_detail)
+
+        self.tab_player.addTab(self.lay_detail, "")
+
+        self.lay_right.addWidget(self.tab_player)
+
+        self.lay_button = QHBoxLayout()
+        self.lay_button.setObjectName(u"lay_button")
+        self.pb_new = QPushButton(PlayerListView)
+        self.pb_new.setObjectName(u"pb_new")
+        icon1 = QIcon()
+        icon1.addFile(u":/icons/ui/buttons/newicon", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.pb_new.setIcon(icon1)
+
+        self.lay_button.addWidget(self.pb_new)
+
+        self.pb_edit = QPushButton(PlayerListView)
+        self.pb_edit.setObjectName(u"pb_edit")
+        icon2 = QIcon()
+        icon2.addFile(u":/icons/ui/buttons/editicon", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.pb_edit.setIcon(icon2)
+
+        self.lay_button.addWidget(self.pb_edit)
+
+        self.pb_delete = QPushButton(PlayerListView)
+        self.pb_delete.setObjectName(u"pb_delete")
+        icon3 = QIcon()
+        icon3.addFile(u":/icons/ui/buttons/trashicon", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.pb_delete.setIcon(icon3)
+
+        self.lay_button.addWidget(self.pb_delete)
 
 
-        self.mainLayout.addLayout(self.rightLayout)
+        self.lay_right.addLayout(self.lay_button)
+
+
+        self.mainLayout.addLayout(self.lay_right)
 
 
         self.retranslateUi(PlayerListView)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tab_player.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(PlayerListView)
     # setupUi
 
     def retranslateUi(self, PlayerListView):
-        PlayerListView.setWindowTitle("")
-        self.search_label.setText(QCoreApplication.translate("PlayerListView", u"Pesquisar:", None))
-        self.search_input.setPlaceholderText(QCoreApplication.translate("PlayerListView", u"Digite o nome ou ID", None))
-        ___qtablewidgetitem = self.table.horizontalHeaderItem(0)
+        PlayerListView.setWindowTitle(QCoreApplication.translate("PlayerListView", u"Plataforma T-TEA - Jogador", None))
+        self.lbl_search.setText(QCoreApplication.translate("PlayerListView", u"Pesquisar:", None))
+        self.led_search.setPlaceholderText(QCoreApplication.translate("PlayerListView", u"Digite o nome ou ID", None))
+        ___qtablewidgetitem = self.tbl_player.horizontalHeaderItem(0)
         ___qtablewidgetitem.setText(QCoreApplication.translate("PlayerListView", u"ID", None));
-        ___qtablewidgetitem1 = self.table.horizontalHeaderItem(1)
+        ___qtablewidgetitem1 = self.tbl_player.horizontalHeaderItem(1)
         ___qtablewidgetitem1.setText(QCoreApplication.translate("PlayerListView", u"Nome", None));
-        self.label_id.setText(QCoreApplication.translate("PlayerListView", u"ID:", None))
-        self.id_label.setText(QCoreApplication.translate("PlayerListView", u"ID: ", None))
-        self.label_name.setText(QCoreApplication.translate("PlayerListView", u"Nome:", None))
-        self.name_label.setText(QCoreApplication.translate("PlayerListView", u"Nome: ", None))
-        self.label_birth_date.setText(QCoreApplication.translate("PlayerListView", u"Data de Nascimento:", None))
-        self.birth_date_label.setText(QCoreApplication.translate("PlayerListView", u"Data de Nascimento: ", None))
-        self.label_observation.setText(QCoreApplication.translate("PlayerListView", u"Observa\u00e7\u00e3o:", None))
-        self.observation_label.setText(QCoreApplication.translate("PlayerListView", u"Observa\u00e7\u00e3o: ", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.details_tab), QCoreApplication.translate("PlayerListView", u"Detalhes", None))
+        self.lbl_id.setText(QCoreApplication.translate("PlayerListView", u"ID:", None))
+        self.lbl_id_value.setText(QCoreApplication.translate("PlayerListView", u"ID: ", None))
+        self.lbl_name.setText(QCoreApplication.translate("PlayerListView", u"Nome:", None))
+        self.lbl_name_value.setText(QCoreApplication.translate("PlayerListView", u"Nome: ", None))
+        self.lbl_birth_date.setText(QCoreApplication.translate("PlayerListView", u"Data de Nascimento:", None))
+        self.lbl_birth_date_value.setText(QCoreApplication.translate("PlayerListView", u"Data de Nascimento: ", None))
+        self.lbl_observation.setText(QCoreApplication.translate("PlayerListView", u"Observa\u00e7\u00e3o:", None))
+        self.lbl_observation_value.setText(QCoreApplication.translate("PlayerListView", u"Observa\u00e7\u00e3o: ", None))
+        self.tab_player.setTabText(self.tab_player.indexOf(self.lay_detail), QCoreApplication.translate("PlayerListView", u"Detalhes", None))
 #if QT_CONFIG(tooltip)
-        self.new_button.setToolTip(QCoreApplication.translate("PlayerListView", u"Crie um novo jogador", None))
+        self.pb_new.setToolTip(QCoreApplication.translate("PlayerListView", u"Crie um novo jogador", None))
 #endif // QT_CONFIG(tooltip)
-        self.new_button.setText(QCoreApplication.translate("PlayerListView", u"Novo", None))
+        self.pb_new.setText(QCoreApplication.translate("PlayerListView", u"Novo", None))
 #if QT_CONFIG(tooltip)
-        self.edit_button.setToolTip(QCoreApplication.translate("PlayerListView", u"Edite o jogador selecionado", None))
+        self.pb_edit.setToolTip(QCoreApplication.translate("PlayerListView", u"Edite o jogador selecionado", None))
 #endif // QT_CONFIG(tooltip)
-        self.edit_button.setText(QCoreApplication.translate("PlayerListView", u"Editar", None))
+        self.pb_edit.setText(QCoreApplication.translate("PlayerListView", u"Editar", None))
 #if QT_CONFIG(tooltip)
-        self.delete_button.setToolTip(QCoreApplication.translate("PlayerListView", u"Exclua o jogador selecionado", None))
+        self.pb_delete.setToolTip(QCoreApplication.translate("PlayerListView", u"Exclua o jogador selecionado", None))
 #endif // QT_CONFIG(tooltip)
-        self.delete_button.setText(QCoreApplication.translate("PlayerListView", u"Excluir", None))
+        self.pb_delete.setText(QCoreApplication.translate("PlayerListView", u"Excluir", None))
     # retranslateUi
 

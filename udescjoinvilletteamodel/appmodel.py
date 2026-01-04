@@ -1,6 +1,3 @@
-# udescjoinvillettea/mvcs/model/appmodel.py
-from typing import Optional
-
 from PySide6.QtCore import QSettings
 
 from udescjoinvilletteaapp import AppConfig
@@ -8,9 +5,22 @@ from udescjoinvilletteautil import PathConfig
 
 
 class AppModel:
-    """Estado global da aplicação (sessão ativa)."""
+    """Estado global da aplicação (sessão ativa) - Implementação Singleton."""
+
+    _instance = None
+    _initialized = False
+
+    def __new__(cls):
+        """Garante que apenas uma instância seja criada."""
+        if cls._instance is None:
+            cls._instance = super(AppModel, cls).__new__(cls)
+        return cls._instance
 
     def __init__(self):
+        """Inicializa a instância apenas na primeira criação."""
+        if AppModel._initialized:
+            return  # Já foi inicializado anteriormente
+
         from udescjoinvilletteamodel import Language
 
         self.language_model = Language()  # usado apenas no LanguageController
@@ -30,6 +40,8 @@ class AppModel:
             self._current_language: str = saved_lang
         else:
             self._current_language: str = Language.DEFAULT_LANGUAGE
+
+        AppModel._initialized = True
 
     # ------------------------------------------------------------------
     # Property para acesso seguro ao idioma atual
@@ -54,8 +66,15 @@ class AppModel:
             self._current_language = Language.DEFAULT_LANGUAGE
 
     # ------------------------------------------------------------------
-    # Método auxiliar opcional (útil se precisar em outros lugares)
+    # Método auxiliar opcional
     # ------------------------------------------------------------------
     def is_english(self) -> bool:
         """Conveniência para verificar se o idioma atual é inglês."""
         return self.current_language == "en_US"
+
+    @classmethod
+    def get_instance(cls) -> "AppModel":
+        """Retorna a única instância da classe (útil para chamadas explícitas)."""
+        if cls._instance is None:
+            cls._instance = cls()  # Isso chamará __new__ e __init__
+        return cls._instance

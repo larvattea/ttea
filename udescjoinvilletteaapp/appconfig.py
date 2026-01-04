@@ -121,7 +121,7 @@ class AppConfig:
         from udescjoinvilletteamodel import AppModel
 
         settings = QSettings(
-            PathConfig.config("config.ini"), QSettings.IniFormat
+            PathConfig.config(PathConfig.CONFIG_FILENAME), QSettings.IniFormat
         )
         saved_mask = settings.value(AppConfig.SETTINGS_GERAL_DATE_MASK)
 
@@ -134,3 +134,7 @@ class AppConfig:
             if AppModel().current_language == "en_US"
             else AppConfig.DEFAULT_DATE_FORMAT
         )
+
+    @staticmethod
+    def config_file_exists(filename: str = PathConfig.CONFIG_FILENAME) -> bool:
+        return PathConfig.config_file_exists(filename)

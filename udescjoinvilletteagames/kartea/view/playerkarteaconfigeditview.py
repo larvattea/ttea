@@ -30,9 +30,9 @@ class PlayerKarteaConfigEditView(QDialog, WindowConfig):
     ) -> None:
         super().__init__(parent)
         self.setModal(True)
-        self.translator = (
-            parent.translator if hasattr(parent, "translator") else None
-        )
+        # self.translator = (
+        #    parent.translator if hasattr(parent, "translator") else None
+        # )
         action = "Editar" if config else "Novo"
         title = parent.parent().get_title()
         self.setup_window(

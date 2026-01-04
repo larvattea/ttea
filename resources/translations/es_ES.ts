@@ -30,6 +30,14 @@
     </message>
 </context>
 <context>
+    <name>LanguageController</name>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/languagecontroller.py" line="50"/>
+        <source>Erro ao carregar o idioma.</source>
+        <translation>Error al cargar el idioma.</translation>
+    </message>
+</context>
+<context>
     <name>LanguageView</name>
     <message>
         <location filename="../ui/languageview.ui" line="14"/>
@@ -42,17 +50,17 @@
         <translation>Selecciona el idioma de la aplicación:</translation>
     </message>
     <message>
-        <location filename="../ui/languageview.ui" line="69"/>
+        <location filename="../ui/languageview.ui" line="86"/>
         <source>Gravar operação corrente</source>
         <translation>Grabar operación actual</translation>
     </message>
     <message>
-        <location filename="../ui/languageview.ui" line="72"/>
-        <source>Confirmar</source>
+        <location filename="../ui/languageview.ui" line="89"/>
+        <source>OK</source>
         <translation>Aceptar</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/languageview.py" line="65"/>
+        <location filename="../../udescjoinvilletteaview/languageview.py" line="66"/>
         <source>Por favor, selecione um idioma.</source>
         <translation>Por favor, selecciona un idioma.</translation>
     </message>
@@ -60,13 +68,48 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../../main.py" line="18"/>
+        <location filename="../../main.py" line="17"/>
         <source>Ocorreu um erro inesperado e o aplicativo será encerrado.
 Por favor, entre em contato com o suporte e envie o arquivo de log.
 Detalhes do erro: {0}</source>
         <translation>Se ha producido un error inesperado y la aplicación se cerrará. 
 Por favor, póngase en contacto con el soporte técnico y envíe el archivo de registro. 
 Detalles del error: {0}</translation>
+    </message>
+</context>
+<context>
+    <name>MainController</name>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/maincontroller copy.py" line="85"/>
+        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="79"/>
+        <source>Funcionalidade de calibração em desenvolvimento...</source>
+        <translation>Funcionalidad de calibración en desarrollo...</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/maincontroller copy.py" line="94"/>
+        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="88"/>
+        <source>Erro ao abrir ajuda.</source>
+        <translation>Error al abrir la ayuda.</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/maincontroller copy.py" line="109"/>
+        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="103"/>
+        <source>Jogo &apos;{}&apos; não implementado ainda.</source>
+        <translation>El juego &apos;{}&apos; aún no se ha implementado.</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/maincontroller copy.py" line="115"/>
+        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="109"/>
+        <source>Erro ao iniciar jogo</source>
+        <translation>Error al iniciar el juego</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/maincontroller copy.py" line="116"/>
+        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="110"/>
+        <source>{} não pôde ser iniciado:
+{}</source>
+        <translation>{} no se pudo iniciar:
+{}</translation>
     </message>
 </context>
 <context>
@@ -107,7 +150,7 @@ Detalles del error: {0}</translation>
     </message>
     <message>
         <location filename="../ui/mainview.ui" line="77"/>
-        <location filename="../ui/mainview.ui" line="123"/>
+        <location filename="../ui/mainview.ui" line="127"/>
         <source>&amp;Ajuda</source>
         <translation>&amp;Ayuda</translation>
     </message>
@@ -147,28 +190,31 @@ Detalles del error: {0}</translation>
         <translation>F4</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="126"/>
+        <location filename="../ui/mainview.ui" line="130"/>
         <source>F1</source>
         <translation>F1</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="131"/>
+        <location filename="../ui/mainview.ui" line="139"/>
         <source>&amp;Sobre...</source>
         <translatorcomment>Mudou-se a tecla de atabalho pois o menu principal Ajuda já usa a letra A com &amp;.</translatorcomment>
         <translation>A&amp;cerca de...</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/mainview.py" line="64"/>
+        <location filename="../../udescjoinvilletteaview/mainview copy.py" line="58"/>
+        <location filename="../../udescjoinvilletteaview/mainview.py" line="61"/>
         <source>Versão da plataforma: {0}</source>
         <translation>Versión de la plataforma: {0}</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/mainview.py" line="67"/>
+        <location filename="../../udescjoinvilletteaview/mainview copy.py" line="61"/>
+        <location filename="../../udescjoinvilletteaview/mainview.py" line="64"/>
         <source>Data atual: {0}</source>
         <translation>Fecha actual: {0}</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/mainview.py" line="85"/>
+        <location filename="../../udescjoinvilletteaview/mainview copy.py" line="79"/>
+        <location filename="../../udescjoinvilletteaview/mainview.py" line="81"/>
         <source>Exergames (nenhum encontrado)</source>
         <translation>Exergames (ninguno encontrado)</translation>
     </message>
@@ -176,178 +222,265 @@ Detalles del error: {0}</translation>
 <context>
     <name>MessageService</name>
     <message>
-        <location filename="../../udescjoinvilletteautil/messageservice.py" line="149"/>
+        <location filename="../../udescjoinvilletteautil/messageservice.py" line="151"/>
         <source>Sim</source>
         <translation>Sí</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteautil/messageservice.py" line="152"/>
+        <location filename="../../udescjoinvilletteautil/messageservice.py" line="154"/>
         <source>Não</source>
         <translation>No</translation>
+    </message>
+</context>
+<context>
+    <name>PlayerEditController</name>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/playereditcontroller.py" line="118"/>
+        <source>Nome é obrigatório!
+</source>
+        <translation>¡El nombre es obligatorio!
+</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/playereditcontroller.py" line="122"/>
+        <source>Por favor, corrija os dados inválidos:
+</source>
+        <translation>Por favor, corrija los datos no válidos:
+</translation>
     </message>
 </context>
 <context>
     <name>PlayerEditView</name>
     <message>
         <location filename="../ui/playereditview.ui" line="14"/>
-        <source>Jogador - Novo</source>
-        <translation>Jugador - Nuevo</translation>
+        <source>Plataforma T-TEA - Jogador</source>
+        <translation>Plataforma T-TEA - Jugador</translation>
     </message>
     <message>
-        <location filename="../ui/playereditview.ui" line="27"/>
+        <location filename="../ui/playereditview.ui" line="31"/>
         <source>Dados</source>
         <translation>Datos</translation>
     </message>
     <message>
-        <location filename="../ui/playereditview.ui" line="36"/>
+        <location filename="../ui/playereditview.ui" line="40"/>
         <source>Nome:</source>
         <translation>Nombre:</translation>
     </message>
     <message>
-        <location filename="../ui/playereditview.ui" line="43"/>
+        <location filename="../ui/playereditview.ui" line="47"/>
         <source>Nome</source>
         <translation>Nombre</translation>
     </message>
     <message>
-        <location filename="../ui/playereditview.ui" line="50"/>
+        <location filename="../ui/playereditview.ui" line="54"/>
         <source>Data de Nascimento:</source>
         <translation>Fecha de Nacimiento:</translation>
     </message>
     <message>
-        <location filename="../ui/playereditview.ui" line="60"/>
+        <location filename="../ui/playereditview.ui" line="61"/>
         <source>dd/MM/yyyy</source>
         <translation>dd/MM/yyyy</translation>
     </message>
     <message>
-        <location filename="../ui/playereditview.ui" line="74"/>
+        <location filename="../ui/playereditview.ui" line="78"/>
         <source>Observação:</source>
         <translation>Observación:</translation>
     </message>
     <message>
-        <location filename="../ui/playereditview.ui" line="84"/>
+        <location filename="../ui/playereditview.ui" line="85"/>
         <source>Observação</source>
         <translation>Observación</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/playereditview.py" line="91"/>
+        <location filename="../ui/playereditview.ui" line="123"/>
         <source>OK</source>
         <translation>Aceptar</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/playereditview.py" line="92"/>
+        <location filename="../ui/playereditview.ui" line="117"/>
         <source>Gravar operação corrente</source>
         <translation>Guardar operación actual</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/playereditview.py" line="96"/>
+        <location filename="../ui/playereditview.ui" line="146"/>
         <source>Cancelar</source>
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/playereditview.py" line="97"/>
+        <location filename="../ui/playereditview.ui" line="143"/>
         <source>Cancelar operação corrente</source>
         <translation>Cancelar operación actual</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteaview/playereditview.py" line="68"/>
+        <source>Novo</source>
+        <translation>Nuevo</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteaview/playereditview.py" line="71"/>
+        <source>Editar</source>
+        <translation>Editar</translation>
+    </message>
+</context>
+<context>
+    <name>PlayerListController</name>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="127"/>
+        <source>Jogador cadastrado com sucesso!</source>
+        <translation>¡Jugador registrado con éxito!</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="129"/>
+        <source>Erro ao salvar jogador.</source>
+        <translation>Error al guardar el jugador.</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="135"/>
+        <source>Selecione um jogador para editar.</source>
+        <translation>Seleccione un jugador para editar.</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="140"/>
+        <source>Jogador não encontrado.</source>
+        <translation>Jugador no encontrado.</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="151"/>
+        <source>Jogador atualizado com sucesso.</source>
+        <translation>Jugador actualizado con éxito.</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="153"/>
+        <source>Erro ao atualizar jogador.</source>
+        <translation>Error al actualizar el jugador.</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="159"/>
+        <source>Selecione um jogador para excluir.</source>
+        <translation>Seleccione un jugador para eliminar.</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="167"/>
+        <source>Tem certeza que deseja excluir?
+{0}</source>
+        <translation>¿Está seguro de que desea eliminar?
+{0}</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="172"/>
+        <source>Jogador excluído com sucesso.</source>
+        <translation>Jugador eliminado con éxito.</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="174"/>
+        <source>Erro ao excluir jogador.</source>
+        <translation>Error al eliminar el jugador.</translation>
     </message>
 </context>
 <context>
     <name>PlayerListView</name>
     <message>
-        <location filename="../ui/playerlistview.ui" line="27"/>
+        <location filename="../ui/playerlistview.ui" line="14"/>
+        <source>Plataforma T-TEA - Jogador</source>
+        <translation>Plataforma T-TEA - Jugador</translation>
+    </message>
+    <message>
+        <location filename="../ui/playerlistview.ui" line="31"/>
         <source>Pesquisar:</source>
         <translation>Buscar:</translation>
     </message>
     <message>
-        <location filename="../ui/playerlistview.ui" line="34"/>
+        <location filename="../ui/playerlistview.ui" line="38"/>
         <source>Digite o nome ou ID</source>
         <translation>Escribe el nombre o la ID</translation>
     </message>
     <message>
-        <location filename="../ui/playerlistview.ui" line="56"/>
+        <location filename="../ui/playerlistview.ui" line="69"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="../ui/playerlistview.ui" line="61"/>
+        <location filename="../ui/playerlistview.ui" line="74"/>
         <source>Nome</source>
         <translation>Nombre</translation>
     </message>
     <message>
-        <location filename="../ui/playerlistview.ui" line="77"/>
+        <location filename="../ui/playerlistview.ui" line="90"/>
         <source>Detalhes</source>
         <translation>Detalles</translation>
     </message>
     <message>
-        <location filename="../ui/playerlistview.ui" line="85"/>
+        <location filename="../ui/playerlistview.ui" line="98"/>
         <source>ID:</source>
         <translation>ID:</translation>
     </message>
     <message>
-        <location filename="../ui/playerlistview.ui" line="95"/>
+        <location filename="../ui/playerlistview.ui" line="108"/>
         <source>ID: </source>
         <translation>ID: </translation>
     </message>
     <message>
-        <location filename="../ui/playerlistview.ui" line="105"/>
+        <location filename="../ui/playerlistview.ui" line="118"/>
         <source>Nome:</source>
         <translation>Nombre:</translation>
     </message>
     <message>
-        <location filename="../ui/playerlistview.ui" line="115"/>
+        <location filename="../ui/playerlistview.ui" line="128"/>
         <source>Nome: </source>
         <translation>Nombre: </translation>
     </message>
     <message>
-        <location filename="../ui/playerlistview.ui" line="125"/>
+        <location filename="../ui/playerlistview.ui" line="138"/>
         <source>Data de Nascimento:</source>
         <translation>Fecha de Nacimiento:</translation>
     </message>
     <message>
-        <location filename="../ui/playerlistview.ui" line="135"/>
+        <location filename="../ui/playerlistview.ui" line="148"/>
         <source>Data de Nascimento: </source>
         <translation>Fecha de Nacimiento: </translation>
     </message>
     <message>
-        <location filename="../ui/playerlistview.ui" line="145"/>
+        <location filename="../ui/playerlistview.ui" line="158"/>
         <source>Observação:</source>
         <translation>Observación:</translation>
     </message>
     <message>
-        <location filename="../ui/playerlistview.ui" line="155"/>
+        <location filename="../ui/playerlistview.ui" line="168"/>
         <source>Observação: </source>
         <translation>Observación: </translation>
     </message>
     <message>
-        <location filename="../ui/playerlistview.ui" line="186"/>
+        <location filename="../ui/playerlistview.ui" line="199"/>
         <source>Crie um novo jogador</source>
         <translation>Crear un nuevo jugador</translation>
     </message>
     <message>
-        <location filename="../ui/playerlistview.ui" line="189"/>
+        <location filename="../ui/playerlistview.ui" line="202"/>
         <source>Novo</source>
         <translation>Nuevo</translation>
     </message>
     <message>
-        <location filename="../ui/playerlistview.ui" line="196"/>
+        <location filename="../ui/playerlistview.ui" line="213"/>
         <source>Edite o jogador selecionado</source>
         <translation>Editar el jugador seleccionado</translation>
     </message>
     <message>
-        <location filename="../ui/playerlistview.ui" line="199"/>
+        <location filename="../ui/playerlistview.ui" line="216"/>
         <source>Editar</source>
         <translation>Editar</translation>
     </message>
     <message>
-        <location filename="../ui/playerlistview.ui" line="206"/>
+        <location filename="../ui/playerlistview.ui" line="227"/>
         <source>Exclua o jogador selecionado</source>
         <translation>Eliminar el jugador seleccionado</translation>
     </message>
     <message>
-        <location filename="../ui/playerlistview.ui" line="209"/>
+        <location filename="../ui/playerlistview.ui" line="230"/>
         <source>Excluir</source>
         <translation>Eliminar</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/playerlistview.py" line="250"/>
+        <location filename="../../udescjoinvilletteaview/playerlistview.py" line="232"/>
         <source>Deseja sair do cadastro?</source>
         <translation>¿Desea salir del registro?</translation>
     </message>

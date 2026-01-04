@@ -1,7 +1,8 @@
+# languageview.py
 from typing import Dict, List, Optional
 
-from PySide6.QtCore import QSize, Qt
-from PySide6.QtGui import QIcon, QPixmap
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QCloseEvent, QIcon, QPixmap
 from PySide6.QtWidgets import QDialog, QWidget
 
 from udescjoinvilletteaui import Ui_LanguageView
@@ -9,9 +10,11 @@ from udescjoinvilletteawindow import WindowConfig
 
 
 class LanguageView(QDialog, Ui_LanguageView, WindowConfig):
-    """View para seleção de idioma usando QComboBox com ícones de bandeiras."""
+    """View para seleção de idioma — agora ativa como PlayerListView."""
 
     def __init__(self, parent: Optional[QWidget] = None):
+        from udescjoinvilletteacontroller import LanguageController
+
         super().__init__(parent)
         self.setupUi(self)
 
@@ -23,40 +26,38 @@ class LanguageView(QDialog, Ui_LanguageView, WindowConfig):
             60,
             parent,
         )
-        self.btn_confirm.setDefault(True)
 
-        # Configura o ComboBox para mostrar ícones e texto
-        self.comboBox.setIconSize(QSize(32, 32))
-        self.comboBox.setStyleSheet("QComboBox { padding-left: 10px; }")
+        # Instancia o controller
+        self.controller = LanguageController(self)
+
+        # === Conexões de sinais ===
+        self.pb_ok.clicked.connect(self.controller.handle_confirm)
+        self.cbx_language.currentIndexChanged.connect(
+            self.controller.handle_preview
+        )
 
     def populate_languages(self, languages: List[Dict[str, str]]) -> None:
-        """Preenche o QComboBox com os idiomas, exibindo bandeira + descrição."""
-        self.comboBox.clear()
-
+        self.cbx_language.clear()
         for lang in languages:
             pixmap = QPixmap(lang["flag"])
             icon = QIcon()
-
             if not pixmap.isNull():
-                scaled_pixmap = pixmap.scaled(
+                scaled = pixmap.scaled(
                     32, 32, Qt.KeepAspectRatio, Qt.SmoothTransformation
                 )
-                icon.addPixmap(scaled_pixmap)
-
-            self.comboBox.addItem(icon, lang["description"], lang["code"])
+                icon.addPixmap(scaled)
+            self.cbx_language.addItem(icon, lang["description"], lang["code"])
 
     def set_preselected_language(self, code: str) -> None:
-        """Seleciona o idioma previamente salvo no ComboBox."""
-        for i in range(self.comboBox.count()):
-            if self.comboBox.itemData(i) == code:
-                self.comboBox.setCurrentIndex(i)
+        for i in range(self.cbx_language.count()):
+            if self.cbx_language.itemData(i) == code:
+                self.cbx_language.setCurrentIndex(i)
                 break
 
-    def get_checked_language(self) -> Optional[str]:
-        """Retorna o código do idioma selecionado."""
-        if self.comboBox.currentIndex() == -1:
+    def get_selected_language(self) -> Optional[str]:
+        if self.cbx_language.currentIndex() == -1:
             return None
-        return self.comboBox.currentData()
+        return self.cbx_language.currentData()
 
     def show_warning(self) -> None:
         from udescjoinvilletteautil import MessageService
@@ -64,3 +65,6 @@ class LanguageView(QDialog, Ui_LanguageView, WindowConfig):
         MessageService(self).warning(
             self.tr("Por favor, selecione um idioma.")
         )
+
+    def closeEvent(self, event: QCloseEvent) -> None:
+        self.controller.handle_close_event(event)
