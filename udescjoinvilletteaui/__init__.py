@@ -30,6 +30,7 @@ https://github.com/larva-udesc/udesc_ttea_view
 
 # Define the __all__ variable
 __all__ = [
+    "Ui_AboutView",
     "Ui_LanguageView",
     "Ui_MainView",
     "Ui_PlayerEditView",
@@ -42,6 +43,7 @@ __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
 # Import the submodules
+from .aboutviewui import Ui_AboutView
 from .languageviewui import Ui_LanguageView
 from .mainviewui import Ui_MainView
 from .playereditviewui import Ui_PlayerEditView

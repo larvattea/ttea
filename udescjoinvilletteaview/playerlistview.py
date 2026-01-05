@@ -96,11 +96,6 @@ class PlayerListView(QDialog, Ui_PlayerListView, WindowConfig):
         # Initialize controller
         self.controller = PlayerListController(self, player_edit_view_factory)
 
-        # Set up table properties not fully handled by .ui file
-        self.tbl_player.horizontalHeader().setSectionResizeMode(
-            QHeaderView.ResizeToContents
-        )
-
         # Events signals and slots
         self.pb_new.clicked.connect(self.on_new_button_clicked)
         self.pb_edit.clicked.connect(self.on_edit_button_clicked)
@@ -229,7 +224,7 @@ class PlayerListView(QDialog, Ui_PlayerListView, WindowConfig):
         event : QCloseEvent
             The close event to accept or ignore.
         """
-        if self.msg.question(self.tr("Deseja sair do cadastro?"), None, False):
+        if self.msg.question(self.tr("Deseja sair do cadastro?"), None, True):
             event.accept()
         else:
             event.ignore()
