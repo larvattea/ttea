@@ -2,17 +2,12 @@ from datetime import datetime
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QPixmap
-from PySide6.QtWidgets import (
-    QDialog,
-    QLabel,
-    QPushButton,
-    QTextBrowser,
-    QVBoxLayout,
-)
+from PySide6.QtWidgets import (QDialog, QLabel, QPushButton, QTextBrowser,
+                               QVBoxLayout)
 
+from udescjoinvilletteaapp import AppConfig
 # Local module import
 from udescjoinvilletteaui import Ui_AboutView
-from udescjoinvilletteaapp import AppConfig
 from udescjoinvilletteawindow import WindowConfig
 
 

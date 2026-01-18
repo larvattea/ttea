@@ -32,9 +32,7 @@ class PathConfig:
 
     LOG_DIR = APPDATA_DIR / "log"
     PLAYERS_DIR = APPDATA_DIR / "players"
-    GAMES_DIR = (
-        APPDATA_DIR / "udescjoinvilletteagames"
-    )  # <- jogos da aplicação
+    EXERGAME_DIR = APPDATA_DIR / "exergames"  # <- jogos da aplicação
     CONFIG_DIR = APPDATA_DIR / "config"
     EXPORTS_DIR = APPDATA_DIR / "exports"  # CSV, relatórios, etc.
 
@@ -82,6 +80,10 @@ class PathConfig:
         return f":/translations/{name}"
 
     @staticmethod
+    def sounds(name: str) -> str:
+        return f":/sounds/{name}"
+
+    @staticmethod
     def help(path: str = "") -> str:
         return f":/help/{path}".rstrip("/")
 
@@ -95,7 +97,7 @@ class PathConfig:
             cls.APPDATA_DIR,
             cls.LOG_DIR,
             cls.PLAYERS_DIR,
-            cls.GAMES_DIR,
+            cls.EXERGAME_DIR,
             cls.CONFIG_DIR,
             cls.EXPORTS_DIR,
         ]:
@@ -114,7 +116,7 @@ class PathConfig:
     @classmethod
     def game_save(cls, game_name: str, filename: str) -> str:
         cls.ensure_user_dirs()
-        game_dir = cls.GAMES_DIR / game_name
+        game_dir = cls.EXERGAME_DIR / game_name
         game_dir.mkdir(exist_ok=True)
         return str(game_dir / filename)
 
@@ -150,7 +152,7 @@ class PathConfig:
         cls.ensure_user_dirs()
         return [
             d.name
-            for d in cls.GAMES_DIR.iterdir()
+            for d in cls.EXERGAME_DIR.iterdir()
             if d.is_dir() and not d.name.startswith(".")
         ]
 

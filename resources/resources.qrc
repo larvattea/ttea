@@ -15,6 +15,7 @@
     <qresource prefix="/icons/ui/buttons">
         <file alias="okicon">icons/ui/buttons/check_solid.png</file>      
         <file alias="editicon">icons/ui/buttons/pen_square_solid.png</file>
+        <file alias="playicon">icons/ui/buttons/play_circle_solid.png</file>
         <file alias="newicon">icons/ui/buttons/plus_solid.png</file>
         <file alias="cancelicon">icons/ui/buttons/times_solid.png</file>
         <file alias="trashicon">icons/ui/buttons/trash_solid.png</file>
@@ -31,13 +32,13 @@
         <file alias="question2">icons/ui/menu/question_solid.png</file>
     </qresource>          
 
-    <!-- Imagens -->
+    <!-- Images -->
     <qresource prefix="/images">        
         <file alias="kartealogo">images/kartealogo.jpg</file>        
         <file alias="ttealogo">images/ttealogo.png</file>
     </qresource>
 
-    <!-- Traduções -->
+    <!-- Translations -->
     <qresource prefix="/translations">
         <file alias="pt">translations/pt_BR.qm</file>
         <file alias="es">translations/es_ES.qm</file>

@@ -143,8 +143,8 @@ class PlayerKarteaSessionCsvDAO(DAO):
         '{player_id}_{sanitized_name}_kartea_session.csv' with multiple
         rows. Extracts player_id from filename.
         """
-        KarteaPathConfig.create_directories()
-        for file_path in KarteaPathConfig.players_dir.glob(
+        KarteaPathConfig.ensure_kartea_dirs()
+        for file_path in KarteaPathConfig.KARTEA_PLAYER_DIR.glob(
             "*_*_kartea_session.csv"
         ):
             # Extract player_id from filename

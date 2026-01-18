@@ -4,10 +4,12 @@ from typing import Any, List, Optional
 
 from udescjoinvilletteadao import DAO
 from udescjoinvilletteagames.kartea.model.karteaphase import KarteaPhase
-from udescjoinvilletteagames.kartea.model.karteaphaselevel import \
-    KarteaPhaseLevel
-from udescjoinvilletteagames.kartea.util.karteapathconfig import \
-    KarteaPathConfig
+from udescjoinvilletteagames.kartea.model.karteaphaselevel import (
+    KarteaPhaseLevel,
+)
+from udescjoinvilletteagames.kartea.util.karteapathconfig import (
+    KarteaPathConfig,
+)
 from udescjoinvilletteautil import CSVHandler
 
 
@@ -50,7 +52,7 @@ class KarteaPhaseLevelCsvDAO(DAO):
         Creates necessary directories using KarteaPathConfig.
         """
         self.csv_handler = CSVHandler()
-        KarteaPathConfig.create_directories()
+        KarteaPathConfig.ensure_kartea_dirs()
 
     def load_levels_from_csv(self, phase_id: int) -> List[KarteaPhaseLevel]:
         """Load all KarteaPhaseLevel for a given phase ID from a CSV file.
@@ -72,7 +74,7 @@ class KarteaPhaseLevelCsvDAO(DAO):
         Validates that the 'phase' column matches phase_id.
         Parses 'obj_type' as a list of integers from a space-separated string.
         """
-        file_path = KarteaPathConfig.kartea_phases_dir / f"{phase_id}.csv"
+        file_path = KarteaPathConfig.KARTEA_PHASES_DIR / f"{phase_id}.csv"
         if not os.path.exists(file_path):
             return []
 
@@ -139,9 +141,9 @@ class KarteaPhaseLevelCsvDAO(DAO):
         Sets the phase reference for the level to include all levels
         of the phase.
         """
-        KarteaPathConfig.create_directories()
+        KarteaPathConfig.ensure_kartea_dirs()
         phase_files = sorted(
-            KarteaPathConfig.kartea_phases_dir.glob("*.csv"),
+            KarteaPathConfig.KARTEA_PHASES_DIR.glob("*.csv"),
             key=lambda x: int(x.stem),
         )
         for file_path in phase_files:
@@ -170,7 +172,7 @@ class KarteaPhaseLevelCsvDAO(DAO):
         KarteaPathConfig.create_directories()
         all_levels = []
         phase_files = sorted(
-            KarteaPathConfig.kartea_phases_dir.glob("*.csv"),
+            KarteaPathConfig.KARTEA_PHASES_DIR.glob("*.csv"),
             key=lambda x: int(x.stem),
         )
         for file_path in phase_files:

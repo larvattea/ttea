@@ -1,15 +1,13 @@
 # splashscreen.py → VERSÃO FINAL QUE FUNCIONA SEMPRE
-from typing import Optional
-
-from PySide6.QtCore import QPropertyAnimation, Qt, QTimer, QTranslator
+from PySide6.QtCore import QPropertyAnimation, Qt, QTimer
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QLabel, QProgressBar, QSplashScreen
-
+from PySide6.QtMultimedia import QSoundEffect
 from udescjoinvilletteautil import PathConfig
 
 
 class SplashScreen(QSplashScreen):
-    def __init__(self, translator: Optional["QTranslator"] = None):
+    def __init__(self):
         pixmap = QPixmap(PathConfig.image("ttealogo"))
         if pixmap.isNull():
             # Se a imagem não carregar, não trava tudo
@@ -92,9 +90,10 @@ class SplashScreen(QSplashScreen):
         self.status_label.setText(self.messages[self.msg_index])
         self.msg_index = (self.msg_index + 1) % len(self.messages)
 
-    # MÉTODO CORRETO — NÃO SOBRESCREVA COM DUPLICATA!
     def finish(self, main_window):
         """Chamado pelo main.py — fecha o splash da forma correta"""
+
+        self.load_resource()
         self.timer.stop()
         self.animation.stop()
         self.progress_bar.setRange(0, 1)
@@ -103,6 +102,10 @@ class SplashScreen(QSplashScreen):
 
         # O mais importante: chama o finish() original do Qt
         super().finish(main_window)
+
+    def load_resource(self) -> None:
+        # Warm up de instância de bibliotecas de som
+        _ = QSoundEffect(self)
 
     # Garante que o layout acompanhe redimensionamento (opcional)
     def resizeEvent(self, event):

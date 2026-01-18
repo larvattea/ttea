@@ -50,7 +50,7 @@ class KarteaPhaseCsvDAO(DAO):
         Creates necessary directories using KarteaPathConfig.
         """
         self.csv_handler = CSVHandler()
-        KarteaPathConfig.create_directories()
+        KarteaPathConfig.ensure_kartea_dirs()
 
     def load_phase_from_csv(
         self, kartea_phase_id: int
@@ -77,7 +77,7 @@ class KarteaPhaseCsvDAO(DAO):
         Sets the phase reference for each level after creation.
         """
         file_path = (
-            KarteaPathConfig.kartea_phases_dir / f"{kartea_phase_id}.csv"
+            KarteaPathConfig.KARTEA_PHASES_DIR / f"{kartea_phase_id}.csv"
         )
         if not os.path.exists(file_path):
             return None
@@ -164,10 +164,10 @@ class KarteaPhaseCsvDAO(DAO):
         Iterates through all '*.csv' files in kartea_phases_dir, sorted by
         phase ID. Calls _load_phase_from_csv for each file.
         """
-        KarteaPathConfig.create_directories()
+        KarteaPathConfig.ensure_kartea_dirs()
         phases = []
         phase_files = sorted(
-            KarteaPathConfig.kartea_phases_dir.glob("*.csv"),
+            KarteaPathConfig.KARTEA_PHASES_DIR.glob("*.csv"),
             key=lambda x: int(x.stem),
         )
         for file_path in phase_files:

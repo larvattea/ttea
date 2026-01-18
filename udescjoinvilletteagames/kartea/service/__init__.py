@@ -1,9 +1,12 @@
 """
-dao
+udescjoinvilletteaservice
 
-A Python package for data access objects (DAOs) in Kartea Game.
+A Python package for service classes from the Kartea game,
+supporting service logic.
+Developed by the Larva UDESC team.
 
-This package provides the DAO classes for session game configuration.
+This package provides the service classes for controllers,
+for the T-TEA platform.
 
 Attributes
 ----------
@@ -18,9 +21,8 @@ __license__ : str
 
 See Also
 --------
-PlayerKarteaConfigCsvDAO
-    Data Access Object for managing player kartea configuration data
-    in CSV format.
+PlayerService
+    Manages the service logic and data operations related to player entities.
 
 Notes
 -----
@@ -31,8 +33,7 @@ https://github.com/larva-udesc/udesc_ttea_view
 
 # Define the __all__ variable
 __all__ = [
-    "PlayerKarteaSessionCsvDAO",
-    "PlayerKarteaSessionDetailCsvDAO",
+    "PlayerKarteaConfigService",
 ]
 
 __version__ = "1.0.0"
@@ -41,5 +42,4 @@ __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
 # Import the submodules
-from .playerkarteasessioncsvdao import PlayerKarteaSessionCsvDAO
-from .playerkarteasessiondetailcsvdao import PlayerKarteaSessionDetailCsvDAO
+from .playerkarteaconfigservice import PlayerKarteaConfigService

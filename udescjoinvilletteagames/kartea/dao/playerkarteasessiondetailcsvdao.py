@@ -6,8 +6,7 @@ from typing import Dict, List, Optional, Union
 
 # Local module import
 from udescjoinvilletteadao import DAO
-from udescjoinvilletteagames.kartea.dao.session import \
-    PlayerKarteaSessionCsvDAO
+from udescjoinvilletteagames.kartea.dao import PlayerKarteaSessionCsvDAO
 from udescjoinvilletteagames.kartea.model import (PlayerKarteaSession,
                                                   PlayerKarteaSessionDetail)
 from udescjoinvilletteagames.kartea.util import KarteaPathConfig

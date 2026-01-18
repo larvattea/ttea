@@ -34,6 +34,9 @@ https://github.com/larva-udesc/udesc_ttea_view
 __all__ = [
     "KarteaPhaseCsvDAO",
     "KarteaPhaseLevelCsvDAO",
+    "PlayerKarteaConfigCsvDAO",
+    "PlayerKarteaSessionCsvDAO",
+    "PlayerKarteaSessionDetailCsvDAO",
 ]
 
 __version__ = "1.0.0"
@@ -44,3 +47,6 @@ __license__ = "MIT License"
 # Import the submodules
 from .karteaphasecsvdao import KarteaPhaseCsvDAO
 from .karteaphaselevelcsvdao import KarteaPhaseLevelCsvDAO
+from .playerkarteaconfigcsvdao import PlayerKarteaConfigCsvDAO
+from .playerkarteasessioncsvdao import PlayerKarteaSessionCsvDAO
+from .playerkarteasessiondetailcsvdao import PlayerKarteaSessionDetailCsvDAO

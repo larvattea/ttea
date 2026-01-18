@@ -97,12 +97,12 @@ class PlayerListView(QDialog, Ui_PlayerListView, WindowConfig):
         self.controller = PlayerListController(self, player_edit_view_factory)
 
         # Events signals and slots
-        self.pb_new.clicked.connect(self.on_new_button_clicked)
-        self.pb_edit.clicked.connect(self.on_edit_button_clicked)
-        self.pb_delete.clicked.connect(self.on_delete_button_clicked)
-        self.led_search.textChanged.connect(self.on_search_input_textChanged)
+        self.pb_new.clicked.connect(self.controller.handle_new_player)
+        self.pb_edit.clicked.connect(self.controller.handle_edit_player)
+        self.pb_delete.clicked.connect(self.controller.delete_player)
+        self.led_search.textChanged.connect(self.controller.filter_players)
         self.tbl_player.selectionModel().selectionChanged.connect(
-            self.on_table_selection_changed
+            self.controller.on_table_selection
         )
 
         # Load initial data
@@ -115,45 +115,6 @@ class PlayerListView(QDialog, Ui_PlayerListView, WindowConfig):
         self.tbl_player.horizontalHeader().setSectionResizeMode(
             1, QHeaderView.Stretch
         )
-
-    def on_new_button_clicked(self):
-        """Handle the 'New' button click.
-
-        Delegates to the controller to open the player creation dialog.
-        """
-        self.controller.handle_new_player()
-
-    def on_edit_button_clicked(self):
-        """Handle the 'Edit' button click.
-
-        Delegates to the controller to edit the selected player.
-        """
-        self.controller.handle_edit_player()
-
-    def on_delete_button_clicked(self):
-        """Handle the 'Delete' button click.
-
-        Delegates to the controller to remove the selected player after
-        confirmation.
-        """
-        self.controller.delete_player()
-
-    def on_search_input_textChanged(self, text: str):
-        """Filter the player list as the user types.
-
-        Parameters
-        ----------
-        text : str
-            Current text in the search input field.
-        """
-        self.controller.filter_players(text)
-
-    def on_table_selection_changed(self):
-        """React to table row selection changes.
-
-        Notifies the controller so it can update the details panel.
-        """
-        self.controller.on_table_selection()
 
     # =====================================================================
     # High-level methods used by the Controller (required for decoupling)

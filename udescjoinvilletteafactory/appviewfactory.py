@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Callable, Optional
 
 from PySide6.QtCore import QObject
-from PySide6.QtWidgets import QDialog, QWidget
+from PySide6.QtWidgets import QDialog, QMainWindow
 
 from udescjoinvilletteaview import (AboutView, LanguageView, MainView,
                                     PlayerEditView, PlayerListView)
@@ -82,7 +82,7 @@ class AppViewFactory:
         return PlayerListView(parent, player_edit_view)
 
     @staticmethod
-    def create_about_view(parent: Optional[QObject] = None) -> AboutView:
+    def create_about_view(parent: Optional[QDialog] = None) -> AboutView:
         """
         Create an instance of AboutView.
 
@@ -99,7 +99,7 @@ class AppViewFactory:
         return AboutView(parent)
 
     @staticmethod
-    def create_language_view(parent: Optional[QObject] = None) -> LanguageView:
+    def create_language_view(parent: Optional[QDialog] = None) -> LanguageView:
         """
         Create an instance of LanguageView.
 
@@ -117,7 +117,7 @@ class AppViewFactory:
         return LanguageView(parent)
 
     @staticmethod
-    def create_main_view(parent: Optional[QWidget] = None) -> MainView:
+    def create_main_view(parent: Optional[QMainWindow] = None) -> MainView:
         """
         Create an instance of MainView.
 

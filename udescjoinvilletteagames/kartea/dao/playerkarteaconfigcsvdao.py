@@ -6,17 +6,14 @@ from typing import Dict, List, Optional, Union
 # Local module imports
 from udescjoinvilletteadao import DAO
 from udescjoinvilletteadao.playercsvdao import PlayerCsvDAO
-from udescjoinvilletteagames.kartea.dao.karteaphasecsvdao import \
-    KarteaPhaseCsvDAO
-from udescjoinvilletteagames.kartea.dao.karteaphaselevelcsvdao import \
-    KarteaPhaseLevelCsvDAO
-from udescjoinvilletteagames.kartea.dao.session import \
-    PlayerKarteaSessionCsvDAO
-from udescjoinvilletteagames.kartea.model import (KarteaPhase,
-                                                  KarteaPhaseLevel,
-                                                  PlayerKarteaConfig)
-from udescjoinvilletteagames.kartea.util.karteapathconfig import \
-    KarteaPathConfig
+from udescjoinvilletteagames.kartea.model import (
+    KarteaPhase,
+    KarteaPhaseLevel,
+    PlayerKarteaConfig,
+)
+from udescjoinvilletteagames.kartea.util.karteapathconfig import (
+    KarteaPathConfig,
+)
 from udescjoinvilletteautil import CSVHandler
 
 
@@ -70,6 +67,12 @@ class PlayerKarteaConfigCsvDAO(DAO):
         Creates necessary directories if they do not exist. Infers int and bool
         properties dynamically from PlayerKarteaConfig dataclass fields.
         """
+        from udescjoinvilletteagames.kartea.dao import (
+            KarteaPhaseCsvDAO,
+            KarteaPhaseLevelCsvDAO,
+            PlayerKarteaSessionCsvDAO,
+        )
+
         self.csv_handler = CSVHandler()
         self.configs: Dict[int, PlayerKarteaConfig] = {}
         self.file_map: Dict[int, str] = {}
@@ -134,7 +137,7 @@ class PlayerKarteaConfigCsvDAO(DAO):
         """
         sanitized_name = self.sanitize_filename(config.player.name)
         filename = f"{config.player.id}_{sanitized_name}_kartea_config.csv"
-        return str(KarteaPathConfig.kartea_players_dir / filename)
+        return str(KarteaPathConfig.KARTEA_PLAYER_DIR / filename)
 
     def load_phases_and_levels(self) -> None:
         """Load all KarteaPhase and KarteaPhaseLevel objects using phase_dao and level_dao.
@@ -146,7 +149,7 @@ class PlayerKarteaConfigCsvDAO(DAO):
         Uses phase_dao.list() to load all phases and their associated levels.
         Populates levels cache by iterating through each phase's level list.
         """
-        KarteaPathConfig.create_directories()
+        KarteaPathConfig.ensure_kartea_dirs()
         self.phases = {phase.id: phase for phase in self.phase_dao.list()}
         self.levels = {}
         for phase in self.phases.values():
@@ -197,8 +200,8 @@ class PlayerKarteaConfigCsvDAO(DAO):
         from filename. Uses player_dao, session_dao, phase_dao, and level_dao
         to reconstruct references.
         """
-        KarteaPathConfig.create_directories()
-        for file_path in KarteaPathConfig.players_dir.glob(
+        KarteaPathConfig.ensure_kartea_dirs()
+        for file_path in KarteaPathConfig.KARTEA_PLAYER_DIR.glob(
             "*_*_kartea_config.csv"
         ):
             # Extract player_id from filename
@@ -244,7 +247,7 @@ class PlayerKarteaConfigCsvDAO(DAO):
                         )
                         if level_id:
                             level = self.get_level(level_id)
-                            if level and level.phase != phase:
+                            if level and level.phase.id != phase.id:
                                 level = None  # Ensure level belongs to phase
 
             # Build config kwargs
