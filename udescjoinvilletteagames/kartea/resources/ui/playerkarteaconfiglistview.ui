@@ -56,7 +56,7 @@
         <enum>QAbstractItemView::SelectionBehavior::SelectRows</enum>
        </property>
        <property name="sortingEnabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="columnCount">
         <number>2</number>

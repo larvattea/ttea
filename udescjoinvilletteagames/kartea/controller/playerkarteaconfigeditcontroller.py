@@ -6,12 +6,10 @@ from PySide6.QtCore import QObject
 
 from udescjoinvilletteagames.kartea.model import PlayerKarteaConfig
 from udescjoinvilletteagames.kartea.model.karteaphase import KarteaPhase
-from udescjoinvilletteagames.kartea.model.karteaphaselevel import (
-    KarteaPhaseLevel,
-)
+from udescjoinvilletteagames.kartea.model.karteaphaselevel import \
+    KarteaPhaseLevel
 from udescjoinvilletteagames.kartea.service import PlayerKarteaConfigService
 from udescjoinvilletteagames.kartea.util import KarteaPathConfig
-
 # Local module imports
 from udescjoinvilletteautil import MessageService
 
@@ -92,6 +90,14 @@ class PlayerKarteaConfigEditController(QObject):
         )
         self.service = PlayerKarteaConfigService()
 
+        # Populate resources
+        self.view.populate_comboboxes()
+
+        # Populate phase combo box with phase IDs
+        phases = self.get_all_phases()
+        self.view.cbx_current_phase.clear()
+        self.view.cbx_current_phase.addItems([str(p.id) for p in phases])
+
         # Populate fields
         if self.config:
             self.view.cbx_player.setCurrentText(
@@ -145,7 +151,6 @@ class PlayerKarteaConfigEditController(QObject):
             default_phase_id = int(
                 default_config["game_settings"]["phase_default"]
             )
-            self.view.cbx_current_phase.addItem(str(default_phase_id))
             default_phase = self.service.get_phase(default_phase_id)
             self.view.cbx_current_phase.setCurrentText(
                 str(default_phase.id) if default_phase else ""
@@ -220,9 +225,9 @@ class PlayerKarteaConfigEditController(QObject):
             )
 
         # Populate phase combo box with phase IDs
-        phases = self.get_all_phases()
-        self.view.cbx_current_phase.clear()
-        self.view.cbx_current_phase.addItems([str(p.id) for p in phases])
+        # phases = self.get_all_phases()
+        # self.view.cbx_current_phase.clear()
+        # self.view.cbx_current_phase.addItems([str(p.id) for p in phases])
 
     def handle_ok(self) -> None:
         """Validate input and close dialog with acceptance.
@@ -256,8 +261,8 @@ class PlayerKarteaConfigEditController(QObject):
 
         if not self.view.cbx_player.currentText():
             error_message += self.view.tr("Jogador é obrigatório!\n")
-        if self.config and not self.view.lbl_session_value.text():
-            error_message += self.view.tr("Sessão é obrigatório!\n")
+        # if self.config and not self.view.lbl_session_value.text():
+        #    error_message += self.view.tr("Sessão é obrigatório!\n")
         if not self.view.cbx_vehicle_image.currentText():
             error_message += self.view.tr("Imagem do veículo é obrigatória!\n")
         if not self.view.cbx_environment_image.currentText():
@@ -321,7 +326,7 @@ class PlayerKarteaConfigEditController(QObject):
 
         level_text = self.view.cbx_current_level.currentText()
         level = (
-            self.service.dao.level_dao.select(int(level_text))
+            self.service.dao.level_dao.select(int(phase_text), int(level_text))
             if level_text and level_text.isdigit()
             else None
         )

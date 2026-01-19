@@ -157,6 +157,9 @@ class PlayerKarteaSessionCsvDAO(DAO):
             if not session_data:
                 continue
 
+            # if not session_data:
+            #    session_data = [["id", "1"]]
+
             # Load full player
             player = self.player_dao.select(player_id)
             if player is None or not player.is_valid():

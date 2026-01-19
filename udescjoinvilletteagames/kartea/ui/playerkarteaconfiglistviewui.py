@@ -9,17 +9,20 @@
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QAbstractItemView, QApplication, QDialog, QGridLayout,
-    QHBoxLayout, QHeaderView, QLabel, QLineEdit,
-    QPushButton, QSizePolicy, QSpacerItem, QTabWidget,
-    QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
+                            QMetaObject, QObject, QPoint, QRect, QSize, Qt,
+                            QTime, QUrl)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
+                           QFontDatabase, QGradient, QIcon, QImage,
+                           QKeySequence, QLinearGradient, QPainter, QPalette,
+                           QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QAbstractItemView, QApplication, QDialog,
+                               QGridLayout, QHBoxLayout, QHeaderView, QLabel,
+                               QLineEdit, QPushButton, QSizePolicy,
+                               QSpacerItem, QTableWidget, QTableWidgetItem,
+                               QTabWidget, QVBoxLayout, QWidget)
+
 import resources.resources_rc
+
 
 class Ui_PlayerKarteaConfigListView(object):
     def setupUi(self, PlayerKarteaConfigListView):
@@ -61,7 +64,7 @@ class Ui_PlayerKarteaConfigListView(object):
         self.tbl_config.setAlternatingRowColors(True)
         self.tbl_config.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
         self.tbl_config.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
-        self.tbl_config.setSortingEnabled(False)
+        self.tbl_config.setSortingEnabled(True)
         self.tbl_config.setColumnCount(2)
         self.tbl_config.horizontalHeader().setStretchLastSection(True)
 

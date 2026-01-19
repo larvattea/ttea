@@ -1,44 +1,90 @@
 from typing import Any, Dict, List, Optional, Union
 
 from udescjoinvilletteagames.kartea.dao import PlayerKarteaConfigCsvDAO
-from udescjoinvilletteagames.kartea.model import (
-    KarteaPhase,
-    KarteaPhaseLevel,
-    PlayerKarteaConfig,
-)
+from udescjoinvilletteagames.kartea.model import (KarteaPhase,
+                                                  KarteaPhaseLevel,
+                                                  PlayerKarteaConfig)
 
 
 class PlayerKarteaConfigService:
     """
-    Service layer for PlayerKarteaConfig operations (MVCS pattern).
-    Handles business logic and delegates to DAO.
+    Service layer (MVCS) handling all business rules related to config.
+
+    Attributes
+    ----------
+    dao : PlayerKarteaConfigCsvDAO
+        Data access object responsible for persistence operations.
+        Defaults to a new ``PlayerKarteaConfigCsvDAO``
+        instance if not provided.
+
+    Methods
+    -------
+    __init__(dao=None)
+        Initializes the service with a DAO instance.
+    get_all_configs()
+        Returns all registered configs.
+    create_config(data)
+        Creates a new config from the provided data dictionary.
+    update_config(self, player_id: int, data: Dict[str, Any])
+        Updates an existing config with the given data.
+    delete_config(player_id)
+        Deletes a config by its ID.
+    find_by_player_id(player_id)
+        Retrieves a config by its ID.
+    search_configs(query="")
+        Searches configs by name or ID (case-insensitive).
+    def get_phase(self, phase_id: int) -> Optional[KarteaPhase]
+        Searches phase with phase id
+    def get_phase(self, phase_id: int) -> Optional[KarteaPhase]
+        Searches phase with phase id
     """
 
     def __init__(self, dao: Optional[PlayerKarteaConfigCsvDAO] = None):
         """
-        Initialize with a DAO (injectable for testing).
+        Initialize the service with a data access object.
+
+        Parameters
+        ----------
+        dao : PlayerKarteaConfigCsvDAO, optional
+            Instance used for persistence. If ``None``, a default
+            ``PlayerKarteaConfigCsvDAO`` is created.
         """
         self.dao = dao or PlayerKarteaConfigCsvDAO()
 
     def get_all_configs(self) -> List[PlayerKarteaConfig]:
-        """Return all PlayerKarteaConfig instances."""
+        """Return a list of all registered configs.
+
+        Returns
+        -------
+        List[PlayerKarteaConfig]
+            Complete list of ``Config`` instances stored in the DAO.
+        """
         return self.dao.list()
 
     def create_config(
         self, data: Dict[str, Any]
     ) -> Optional[PlayerKarteaConfig]:
         """
-        Create a new config from data dict.
-        Validates and inserts via DAO.
+        Create a new config from a dictionary of attributes.
+
+        Parameters
+        ----------
+        data : dict
+            Must contain the keys of model.
+
+        Returns
+        -------
+        PlayerKarteaConfig or None
+            The created ``Config`` instance if validation and insertion
+            succeed; ``None`` otherwise.
         """
         # Resolve references (e.g., fetch Player, Phase, Level from DAO)
         player = self.dao.player_dao.select(data.get("player_id"))
         session = self.dao.session_dao.select(data.get("session_id"))
         phase = self.dao.phase_dao.select(data.get("phase_id"))
-        level = self.dao.level_dao.select(data.get("level_id"))
-
-        if not player or not phase or not level:
-            return None  # Invalid references
+        level = self.dao.level_dao.select(
+            data.get("phase_id"), data.get("level_id")
+        )
 
         config = PlayerKarteaConfig(
             player=player,
@@ -61,7 +107,7 @@ class PlayerKarteaConfigService:
             sound=data.get("sound", False),
         )
 
-        if not self.is_valid_config(config):  # Add custom validation if needed
+        if not config.is_valid():
             return None
 
         player_id = self.dao.insert(config)
@@ -75,11 +121,58 @@ class PlayerKarteaConfigService:
         if not config:
             return False
 
-        # Update fields (similar to create, resolve references)
-        config.level_time = data.get("level_time", config.level_time)
-        # ... Update other fields similarly ...
+        # Resolve references (e.g., fetch Player, Phase, Level from DAO)
+        player = self.dao.player_dao.select(
+            data.get("player_id", config.player.id)
+        )
+        session = self.dao.session_dao.select(
+            data.get("session_id", config.session.id)
+        )
+        phase = self.dao.phase_dao.select(
+            data.get("phase_id", config.phase.id)
+        )
+        level = self.dao.level_dao.select(
+            data.get("phase_id", config.phase.id),
+            data.get("level_id", config.level.id),
+        )
 
-        if not self.is_valid_config(config):
+        config.player = player
+        config.session = session
+        config.phase = phase
+        config.level = level
+
+        config.level_time = data.get("level_time", config.level_time)
+        config.car_image = data.get("car_image", config.car_image)
+        config.environment_image = data.get(
+            "environment_image", config.environment_image
+        )
+        config.target_image = data.get("target_image", config.target_image)
+        config.obstacle_image = data.get(
+            "obstacle_image", config.obstacle_image
+        )
+        config.positive_feedback_image = data.get(
+            "positive_feedback_image", config.positive_feedback_image
+        )
+        config.neutral_feedback_image = data.get(
+            "neutral_feedback_image", config.neutral_feedback_image
+        )
+        config.negative_feedback_image = data.get(
+            "negative_feedback_image", config.negative_feedback_image
+        )
+        config.positive_feedback_sound = data.get(
+            "positive_feedback_sound", config.positive_feedback_sound
+        )
+        config.neutral_feedback_sound = data.get(
+            "neutral_feedback_sound", config.neutral_feedback_sound
+        )
+        config.negative_feedback_sound = data.get(
+            "negative_feedback_sound", config.negative_feedback_sound
+        )
+        config.palette = data.get("palette", config.palette)
+        config.hud = data.get("hud", config.hud)
+        config.sound = data.get("sound", config.sound)
+
+        if not config.is_valid():
             return False
 
         return self.dao.update(config)
@@ -110,15 +203,9 @@ class PlayerKarteaConfigService:
             or (c.player and q in c.player.name.lower())
         ]
 
-    def is_valid_config(self, config: PlayerKarteaConfig) -> bool:
-        """Custom validation (expand as needed)."""
-        # Example: Check required fields
-        return bool(config.player and config.phase and config.level)
-
     def get_phase(self, phase_id: int) -> Optional[KarteaPhase]:
         return self.dao.get_phase(phase_id)
 
-    # Additional methods from DAO if needed
     def get_all_phases(self) -> List[KarteaPhase]:
         return self.dao.get_all_phases()
 

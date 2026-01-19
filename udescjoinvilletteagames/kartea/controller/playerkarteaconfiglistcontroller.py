@@ -1,20 +1,57 @@
 from typing import TYPE_CHECKING, Callable, Optional
 
-from PySide6.QtWidgets import QDialog, QMessageBox, QTableWidgetItem
+from PySide6.QtCore import QObject
+from PySide6.QtWidgets import QDialog
 
 from udescjoinvilletteagames.kartea.model import PlayerKarteaConfig
-from udescjoinvilletteagames.kartea.service import (
-    PlayerKarteaConfigService,
-)  # New import
+from udescjoinvilletteagames.kartea.service import PlayerKarteaConfigService
+from udescjoinvilletteautil import MessageService
 
 if TYPE_CHECKING:
     from udescjoinvilletteagames.kartea.view import (
-        PlayerKarteaConfigEditView,
-        PlayerKarteaConfigListView,
-    )
+        PlayerKarteaConfigEditView, PlayerKarteaConfigListView)
 
 
-class PlayerKarteaConfigListController:
+class PlayerKarteaConfigListController(QObject):
+    """
+    Lightweight controller that orchestrates PlayerKarteaConfigListView
+    and PlayerKarteaConfigService.
+
+    Follows MVCS pattern: mediates between view and service layer,
+    handling user interactions and updating the UI accordingly.
+
+    Attributes
+    ----------
+    view : PlayerKarteaConfigListView
+        Main view displaying the list and details of configs.
+    factory : Callable
+        Factory function that creates a ``PlayerKarteaConfigEditView`` dialog,
+        receiving the parent view and an optional player to edit.
+    service : PlayerKarteaConfigService
+        Business logic layer for player CRUD operations.
+    msg : MessageService
+        Helper for showing info, warning, and error messages.
+
+    Methods
+    -------
+    __init__(view, player_edit_view_factory)
+        Initializes the controller with view and edit dialog factory.
+    load_configs(query="")
+        Loads and displays configs, optionally filtered by search term.
+    filter_configs(text)
+        Filters the config list based on the search input text.
+    on_table_selection()
+        Updates details panel when a table row is selected.
+    select_and_show_config(player_id)
+        Selects a config row and shows its details.
+    handle_new_config()
+        Opens dialog to create a new config.
+    handle_edit_config()
+        Opens dialog to edit the selected config.
+    delete_config()
+        Deletes the selected config after confirmation.
+    """
+
     def __init__(
         self,
         view: "PlayerKarteaConfigListView",
@@ -23,98 +60,125 @@ class PlayerKarteaConfigListController:
             "PlayerKarteaConfigEditView",
         ],
     ) -> None:
+        """
+        Initialize the controller.
+
+        Parameters
+        ----------
+        view : PlayerKarteaConfigListView
+            The main list view instance to control.
+        player_kartea_config_edit_view_factory : Callable
+            Function that returns a ``PlayerKarteaConfigEditView`` dialog.
+            Signature: (parent_view, playerkarteaconfig) -> PlayerKarteaConfigEditView.
+        """
         self.view = view
-        self.service = (
-            PlayerKarteaConfigService()
-        )  # Use Service instead of DAO
-        self.player_kartea_config_edit_view_factory = (
-            player_kartea_config_edit_view_factory
-        )
+        self.factory = player_kartea_config_edit_view_factory
+        self.service = PlayerKarteaConfigService()
+        self.msg = MessageService(view)
 
     def load_configs(self, search_query: str = "") -> None:
-        configs = self.service.search_configs(
-            search_query
-        )  # Use service search
-        self.view.tbl_config.setRowCount(0)
-        for config in configs:
-            row = self.view.tbl_config.rowCount()
-            self.view.tbl_config.insertRow(row)
-            self.view.tbl_config.setItem(
-                row, 0, QTableWidgetItem(str(config.player.id))
-            )
-            self.view.tbl_config.setItem(
-                row, 1, QTableWidgetItem(config.player.name)
-            )
-        self.show_config_details(None)
+        """
+        Load players configs from service and populate the table view.
 
-    def filter_configs(self) -> None:
-        self.load_configs(self.view.led_search.text())
+        Parameters
+        ----------
+        query : str, optional
+            Search term to filter players (default is empty string).
+        """
+        configs = self.service.search_configs(search_query)
+        self.view.populate_table(configs)
+        self.view.clear_details()
 
-    def handle_new_config(self) -> None:
-        edit_view = self.player_kartea_config_edit_view_factory(
-            self.view, None
-        )
-        if edit_view.exec():
-            data = (
-                edit_view.controller.get_data()
-            )  # Assume EditView has a get_data() method
-            new_config = self.service.create_config(data)
-            if new_config:
-                self.load_configs(self.view.led_search.text())
-                # Select the new row, etc.
+    def filter_configs(self, text: str) -> None:
+        """Filter player config list based on search input text."""
+        self.load_configs(text.strip())
 
-    def handle_edit_config(self) -> None:
-        selected = self.view.tbl_config.selectedItems()
-        if not selected:
-            QMessageBox.warning(self.view, "Warning", "Select a config")
-            return
-        player_id = int(self.view.tbl_config.item(selected[0].row(), 0).text())
+    def on_table_selection(self) -> None:
+        """Update details pane when a player config is selected in the table."""
+        player_id = self.view.get_selected_player_id()
+        if player_id is not None:
+            config = self.service.find_by_player_id(player_id)
+            self.view.display_config_details(config)
+        else:
+            self.view.clear_details()
+
+    def select_and_show_config(self, player_id: int) -> None:
+        """
+        Select a player config row by ID and display its details.
+
+        Parameters
+        ----------
+        player_id : int
+            The ID of the player config to select and show.
+        """
         config = self.service.find_by_player_id(player_id)
         if config:
-            edit_view = self.player_kartea_config_edit_view_factory(
-                self.view, config
+            self.view.display_config_details(config)
+            self.view.select_row_by_id(player_id)
+
+    def handle_new_config(self) -> None:
+        """Open dialog to create a new player config and save if accepted."""
+        dialog = self.factory(self.view, None)
+        if not dialog.exec():
+            return
+
+        data = dialog.controller.get_data()
+        config = self.service.create_config(data)
+        if config:
+            self.load_configs(self.view.led_search.text())
+            self.select_and_show_config(config.player.id)
+            self.msg.info(self.tr("Configuração cadastrada com sucesso!"))
+        else:
+            self.msg.critical(self.tr("Erro ao salvar configuração."))
+
+    def handle_edit_config(self) -> None:
+        """Open dialog to edit the selected player config
+        and update if accepted."""
+        player_id = self.view.get_selected_player_id()
+        if not player_id:
+            self.msg.warning(
+                self.tr("Selecione uma configuração para editar.")
             )
-            if edit_view.exec():
-                data = edit_view.get_data()
-                if self.service.update_config(player_id, data):
-                    self.load_configs(self.view.led_search.text())
+            return
+
+        config = self.service.find_by_player_id(player_id)
+        if not config:
+            self.msg.critical(self.tr("Configuração não encontrada."))
+            return
+
+        dialog = self.factory(self.view, config)
+        if not dialog.exec():
+            return
+
+        data = dialog.controller.get_data()
+        if self.service.update_config(player_id, data):
+            self.load_configs(self.view.led_search.text())
+            self.select_and_show_config(player_id)
+            self.msg.info(self.tr("Configuração atualizada com sucesso."))
+        else:
+            self.msg.critical(self.tr("Erro ao atualizar configuração."))
 
     def delete_config(self) -> None:
-        selected = self.view.tbl_config.selectedItems()
-        if not selected:
-            QMessageBox.warning(self.view, "Warning", "Select a config")
+        """Delete the selected player config after user confirmation."""
+        player_id = self.view.get_selected_player_id()
+        if not player_id:
+            self.msg.warning(
+                self.tr("Selecione uma configuração para excluir.")
+            )
             return
-        player_id = int(self.view.tbl_config.item(selected[0].row(), 0).text())
-        if (
-            QMessageBox.question(self.view, "Confirm", "Delete?")
-            == QMessageBox.Yes
+
+        config = self.service.find_by_player_id(player_id)
+        if not config:
+            return
+
+        if self.msg.question(
+            self.tr(
+                "Tem certeza que seja excluir a configuração do jogador?\n{0}"
+            ).format(config.player.name)
         ):
             if self.service.delete_config(player_id):
                 self.load_configs(self.view.led_search.text())
-
-    def show_config_details(
-        self, config: Optional[PlayerKarteaConfig]
-    ) -> None:
-        if config:
-            self.view.lbl_id_value.setText(str(config.player.id))
-            self.view.lbl_name_value.setText(config.player.name)
-            self.view.lbl_phase_value.setText(str(config.phase.id))
-            self.view.lbl_level_value.setText(str(config.level.id))
-            self.view.lbl_time_value.setText(str(config.level_time))
-        else:
-            self.view.lbl_id_value.setText("")
-            self.view.lbl_name_value.setText("")
-            self.view.lbl_phase_value.setText("")
-            self.view.lbl_level_value.setText("")
-            self.view.lbl_time_value.setText("")
-
-    def on_table_selection(self) -> None:
-        selected = self.view.tbl_config.selectedItems()
-        if selected:
-            player_id = int(
-                self.view.tbl_config.item(selected[0].row(), 0).text()
-            )
-            config = self.service.find_by_player_id(player_id)
-            self.show_config_details(config)
-        else:
-            self.show_config_details(None)
+                self.view.clear_details()
+                self.msg.info(self.tr("Configuração excluída com sucesso."))
+            else:
+                self.msg.critical(self.tr("Erro ao excluir configuração."))

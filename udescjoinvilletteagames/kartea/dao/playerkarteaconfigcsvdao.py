@@ -6,14 +6,11 @@ from typing import Dict, List, Optional, Union
 # Local module imports
 from udescjoinvilletteadao import DAO
 from udescjoinvilletteadao.playercsvdao import PlayerCsvDAO
-from udescjoinvilletteagames.kartea.model import (
-    KarteaPhase,
-    KarteaPhaseLevel,
-    PlayerKarteaConfig,
-)
-from udescjoinvilletteagames.kartea.util.karteapathconfig import (
-    KarteaPathConfig,
-)
+from udescjoinvilletteagames.kartea.model import (KarteaPhase,
+                                                  KarteaPhaseLevel,
+                                                  PlayerKarteaConfig)
+from udescjoinvilletteagames.kartea.util.karteapathconfig import \
+    KarteaPathConfig
 from udescjoinvilletteautil import CSVHandler
 
 
@@ -68,10 +65,8 @@ class PlayerKarteaConfigCsvDAO(DAO):
         properties dynamically from PlayerKarteaConfig dataclass fields.
         """
         from udescjoinvilletteagames.kartea.dao import (
-            KarteaPhaseCsvDAO,
-            KarteaPhaseLevelCsvDAO,
-            PlayerKarteaSessionCsvDAO,
-        )
+            KarteaPhaseCsvDAO, KarteaPhaseLevelCsvDAO,
+            PlayerKarteaSessionCsvDAO)
 
         self.csv_handler = CSVHandler()
         self.configs: Dict[int, PlayerKarteaConfig] = {}
@@ -171,7 +166,9 @@ class PlayerKarteaConfigCsvDAO(DAO):
         """
         return self.phase_dao.select(phase_id)
 
-    def get_level(self, level_id: int) -> Optional[KarteaPhaseLevel]:
+    def get_level(
+        self, phase_id: int, level_id: int
+    ) -> Optional[KarteaPhaseLevel]:
         """Retrieve a KarteaPhaseLevel by its ID using level_dao.
 
         Parameters
@@ -184,7 +181,7 @@ class PlayerKarteaConfigCsvDAO(DAO):
         Optional[KarteaPhaseLevel]
             The KarteaPhaseLevel object if found, None otherwise.
         """
-        return self.level_dao.select(level_id)
+        return self.level_dao.select(phase_id, level_id)
 
     def load_all_configs(self) -> None:
         """Load all configuration CSV files into memory.
@@ -246,7 +243,7 @@ class PlayerKarteaConfigCsvDAO(DAO):
                             else None
                         )
                         if level_id:
-                            level = self.get_level(level_id)
+                            level = self.get_level(phase_id, level_id)
                             if level and level.phase.id != phase.id:
                                 level = None  # Ensure level belongs to phase
 

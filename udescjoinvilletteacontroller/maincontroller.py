@@ -9,8 +9,9 @@ from udescjoinvilletteautil import PathConfig
 if TYPE_CHECKING:
     from udescjoinvilletteamodel import AppModel
     from udescjoinvilletteautil import MessageService
-    from udescjoinvilletteaview.mainview import \
-        MainView  # Apenas para type hint
+    from udescjoinvilletteaview.mainview import (
+        MainView,
+    )  # Apenas para type hint
 
 
 class MainController(QObject):
@@ -94,20 +95,26 @@ class MainController(QObject):
         )
 
     def open_help(self) -> None:
-        try:
+        self.view.update_status_message(
+            self.tr("Funcionalidade do help em desenvolvimento...")
+        )
+        """try:
             # open_help()
             pass
         except Exception as e:
             self.view.show_critical_error(
                 self.tr("Erro ao abrir ajuda."), str(e)
-            )
+            )"""
 
     def open_about(self) -> None:
         dialog = self.app_factory.create_about_view(parent=self.view)
         dialog.exec()
 
     def start_game(self, game_name: str) -> None:
-        try:
+        self.view.update_status_message(
+            self.tr("Funcionalidade de jogos em desenvolvimento...")
+        )
+        """try:
             if "KarTEA" in game_name:
                 from udescjoinvillettea.games.kartea.main import launch_kartea
 
@@ -124,4 +131,4 @@ class MainController(QObject):
                 self.tr("{} não pôde ser iniciado:\n{}").format(
                     game_name, str(e)
                 ),
-            )
+            )"""

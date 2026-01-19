@@ -223,9 +223,9 @@ class KarteaPathConfig(PathConfig):
         }
 
         config["sound_feedback"] = {
-            "positive_feedback_sound_default": "win",
+            "positive_feedback_sound_default": "hit",
             "neutral_feedback_sound_default": "miss",
-            "negative_feedback_sound_default": "crash",
+            "negative_feedback_sound_default": "error",
         }
 
         config["interface_settings"] = {

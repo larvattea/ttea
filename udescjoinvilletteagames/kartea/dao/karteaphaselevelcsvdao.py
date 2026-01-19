@@ -4,12 +4,10 @@ from typing import Any, List, Optional
 
 from udescjoinvilletteadao import DAO
 from udescjoinvilletteagames.kartea.model.karteaphase import KarteaPhase
-from udescjoinvilletteagames.kartea.model.karteaphaselevel import (
-    KarteaPhaseLevel,
-)
-from udescjoinvilletteagames.kartea.util.karteapathconfig import (
-    KarteaPathConfig,
-)
+from udescjoinvilletteagames.kartea.model.karteaphaselevel import \
+    KarteaPhaseLevel
+from udescjoinvilletteagames.kartea.util.karteapathconfig import \
+    KarteaPathConfig
 from udescjoinvilletteautil import CSVHandler
 
 
@@ -120,7 +118,9 @@ class KarteaPhaseLevelCsvDAO(DAO):
 
         return levels
 
-    def select(self, obj_id: int) -> Optional[KarteaPhaseLevel]:
+    def select(
+        self, phase_id: int, level_id: int
+    ) -> Optional[KarteaPhaseLevel]:
         """Retrieve a single KarteaPhaseLevel by ID by reading all
         phase CSV files.
 
@@ -148,12 +148,13 @@ class KarteaPhaseLevelCsvDAO(DAO):
         )
         for file_path in phase_files:
             phase_number = int(file_path.stem)
-            levels = self.load_levels_from_csv(phase_number)
-            for level in levels:
-                if level.id == obj_id:
-                    phase = KarteaPhase(id=phase_number, level_list=levels)
-                    level.phase = phase
-                    return level
+            if phase_number == phase_id:
+                levels = self.load_levels_from_csv(phase_number)
+                for level in levels:
+                    if level.id == level_id:
+                        phase = KarteaPhase(id=phase_number, level_list=levels)
+                        level.phase = phase
+                        return level
         return None
 
     def list(self) -> List[KarteaPhaseLevel]:

@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Callable, List, Optional
 from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 
+# Local module import
 from udescjoinvilletteagames.kartea.controller import \
     PlayerKarteaConfigListController
 from udescjoinvilletteagames.kartea.ui import \
@@ -27,8 +28,6 @@ class PlayerKarteaConfigListView(
 
     Attributes
     ----------
-    translator : Optional[object]
-        Translator object inherited from the parent window (for i18n).
     msg : MessageService
         Helper service used to show info/warning/question dialogs.
     controller : PlayerKarteaConfigListController
@@ -74,7 +73,7 @@ class PlayerKarteaConfigListView(
         """
         super().__init__(parent)
 
-        # Setup UI from .ui file
+        # Setup UI interface Ui_PlayerKarteaConfigListView
         self.setupUi(self)
         self.msg = MessageService(self)
 
@@ -88,12 +87,12 @@ class PlayerKarteaConfigListView(
             parent,
         )
 
-        # Create controller
+        # Initialize controller
         self.controller = PlayerKarteaConfigListController(
             self, player_kartea_config_edit_view_factory
         )
 
-        # Connect signals
+        # Events signals and slots
         self.pb_new.clicked.connect(self.controller.handle_new_config)
         self.pb_edit.clicked.connect(self.controller.handle_edit_config)
         self.pb_delete.clicked.connect(self.controller.delete_config)
@@ -105,7 +104,7 @@ class PlayerKarteaConfigListView(
         # Load initial data
         self.controller.load_configs()
 
-        # Adjust table headers
+        # Perfect column widths
         self.tbl_config.horizontalHeader().setSectionResizeMode(
             0, QHeaderView.ResizeToContents
         )

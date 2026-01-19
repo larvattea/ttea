@@ -4,7 +4,8 @@ from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 
 # Local module import
-from udescjoinvilletteaui import Ui_PlayerListView
+from udescjoinvilletteaui import \
+    Ui_PlayerListView  # Assuming generated UI class
 from udescjoinvilletteautil import MessageService
 from udescjoinvilletteawindow import WindowConfig
 
@@ -23,8 +24,6 @@ class PlayerListView(QDialog, Ui_PlayerListView, WindowConfig):
 
     Attributes
     ----------
-    translator : Optional[object]
-        Translator object inherited from the parent window (for i18n).
     msg : MessageService
         Helper service used to show info/warning/question dialogs.
     controller : PlayerListController

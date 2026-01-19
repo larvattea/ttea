@@ -1,18 +1,16 @@
 # Adjusted playerkarteaconfigeditview.py with single preview for visual feedback
 from typing import TYPE_CHECKING, Optional
 
-from PySide6.QtCore import QEvent, Qt, QUrl, QCoreApplication
+from PySide6.QtCore import QCoreApplication, QEvent, Qt, QUrl
 from PySide6.QtGui import QPixmap
 from PySide6.QtMultimedia import QSoundEffect
 from PySide6.QtWidgets import QComboBox, QDialog
 
 # Local module imports
-from udescjoinvilletteagames.kartea.controller import (
-    PlayerKarteaConfigEditController,
-)
-from udescjoinvilletteagames.kartea.ui import (
-    Ui_PlayerKarteaConfigEditView,
-)  # Assuming the UI is in this module or adjust import
+from udescjoinvilletteagames.kartea.controller import \
+    PlayerKarteaConfigEditController
+from udescjoinvilletteagames.kartea.ui import \
+    Ui_PlayerKarteaConfigEditView  # Assuming the UI is in this module or adjust import
 from udescjoinvilletteagames.kartea.util import KarteaPathConfig
 from udescjoinvilletteawindow import WindowConfig
 
@@ -69,6 +67,9 @@ class PlayerKarteaConfigEditView(
             parent,
         )
 
+        # Preenchendo os comboboxes de recursos
+        # self.populate_comboboxes()
+
         # Controller
         self.controller = PlayerKarteaConfigEditController(self, config)
 
@@ -78,9 +79,6 @@ class PlayerKarteaConfigEditView(
         self.cbx_current_phase.currentIndexChanged.connect(
             self.controller.update_levels
         )
-
-        # Preenchendo os comboboxes de recursos
-        self.populate_comboboxes()
 
         self.combo_types = {
             self.cbx_vehicle_image: "Veículo",

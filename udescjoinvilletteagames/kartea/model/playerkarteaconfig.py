@@ -164,6 +164,21 @@ class PlayerKarteaConfig:
     PROPERTIES: ClassVar[list[str]] = []
     DATA_PROPERTIES: ClassVar[list] = []
 
+    def is_valid(self) -> bool:
+        """Checks if the configs's data is valid.
+
+        Returns
+        -------
+        bool
+            True if the data are provided, False otherwise.
+
+        Notes
+        -----
+        - A player is considered valid if `player`, `phase` and `level`
+        is not None.
+        """
+        return bool(self.player and self.phase and self.level)
+
     def set_data(self, data: Dict) -> None:
         """Update configuration data from a dictionary.
 
