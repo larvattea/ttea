@@ -196,7 +196,7 @@
        <item>
         <widget class="QPushButton" name="pb_new">
          <property name="toolTip">
-          <string>Crie um novo jogador</string>
+          <string>Criar um novo registro</string>
          </property>
          <property name="text">
           <string>Novo</string>
@@ -210,7 +210,7 @@
        <item>
         <widget class="QPushButton" name="pb_edit">
          <property name="toolTip">
-          <string>Edite o jogador selecionado</string>
+          <string>Editar o registro selecionado</string>
          </property>
          <property name="text">
           <string>Editar</string>
@@ -224,7 +224,7 @@
        <item>
         <widget class="QPushButton" name="pb_delete">
          <property name="toolTip">
-          <string>Exclua o jogador selecionado</string>
+          <string>Excluir o registro selecionado</string>
          </property>
          <property name="text">
           <string>Excluir</string>

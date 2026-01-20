@@ -27,7 +27,7 @@ class Ui_PlayerKarteaConfigEditView(object):
     def setupUi(self, PlayerKarteaConfigEditView):
         if not PlayerKarteaConfigEditView.objectName():
             PlayerKarteaConfigEditView.setObjectName(u"PlayerKarteaConfigEditView")
-        PlayerKarteaConfigEditView.resize(650, 601)
+        PlayerKarteaConfigEditView.resize(650, 633)
         icon = QIcon()
         icon.addFile(u":/icons/system/appicon", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         PlayerKarteaConfigEditView.setWindowIcon(icon)

@@ -1,5 +1,4 @@
 # Adjusted playerkarteaconfigeditcontroller.py
-from datetime import date
 from typing import TYPE_CHECKING, Dict, List, Optional, Union
 
 from PySide6.QtCore import QObject
@@ -260,25 +259,19 @@ class PlayerKarteaConfigEditController(QObject):
         error_message = ""
 
         if not self.view.cbx_player.currentText():
-            error_message += self.view.tr("Jogador é obrigatório!\n")
-        # if self.config and not self.view.lbl_session_value.text():
-        #    error_message += self.view.tr("Sessão é obrigatório!\n")
+            error_message += self.tr("Jogador é obrigatório!\n")
         if not self.view.cbx_vehicle_image.currentText():
-            error_message += self.view.tr("Imagem do veículo é obrigatória!\n")
+            error_message += self.tr("Imagem do veículo é obrigatória!\n")
         if not self.view.cbx_environment_image.currentText():
-            error_message += self.view.tr(
-                "Imagem do ambiente é obrigatória!\n"
-            )
+            error_message += self.tr("Imagem do ambiente é obrigatória!\n")
         if not self.view.cbx_target_image.currentText():
-            error_message += self.view.tr("Imagem do alvo é obrigatória!\n")
+            error_message += self.tr("Imagem do alvo é obrigatória!\n")
         if not self.view.cbx_obstacle_image.currentText():
-            error_message += self.view.tr(
-                "Imagem do obstáculo é obrigatória!\n"
-            )
+            error_message += self.tr("Imagem do obstáculo é obrigatória!\n")
 
         if error_message:
             self.msg.critical(
-                self.view.tr("Por favor, corrija os dados inválidos:\n")
+                self.tr("Por favor, corrija os dados inválidos:\n")
                 + error_message
             )
             return False

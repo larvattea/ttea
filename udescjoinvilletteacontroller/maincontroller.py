@@ -9,9 +9,8 @@ from udescjoinvilletteautil import PathConfig
 if TYPE_CHECKING:
     from udescjoinvilletteamodel import AppModel
     from udescjoinvilletteautil import MessageService
-    from udescjoinvilletteaview.mainview import (
-        MainView,
-    )  # Apenas para type hint
+    from udescjoinvilletteaview.mainview import \
+        MainView  # Apenas para type hint
 
 
 class MainController(QObject):

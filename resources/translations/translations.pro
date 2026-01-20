@@ -7,11 +7,14 @@
 TEMPLATE = aux
 
 # Graphical user interface (.ui) files created in Qt Designer
-FORMS += ../ui/*.ui
+FORMS += ../ui/*.ui \
+         ../../udescjoinvilletteagames/kartea/resources/ui/*.ui
 
 # Python files that must be parsed by lupdate
 SOURCES += ../../udescjoinvilletteaapp/*.py \
             ../../udescjoinvilletteacontroller/*.py \
+            ../../udescjoinvilletteagames/kartea/controller/*.py \
+            ../../udescjoinvilletteagames/kartea/view/*.py \
             ../../udescjoinvilletteaservice/*.py \            
             ../../udescjoinvilletteautil/*.py \
             ../../udescjoinvilletteaview/*.py \

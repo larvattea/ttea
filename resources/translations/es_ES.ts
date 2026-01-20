@@ -64,7 +64,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation>Aceptar</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/aboutview.py" line="53"/>
+        <location filename="../../udescjoinvilletteaview/aboutview.py" line="48"/>
         <source>Desde: 2021 - {}</source>
         <translation>Desde: 2021 - {}</translation>
     </message>
@@ -125,26 +125,14 @@ Detalles del error: {0}</translation>
         <translation>Funcionalidad de calibración en desarrollo...</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="103"/>
-        <source>Erro ao abrir ajuda.</source>
-        <translation>Error al abrir la ayuda.</translation>
+        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="99"/>
+        <source>Funcionalidade do help em desenvolvimento...</source>
+        <translation>Funcionalidad de ayuda en desarrollo...</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="118"/>
-        <source>Jogo &apos;{}&apos; não implementado ainda.</source>
-        <translation>El juego &apos;{}&apos; aún no se ha implementado.</translation>
-    </message>
-    <message>
-        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="124"/>
-        <source>Erro ao iniciar jogo</source>
-        <translation>Error al iniciar el juego</translation>
-    </message>
-    <message>
-        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="125"/>
-        <source>{} não pôde ser iniciado:
-{}</source>
-        <translation>{} no se pudo iniciar:
-{}</translation>
+        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="115"/>
+        <source>Funcionalidade de jogos em desenvolvimento...</source>
+        <translation>Funcionalidad de juegos en desarrollo...</translation>
     </message>
 </context>
 <context>
@@ -355,6 +343,394 @@ Detalles del error: {0}</translation>
     </message>
 </context>
 <context>
+    <name>PlayerKarteaConfigEditController</name>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfigeditcontroller.py" line="264"/>
+        <source>Jogador é obrigatório!
+</source>
+        <translation>¡El jugador é obligatorio!
+</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfigeditcontroller.py" line="266"/>
+        <source>Imagem do veículo é obrigatória!
+</source>
+        <translation>¡La imagen del vehículo es obligatoria!
+</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfigeditcontroller.py" line="268"/>
+        <source>Imagem do ambiente é obrigatória!
+</source>
+        <translation>¡La imagen del entorno es obligatoria!
+</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfigeditcontroller.py" line="270"/>
+        <source>Imagem do alvo é obrigatória!
+</source>
+        <translation>¡La imagen del blanco es obligatoria!
+</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfigeditcontroller.py" line="272"/>
+        <source>Imagem do obstáculo é obrigatória!
+</source>
+        <translation>¡La imagen del obstáculo es obligatoria!
+</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfigeditcontroller.py" line="276"/>
+        <source>Por favor, corrija os dados inválidos:
+</source>
+        <translation>Por favor, corrija los datos no válidos:
+</translation>
+    </message>
+</context>
+<context>
+    <name>PlayerKarteaConfigEditView</name>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/view/playerkarteaconfigeditview.py" line="56"/>
+        <source>Novo</source>
+        <translation>Nuevo</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/view/playerkarteaconfigeditview.py" line="59"/>
+        <source>Editar</source>
+        <translation>Editar</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="14"/>
+        <source>Plataforma T-TEA - Configuração Kartea</source>
+        <translation>Plataforma T-TEA - Configuración Kartea</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="31"/>
+        <source>Configuração de Jogo</source>
+        <translation>Configuración del Juego</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="42"/>
+        <source>Jogador:</source>
+        <translation>Jugador:</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="56"/>
+        <source>Sessão:</source>
+        <translation>Sesión:</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="70"/>
+        <source>Fase Atual:</source>
+        <translation>Fase Actual:</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="80"/>
+        <source>Nível Atual:</source>
+        <translation>Nivel Actual:</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="90"/>
+        <source>Tempo de Nível:</source>
+        <translation>Tiempo del Nivel:</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="123"/>
+        <source>Recurso Visual</source>
+        <translation>Recurso Visual</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="150"/>
+        <source>Selecione um recurso visual para visualizar</source>
+        <translation>Seleccione un recurso visual para visualizar</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="212"/>
+        <source>Imagem do Veículo:</source>
+        <translation>Imagen del Vehículo:</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="226"/>
+        <source>Imagem do Ambiente:</source>
+        <translation>Imagen del Entorno:</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="240"/>
+        <source>Imagem do Alvo:</source>
+        <translation>Imagen del Blanco:</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="254"/>
+        <source>Imagem do Obstáculo:</source>
+        <translation>Imagen del Obstáculo:</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="287"/>
+        <source>Feedback Visual</source>
+        <translation>Retroalimentación Visual</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="299"/>
+        <source>Selecione uma imagem de feedback para visualizar</source>
+        <translation>Seleccione una imagen de retroalimentación para visualizar</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="361"/>
+        <source>Imagem de Feedback Positivo:</source>
+        <translation>Imagen de Retroalimentación Positiva:</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="375"/>
+        <source>Imagem de Feedback Neutro:</source>
+        <translation>Imagen de Retroalimentación Neutra:</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="389"/>
+        <source>Imagem de Feedback Negativo:</source>
+        <translation>Imagen de Retroalimentación Negativa:</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="419"/>
+        <source>Feedback Sonoro</source>
+        <translation>Retroalimentación Sonora</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="427"/>
+        <source>Som de Feedback Positivo:</source>
+        <translation>Sonido del Retroalimentación Positiva:</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="443"/>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="472"/>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="501"/>
+        <source>Play</source>
+        <translation>Reproducir</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="456"/>
+        <source>Som de Feedback Neutro:</source>
+        <translation>Sonido de Retroalimentación Neutra:</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="485"/>
+        <source>Som de Feedback Negativo:</source>
+        <translation>Sonido de Retroalimentación Negativa:</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="530"/>
+        <source>Configuração de Interface</source>
+        <translation>Configuración de Interfaz</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="538"/>
+        <source>Paleta:</source>
+        <translation>Paleta:</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="555"/>
+        <source>HUD:</source>
+        <translation>HUD:</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="565"/>
+        <source>Som:</source>
+        <translation>Sonido:</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="609"/>
+        <source>Gravar operação corrente</source>
+        <translation>Guardar operación actual</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="612"/>
+        <source>OK</source>
+        <translation>Aceptar</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="623"/>
+        <source>Cancelar operação corrente</source>
+        <translation>Cancelar operación actual</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="626"/>
+        <source>Cancelar</source>
+        <translation>Cancelar</translation>
+    </message>
+</context>
+<context>
+    <name>PlayerKarteaConfigListController</name>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfiglistcontroller.py" line="130"/>
+        <source>Configuração cadastrada com sucesso!</source>
+        <translation>¡Configuración registrada con éxito!</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfiglistcontroller.py" line="132"/>
+        <source>Erro ao salvar configuração.</source>
+        <translation>Error al guardar la configuración.</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfiglistcontroller.py" line="140"/>
+        <source>Selecione uma configuração para editar.</source>
+        <translation>Seleccione una configuración para editar.</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfiglistcontroller.py" line="146"/>
+        <source>Configuração não encontrada.</source>
+        <translation>Configuración no encontrada.</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfiglistcontroller.py" line="157"/>
+        <source>Configuração atualizada com sucesso.</source>
+        <translation>Configuración actualizada con éxito.</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfiglistcontroller.py" line="159"/>
+        <source>Erro ao atualizar configuração.</source>
+        <translation>Error al actualizar la configuración.</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfiglistcontroller.py" line="166"/>
+        <source>Selecione uma configuração para excluir.</source>
+        <translation>Seleccione una configuración para eliminar.</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfiglistcontroller.py" line="176"/>
+        <source>Tem certeza que seja excluir a configuração do jogador?
+{0}</source>
+        <translation>¿Está seguro de que desea eliminar la configuración del jugador?
+{0}</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfiglistcontroller.py" line="182"/>
+        <source>Configuração excluída com sucesso.</source>
+        <translation>Configuración eliminada con éxito.</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfiglistcontroller.py" line="184"/>
+        <source>Erro ao excluir configuração.</source>
+        <translation>Error al eliminar la configuración.</translation>
+    </message>
+</context>
+<context>
+    <name>PlayerKarteaConfigListView</name>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/view/playerkarteaconfiglistview.py" line="193"/>
+        <source>Deseja sair do cadastro?</source>
+        <translation>¿Desea salir del registro?</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="14"/>
+        <source>Plataforma T-TEA - Configurações Kartea</source>
+        <translation>Plataforma T-TEA - Configuración de Kartea</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="31"/>
+        <source>Pesquisar:</source>
+        <translation>Buscar:</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="38"/>
+        <source>Digite o nome ou ID do jogador</source>
+        <translation>Escribe el nombre o la ID del jugador</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="69"/>
+        <source>ID</source>
+        <translation>ID</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="74"/>
+        <source>Nome</source>
+        <translation>Nombre</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="90"/>
+        <source>Detalhes</source>
+        <translation>Detalles</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="98"/>
+        <source>ID:</source>
+        <translation>ID:</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="105"/>
+        <source>ID: </source>
+        <translation>ID: </translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="112"/>
+        <source>Nome:</source>
+        <translation>Nombre:</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="119"/>
+        <source>Nome: </source>
+        <translation>Nombre: </translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="126"/>
+        <source>Fase Atual:</source>
+        <translation>Fase actual:</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="133"/>
+        <source>Fase Atual: </source>
+        <translation>Fase actual: </translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="140"/>
+        <source>Nível Atual:</source>
+        <translation>Nivel actual:</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="147"/>
+        <source>Nível Atual: </source>
+        <translation>Nivel actual: </translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="154"/>
+        <source>Tempo do Nível:</source>
+        <translation>Tiempo del nivel:</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="161"/>
+        <source>Tempo do Nível: </source>
+        <translation>Tiempo del nivel: </translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="189"/>
+        <source>Criar um novo registro</source>
+        <translation>Crear un nuevo registro</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="192"/>
+        <source>Novo</source>
+        <translation>Nuevo</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="203"/>
+        <source>Editar o registro selecionado</source>
+        <translation>Editar el registro seleccionado</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="206"/>
+        <source>Editar</source>
+        <translation>Editar</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="217"/>
+        <source>Excluir o registro selecionado</source>
+        <translation>Eliminar el registro seleccionado</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="220"/>
+        <source>Excluir</source>
+        <translation>Eliminar</translation>
+    </message>
+</context>
+<context>
     <name>PlayerListController</name>
     <message>
         <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="127"/>
@@ -483,8 +859,18 @@ Detalles del error: {0}</translation>
     </message>
     <message>
         <location filename="../ui/playerlistview.ui" line="199"/>
-        <source>Crie um novo jogador</source>
-        <translation>Crear un nuevo jugador</translation>
+        <source>Criar um novo registro</source>
+        <translation>Crear un nuevo registro</translation>
+    </message>
+    <message>
+        <location filename="../ui/playerlistview.ui" line="213"/>
+        <source>Editar o registro selecionado</source>
+        <translation>Editar el registro seleccionado</translation>
+    </message>
+    <message>
+        <location filename="../ui/playerlistview.ui" line="227"/>
+        <source>Excluir o registro selecionado</source>
+        <translation>Eliminar el registro seleccionado</translation>
     </message>
     <message>
         <location filename="../ui/playerlistview.ui" line="202"/>
@@ -492,19 +878,9 @@ Detalles del error: {0}</translation>
         <translation>Nuevo</translation>
     </message>
     <message>
-        <location filename="../ui/playerlistview.ui" line="213"/>
-        <source>Edite o jogador selecionado</source>
-        <translation>Editar el jugador seleccionado</translation>
-    </message>
-    <message>
         <location filename="../ui/playerlistview.ui" line="216"/>
         <source>Editar</source>
         <translation>Editar</translation>
-    </message>
-    <message>
-        <location filename="../ui/playerlistview.ui" line="227"/>
-        <source>Exclua o jogador selecionado</source>
-        <translation>Eliminar el jugador seleccionado</translation>
     </message>
     <message>
         <location filename="../ui/playerlistview.ui" line="230"/>
@@ -512,7 +888,7 @@ Detalles del error: {0}</translation>
         <translation>Eliminar</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/playerlistview.py" line="227"/>
+        <location filename="../../udescjoinvilletteaview/playerlistview.py" line="187"/>
         <source>Deseja sair do cadastro?</source>
         <translation>¿Desea salir del registro?</translation>
     </message>
@@ -520,28 +896,28 @@ Detalles del error: {0}</translation>
 <context>
     <name>SplashScreen</name>
     <message>
-        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="26"/>
-        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="73"/>
+        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="25"/>
+        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="72"/>
         <source>Iniciando aplicação...</source>
         <translation>Iniciando aplicación...</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="74"/>
+        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="73"/>
         <source>Carregando módulos...</source>
         <translation>Cargando módulos...</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="75"/>
+        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="74"/>
         <source>Inicializando interface...</source>
         <translation>Inicializando interfaz...</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="76"/>
+        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="75"/>
         <source>Verificando configurações...</source>
         <translation>Comprobando configuraciones...</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="77"/>
+        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="76"/>
         <source>Quase lá...</source>
         <translation>Casi listo...</translation>
     </message>
