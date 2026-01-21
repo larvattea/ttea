@@ -154,9 +154,22 @@ class PlayerListController(QObject):
 
     def delete_player(self) -> None:
         """Delete the selected player after user confirmation."""
+        from udescjoinvilletteagames.kartea.service import \
+            PlayerKarteaConfigService
+
         player_id = self.view.get_selected_player_id()
         if not player_id:
             self.msg.warning(self.tr("Selecione um jogador para excluir."))
+            return
+
+        # Add validation with config of games don't delete player
+        karteaconfig = PlayerKarteaConfigService()
+        if karteaconfig.find_by_player_id(player_id):
+            self.msg.warning(
+                self.tr(
+                    "A exclusão do jogador não é permitida enquanto a configuração do KarTEA existir."
+                )
+            )
             return
 
         player = self.service.find_by_id(player_id)

@@ -145,6 +145,7 @@ class PlayerKarteaConfig:
 
     player: "Player"
     session: "PlayerKarteaSession"
+    update_session_id: bool
     phase: "KarteaPhase"
     level: "KarteaPhaseLevel"
     level_time: int
@@ -163,6 +164,8 @@ class PlayerKarteaConfig:
     sound: bool
     PROPERTIES: ClassVar[list[str]] = []
     DATA_PROPERTIES: ClassVar[list] = []
+    UPDATE_SESSION_ID_NO = False
+    UPDATE_SESSION_ID_YES = True
 
     def is_valid(self) -> bool:
         """Checks if the configs's data is valid.

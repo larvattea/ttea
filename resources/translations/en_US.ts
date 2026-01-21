@@ -120,17 +120,17 @@ Error details: {0}</translation>
 <context>
     <name>MainController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="94"/>
+        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="93"/>
         <source>Funcionalidade de calibração em desenvolvimento...</source>
         <translation>Calibration functionality under development...</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="99"/>
+        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="98"/>
         <source>Funcionalidade do help em desenvolvimento...</source>
         <translation>Help functionality under development...</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="115"/>
+        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="114"/>
         <source>Funcionalidade de jogos em desenvolvimento...</source>
         <translation>Game functionality under development...</translation>
     </message>
@@ -343,42 +343,42 @@ Error details: {0}</translation>
 <context>
     <name>PlayerKarteaConfigEditController</name>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfigeditcontroller.py" line="264"/>
+        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfigeditcontroller.py" line="262"/>
         <source>Jogador é obrigatório!
 </source>
         <translation>Player is required!
 </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfigeditcontroller.py" line="266"/>
+        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfigeditcontroller.py" line="264"/>
         <source>Imagem do veículo é obrigatória!
 </source>
         <translation>A photo of the vehicle is required!
 </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfigeditcontroller.py" line="268"/>
+        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfigeditcontroller.py" line="266"/>
         <source>Imagem do ambiente é obrigatória!
 </source>
         <translation>A picture of the environment is a required!
 </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfigeditcontroller.py" line="270"/>
+        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfigeditcontroller.py" line="268"/>
         <source>Imagem do alvo é obrigatória!
 </source>
         <translation>A picture of the target is required!
 </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfigeditcontroller.py" line="272"/>
+        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfigeditcontroller.py" line="270"/>
         <source>Imagem do obstáculo é obrigatória!
 </source>
         <translation>A picture of the obstacle is required!
 </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfigeditcontroller.py" line="276"/>
+        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfigeditcontroller.py" line="274"/>
         <source>Por favor, corrija os dados inválidos:
 </source>
         <translation>Please correct the invalid data:
@@ -388,12 +388,12 @@ Error details: {0}</translation>
 <context>
     <name>PlayerKarteaConfigEditView</name>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/view/playerkarteaconfigeditview.py" line="56"/>
+        <location filename="../../udescjoinvilletteagames/kartea/view/playerkarteaconfigeditview.py" line="58"/>
         <source>Novo</source>
         <translation>New</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/view/playerkarteaconfigeditview.py" line="59"/>
+        <location filename="../../udescjoinvilletteagames/kartea/view/playerkarteaconfigeditview.py" line="61"/>
         <source>Editar</source>
         <translation>Edit</translation>
     </message>
@@ -761,24 +761,29 @@ Error details: {0}</translation>
         <translation>Error updating player.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="159"/>
+        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="163"/>
         <source>Selecione um jogador para excluir.</source>
         <translation>Select a player to delete.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="167"/>
+        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="171"/>
+        <source>A exclusão do jogador não é permitida enquanto a configuração do KarTEA existir.</source>
+        <translation>Player deletion is not allowed while the KarTEA configuration exists.</translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="181"/>
         <source>Tem certeza que deseja excluir?
 {0}</source>
         <translation>Are you sure you want to delete this?
 {0}</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="172"/>
+        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="186"/>
         <source>Jogador excluído com sucesso.</source>
         <translation>Player successfully removed.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="174"/>
+        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="188"/>
         <source>Erro ao excluir jogador.</source>
         <translation>Error deleting player.</translation>
     </message>

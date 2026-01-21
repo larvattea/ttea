@@ -7,12 +7,10 @@ from PySide6.QtMultimedia import QSoundEffect
 from PySide6.QtWidgets import QComboBox, QDialog
 
 # Local module imports
-from udescjoinvilletteagames.kartea.controller import (
-    PlayerKarteaConfigEditController,
-)
-from udescjoinvilletteagames.kartea.ui import (
-    Ui_PlayerKarteaConfigEditView,
-)  # Assuming the UI is in this module or adjust import
+from udescjoinvilletteagames.kartea.controller import \
+    PlayerKarteaConfigEditController
+from udescjoinvilletteagames.kartea.ui import \
+    Ui_PlayerKarteaConfigEditView  # Assuming the UI is in this module or adjust import
 from udescjoinvilletteagames.kartea.util import KarteaPathConfig
 from udescjoinvilletteawindow import WindowConfig
 

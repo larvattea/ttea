@@ -89,6 +89,9 @@ class PlayerKarteaConfigService:
         config = PlayerKarteaConfig(
             player=player,
             session=session,
+            update_session_id=data.get(
+                "update_session_id", PlayerKarteaConfig.UPDATE_SESSION_ID_YES
+            ),
             phase=phase,
             level=level,
             level_time=data.get("level_time", 0),
@@ -138,6 +141,11 @@ class PlayerKarteaConfigService:
 
         config.player = player
         config.session = session
+        config.update_session_id = (
+            data.get(
+                "update_session_id", PlayerKarteaConfig.UPDATE_SESSION_ID_YES
+            ),
+        )
         config.phase = phase
         config.level = level
 
