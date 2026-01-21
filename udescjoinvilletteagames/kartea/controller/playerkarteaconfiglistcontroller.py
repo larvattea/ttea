@@ -97,7 +97,7 @@ class PlayerKarteaConfigListController(QObject):
         """Update details pane when a player config is selected in the table."""
         player_id = self.view.get_selected_player_id()
         if player_id is not None:
-            config = self.service.find_by_player_id(player_id)
+            config = self.service.find_config_by_player_id(player_id)
             self.view.display_config_details(config)
         else:
             self.view.clear_details()
@@ -111,7 +111,7 @@ class PlayerKarteaConfigListController(QObject):
         player_id : int
             The ID of the player config to select and show.
         """
-        config = self.service.find_by_player_id(player_id)
+        config = self.service.find_config_by_player_id(player_id)
         if config:
             self.view.display_config_details(config)
             self.view.select_row_by_id(player_id)
@@ -141,7 +141,7 @@ class PlayerKarteaConfigListController(QObject):
             )
             return
 
-        config = self.service.find_by_player_id(player_id)
+        config = self.service.find_config_by_player_id(player_id)
         if not config:
             self.msg.critical(self.tr("Configuração não encontrada."))
             return
@@ -167,7 +167,7 @@ class PlayerKarteaConfigListController(QObject):
             )
             return
 
-        config = self.service.find_by_player_id(player_id)
+        config = self.service.find_config_by_player_id(player_id)
         if not config:
             return
 

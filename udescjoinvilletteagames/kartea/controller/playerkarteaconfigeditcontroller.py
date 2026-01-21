@@ -13,7 +13,6 @@ from udescjoinvilletteagames.kartea.util import KarteaPathConfig
 from udescjoinvilletteautil import MessageService
 
 if TYPE_CHECKING:
-    from udescjoinvilletteacontroller import PlayerListController
     from udescjoinvilletteagames.kartea.model import PlayerKarteaSession
     from udescjoinvilletteagames.kartea.view import PlayerKarteaConfigEditView
     from udescjoinvilletteamodel import Player
@@ -35,10 +34,6 @@ class PlayerKarteaConfigEditController(QObject):
         True if the dialog was accepted with valid data.
     msg : MessageService
         Service used to display validation/error messages.
-    player_list_controller : PlayerListController
-        Controller for managing player list data.
-    dao : PlayerKarteaConfigCsvDAO
-        DAO for accessing configuration data.
 
     Methods
     -------
@@ -58,7 +53,7 @@ class PlayerKarteaConfigEditController(QObject):
         self,
         view: "PlayerKarteaConfigEditView",
         config: Optional["PlayerKarteaConfig"] = None,
-        player_list_controller: Optional["PlayerListController"] = None,
+        service: Optional[PlayerKarteaConfigService] = None,
         message_service: Optional[MessageService] = None,
     ) -> None:
         """Initialize the controller and prepare the dialog.
@@ -72,28 +67,22 @@ class PlayerKarteaConfigEditController(QObject):
             The associated dialog view.
         config : Optional[PlayerKarteaConfig], optional
             Config object to edit; None creates a new config.
-        player_list_controller : Optional[PlayerListController], optional
-            Controller for player data; defaults to new instance.
         message_service : Optional[MessageService], optional
             Custom message service; defaults to MessageService(view).
         """
         super().__init__()
-        from udescjoinvilletteacontroller import PlayerListController
 
         self.view = view
         self.config = config
         self.ok_clicked = False
+        self.service = service or PlayerKarteaConfigService()
         self.msg = message_service or MessageService(view)
-        self.player_list_controller = (
-            player_list_controller or PlayerListController(view, None)
-        )
-        self.service = PlayerKarteaConfigService()
 
         # Populate resources
         self.view.populate_comboboxes()
 
         # Populate phase combo box with phase IDs
-        phases = self.get_all_phases()
+        phases = self.service.get_all_phases()
         self.view.cbx_current_phase.clear()
         self.view.cbx_current_phase.addItems([str(p.id) for p in phases])
 
@@ -108,7 +97,7 @@ class PlayerKarteaConfigEditController(QObject):
             self.view.cbx_current_phase.setCurrentText(
                 str(self.config.phase.id) if self.config.phase else ""
             )
-            self.update_levels()
+            self.view.update_levels()
             self.view.cbx_current_level.setCurrentText(
                 str(self.config.level.id) if self.config.level else ""
             )
@@ -154,11 +143,11 @@ class PlayerKarteaConfigEditController(QObject):
             self.view.cbx_current_phase.setCurrentText(
                 str(default_phase.id) if default_phase else ""
             )
-            self.update_levels()
+            self.view.update_levels()
             default_level_id = int(
                 default_config["game_settings"]["level_default"]
             )
-            levels = self.get_levels_for_phase(default_phase)
+            levels = self.service.get_levels_for_phase(default_phase)
             default_level = next(
                 (level for level in levels if level.id == default_level_id),
                 None,
@@ -222,11 +211,6 @@ class PlayerKarteaConfigEditController(QObject):
                 default_config["interface_settings"]["sound_default"].lower()
                 == "true"
             )
-
-        # Populate phase combo box with phase IDs
-        # phases = self.get_all_phases()
-        # self.view.cbx_current_phase.clear()
-        # self.view.cbx_current_phase.addItems([str(p.id) for p in phases])
 
     def handle_ok(self) -> None:
         """Validate input and close dialog with acceptance.
@@ -300,33 +284,38 @@ class PlayerKarteaConfigEditController(QObject):
         """
         player_name = self.view.cbx_player.currentText()
         player = next(
-            (p for p in self.get_all_players() if p.name == player_name), None
+            (
+                p
+                for p in self.service.get_all_players()
+                if p.name == player_name
+            ),
+            None,
         )
 
         session_text = self.view.lbl_session_value.text()
         session = (
-            self.service.dao.session_dao.select(int(session_text))
+            self.service.get_session(int(session_text))
             if session_text and session_text.isdigit()
             else None
         )
 
         phase_text = self.view.cbx_current_phase.currentText()
         phase = (
-            self.service.dao.phase_dao.select(int(phase_text))
+            self.service.get_phase(int(phase_text))
             if phase_text and phase_text.isdigit()
             else None
         )
 
         level_text = self.view.cbx_current_level.currentText()
         level = (
-            self.service.dao.level_dao.select(int(phase_text), int(level_text))
+            self.service.get_level_by_ids(int(phase_text), int(level_text))
             if level_text and level_text.isdigit()
             else None
         )
 
         return {
             "player_id": player.id,
-            "session_id": session,
+            "session_id": session.id if session else None,
             "phase_id": phase.id,
             "level_id": level.id,
             "level_time": self.view.spn_level_time.value(),
@@ -345,39 +334,5 @@ class PlayerKarteaConfigEditController(QObject):
             "sound": self.view.chk_sound.isChecked(),
         }
 
-    def get_all_players(self) -> List["Player"]:
-        """Retrieve all players sorted alphabetically by name."""
-        return sorted(
-            self.player_list_controller.service.dao.list(),
-            key=lambda p: p.name,
-        )
-
-    def get_phase(self, phase_id: int) -> Optional[KarteaPhase]:
-        """Retrieve one available phase from DAO."""
-        return self.service.get_phase(phase_id)
-
-    def get_all_phases(self) -> List["KarteaPhase"]:
-        """Retrieve all available phases from DAO."""
-        return self.service.get_all_phases()
-
-    def get_levels_for_phase(
-        self, phase: "KarteaPhase"
-    ) -> List["KarteaPhaseLevel"]:
-        """Retrieve levels for a specific phase from DAO."""
-        return self.service.get_levels_for_phase(phase)
-
     def get_kartea_ini_config(self) -> Dict[str, str]:
         return KarteaPathConfig.read_config()
-
-    def update_levels(self):
-        """Update the cbx_current_level based on the selected phase."""
-        phase_str = self.view.cbx_current_phase.currentText()
-        self.view.cbx_current_level.clear()
-        if phase_str:
-            phase_id = int(phase_str)
-            phase = self.service.get_phase(phase_id)
-            if phase:
-                levels = self.service.get_levels_for_phase(phase)
-                self.view.cbx_current_level.addItems(
-                    [str(level.id) for level in levels]
-                )

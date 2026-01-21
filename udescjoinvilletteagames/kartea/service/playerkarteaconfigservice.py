@@ -3,7 +3,10 @@ from typing import Any, Dict, List, Optional, Union
 from udescjoinvilletteagames.kartea.dao import PlayerKarteaConfigCsvDAO
 from udescjoinvilletteagames.kartea.model import (KarteaPhase,
                                                   KarteaPhaseLevel,
-                                                  PlayerKarteaConfig)
+                                                  PlayerKarteaConfig,
+                                                  PlayerKarteaSession)
+from udescjoinvilletteamodel import Player
+from udescjoinvilletteaservice import PlayerService
 
 
 class PlayerKarteaConfigService:
@@ -35,11 +38,13 @@ class PlayerKarteaConfigService:
         Searches configs by name or ID (case-insensitive).
     def get_phase(self, phase_id: int) -> Optional[KarteaPhase]
         Searches phase with phase id
-    def get_phase(self, phase_id: int) -> Optional[KarteaPhase]
-        Searches phase with phase id
     """
 
-    def __init__(self, dao: Optional[PlayerKarteaConfigCsvDAO] = None):
+    def __init__(
+        self,
+        dao: Optional[PlayerKarteaConfigCsvDAO] = None,
+        player_service: Optional[PlayerService] = None,
+    ):
         """
         Initialize the service with a data access object.
 
@@ -50,6 +55,7 @@ class PlayerKarteaConfigService:
             ``PlayerKarteaConfigCsvDAO`` is created.
         """
         self.dao = dao or PlayerKarteaConfigCsvDAO()
+        self.player_service = player_service or PlayerService()
 
     def get_all_configs(self) -> List[PlayerKarteaConfig]:
         """Return a list of all registered configs.
@@ -189,7 +195,7 @@ class PlayerKarteaConfigService:
         """Delete a config by player ID."""
         return self.dao.delete(player_id)
 
-    def find_by_player_id(
+    def find_config_by_player_id(
         self, player_id: int
     ) -> Optional[PlayerKarteaConfig]:
         """Find config by player ID."""
@@ -211,11 +217,25 @@ class PlayerKarteaConfigService:
             or (c.player and q in c.player.name.lower())
         ]
 
+    def get_all_players(self) -> List[Player]:
+        return sorted(
+            self.player_service.get_all_players(),
+            key=lambda p: p.name,
+        )
+
+    def get_session(self, session_id: int) -> Optional[PlayerKarteaSession]:
+        return self.dao.session_dao.select(session_id)
+
     def get_phase(self, phase_id: int) -> Optional[KarteaPhase]:
         return self.dao.get_phase(phase_id)
 
     def get_all_phases(self) -> List[KarteaPhase]:
         return self.dao.get_all_phases()
+
+    def get_level_by_ids(
+        self, phase_id: int, level_id: int
+    ) -> Optional[KarteaPhaseLevel]:
+        return self.dao.level_dao.select(phase_id, level_id)
 
     def get_levels_for_phase(
         self, phase: Union[int, KarteaPhase]

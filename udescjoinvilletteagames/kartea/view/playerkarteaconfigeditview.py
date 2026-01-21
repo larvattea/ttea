@@ -9,6 +9,7 @@ from PySide6.QtWidgets import QComboBox, QDialog
 # Local module imports
 from udescjoinvilletteagames.kartea.controller import \
     PlayerKarteaConfigEditController
+from udescjoinvilletteagames.kartea.service import PlayerKarteaConfigService
 from udescjoinvilletteagames.kartea.ui import \
     Ui_PlayerKarteaConfigEditView  # Assuming the UI is in this module or adjust import
 from udescjoinvilletteagames.kartea.util import KarteaPathConfig
@@ -47,7 +48,10 @@ class PlayerKarteaConfigEditView(
     """
 
     def __init__(
-        self, parent=None, config: Optional["PlayerKarteaConfig"] = None
+        self,
+        parent=None,
+        config: Optional["PlayerKarteaConfig"] = None,
+        service: Optional[PlayerKarteaConfigService] = None,
     ):
         super().__init__(parent)
         self.setupUi(self)
@@ -66,9 +70,7 @@ class PlayerKarteaConfigEditView(
             55,
             parent,
         )
-
-        # Preenchendo os comboboxes de recursos
-        # self.populate_comboboxes()
+        self.service = service or PlayerKarteaConfigService()
 
         # Controller
         self.controller = PlayerKarteaConfigEditController(self, config)
@@ -76,9 +78,7 @@ class PlayerKarteaConfigEditView(
         self.pb_ok.clicked.connect(self.controller.handle_ok)
         self.pb_cancel.clicked.connect(self.controller.handle_cancel)
 
-        self.cbx_current_phase.currentIndexChanged.connect(
-            self.controller.update_levels
-        )
+        self.cbx_current_phase.currentIndexChanged.connect(self.update_levels)
 
         self.combo_types = {
             self.cbx_vehicle_image: "Veículo",
@@ -154,7 +154,7 @@ class PlayerKarteaConfigEditView(
         self.pb_negative_sound.clicked.connect(self.sound_negative.play)
 
         # Players
-        players = self.controller.get_all_players()
+        players = self.service.get_all_players()
         self.cbx_player.addItems([p.name for p in players])
 
         # Opcional: estado inicial do preview de recursos
@@ -296,3 +296,16 @@ class PlayerKarteaConfigEditView(
                     self.combo_types.get(watched, "Desconhecido"),
                 )
         return super().eventFilter(watched, event)
+
+    def update_levels(self):
+        """Update the cbx_current_level based on the selected phase."""
+        phase_str = self.cbx_current_phase.currentText()
+        self.cbx_current_level.clear()
+        if phase_str:
+            phase_id = int(phase_str)
+            phase = self.service.get_phase(phase_id)
+            if phase:
+                levels = self.service.get_levels_for_phase(phase)
+                self.cbx_current_level.addItems(
+                    [str(level.id) for level in levels]
+                )

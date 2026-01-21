@@ -164,7 +164,7 @@ class PlayerListController(QObject):
 
         # Add validation with config of games don't delete player
         karteaconfig = PlayerKarteaConfigService()
-        if karteaconfig.find_by_player_id(player_id):
+        if karteaconfig.find_config_by_player_id(player_id):
             self.msg.warning(
                 self.tr(
                     "A exclusão do jogador não é permitida enquanto a configuração do KarTEA existir."
