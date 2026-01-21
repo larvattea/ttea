@@ -1,5 +1,6 @@
 # udescjoinvilletteautil/cvshandler.py
 import csv
+import io
 import os
 from pathlib import Path
 from typing import Dict, List, Optional, TextIO, Union
@@ -171,8 +172,9 @@ class CSVHandler:
 
     def read_csv(
         self,
-        filename: Union[str, os.PathLike],
+        filename: Optional[Union[str, os.PathLike]] = None,
         as_dict: bool = False,
+        content: Optional[str] = None,  # Novo parâmetro para conteúdo direto
     ) -> List[Union[Dict, List]]:
         """
         Read a CSV file with comprehensive error handling.
@@ -194,6 +196,18 @@ class CSVHandler:
             List of rows (dicts if ``as_dict=True``, otherwise lists).
             Empty list on any read error.
         """
+        if content is not None:
+            try:
+                f = io.StringIO(content)
+                if as_dict:
+                    reader = csv.DictReader(f, dialect=self.dialect)
+                else:
+                    reader = csv.reader(f, dialect=self.dialect)
+                return list(reader)
+            except Exception as e:
+                self.log.log_error(f"Error reading CSV content: {e}")
+                return []
+
         path = Path(filename)
 
         if not path.exists():

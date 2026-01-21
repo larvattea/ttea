@@ -129,7 +129,9 @@ class PlayerKarteaConfigService:
             data.get("player_id", config.player.id)
         )
         session = self.dao.session_dao.select(
-            data.get("session_id", config.session.id)
+            data.get(
+                "session_id", config.session.id if config.session else None
+            )
         )
         phase = self.dao.phase_dao.select(
             data.get("phase_id", config.phase.id)
@@ -141,10 +143,8 @@ class PlayerKarteaConfigService:
 
         config.player = player
         config.session = session
-        config.update_session_id = (
-            data.get(
-                "update_session_id", PlayerKarteaConfig.UPDATE_SESSION_ID_YES
-            ),
+        config.update_session_id = data.get(
+            "update_session_id", PlayerKarteaConfig.UPDATE_SESSION_ID_YES
         )
         config.phase = phase
         config.level = level

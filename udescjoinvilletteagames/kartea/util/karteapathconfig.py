@@ -1,8 +1,9 @@
 # karteapathconfig.py
 import configparser
 from pathlib import Path
+from typing import Optional
 
-from PySide6.QtCore import QDir, QDirIterator
+from PySide6.QtCore import QDir, QDirIterator, QFile, QIODevice
 
 from udescjoinvilletteagames.kartea.resources import resourceskartea_rc
 from udescjoinvilletteautil import PathConfig
@@ -90,21 +91,44 @@ class KarteaPathConfig(PathConfig):
         else:
             return ""
 
-    @staticmethod
-    def kartea_phases(name: str) -> str:
-        """Recurso embutido (padrão do jogo)"""
-        it = QDirIterator(
-            ":/phases",
-            [name],  # Filtra pelo nome exato do arquivo
-            QDir.Files,  # Apenas arquivos
-            QDirIterator.Subdirectories,  # Busca recursiva em subpastas
-        )
+    @classmethod
+    def get_phase_source(cls, phase_id: int) -> dict:
+        """
+        Determina a origem de uma fase (Disco vs Recurso).
+        Retorna um dicionário com o tipo de origem e o identificador.
+        """
+        # 1. Tenta encontrar no disco (AppData/UserDir)
+        # Assume-se que o arquivo no disco teria a extensão .csv
+        user_file = cls.KARTEA_PHASES_DIR / f"{phase_id}.csv"
 
-        if it.hasNext():
-            path = it.next()
-            return path
+        if user_file.exists():
+            return {"type": "file", "path": str(user_file)}
+
+        # 2. Fallback: Recurso embutido no Qt
+        return {"type": "resource", "path": f":/phases/{phase_id}"}
+
+    @classmethod
+    def read_phase_data(cls, phase_id: int) -> Optional[str]:
+        """
+        Lê os dados da fase independentemente de onde ela esteja.
+        Retorna a string do CSV ou None se não encontrar.
+        """
+        source = cls.get_phase_source(phase_id)
+
+        if source["type"] == "file":
+            try:
+                with open(source["path"], "r", encoding="utf-8-sig") as f:
+                    return f.read()
+            except Exception:
+                return None
         else:
-            return ""
+            # Leitura do recurso Qt
+            qfile = QFile(source["path"])
+            if qfile.open(QIODevice.ReadOnly | QIODevice.Text):
+                content = bytes(qfile.readAll()).decode("utf-8")
+                qfile.close()
+                return content
+        return None
 
     # ===================================================================
     # 4. DADOS DO USUÁRIO

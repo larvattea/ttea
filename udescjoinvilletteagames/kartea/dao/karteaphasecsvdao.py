@@ -1,6 +1,7 @@
-import os
 from dataclasses import fields
-from typing import Any, List, Optional
+from typing import Any, List, Optional, Set
+
+from PySide6.QtCore import QDir, QDirIterator
 
 from udescjoinvilletteadao import DAO
 from udescjoinvilletteagames.kartea.model.karteaphase import KarteaPhase
@@ -55,49 +56,23 @@ class KarteaPhaseCsvDAO(DAO):
     def load_phase_from_csv(
         self, kartea_phase_id: int
     ) -> Optional[KarteaPhase]:
-        """Load a KarteaPhase and its levels from a CSV file using PROPERTIES.
-
-        Parameters
-        ----------
-        kartea_phase_id : int
-            The ID of the phase to load.
-
-        Returns
-        -------
-        Optional[KarteaPhase]
-            The KarteaPhase object with its levels, or None if not found.
-
-        Notes
-        -----
-        Reads the CSV file named '{kartea_phase_id}.csv'
-        from kartea_phases_dir.
-        Uses KarteaPhaseLevel.PROPERTIES to map CSV columns to fields.
-        Validates that the 'phase' column matches kartea_phase_id.
-        Parses 'obj_type' as a list of integers from a space-separated string.
-        Sets the phase reference for each level after creation.
-        """
-        file_path = (
-            KarteaPathConfig.KARTEA_PHASES_DIR / f"{kartea_phase_id}.csv"
-        )
-        if not os.path.exists(file_path):
+        # PathConfig resolve a prioridade: Disco > Recurso
+        content = KarteaPathConfig.read_phase_data(kartea_phase_id)
+        if not content:
             return None
 
-        phase_data = self.csv_handler.read_csv(str(file_path), as_dict=True)
+        phase_data = self.csv_handler.read_csv(content=content, as_dict=True)
         if not phase_data:
             return None
 
         levels = []
         temp_phase = KarteaPhase(id=kartea_phase_id, level_list=[])
-
-        # Infer field types for conversion
         level_fields = {f.name: f.type for f in fields(KarteaPhaseLevel)}
 
         for row in phase_data:
-            # Validate phase ID in CSV matches file name
             if "phase" in row and int(row["phase"]) != kartea_phase_id:
-                continue  # Skip rows with mismatched phase ID
+                continue
 
-            # Build kwargs dynamically from PROPERTIES
             level_kwargs = {}
             for prop in KarteaPhaseLevel.PROPERTIES:
                 if prop == "phase":
@@ -109,15 +84,11 @@ class KarteaPhaseCsvDAO(DAO):
                         if x.strip().isdigit()
                     ]
                 elif prop in row:
-                    # Convert based on field type
-                    if level_fields[prop] == int:
-                        level_kwargs[prop] = int(row[prop])
-                    elif level_fields[prop] == float:
-                        level_kwargs[prop] = float(row[prop])
-                    else:
-                        level_kwargs[prop] = row[prop]
+                    t = level_fields.get(prop)
+                    level_kwargs[prop] = (
+                        t(row[prop]) if t in (int, float) else row[prop]
+                    )
 
-            # Only create level if required fields are present
             if "id" in level_kwargs:
                 level = KarteaPhaseLevel(**level_kwargs)
                 levels.append(level)
@@ -125,11 +96,9 @@ class KarteaPhaseCsvDAO(DAO):
         if not levels:
             return None
 
-        # Create final phase and set level references
         phase = KarteaPhase(id=kartea_phase_id, level_list=levels)
         for level in levels:
             level.phase = phase
-
         return phase
 
     def select(self, obj_id: int) -> Optional[KarteaPhase]:
@@ -152,27 +121,24 @@ class KarteaPhaseCsvDAO(DAO):
         return self.load_phase_from_csv(obj_id)
 
     def list(self) -> List[KarteaPhase]:
-        """Retrieve a list of all KarteaPhases, each including its levels.
+        phase_ids: Set[int] = set()
 
-        Returns
-        -------
-        List[KarteaPhase]
-            A list of all KarteaPhase objects found in CSV files.
+        # 1. Busca IDs no Disco (AppData)
+        for file in KarteaPathConfig.KARTEA_PHASES_DIR.glob("*.csv"):
+            if file.stem.isdigit():
+                phase_ids.add(int(file.stem))
 
-        Notes
-        -----
-        Iterates through all '*.csv' files in kartea_phases_dir, sorted by
-        phase ID. Calls _load_phase_from_csv for each file.
-        """
-        KarteaPathConfig.ensure_kartea_dirs()
+        # 2. Busca IDs nos Recursos (:/phases) [cite: 1, 9]
+        it = QDirIterator(":/phases", QDir.Files)
+        while it.hasNext():
+            it.next()
+            name = it.fileName().replace(".csv", "")
+            if name.isdigit():
+                phase_ids.add(int(name))
+
         phases = []
-        phase_files = sorted(
-            KarteaPathConfig.KARTEA_PHASES_DIR.glob("*.csv"),
-            key=lambda x: int(x.stem),
-        )
-        for file_path in phase_files:
-            phase_number = int(file_path.stem)
-            phase = self.load_phase_from_csv(phase_number)
+        for p_id in sorted(list(phase_ids)):
+            phase = self.load_phase_from_csv(p_id)
             if phase:
                 phases.append(phase)
         return phases
