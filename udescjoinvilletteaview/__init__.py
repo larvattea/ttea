@@ -42,6 +42,7 @@ https://github.com/larva-udesc/udesc_ttea_view
 # Define the __all__ variable
 __all__ = [
     "AboutView",
+    "CalibrationView",
     "LanguageView",
     "MainView",
     "PlayerEditView",
@@ -56,6 +57,7 @@ __license__ = "MIT License"
 
 # Import the submodules
 from .aboutview import AboutView
+from .calibrationview import CalibrationView
 from .languageview import LanguageView
 from .mainview import MainView
 from .playereditview import PlayerEditView

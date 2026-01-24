@@ -33,8 +33,8 @@ https://github.com/larva-udesc/udesc_ttea_view
 
 # Define the __all__ variable
 __all__ = [
-    "DAO",
-    "PlayerCsvDAO",
+    "CalibrationMath",
+    "CameraVideoThread",
 ]
 
 __version__ = "1.0.0"
@@ -43,5 +43,5 @@ __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
 # Import the submodules
-from .dao import DAO
-from .playercsvdao import PlayerCsvDAO
+from .calibrationmath import CalibrationMath
+from .cameravideothread import CameraVideoThread

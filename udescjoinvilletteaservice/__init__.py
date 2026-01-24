@@ -33,6 +33,7 @@ https://github.com/larva-udesc/udesc_ttea_view
 
 # Define the __all__ variable
 __all__ = [
+    "CalibrationService",
     "LanguageService",
     "MainService",
     "PlayerService",
@@ -44,6 +45,7 @@ __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
 # Import the submodules
+from .calibrationservice import CalibrationService
 from .languageservice import LanguageService
 from .mainservice import MainService
 from .playerservice import PlayerService

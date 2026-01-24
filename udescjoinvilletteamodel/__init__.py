@@ -34,6 +34,7 @@ https://github.com/larva-udesc/udesc_ttea_view
 # Define the __all__ variable
 __all__ = [
     "AppModel",
+    "Calibration",
     "Language",
     "Player",
 ]
@@ -45,5 +46,6 @@ __license__ = "MIT License"
 
 # Import the submodules
 from .appmodel import AppModel
+from .calibration import Calibration
 from .language import Language
 from .player import Player

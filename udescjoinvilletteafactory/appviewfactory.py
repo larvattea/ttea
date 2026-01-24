@@ -3,8 +3,8 @@ from typing import TYPE_CHECKING, Callable, Optional
 from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QDialog, QMainWindow
 
-from udescjoinvilletteaview import (AboutView, LanguageView, MainView,
-                                    PlayerEditView, PlayerListView)
+from udescjoinvilletteaview import (AboutView, CalibrationView, LanguageView,
+                                    MainView, PlayerEditView, PlayerListView)
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
@@ -97,6 +97,25 @@ class AppViewFactory:
             An instance of AboutView configured with the provided parent.
         """
         return AboutView(parent)
+
+    @staticmethod
+    def create_calibration_view(
+        parent: Optional[QDialog] = None,
+    ) -> CalibrationView:
+        """
+        Create an instance of CalibrationView.
+
+        Parameters
+        ----------
+        parent : Optional[QObject], optional
+            The parent object for the CalibrationView, by default None.
+
+        Returns
+        -------
+        CalibrationView
+            An instance of CalibrationView configured with the provided parent.
+        """
+        return CalibrationView(parent)
 
     @staticmethod
     def create_language_view(parent: Optional[QDialog] = None) -> LanguageView:

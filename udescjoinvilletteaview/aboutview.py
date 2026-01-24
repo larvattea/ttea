@@ -1,11 +1,7 @@
-from datetime import datetime
+from typing import Optional
 
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QPixmap
-from PySide6.QtWidgets import (QDialog, QLabel, QPushButton, QTextBrowser,
-                               QVBoxLayout)
+from PySide6.QtWidgets import QDialog
 
-from udescjoinvilletteaapp import AppConfig
 # Local module import
 from udescjoinvilletteaui import Ui_AboutView
 from udescjoinvilletteawindow import WindowConfig
@@ -27,7 +23,10 @@ class AboutView(QDialog, Ui_AboutView, WindowConfig):
         Initializes the AboutView dialog with the specified parent.
     """
 
-    def __init__(self, parent=None) -> None:
+    def __init__(
+        self,
+        parent: Optional[QDialog] = None,
+    ) -> None:
 
         super().__init__(parent)
         self.setupUi(self)

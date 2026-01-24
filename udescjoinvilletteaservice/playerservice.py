@@ -1,5 +1,4 @@
 # udescjoinvillettea/service/player_service.py
-from datetime import date
 from typing import Any, Dict, List, Optional
 
 from udescjoinvilletteadao import PlayerCsvDAO

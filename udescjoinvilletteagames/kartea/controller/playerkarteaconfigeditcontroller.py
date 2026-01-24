@@ -1,5 +1,5 @@
 # Adjusted playerkarteaconfigeditcontroller.py
-from typing import TYPE_CHECKING, Dict, List, Optional, Union
+from typing import TYPE_CHECKING, Dict, Optional, Union
 
 from PySide6.QtCore import QObject
 

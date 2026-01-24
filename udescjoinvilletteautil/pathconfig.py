@@ -18,6 +18,9 @@ class PathConfig:
     # Nome do app
     APP_NAME = "ttea"  # Nome do app
 
+    # Arquivo de calibração
+    CALIBRATION_FILENAME = "calibration.ini"
+
     # Nome do arquivo principal de configuração
     CONFIG_FILENAME = "config.ini"
 
@@ -30,11 +33,12 @@ class PathConfig:
     else:  # Linux e outros
         APPDATA_DIR = Path.home() / ".local" / "share" / APP_NAME
 
+    CALIBRATION_DIR = APPDATA_DIR / "calibration"
+    CONFIG_DIR = APPDATA_DIR / "config"
+    EXERGAME_DIR = APPDATA_DIR / "exergames"  # <- jogos da aplicação
+    EXPORTS_DIR = APPDATA_DIR / "exports"  # CSV, relatórios, etc.
     LOG_DIR = APPDATA_DIR / "log"
     PLAYERS_DIR = APPDATA_DIR / "players"
-    EXERGAME_DIR = APPDATA_DIR / "exergames"  # <- jogos da aplicação
-    CONFIG_DIR = APPDATA_DIR / "config"
-    EXPORTS_DIR = APPDATA_DIR / "exports"  # CSV, relatórios, etc.
 
     # ===================================================================
     # 2. PASTA RAIZ DO PROJETO (apenas para desenvolvimento)
@@ -95,11 +99,12 @@ class PathConfig:
         """Cria todas as pastas de dados do usuário na primeira execução"""
         for directory in [
             cls.APPDATA_DIR,
+            cls.CALIBRATION_DIR,
+            cls.CONFIG_DIR,
+            cls.EXERGAME_DIR,
+            cls.EXPORTS_DIR,
             cls.LOG_DIR,
             cls.PLAYERS_DIR,
-            cls.EXERGAME_DIR,
-            cls.CONFIG_DIR,
-            cls.EXPORTS_DIR,
         ]:
             directory.mkdir(parents=True, exist_ok=True)
 
@@ -132,6 +137,26 @@ class PathConfig:
 
     @classmethod
     def config_file_exists(cls, filename: str = CONFIG_FILENAME) -> bool:
+        """Verifica se o arquivo de configuração existe no diretório do usuário.
+
+        Returns
+        -------
+        bool
+            True se o arquivo config.ini existir, False caso contrário.
+        """
+        cls.ensure_user_dirs()  # Garante que as pastas existam (não cria o arquivo)
+        config_path = Path(cls.config(filename))
+        return config_path.exists()
+
+    @classmethod
+    def calibration(cls, filename: str = CALIBRATION_FILENAME) -> str:
+        cls.ensure_user_dirs()
+        return str(cls.CALIBRATION_DIR / filename)
+
+    @classmethod
+    def calibration_file_exists(
+        cls, filename: str = CALIBRATION_FILENAME
+    ) -> bool:
         """Verifica se o arquivo de configuração existe no diretório do usuário.
 
         Returns
