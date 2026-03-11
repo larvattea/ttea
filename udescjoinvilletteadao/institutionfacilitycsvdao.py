@@ -244,3 +244,19 @@ class InstitutionFacilityCsvDAO(DAO[InstitutionFacility]):
                 institutionfacility
             )
             self.file_map[institutionfacility.id] = str(file_path)
+
+    def search_institutionfacilities(
+        self, query: str = ""
+    ) -> List[InstitutionFacility]:
+        """Retorna a lista de instituições, opcionalmente filtrada."""
+        all_institutionfacilities = list(self.institutionfacilities.values())
+
+        if not query.strip():
+            return all_institutionfacilities
+
+        q = query.lower().strip()
+        return [
+            p
+            for p in all_institutionfacilities
+            if q in str(p.id) or q in p.name.lower()
+        ]

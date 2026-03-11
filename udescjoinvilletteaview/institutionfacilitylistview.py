@@ -3,10 +3,11 @@ from typing import TYPE_CHECKING, Callable, List, Optional
 from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 
-from udescjoinvilletteaservice import InstitutionFacilityService
 # Local module import
-from udescjoinvilletteaui import \
-    Ui_InstitutionFacilityListView  # Assuming generated UI class
+from udescjoinvilletteacontroller import InstitutionFacilityListController
+from udescjoinvilletteaui import (
+    Ui_InstitutionFacilityListView,
+)  # Assuming generated UI class
 from udescjoinvilletteautil import MessageService
 from udescjoinvilletteawindow import WindowConfig
 
@@ -29,14 +30,10 @@ class InstitutionFacilityListView(
             ]
         ] = None,
     ) -> None:
-        from udescjoinvilletteacontroller import \
-            InstitutionFacilityListController
-
         super().__init__(parent)
         # Setup UI interface Ui_PlayerListView
         self.setupUi(self)
         self.msg = MessageService(self)
-        self.service = InstitutionFacilityService()
 
         # Set up window properties
         self.setup_window(
@@ -52,26 +49,6 @@ class InstitutionFacilityListView(
         self.controller = InstitutionFacilityListController(
             self, institutionfacility_edit_view_factory
         )
-
-        # Events signals and slots
-        self.pb_new.clicked.connect(
-            self.controller.handle_new_institutionfacility
-        )
-        self.pb_edit.clicked.connect(
-            self.controller.handle_edit_institutionfacility
-        )
-        self.pb_delete.clicked.connect(
-            self.controller.delete_institutionfacility
-        )
-        self.led_search.textChanged.connect(
-            self.controller.filter_institutionfacilities
-        )
-        self.tbl_institution.selectionModel().selectionChanged.connect(
-            self.controller.on_table_selection
-        )
-
-        # Load initial data
-        self.controller.load_institutionfacilities()
 
         # Perfect column widths
         self.tbl_institution.horizontalHeader().setSectionResizeMode(
@@ -110,7 +87,7 @@ class InstitutionFacilityListView(
         self.lbl_type_value.setText("")
         self.lbl_address_value.setText("")
 
-    def display_institutionfacility_details(
+    def display_details(
         self, institutionfacility: Optional["InstitutionFacility"]
     ) -> None:
         """Show the selected institutionfacility's
@@ -124,14 +101,14 @@ class InstitutionFacilityListView(
         self.lbl_name_value.setText(institutionfacility.name)
         self.lbl_type_value.setText(
             str(
-                self.service.get_institutionfacility_types()[
+                self.controller.get_institutionfacility_types()[
                     institutionfacility.type
                 ]
             )
         )
         self.lbl_address_value.setText(institutionfacility.address or "—")
 
-    def get_selected_institutionfacility_id(self) -> Optional[int]:
+    def get_selected_id(self) -> Optional[int]:
         """Return the ID of the currently selected institutionfacility
         or None."""
         items = self.tbl_institution.selectedItems()
@@ -145,6 +122,10 @@ class InstitutionFacilityListView(
     def select_row_by_id(self, institutionfacility_id: int) -> None:
         """Programmatically select the row with
         the given institutionfacility ID."""
+
+        if institutionfacility_id <= 0:
+            return
+
         self.tbl_institution.blockSignals(True)
         for row in range(self.tbl_institution.rowCount()):
             item = self.tbl_institution.item(row, 0)
@@ -153,6 +134,7 @@ class InstitutionFacilityListView(
                 self.tbl_institution.scrollToItem(item)
                 break
         self.tbl_institution.blockSignals(False)
+        self.controller.on_table_selection()
 
     def closeEvent(self, event: QCloseEvent) -> None:
         """Override close event to confirm exit.

@@ -62,12 +62,22 @@ class InstitutionFacility:
     DATA_PROPERTIES: ClassVar[list] = []
 
     def is_valid(self) -> bool:
-        for prop in self.PROPERTIES:
-            value = getattr(self, prop)
+        if self.id is None or not isinstance(self.id, int):
+            return False
 
-            # Generic validation for None
-            if value is None:
-                return False
+        if not self.name or not self.name.strip():
+            return False
+
+        if not isinstance(self.type, int) or self.type not in self.TYPE_MAP:
+            return False
+
+        strong_fields = {"id", "name", "type"}
+
+        for prop in self.PROPERTIES:
+            if prop not in strong_fields:
+                value = getattr(self, prop)
+                if value is None:
+                    return False
 
         return True
 

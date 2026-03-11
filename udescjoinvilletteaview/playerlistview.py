@@ -3,10 +3,11 @@ from typing import TYPE_CHECKING, Callable, List, Optional
 from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 
-from udescjoinvilletteacontroller import PlayerListController
 # Local module import
-from udescjoinvilletteaui import \
-    Ui_PlayerListView  # Assuming generated UI class
+from udescjoinvilletteacontroller import PlayerListController
+from udescjoinvilletteaui import (
+    Ui_PlayerListView,
+)  # Assuming generated UI class
 from udescjoinvilletteautil import MessageService, QtDateFormat
 from udescjoinvilletteawindow import WindowConfig
 

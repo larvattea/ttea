@@ -90,13 +90,24 @@ class Player:
         - A player is considered valid if id is not None and int,
           `name` is not an empty string and `birth_date` is not None.
         """
-        return bool(
-            self.id is not None
-            and isinstance(self.id, int)
-            and self.name
-            and self.name.strip()
-            and self.birth_date
-        )
+        if self.id is None or not isinstance(self.id, int):
+            return False
+
+        if not self.name or not self.name.strip():
+            return False
+
+        if self.birth_date is None:
+            return False
+
+        strong_fields = {"id", "name", "birth_date"}
+
+        for prop in self.PROPERTIES:
+            if prop not in strong_fields:
+                value = getattr(self, prop)
+                if value is None:
+                    return False
+
+        return True
 
     def set_data(self, data: Dict) -> None:
         """Updates the player's data from a dictionary.

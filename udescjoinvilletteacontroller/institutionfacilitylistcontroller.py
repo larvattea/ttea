@@ -1,15 +1,17 @@
-from typing import TYPE_CHECKING, Callable, Optional
+from typing import TYPE_CHECKING, Callable, Dict
 
 from PySide6.QtCore import QObject
 
 # Local module import
+from udescjoinvilletteaexception import BusinessRuleException
 from udescjoinvilletteaservice import InstitutionFacilityService
 from udescjoinvilletteautil import MessageService
 
 if TYPE_CHECKING:
-    from udescjoinvilletteamodel import InstitutionFacility
-    from udescjoinvilletteaview import (InstitutionFacilityEditView,
-                                        InstitutionFacilityListView)
+    from udescjoinvilletteaview import (
+        InstitutionFacilityEditView,
+        InstitutionFacilityListView,
+    )
 
 
 class InstitutionFacilityListController(QObject):
@@ -54,15 +56,7 @@ class InstitutionFacilityListController(QObject):
     """
 
     def __init__(
-        self,
-        view: "InstitutionFacilityListView",
-        institutionfacility_edit_view_factory: Callable[
-            [
-                Optional["InstitutionFacilityListView"],
-                Optional["InstitutionFacility"],
-            ],
-            "InstitutionFacilityEditView",
-        ],
+        self, view: "InstitutionFacilityListView", factory: Callable
     ) -> None:
         """
         Initialize the controller.
@@ -77,9 +71,43 @@ class InstitutionFacilityListController(QObject):
             -> InstitutionFacilityEditView.
         """
         self.view = view
-        self.factory = institutionfacility_edit_view_factory
+        self.factory = factory
         self.service = InstitutionFacilityService()
-        self.msg = MessageService(view)
+        self.msg = MessageService(self.view)
+
+        # ------------------------------------------------------------------
+        # OBSERVER PATTERN: Conexão reativa
+        # ------------------------------------------------------------------
+        # Sempre que o serviço emitir que os dados mudaram, a lista recarrega.
+        self.service.institutionfacility_change.connect(self.reload_data)
+
+        # Conexões de UI
+        self.view.pb_new.clicked.connect(self.create_institutionfacility)
+        self.view.pb_edit.clicked.connect(self.update_institutionfacility)
+        self.view.pb_delete.clicked.connect(self.delete_institutionfacility)
+        self.view.led_search.textChanged.connect(
+            self.filter_institutionfacilities
+        )
+        self.view.tbl_institution.itemSelectionChanged.connect(
+            self.on_table_selection
+        )
+
+        # Carga inicial
+        self.load_institutionfacilities()
+
+    def reload_data(self, target_id: int = 0) -> None:
+        """
+        Slot que reage ao sinal do Service.
+        Mantém o filtro atual ao recarregar.
+        """
+        if target_id == 0:
+            target_id = self.view.get_selected_id() or 0
+
+        query = self.view.led_search.text()
+        self.load_institutionfacilities(query)
+
+        if target_id > 0:
+            self.view.select_row_by_id(target_id)
 
     def load_institutionfacilities(self, query: str = "") -> None:
         """
@@ -92,10 +120,10 @@ class InstitutionFacilityListController(QObject):
             Search term to filter institutionfacilities
             (default is empty string).
         """
-        load_institutionfacilities = self.service.search_institutionfacilities(
+        institutionfacilities = self.service.search_institutionfacilities(
             query
         )
-        self.view.populate_table(load_institutionfacilities)
+        self.view.populate_table(institutionfacilities)
         self.view.clear_details()
 
     def filter_institutionfacilities(self, text: str) -> None:
@@ -105,59 +133,38 @@ class InstitutionFacilityListController(QObject):
     def on_table_selection(self) -> None:
         """Update details pane when a institutionfacility
         is selected in the table."""
-        institutionfacility_id = (
-            self.view.get_selected_institutionfacility_id()
-        )
-        if institutionfacility_id is not None:
+        institutionfacility_id = self.view.get_selected_id()
+        if institutionfacility_id:
             institutionfacility = self.service.find_by_id(
                 institutionfacility_id
             )
-            self.view.display_institutionfacility_details(institutionfacility)
+
+            if institutionfacility:
+                self.view.display_details(institutionfacility)
         else:
             self.view.clear_details()
 
-    def select_and_show_institutionfacility(
-        self, institutionfacility_id: int
-    ) -> None:
-        """
-        Select a institutionfacility row by ID and display its details.
-
-        Parameters
-        ----------
-        institutionfacility_id : int
-            The ID of the institutionfacility to select and show.
-        """
-        institutionfacility = self.service.find_by_id(institutionfacility_id)
-        if institutionfacility:
-            self.view.display_institutionfacility_details(institutionfacility)
-            self.view.select_row_by_id(institutionfacility_id)
-
-    def handle_new_institutionfacility(self) -> None:
+    def create_institutionfacility(self) -> None:
         """Open dialog to create a new institutionfacility
         and save if accepted."""
-        dialog = self.factory(self.view, None)
-        if not dialog.exec():
-            return
+        dialog: "InstitutionFacilityEditView" = self.factory(self.view, None)
+        if dialog.exec():
+            data = dialog.controller.get_data()
+            if self.service.create_institutionfacility(data):
+                self.msg.info(
+                    self.tr(
+                        "Instituição/Estabelecimento cadastrada com sucesso!"
+                    )
+                )
+            else:
+                self.msg.critical(
+                    self.tr("Erro ao salvar instuição/estabelecimento.")
+                )
 
-        data = dialog.controller.get_data()
-        institutionfacility = self.service.create_institutionfacility(data)
-        if institutionfacility:
-            self.load_institutionfacilities(self.view.led_search.text())
-            self.select_and_show_institutionfacility(institutionfacility.id)
-            self.msg.info(
-                self.tr("Instituição/Estabelecimento cadastrada com sucesso!")
-            )
-        else:
-            self.msg.critical(
-                self.tr("Erro ao salvar instuição/estabelecimento.")
-            )
-
-    def handle_edit_institutionfacility(self) -> None:
+    def update_institutionfacility(self) -> None:
         """Open dialog to edit the selected institutionfacility
         and update if accepted."""
-        institutionfacility_id = (
-            self.view.get_selected_institutionfacility_id()
-        )
+        institutionfacility_id = self.view.get_selected_id()
         if not institutionfacility_id:
             self.msg.warning(
                 self.tr(
@@ -173,33 +180,27 @@ class InstitutionFacilityListController(QObject):
             )
             return
 
-        dialog = self.factory(self.view, institutionfacility)
-        if not dialog.exec():
-            return
-
-        data = dialog.controller.get_data()
-        if self.service.update_institutionfacility(
-            institutionfacility_id, data
-        ):
-            self.load_institutionfacilities(self.view.led_search.text())
-            self.select_and_show_institutionfacility(institutionfacility_id)
-            self.msg.info(
-                self.tr("Instituição/Estabelecimento atualizada com sucesso.")
-            )
-        else:
-            self.msg.critical(
-                self.tr("Erro ao atualizar instituição/estabelecimento.")
-            )
+        dialog: "InstitutionFacilityEditView" = self.factory(
+            self.view, institutionfacility
+        )
+        if dialog.exec():
+            data = dialog.controller.get_data()
+            if self.service.update_institutionfacility(
+                institutionfacility_id, data
+            ):
+                self.msg.info(
+                    self.tr(
+                        "Instituição/Estabelecimento atualizada com sucesso."
+                    )
+                )
+            else:
+                self.msg.critical(
+                    self.tr("Erro ao atualizar instituição/estabelecimento.")
+                )
 
     def delete_institutionfacility(self) -> None:
         """Delete the selected institutionfacility after user confirmation."""
-        # from udescjoinvilletteagames.kartea.service import (
-        #    PlayerKarteaConfigService,
-        # )
-
-        institutionfacility_id = (
-            self.view.get_selected_institutionfacility_id()
-        )
+        institutionfacility_id = self.view.get_selected_id()
         if not institutionfacility_id:
             self.msg.warning(
                 self.tr(
@@ -208,35 +209,29 @@ class InstitutionFacilityListController(QObject):
             )
             return
 
-        # Add validation with config of games don't delete institutionfacility trocar
-        # para ver se não existe profissional de saúde vinculado.
-        # karteaconfig = PlayerKarteaConfigService()
-        # if karteaconfig.find_config_by_player_id(player_id):
-        #    self.msg.warning(
-        #        self.tr(
-        #            "A exclusão do jogador não é permitida enquanto a configuração do KarTEA existir."
-        #        )
-        #    )
-        #    return
-
         institutionfacility = self.service.find_by_id(institutionfacility_id)
         if not institutionfacility:
             return
 
         if self.msg.question(
-            self.tr("Tem certeza que deseja excluir?\n{0}").format(
-                institutionfacility.name
-            )
+            self.tr("Deseja excluir?\n{0}").format(institutionfacility.name)
         ):
-            if self.service.delete_institutionfacility(institutionfacility_id):
-                self.load_institutionfacilities(self.view.led_search.text())
-                self.view.clear_details()
-                self.msg.info(
-                    self.tr(
-                        "Instituição/Estabelecimento excluída com sucesso."
+            try:
+                if self.service.delete_institutionfacility(
+                    institutionfacility_id
+                ):
+                    self.view.clear_details()
+                    self.msg.info(
+                        self.tr(
+                            "Instituição/Estabelecimento excluída com sucesso."
+                        )
                     )
-                )
-            else:
-                self.msg.critical(
-                    self.tr("Erro ao excluir instituição/estabelecimento.")
-                )
+                else:
+                    self.msg.critical(
+                        self.tr("Erro ao excluir instituição/estabelecimento.")
+                    )
+            except BusinessRuleException as e:
+                self.msg.warning(str(e))
+
+    def get_institutionfacility_types(self) -> Dict[int, str]:
+        return self.service.get_institutionfacility_types()

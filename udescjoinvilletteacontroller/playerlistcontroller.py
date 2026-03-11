@@ -2,9 +2,8 @@ from typing import TYPE_CHECKING, Callable
 
 from PySide6.QtCore import QObject
 
-from udescjoinvilletteaexception import BusinessRuleException
-
 # Local module import
+from udescjoinvilletteaexception import BusinessRuleException
 from udescjoinvilletteaservice import PlayerService
 from udescjoinvilletteautil import MessageService
 
@@ -20,7 +19,6 @@ class PlayerListController(QObject):
     """
 
     def __init__(self, view: "PlayerListView", factory: Callable):
-        super().__init__()
         self.view = view
         self.factory = factory
         self.service = PlayerService()
@@ -81,7 +79,7 @@ class PlayerListController(QObject):
     def create_player(self) -> None:
         """Abre o diálogo de criação."""
         dialog: "PlayerEditView" = self.factory(self.view)
-        if dialog.exec_():
+        if dialog.exec():
             data = dialog.controller.get_data()
             if self.service.create_player(data):
                 # O Observer (Signal) cuidará do load_players automaticamente
@@ -102,7 +100,7 @@ class PlayerListController(QObject):
             return
 
         dialog: "PlayerEditView" = self.factory(self.view, player)
-        if dialog.exec_():
+        if dialog.exec():
             data = dialog.controller.get_data()
             if self.service.update_player(player_id, data):
                 # O Observer cuidará da atualização da lista

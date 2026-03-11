@@ -73,25 +73,31 @@ class InstitutionFacilityEditController(QObject):
         self.msg = message_service or MessageService(view)
         self._initialize_view()
 
-        # Populate fields if editing
-        if institutionfacility:
-            self.view.led_name.setText(institutionfacility.name)
-
-            index = self.view.cbx_type.findData(institutionfacility.type)
-            self.view.cbx_type.setCurrentIndex(index)
-
-            self.view.led_address.setText(institutionfacility.address)
-            self.view.led_phone.setText(institutionfacility.phone)
-            self.view.led_email.setText(institutionfacility.email)
-            self.view.led_website.setText(institutionfacility.website)
-            self.view.led_social_network.setText(
-                institutionfacility.social_network
-            )
-        else:
-            self.view.cbx_type.setCurrentIndex(0)
+        # ------------------------------------------------------------------
+        # Connect buttons to controller (validation + accept/reject handling)
+        # ------------------------------------------------------------------
+        self.view.pb_ok.clicked.connect(self.handle_ok)
+        self.view.pb_cancel.clicked.connect(self.handle_cancel)
 
     def _initialize_view(self):
         self.list_types()
+
+        # Populate fields if editing
+        if self.institutionfacility:
+            self.view.led_name.setText(self.institutionfacility.name)
+
+            index = self.view.cbx_type.findData(self.institutionfacility.type)
+            self.view.cbx_type.setCurrentIndex(index)
+
+            self.view.led_address.setText(self.institutionfacility.address)
+            self.view.led_phone.setText(self.institutionfacility.phone)
+            self.view.led_email.setText(self.institutionfacility.email)
+            self.view.led_website.setText(self.institutionfacility.website)
+            self.view.led_social_network.setText(
+                self.institutionfacility.social_network
+            )
+        else:
+            self.view.cbx_type.setCurrentIndex(0)
 
     def list_types(self) -> None:
         self.view.cbx_type.clear()
@@ -106,9 +112,18 @@ class InstitutionFacilityEditController(QObject):
         If validation passes, sets ok_clicked to True and accepts the
         dialog. Otherwise shows a critical message with errors.
         """
-        if self.is_input_valid():
-            self.ok_clicked = True
-            self.view.accept()
+        data = self.get_data()
+        errors = self.service.validate_data(data)
+
+        if errors:
+            self.msg.critical(
+                self.tr("Por favor, corrija os dados inválidos:\n")
+                + "".join(errors)
+            )
+            return
+
+        self.ok_clicked = True
+        self.view.accept()
 
     def handle_cancel(self) -> None:
         """Close the dialog without saving changes.
@@ -116,33 +131,6 @@ class InstitutionFacilityEditController(QObject):
         Rejects the dialog, discarding any entered data.
         """
         self.view.reject()
-
-    def is_input_valid(self) -> bool:
-        """Validate required fields.
-
-        Currently checks that the name field is not empty. Shows a
-        critical message listing all errors if validation fails.
-
-        Returns
-        -------
-        bool
-            True if all inputs are valid, False otherwise.
-        """
-        error_message = ""
-
-        if not self.view.led_name.text():
-            error_message += self.tr("Nome é obrigatório!\n")
-
-        if self.view.cbx_type.currentIndex() == 0:
-            error_message += self.tr("Tipo é obrigatório!\n")
-
-        if error_message:
-            self.msg.critical(
-                self.tr("Por favor, corrija os dados inválidos:\n")
-                + error_message
-            )
-            return False
-        return True
 
     def get_data(self) -> Dict[str, Union[str, Any]]:
         """Extract current form values into a dictionary.
@@ -152,8 +140,6 @@ class InstitutionFacilityEditController(QObject):
         dict
             Mapping with keys:
             - "name": str from name input
-            - "birth_date": date from date editor
-            - "observation": str from observation text area
         """
         return {
             "id": (

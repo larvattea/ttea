@@ -1,11 +1,13 @@
 # udescjoinvillettea/service/institutionfacility_service.py
 from typing import Any, Dict, List, Optional
 
+from PySide6.QtCore import QObject, Signal
+
 from udescjoinvilletteadao import InstitutionFacilityCsvDAO
 from udescjoinvilletteamodel import InstitutionFacility
 
 
-class InstitutionFacilityService:
+class InstitutionFacilityService(QObject):
     """
     Service layer (MVCS) handling all business rules related to insti.
 
@@ -34,6 +36,15 @@ class InstitutionFacilityService:
         Searches institutionfacilities by name or ID (case-insensitive).
     """
 
+    _instance = None
+    # Sinal que avisa: "Os dados do jagador mudaram"
+    institutionfacility_change = Signal(int)
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
     def __init__(self, dao: Optional[InstitutionFacilityCsvDAO] = None):
         """
         Initialize the service with a data access object.
@@ -44,7 +55,10 @@ class InstitutionFacilityService:
             Instance used for persistence. If ``None``, a default
             ``InstitutionFacilityCsvDAO`` is created.
         """
-        self.dao = dao or InstitutionFacilityCsvDAO()
+        if not hasattr(self, "_initialized"):
+            super().__init__()
+            self.dao = dao or InstitutionFacilityCsvDAO()
+            self._initialized = True
 
     def get_all_institutionfacilities(self) -> List[InstitutionFacility]:
         """Return a list of all registered institutionfacilities.
@@ -56,6 +70,25 @@ class InstitutionFacilityService:
             in the DAO.
         """
         return self.dao.list()
+
+    def validate_data(self, data: Dict[str, Any]) -> List[str]:
+        """
+        Valida as regras de negócio para os dados de uma instituição.
+        Retorna uma lista de mensagens de erro (vazia se estiver tudo ok).
+        """
+        errors = []
+        if data.get("id") is None:
+            errors.append(self.tr("ID é obrigatório!\n"))
+        elif not isinstance(data.get("id"), int):
+            errors.append(self.tr("ID deve ser do tipo inteiro!\n"))
+
+        if not data.get("name") or not data.get("name").strip():
+            errors.append(self.tr("Nome é obrigatório!\n"))
+
+        if data.get("type") == 0:
+            errors.append(self.tr("Tipo é obrigatório!\n"))
+
+        return errors
 
     def create_institutionfacility(
         self, data: Dict[str, Any]
@@ -80,6 +113,8 @@ class InstitutionFacilityService:
             return None
 
         new_id = self.dao.insert(institutionfacility)
+        if new_id:
+            self.institutionfacility_change.emit(new_id)
         return self.dao.select(new_id) if new_id > 0 else None
 
     def update_institutionfacility(
@@ -111,7 +146,12 @@ class InstitutionFacilityService:
         if not institutionfacility.is_valid():
             return False
 
-        return self.dao.update(institutionfacility)
+        success = self.dao.update(institutionfacility)
+
+        if success:
+            self.institutionfacility_change.emit(institutionfacility_id)
+
+        return success
 
     def delete_institutionfacility(self, institutionfacility_id: int) -> bool:
         """Delete a institutionfacility by its identifier.
@@ -127,7 +167,12 @@ class InstitutionFacilityService:
             ``True`` if the institutionfacility was successfully deleted,
             ``False`` otherwise (e.g., institutionfacility not found).
         """
-        return self.dao.delete(institutionfacility_id)
+        success = self.dao.delete(institutionfacility_id)
+
+        if success:
+            self.institutionfacility_change.emit(0)
+
+        return success
 
     def find_by_id(
         self, institutionfacility_id: int
@@ -165,16 +210,7 @@ class InstitutionFacilityService:
             List of institutionfacilities whose ID (as string)
             or name contain the query term.
         """
-        all_institutionfacilities = self.get_all_institutionfacilities()
-        if not query.strip():
-            return all_institutionfacilities
-
-        q = query.lower().strip()
-        return [
-            p
-            for p in all_institutionfacilities
-            if q in str(p.id) or q in p.name.lower()
-        ]
+        return self.dao.search_institutionfacilities(query)
 
     def get_institutionfacility_types(self) -> Dict[int, str]:
         return InstitutionFacility.TYPE_MAP
