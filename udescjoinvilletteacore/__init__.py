@@ -35,6 +35,8 @@ https://github.com/larva-udesc/udesc_ttea_view
 __all__ = [
     "CalibrationMath",
     "CameraVideoThread",
+    "MediaPipeFilter",
+    "MediaPipeManager",
 ]
 
 __version__ = "1.0.0"
@@ -45,3 +47,5 @@ __license__ = "MIT License"
 # Import the submodules
 from .calibrationmath import CalibrationMath
 from .cameravideothread import CameraVideoThread
+from .mediapipefilter import MediaPipeFilter
+from .mediapipemanager import MediaPipeManager

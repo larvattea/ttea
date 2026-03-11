@@ -1,6 +1,8 @@
 # udescjoinvilletteautil/qtdateformat.py
 from typing import Final
 
+from PySide6.QtCore import QDate
+
 
 class QtDateFormat:
     """
@@ -117,3 +119,23 @@ class QtDateFormat:
             qt_mask = qt_mask.replace(py_token, qt_token)
 
         return qt_mask
+
+    @staticmethod
+    def format_python_date(python_date) -> str:
+        if python_date is None:
+            return ""
+        qt_mask = QtDateFormat.from_config()
+        q_date = QDate(python_date.year, python_date.month, python_date.day)
+
+        return q_date.toString(qt_mask)
+
+    @staticmethod
+    def to_qdate(python_date) -> QDate:
+        """
+        Converte um objeto date/datetime do Python para QDate.
+        Se a data for None, retorna a data atual.
+        """
+        if not python_date:
+            return QDate.currentDate()
+
+        return QDate(python_date.year, python_date.month, python_date.day)

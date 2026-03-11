@@ -223,11 +223,7 @@ class CSVHandler:
                 else:
                     reader = csv.reader(file, dialect=self.dialect)
                 rows = list(reader)
-                # Ignora linha de cabeçalho se não for DictReader
-                actual_count = len(rows) - (1 if as_dict and rows else 0)
-                self.log.log_info(
-                    f"CSV loaded: {path.name} -> {actual_count} records"
-                )
+
                 return rows
         except PermissionError:
             self.log.log_warning(

@@ -30,24 +30,31 @@ def initialize_reflexive(cls):
 @initialize_reflexive
 @dataclass
 class Calibration:
-    camera_position: int
     camera_description: str
+    camera_id: str
+    camera_position: int
+    camera_width: int
+    camera_height: int
+    camera_max_fps: int
+    camera_min_fps: int
 
-    control_height_proportion: int
-    control_width_proportion: int
+    screen_manufacturer: str
+    screen_model: str
+    screen_position: int
+    screen_serial_number: str
+    screen_width: int
+    screen_height: int
+    screen_available_width: int
+    screen_available_height: int
 
-    monitor_manufacturer: str
-    monitor_model: str
-    monitor_serial_number: str
+    # Available width and height for projection and aspect ratio 16:9 or 4:3
+    content_width: int
+    content_height: int
+    content_width_ratio: int
+    content_height_ratio: int
+    content_proportion: str
 
-    monitor_height: int
-    monitor_width: int
-
-    proportion: str
-    proportion_value: str
-
-    height_ratio: int
-    width_ratio: int
+    calibration_date: str
 
     PROPERTIES: ClassVar[list[str]] = []
     DATA_PROPERTIES: ClassVar[list] = []
@@ -56,22 +63,31 @@ class Calibration:
         "16:9": (16, 9),
     }
 
+    # Mapping prefixes to .ini sections
+    SECTIONS_MAP: ClassVar[dict[str, str]] = {
+        "camera_": "camera",
+        "screen_": "screen",
+        "content_": "content",
+        "calibration_": "info",
+    }
+
+    # Constant to identify properties that should not be saved
+    IGNORED_PROPERTIES: ClassVar[list[str]] = [
+        "PROPERTIES",
+        "DATA_PROPERTIES",
+        "PROPORTIONS",
+        "SECTIONS_MAP",
+    ]
+
     def is_valid(self) -> bool:
-        return (
-            self.camera_position
-            and self.camera_description
-            and self.control_height_proportion
-            and self.control_width_proportion
-            and self.monitor_manufacturer
-            and self.monitor_model
-            and self.monitor_serial_number
-            and self.monitor_height
-            and self.monitor_width
-            and self.proportion
-            and self.proportion_value
-            and self.height_ratio
-            and self.width_ratio
-        )
+        for prop in self.PROPERTIES:
+            value = getattr(self, prop)
+
+            # Generic validation for None
+            if value is None:
+                return False
+
+        return True
 
     def set_data(self, data: Dict) -> None:
         for prop in self.PROPERTIES:
@@ -81,3 +97,13 @@ class Calibration:
     def get_data(self) -> List[Dict]:
         info = {prop: getattr(self, prop) for prop in self.PROPERTIES}
         return [info]
+
+    def get_proportion_tuple(self, proportion: str) -> tuple[int, int]:
+        return self.PROPORTIONS.get(proportion, (0, 0))
+
+    def get_section_for_property(self, prop_name: str) -> str:
+        """Returns the section name for a given property."""
+        for prefix, section in self.SECTIONS_MAP.items():
+            if prop_name.startswith(prefix):
+                return section
+        return "geral"

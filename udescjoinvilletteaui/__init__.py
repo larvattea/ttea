@@ -31,10 +31,16 @@ https://github.com/larva-udesc/udesc_ttea_view
 # Define the __all__ variable
 __all__ = [
     "Ui_AboutView",
+    "Ui_CalibrationParameterizationView",
     "Ui_CalibrationView",
+    "Ui_HealthProfessionalEditView",
+    "Ui_HealthProfessionalListView",
+    "Ui_InstitutionFacilityEditView",
+    "Ui_InstitutionFacilityListView",
     "Ui_LanguageView",
     "Ui_MainView",
     "Ui_PlayerEditView",
+    "Ui_PlayerGameLaunchView",
     "Ui_PlayerListView",
 ]
 
@@ -45,8 +51,15 @@ __license__ = "MIT License"
 
 # Import the submodules
 from .aboutviewui import Ui_AboutView
-from .calibrationui import Ui_CalibrationView
+from .calibrationparameterizationviewui import \
+    Ui_CalibrationParameterizationView
+from .calibrationviewui import Ui_CalibrationView
+from .healthprofessionaleditviewui import Ui_HealthProfessionalEditView
+from .healthprofessionallistviewui import Ui_HealthProfessionalListView
+from .institutionfacilityeditviewui import Ui_InstitutionFacilityEditView
+from .institutionfacilitylistviewui import Ui_InstitutionFacilityListView
 from .languageviewui import Ui_LanguageView
 from .mainviewui import Ui_MainView
 from .playereditviewui import Ui_PlayerEditView
+from .playergamelaunchviewui import Ui_PlayerGameLaunchView
 from .playerlistviewui import Ui_PlayerListView

@@ -33,7 +33,10 @@ https://github.com/larva-udesc/udesc_ttea_view
 
 # Define the __all__ variable
 __all__ = [
+    "CalibrationIniDAO",
     "DAO",
+    "HealthProfessionalCsvDAO",
+    "InstitutionFacilityCsvDAO",
     "PlayerCsvDAO",
 ]
 
@@ -42,6 +45,8 @@ __date__ = "2025-12-25"
 __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
-# Import the submodules
+from .calibrationinidao import CalibrationIniDAO
 from .dao import DAO
+from .healthprofessionalcsvdao import HealthProfessionalCsvDAO
+from .institutionfacilitycsvdao import InstitutionFacilityCsvDAO
 from .playercsvdao import PlayerCsvDAO

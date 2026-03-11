@@ -1,4 +1,3 @@
-from math import atan2
 
 import cv2 as cv
 from numpy import array

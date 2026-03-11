@@ -3,10 +3,11 @@ from typing import TYPE_CHECKING, Callable, List, Optional
 from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 
+from udescjoinvilletteacontroller import PlayerListController
 # Local module import
 from udescjoinvilletteaui import \
     Ui_PlayerListView  # Assuming generated UI class
-from udescjoinvilletteautil import MessageService
+from udescjoinvilletteautil import MessageService, QtDateFormat
 from udescjoinvilletteawindow import WindowConfig
 
 # Type checking to prevent circular import on run time
@@ -74,7 +75,6 @@ class PlayerListView(QDialog, Ui_PlayerListView, WindowConfig):
             Factory function that creates PlayerEditView instances.
             Enables dependency injection (useful for testing).
         """
-        from udescjoinvilletteacontroller import PlayerListController
 
         super().__init__(parent)
 
@@ -94,18 +94,6 @@ class PlayerListView(QDialog, Ui_PlayerListView, WindowConfig):
 
         # Initialize controller
         self.controller = PlayerListController(self, player_edit_view_factory)
-
-        # Events signals and slots
-        self.pb_new.clicked.connect(self.controller.handle_new_player)
-        self.pb_edit.clicked.connect(self.controller.handle_edit_player)
-        self.pb_delete.clicked.connect(self.controller.delete_player)
-        self.led_search.textChanged.connect(self.controller.filter_players)
-        self.tbl_player.selectionModel().selectionChanged.connect(
-            self.controller.on_table_selection
-        )
-
-        # Load initial data
-        self.controller.load_players()
 
         # Perfect column widths
         self.tbl_player.horizontalHeader().setSectionResizeMode(
@@ -139,21 +127,21 @@ class PlayerListView(QDialog, Ui_PlayerListView, WindowConfig):
         self.lbl_birth_date_value.setText("")
         self.lbl_observation_value.setText("")
 
-    def display_player_details(self, player: Optional["Player"]) -> None:
+    def display_details(self, player: Optional["Player"]) -> None:
         """Show the selected player's details in the right panel."""
-        from udescjoinvilletteaapp import AppConfig
-
         if not player:
             self.clear_details()
             return
 
         self.lbl_id_value.setText(str(player.id))
         self.lbl_name_value.setText(player.name)
-        mask = AppConfig.get_geral_date_mask()
-        self.lbl_birth_date_value.setText(player.birth_date.strftime(mask))
+        self.lbl_birth_date_value.setText(
+            QtDateFormat.format_python_date(player.birth_date)
+        )
+
         self.lbl_observation_value.setText(player.observation or "—")
 
-    def get_selected_player_id(self) -> Optional[int]:
+    def get_selected_id(self) -> Optional[int]:
         """Return the ID of the currently selected player or None."""
         items = self.tbl_player.selectedItems()
         if not items:
@@ -165,6 +153,9 @@ class PlayerListView(QDialog, Ui_PlayerListView, WindowConfig):
 
     def select_row_by_id(self, player_id: int) -> None:
         """Programmatically select the row with the given player ID."""
+        if player_id <= 0:
+            return
+
         self.tbl_player.blockSignals(True)
         for row in range(self.tbl_player.rowCount()):
             item = self.tbl_player.item(row, 0)
@@ -173,6 +164,7 @@ class PlayerListView(QDialog, Ui_PlayerListView, WindowConfig):
                 self.tbl_player.scrollToItem(item)
                 break
         self.tbl_player.blockSignals(False)
+        self.controller.on_table_selection()
 
     def closeEvent(self, event: QCloseEvent) -> None:
         """Override close event to confirm exit.

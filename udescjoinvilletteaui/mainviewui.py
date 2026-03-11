@@ -9,16 +9,17 @@
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
-    QCursor, QFont, QFontDatabase, QGradient,
-    QIcon, QImage, QKeySequence, QLinearGradient,
-    QPainter, QPalette, QPixmap, QRadialGradient,
-    QTransform)
+                            QMetaObject, QObject, QPoint, QRect, QSize, Qt,
+                            QTime, QUrl)
+from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient, QCursor,
+                           QFont, QFontDatabase, QGradient, QIcon, QImage,
+                           QKeySequence, QLinearGradient, QPainter, QPalette,
+                           QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QMainWindow, QMenu, QMenuBar,
-    QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
+                               QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
+
 import resources.resources_rc
+
 
 class Ui_MainView(object):
     def setupUi(self, MainView):
@@ -31,6 +32,10 @@ class Ui_MainView(object):
         MainView.setWindowIcon(icon)
         self.act_exit = QAction(MainView)
         self.act_exit.setObjectName(u"act_exit")
+        self.act_institutionfacility = QAction(MainView)
+        self.act_institutionfacility.setObjectName(u"act_institutionfacility")
+        self.act_healthprofessional = QAction(MainView)
+        self.act_healthprofessional.setObjectName(u"act_healthprofessional")
         self.act_player = QAction(MainView)
         self.act_player.setObjectName(u"act_player")
         self.act_kartea = QAction(MainView)
@@ -40,16 +45,29 @@ class Ui_MainView(object):
         self.act_kartea.setIcon(icon1)
         self.act_calibration = QAction(MainView)
         self.act_calibration.setObjectName(u"act_calibration")
+        icon2 = QIcon()
+        icon2.addFile(u":/icons/ui/menu/video", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.act_calibration.setIcon(icon2)
+        self.act_calibration_parameterization = QAction(MainView)
+        self.act_calibration_parameterization.setObjectName(u"act_calibration_parameterization")
+        icon3 = QIcon()
+        icon3.addFile(u":/icons/ui/menu/cogsicon", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.act_calibration_parameterization.setIcon(icon3)
         self.act_help = QAction(MainView)
         self.act_help.setObjectName(u"act_help")
-        icon2 = QIcon()
-        icon2.addFile(u":/icons/ui/menu/question", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        self.act_help.setIcon(icon2)
+        icon4 = QIcon()
+        icon4.addFile(u":/icons/ui/menu/questionicon", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.act_help.setIcon(icon4)
         self.act_about = QAction(MainView)
         self.act_about.setObjectName(u"act_about")
-        icon3 = QIcon()
-        icon3.addFile(u":/icons/ui/menu/info", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        self.act_about.setIcon(icon3)
+        icon5 = QIcon()
+        icon5.addFile(u":/icons/ui/menu/infoicon", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.act_about.setIcon(icon5)
+        self.act_player_game = QAction(MainView)
+        self.act_player_game.setObjectName(u"act_player_game")
+        icon6 = QIcon()
+        icon6.addFile(u":/icons/ui/menu/gamepadicon", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        self.act_player_game.setIcon(icon6)
         self.wid_main = QWidget(MainView)
         self.wid_main.setObjectName(u"wid_main")
         self.lay_main = QVBoxLayout(self.wid_main)
@@ -68,6 +86,8 @@ class Ui_MainView(object):
         self.mnu_exergames.setObjectName(u"mnu_exergames")
         self.mnu_settings = QMenu(self.mnu_main)
         self.mnu_settings.setObjectName(u"mnu_settings")
+        self.mnu_system = QMenu(self.mnu_main)
+        self.mnu_system.setObjectName(u"mnu_system")
         self.mnu_help = QMenu(self.mnu_main)
         self.mnu_help.setObjectName(u"mnu_help")
         MainView.setMenuBar(self.mnu_main)
@@ -75,15 +95,20 @@ class Ui_MainView(object):
         self.mnu_main.addAction(self.mnu_file.menuAction())
         self.mnu_main.addAction(self.mnu_exergames.menuAction())
         self.mnu_main.addAction(self.mnu_settings.menuAction())
+        self.mnu_main.addAction(self.mnu_system.menuAction())
         self.mnu_main.addAction(self.mnu_help.menuAction())
+        self.mnu_file.addAction(self.act_institutionfacility)
+        self.mnu_file.addAction(self.act_healthprofessional)
         self.mnu_file.addAction(self.act_player)
         self.mnu_file.addSeparator()
         self.mnu_file.addAction(self.act_exit)
         self.mnu_file.addSeparator()
+        self.mnu_exergames.addAction(self.act_player_game)
         self.mnu_settings.addAction(self.act_kartea)
         self.mnu_settings.addSeparator()
         self.mnu_settings.addAction(self.act_calibration)
         self.mnu_settings.addSeparator()
+        self.mnu_system.addAction(self.act_calibration_parameterization)
         self.mnu_help.addAction(self.act_help)
         self.mnu_help.addSeparator()
         self.mnu_help.addAction(self.act_about)
@@ -99,6 +124,14 @@ class Ui_MainView(object):
 #if QT_CONFIG(shortcut)
         self.act_exit.setShortcut(QCoreApplication.translate("MainView", u"Ctrl+Q", None))
 #endif // QT_CONFIG(shortcut)
+        self.act_institutionfacility.setText(QCoreApplication.translate("MainView", u"Institui\u00e7\u00e3o/Estabelecimento", None))
+#if QT_CONFIG(shortcut)
+        self.act_institutionfacility.setShortcut(QCoreApplication.translate("MainView", u"Ctrl+I", None))
+#endif // QT_CONFIG(shortcut)
+        self.act_healthprofessional.setText(QCoreApplication.translate("MainView", u"Professional de Sa\u00fade", None))
+#if QT_CONFIG(shortcut)
+        self.act_healthprofessional.setShortcut(QCoreApplication.translate("MainView", u"Ctrl+H", None))
+#endif // QT_CONFIG(shortcut)
         self.act_player.setText(QCoreApplication.translate("MainView", u"Jogador", None))
 #if QT_CONFIG(shortcut)
         self.act_player.setShortcut(QCoreApplication.translate("MainView", u"Ctrl+J", None))
@@ -108,14 +141,23 @@ class Ui_MainView(object):
 #if QT_CONFIG(shortcut)
         self.act_calibration.setShortcut(QCoreApplication.translate("MainView", u"F4", None))
 #endif // QT_CONFIG(shortcut)
+        self.act_calibration_parameterization.setText(QCoreApplication.translate("MainView", u"&Parametriza\u00e7\u00e3o da Calibra\u00e7\u00e3o", None))
+#if QT_CONFIG(shortcut)
+        self.act_calibration_parameterization.setShortcut(QCoreApplication.translate("MainView", u"F5", None))
+#endif // QT_CONFIG(shortcut)
         self.act_help.setText(QCoreApplication.translate("MainView", u"&Ajuda", None))
 #if QT_CONFIG(shortcut)
         self.act_help.setShortcut(QCoreApplication.translate("MainView", u"F1", None))
 #endif // QT_CONFIG(shortcut)
         self.act_about.setText(QCoreApplication.translate("MainView", u"&Sobre...", None))
+        self.act_player_game.setText(QCoreApplication.translate("MainView", u"Sess\u00e3o de Jogo", None))
+#if QT_CONFIG(shortcut)
+        self.act_player_game.setShortcut(QCoreApplication.translate("MainView", u"Ctrl+P", None))
+#endif // QT_CONFIG(shortcut)
         self.mnu_file.setTitle(QCoreApplication.translate("MainView", u"&Cadastro", None))
         self.mnu_exergames.setTitle(QCoreApplication.translate("MainView", u"&Exergames", None))
         self.mnu_settings.setTitle(QCoreApplication.translate("MainView", u"C&onfigura\u00e7\u00f5es", None))
+        self.mnu_system.setTitle(QCoreApplication.translate("MainView", u"S&istema", None))
         self.mnu_help.setTitle(QCoreApplication.translate("MainView", u"&Ajuda", None))
     # retranslateUi
 

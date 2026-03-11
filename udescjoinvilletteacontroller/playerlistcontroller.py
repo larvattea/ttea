@@ -1,136 +1,97 @@
-from typing import TYPE_CHECKING, Callable, Optional
+from typing import TYPE_CHECKING, Callable
 
 from PySide6.QtCore import QObject
+
+from udescjoinvilletteaexception import BusinessRuleException
 
 # Local module import
 from udescjoinvilletteaservice import PlayerService
 from udescjoinvilletteautil import MessageService
 
 if TYPE_CHECKING:
-    from udescjoinvilletteamodel import Player
     from udescjoinvilletteaview import PlayerEditView, PlayerListView
 
 
 class PlayerListController(QObject):
     """
-    Lightweight controller that orchestrates PlayerListView and PlayerService.
+    Controller que orquestra a PlayerListView usando o Observer Pattern.
 
-    Follows MVCS pattern: mediates between view and service layer,
-    handling user interactions and updating the UI accordingly.
-
-    Attributes
-    ----------
-    view : PlayerListView
-        Main view displaying the list and details of players.
-    factory : Callable
-        Factory function that creates a ``PlayerEditView`` dialog,
-        receiving the parent view and an optional player to edit.
-    service : PlayerService
-        Business logic layer for player CRUD operations.
-    msg : MessageService
-        Helper for showing info, warning, and error messages.
-
-    Methods
-    -------
-    __init__(view, player_edit_view_factory)
-        Initializes the controller with view and edit dialog factory.
-    load_players(query="")
-        Loads and displays players, optionally filtered by search term.
-    filter_players(text)
-        Filters the player list based on the search input text.
-    on_table_selection()
-        Updates details panel when a table row is selected.
-    select_and_show_player(player_id)
-        Selects a player row and shows its details.
-    handle_new_player()
-        Opens dialog to create a new player.
-    handle_edit_player()
-        Opens dialog to edit the selected player.
-    delete_player()
-        Deletes the selected player after confirmation.
+    Agora, este controller reage automaticamente a mudanças no Service.
     """
 
-    def __init__(
-        self,
-        view: "PlayerListView",
-        player_edit_view_factory: Callable[
-            [Optional["PlayerListView"], Optional["Player"]], "PlayerEditView"
-        ],
-    ) -> None:
-        """
-        Initialize the controller.
-
-        Parameters
-        ----------
-        view : PlayerListView
-            The main list view instance to control.
-        player_edit_view_factory : Callable
-            Function that returns a ``PlayerEditView`` dialog.
-            Signature: (parent_view, player) -> PlayerEditView.
-        """
+    def __init__(self, view: "PlayerListView", factory: Callable):
+        super().__init__()
         self.view = view
-        self.factory = player_edit_view_factory
-        self.service = PlayerService()  # <- Serviço injetado
-        self.msg = MessageService(view)
+        self.factory = factory
+        self.service = PlayerService()
+        self.msg = MessageService(self.view)
+
+        # ------------------------------------------------------------------
+        # OBSERVER PATTERN: Conexão reativa
+        # ------------------------------------------------------------------
+        # Sempre que o serviço emitir que os dados mudaram, a lista recarrega.
+        self.service.player_change.connect(self.reload_data)
+
+        # Conexões de UI
+        self.view.pb_new.clicked.connect(self.create_player)
+        self.view.pb_edit.clicked.connect(self.update_player)
+        self.view.pb_delete.clicked.connect(self.delete_player)
+        self.view.led_search.textChanged.connect(self.filter_players)
+        self.view.tbl_player.itemSelectionChanged.connect(
+            self.on_table_selection
+        )
+
+        # Carga inicial
+        self.load_players()
+
+    def reload_data(self, target_id: int = 0) -> None:
+        """
+        Slot que reage ao sinal do Service.
+        Mantém o filtro atual ao recarregar.
+        """
+        if target_id == 0:
+            target_id = self.view.get_selected_id() or 0
+
+        query = self.view.led_search.text()
+        self.load_players(query)
+
+        if target_id > 0:
+            self.view.select_row_by_id(target_id)
 
     def load_players(self, query: str = "") -> None:
-        """
-        Load players from service and populate the table view.
-
-        Parameters
-        ----------
-        query : str, optional
-            Search term to filter players (default is empty string).
-        """
+        """Busca os jogadores no serviço e popula a tabela da View."""
         players = self.service.search_players(query)
         self.view.populate_table(players)
         self.view.clear_details()
 
     def filter_players(self, text: str) -> None:
-        """Filter player list based on search input text."""
+        """Filtra a lista conforme o usuário digita."""
         self.load_players(text.strip())
 
     def on_table_selection(self) -> None:
-        """Update details pane when a player is selected in the table."""
-        player_id = self.view.get_selected_player_id()
-        if player_id is not None:
+        """Atualiza o painel de detalhes ao selecionar uma linha."""
+        player_id = self.view.get_selected_id()
+        if player_id:
             player = self.service.find_by_id(player_id)
-            self.view.display_player_details(player)
+            if player:
+                self.view.display_details(player)
         else:
             self.view.clear_details()
 
-    def select_and_show_player(self, player_id: int) -> None:
-        """
-        Select a player row by ID and display its details.
+    def create_player(self) -> None:
+        """Abre o diálogo de criação."""
+        dialog: "PlayerEditView" = self.factory(self.view)
+        if dialog.exec_():
+            data = dialog.controller.get_data()
+            if self.service.create_player(data):
+                # O Observer (Signal) cuidará do load_players automaticamente
+                self.msg.info(self.tr("Jogador cadastrado com sucesso!"))
+            else:
+                self.msg.critical(self.tr("Erro ao salvar jogador."))
 
-        Parameters
-        ----------
-        player_id : int
-            The ID of the player to select and show.
-        """
-        player = self.service.find_by_id(player_id)
-        if player:
-            self.view.display_player_details(player)
-            self.view.select_row_by_id(player_id)
-
-    def handle_new_player(self) -> None:
-        """Open dialog to create a new player and save if accepted."""
-        dialog = self.factory(self.view, None)
-        if not dialog.exec():
-            return
-
-        data = dialog.controller.get_data()
-        player = self.service.create_player(data)
-        if player:
-            self.load_players(self.view.led_search.text())
-            self.select_and_show_player(player.id)
-            self.msg.info(self.tr("Jogador cadastrado com sucesso!"))
-        else:
-            self.msg.critical(self.tr("Erro ao salvar jogador."))
-
-    def handle_edit_player(self) -> None:
-        """Open dialog to edit the selected player and update if accepted."""
-        player_id = self.view.get_selected_player_id()
+    def update_player(self) -> None:
+        """Abre o diálogo de edição para o jogador selecionado."""
+        player_id = self.view.get_selected_id()
         if not player_id:
             self.msg.warning(self.tr("Selecione um jogador para editar."))
             return
@@ -140,36 +101,20 @@ class PlayerListController(QObject):
             self.msg.critical(self.tr("Jogador não encontrado."))
             return
 
-        dialog = self.factory(self.view, player)
-        if not dialog.exec():
-            return
-
-        data = dialog.controller.get_data()
-        if self.service.update_player(player_id, data):
-            self.load_players(self.view.led_search.text())
-            self.select_and_show_player(player_id)
-            self.msg.info(self.tr("Jogador atualizado com sucesso."))
-        else:
-            self.msg.critical(self.tr("Erro ao atualizar jogador."))
+        dialog: "PlayerEditView" = self.factory(self.view, player)
+        if dialog.exec_():
+            data = dialog.controller.get_data()
+            if self.service.update_player(player_id, data):
+                # O Observer cuidará da atualização da lista
+                self.msg.info(self.tr("Jogador atualizado com sucesso."))
+            else:
+                self.msg.critical(self.tr("Erro ao atualizar jogador."))
 
     def delete_player(self) -> None:
-        """Delete the selected player after user confirmation."""
-        from udescjoinvilletteagames.kartea.service import \
-            PlayerKarteaConfigService
-
-        player_id = self.view.get_selected_player_id()
+        """Exclui o jogador selecionado após confirmação."""
+        player_id = self.view.get_selected_id()
         if not player_id:
             self.msg.warning(self.tr("Selecione um jogador para excluir."))
-            return
-
-        # Add validation with config of games don't delete player
-        karteaconfig = PlayerKarteaConfigService()
-        if karteaconfig.find_config_by_player_id(player_id):
-            self.msg.warning(
-                self.tr(
-                    "A exclusão do jogador não é permitida enquanto a configuração do KarTEA existir."
-                )
-            )
             return
 
         player = self.service.find_by_id(player_id)
@@ -177,11 +122,13 @@ class PlayerListController(QObject):
             return
 
         if self.msg.question(
-            self.tr("Tem certeza que deseja excluir?\n{0}").format(player.name)
+            self.tr("Deseja excluir?\n{0}").format(player.name)
         ):
-            if self.service.delete_player(player_id):
-                self.load_players(self.view.led_search.text())
-                self.view.clear_details()
-                self.msg.info(self.tr("Jogador excluído com sucesso."))
-            else:
-                self.msg.critical(self.tr("Erro ao excluir jogador."))
+            try:
+                if self.service.delete_player(player_id):
+                    self.view.clear_details()
+                    self.msg.info(self.tr("Jogador excluído com sucesso."))
+                else:
+                    self.msg.critical(self.tr("Erro ao excluir jogador."))
+            except BusinessRuleException as e:
+                self.msg.warning(str(e))

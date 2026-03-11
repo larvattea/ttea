@@ -1,11 +1,14 @@
 # udescjoinvillettea/service/player_service.py
 from typing import Any, Dict, List, Optional
 
+from PySide6.QtCore import QObject, Signal
+
 from udescjoinvilletteadao import PlayerCsvDAO
+from udescjoinvilletteaexception import BusinessRuleException
 from udescjoinvilletteamodel import Player
 
 
-class PlayerService:
+class PlayerService(QObject):
     """
     Service layer (MVCS) handling all business rules related to players.
 
@@ -33,6 +36,15 @@ class PlayerService:
         Searches players by name or ID (case-insensitive).
     """
 
+    _instance = None
+    # Sinal que avisa: "Os dados do jagador mudaram"
+    player_change = Signal(int)
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
     def __init__(self, dao: Optional[PlayerCsvDAO] = None):
         """
         Initialize the service with a data access object.
@@ -43,7 +55,10 @@ class PlayerService:
             Instance used for persistence. If ``None``, a default
             ``PlayerCsvDAO`` is created.
         """
-        self.dao = dao or PlayerCsvDAO()
+        if not hasattr(self, "_initialized"):
+            super().__init__()
+            self.dao = dao or PlayerCsvDAO()
+            self._initialized = True
 
     def get_all_players(self) -> List[Player]:
         """Return a list of all registered players.
@@ -55,6 +70,25 @@ class PlayerService:
         """
         return self.dao.list()
 
+    def validate_data(self, data: Dict[str, Any]) -> List[str]:
+        """
+        Valida as regras de negócio para os dados de um jogador.
+        Retorna uma lista de mensagens de erro (vazia se estiver tudo ok).
+        """
+        errors = []
+        if data.get("id") is None:
+            errors.append(self.tr("ID é obrigatório!\n"))
+        elif not isinstance(data.get("id"), int):
+            errors.append(self.tr("ID deve ser do tipo inteiro!\n"))
+
+        if not data.get("name") or not data.get("name").strip():
+            errors.append(self.tr("Nome é obrigatório!\n"))
+
+        if not data.get("birth_date"):
+            errors.append(self.tr("Data de nascimento é obrigatória!\n"))
+
+        return errors
+
     def create_player(self, data: Dict[str, Any]) -> Optional[Player]:
         """
         Create a new player from a dictionary of attributes.
@@ -62,8 +96,8 @@ class PlayerService:
         Parameters
         ----------
         data : dict
-            Must contain the keys ``name`` (str), ``birth_date`` (date),
-            and optionally ``observation`` (str).
+            Must contain the key ``id`` (int),  ``name`` (str),
+            ``birth_date`` (date) and optionally ``observation`` (str).
 
         Returns
         -------
@@ -71,17 +105,14 @@ class PlayerService:
             The created ``Player`` instance if validation and insertion
             succeed; ``None`` otherwise.
         """
-        player = Player(
-            id=0,
-            name=data.get("name", "").strip(),
-            birth_date=data.get("birth_date"),
-            observation=data.get("observation", "").strip(),
-        )
+        player = Player(**data)
 
         if not player.is_valid():
             return None
 
         new_id = self.dao.insert(player)
+        if new_id:
+            self.player_change.emit(new_id)  # Notifica observadores
         return self.dao.select(new_id) if new_id > 0 else None
 
     def update_player(self, player_id: int, data: Dict[str, Any]) -> bool:
@@ -107,16 +138,17 @@ class PlayerService:
         if not player:
             return False
 
-        player.name = data.get("name", player.name).strip()
-        player.birth_date = data.get("birth_date", player.birth_date)
-        player.observation = data.get(
-            "observation", player.observation or ""
-        ).strip()
+        player.set_data(data)
 
         if not player.is_valid():
             return False
 
-        return self.dao.update(player)
+        success = self.dao.update(player)
+
+        if success:
+            self.player_change.emit(player_id)
+
+        return success
 
     def delete_player(self, player_id: int) -> bool:
         """Delete a player by its identifier.
@@ -132,7 +164,27 @@ class PlayerService:
             ``True`` if the player was successfully deleted,
             ``False`` otherwise (e.g., player not found).
         """
-        return self.dao.delete(player_id)
+        from udescjoinvilletteagames.kartea.service import (
+            PlayerKarteaConfigService,
+        )
+
+        # Validação de integridade referencial (Negócio)
+        # Todos os jogos que tiverem configurações por jogador
+        # devem ser validados aqui antes da exclusão
+        karteaconfig = PlayerKarteaConfigService()
+        if karteaconfig.find_config_by_player_id(player_id):
+            raise BusinessRuleException(
+                self.tr(
+                    "Exclusão negada: O jogador possui uma configuração do KarTEA ativa."
+                )
+            )
+
+        success = self.dao.delete(player_id)
+
+        if success:
+            self.player_change.emit(0)
+
+        return success
 
     def find_by_id(self, player_id: int) -> Optional[Player]:
         """Retrieve a player by its unique identifier.
@@ -165,11 +217,4 @@ class PlayerService:
             List of players whose ID (as string) or name contain the
             query term.
         """
-        all_players = self.get_all_players()
-        if not query.strip():
-            return all_players
-
-        q = query.lower().strip()
-        return [
-            p for p in all_players if q in str(p.id) or q in p.name.lower()
-        ]
+        return self.dao.search_players(query)

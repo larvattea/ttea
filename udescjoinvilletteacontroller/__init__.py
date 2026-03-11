@@ -37,9 +37,14 @@ https://github.com/larva-udesc/udesc_ttea_view
 # Define the __all__ variable
 __all__ = [
     "CalibrationController",
+    "HealthProfessionalEditController",
+    "HealthProfessionalListController",
+    "InstitutionFacilityEditController",
+    "InstitutionFacilityListController",
     "LanguageController",
     "MainController",
     "PlayerEditController",
+    "PlayerGameLaunchController",
     "PlayerListController",
 ]
 
@@ -50,7 +55,14 @@ __license__ = "MIT License"
 
 # Import the submodules
 from .calibrationcontroller import CalibrationController
+from .healthprofessionaleditcontroller import HealthProfessionalEditController
+from .healthprofessionallistcontroller import HealthProfessionalListController
+from .institutionfacilityeditcontroller import \
+    InstitutionFacilityEditController
+from .institutionfacilitylistcontroller import \
+    InstitutionFacilityListController
 from .languagecontroller import LanguageController
 from .maincontroller import MainController
 from .playereditcontroller import PlayerEditController
+from .playergamelaunchcontroller import PlayerGameLaunchController
 from .playerlistcontroller import PlayerListController

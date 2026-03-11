@@ -36,7 +36,7 @@ class MainController(QObject):
         self.app_factory = ViewFactory.get_app_view_factory()
         self.kartea_factory = ViewFactory.get_kartea_view_factory()
 
-        self._load_games_menu()  # já ordena uma única vez aqui
+        # self._load_games_menu()  # já ordena uma única vez aqui
         self._is_quitting = False
 
     def _load_games_menu(self) -> None:
@@ -81,6 +81,20 @@ class MainController(QObject):
         )
         dialog.exec()
 
+    def open_healthprofessional_list(self) -> None:
+        dialog = self.app_factory.create_healthprofessional_list_view(
+            self.view,
+            self.app_factory.create_healthprofessional_edit_view,
+        )
+        dialog.exec()
+
+    def open_institutionfacility_list(self) -> None:
+        dialog = self.app_factory.create_institutionfacility_list_view(
+            self.view,
+            self.app_factory.create_institutionfacility_edit_view,
+        )
+        dialog.exec()
+
     def open_kartea_player_config(self) -> None:
         dialog = self.kartea_factory.create_player_kartea_config_list_view(
             self.view,
@@ -108,10 +122,9 @@ class MainController(QObject):
         dialog = self.app_factory.create_about_view(parent=self.view)
         dialog.exec()
 
-    def start_game(self, game_name: str) -> None:
-        self.view.update_status_message(
-            self.tr("Funcionalidade de jogos em desenvolvimento...")
-        )
+    def open_playergamelaunch(self) -> None:
+        dialog = self.app_factory.create_playergamelauch_view(parent=self.view)
+        dialog.exec()
         """try:
             if "KarTEA" in game_name:
                 from udescjoinvillettea.games.kartea.main import launch_kartea

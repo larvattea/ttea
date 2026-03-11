@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING, Dict, Optional, Union
 from PySide6.QtCore import QDate, QObject
 
 # Local module import
+from udescjoinvilletteaservice import PlayerService
 from udescjoinvilletteautil import MessageService, QtDateFormat
 
 # Type checking to prevent circular import on run time
@@ -66,19 +67,26 @@ class PlayerEditController(QObject):
             Custom message service; defaults to MessageService(view).
         """
         self.view = view
+        self.service = PlayerService()
         self.player = player
         self.ok_clicked = False
         self.msg = message_service or MessageService(view)
+        self._initialize_view()
 
+        # ------------------------------------------------------------------
+        # Connect buttons to controller (validation + accept/reject handling)
+        # ------------------------------------------------------------------
+        self.view.pb_ok.clicked.connect(self.handle_ok)
+        self.view.pb_cancel.clicked.connect(self.handle_cancel)
+
+    def _initialize_view(self):
         # Populate fields if editing
-        if player:
-            self.view.led_name.setText(player.name)
-
-            birth_date = player.birth_date
-            qdate = QDate(birth_date.year, birth_date.month, birth_date.day)
-            self.view.ded_birth_date.setDate(qdate)
-
-            self.view.ted_observation.setPlainText(player.observation)
+        if self.player:
+            self.view.led_name.setText(self.player.name)
+            self.view.ded_birth_date.setDate(
+                QtDateFormat.to_qdate(self.player.birth_date)
+            )
+            self.view.ted_observation.setPlainText(self.player.observation)
         else:
             self.view.ded_birth_date.setDate(QDate.currentDate())
 
@@ -90,9 +98,18 @@ class PlayerEditController(QObject):
         If validation passes, sets ok_clicked to True and accepts the
         dialog. Otherwise shows a critical message with errors.
         """
-        if self.is_input_valid():
-            self.ok_clicked = True
-            self.view.accept()
+        data = self.get_data()
+        errors = self.service.validate_data(data)
+
+        if errors:
+            self.msg.critical(
+                self.tr("Por favor, corrija os dados inválidos:\n")
+                + "".join(errors)
+            )
+            return
+
+        self.ok_clicked = True
+        self.view.accept()
 
     def handle_cancel(self) -> None:
         """Close the dialog without saving changes.
@@ -101,30 +118,6 @@ class PlayerEditController(QObject):
         """
         self.view.reject()
 
-    def is_input_valid(self) -> bool:
-        """Validate required fields.
-
-        Currently checks that the name field is not empty. Shows a
-        critical message listing all errors if validation fails.
-
-        Returns
-        -------
-        bool
-            True if all inputs are valid, False otherwise.
-        """
-        error_message = ""
-
-        if not self.view.led_name.text():
-            error_message += self.tr("Nome é obrigatório!\n")
-
-        if error_message:
-            self.msg.critical(
-                self.tr("Por favor, corrija os dados inválidos:\n")
-                + error_message
-            )
-            return False
-        return True
-
     def get_data(self) -> Dict[str, Union[str, date]]:
         """Extract current form values into a dictionary.
 
@@ -132,11 +125,15 @@ class PlayerEditController(QObject):
         -------
         dict
             Mapping with keys:
+            - "id": int from model or init with zero
             - "name": str from name input
             - "birth_date": date from date editor
             - "observation": str from observation text area
         """
         return {
+            "id": (
+                self.player.id if self.player and self.player.id != 0 else 0
+            ),
             "name": self.view.led_name.text(),
             "birth_date": self.view.ded_birth_date.date().toPython(),
             "observation": self.view.ted_observation.toPlainText(),

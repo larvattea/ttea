@@ -38,6 +38,12 @@ class MainView(QMainWindow, Ui_MainView, WindowConfig):
 
         # === CONEXÕES DIRETAS DOS WIDGETS/ACTIONS AO CONTROLLER ===
         self.act_exit.triggered.connect(self.controller.handle_exit)
+        self.act_healthprofessional.triggered.connect(
+            self.controller.open_healthprofessional_list
+        )
+        self.act_institutionfacility.triggered.connect(
+            self.controller.open_institutionfacility_list
+        )
         self.act_player.triggered.connect(self.controller.open_player_list)
         self.act_kartea.triggered.connect(
             self.controller.open_kartea_player_config
@@ -48,8 +54,9 @@ class MainView(QMainWindow, Ui_MainView, WindowConfig):
         self.act_help.triggered.connect(self.controller.open_help)
         self.act_about.triggered.connect(self.controller.open_about)
 
-        # Menu dinâmico de jogos (preenchido pelo controller depois)
-        self.mnu_exergames.triggered.connect(self.controller.start_game)
+        self.act_player_game.triggered.connect(
+            self.controller.open_playergamelaunch
+        )
 
         self.msg = MessageService(self)
         self._setup_status_bar()

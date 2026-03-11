@@ -53,6 +53,8 @@
     <property name="title">
      <string>&amp;Cadastro</string>
     </property>
+    <addaction name="act_institutionfacility"/>
+    <addaction name="act_healthprofessional"/>
     <addaction name="act_player"/>
     <addaction name="separator"/>
     <addaction name="act_exit"/>
@@ -62,6 +64,7 @@
     <property name="title">
      <string>&amp;Exergames</string>
     </property>
+    <addaction name="act_player_game"/>
    </widget>
    <widget class="QMenu" name="mnu_settings">
     <property name="title">
@@ -71,6 +74,12 @@
     <addaction name="separator"/>
     <addaction name="act_calibration"/>
     <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="mnu_system">
+    <property name="title">
+     <string>S&amp;istema</string>
+    </property>
+    <addaction name="act_calibration_parameterization"/>
    </widget>
    <widget class="QMenu" name="mnu_help">
     <property name="title">
@@ -83,6 +92,7 @@
    <addaction name="mnu_file"/>
    <addaction name="mnu_exergames"/>
    <addaction name="mnu_settings"/>
+   <addaction name="mnu_system"/>
    <addaction name="mnu_help"/>
   </widget>
   <action name="act_exit">
@@ -91,6 +101,22 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="act_institutionfacility">
+   <property name="text">
+    <string>Instituição/Estabelecimento</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+I</string>
+   </property>
+  </action>
+  <action name="act_healthprofessional">
+   <property name="text">
+    <string>Professional de Saúde</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+H</string>
    </property>
   </action>
   <action name="act_player">
@@ -111,6 +137,10 @@
    </property>
   </action>
   <action name="act_calibration">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/ui/menu/video</normaloff>:/icons/ui/menu/video</iconset>
+   </property>
    <property name="text">
     <string>&amp;Calibração</string>
    </property>
@@ -118,10 +148,22 @@
     <string>F4</string>
    </property>
   </action>
+  <action name="act_calibration_parameterization">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/ui/menu/cogsicon</normaloff>:/icons/ui/menu/cogsicon</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Parametrização da Calibração</string>
+   </property>
+   <property name="shortcut">
+    <string>F5</string>
+   </property>
+  </action>
   <action name="act_help">
    <property name="icon">
     <iconset resource="../resources.qrc">
-     <normaloff>:/icons/ui/menu/question</normaloff>:/icons/ui/menu/question</iconset>
+     <normaloff>:/icons/ui/menu/questionicon</normaloff>:/icons/ui/menu/questionicon</iconset>
    </property>
    <property name="text">
     <string>&amp;Ajuda</string>
@@ -133,10 +175,22 @@
   <action name="act_about">
    <property name="icon">
     <iconset resource="../resources.qrc">
-     <normaloff>:/icons/ui/menu/info</normaloff>:/icons/ui/menu/info</iconset>
+     <normaloff>:/icons/ui/menu/infoicon</normaloff>:/icons/ui/menu/infoicon</iconset>
    </property>
    <property name="text">
     <string>&amp;Sobre...</string>
+   </property>
+  </action>
+  <action name="act_player_game">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/ui/menu/gamepadicon</normaloff>:/icons/ui/menu/gamepadicon</iconset>
+   </property>
+   <property name="text">
+    <string>Sessão de Jogo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
    </property>
   </action>
  </widget>

@@ -3,8 +3,6 @@ from typing import TYPE_CHECKING, Callable, Optional
 from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QDialog
 
-from udescjoinvilletteagames.kartea.controller import \
-    PlayerKarteaConfigEditController
 from udescjoinvilletteagames.kartea.view import (PlayerKarteaConfigEditView,
                                                  PlayerKarteaConfigListView)
 

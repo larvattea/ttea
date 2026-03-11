@@ -262,3 +262,15 @@ class PlayerCsvDAO(DAO[Player]):
             player = Player(**player_kwargs)
             self.players[player.id] = player
             self.file_map[player.id] = str(file_path)
+
+    def search_players(self, query: str = "") -> List[Player]:
+        """Retorna a lista de jogadores, opcionalmente filtrada."""
+        all_players = list(self.players.values())
+
+        if not query.strip():
+            return all_players
+
+        q = query.lower().strip()
+        return [
+            p for p in all_players if q in str(p.id) or q in p.name.lower()
+        ]

@@ -35,10 +35,13 @@ class PathConfig:
 
     CALIBRATION_DIR = APPDATA_DIR / "calibration"
     CONFIG_DIR = APPDATA_DIR / "config"
-    EXERGAME_DIR = APPDATA_DIR / "exergames"  # <- jogos da aplicação
+    EXERGAME_DIR = APPDATA_DIR / "exergames"  # jogos da aplicação
     EXPORTS_DIR = APPDATA_DIR / "exports"  # CSV, relatórios, etc.
+    HEALTHPROFESSIONAL_DIR = APPDATA_DIR / "healthprofessionals"
+    INSTITUTIONFACILITY_DIR = APPDATA_DIR / "institutionfacilities"
     LOG_DIR = APPDATA_DIR / "log"
     PLAYERS_DIR = APPDATA_DIR / "players"
+    MODELS_DIR = APPDATA_DIR / "mediapipemodels"
 
     # ===================================================================
     # 2. PASTA RAIZ DO PROJETO (apenas para desenvolvimento)
@@ -64,8 +67,12 @@ class PathConfig:
         return f":/icons/system/{name}"
 
     @staticmethod
-    def icon_ui(name: str) -> str:
-        return f":/icons/ui/{name}"
+    def icon_ui_button(name: str) -> str:
+        return f":/icons/ui/buttons/{name}"
+
+    @staticmethod
+    def icon_ui_menu(name: str) -> str:
+        return f":/icons/ui/menu/{name}"
 
     @staticmethod
     def flag(name: str) -> str:
@@ -103,10 +110,23 @@ class PathConfig:
             cls.CONFIG_DIR,
             cls.EXERGAME_DIR,
             cls.EXPORTS_DIR,
+            cls.HEALTHPROFESSIONAL_DIR,
+            cls.INSTITUTIONFACILITY_DIR,
             cls.LOG_DIR,
             cls.PLAYERS_DIR,
+            cls.MODELS_DIR,
         ]:
             directory.mkdir(parents=True, exist_ok=True)
+
+    @classmethod
+    def healthprofessional(cls, filename: str) -> str:
+        cls.ensure_user_dirs()
+        return str(cls.HEALTHPROFESSIONAL_DIR / filename)
+
+    @classmethod
+    def institutionfacility(cls, filename: str) -> str:
+        cls.ensure_user_dirs()
+        return str(cls.INSTITUTIONFACILITY_DIR / filename)
 
     @classmethod
     def log(cls, filename: str) -> str:
@@ -167,6 +187,11 @@ class PathConfig:
         cls.ensure_user_dirs()  # Garante que as pastas existam (não cria o arquivo)
         config_path = Path(cls.config(filename))
         return config_path.exists()
+
+    @classmethod
+    def model_path(cls, filename: str) -> str:
+        """Retorna o caminho absoluto para um modelo .task"""
+        return str(cls.MODELS_DIR / filename)
 
     # ===================================================================
     # 5. MÉTODOS LEGADOS (mantidos para compatibilidade)

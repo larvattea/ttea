@@ -43,9 +43,14 @@ https://github.com/larva-udesc/udesc_ttea_view
 __all__ = [
     "AboutView",
     "CalibrationView",
+    "HealthProfessionalEditView",
+    "HealthProfessionalListView",
+    "InstitutionFacilityEditView",
+    "InstitutionFacilityListView",
     "LanguageView",
     "MainView",
     "PlayerEditView",
+    "PlayerGameLaunchView",
     "PlayerListView",
     "SplashScreen",
 ]
@@ -58,8 +63,13 @@ __license__ = "MIT License"
 # Import the submodules
 from .aboutview import AboutView
 from .calibrationview import CalibrationView
+from .healthprofessionaleditview import HealthProfessionalEditView
+from .healthprofessionallistview import HealthProfessionalListView
+from .institutionfacilityeditview import InstitutionFacilityEditView
+from .institutionfacilitylistview import InstitutionFacilityListView
 from .languageview import LanguageView
 from .mainview import MainView
 from .playereditview import PlayerEditView
+from .playergamelaunchview import PlayerGameLaunchView
 from .playerlistview import PlayerListView
 from .splashscreen import SplashScreen

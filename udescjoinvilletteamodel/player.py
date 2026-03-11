@@ -82,15 +82,21 @@ class Player:
         Returns
         -------
         bool
-            True if the player's name and birth date are provided, False
+            True if the player's id, name and birth date are provided, False
             otherwise.
 
         Notes
         -----
-        - A player is considered valid if `name` is not an empty string and
-          `birth_date` is not None.
+        - A player is considered valid if id is not None and int,
+          `name` is not an empty string and `birth_date` is not None.
         """
-        return self.name and self.birth_date
+        return bool(
+            self.id is not None
+            and isinstance(self.id, int)
+            and self.name
+            and self.name.strip()
+            and self.birth_date
+        )
 
     def set_data(self, data: Dict) -> None:
         """Updates the player's data from a dictionary.

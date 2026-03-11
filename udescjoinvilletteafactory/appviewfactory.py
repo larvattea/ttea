@@ -3,13 +3,19 @@ from typing import TYPE_CHECKING, Callable, Optional
 from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QDialog, QMainWindow
 
-from udescjoinvilletteaview import (AboutView, CalibrationView, LanguageView,
-                                    MainView, PlayerEditView, PlayerListView)
+from udescjoinvilletteaview import (AboutView, CalibrationView,
+                                    HealthProfessionalEditView,
+                                    HealthProfessionalListView,
+                                    InstitutionFacilityEditView,
+                                    InstitutionFacilityListView, LanguageView,
+                                    MainView, PlayerEditView,
+                                    PlayerGameLaunchView, PlayerListView)
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
     # Local module import
-    from udescjoinvilletteamodel import Player
+    from udescjoinvilletteamodel import (HealthProfessional,
+                                         InstitutionFacility, Player)
 
 
 class AppViewFactory:
@@ -82,6 +88,81 @@ class AppViewFactory:
         return PlayerListView(parent, player_edit_view)
 
     @staticmethod
+    def create_healthprofessional_edit_view(
+        parent: Optional[QDialog] = None,
+        healthprofessional: Optional["HealthProfessional"] = None,
+    ) -> HealthProfessionalEditView:
+        """
+        Create an instance of HealthProfessionalEditView.
+
+        Parameters
+        ----------
+        parent : Optional[QDialog], optional
+            The parent dialog for the HealthProfessionalEditView,
+            by default None.
+        healthprofessional : Optional[HealthProfessional], optional
+            The healthprofessional object to be edited, by default None.
+
+        Returns
+        -------
+        HealthProfessionalEditView
+            An instance of HealthProfessionalEditView configured
+            with the provided parent and institutionfacility.
+        """
+        return HealthProfessionalEditView(parent, healthprofessional)
+
+    @staticmethod
+    def create_healthprofessional_list_view(
+        parent: Optional[QObject] = None,
+        healthprofessional_edit_view: Optional[
+            Callable[
+                [Optional[QDialog], Optional["HealthProfessional"]],
+                HealthProfessionalEditView,
+            ]
+        ] = None,
+    ) -> HealthProfessionalListView:
+        return HealthProfessionalListView(parent, healthprofessional_edit_view)
+
+    @staticmethod
+    def create_institutionfacility_edit_view(
+        parent: Optional[QDialog] = None,
+        institutionfacility: Optional["InstitutionFacility"] = None,
+    ) -> InstitutionFacilityEditView:
+        """
+        Create an instance of InstitutionFacilityEditView.
+
+        Parameters
+        ----------
+        parent : Optional[QDialog], optional
+            The parent dialog for the InstitutionFacilityEditView,
+            by default None.
+        institutionfacility : Optional[InstitutionFacility], optional
+            The institutionfacility object to be edited, by default None.
+
+        Returns
+        -------
+        InstitutionFacilityEditView
+            An instance of InstitutionFacilityEditView configured
+            with the provided parent and institutionfacility.
+        """
+        return InstitutionFacilityEditView(parent, institutionfacility)
+
+    @staticmethod
+    def create_institutionfacility_list_view(
+        parent: Optional[QObject] = None,
+        institutionfacility_edit_view: Optional[
+            Callable[
+                [Optional[QDialog], Optional["InstitutionFacility"]],
+                InstitutionFacilityEditView,
+            ]
+        ] = None,
+    ) -> InstitutionFacilityListView:
+
+        return InstitutionFacilityListView(
+            parent, institutionfacility_edit_view
+        )
+
+    @staticmethod
     def create_about_view(parent: Optional[QDialog] = None) -> AboutView:
         """
         Create an instance of AboutView.
@@ -116,6 +197,25 @@ class AppViewFactory:
             An instance of CalibrationView configured with the provided parent.
         """
         return CalibrationView(parent)
+
+    @staticmethod
+    def create_playergamelauch_view(
+        parent: Optional[QDialog] = None,
+    ) -> CalibrationView:
+        """
+        Create an instance of PlayerGameLaunchView.
+
+        Parameters
+        ----------
+        parent : Optional[QObject], optional
+            The parent object for the PlayerGameLaunchView, by default None.
+
+        Returns
+        -------
+        PlayerGameLaunchView
+            An instance of PlayerGameLaunchView configured with the provided parent.
+        """
+        return PlayerGameLaunchView(parent)
 
     @staticmethod
     def create_language_view(parent: Optional[QDialog] = None) -> LanguageView:

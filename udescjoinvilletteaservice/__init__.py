@@ -34,8 +34,11 @@ https://github.com/larva-udesc/udesc_ttea_view
 # Define the __all__ variable
 __all__ = [
     "CalibrationService",
+    "HealthProfessionalService",
+    "InstitutionFacilityService",
     "LanguageService",
     "MainService",
+    "PlayerGameLaunchService",
     "PlayerService",
 ]
 
@@ -46,6 +49,9 @@ __license__ = "MIT License"
 
 # Import the submodules
 from .calibrationservice import CalibrationService
+from .healthprofessionalservice import HealthProfessionalService
+from .institutionfacilityservice import InstitutionFacilityService
 from .languageservice import LanguageService
 from .mainservice import MainService
+from .playergamelaunchservice import PlayerGameLaunchService
 from .playerservice import PlayerService
