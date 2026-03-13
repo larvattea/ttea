@@ -8,10 +8,8 @@ from udescjoinvilletteaservice import InstitutionFacilityService
 from udescjoinvilletteautil import MessageService
 
 if TYPE_CHECKING:
-    from udescjoinvilletteaview import (
-        InstitutionFacilityEditView,
-        InstitutionFacilityListView,
-    )
+    from udescjoinvilletteaview import (InstitutionFacilityEditView,
+                                        InstitutionFacilityListView)
 
 
 class InstitutionFacilityListController(QObject):

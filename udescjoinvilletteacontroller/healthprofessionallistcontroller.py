@@ -7,10 +7,8 @@ from udescjoinvilletteaservice import HealthProfessionalService
 from udescjoinvilletteautil import MessageService
 
 if TYPE_CHECKING:
-    from udescjoinvilletteaview import (
-        HealthProfessionalEditView,
-        HealthProfessionalListView,
-    )
+    from udescjoinvilletteaview import (HealthProfessionalEditView,
+                                        HealthProfessionalListView)
 
 
 class HealthProfessionalListController(QObject):

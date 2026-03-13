@@ -106,6 +106,13 @@ class MainController(QObject):
         dialog = self.app_factory.create_calibration_view(parent=self.view)
         dialog.exec()
 
+    def open_calibration_parameterization(self) -> None:
+        self.view.update_status_message(
+            self.tr(
+                "Funcionalidade do parâmetro de calibração em desenvolvimento..."
+            )
+        )
+
     def open_help(self) -> None:
         self.view.update_status_message(
             self.tr("Funcionalidade do help em desenvolvimento...")

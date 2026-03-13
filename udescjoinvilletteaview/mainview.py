@@ -51,6 +51,11 @@ class MainView(QMainWindow, Ui_MainView, WindowConfig):
         self.act_calibration.triggered.connect(
             self.controller.open_calibration
         )
+
+        self.act_calibration_parameterization.triggered.connect(
+            self.controller.open_calibration_parameterization
+        )
+
         self.act_help.triggered.connect(self.controller.open_help)
         self.act_about.triggered.connect(self.controller.open_about)
 

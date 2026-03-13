@@ -5,9 +5,8 @@ from PySide6.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 
 # Local module import
 from udescjoinvilletteacontroller import InstitutionFacilityListController
-from udescjoinvilletteaui import (
-    Ui_InstitutionFacilityListView,
-)  # Assuming generated UI class
+from udescjoinvilletteaui import \
+    Ui_InstitutionFacilityListView  # Assuming generated UI class
 from udescjoinvilletteautil import MessageService
 from udescjoinvilletteawindow import WindowConfig
 
