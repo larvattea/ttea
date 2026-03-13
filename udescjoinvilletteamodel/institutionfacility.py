@@ -5,22 +5,21 @@ from PySide6.QtCore import QCoreApplication
 
 
 def initialize_reflexive(cls):
-    """Decorator to statically initialize player reflection data.
+    """
+    Initialize class with reflexive properties metadata.
+
+    Populates PROPERTIES with all field names and DATA_PROPERTIES with
+    default values of initializable fields.
 
     Parameters
     ----------
     cls : type
-        The class to be decorated.
+        Class to decorate with reflexive properties.
 
     Returns
     -------
     type
-        The decorated class with initialized PROPERTIES and DATA_PROPERTIES.
-
-    Notes
-    -----
-    - Adds the list of field names to `PROPERTIES`.
-    - Adds default values of initializable fields to `DATA_PROPERTIES`.
+        The decorated class with PROPERTIES and DATA_PROPERTIES attributes.
     """
     cls.PROPERTIES = [field.name for field in fields(cls)]
     cls.DATA_PROPERTIES = [
@@ -32,6 +31,53 @@ def initialize_reflexive(cls):
 @initialize_reflexive
 @dataclass
 class InstitutionFacility:
+    """Health institution / facility entity.
+
+    Represents a service location with contact information.
+
+    Attributes
+    ----------
+    id : int
+        Unique identifier for the facility.
+    name : str
+        Facility name.
+    address : str
+        Physical address.
+    phone : str
+        Contact phone number.
+    email : str
+        Contact email address.
+    website : str
+        Website URL.
+    social_network : str
+        Social network or messaging endpoint.
+    type : int
+        Integer key into TYPE_MAP describing facility type.
+
+    CLASS VARIABLES
+    ---------------
+    TYPE_MAP : ClassVar[dict[int, str]]
+        Mapping of facility type codes to translated names.
+        Used for internationalization via QCoreApplication.
+    PROPERTIES : ClassVar[list[str]]
+        List of property names for serialization.
+    DATA_PROPERTIES : ClassVar[list]
+        List of data property defaults for serialization.
+
+    Methods
+    -------
+    is_valid() -> bool
+        Validate required fields.
+    set_data(data: Dict) -> None
+        Populate properties from a dict.
+    get_data() -> List[Dict]
+        Export properties as a list containing one dict.
+
+    Notes
+    -----
+    TYPE_MAP is used for localization via QCoreApplication.translate.
+    """
+
     id: int
     name: str
     address: str
@@ -61,6 +107,26 @@ class InstitutionFacility:
     DATA_PROPERTIES: ClassVar[list] = []
 
     def is_valid(self) -> bool:
+        """Validate the facility object.
+
+        Ensures required fields are present and non-empty, and all other
+        fields are not None.
+
+        Returns
+        -------
+        bool
+            True if the object is valid, False otherwise.
+
+        Examples
+        --------
+        >>> inst = InstitutionFacility(1, 'A', '', '', '', '', '', 0)
+        >>> inst.is_valid()
+        True
+        >>> inst = InstitutionFacility(None, '', '', '', '', '', '', 0)
+        >>> inst.is_valid()
+        False
+        """
+
         if self.id is None or not isinstance(self.id, int):
             return False
 
@@ -81,10 +147,37 @@ class InstitutionFacility:
         return True
 
     def set_data(self, data: Dict) -> None:
+        """Set object attributes from a dictionary.
+
+        Parameters
+        ----------
+        data : Dict
+            Dictionary mapping property names to their values.
+
+        Examples
+        --------
+        >>> inst = InstitutionFacility(1, 'A', '', '', '', '', '', 0)
+        >>> inst.set_data({'name': 'B', 'type': 1})
+        """
+
         for prop in self.PROPERTIES:
             if prop in data:
                 setattr(self, prop, data[prop])
 
     def get_data(self) -> List[Dict]:
+        """Retrieve facility data as a list containing a dict.
+
+        Returns
+        -------
+        List[Dict]
+            List with a single dict containing all property values.
+
+        Examples
+        --------
+        >>> inst = InstitutionFacility(1, 'A', '', '', '', '', '', 0)
+        >>> inst.get_data()[0]['name']
+        'A'
+        """
+
         info = {prop: getattr(self, prop) for prop in self.PROPERTIES}
         return [info]

@@ -164,12 +164,11 @@ class PlayerService(QObject):
             ``True`` if the player was successfully deleted,
             ``False`` otherwise (e.g., player not found).
         """
-        from udescjoinvilletteagames.kartea.service import \
-            PlayerKarteaConfigService
+        from udescjoinvilletteagames.kartea.service import (
+            PlayerKarteaConfigService,
+        )
 
         # Validação de integridade referencial (Negócio)
-        # Todos os jogos que tiverem configurações por jogador
-        # devem ser validados aqui antes da exclusão
         karteaconfig = PlayerKarteaConfigService()
         if karteaconfig.find_config_by_player_id(player_id):
             raise BusinessRuleException(

@@ -5,6 +5,7 @@ from PySide6.QtCore import QObject, Signal
 
 # Local module import
 from udescjoinvilletteadao import InstitutionFacilityCsvDAO
+from udescjoinvilletteaexception import BusinessRuleException
 from udescjoinvilletteamodel import InstitutionFacility
 
 
@@ -168,6 +169,21 @@ class InstitutionFacilityService(QObject):
             ``True`` if the institutionfacility was successfully deleted,
             ``False`` otherwise (e.g., institutionfacility not found).
         """
+        from udescjoinvilletteaservice import HealthProfessionalService
+
+        # Validação de integridade referencial (Negócio)
+        health_service = HealthProfessionalService()
+        healthprofessionals = health_service.get_all_healthprofessionals()
+        if any(
+            healthprofessional.institutionfacility.id == institutionfacility_id
+            for healthprofessional in healthprofessionals
+        ):
+            raise BusinessRuleException(
+                self.tr(
+                    "Exclusão negada: A instituição possui profissional de saúde vinculado."
+                )
+            )
+
         success = self.dao.delete(institutionfacility_id)
 
         if success:
