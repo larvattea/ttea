@@ -30,7 +30,7 @@ class PlayerListController(QObject):
         # Sempre que o serviço emitir que os dados mudaram, a lista recarrega.
         self.service.player_change.connect(self.reload_data)
 
-        # Conexões de UI
+        # Events signals and slots
         self.view.pb_new.clicked.connect(self.create_player)
         self.view.pb_edit.clicked.connect(self.update_player)
         self.view.pb_delete.clicked.connect(self.delete_player)

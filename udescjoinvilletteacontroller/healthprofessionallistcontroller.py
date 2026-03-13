@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Callable, Optional
+from typing import TYPE_CHECKING, Callable, Dict
 
 from PySide6.QtCore import QObject
 
@@ -7,9 +7,10 @@ from udescjoinvilletteaservice import HealthProfessionalService
 from udescjoinvilletteautil import MessageService
 
 if TYPE_CHECKING:
-    from udescjoinvilletteamodel import HealthProfessional
-    from udescjoinvilletteaview import (HealthProfessionalEditView,
-                                        HealthProfessionalListView)
+    from udescjoinvilletteaview import (
+        HealthProfessionalEditView,
+        HealthProfessionalListView,
+    )
 
 
 class HealthProfessionalListController(QObject):
@@ -54,15 +55,7 @@ class HealthProfessionalListController(QObject):
     """
 
     def __init__(
-        self,
-        view: "HealthProfessionalListView",
-        healthprofessional_edit_view_factory: Callable[
-            [
-                Optional["HealthProfessionalListView"],
-                Optional["HealthProfessional"],
-            ],
-            "HealthProfessionalEditView",
-        ],
+        self, view: "HealthProfessionalListView", factory: Callable
     ) -> None:
         """
         Initialize the controller.
@@ -77,9 +70,43 @@ class HealthProfessionalListController(QObject):
             -> HealthProfessionalEditView.
         """
         self.view = view
-        self.factory = healthprofessional_edit_view_factory
+        self.factory = factory
         self.service = HealthProfessionalService()
-        self.msg = MessageService(view)
+        self.msg = MessageService(self.view)
+
+        # ------------------------------------------------------------------
+        # OBSERVER PATTERN: Conexão reativa
+        # ------------------------------------------------------------------
+        # Sempre que o serviço emitir que os dados mudaram, a lista recarrega.
+        self.service.healthprofessional_change.connect(self.reload_data)
+
+        # Events signals and slots
+        self.view.pb_new.clicked.connect(self.create_healthprofessional)
+        self.view.pb_edit.clicked.connect(self.update_healthprofessional)
+        self.view.pb_delete.clicked.connect(self.delete_healthprofessional)
+        self.view.led_search.textChanged.connect(
+            self.filter_healthprofessionals
+        )
+        self.view.tbl_health.selectionModel().selectionChanged.connect(
+            self.on_table_selection
+        )
+
+        # Carga inicial
+        self.load_healthprofessionals()
+
+    def reload_data(self, target_id: int = 0) -> None:
+        """
+        Slot que reage ao sinal do Service.
+        Mantém o filtro atual ao recarregar.
+        """
+        if target_id == 0:
+            target_id = self.view.get_selected_id() or 0
+
+        query = self.view.led_search.text()
+        self.load_healthprofessionals(query)
+
+        if target_id > 0:
+            self.view.select_row_by_id(target_id)
 
     def load_healthprofessionals(self, query: str = "") -> None:
         """
@@ -105,51 +132,34 @@ class HealthProfessionalListController(QObject):
     def on_table_selection(self) -> None:
         """Update details pane when a healthprofessional
         is selected in the table."""
-        healthprofessional_id = self.view.get_selected_healthprofessional_id()
-        if healthprofessional_id is not None:
+        healthprofessional_id = self.view.get_selected_id()
+        if healthprofessional_id:
             healthprofessional = self.service.find_by_id(healthprofessional_id)
-            self.view.display_healthprofessional_details(healthprofessional)
+
+            if healthprofessional:
+                self.view.display_details(healthprofessional)
         else:
             self.view.clear_details()
 
-    def select_and_show_healthprofessional(
-        self, healthprofessional_id: int
-    ) -> None:
-        """
-        Select a healthprofessional row by ID and display its details.
-
-        Parameters
-        ----------
-        healthprofessional_id : int
-            The ID of the healthprofessional to select and show.
-        """
-        healthprofessional = self.service.find_by_id(healthprofessional_id)
-        if healthprofessional:
-            self.view.display_healthprofessional_details(healthprofessional)
-            self.view.select_row_by_id(healthprofessional_id)
-
-    def handle_new_healthprofessional(self) -> None:
+    def create_healthprofessional(self) -> None:
         """Open dialog to create a new healthprofessional
         and save if accepted."""
-        dialog = self.factory(self.view, None)
-        if not dialog.exec():
-            return
+        dialog: "HealthProfessionalEditView" = self.factory(self.view, None)
+        if dialog.exec():
+            data = dialog.controller.get_data()
+            if self.service.create_healthprofessional(data):
+                self.msg.info(
+                    self.tr("Profissional de saúde cadastrado com sucesso!")
+                )
+            else:
+                self.msg.critical(
+                    self.tr("Erro ao salvar profissional de saúde.")
+                )
 
-        data = dialog.controller.get_data()
-        healthprofessional = self.service.create_healthprofessional(data)
-        if healthprofessional:
-            self.load_healthprofessionals(self.view.led_search.text())
-            self.select_and_show_healthprofessional(healthprofessional.id)
-            self.msg.info(
-                self.tr("Profissional de saúde cadastrado com sucesso!")
-            )
-        else:
-            self.msg.critical(self.tr("Erro ao salvar profissional de saúde."))
-
-    def handle_edit_healthprofessional(self) -> None:
+    def update_healthprofessional(self) -> None:
         """Open dialog to edit the selected healthprofessional
         and update if accepted."""
-        healthprofessional_id = self.view.get_selected_healthprofessional_id()
+        healthprofessional_id = self.view.get_selected_id()
         if not healthprofessional_id:
             self.msg.warning(
                 self.tr("Selecione um professional de saúde para editar.")
@@ -161,57 +171,40 @@ class HealthProfessionalListController(QObject):
             self.msg.critical(self.tr("Professional de saúde não encontrada."))
             return
 
-        dialog = self.factory(self.view, healthprofessional)
-        if not dialog.exec():
-            return
-
-        data = dialog.controller.get_data()
-        if self.service.update_healthprofessional(healthprofessional_id, data):
-            self.load_healthprofessionals(self.view.led_search.text())
-            self.select_and_show_healthprofessional(healthprofessional_id)
-            self.msg.info(
-                self.tr("Professional de saúde atualizado com sucesso.")
-            )
-        else:
-            self.msg.critical(
-                self.tr("Erro ao atualizar professional de saúde.")
-            )
+        dialog: "HealthProfessionalEditView" = self.factory(
+            self.view, healthprofessional
+        )
+        if dialog.exec():
+            data = dialog.controller.get_data()
+            if self.service.update_healthprofessional(
+                healthprofessional_id, data
+            ):
+                self.msg.info(
+                    self.tr("Professional de saúde atualizado com sucesso.")
+                )
+            else:
+                self.msg.critical(
+                    self.tr("Erro ao atualizar professional de saúde.")
+                )
 
     def delete_healthprofessional(self) -> None:
         """Delete the selected healthprofessional after user confirmation."""
-        # from udescjoinvilletteagames.kartea.service import (
-        #    PlayerKarteaConfigService,
-        # )
 
-        healthprofessional_id = self.view.get_selected_healthprofessional_id()
+        healthprofessional_id = self.view.get_selected_id()
         if not healthprofessional_id:
             self.msg.warning(
                 self.tr("Selecione um professional de saúde para excluir.")
             )
             return
 
-        # Add validation with config of games don't delete healthprofessional trocar
-        # para ver se não existe profissional de saúde vinculado em sessão.
-        # karteaconfig = PlayerKarteaConfigService()
-        # if karteaconfig.find_config_by_player_id(player_id):
-        #    self.msg.warning(
-        #        self.tr(
-        #            "A exclusão do jogador não é permitida enquanto a configuração do KarTEA existir."
-        #        )
-        #    )
-        #    return
-
         healthprofessional = self.service.find_by_id(healthprofessional_id)
         if not healthprofessional:
             return
 
         if self.msg.question(
-            self.tr("Tem certeza que deseja excluir?\n{0}").format(
-                healthprofessional.name
-            )
+            self.tr("Deseja excluir?\n{0}").format(healthprofessional.name)
         ):
             if self.service.delete_healthprofessional(healthprofessional_id):
-                self.load_healthprofessionals(self.view.led_search.text())
                 self.view.clear_details()
                 self.msg.info(
                     self.tr("Professional de saúde excluído com sucesso.")
@@ -220,3 +213,6 @@ class HealthProfessionalListController(QObject):
                 self.msg.critical(
                     self.tr("Erro ao excluir professional de saúde.")
                 )
+
+    def get_healthprofessional_types(self) -> Dict[int, str]:
+        return self.service.get_healthprofessional_types()

@@ -8,7 +8,6 @@ from udescjoinvilletteautil import MessageService
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
-    # Local module import
     from udescjoinvilletteamodel import HealthProfessional
     from udescjoinvilletteaview import HealthProfessionalEditView
 
@@ -74,6 +73,12 @@ class HealthProfessionalEditController(QObject):
         self.msg = message_service or MessageService(view)
         self._initialize_view()
 
+        # ------------------------------------------------------------------
+        # Connect buttons to controller (validation + accept/reject handling)
+        # ------------------------------------------------------------------
+        self.view.pb_ok.clicked.connect(self.handle_ok)
+        self.view.pb_cancel.clicked.connect(self.handle_cancel)
+
     def _initialize_view(self):
         self.list_types()
         self.list_institutions()
@@ -86,7 +91,7 @@ class HealthProfessionalEditController(QObject):
             self.view.cbx_type.setCurrentIndex(index)
 
             index = self.view.cbx_institution.findData(
-                int(self.healthprofessional.institutionfacility)
+                self.healthprofessional.institutionfacility.id
             )
             self.view.cbx_institution.setCurrentIndex(index)
         else:
@@ -113,9 +118,18 @@ class HealthProfessionalEditController(QObject):
         If validation passes, sets ok_clicked to True and accepts the
         dialog. Otherwise shows a critical message with errors.
         """
-        if self.is_input_valid():
-            self.ok_clicked = True
-            self.view.accept()
+        data = self.get_data()
+        errors = self.service.validate_data(data)
+
+        if errors:
+            self.msg.critical(
+                self.tr("Por favor, corrija os dados inválidos:\n")
+                + "".join(errors)
+            )
+            return
+
+        self.ok_clicked = True
+        self.view.accept()
 
     def handle_cancel(self) -> None:
         """Close the dialog without saving changes.
@@ -123,33 +137,6 @@ class HealthProfessionalEditController(QObject):
         Rejects the dialog, discarding any entered data.
         """
         self.view.reject()
-
-    def is_input_valid(self) -> bool:
-        """Validate required fields.
-
-        Currently checks that the name field is not empty. Shows a
-        critical message listing all errors if validation fails.
-
-        Returns
-        -------
-        bool
-            True if all inputs are valid, False otherwise.
-        """
-        error_message = ""
-
-        if not self.view.led_name.text():
-            error_message += self.tr("Nome é obrigatório!\n")
-
-        if self.view.cbx_type.currentIndex() == 0:
-            error_message += self.tr("Tipo é obrigatório!\n")
-
-        if error_message:
-            self.msg.critical(
-                self.tr("Por favor, corrija os dados inválidos:\n")
-                + error_message
-            )
-            return False
-        return True
 
     def get_data(self) -> Dict[str, Union[str, Any]]:
         """Extract current form values into a dictionary.
@@ -159,17 +146,10 @@ class HealthProfessionalEditController(QObject):
         dict
             Mapping with keys:
             - "name": str from name input
-            - "birth_date": date from date editor
-            - "observation": str from observation text area
         """
-        institution_name = self.view.cbx_institution.currentText()
-        institution = next(
-            (
-                i
-                for i in self.service.get_all_institutionfacilities()
-                if i.name == institution_name
-            ),
-            None,
+        institution_id = self.view.cbx_institution.currentData()
+        institution = self.service.get_institutionfacility_by_id(
+            institution_id
         )
 
         return {
@@ -180,5 +160,5 @@ class HealthProfessionalEditController(QObject):
             ),
             "name": self.view.led_name.text(),
             "type": self.view.cbx_type.currentData(),
-            "institutionfacility": institution,  # institution.id if institution else None,
+            "institutionfacility": institution,
         }

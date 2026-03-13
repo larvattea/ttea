@@ -1,8 +1,9 @@
-# udescjoinvillettea/service/institutionfacility_service.py
+# udescjoinvillettea/service/institutionfacilityservice.py
 from typing import Any, Dict, List, Optional
 
 from PySide6.QtCore import QObject, Signal
 
+# Local module import
 from udescjoinvilletteadao import InstitutionFacilityCsvDAO
 from udescjoinvilletteamodel import InstitutionFacility
 
@@ -37,7 +38,7 @@ class InstitutionFacilityService(QObject):
     """
 
     _instance = None
-    # Sinal que avisa: "Os dados do jagador mudaram"
+    # Sinal que avisa: "Se os dados mudaram"
     institutionfacility_change = Signal(int)
 
     def __new__(cls, *args, **kwargs):
@@ -214,3 +215,13 @@ class InstitutionFacilityService(QObject):
 
     def get_institutionfacility_types(self) -> Dict[int, str]:
         return InstitutionFacility.TYPE_MAP
+
+    def get_dao(self) -> InstitutionFacilityCsvDAO:
+        """Return the DAO instance used by this service.
+
+        Returns
+        -------
+        InstitutionFacilityCsvDAO
+            The data access object instance responsible for persistence.
+        """
+        return self.dao

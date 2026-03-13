@@ -1,7 +1,7 @@
 import os
 import re
 from dataclasses import fields
-from typing import Dict, List, Optional
+from typing import TYPE_CHECKING, Dict, List, Optional
 
 import portalocker
 
@@ -10,15 +10,22 @@ from udescjoinvilletteadao import DAO
 from udescjoinvilletteamodel import HealthProfessional
 from udescjoinvilletteautil import CSVHandler, PathConfig
 
+if TYPE_CHECKING:
+    from udescjoinvilletteadao import InstitutionFacilityCsvDAO
+
 
 class HealthProfessionalCsvDAO(DAO[HealthProfessional]):
     """Specialized DAO for healthprofessional entities using CSV files
     with in-memory cache.
     """
 
-    def __init__(self) -> None:
+    def __init__(
+        self, institution_dao: Optional["InstitutionFacilityCsvDAO"] = None
+    ) -> None:
         """Initialize the DAO and load all healthprofessionals
         from CSV files."""
+        from udescjoinvilletteadao import InstitutionFacilityCsvDAO
+
         self.csv_handler = CSVHandler()
         self.healthprofessionals: Dict[int, HealthProfessional] = {}
         self.file_map: Dict[int, str] = {}
@@ -28,6 +35,7 @@ class HealthProfessionalCsvDAO(DAO[HealthProfessional]):
         self.bool_properties = [
             f.name for f in fields(HealthProfessional) if f.type == bool
         ]
+        self.institution_dao = institution_dao or InstitutionFacilityCsvDAO()
         self.load_all_healthprofessionals()
 
     def generate_next_id(self) -> int:
@@ -156,8 +164,8 @@ class HealthProfessionalCsvDAO(DAO[HealthProfessional]):
 
         Returns
         -------
-        Optional[Player]
-            The Player instance if found, None otherwise.
+        Optional[HealthProfessional]
+            The HealthProfessional instance if found, None otherwise.
         """
         return self.healthprofessionals.get(obj_id)
 
@@ -228,7 +236,19 @@ class HealthProfessionalCsvDAO(DAO[HealthProfessional]):
             healthprofessional_kwargs = {}
             for prop in HealthProfessional.PROPERTIES:
                 if prop in row:
-                    if prop in self.int_properties:
+                    # Special handling for institutionfacility to load the full object
+                    if prop == "institutionfacility":
+                        institution_id = (
+                            int(row[prop]) if row[prop].isdigit() else None
+                        )
+                        if self.institution_dao and institution_id:
+                            # Busca o objeto completo da instituição pelo ID
+                            healthprofessional_kwargs[prop] = (
+                                self.institution_dao.select(institution_id)
+                            )
+                        else:
+                            healthprofessional_kwargs[prop] = None
+                    elif prop in self.int_properties:
                         healthprofessional_kwargs[prop] = (
                             int(row[prop]) if row[prop].isdigit() else 0
                         )
@@ -246,3 +266,19 @@ class HealthProfessionalCsvDAO(DAO[HealthProfessional]):
                 healthprofessional
             )
             self.file_map[healthprofessional.id] = str(file_path)
+
+    def search_healthprofessionals(
+        self, query: str = ""
+    ) -> List[HealthProfessional]:
+        """Retorna a lista de instituições, opcionalmente filtrada."""
+        all_healthprofessionals = list(self.healthprofessionals.values())
+
+        if not query.strip():
+            return all_healthprofessionals
+
+        q = query.lower().strip()
+        return [
+            p
+            for p in all_healthprofessionals
+            if q in str(p.id) or q in p.name.lower()
+        ]

@@ -1,11 +1,14 @@
-# udescjoinvillettea/service/healthprofessional_service.py
+# udescjoinvillettea/service/healthprofessionalservice.py
 from typing import Any, Dict, List, Optional
 
+from PySide6.QtCore import QObject, Signal
+
+# Local module import
 from udescjoinvilletteadao import HealthProfessionalCsvDAO
 from udescjoinvilletteamodel import HealthProfessional, InstitutionFacility
 
 
-class HealthProfessionalService:
+class HealthProfessionalService(QObject):
     """
     Service layer (MVCS) handling all business rules related to insti.
 
@@ -34,6 +37,15 @@ class HealthProfessionalService:
         Searches healthprofessionals by name or ID (case-insensitive).
     """
 
+    _instance = None
+    # Sinal que avisa: "Se os dados mudaram"
+    healthprofessional_change = Signal(int)
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+
     def __init__(self, dao: Optional[HealthProfessionalCsvDAO] = None):
         """
         Initialize the service with a data access object.
@@ -46,8 +58,13 @@ class HealthProfessionalService:
         """
         from udescjoinvilletteaservice import InstitutionFacilityService
 
-        self.dao = dao or HealthProfessionalCsvDAO()
-        self.institution_service = InstitutionFacilityService()
+        if not hasattr(self, "_initialized"):
+            super().__init__()
+            self.institution_service = InstitutionFacilityService()
+            self.dao = dao or HealthProfessionalCsvDAO(
+                self.institution_service.get_dao()
+            )
+            self._initialized = True
 
     def get_all_healthprofessionals(self) -> List[HealthProfessional]:
         """Return a list of all registered healthprofessionals.
@@ -59,6 +76,25 @@ class HealthProfessionalService:
             in the DAO.
         """
         return self.dao.list()
+
+    def validate_data(self, data: Dict[str, Any]) -> List[str]:
+        """
+        Valida as regras de negócio para os dados de uma instituição.
+        Retorna uma lista de mensagens de erro (vazia se estiver tudo ok).
+        """
+        errors = []
+        if data.get("id") is None:
+            errors.append(self.tr("ID é obrigatório!\n"))
+        elif not isinstance(data.get("id"), int):
+            errors.append(self.tr("ID deve ser do tipo inteiro!\n"))
+
+        if not data.get("name") or not data.get("name").strip():
+            errors.append(self.tr("Nome é obrigatório!\n"))
+
+        if data.get("type") == 0:
+            errors.append(self.tr("Tipo é obrigatório!\n"))
+
+        return errors
 
     def create_healthprofessional(
         self, data: Dict[str, Any]
@@ -83,6 +119,8 @@ class HealthProfessionalService:
             return None
 
         new_id = self.dao.insert(healthprofessional)
+        if new_id:
+            self.healthprofessional_change.emit(new_id)
         return self.dao.select(new_id) if new_id > 0 else None
 
     def update_healthprofessional(
@@ -114,7 +152,12 @@ class HealthProfessionalService:
         if not healthprofessional.is_valid():
             return False
 
-        return self.dao.update(healthprofessional)
+        success = self.dao.update(healthprofessional)
+
+        if success:
+            self.healthprofessional_change.emit(healthprofessional_id)
+
+        return success
 
     def delete_healthprofessional(self, healthprofessional_id: int) -> bool:
         """Delete a healthprofessional by its identifier.
@@ -130,7 +173,12 @@ class HealthProfessionalService:
             ``True`` if the healthprofessional was successfully deleted,
             ``False`` otherwise (e.g., healthprofessional not found).
         """
-        return self.dao.delete(healthprofessional_id)
+        success = self.dao.delete(healthprofessional_id)
+
+        if success:
+            self.institutionfacility_change.emit(0)
+
+        return success
 
     def find_by_id(
         self, healthprofessional_id: int
@@ -187,3 +235,8 @@ class HealthProfessionalService:
             self.institution_service.get_all_institutionfacilities(),
             key=lambda p: p.name,
         )
+
+    def get_institutionfacility_by_id(
+        self, institution_id: int
+    ) -> Optional[InstitutionFacility]:
+        return self.institution_service.find_by_id(institution_id)

@@ -8,7 +8,6 @@ from udescjoinvilletteautil import MessageService
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
-    # Local module import
     from udescjoinvilletteamodel import InstitutionFacility
     from udescjoinvilletteaview import InstitutionFacilityEditView
 

@@ -81,7 +81,7 @@ class InstitutionFacilityListController(QObject):
         # Sempre que o serviço emitir que os dados mudaram, a lista recarrega.
         self.service.institutionfacility_change.connect(self.reload_data)
 
-        # Conexões de UI
+        # Events signals and slots
         self.view.pb_new.clicked.connect(self.create_institutionfacility)
         self.view.pb_edit.clicked.connect(self.update_institutionfacility)
         self.view.pb_delete.clicked.connect(self.delete_institutionfacility)

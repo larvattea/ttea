@@ -3,10 +3,12 @@ from typing import TYPE_CHECKING, Callable, List, Optional
 from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 
-from udescjoinvilletteaservice import HealthProfessionalService
 # Local module import
-from udescjoinvilletteaui import \
-    Ui_HealthProfessionalListView  # Assuming generated UI class
+from udescjoinvilletteacontroller import HealthProfessionalListController
+
+from udescjoinvilletteaui import (
+    Ui_HealthProfessionalListView,
+)  # Assuming generated UI class
 from udescjoinvilletteautil import MessageService
 from udescjoinvilletteawindow import WindowConfig
 
@@ -29,14 +31,11 @@ class HealthProfessionalListView(
             ]
         ] = None,
     ) -> None:
-        from udescjoinvilletteacontroller import \
-            HealthProfessionalListController
 
         super().__init__(parent)
         # Setup UI interface Ui_PlayerListView
         self.setupUi(self)
         self.msg = MessageService(self)
-        self.service = HealthProfessionalService()
 
         # Set up window properties
         self.setup_window(
@@ -53,26 +52,6 @@ class HealthProfessionalListView(
             self, healthprofessional_edit_view_factory
         )
 
-        # Events signals and slots
-        self.pb_new.clicked.connect(
-            self.controller.handle_new_healthprofessional
-        )
-        self.pb_edit.clicked.connect(
-            self.controller.handle_edit_healthprofessional
-        )
-        self.pb_delete.clicked.connect(
-            self.controller.delete_healthprofessional
-        )
-        self.led_search.textChanged.connect(
-            self.controller.filter_healthprofessionals
-        )
-        self.tbl_health.selectionModel().selectionChanged.connect(
-            self.controller.on_table_selection
-        )
-
-        # Load initial data
-        self.controller.load_healthprofessionals()
-
         # Perfect column widths
         self.tbl_health.horizontalHeader().setSectionResizeMode(
             0, QHeaderView.ResizeToContents
@@ -85,7 +64,7 @@ class HealthProfessionalListView(
     # High-level methods used by the Controller (required for decoupling)
     # =====================================================================
     def populate_table(
-        self, healthprofessionals: List["InstitutionFacility"]
+        self, healthprofessionals: List["HealthProfessional"]
     ) -> None:
         """Fill the table with a list of healthprofessionals."""
         self.tbl_health.blockSignals(True)
@@ -109,7 +88,7 @@ class HealthProfessionalListView(
         self.lbl_name_value.setText("")
         self.lbl_type_value.setText("")
 
-    def display_healthprofessional_details(
+    def display_details(
         self, healthprofessional: Optional["HealthProfessional"]
     ) -> None:
         """Show the selected healthprofessional's
@@ -123,13 +102,13 @@ class HealthProfessionalListView(
         self.lbl_name_value.setText(healthprofessional.name)
         self.lbl_type_value.setText(
             str(
-                self.service.get_healthprofessional_types()[
+                self.controller.get_healthprofessional_types()[
                     healthprofessional.type
                 ]
             )
         )
 
-    def get_selected_healthprofessional_id(self) -> Optional[int]:
+    def get_selected_id(self) -> Optional[int]:
         """Return the ID of the currently selected pealthprofessional
         or None."""
         items = self.tbl_health.selectedItems()
@@ -143,6 +122,9 @@ class HealthProfessionalListView(
     def select_row_by_id(self, healthprofessional_id: int) -> None:
         """Programmatically select the row with
         the given healthprofessional ID."""
+        if healthprofessional_id <= 0:
+            return
+
         self.tbl_health.blockSignals(True)
         for row in range(self.tbl_health.rowCount()):
             item = self.tbl_health.item(row, 0)
@@ -151,6 +133,7 @@ class HealthProfessionalListView(
                 self.tbl_health.scrollToItem(item)
                 break
         self.tbl_health.blockSignals(False)
+        self.controller.on_table_selection()
 
     def closeEvent(self, event: QCloseEvent) -> None:
         """Override close event to confirm exit.
