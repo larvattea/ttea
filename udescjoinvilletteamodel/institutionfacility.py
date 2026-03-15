@@ -1,7 +1,7 @@
 from dataclasses import dataclass, fields
 from typing import ClassVar, Dict, List
 
-from PySide6.QtCore import QCoreApplication
+from PySide6.QtCore import QT_TRANSLATE_NOOP
 
 
 def initialize_reflexive(cls):
@@ -87,20 +87,18 @@ class InstitutionFacility:
     social_network: str
     type: int
 
-    # Mapping prefixes to .ini sections
+    # Mapping type with translation support using QT_TRANSLATE_NOOP
+    # for deferred translation. The translation will be applied when
+    # the type is accessed in the UI, allowing for dynamic language changes.
     TYPE_MAP: ClassVar[dict[int, str]] = {
         0: "",
-        1: QCoreApplication.translate("InstitutionFacility", "Clínica"),
-        2: QCoreApplication.translate("InstitutionFacility", "Consultório"),
-        3: QCoreApplication.translate("InstitutionFacility", "Hospital"),
-        4: QCoreApplication.translate(
-            "InstitutionFacility", "Instituição Comunitária"
-        ),
-        5: QCoreApplication.translate(
-            "InstitutionFacility", "Instituição de Ensino"
-        ),
-        6: QCoreApplication.translate("InstitutionFacility", "Outro"),
-        7: QCoreApplication.translate("InstitutionFacility", "Posto de Saúde"),
+        1: QT_TRANSLATE_NOOP("InstitutionFacility", "Clínica"),
+        2: QT_TRANSLATE_NOOP("InstitutionFacility", "Consultório"),
+        3: QT_TRANSLATE_NOOP("InstitutionFacility", "Hospital"),
+        4: QT_TRANSLATE_NOOP("InstitutionFacility", "Instituição Comunitária"),
+        5: QT_TRANSLATE_NOOP("InstitutionFacility", "Instituição de Ensino"),
+        6: QT_TRANSLATE_NOOP("InstitutionFacility", "Outro"),
+        7: QT_TRANSLATE_NOOP("InstitutionFacility", "Posto de Saúde"),
     }
 
     PROPERTIES: ClassVar[list[str]] = []

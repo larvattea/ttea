@@ -1,7 +1,7 @@
 # udescjoinvillettea/service/healthprofessionalservice.py
 from typing import Any, Dict, List, Optional
 
-from PySide6.QtCore import QObject, Signal
+from PySide6.QtCore import QCoreApplication, QObject, Signal
 
 # Local module import
 from udescjoinvilletteadao import HealthProfessionalCsvDAO
@@ -228,7 +228,10 @@ class HealthProfessionalService(QObject):
         ]
 
     def get_healthprofessional_types(self) -> Dict[int, str]:
-        return HealthProfessional.TYPE_MAP
+        return {
+            key: QCoreApplication.translate("HealthProfessional", value)
+            for key, value in HealthProfessional.TYPE_MAP.items()
+        }
 
     def get_all_institutionfacilities(self) -> List[InstitutionFacility]:
         return sorted(

@@ -1,7 +1,7 @@
 # udescjoinvillettea/service/institutionfacilityservice.py
 from typing import Any, Dict, List, Optional
 
-from PySide6.QtCore import QObject, Signal
+from PySide6.QtCore import QCoreApplication, QObject, Signal
 
 # Local module import
 from udescjoinvilletteadao import InstitutionFacilityCsvDAO
@@ -230,7 +230,11 @@ class InstitutionFacilityService(QObject):
         return self.dao.search_institutionfacilities(query)
 
     def get_institutionfacility_types(self) -> Dict[int, str]:
-        return InstitutionFacility.TYPE_MAP
+        # return InstitutionFacility.TYPE_MAP
+        return {
+            key: QCoreApplication.translate("InstitutionFacility", value)
+            for key, value in InstitutionFacility.TYPE_MAP.items()
+        }
 
     def get_dao(self) -> InstitutionFacilityCsvDAO:
         """Return the DAO instance used by this service.

@@ -1,7 +1,7 @@
 from dataclasses import dataclass, fields
 from typing import TYPE_CHECKING, ClassVar, Dict, List
 
-from PySide6.QtCore import QCoreApplication
+from PySide6.QtCore import QT_TRANSLATE_NOOP
 
 if TYPE_CHECKING:
     from udescjoinvilletteamodel import InstitutionFacility
@@ -81,41 +81,33 @@ class HealthProfessional:
     type: int
     institutionfacility: "InstitutionFacility"
 
-    # Mapping prefixes to .ini sections
+    # Mapping type with translation support using QT_TRANSLATE_NOOP
+    # for deferred translation. The translation will be applied when
+    # the type is accessed in the UI, allowing for dynamic language changes.
     TYPE_MAP: ClassVar[dict[int, str]] = {
         0: "",
-        1: QCoreApplication.translate("HealthProfessional", "Arteterapeuta"),
-        2: QCoreApplication.translate(
-            "HealthProfessional", "Assistente Social"
-        ),
-        3: QCoreApplication.translate(
-            "HealthProfessional", "Cuidador Especializado"
-        ),
-        4: QCoreApplication.translate("HealthProfessional", "Educador Físico"),
-        5: QCoreApplication.translate("HealthProfessional", "Enfermeiro"),
-        6: QCoreApplication.translate("HealthProfessional", "Fisioterapeuta"),
-        7: QCoreApplication.translate("HealthProfessional", "Fonoaudiólogo"),
-        8: QCoreApplication.translate("HealthProfessional", "Geneticista"),
-        9: QCoreApplication.translate(
-            "HealthProfessional", "Mediador Escolar"
-        ),
-        10: QCoreApplication.translate(
-            "HealthProfessional", "Musicoterapeuta"
-        ),
-        11: QCoreApplication.translate("HealthProfessional", "Neuropediatra"),
-        12: QCoreApplication.translate("HealthProfessional", "Neurologista"),
-        13: QCoreApplication.translate("HealthProfessional", "Nutricionista"),
-        14: QCoreApplication.translate("HealthProfessional", "Pediatra"),
-        15: QCoreApplication.translate(
+        1: QT_TRANSLATE_NOOP("HealthProfessional", "Arteterapeuta"),
+        2: QT_TRANSLATE_NOOP("HealthProfessional", "Assistente Social"),
+        3: QT_TRANSLATE_NOOP("HealthProfessional", "Cuidador Especializado"),
+        4: QT_TRANSLATE_NOOP("HealthProfessional", "Educador Físico"),
+        5: QT_TRANSLATE_NOOP("HealthProfessional", "Enfermeiro"),
+        6: QT_TRANSLATE_NOOP("HealthProfessional", "Fisioterapeuta"),
+        7: QT_TRANSLATE_NOOP("HealthProfessional", "Fonoaudiólogo"),
+        8: QT_TRANSLATE_NOOP("HealthProfessional", "Geneticista"),
+        9: QT_TRANSLATE_NOOP("HealthProfessional", "Mediador Escolar"),
+        10: QT_TRANSLATE_NOOP("HealthProfessional", "Musicoterapeuta"),
+        11: QT_TRANSLATE_NOOP("HealthProfessional", "Neuropediatra"),
+        12: QT_TRANSLATE_NOOP("HealthProfessional", "Neurologista"),
+        13: QT_TRANSLATE_NOOP("HealthProfessional", "Nutricionista"),
+        14: QT_TRANSLATE_NOOP("HealthProfessional", "Pediatra"),
+        15: QT_TRANSLATE_NOOP(
             "HealthProfessional", "Professor Educação Especial"
         ),
-        16: QCoreApplication.translate("HealthProfessional", "Psicopedagogo"),
-        17: QCoreApplication.translate("HealthProfessional", "Psicólogo"),
-        18: QCoreApplication.translate("HealthProfessional", "Psiquiatra"),
-        19: QCoreApplication.translate(
-            "HealthProfessional", "Terapeuta Ocupacional"
-        ),
-        20: QCoreApplication.translate("HealthProfessional", "Voluntário"),
+        16: QT_TRANSLATE_NOOP("HealthProfessional", "Psicopedagogo"),
+        17: QT_TRANSLATE_NOOP("HealthProfessional", "Psicólogo"),
+        18: QT_TRANSLATE_NOOP("HealthProfessional", "Psiquiatra"),
+        19: QT_TRANSLATE_NOOP("HealthProfessional", "Terapeuta Ocupacional"),
+        20: QT_TRANSLATE_NOOP("HealthProfessional", "Voluntário"),
     }
 
     PROPERTIES: ClassVar[list[str]] = []
