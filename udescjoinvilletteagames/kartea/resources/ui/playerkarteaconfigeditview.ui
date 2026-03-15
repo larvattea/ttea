@@ -48,6 +48,9 @@
            <property name="enabled">
             <bool>true</bool>
            </property>
+           <property name="maxVisibleItems">
+            <number>5</number>
+           </property>
           </widget>
          </item>
          <item row="1" column="0">
@@ -72,7 +75,11 @@
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QComboBox" name="cbx_current_phase"/>
+          <widget class="QComboBox" name="cbx_current_phase">
+           <property name="maxVisibleItems">
+            <number>5</number>
+           </property>
+          </widget>
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="lbl_current_level">
@@ -82,7 +89,11 @@
           </widget>
          </item>
          <item row="3" column="1">
-          <widget class="QComboBox" name="cbx_current_level"/>
+          <widget class="QComboBox" name="cbx_current_level">
+           <property name="maxVisibleItems">
+            <number>5</number>
+           </property>
+          </widget>
          </item>
          <item row="4" column="0">
           <widget class="QLabel" name="lbl_level_time">
@@ -218,6 +229,9 @@
            <property name="editable">
             <bool>true</bool>
            </property>
+           <property name="maxVisibleItems">
+            <number>5</number>
+           </property>
           </widget>
          </item>
          <item row="1" column="0">
@@ -231,6 +245,9 @@
           <widget class="QComboBox" name="cbx_environment_image">
            <property name="editable">
             <bool>true</bool>
+           </property>
+           <property name="maxVisibleItems">
+            <number>5</number>
            </property>
           </widget>
          </item>
@@ -246,6 +263,9 @@
            <property name="editable">
             <bool>true</bool>
            </property>
+           <property name="maxVisibleItems">
+            <number>5</number>
+           </property>
           </widget>
          </item>
          <item row="3" column="0">
@@ -259,6 +279,9 @@
           <widget class="QComboBox" name="cbx_obstacle_image">
            <property name="editable">
             <bool>true</bool>
+           </property>
+           <property name="maxVisibleItems">
+            <number>5</number>
            </property>
           </widget>
          </item>
@@ -367,6 +390,9 @@
            <property name="editable">
             <bool>true</bool>
            </property>
+           <property name="maxVisibleItems">
+            <number>5</number>
+           </property>
           </widget>
          </item>
          <item row="1" column="0">
@@ -381,6 +407,9 @@
            <property name="editable">
             <bool>true</bool>
            </property>
+           <property name="maxVisibleItems">
+            <number>5</number>
+           </property>
           </widget>
          </item>
          <item row="2" column="0">
@@ -394,6 +423,9 @@
           <widget class="QComboBox" name="cbx_negative_feedback_image">
            <property name="editable">
             <bool>true</bool>
+           </property>
+           <property name="maxVisibleItems">
+            <number>5</number>
            </property>
           </widget>
          </item>
@@ -435,6 +467,9 @@
              <property name="editable">
               <bool>true</bool>
              </property>
+             <property name="maxVisibleItems">
+              <number>5</number>
+             </property>
             </widget>
            </item>
            <item>
@@ -464,6 +499,9 @@
              <property name="editable">
               <bool>true</bool>
              </property>
+             <property name="maxVisibleItems">
+              <number>5</number>
+             </property>
             </widget>
            </item>
            <item>
@@ -492,6 +530,9 @@
             <widget class="QComboBox" name="cbx_negative_feedback_sound">
              <property name="editable">
               <bool>true</bool>
+             </property>
+             <property name="maxVisibleItems">
+              <number>5</number>
              </property>
             </widget>
            </item>

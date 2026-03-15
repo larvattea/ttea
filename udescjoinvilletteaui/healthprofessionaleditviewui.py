@@ -58,6 +58,7 @@ class Ui_HealthProfessionalEditView(object):
 
         self.cbx_type = QComboBox(self.tab_data)
         self.cbx_type.setObjectName(u"cbx_type")
+        self.cbx_type.setMaxVisibleItems(5)
 
         self.details_layout.setWidget(1, QFormLayout.ItemRole.FieldRole, self.cbx_type)
 
@@ -70,6 +71,7 @@ class Ui_HealthProfessionalEditView(object):
 
         self.cbx_institution = QComboBox(self.tab_data)
         self.cbx_institution.setObjectName(u"cbx_institution")
+        self.cbx_institution.setMaxVisibleItems(5)
 
         self.details_layout.setWidget(2, QFormLayout.ItemRole.FieldRole, self.cbx_institution)
 

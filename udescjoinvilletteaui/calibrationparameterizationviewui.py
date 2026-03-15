@@ -463,6 +463,7 @@ class Ui_CalibrationParameterizationView(object):
 
         self.cbx_ratio = QComboBox(self.grp_camera_info)
         self.cbx_ratio.setObjectName(u"cbx_ratio")
+        self.cbx_ratio.setMaxVisibleItems(5)
 
         self.form_camera.setWidget(0, QFormLayout.ItemRole.FieldRole, self.cbx_ratio)
 
@@ -473,6 +474,7 @@ class Ui_CalibrationParameterizationView(object):
 
         self.cbx_camera_width = QComboBox(self.grp_camera_info)
         self.cbx_camera_width.setObjectName(u"cbx_camera_width")
+        self.cbx_camera_width.setMaxVisibleItems(5)
 
         self.form_camera.setWidget(1, QFormLayout.ItemRole.FieldRole, self.cbx_camera_width)
 
@@ -483,6 +485,7 @@ class Ui_CalibrationParameterizationView(object):
 
         self.cbx_camera_height = QComboBox(self.grp_camera_info)
         self.cbx_camera_height.setObjectName(u"cbx_camera_height")
+        self.cbx_camera_height.setMaxVisibleItems(5)
 
         self.form_camera.setWidget(2, QFormLayout.ItemRole.FieldRole, self.cbx_camera_height)
 

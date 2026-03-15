@@ -166,7 +166,7 @@ class HealthProfessionalListController(QObject):
 
         healthprofessional = self.service.find_by_id(healthprofessional_id)
         if not healthprofessional:
-            self.msg.critical(self.tr("Professional de saúde não encontrada."))
+            self.msg.critical(self.tr("Professional de saúde não encontrado."))
             return
 
         dialog: "HealthProfessionalEditView" = self.factory(

@@ -15,6 +15,7 @@ SOURCES += ../../udescjoinvilletteaapp/*.py \
             ../../udescjoinvilletteacontroller/*.py \
             ../../udescjoinvilletteagames/kartea/controller/*.py \
             ../../udescjoinvilletteagames/kartea/view/*.py \
+            ../../udescjoinvilletteamodel/*.py \
             ../../udescjoinvilletteaservice/*.py \            
             ../../udescjoinvilletteautil/*.py \
             ../../udescjoinvilletteaview/*.py \

@@ -765,7 +765,11 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QComboBox" name="cbx_ratio"/>
+           <widget class="QComboBox" name="cbx_ratio">
+            <property name="maxVisibleItems">
+             <number>5</number>
+            </property>
+           </widget>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="lbl_width">
@@ -775,7 +779,11 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QComboBox" name="cbx_camera_width"/>
+           <widget class="QComboBox" name="cbx_camera_width">
+            <property name="maxVisibleItems">
+             <number>5</number>
+            </property>
+           </widget>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="lbl_height">
@@ -785,7 +793,11 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QComboBox" name="cbx_camera_height"/>
+           <widget class="QComboBox" name="cbx_camera_height">
+            <property name="maxVisibleItems">
+             <number>5</number>
+            </property>
+           </widget>
           </item>
           <item row="3" column="0">
            <widget class="QLabel" name="lbl_fps">

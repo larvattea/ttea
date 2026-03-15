@@ -48,6 +48,7 @@ class Ui_CalibrationView(object):
         self.cbx_proportion = QComboBox(CalibrationView)
         self.cbx_proportion.setObjectName(u"cbx_proportion")
         self.cbx_proportion.setMinimumSize(QSize(140, 32))
+        self.cbx_proportion.setMaxVisibleItems(5)
 
         self.lay_combobox.addWidget(self.cbx_proportion)
 
@@ -60,6 +61,7 @@ class Ui_CalibrationView(object):
         self.cbx_monitor = QComboBox(CalibrationView)
         self.cbx_monitor.setObjectName(u"cbx_monitor")
         self.cbx_monitor.setMinimumSize(QSize(140, 32))
+        self.cbx_monitor.setMaxVisibleItems(5)
 
         self.lay_combobox.addWidget(self.cbx_monitor)
 
@@ -72,6 +74,7 @@ class Ui_CalibrationView(object):
         self.cbx_camera = QComboBox(CalibrationView)
         self.cbx_camera.setObjectName(u"cbx_camera")
         self.cbx_camera.setMinimumSize(QSize(180, 32))
+        self.cbx_camera.setMaxVisibleItems(5)
 
         self.lay_combobox.addWidget(self.cbx_camera)
 

@@ -1,26 +1,31 @@
 import json
-from typing import TYPE_CHECKING, List, Optional
+from typing import List
 
 # Local module import
-from udescjoinvilletteamodel import Language, Player
+from udescjoinvilletteamodel import HealthProfessional, Player
 from udescjoinvilletteautil import PathConfig
-
-if TYPE_CHECKING:
-    from udescjoinvilletteaservice import PlayerService
 
 
 class PlayerGameLaunchService:
     METADATA_FILENAME = "metadata.json"
 
-    def __init__(self, player_service: Optional["PlayerService"] = None):
-        from udescjoinvilletteaservice import PlayerService
+    def __init__(self):
+        from udescjoinvilletteaservice import (HealthProfessionalService,
+                                               PlayerService)
 
-        self.player_service = player_service or PlayerService()
+        self.player_service = PlayerService()
+        self.health_professional_service = HealthProfessionalService()
 
     def get_all_players(self) -> List[Player]:
         return sorted(
             self.player_service.get_all_players(),
             key=lambda p: p.name,
+        )
+
+    def get_all_healthprofessionals(self) -> List[HealthProfessional]:
+        return sorted(
+            self.health_professional_service.get_all_healthprofessionals(),
+            key=lambda h: h.name,
         )
 
     def get_games_metadata(self) -> List[dict]:

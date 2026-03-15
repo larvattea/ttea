@@ -58,6 +58,9 @@
          <height>32</height>
         </size>
        </property>
+       <property name="maxVisibleItems">
+        <number>5</number>
+       </property>
       </widget>
      </item>
      <item>
@@ -80,6 +83,9 @@
          <height>32</height>
         </size>
        </property>
+       <property name="maxVisibleItems">
+        <number>5</number>
+       </property>
       </widget>
      </item>
      <item>
@@ -101,6 +107,9 @@
          <width>180</width>
          <height>32</height>
         </size>
+       </property>
+       <property name="maxVisibleItems">
+        <number>5</number>
        </property>
       </widget>
      </item>

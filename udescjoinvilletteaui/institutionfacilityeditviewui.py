@@ -27,7 +27,7 @@ class Ui_InstitutionFacilityEditView(object):
     def setupUi(self, InstitutionFacilityEditView):
         if not InstitutionFacilityEditView.objectName():
             InstitutionFacilityEditView.setObjectName(u"InstitutionFacilityEditView")
-        InstitutionFacilityEditView.resize(450, 300)
+        InstitutionFacilityEditView.resize(400, 300)
         icon = QIcon()
         icon.addFile(u":/icons/system/appicon", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         InstitutionFacilityEditView.setWindowIcon(icon)
@@ -58,6 +58,7 @@ class Ui_InstitutionFacilityEditView(object):
 
         self.cbx_type = QComboBox(self.tab_data)
         self.cbx_type.setObjectName(u"cbx_type")
+        self.cbx_type.setMaxVisibleItems(5)
 
         self.details_layout.setWidget(1, QFormLayout.ItemRole.FieldRole, self.cbx_type)
 

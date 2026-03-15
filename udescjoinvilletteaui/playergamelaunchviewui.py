@@ -56,31 +56,46 @@ class Ui_PlayerGameLaunchView(object):
         self.frm_data.setFormAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
         self.frm_data.setHorizontalSpacing(12)
         self.frm_data.setVerticalSpacing(18)
+        self.lbl_player = QLabel(PlayerGameLaunchView)
+        self.lbl_player.setObjectName(u"lbl_player")
+        font1 = QFont()
+        font1.setPointSize(9)
+        self.lbl_player.setFont(font1)
+
+        self.frm_data.setWidget(0, QFormLayout.ItemRole.LabelRole, self.lbl_player)
+
         self.cbx_player = QComboBox(PlayerGameLaunchView)
         self.cbx_player.setObjectName(u"cbx_player")
         self.cbx_player.setMinimumSize(QSize(0, 0))
+        self.cbx_player.setMaxVisibleItems(5)
 
         self.frm_data.setWidget(0, QFormLayout.ItemRole.FieldRole, self.cbx_player)
 
+        self.lbl_health = QLabel(PlayerGameLaunchView)
+        self.lbl_health.setObjectName(u"lbl_health")
+        self.lbl_health.setFont(font1)
+
+        self.frm_data.setWidget(1, QFormLayout.ItemRole.LabelRole, self.lbl_health)
+
+        self.cbx_health = QComboBox(PlayerGameLaunchView)
+        self.cbx_health.setObjectName(u"cbx_health")
+        self.cbx_health.setMinimumSize(QSize(0, 0))
+        self.cbx_health.setMaxVisibleItems(5)
+
+        self.frm_data.setWidget(1, QFormLayout.ItemRole.FieldRole, self.cbx_health)
+
         self.lbl_game = QLabel(PlayerGameLaunchView)
         self.lbl_game.setObjectName(u"lbl_game")
-        font1 = QFont()
-        font1.setPointSize(9)
         self.lbl_game.setFont(font1)
 
-        self.frm_data.setWidget(1, QFormLayout.ItemRole.LabelRole, self.lbl_game)
+        self.frm_data.setWidget(2, QFormLayout.ItemRole.LabelRole, self.lbl_game)
 
         self.cbx_game = QComboBox(PlayerGameLaunchView)
         self.cbx_game.setObjectName(u"cbx_game")
         self.cbx_game.setMinimumSize(QSize(0, 0))
+        self.cbx_game.setMaxVisibleItems(5)
 
-        self.frm_data.setWidget(1, QFormLayout.ItemRole.FieldRole, self.cbx_game)
-
-        self.lbl_player = QLabel(PlayerGameLaunchView)
-        self.lbl_player.setObjectName(u"lbl_player")
-        self.lbl_player.setFont(font1)
-
-        self.frm_data.setWidget(0, QFormLayout.ItemRole.LabelRole, self.lbl_player)
+        self.frm_data.setWidget(2, QFormLayout.ItemRole.FieldRole, self.cbx_game)
 
 
         self.verticalLayout.addLayout(self.frm_data)
@@ -146,8 +161,12 @@ class Ui_PlayerGameLaunchView(object):
     def retranslateUi(self, PlayerGameLaunchView):
         PlayerGameLaunchView.setWindowTitle(QCoreApplication.translate("PlayerGameLaunchView", u"Plataforma T-TEA - Iniciar Sess\u00e3o de Jogo", None))
         self.lbl_title.setText(QCoreApplication.translate("PlayerGameLaunchView", u"Iniciar Sess\u00e3o de Jogo", None))
-        self.lbl_game.setText(QCoreApplication.translate("PlayerGameLaunchView", u"Jogo:", None))
         self.lbl_player.setText(QCoreApplication.translate("PlayerGameLaunchView", u"Jogador:", None))
+        self.lbl_health.setText(QCoreApplication.translate("PlayerGameLaunchView", u"Professional de Sa\u00fade:", None))
+        self.lbl_game.setText(QCoreApplication.translate("PlayerGameLaunchView", u"Jogo:", None))
+#if QT_CONFIG(tooltip)
+        self.pb_play.setToolTip(QCoreApplication.translate("PlayerGameLaunchView", u"Jogar", None))
+#endif // QT_CONFIG(tooltip)
         self.pb_play.setText(QCoreApplication.translate("PlayerGameLaunchView", u"Jogar", None))
 #if QT_CONFIG(tooltip)
         self.pb_cancel.setToolTip(QCoreApplication.translate("PlayerGameLaunchView", u"Cancelar opera\u00e7\u00e3o corrente", None))

@@ -22,9 +22,11 @@
     </qresource>
 
     <qresource prefix="/icons/ui/menu">
-        <file alias="camera">icons/ui/menu/camera_solid.png</file>
+        <file alias="cameraicon">icons/ui/menu/camera_solid.png</file>
         <file alias="cogsicon">icons/ui/menu/cogs_solid.png</file>
-        <file alias="gamepadicon">icons/ui/menu/gamepad_solid.png</file>    
+        <file alias="dooropenicon">icons/ui/menu/door_open_solid.png</file>
+        <file alias="gamepadicon">icons/ui/menu/gamepad_solid.png</file>   
+        <file alias="hospitalicon">icons/ui/menu/hospital_solid.png</file> 
         <file alias="infoicon">icons/ui/menu/info_circle_solid.png</file>
         <file alias="info2icon">icons/ui/menu/info_solid.png</file>
         <file alias="karteaicon">icons/ui/menu/kartea.ico</file>
@@ -33,8 +35,10 @@
         <file alias="kartea4icon">icons/ui/menu/kartea4.ico</file>
         <file alias="questionicon">icons/ui/menu/question_circle_solid.png</file>
         <file alias="question2icon">icons/ui/menu/question_solid.png</file>
-        <file alias="video">icons/ui/menu/video_solid.png</file>
-        <file alias="wrench">icons/ui/menu/wrench_solid.png</file>
+        <file alias="stethoscopeicon">icons/ui/menu/stethoscope_solid.png</file>
+        <file alias="userticon">icons/ui/menu/user_solid.png</file>
+        <file alias="videoicon">icons/ui/menu/video_solid.png</file>
+        <file alias="wrenchicon">icons/ui/menu/wrench_solid.png</file>
     </qresource>          
 
     <!-- Images -->
@@ -55,11 +59,14 @@
         <file alias="aboutviewui">ui/aboutview.ui</file>
         <file alias="calibrationparameterizationviewui">ui/calibrationparameterizationview.ui</file>
         <file alias="calibrationviewui">ui/calibrationview.ui</file>
+        <file alias="healthprofessionaleditviewui">ui/healthprofessionaleditview.ui</file>
+        <file alias="healthprofessionallistviewui">ui/healthprofessionallistview.ui</file>
+        <file alias="institutionfacilityeditviewui">ui/institutionfacilityeditview.ui</file>
         <file alias="institutionfacilitylistviewui">ui/institutionfacilitylistview.ui</file>
         <file alias="languageviewui">ui/languageview.ui</file>
         <file alias="mainviewui">ui/mainview.ui</file>
         <file alias="playereditviewui">ui/playereditview.ui</file>
-        <file alias="playergamelaunchview">ui/playereditview.ui</file>
+        <file alias="playergamelaunchviewui">ui/playereditview.ui</file>
         <file alias="playerlistviewui">ui/playerlistview.ui</file>
     </qresource>
 </RCC>

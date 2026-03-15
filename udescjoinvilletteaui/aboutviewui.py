@@ -140,7 +140,7 @@ class Ui_AboutView(object):
 "</style></head><body style=\" font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
 "<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:700;\">Desenvolvido por:</span></p>\n"
 "<p align=\"center\" style=\" margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">1. Marcelo da Silva Hounsell<br />2. Andr\u00e9 Bonetto Trindade<br />3. Gabriel Brunelli Pereira<br />4. Marlow Rodrigo Becker Dickel<br />5. Lu"
-                        "is Eduardo Bet<br />6. Alexandre Altair de Melo</span></p></body></html>", None))
+                        "is Eduardo Bet<br />6. Maria Julia Sales<br />7. Alexandre Altair de Melo</span></p></body></html>", None))
         self.pb_ok.setText(QCoreApplication.translate("AboutView", u"OK", None))
     # retranslateUi
 

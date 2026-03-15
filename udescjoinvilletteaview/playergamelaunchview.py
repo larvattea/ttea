@@ -28,8 +28,8 @@ class PlayerGameLaunchView(QDialog, Ui_PlayerGameLaunchView, WindowConfig):
             None,
             None,
             WindowConfig.DECREMENT_SIZE_PERCENT,  # status
-            45,  # width
-            30,  # height
+            30,  # width
+            10,  # height
             parent,  # parent
         )
         self.service = PlayerGameLaunchService()
@@ -48,6 +48,11 @@ class PlayerGameLaunchView(QDialog, Ui_PlayerGameLaunchView, WindowConfig):
         # Players
         self.cbx_player.addItems(
             [p.name for p in self.service.get_all_players()]
+        )
+
+        # Health Professionals
+        self.cbx_health.addItems(
+            [h.name for h in self.service.get_all_healthprofessionals()]
         )
 
         # 2. Popular Jogos com Metadados e Idioma

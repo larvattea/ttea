@@ -96,6 +96,10 @@
    <addaction name="mnu_help"/>
   </widget>
   <action name="act_exit">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/ui/menu/dooropenicon</normaloff>:/icons/ui/menu/dooropenicon</iconset>
+   </property>
    <property name="text">
     <string>&amp;Sair</string>
    </property>
@@ -104,6 +108,10 @@
    </property>
   </action>
   <action name="act_institutionfacility">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/ui/menu/hospitalicon</normaloff>:/icons/ui/menu/hospitalicon</iconset>
+   </property>
    <property name="text">
     <string>Instituição/Estabelecimento</string>
    </property>
@@ -112,6 +120,10 @@
    </property>
   </action>
   <action name="act_healthprofessional">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/ui/menu/stethoscopeicon</normaloff>:/icons/ui/menu/stethoscopeicon</iconset>
+   </property>
    <property name="text">
     <string>Professional de Saúde</string>
    </property>
@@ -120,6 +132,10 @@
    </property>
   </action>
   <action name="act_player">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/ui/menu/userticon</normaloff>:/icons/ui/menu/userticon</iconset>
+   </property>
    <property name="text">
     <string>Jogador</string>
    </property>
@@ -139,7 +155,7 @@
   <action name="act_calibration">
    <property name="icon">
     <iconset resource="../resources.qrc">
-     <normaloff>:/icons/ui/menu/video</normaloff>:/icons/ui/menu/video</iconset>
+     <normaloff>:/icons/ui/menu/videoicon</normaloff>:/icons/ui/menu/videoicon</iconset>
    </property>
    <property name="text">
     <string>&amp;Calibração</string>

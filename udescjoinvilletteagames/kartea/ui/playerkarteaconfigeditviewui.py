@@ -51,6 +51,7 @@ class Ui_PlayerKarteaConfigEditView(object):
         self.cbx_player = QComboBox(self.lay_game_setting)
         self.cbx_player.setObjectName(u"cbx_player")
         self.cbx_player.setEnabled(True)
+        self.cbx_player.setMaxVisibleItems(5)
 
         self.frm_game_setting.setWidget(0, QFormLayout.ItemRole.FieldRole, self.cbx_player)
 
@@ -71,6 +72,7 @@ class Ui_PlayerKarteaConfigEditView(object):
 
         self.cbx_current_phase = QComboBox(self.lay_game_setting)
         self.cbx_current_phase.setObjectName(u"cbx_current_phase")
+        self.cbx_current_phase.setMaxVisibleItems(5)
 
         self.frm_game_setting.setWidget(2, QFormLayout.ItemRole.FieldRole, self.cbx_current_phase)
 
@@ -81,6 +83,7 @@ class Ui_PlayerKarteaConfigEditView(object):
 
         self.cbx_current_level = QComboBox(self.lay_game_setting)
         self.cbx_current_level.setObjectName(u"cbx_current_level")
+        self.cbx_current_level.setMaxVisibleItems(5)
 
         self.frm_game_setting.setWidget(3, QFormLayout.ItemRole.FieldRole, self.cbx_current_level)
 
@@ -146,6 +149,7 @@ class Ui_PlayerKarteaConfigEditView(object):
         self.cbx_vehicle_image = QComboBox(self.lay_visual_resources)
         self.cbx_vehicle_image.setObjectName(u"cbx_vehicle_image")
         self.cbx_vehicle_image.setEditable(True)
+        self.cbx_vehicle_image.setMaxVisibleItems(5)
 
         self.visual_form.setWidget(0, QFormLayout.ItemRole.FieldRole, self.cbx_vehicle_image)
 
@@ -157,6 +161,7 @@ class Ui_PlayerKarteaConfigEditView(object):
         self.cbx_environment_image = QComboBox(self.lay_visual_resources)
         self.cbx_environment_image.setObjectName(u"cbx_environment_image")
         self.cbx_environment_image.setEditable(True)
+        self.cbx_environment_image.setMaxVisibleItems(5)
 
         self.visual_form.setWidget(1, QFormLayout.ItemRole.FieldRole, self.cbx_environment_image)
 
@@ -168,6 +173,7 @@ class Ui_PlayerKarteaConfigEditView(object):
         self.cbx_target_image = QComboBox(self.lay_visual_resources)
         self.cbx_target_image.setObjectName(u"cbx_target_image")
         self.cbx_target_image.setEditable(True)
+        self.cbx_target_image.setMaxVisibleItems(5)
 
         self.visual_form.setWidget(2, QFormLayout.ItemRole.FieldRole, self.cbx_target_image)
 
@@ -179,6 +185,7 @@ class Ui_PlayerKarteaConfigEditView(object):
         self.cbx_obstacle_image = QComboBox(self.lay_visual_resources)
         self.cbx_obstacle_image.setObjectName(u"cbx_obstacle_image")
         self.cbx_obstacle_image.setEditable(True)
+        self.cbx_obstacle_image.setMaxVisibleItems(5)
 
         self.visual_form.setWidget(3, QFormLayout.ItemRole.FieldRole, self.cbx_obstacle_image)
 
@@ -227,6 +234,7 @@ class Ui_PlayerKarteaConfigEditView(object):
         self.cbx_positive_feedback_image = QComboBox(self.lay_visual_feedback)
         self.cbx_positive_feedback_image.setObjectName(u"cbx_positive_feedback_image")
         self.cbx_positive_feedback_image.setEditable(True)
+        self.cbx_positive_feedback_image.setMaxVisibleItems(5)
 
         self.frm_visual_feedback.setWidget(0, QFormLayout.ItemRole.FieldRole, self.cbx_positive_feedback_image)
 
@@ -238,6 +246,7 @@ class Ui_PlayerKarteaConfigEditView(object):
         self.cbx_neutral_feedback_image = QComboBox(self.lay_visual_feedback)
         self.cbx_neutral_feedback_image.setObjectName(u"cbx_neutral_feedback_image")
         self.cbx_neutral_feedback_image.setEditable(True)
+        self.cbx_neutral_feedback_image.setMaxVisibleItems(5)
 
         self.frm_visual_feedback.setWidget(1, QFormLayout.ItemRole.FieldRole, self.cbx_neutral_feedback_image)
 
@@ -249,6 +258,7 @@ class Ui_PlayerKarteaConfigEditView(object):
         self.cbx_negative_feedback_image = QComboBox(self.lay_visual_feedback)
         self.cbx_negative_feedback_image.setObjectName(u"cbx_negative_feedback_image")
         self.cbx_negative_feedback_image.setEditable(True)
+        self.cbx_negative_feedback_image.setMaxVisibleItems(5)
 
         self.frm_visual_feedback.setWidget(2, QFormLayout.ItemRole.FieldRole, self.cbx_negative_feedback_image)
 
@@ -276,6 +286,7 @@ class Ui_PlayerKarteaConfigEditView(object):
         self.cbx_positive_feedback_sound = QComboBox(self.lay_sound_feedback)
         self.cbx_positive_feedback_sound.setObjectName(u"cbx_positive_feedback_sound")
         self.cbx_positive_feedback_sound.setEditable(True)
+        self.cbx_positive_feedback_sound.setMaxVisibleItems(5)
 
         self.lay_positive_feedback_sound.addWidget(self.cbx_positive_feedback_sound)
 
@@ -300,6 +311,7 @@ class Ui_PlayerKarteaConfigEditView(object):
         self.cbx_neutral_feedback_sound = QComboBox(self.lay_sound_feedback)
         self.cbx_neutral_feedback_sound.setObjectName(u"cbx_neutral_feedback_sound")
         self.cbx_neutral_feedback_sound.setEditable(True)
+        self.cbx_neutral_feedback_sound.setMaxVisibleItems(5)
 
         self.lay_neutral_feedback_sound.addWidget(self.cbx_neutral_feedback_sound)
 
@@ -322,6 +334,7 @@ class Ui_PlayerKarteaConfigEditView(object):
         self.cbx_negative_feedback_sound = QComboBox(self.lay_sound_feedback)
         self.cbx_negative_feedback_sound.setObjectName(u"cbx_negative_feedback_sound")
         self.cbx_negative_feedback_sound.setEditable(True)
+        self.cbx_negative_feedback_sound.setMaxVisibleItems(5)
 
         self.lay_negative_feedback_sound.addWidget(self.cbx_negative_feedback_sound)
 
