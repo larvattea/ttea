@@ -5,6 +5,7 @@ from udescjoinvilletteagames.kartea.model import (KarteaPhase,
                                                   KarteaPhaseLevel,
                                                   PlayerKarteaConfig,
                                                   PlayerKarteaSession)
+from udescjoinvilletteagames.kartea.util import KarteaPathConfig
 from udescjoinvilletteamodel import Player
 from udescjoinvilletteaservice import PlayerService
 
@@ -241,3 +242,6 @@ class PlayerKarteaConfigService:
         self, phase: Union[int, KarteaPhase]
     ) -> List[KarteaPhaseLevel]:
         return self.dao.get_levels_for_phase(phase)
+
+    def get_kartea_ini_config(self) -> Dict[str, str]:
+        return KarteaPathConfig.read_config()

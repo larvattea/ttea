@@ -134,16 +134,6 @@ class KarteaPathConfig(PathConfig):
     # 4. DADOS DO USUÁRIO
     # ===================================================================
     @classmethod
-    def user_image(cls, filename: str) -> str:
-        cls.ensure_kartea_dirs()
-        return str(cls.KARTEA_IMAGES_DIR / filename)
-
-    @classmethod
-    def user_sound(cls, filename: str) -> str:
-        cls.ensure_kartea_dirs()
-        return str(cls.KARTEA_SOUNDS_DIR / filename)
-
-    @classmethod
     def player(cls, filename: str) -> str:
         cls.ensure_kartea_dirs()
         return str(cls.KARTEA_PLAYER_DIR / filename)
@@ -176,6 +166,16 @@ class KarteaPathConfig(PathConfig):
     # ===================================================================
     # 5. LISTAGEM E CONFIG
     # ===================================================================
+    @classmethod
+    def game_image(cls, filename: str) -> str:
+        cls.ensure_kartea_dirs()
+        return str(cls.KARTEA_IMAGES_DIR / filename)
+
+    @classmethod
+    def game_sound(cls, filename: str) -> str:
+        cls.ensure_kartea_dirs()
+        return str(cls.KARTEA_SOUNDS_DIR / filename)
+
     @classmethod
     def list_images(cls) -> list[str]:
         cls.ensure_kartea_dirs()
