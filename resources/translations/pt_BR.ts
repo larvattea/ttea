@@ -450,346 +450,346 @@ li.checked::marker { content: &quot;\2612&quot;; }
     </message>
 </context>
 <context>
-    <name>HealthProfessional</name>
+    <name>Professional</name>
     <message>
-        <location filename="../../udescjoinvilletteamodel/healthprofessional.py" line="89"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="89"/>
         <source>Arteterapeuta</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/healthprofessional.py" line="90"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="90"/>
         <source>Assistente Social</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/healthprofessional.py" line="91"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="91"/>
         <source>Cuidador Especializado</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/healthprofessional.py" line="92"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="92"/>
         <source>Educador Físico</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/healthprofessional.py" line="93"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="93"/>
         <source>Enfermeiro</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/healthprofessional.py" line="94"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="94"/>
         <source>Fisioterapeuta</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/healthprofessional.py" line="95"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="95"/>
         <source>Fonoaudiólogo</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/healthprofessional.py" line="96"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="96"/>
         <source>Geneticista</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/healthprofessional.py" line="97"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="97"/>
         <source>Mediador Escolar</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/healthprofessional.py" line="98"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="98"/>
         <source>Musicoterapeuta</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/healthprofessional.py" line="99"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="99"/>
         <source>Neuropediatra</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/healthprofessional.py" line="100"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="100"/>
         <source>Neurologista</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/healthprofessional.py" line="101"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="101"/>
         <source>Nutricionista</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/healthprofessional.py" line="102"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="102"/>
         <source>Pediatra</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/healthprofessional.py" line="103"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="103"/>
         <source>Professor Educação Especial</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/healthprofessional.py" line="106"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="106"/>
         <source>Psicopedagogo</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/healthprofessional.py" line="107"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="107"/>
         <source>Psicólogo</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/healthprofessional.py" line="108"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="108"/>
         <source>Psiquiatra</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/healthprofessional.py" line="109"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="109"/>
         <source>Terapeuta Ocupacional</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/healthprofessional.py" line="110"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="110"/>
         <source>Voluntário</source>
         <translation></translation>
     </message>
 </context>
 <context>
-    <name>HealthProfessionalEditController</name>
+    <name>ProfessionalEditController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/healthprofessionaleditcontroller.py" line="126"/>
+        <location filename="../../udescjoinvilletteacontroller/professionaleditcontroller.py" line="126"/>
         <source>Por favor, corrija os dados inválidos:
 </source>
         <translation></translation>
     </message>
 </context>
 <context>
-    <name>HealthProfessionalEditView</name>
+    <name>ProfessionalEditView</name>
     <message>
-        <location filename="../ui/healthprofessionaleditview.ui" line="14"/>
-        <source>Plataforma T-TEA - Professional de Saúde</source>
+        <location filename="../ui/professionaleditview.ui" line="14"/>
+        <source>Plataforma T-TEA - Profissional</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/healthprofessionaleditview.ui" line="31"/>
+        <location filename="../ui/professionaleditview.ui" line="31"/>
         <source>Dados</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/healthprofessionaleditview.ui" line="40"/>
+        <location filename="../ui/professionaleditview.ui" line="40"/>
         <source>Nome:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/healthprofessionaleditview.ui" line="47"/>
+        <location filename="../ui/professionaleditview.ui" line="47"/>
         <source>Nome</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/healthprofessionaleditview.ui" line="54"/>
+        <location filename="../ui/professionaleditview.ui" line="54"/>
         <source>Tipo:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/healthprofessionaleditview.ui" line="71"/>
-        <source>Instituição/Estabelecimento de Saúde:</source>
+        <location filename="../ui/professionaleditview.ui" line="71"/>
+        <source>Instituição/Estabelecimento:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/healthprofessionaleditview.ui" line="119"/>
+        <location filename="../ui/professionaleditview.ui" line="119"/>
         <source>Gravar operação corrente</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/healthprofessionaleditview.ui" line="125"/>
+        <location filename="../ui/professionaleditview.ui" line="125"/>
         <source>OK</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/healthprofessionaleditview.ui" line="145"/>
+        <location filename="../ui/professionaleditview.ui" line="145"/>
         <source>Cancelar operação corrente</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/healthprofessionaleditview.ui" line="148"/>
+        <location filename="../ui/professionaleditview.ui" line="148"/>
         <source>Cancelar</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/healthprofessionaleditview.py" line="76"/>
+        <location filename="../../udescjoinvilletteaview/professionaleditview.py" line="76"/>
         <source>Novo</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/healthprofessionaleditview.py" line="76"/>
+        <location filename="../../udescjoinvilletteaview/professionaleditview.py" line="76"/>
         <source>Editar</source>
         <translation></translation>
     </message>
 </context>
 <context>
-    <name>HealthProfessionalListController</name>
+    <name>ProfessionalListController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/healthprofessionallistcontroller.py" line="150"/>
-        <source>Profissional de saúde cadastrado com sucesso!</source>
+        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="150"/>
+        <source>Profissional cadastrado com sucesso!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/healthprofessionallistcontroller.py" line="154"/>
-        <source>Erro ao salvar profissional de saúde.</source>
+        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="154"/>
+        <source>Erro ao salvar profissional.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/healthprofessionallistcontroller.py" line="163"/>
-        <source>Selecione um professional de saúde para editar.</source>
+        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="163"/>
+        <source>Selecione um professional para editar.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/healthprofessionallistcontroller.py" line="169"/>
-        <source>Professional de saúde não encontrado.</source>
+        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="169"/>
+        <source>Professional não encontrado.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/healthprofessionallistcontroller.py" line="181"/>
-        <source>Professional de saúde atualizado com sucesso.</source>
+        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="181"/>
+        <source>Professional atualizado com sucesso.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/healthprofessionallistcontroller.py" line="185"/>
-        <source>Erro ao atualizar professional de saúde.</source>
+        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="185"/>
+        <source>Erro ao atualizar professional.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/healthprofessionallistcontroller.py" line="194"/>
-        <source>Selecione um professional de saúde para excluir.</source>
+        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="194"/>
+        <source>Selecione um professional para excluir.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/healthprofessionallistcontroller.py" line="203"/>
+        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="203"/>
         <source>Deseja excluir?
 {0}</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/healthprofessionallistcontroller.py" line="208"/>
-        <source>Professional de saúde excluído com sucesso.</source>
+        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="208"/>
+        <source>Professional excluído com sucesso.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/healthprofessionallistcontroller.py" line="212"/>
-        <source>Erro ao excluir professional de saúde.</source>
+        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="212"/>
+        <source>Erro ao excluir professional.</source>
         <translation></translation>
     </message>
 </context>
 <context>
-    <name>HealthProfessionalListView</name>
+    <name>ProfessionalListView</name>
     <message>
-        <location filename="../ui/healthprofessionallistview.ui" line="14"/>
-        <source>Plataforma T-TEA - Professional de Saúde</source>
+        <location filename="../ui/professionallistview.ui" line="14"/>
+        <source>Plataforma T-TEA - Profissional</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/healthprofessionallistview.ui" line="31"/>
+        <location filename="../ui/professionallistview.ui" line="31"/>
         <source>Pesquisar:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/healthprofessionallistview.ui" line="38"/>
+        <location filename="../ui/professionallistview.ui" line="38"/>
         <source>Digite o nome ou ID</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/healthprofessionallistview.ui" line="69"/>
+        <location filename="../ui/professionallistview.ui" line="69"/>
         <source>ID</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/healthprofessionallistview.ui" line="74"/>
+        <location filename="../ui/professionallistview.ui" line="74"/>
         <source>Nome</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/healthprofessionallistview.ui" line="90"/>
+        <location filename="../ui/professionallistview.ui" line="90"/>
         <source>Detalhes</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/healthprofessionallistview.ui" line="98"/>
-        <location filename="../ui/healthprofessionallistview.ui" line="108"/>
+        <location filename="../ui/professionallistview.ui" line="98"/>
+        <location filename="../ui/professionallistview.ui" line="108"/>
         <source>ID:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/healthprofessionallistview.ui" line="118"/>
+        <location filename="../ui/professionallistview.ui" line="118"/>
         <source>Nome:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/healthprofessionallistview.ui" line="128"/>
+        <location filename="../ui/professionallistview.ui" line="128"/>
         <source>Nome: </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/healthprofessionallistview.ui" line="138"/>
-        <location filename="../ui/healthprofessionallistview.ui" line="148"/>
+        <location filename="../ui/professionallistview.ui" line="138"/>
+        <location filename="../ui/professionallistview.ui" line="148"/>
         <source>Tipo:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/healthprofessionallistview.ui" line="179"/>
+        <location filename="../ui/professionallistview.ui" line="179"/>
         <source>Criar um novo registro</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/healthprofessionallistview.ui" line="182"/>
+        <location filename="../ui/professionallistview.ui" line="182"/>
         <source>Novo</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/healthprofessionallistview.ui" line="193"/>
+        <location filename="../ui/professionallistview.ui" line="193"/>
         <source>Editar o registro selecionado</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/healthprofessionallistview.ui" line="196"/>
+        <location filename="../ui/professionallistview.ui" line="196"/>
         <source>Editar</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/healthprofessionallistview.ui" line="207"/>
+        <location filename="../ui/professionallistview.ui" line="207"/>
         <source>Excluir o registro selecionado</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/healthprofessionallistview.ui" line="210"/>
+        <location filename="../ui/professionallistview.ui" line="210"/>
         <source>Excluir</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/healthprofessionallistview.py" line="146"/>
+        <location filename="../../udescjoinvilletteaview/professionallistview.py" line="146"/>
         <source>Deseja sair do cadastro?</source>
         <translation></translation>
     </message>
 </context>
 <context>
-    <name>HealthProfessionalService</name>
+    <name>ProfessionalService</name>
     <message>
-        <location filename="../../udescjoinvilletteaservice/healthprofessionalservice.py" line="87"/>
+        <location filename="../../udescjoinvilletteaservice/professionalservice.py" line="87"/>
         <source>ID é obrigatório!
 </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaservice/healthprofessionalservice.py" line="89"/>
+        <location filename="../../udescjoinvilletteaservice/professionalservice.py" line="89"/>
         <source>ID deve ser do tipo inteiro!
 </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaservice/healthprofessionalservice.py" line="92"/>
+        <location filename="../../udescjoinvilletteaservice/professionalservice.py" line="92"/>
         <source>Nome é obrigatório!
 </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaservice/healthprofessionalservice.py" line="95"/>
+        <location filename="../../udescjoinvilletteaservice/professionalservice.py" line="95"/>
         <source>Tipo é obrigatório!
 </source>
         <translation></translation>
@@ -846,7 +846,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <name>InstitutionFacilityEditView</name>
     <message>
         <location filename="../ui/institutionfacilityeditview.ui" line="14"/>
-        <source>Plataforma T-TEA - Instituição / Estabelecimento de Saúde</source>
+        <source>Plataforma T-TEA - Instituição / Estabelecimento</source>
         <translation></translation>
     </message>
     <message>
@@ -1013,7 +1013,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <name>InstitutionFacilityListView</name>
     <message>
         <location filename="../ui/institutionfacilitylistview.ui" line="14"/>
-        <source>Plataforma T-TEA - Instituição / Estabelecimento de Saúde</source>
+        <source>Plataforma T-TEA - Instituição / Estabelecimento</source>
         <translation></translation>
     </message>
     <message>
@@ -1133,7 +1133,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
     </message>
     <message>
         <location filename="../../udescjoinvilletteaservice/institutionfacilityservice.py" line="183"/>
-        <source>Exclusão negada: A instituição possui profissional de saúde vinculado.</source>
+        <source>Exclusão negada: A instituição possui profissional vinculado.</source>
         <translation></translation>
     </message>
 </context>
@@ -1264,7 +1264,7 @@ Detalhes do erro: {0}</source>
     </message>
     <message>
         <location filename="../ui/mainview.ui" line="128"/>
-        <source>Professional de Saúde</source>
+        <source>Professional</source>
         <translation></translation>
     </message>
     <message>
@@ -1470,7 +1470,7 @@ Detalhes do erro: {0}</source>
     </message>
     <message>
         <location filename="../ui/playergamelaunchview.ui" line="124"/>
-        <source>Professional de Saúde:</source>
+        <source>Profissional:</source>
         <translation></translation>
     </message>
     <message>

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'healthprofessionaleditview.ui'
+## Form generated from reading UI file 'professionaleditview.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.10.1
 ##
@@ -23,19 +23,19 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QFormLayout,
 import resources.resources_rc
 
 
-class Ui_HealthProfessionalEditView(object):
-    def setupUi(self, HealthProfessionalEditView):
-        if not HealthProfessionalEditView.objectName():
-            HealthProfessionalEditView.setObjectName(u"HealthProfessionalEditView")
-        HealthProfessionalEditView.resize(400, 300)
+class Ui_ProfessionalEditView(object):
+    def setupUi(self, ProfessionalEditView):
+        if not ProfessionalEditView.objectName():
+            ProfessionalEditView.setObjectName(u"ProfessionalEditView")
+        ProfessionalEditView.resize(400, 300)
         icon = QIcon()
         icon.addFile(u":/icons/system/appicon", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        HealthProfessionalEditView.setWindowIcon(icon)
-        HealthProfessionalEditView.setModal(True)
-        self.main_layout = QVBoxLayout(HealthProfessionalEditView)
+        ProfessionalEditView.setWindowIcon(icon)
+        ProfessionalEditView.setModal(True)
+        self.main_layout = QVBoxLayout(ProfessionalEditView)
         self.main_layout.setObjectName(u"main_layout")
-        self.tab_healthprofessional = QTabWidget(HealthProfessionalEditView)
-        self.tab_healthprofessional.setObjectName(u"tab_healthprofessional")
+        self.tab_professional = QTabWidget(ProfessionalEditView)
+        self.tab_professional.setObjectName(u"tab_professional")
         self.tab_data = QWidget()
         self.tab_data.setObjectName(u"tab_data")
         self.details_layout = QFormLayout(self.tab_data)
@@ -75,9 +75,9 @@ class Ui_HealthProfessionalEditView(object):
 
         self.details_layout.setWidget(2, QFormLayout.ItemRole.FieldRole, self.cbx_institution)
 
-        self.tab_healthprofessional.addTab(self.tab_data, "")
+        self.tab_professional.addTab(self.tab_data, "")
 
-        self.main_layout.addWidget(self.tab_healthprofessional)
+        self.main_layout.addWidget(self.tab_professional)
 
         self.lay_button = QHBoxLayout()
         self.lay_button.setObjectName(u"lay_button")
@@ -85,7 +85,7 @@ class Ui_HealthProfessionalEditView(object):
 
         self.lay_button.addItem(self.hs_button)
 
-        self.pb_ok = QPushButton(HealthProfessionalEditView)
+        self.pb_ok = QPushButton(ProfessionalEditView)
         self.pb_ok.setObjectName(u"pb_ok")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -100,7 +100,7 @@ class Ui_HealthProfessionalEditView(object):
 
         self.lay_button.addWidget(self.pb_ok)
 
-        self.pb_cancel = QPushButton(HealthProfessionalEditView)
+        self.pb_cancel = QPushButton(ProfessionalEditView)
         self.pb_cancel.setObjectName(u"pb_cancel")
         sizePolicy.setHeightForWidth(self.pb_cancel.sizePolicy().hasHeightForWidth())
         self.pb_cancel.setSizePolicy(sizePolicy)
@@ -115,30 +115,30 @@ class Ui_HealthProfessionalEditView(object):
         self.main_layout.addLayout(self.lay_button)
 
 
-        self.retranslateUi(HealthProfessionalEditView)
+        self.retranslateUi(ProfessionalEditView)
 
-        self.tab_healthprofessional.setCurrentIndex(0)
+        self.tab_professional.setCurrentIndex(0)
         self.cbx_type.setCurrentIndex(-1)
         self.cbx_institution.setCurrentIndex(-1)
 
 
-        QMetaObject.connectSlotsByName(HealthProfessionalEditView)
+        QMetaObject.connectSlotsByName(ProfessionalEditView)
     # setupUi
 
-    def retranslateUi(self, HealthProfessionalEditView):
-        HealthProfessionalEditView.setWindowTitle(QCoreApplication.translate("HealthProfessionalEditView", u"Plataforma T-TEA - Professional de Sa\u00fade", None))
-        self.lbl_name.setText(QCoreApplication.translate("HealthProfessionalEditView", u"Nome:", None))
-        self.led_name.setPlaceholderText(QCoreApplication.translate("HealthProfessionalEditView", u"Nome", None))
-        self.lbl_type.setText(QCoreApplication.translate("HealthProfessionalEditView", u"Tipo:", None))
-        self.lbl_institution.setText(QCoreApplication.translate("HealthProfessionalEditView", u"Institui\u00e7\u00e3o/Estabelecimento de Sa\u00fade:", None))
-        self.tab_healthprofessional.setTabText(self.tab_healthprofessional.indexOf(self.tab_data), QCoreApplication.translate("HealthProfessionalEditView", u"Dados", None))
+    def retranslateUi(self, ProfessionalEditView):
+        ProfessionalEditView.setWindowTitle(QCoreApplication.translate("ProfessionalEditView", u"Plataforma T-TEA - Professional", None))
+        self.lbl_name.setText(QCoreApplication.translate("ProfessionalEditView", u"Nome:", None))
+        self.led_name.setPlaceholderText(QCoreApplication.translate("ProfessionalEditView", u"Nome", None))
+        self.lbl_type.setText(QCoreApplication.translate("ProfessionalEditView", u"Tipo:", None))
+        self.lbl_institution.setText(QCoreApplication.translate("ProfessionalEditView", u"Institui\u00e7\u00e3o/Estabelecimento:", None))
+        self.tab_professional.setTabText(self.tab_professional.indexOf(self.tab_data), QCoreApplication.translate("ProfessionalEditView", u"Dados", None))
 #if QT_CONFIG(tooltip)
-        self.pb_ok.setToolTip(QCoreApplication.translate("HealthProfessionalEditView", u"Gravar opera\u00e7\u00e3o corrente", None))
+        self.pb_ok.setToolTip(QCoreApplication.translate("ProfessionalEditView", u"Gravar opera\u00e7\u00e3o corrente", None))
 #endif // QT_CONFIG(tooltip)
-        self.pb_ok.setText(QCoreApplication.translate("HealthProfessionalEditView", u"OK", None))
+        self.pb_ok.setText(QCoreApplication.translate("ProfessionalEditView", u"OK", None))
 #if QT_CONFIG(tooltip)
-        self.pb_cancel.setToolTip(QCoreApplication.translate("HealthProfessionalEditView", u"Cancelar opera\u00e7\u00e3o corrente", None))
+        self.pb_cancel.setToolTip(QCoreApplication.translate("ProfessionalEditView", u"Cancelar opera\u00e7\u00e3o corrente", None))
 #endif // QT_CONFIG(tooltip)
-        self.pb_cancel.setText(QCoreApplication.translate("HealthProfessionalEditView", u"Cancelar", None))
+        self.pb_cancel.setText(QCoreApplication.translate("ProfessionalEditView", u"Cancelar", None))
     # retranslateUi
 

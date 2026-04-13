@@ -59,8 +59,8 @@
         <file alias="aboutviewui">ui/aboutview.ui</file>
         <file alias="calibrationparameterizationviewui">ui/calibrationparameterizationview.ui</file>
         <file alias="calibrationviewui">ui/calibrationview.ui</file>
-        <file alias="healthprofessionaleditviewui">ui/healthprofessionaleditview.ui</file>
-        <file alias="healthprofessionallistviewui">ui/healthprofessionallistview.ui</file>
+        <file alias="professionaleditviewui">ui/professionaleditview.ui</file>
+        <file alias="professionallistviewui">ui/professionallistview.ui</file>
         <file alias="institutionfacilityeditviewui">ui/institutionfacilityeditview.ui</file>
         <file alias="institutionfacilitylistviewui">ui/institutionfacilitylistview.ui</file>
         <file alias="languageviewui">ui/languageview.ui</file>

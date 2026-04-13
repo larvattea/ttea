@@ -169,18 +169,18 @@ class InstitutionFacilityService(QObject):
             ``True`` if the institutionfacility was successfully deleted,
             ``False`` otherwise (e.g., institutionfacility not found).
         """
-        from udescjoinvilletteaservice import HealthProfessionalService
+        from udescjoinvilletteaservice import ProfessionalService
 
         # Validação de integridade referencial (Negócio)
-        health_service = HealthProfessionalService()
-        healthprofessionals = health_service.get_all_healthprofessionals()
+        health_service = ProfessionalService()
+        professionals = health_service.get_all_professionals()
         if any(
-            healthprofessional.institutionfacility.id == institutionfacility_id
-            for healthprofessional in healthprofessionals
+            professional.institutionfacility.id == institutionfacility_id
+            for professional in professionals
         ):
             raise BusinessRuleException(
                 self.tr(
-                    "Exclusão negada: A instituição possui profissional de saúde vinculado."
+                    "Exclusão negada: A instituição possui profissional vinculado."
                 )
             )
 

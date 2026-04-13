@@ -4,8 +4,8 @@ from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QDialog, QMainWindow
 
 from udescjoinvilletteaview import (AboutView, CalibrationView,
-                                    HealthProfessionalEditView,
-                                    HealthProfessionalListView,
+                                    ProfessionalEditView,
+                                    ProfessionalListView,
                                     InstitutionFacilityEditView,
                                     InstitutionFacilityListView, LanguageView,
                                     MainView, PlayerEditView,
@@ -14,7 +14,7 @@ from udescjoinvilletteaview import (AboutView, CalibrationView,
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
     # Local module import
-    from udescjoinvilletteamodel import (HealthProfessional,
+    from udescjoinvilletteamodel import (Professional,
                                          InstitutionFacility, Player)
 
 
@@ -88,40 +88,40 @@ class AppViewFactory:
         return PlayerListView(parent, player_edit_view)
 
     @staticmethod
-    def create_healthprofessional_edit_view(
+    def create_professional_edit_view(
         parent: Optional[QDialog] = None,
-        healthprofessional: Optional["HealthProfessional"] = None,
-    ) -> HealthProfessionalEditView:
+        professional: Optional["Professional"] = None,
+    ) -> ProfessionalEditView:
         """
-        Create an instance of HealthProfessionalEditView.
+        Create an instance of ProfessionalEditView.
 
         Parameters
         ----------
         parent : Optional[QDialog], optional
-            The parent dialog for the HealthProfessionalEditView,
+            The parent dialog for the ProfessionalEditView,
             by default None.
-        healthprofessional : Optional[HealthProfessional], optional
-            The healthprofessional object to be edited, by default None.
+        professional : Optional[Professional], optional
+            The professional object to be edited, by default None.
 
         Returns
         -------
-        HealthProfessionalEditView
-            An instance of HealthProfessionalEditView configured
-            with the provided parent and institutionfacility.
+        ProfessionalEditView
+            An instance of ProfessionalEditView configured
+            with the provided parent and professional.
         """
-        return HealthProfessionalEditView(parent, healthprofessional)
+        return ProfessionalEditView(parent, professional)
 
     @staticmethod
-    def create_healthprofessional_list_view(
+    def create_professional_list_view(
         parent: Optional[QObject] = None,
-        healthprofessional_edit_view: Optional[
+        professional_edit_view: Optional[
             Callable[
-                [Optional[QDialog], Optional["HealthProfessional"]],
-                HealthProfessionalEditView,
+                [Optional[QDialog], Optional["Professional"]],
+                ProfessionalEditView,
             ]
         ] = None,
-    ) -> HealthProfessionalListView:
-        return HealthProfessionalListView(parent, healthprofessional_edit_view)
+    ) -> ProfessionalListView:
+        return ProfessionalListView(parent, professional_edit_view)
 
     @staticmethod
     def create_institutionfacility_edit_view(

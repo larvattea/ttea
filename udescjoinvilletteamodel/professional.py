@@ -33,19 +33,19 @@ def initialize_reflexive(cls):
 
 @initialize_reflexive
 @dataclass
-class HealthProfessional:
+class Professional:
     """
-    Health professional entity representing a healthcare professional.
-    A HealthProfessional instance encapsulates information about a
+    Professional entity representing a healthcare professional.
+    A Professional instance encapsulates information about a
     healthcare worker, including their identifier, name, professional type,
     and associated institution or facility.
 
     Attributes
     ----------
     id : int
-        Unique identifier for the health professional.
+        Unique identifier for the professional.
     name : str
-        Full name of the health professional.
+        Full name of the professional.
     type : int
         Professional type code mapping to TYPE_MAP dictionary.
     institutionfacility : InstitutionFacility
@@ -86,28 +86,28 @@ class HealthProfessional:
     # the type is accessed in the UI, allowing for dynamic language changes.
     TYPE_MAP: ClassVar[dict[int, str]] = {
         0: "",
-        1: QT_TRANSLATE_NOOP("HealthProfessional", "Arteterapeuta"),
-        2: QT_TRANSLATE_NOOP("HealthProfessional", "Assistente Social"),
-        3: QT_TRANSLATE_NOOP("HealthProfessional", "Cuidador Especializado"),
-        4: QT_TRANSLATE_NOOP("HealthProfessional", "Educador Físico"),
-        5: QT_TRANSLATE_NOOP("HealthProfessional", "Enfermeiro"),
-        6: QT_TRANSLATE_NOOP("HealthProfessional", "Fisioterapeuta"),
-        7: QT_TRANSLATE_NOOP("HealthProfessional", "Fonoaudiólogo"),
-        8: QT_TRANSLATE_NOOP("HealthProfessional", "Geneticista"),
-        9: QT_TRANSLATE_NOOP("HealthProfessional", "Mediador Escolar"),
-        10: QT_TRANSLATE_NOOP("HealthProfessional", "Musicoterapeuta"),
-        11: QT_TRANSLATE_NOOP("HealthProfessional", "Neuropediatra"),
-        12: QT_TRANSLATE_NOOP("HealthProfessional", "Neurologista"),
-        13: QT_TRANSLATE_NOOP("HealthProfessional", "Nutricionista"),
-        14: QT_TRANSLATE_NOOP("HealthProfessional", "Pediatra"),
+        1: QT_TRANSLATE_NOOP("Professional", "Arteterapeuta"),
+        2: QT_TRANSLATE_NOOP("Professional", "Assistente Social"),
+        3: QT_TRANSLATE_NOOP("Professional", "Cuidador Especializado"),
+        4: QT_TRANSLATE_NOOP("Professional", "Educador Físico"),
+        5: QT_TRANSLATE_NOOP("Professional", "Enfermeiro"),
+        6: QT_TRANSLATE_NOOP("Professional", "Fisioterapeuta"),
+        7: QT_TRANSLATE_NOOP("Professional", "Fonoaudiólogo"),
+        8: QT_TRANSLATE_NOOP("Professional", "Geneticista"),
+        9: QT_TRANSLATE_NOOP("Professional", "Mediador Escolar"),
+        10: QT_TRANSLATE_NOOP("Professional", "Musicoterapeuta"),
+        11: QT_TRANSLATE_NOOP("Professional", "Neuropediatra"),
+        12: QT_TRANSLATE_NOOP("Professional", "Neurologista"),
+        13: QT_TRANSLATE_NOOP("Professional", "Nutricionista"),
+        14: QT_TRANSLATE_NOOP("Professional", "Pediatra"),
         15: QT_TRANSLATE_NOOP(
-            "HealthProfessional", "Professor Educação Especial"
+            "Professional", "Professor Educação Especial"
         ),
-        16: QT_TRANSLATE_NOOP("HealthProfessional", "Psicopedagogo"),
-        17: QT_TRANSLATE_NOOP("HealthProfessional", "Psicólogo"),
-        18: QT_TRANSLATE_NOOP("HealthProfessional", "Psiquiatra"),
-        19: QT_TRANSLATE_NOOP("HealthProfessional", "Terapeuta Ocupacional"),
-        20: QT_TRANSLATE_NOOP("HealthProfessional", "Voluntário"),
+        16: QT_TRANSLATE_NOOP("Professional", "Psicopedagogo"),
+        17: QT_TRANSLATE_NOOP("Professional", "Psicólogo"),
+        18: QT_TRANSLATE_NOOP("Professional", "Psiquiatra"),
+        19: QT_TRANSLATE_NOOP("Professional", "Terapeuta Ocupacional"),
+        20: QT_TRANSLATE_NOOP("Professional", "Voluntário"),
     }
 
     PROPERTIES: ClassVar[list[str]] = []
@@ -115,7 +115,7 @@ class HealthProfessional:
 
     def is_valid(self) -> bool:
         """
-        Validate the health professional object.
+        Validate the professional object.
 
         Checks that id is a valid integer, name is non-empty, type is a valid
         integer mapped in TYPE_MAP, and all non-strong properties are not None.
@@ -123,16 +123,16 @@ class HealthProfessional:
         Returns
         -------
         bool
-            True if the health professional object is valid, False otherwise.
+            True if the professional object is valid, False otherwise.
 
         Examples
         --------
-        >>> hp = HealthProfessional(id=1, name="Dr. Smith",
+        >>> hp = Professional(id=1, name="Dr. Smith",
         ...     type=5, institutionfacility=None)
         >>> hp.is_valid()
         True
 
-        >>> hp_invalid = HealthProfessional(id=None, name="",
+        >>> hp_invalid = Professional(id=None, name="",
         ...     type=99, institutionfacility=None)
         >>> hp_invalid.is_valid()
         False
@@ -175,7 +175,7 @@ class HealthProfessional:
 
     def get_data(self) -> List[Dict]:
         """
-        Retrieve health professional data as a list containing a dictionary.
+        Retrieve professional data as a list containing a dictionary.
 
         Extracts all properties except 'institutionfacility', which is
         converted to its ID if present, otherwise None.
@@ -188,7 +188,7 @@ class HealthProfessional:
 
         Examples
         --------
-        >>> hp = HealthProfessional(id=1, name="Dr. Smith",
+        >>> hp = Professional(id=1, name="Dr. Smith",
         ...     type=5, institutionfacility=None)
         >>> data = hp.get_data()
         >>> data[0]['id']

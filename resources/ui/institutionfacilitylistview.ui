@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Plataforma T-TEA - Instituição / Estabelecimento de Saúde</string>
+   <string>Plataforma T-TEA - Instituição / Estabelecimento</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../resources.qrc">

@@ -37,7 +37,7 @@ class PathConfig:
     CONFIG_DIR = APPDATA_DIR / "config"
     EXERGAME_DIR = APPDATA_DIR / "exergames"  # jogos da aplicação
     EXPORTS_DIR = APPDATA_DIR / "exports"  # CSV, relatórios, etc.
-    HEALTHPROFESSIONAL_DIR = APPDATA_DIR / "healthprofessionals"
+    PROFESSIONAL_DIR = APPDATA_DIR / "professionals"
     INSTITUTIONFACILITY_DIR = APPDATA_DIR / "institutionfacilities"
     LOG_DIR = APPDATA_DIR / "log"
     PLAYERS_DIR = APPDATA_DIR / "players"
@@ -110,7 +110,7 @@ class PathConfig:
             cls.CONFIG_DIR,
             cls.EXERGAME_DIR,
             cls.EXPORTS_DIR,
-            cls.HEALTHPROFESSIONAL_DIR,
+            cls.PROFESSIONAL_DIR,
             cls.INSTITUTIONFACILITY_DIR,
             cls.LOG_DIR,
             cls.PLAYERS_DIR,
@@ -119,9 +119,9 @@ class PathConfig:
             directory.mkdir(parents=True, exist_ok=True)
 
     @classmethod
-    def healthprofessional(cls, filename: str) -> str:
+    def professional(cls, filename: str) -> str:
         cls.ensure_user_dirs()
-        return str(cls.HEALTHPROFESSIONAL_DIR / filename)
+        return str(cls.PROFESSIONAL_DIR / filename)
 
     @classmethod
     def institutionfacility(cls, filename: str) -> str:

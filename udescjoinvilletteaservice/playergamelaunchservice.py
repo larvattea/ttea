@@ -2,7 +2,7 @@ import json
 from typing import List
 
 # Local module import
-from udescjoinvilletteamodel import HealthProfessional, Player
+from udescjoinvilletteamodel import Professional, Player
 from udescjoinvilletteautil import PathConfig
 
 
@@ -10,11 +10,11 @@ class PlayerGameLaunchService:
     METADATA_FILENAME = "metadata.json"
 
     def __init__(self):
-        from udescjoinvilletteaservice import (HealthProfessionalService,
+        from udescjoinvilletteaservice import (ProfessionalService,
                                                PlayerService)
 
         self.player_service = PlayerService()
-        self.health_professional_service = HealthProfessionalService()
+        self.professional_service = ProfessionalService()
 
     def get_all_players(self) -> List[Player]:
         return sorted(
@@ -22,9 +22,9 @@ class PlayerGameLaunchService:
             key=lambda p: p.name,
         )
 
-    def get_all_healthprofessionals(self) -> List[HealthProfessional]:
+    def get_all_professionals(self) -> List[Professional]:
         return sorted(
-            self.health_professional_service.get_all_healthprofessionals(),
+            self.professional_service.get_all_professionals(),
             key=lambda h: h.name,
         )
 

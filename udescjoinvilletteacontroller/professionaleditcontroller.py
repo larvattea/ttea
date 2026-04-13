@@ -3,17 +3,17 @@ from typing import TYPE_CHECKING, Any, Dict, Optional, Union
 from PySide6.QtCore import QObject
 
 # Local module import
-from udescjoinvilletteaservice import HealthProfessionalService
+from udescjoinvilletteaservice import ProfessionalService
 from udescjoinvilletteautil import MessageService
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
-    from udescjoinvilletteamodel import HealthProfessional
-    from udescjoinvilletteaview import HealthProfessionalEditView
+    from udescjoinvilletteamodel import Professional
+    from udescjoinvilletteaview import ProfessionalEditView
 
 
-class HealthProfessionalEditController(QObject):
-    """Controller for the healthprofessional edit/create dialog.
+class ProfessionalEditController(QObject):
+    """Controller for the professional edit/create dialog.
 
     Manages the interaction between PlayerEditView and the Player model,
     including field population, input validation, and data extraction.
@@ -22,9 +22,9 @@ class HealthProfessionalEditController(QObject):
     ----------
     view : PlayerEditView
         The dialog view containing the input widgets.
-    healthprofessional : Optional[InstitutionFacility]
+    professional : Optional[InstitutionFacility]
         Player instance being edited, or None when creating
-        a new healthprofessional.
+        a new professional.
     ok_clicked : bool
         True if the dialog was accepted with valid data.
     msg : MessageService
@@ -32,7 +32,7 @@ class HealthProfessionalEditController(QObject):
 
     Methods
     -------
-    __init__(view, healthprofessional=None, message_service=None)
+    __init__(view, professional=None, message_service=None)
         Initialize controller and populate fields if editing.
     handle_ok()
         Validate inputs and accept dialog if valid.
@@ -46,29 +46,29 @@ class HealthProfessionalEditController(QObject):
 
     def __init__(
         self,
-        view: "HealthProfessionalEditView",
-        healthprofessional: Optional["HealthProfessional"] = None,
+        view: "ProfessionalEditView",
+        professional: Optional["Professional"] = None,
         message_service: Optional[MessageService] = None,
     ) -> None:
         """Initialize the controller and prepare the dialog.
 
         Stores references, sets the ok_clicked flag, and pre-fills the
-        form when editing an existing healthprofessional.
-        Sets current date as default for new healthprofessionals.
+        form when editing an existing professional.
+        Sets current date as default for new professionals.
 
         Parameters
         ----------
-        view : HealthProfessionalEditView
+        view : ProfessionalEditView
             The associated dialog view.
-        healthprofessional : Optional[HealthProfessional], optional
-            HealthProfessional object to edit;
-            None creates a new healthprofessional.
+        professional : Optional[Professional], optional
+            Professional object to edit;
+            None creates a new professional.
         message_service : Optional[MessageService], optional
             Custom message service; defaults to MessageService(view).
         """
         self.view = view
-        self.service = HealthProfessionalService()
-        self.healthprofessional = healthprofessional
+        self.service = ProfessionalService()
+        self.professional = professional
         self.ok_clicked = False
         self.msg = message_service or MessageService(view)
         self._initialize_view()
@@ -84,14 +84,14 @@ class HealthProfessionalEditController(QObject):
         self.list_institutions()
 
         # Populate fields if editing
-        if self.healthprofessional:
-            self.view.led_name.setText(self.healthprofessional.name)
+        if self.professional:
+            self.view.led_name.setText(self.professional.name)
 
-            index = self.view.cbx_type.findData(self.healthprofessional.type)
+            index = self.view.cbx_type.findData(self.professional.type)
             self.view.cbx_type.setCurrentIndex(index)
 
             index = self.view.cbx_institution.findData(
-                self.healthprofessional.institutionfacility.id
+                self.professional.institutionfacility.id
             )
             self.view.cbx_institution.setCurrentIndex(index)
         else:
@@ -101,7 +101,7 @@ class HealthProfessionalEditController(QObject):
     def list_types(self) -> None:
         self.view.cbx_type.clear()
 
-        types = self.service.get_healthprofessional_types()
+        types = self.service.get_professional_types()
         for type_id, type_name in types.items():
             self.view.cbx_type.addItem(type_name, type_id)
 
@@ -154,8 +154,8 @@ class HealthProfessionalEditController(QObject):
 
         return {
             "id": (
-                self.healthprofessional.id
-                if self.healthprofessional and self.healthprofessional.id != 0
+                self.professional.id
+                if self.professional and self.professional.id != 0
                 else 0
             ),
             "name": self.view.led_name.text(),
