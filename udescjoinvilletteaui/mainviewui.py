@@ -3,23 +3,23 @@
 ################################################################################
 ## Form generated from reading UI file 'mainview.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.10.1
+## Created by: Qt User Interface Compiler version 6.11.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                            QMetaObject, QObject, QPoint, QRect, QSize, Qt,
-                            QTime, QUrl)
-from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient, QCursor,
-                           QFont, QFontDatabase, QGradient, QIcon, QImage,
-                           QKeySequence, QLinearGradient, QPainter, QPalette,
-                           QPixmap, QRadialGradient, QTransform)
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
+    QCursor, QFont, QFontDatabase, QGradient,
+    QIcon, QImage, QKeySequence, QLinearGradient,
+    QPainter, QPalette, QPixmap, QRadialGradient,
+    QTransform)
 from PySide6.QtWidgets import (QApplication, QMainWindow, QMenu, QMenuBar,
-                               QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
+    QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
 
-import resources.resources_rc
-
+from resources import resources_rc
 
 class Ui_MainView(object):
     def setupUi(self, MainView):
@@ -140,7 +140,7 @@ class Ui_MainView(object):
 #if QT_CONFIG(shortcut)
         self.act_institutionfacility.setShortcut(QCoreApplication.translate("MainView", u"Ctrl+I", None))
 #endif // QT_CONFIG(shortcut)
-        self.act_professional.setText(QCoreApplication.translate("MainView", u"Professional de Sa\u00fade", None))
+        self.act_professional.setText(QCoreApplication.translate("MainView", u"Profissional", None))
 #if QT_CONFIG(shortcut)
         self.act_professional.setShortcut(QCoreApplication.translate("MainView", u"Ctrl+H", None))
 #endif // QT_CONFIG(shortcut)

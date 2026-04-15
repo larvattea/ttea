@@ -3,25 +3,24 @@
 ################################################################################
 ## Form generated from reading UI file 'professionaleditview.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.10.1
+## Created by: Qt User Interface Compiler version 6.11.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                            QMetaObject, QObject, QPoint, QRect, QSize, Qt,
-                            QTime, QUrl)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
-                           QFontDatabase, QGradient, QIcon, QImage,
-                           QKeySequence, QLinearGradient, QPainter, QPalette,
-                           QPixmap, QRadialGradient, QTransform)
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QFormLayout,
-                               QHBoxLayout, QLabel, QLineEdit, QPushButton,
-                               QSizePolicy, QSpacerItem, QTabWidget,
-                               QVBoxLayout, QWidget)
+    QHBoxLayout, QLabel, QLineEdit, QPushButton,
+    QSizePolicy, QSpacerItem, QTabWidget, QVBoxLayout,
+    QWidget)
 
-import resources.resources_rc
-
+from resources import resources_rc
 
 class Ui_ProfessionalEditView(object):
     def setupUi(self, ProfessionalEditView):
@@ -126,7 +125,7 @@ class Ui_ProfessionalEditView(object):
     # setupUi
 
     def retranslateUi(self, ProfessionalEditView):
-        ProfessionalEditView.setWindowTitle(QCoreApplication.translate("ProfessionalEditView", u"Plataforma T-TEA - Professional", None))
+        ProfessionalEditView.setWindowTitle(QCoreApplication.translate("ProfessionalEditView", u"Plataforma T-TEA - Profissional", None))
         self.lbl_name.setText(QCoreApplication.translate("ProfessionalEditView", u"Nome:", None))
         self.led_name.setPlaceholderText(QCoreApplication.translate("ProfessionalEditView", u"Nome", None))
         self.lbl_type.setText(QCoreApplication.translate("ProfessionalEditView", u"Tipo:", None))

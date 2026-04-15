@@ -3,24 +3,23 @@
 ################################################################################
 ## Form generated from reading UI file 'playergamelaunchview.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.10.1
+## Created by: Qt User Interface Compiler version 6.11.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                            QMetaObject, QObject, QPoint, QRect, QSize, Qt,
-                            QTime, QUrl)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
-                           QFontDatabase, QGradient, QIcon, QImage,
-                           QKeySequence, QLinearGradient, QPainter, QPalette,
-                           QPixmap, QRadialGradient, QTransform)
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QFormLayout,
-                               QHBoxLayout, QLabel, QPushButton, QSizePolicy,
-                               QSpacerItem, QVBoxLayout, QWidget)
+    QHBoxLayout, QLabel, QPushButton, QSizePolicy,
+    QSpacerItem, QVBoxLayout, QWidget)
 
-import resources.resources_rc
-
+from resources import resources_rc
 
 class Ui_PlayerGameLaunchView(object):
     def setupUi(self, PlayerGameLaunchView):
@@ -162,7 +161,7 @@ class Ui_PlayerGameLaunchView(object):
         PlayerGameLaunchView.setWindowTitle(QCoreApplication.translate("PlayerGameLaunchView", u"Plataforma T-TEA - Iniciar Sess\u00e3o de Jogo", None))
         self.lbl_title.setText(QCoreApplication.translate("PlayerGameLaunchView", u"Iniciar Sess\u00e3o de Jogo", None))
         self.lbl_player.setText(QCoreApplication.translate("PlayerGameLaunchView", u"Jogador:", None))
-        self.lbl_health.setText(QCoreApplication.translate("PlayerGameLaunchView", u"Professional de Sa\u00fade:", None))
+        self.lbl_health.setText(QCoreApplication.translate("PlayerGameLaunchView", u"Profissional:", None))
         self.lbl_game.setText(QCoreApplication.translate("PlayerGameLaunchView", u"Jogo:", None))
 #if QT_CONFIG(tooltip)
         self.pb_play.setToolTip(QCoreApplication.translate("PlayerGameLaunchView", u"Jogar", None))
