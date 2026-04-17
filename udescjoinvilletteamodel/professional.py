@@ -35,9 +35,9 @@ def initialize_reflexive(cls):
 @dataclass
 class Professional:
     """
-    Professional entity representing a healthcare professional.
+    Professional entity representing a professional.
     A Professional instance encapsulates information about a
-    healthcare worker, including their identifier, name, professional type,
+    worker, including their identifier, name, professional type,
     and associated institution or facility.
 
     Attributes
@@ -72,7 +72,7 @@ class Professional:
 
     Notes
     -----
-    Type codes range from 0-20 representing different healthcare professions
+    Type codes range from 0-20 representing different professions
     including nurses, psychologists, physiotherapists, and others.
     """
 

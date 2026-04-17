@@ -19,7 +19,6 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QFormLayout,
     QHBoxLayout, QLabel, QLineEdit, QPushButton,
     QSizePolicy, QSpacerItem, QTabWidget, QVBoxLayout,
     QWidget)
-
 from resources import resources_rc
 
 class Ui_ProfessionalEditView(object):

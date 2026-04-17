@@ -19,7 +19,6 @@ from PySide6.QtWidgets import (QApplication, QDateEdit, QDialog, QFormLayout,
     QHBoxLayout, QLabel, QLineEdit, QPushButton,
     QSizePolicy, QSpacerItem, QTabWidget, QTextEdit,
     QVBoxLayout, QWidget)
-
 from resources import resources_rc
 
 class Ui_PlayerEditView(object):

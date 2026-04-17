@@ -49,7 +49,7 @@ class PlayerGameLaunchController(QObject):
                 [sys.executable, script_path, "--lang", language_app],
                 cwd=folder,
             )
-            self.view.accept()
+            #self.view.accept()  # Provavelmente fecha a janela de sessão
 
     def update_tooltip(self, index):
         if index >= 0:

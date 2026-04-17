@@ -20,7 +20,6 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDialog,
     QLabel, QPushButton, QRadioButton, QSizePolicy,
     QSpacerItem, QSpinBox, QTabWidget, QVBoxLayout,
     QWidget)
-
 from resources import resources_rc
 
 class Ui_CalibrationParameterizationView(object):
