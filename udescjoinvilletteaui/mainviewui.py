@@ -3,23 +3,22 @@
 ################################################################################
 ## Form generated from reading UI file 'mainview.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.10.1
+## Created by: Qt User Interface Compiler version 6.11.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                            QMetaObject, QObject, QPoint, QRect, QSize, Qt,
-                            QTime, QUrl)
-from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient, QCursor,
-                           QFont, QFontDatabase, QGradient, QIcon, QImage,
-                           QKeySequence, QLinearGradient, QPainter, QPalette,
-                           QPixmap, QRadialGradient, QTransform)
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
+    QCursor, QFont, QFontDatabase, QGradient,
+    QIcon, QImage, QKeySequence, QLinearGradient,
+    QPainter, QPalette, QPixmap, QRadialGradient,
+    QTransform)
 from PySide6.QtWidgets import (QApplication, QMainWindow, QMenu, QMenuBar,
-                               QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
-
-import resources.resources_rc
-
+    QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
+from resources import resources_rc
 
 class Ui_MainView(object):
     def setupUi(self, MainView):
@@ -40,11 +39,11 @@ class Ui_MainView(object):
         icon2 = QIcon()
         icon2.addFile(u":/icons/ui/menu/hospitalicon", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.act_institutionfacility.setIcon(icon2)
-        self.act_healthprofessional = QAction(MainView)
-        self.act_healthprofessional.setObjectName(u"act_healthprofessional")
+        self.act_professional = QAction(MainView)
+        self.act_professional.setObjectName(u"act_professional")
         icon3 = QIcon()
         icon3.addFile(u":/icons/ui/menu/stethoscopeicon", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        self.act_healthprofessional.setIcon(icon3)
+        self.act_professional.setIcon(icon3)
         self.act_player = QAction(MainView)
         self.act_player.setObjectName(u"act_player")
         icon4 = QIcon()
@@ -110,7 +109,7 @@ class Ui_MainView(object):
         self.mnu_main.addAction(self.mnu_system.menuAction())
         self.mnu_main.addAction(self.mnu_help.menuAction())
         self.mnu_file.addAction(self.act_institutionfacility)
-        self.mnu_file.addAction(self.act_healthprofessional)
+        self.mnu_file.addAction(self.act_professional)
         self.mnu_file.addAction(self.act_player)
         self.mnu_file.addSeparator()
         self.mnu_file.addAction(self.act_exit)
@@ -140,9 +139,9 @@ class Ui_MainView(object):
 #if QT_CONFIG(shortcut)
         self.act_institutionfacility.setShortcut(QCoreApplication.translate("MainView", u"Ctrl+I", None))
 #endif // QT_CONFIG(shortcut)
-        self.act_healthprofessional.setText(QCoreApplication.translate("MainView", u"Professional de Sa\u00fade", None))
+        self.act_professional.setText(QCoreApplication.translate("MainView", u"Profissional", None))
 #if QT_CONFIG(shortcut)
-        self.act_healthprofessional.setShortcut(QCoreApplication.translate("MainView", u"Ctrl+H", None))
+        self.act_professional.setShortcut(QCoreApplication.translate("MainView", u"Ctrl+H", None))
 #endif // QT_CONFIG(shortcut)
         self.act_player.setText(QCoreApplication.translate("MainView", u"Jogador", None))
 #if QT_CONFIG(shortcut)

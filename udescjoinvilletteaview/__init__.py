@@ -43,8 +43,8 @@ https://github.com/larva-udesc/udesc_ttea_view
 __all__ = [
     "AboutView",
     "CalibrationView",
-    "HealthProfessionalEditView",
-    "HealthProfessionalListView",
+    "ProfessionalEditView",
+    "ProfessionalListView",
     "InstitutionFacilityEditView",
     "InstitutionFacilityListView",
     "LanguageView",
@@ -63,8 +63,8 @@ __license__ = "MIT License"
 # Import the submodules
 from .aboutview import AboutView
 from .calibrationview import CalibrationView
-from .healthprofessionaleditview import HealthProfessionalEditView
-from .healthprofessionallistview import HealthProfessionalListView
+from .professionaleditview import ProfessionalEditView
+from .professionallistview import ProfessionalListView
 from .institutionfacilityeditview import InstitutionFacilityEditView
 from .institutionfacilitylistview import InstitutionFacilityListView
 from .languageview import LanguageView

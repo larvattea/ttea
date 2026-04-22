@@ -38,8 +38,8 @@ class MainView(QMainWindow, Ui_MainView, WindowConfig):
 
         # === CONEXÕES DIRETAS DOS WIDGETS/ACTIONS AO CONTROLLER ===
         self.act_exit.triggered.connect(self.controller.handle_exit)
-        self.act_healthprofessional.triggered.connect(
-            self.controller.open_healthprofessional_list
+        self.act_professional.triggered.connect(
+            self.controller.open_professional_list
         )
         self.act_institutionfacility.triggered.connect(
             self.controller.open_institutionfacility_list

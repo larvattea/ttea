@@ -50,9 +50,9 @@ class PlayerGameLaunchView(QDialog, Ui_PlayerGameLaunchView, WindowConfig):
             [p.name for p in self.service.get_all_players()]
         )
 
-        # Health Professionals
+        # Professionals
         self.cbx_health.addItems(
-            [h.name for h in self.service.get_all_healthprofessionals()]
+            [h.name for h in self.service.get_all_professionals()]
         )
 
         # 2. Popular Jogos com Metadados e Idioma

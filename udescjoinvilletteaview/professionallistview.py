@@ -4,28 +4,28 @@ from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 
 # Local module import
-from udescjoinvilletteacontroller import HealthProfessionalListController
+from udescjoinvilletteacontroller import ProfessionalListController
 from udescjoinvilletteaui import \
-    Ui_HealthProfessionalListView  # Assuming generated UI class
+    Ui_ProfessionalListView  # Assuming generated UI class
 from udescjoinvilletteautil import MessageService
 from udescjoinvilletteawindow import WindowConfig
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
-    from udescjoinvilletteamodel import HealthProfessional
-    from udescjoinvilletteaview import HealthProfessionalEditView
+    from udescjoinvilletteamodel import Professional
+    from udescjoinvilletteaview import ProfessionalEditView
 
 
-class HealthProfessionalListView(
-    QDialog, Ui_HealthProfessionalListView, WindowConfig
+class ProfessionalListView(
+    QDialog, Ui_ProfessionalListView, WindowConfig
 ):
     def __init__(
         self,
         parent: Optional[QDialog] = None,
-        healthprofessional_edit_view_factory: Optional[
+        professional_edit_view_factory: Optional[
             Callable[
-                [Optional[QDialog], Optional["HealthProfessional"]],
-                "HealthProfessionalEditView",
+                [Optional[QDialog], Optional["Professional"]],
+                "ProfessionalEditView",
             ]
         ] = None,
     ) -> None:
@@ -46,8 +46,8 @@ class HealthProfessionalListView(
         )
 
         # Initialize controller
-        self.controller = HealthProfessionalListController(
-            self, healthprofessional_edit_view_factory
+        self.controller = ProfessionalListController(
+            self, professional_edit_view_factory
         )
 
         # Perfect column widths
@@ -62,20 +62,20 @@ class HealthProfessionalListView(
     # High-level methods used by the Controller (required for decoupling)
     # =====================================================================
     def populate_table(
-        self, healthprofessionals: List["HealthProfessional"]
+        self, professionals: List["Professional"]
     ) -> None:
-        """Fill the table with a list of healthprofessionals."""
+        """Fill the table with a list of professionals."""
         self.tbl_health.blockSignals(True)
         self.tbl_health.setRowCount(0)
 
-        for healthprofessional in healthprofessionals:
+        for professional in professionals:
             row = self.tbl_health.rowCount()
             self.tbl_health.insertRow(row)
             self.tbl_health.setItem(
-                row, 0, QTableWidgetItem(str(healthprofessional.id))
+                row, 0, QTableWidgetItem(str(professional.id))
             )
             self.tbl_health.setItem(
-                row, 1, QTableWidgetItem(healthprofessional.name)
+                row, 1, QTableWidgetItem(professional.name)
             )
 
         self.tbl_health.blockSignals(False)
@@ -87,27 +87,27 @@ class HealthProfessionalListView(
         self.lbl_type_value.setText("")
 
     def display_details(
-        self, healthprofessional: Optional["HealthProfessional"]
+        self, professional: Optional["Professional"]
     ) -> None:
-        """Show the selected healthprofessional's
+        """Show the selected professional's
         details in the right panel."""
 
-        if not healthprofessional:
+        if not professional:
             self.clear_details()
             return
 
-        self.lbl_id_value.setText(str(healthprofessional.id))
-        self.lbl_name_value.setText(healthprofessional.name)
+        self.lbl_id_value.setText(str(professional.id))
+        self.lbl_name_value.setText(professional.name)
         self.lbl_type_value.setText(
             str(
-                self.controller.get_healthprofessional_types()[
-                    healthprofessional.type
+                self.controller.get_professional_types()[
+                    professional.type
                 ]
             )
         )
 
     def get_selected_id(self) -> Optional[int]:
-        """Return the ID of the currently selected pealthprofessional
+        """Return the ID of the currently selected professional
         or None."""
         items = self.tbl_health.selectedItems()
         if not items:
@@ -117,16 +117,16 @@ class HealthProfessionalListView(
         except (ValueError, AttributeError):
             return None
 
-    def select_row_by_id(self, healthprofessional_id: int) -> None:
+    def select_row_by_id(self, professional_id: int) -> None:
         """Programmatically select the row with
-        the given healthprofessional ID."""
-        if healthprofessional_id <= 0:
+        the given professional ID."""
+        if professional_id <= 0:
             return
 
         self.tbl_health.blockSignals(True)
         for row in range(self.tbl_health.rowCount()):
             item = self.tbl_health.item(row, 0)
-            if item and int(item.text()) == healthprofessional_id:
+            if item and int(item.text()) == professional_id:
                 self.tbl_health.selectRow(row)
                 self.tbl_health.scrollToItem(item)
                 break

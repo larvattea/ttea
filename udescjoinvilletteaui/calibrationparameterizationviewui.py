@@ -3,26 +3,24 @@
 ################################################################################
 ## Form generated from reading UI file 'calibrationparameterizationview.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.10.1
+## Created by: Qt User Interface Compiler version 6.11.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                            QMetaObject, QObject, QPoint, QRect, QSize, Qt,
-                            QTime, QUrl)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
-                           QFontDatabase, QGradient, QIcon, QImage,
-                           QKeySequence, QLinearGradient, QPainter, QPalette,
-                           QPixmap, QRadialGradient, QTransform)
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDialog,
-                               QDoubleSpinBox, QFormLayout, QGroupBox,
-                               QHBoxLayout, QLabel, QPushButton, QRadioButton,
-                               QSizePolicy, QSpacerItem, QSpinBox, QTabWidget,
-                               QVBoxLayout, QWidget)
-
-import resources.resources_rc
-
+    QDoubleSpinBox, QFormLayout, QGroupBox, QHBoxLayout,
+    QLabel, QPushButton, QRadioButton, QSizePolicy,
+    QSpacerItem, QSpinBox, QTabWidget, QVBoxLayout,
+    QWidget)
+from resources import resources_rc
 
 class Ui_CalibrationParameterizationView(object):
     def setupUi(self, CalibrationParameterizationView):

@@ -81,10 +81,10 @@ class MainController(QObject):
         )
         dialog.exec()
 
-    def open_healthprofessional_list(self) -> None:
-        dialog = self.app_factory.create_healthprofessional_list_view(
+    def open_professional_list(self) -> None:
+        dialog = self.app_factory.create_professional_list_view(
             self.view,
-            self.app_factory.create_healthprofessional_edit_view,
+            self.app_factory.create_professional_edit_view,
         )
         dialog.exec()
 

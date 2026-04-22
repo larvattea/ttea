@@ -33,8 +33,8 @@ __all__ = [
     "Ui_AboutView",
     "Ui_CalibrationParameterizationView",
     "Ui_CalibrationView",
-    "Ui_HealthProfessionalEditView",
-    "Ui_HealthProfessionalListView",
+    "Ui_ProfessionalEditView",
+    "Ui_ProfessionalListView",
     "Ui_InstitutionFacilityEditView",
     "Ui_InstitutionFacilityListView",
     "Ui_LanguageView",
@@ -54,8 +54,8 @@ from .aboutviewui import Ui_AboutView
 from .calibrationparameterizationviewui import \
     Ui_CalibrationParameterizationView
 from .calibrationviewui import Ui_CalibrationView
-from .healthprofessionaleditviewui import Ui_HealthProfessionalEditView
-from .healthprofessionallistviewui import Ui_HealthProfessionalListView
+from .professionaleditviewui import Ui_ProfessionalEditView
+from .professionallistviewui import Ui_ProfessionalListView
 from .institutionfacilityeditviewui import Ui_InstitutionFacilityEditView
 from .institutionfacilitylistviewui import Ui_InstitutionFacilityListView
 from .languageviewui import Ui_LanguageView

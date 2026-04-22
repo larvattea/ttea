@@ -1,14 +1,14 @@
-# udescjoinvillettea/service/healthprofessionalservice.py
+# udescjoinvillettea/service/professionalservice.py
 from typing import Any, Dict, List, Optional
 
 from PySide6.QtCore import QCoreApplication, QObject, Signal
 
 # Local module import
-from udescjoinvilletteadao import HealthProfessionalCsvDAO
-from udescjoinvilletteamodel import HealthProfessional, InstitutionFacility
+from udescjoinvilletteadao import ProfessionalCsvDAO
+from udescjoinvilletteamodel import Professional, InstitutionFacility
 
 
-class HealthProfessionalService(QObject):
+class ProfessionalService(QObject):
     """
     Service layer (MVCS) handling all business rules related to insti.
 
@@ -23,30 +23,30 @@ class HealthProfessionalService(QObject):
     -------
     __init__(dao=None)
         Initializes the service with a DAO instance.
-    get_all_healthprofessionals()
-        Returns all registered healthprofessionals.
-    create_healthprofessional(data)
-        Creates a new healthprofessional from the provided data dictionary.
-    update_healthprofessional(healthprofessional_id, data)
-        Updates an existing healthprofessional with the given data.
-    delete_healthprofessional(healthprofessional_id)
-        Deletes a healthprofessional by its ID.
-    find_by_id(healthprofessional_id)
-        Retrieves a healthprofessional by its ID.
-    search_healthprofessionals(query="")
-        Searches healthprofessionals by name or ID (case-insensitive).
+    get_all_professionals()
+        Returns all registered professionals.
+    create_professional(data)
+        Creates a new professional from the provided data dictionary.
+    update_professional(professional_id, data)
+        Updates an existing professional with the given data.
+    delete_professional(professional_id)
+        Deletes a professional by its ID.
+    find_by_id(professional_id)
+        Retrieves a professional by its ID.
+    search_professionals(query="")
+        Searches professionals by name or ID (case-insensitive).
     """
 
     _instance = None
     # Sinal que avisa: "Se os dados mudaram"
-    healthprofessional_change = Signal(int)
+    professional_change = Signal(int)
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
 
-    def __init__(self, dao: Optional[HealthProfessionalCsvDAO] = None):
+    def __init__(self, dao: Optional[ProfessionalCsvDAO] = None):
         """
         Initialize the service with a data access object.
 
@@ -61,13 +61,13 @@ class HealthProfessionalService(QObject):
         if not hasattr(self, "_initialized"):
             super().__init__()
             self.institution_service = InstitutionFacilityService()
-            self.dao = dao or HealthProfessionalCsvDAO(
+            self.dao = dao or ProfessionalCsvDAO(
                 self.institution_service.get_dao()
             )
             self._initialized = True
 
-    def get_all_healthprofessionals(self) -> List[HealthProfessional]:
-        """Return a list of all registered healthprofessionals.
+    def get_all_professionals(self) -> List[Professional]:
+        """Return a list of all registered professionals.
 
         Returns
         -------
@@ -96,9 +96,9 @@ class HealthProfessionalService(QObject):
 
         return errors
 
-    def create_healthprofessional(
+    def create_professional(
         self, data: Dict[str, Any]
-    ) -> Optional[HealthProfessional]:
+    ) -> Optional[Professional]:
         """
         Create a new InstitutionFacility from a dictionary of attributes.
 
@@ -113,26 +113,26 @@ class HealthProfessionalService(QObject):
             The created ``InstitutionFacility`` instance if validation
             and insertion succeed; ``None`` otherwise.
         """
-        healthprofessional = HealthProfessional(**data)
+        professional = Professional(**data)
 
-        if not healthprofessional.is_valid():
+        if not professional.is_valid():
             return None
 
-        new_id = self.dao.insert(healthprofessional)
+        new_id = self.dao.insert(professional)
         if new_id:
-            self.healthprofessional_change.emit(new_id)
+            self.professional_change.emit(new_id)
         return self.dao.select(new_id) if new_id > 0 else None
 
-    def update_healthprofessional(
-        self, healthprofessional_id: int, data: Dict[str, Any]
+    def update_professional(
+        self, professional_id: int, data: Dict[str, Any]
     ) -> bool:
         """
-        Update an existing healthprofessional with new values.
+        Update an existing professional with new values.
 
         Parameters
         ----------
-        healthprofessional_id : int
-            Identifier of the healthprofessional to update.
+        professional_id : int
+            Identifier of the professional to update.
         data : dict
             Dictionary containing updated fields. Missing keys keep the
             current value.
@@ -140,40 +140,40 @@ class HealthProfessionalService(QObject):
         Returns
         -------
         bool
-            ``True`` if the healthprofessional was found, validated,
+            ``True`` if the professional was found, validated,
             and updated successfully; ``False`` otherwise.
         """
-        healthprofessional = self.dao.select(healthprofessional_id)
-        if not healthprofessional:
+        professional = self.dao.select(professional_id)
+        if not professional:
             return False
 
-        healthprofessional.set_data(data)
+        professional.set_data(data)
 
-        if not healthprofessional.is_valid():
+        if not professional.is_valid():
             return False
 
-        success = self.dao.update(healthprofessional)
+        success = self.dao.update(professional)
 
         if success:
-            self.healthprofessional_change.emit(healthprofessional_id)
+            self.professional_change.emit(professional_id)
 
         return success
 
-    def delete_healthprofessional(self, healthprofessional_id: int) -> bool:
-        """Delete a healthprofessional by its identifier.
+    def delete_professional(self, professional_id: int) -> bool:
+        """Delete a professional by its identifier.
 
         Parameters
         ----------
-        healthprofessional_id : int
-            Identifier of the healthprofessional to be removed.
+        professional_id : int
+            Identifier of the professional to be removed.
 
         Returns
         -------
         bool
-            ``True`` if the healthprofessional was successfully deleted,
-            ``False`` otherwise (e.g., healthprofessional not found).
+            ``True`` if the professional was successfully deleted,
+            ``False`` otherwise (e.g., professional not found).
         """
-        success = self.dao.delete(healthprofessional_id)
+        success = self.dao.delete(professional_id)
 
         if success:
             self.institutionfacility_change.emit(0)
@@ -181,56 +181,56 @@ class HealthProfessionalService(QObject):
         return success
 
     def find_by_id(
-        self, healthprofessional_id: int
-    ) -> Optional[HealthProfessional]:
-        """Retrieve a healthprofessional by its unique identifier.
+        self, professional_id: int
+    ) -> Optional[Professional]:
+        """Retrieve a professional by its unique identifier.
 
         Parameters
         ----------
-        healthprofessional_id : int
-            The healthprofessional's ID.
+        professional_id : int
+            The professional's ID.
 
         Returns
         -------
-        HealthProfessional or None
-            The matching ``HealthProfessional`` instance
+        Professional or None
+            The matching ``Professional`` instance
             or ``None`` if not found.
         """
-        return self.dao.select(healthprofessional_id)
+        return self.dao.select(professional_id)
 
-    def search_healthprofessionals(
+    def search_professionals(
         self, query: str = ""
-    ) -> List[HealthProfessional]:
+    ) -> List[Professional]:
         """
-        Search healthprofessionals by name or ID (case-insensitive).
+        Search professionals by name or ID (case-insensitive).
 
         Parameters
         ----------
         query : str, optional
             Search term. If empty or whitespace-only, returns all
-            healthprofessionals.
+            professionals.
 
         Returns
         -------
         List[InstitutionFacility]
-            List of healthprofessionals whose ID (as string)
+            List of professionals whose ID (as string)
             or name contain the query term.
         """
-        all_healthprofessionals = self.get_all_healthprofessionals()
+        all_professionals = self.get_all_professionals()
         if not query.strip():
-            return all_healthprofessionals
+            return all_professionals
 
         q = query.lower().strip()
         return [
             p
-            for p in all_healthprofessionals
+            for p in all_professionals
             if q in str(p.id) or q in p.name.lower()
         ]
 
-    def get_healthprofessional_types(self) -> Dict[int, str]:
+    def get_professional_types(self) -> Dict[int, str]:
         return {
-            key: QCoreApplication.translate("HealthProfessional", value)
-            for key, value in HealthProfessional.TYPE_MAP.items()
+            key: QCoreApplication.translate("Professional", value)
+            for key, value in Professional.TYPE_MAP.items()
         }
 
     def get_all_institutionfacilities(self) -> List[InstitutionFacility]:

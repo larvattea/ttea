@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>HealthProfessionalListView</class>
- <widget class="QDialog" name="HealthProfessionalListView">
+ <class>ProfessionalListView</class>
+ <widget class="QDialog" name="ProfessionalListView">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Plataforma T-TEA - Professional de Saúde</string>
+   <string>Plataforma T-TEA - Profissional</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../resources.qrc">

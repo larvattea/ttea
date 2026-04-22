@@ -7,6 +7,7 @@ from PySide6.QtCore import QObject, Qt
 
 from udescjoinvilletteamodel import AppModel
 from udescjoinvilletteaservice import PlayerGameLaunchService
+
 # Local module imports
 from udescjoinvilletteautil import MessageService
 
@@ -52,7 +53,7 @@ class PlayerGameLaunchController(QObject):
                 [sys.executable, script_path, "--lang", language_app],
                 cwd=folder,
             )
-            # self.view.accept()
+            self.view.accept()
 
     def update_tooltip(self, index):
         if index >= 0:

@@ -37,8 +37,8 @@ https://github.com/larva-udesc/udesc_ttea_view
 # Define the __all__ variable
 __all__ = [
     "CalibrationController",
-    "HealthProfessionalEditController",
-    "HealthProfessionalListController",
+    "ProfessionalEditController",
+    "ProfessionalListController",
     "InstitutionFacilityEditController",
     "InstitutionFacilityListController",
     "LanguageController",
@@ -55,8 +55,8 @@ __license__ = "MIT License"
 
 # Import the submodules
 from .calibrationcontroller import CalibrationController
-from .healthprofessionaleditcontroller import HealthProfessionalEditController
-from .healthprofessionallistcontroller import HealthProfessionalListController
+from .professionaleditcontroller import ProfessionalEditController
+from .professionallistcontroller import ProfessionalListController
 from .institutionfacilityeditcontroller import \
     InstitutionFacilityEditController
 from .institutionfacilitylistcontroller import \

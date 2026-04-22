@@ -35,7 +35,7 @@ https://github.com/larva-udesc/udesc_ttea_view
 __all__ = [
     "CalibrationIniDAO",
     "DAO",
-    "HealthProfessionalCsvDAO",
+    "ProfessionalCsvDAO",
     "InstitutionFacilityCsvDAO",
     "PlayerCsvDAO",
 ]
@@ -47,6 +47,6 @@ __license__ = "MIT License"
 
 from .calibrationinidao import CalibrationIniDAO
 from .dao import DAO
-from .healthprofessionalcsvdao import HealthProfessionalCsvDAO
+from .professionalcsvdao import ProfessionalCsvDAO
 from .institutionfacilitycsvdao import InstitutionFacilityCsvDAO
 from .playercsvdao import PlayerCsvDAO
