@@ -1,65 +1,83 @@
 import cv2
 
-from udescjoinvilletteagames.kartea.gameutil import GameSettings
+# import settings
 
 
 class Camera:
-    """Gerencia a captura de vídeo da câmera."""
+    """Classe responsável pelo gerenciamento da câmera (captura de vídeo via OpenCV)."""
 
     def __init__(self):
-        self.settings = GameSettings()
-        self.cap = None
-        self.frame = None
+        """Inicializa a captura de vídeo usando a configuração definida em settings."""
+        self.cap = cv2.VideoCapture(settings.CAMERA, cv2.CAP_DSHOW)
         self.ret = False
-        self._initialize_camera()
+        self.frame = None
 
-    def _initialize_camera(self):
-        """Inicializa a captura de vídeo."""
-        self.cap = cv2.VideoCapture(self.settings.CAMERA, cv2.CAP_DSHOW)
-        if not self.cap.isOpened():
-            print("Erro: Não foi possível abrir a câmera.")
-            return
+        # Lê o primeiro frame para inicialização
         self.ret, self.frame = self.cap.read()
 
     def load_camera(self):
-        """Lê um frame, aplica flip e desenha a área de calibração."""
-        if self.cap is None or not self.cap.isOpened():
-            return None
-
+        """
+        Lê um novo frame da câmera, aplica flip horizontal e desenha
+        a área de calibração na imagem.
+        """
         self.ret, self.frame = self.cap.read()
-        if not self.ret or self.frame is None:
-            return None
 
-        # Flip horizontal (efeito espelho)
-        self.frame = cv2.flip(self.frame, 1)
+        if self.frame is not None:
+            # Espelha a imagem horizontalmente (efeito mirror)
+            self.frame = cv2.flip(self.frame, 1)
 
-        # Desenha a área de calibração
-        pts = self.settings.calibration_points
-        if len(pts) >= 4:
-            cv2.line(self.frame, pts[0], pts[1], self.settings.green, 2)
-            cv2.line(self.frame, pts[1], pts[3], self.settings.green, 2)
-            cv2.line(self.frame, pts[2], pts[0], self.settings.green, 2)
-            cv2.line(self.frame, pts[2], pts[3], self.settings.green, 2)
+            # Desenha as linhas da área de calibração
+            cv2.line(
+                self.frame,
+                settings.pontos_calibracao[0],
+                settings.pontos_calibracao[1],
+                settings.verde,
+                2,
+            )
 
-            for point in pts:
-                cv2.circle(self.frame, point, 5, self.settings.blue, 3)
+            cv2.line(
+                self.frame,
+                settings.pontos_calibracao[1],
+                settings.pontos_calibracao[3],
+                settings.verde,
+                2,
+            )
 
-        cv2.imshow("Tela de Captura", self.frame)
-        cv2.waitKey(1)
-        return self.frame
+            cv2.line(
+                self.frame,
+                settings.pontos_calibracao[2],
+                settings.pontos_calibracao[0],
+                settings.verde,
+                2,
+            )
+
+            cv2.line(
+                self.frame,
+                settings.pontos_calibracao[2],
+                settings.pontos_calibracao[3],
+                settings.verde,
+                2,
+            )
+
+            # Desenha os pontos de calibração como círculos
+            cv2.circle(
+                self.frame, settings.pontos_calibracao[0], 5, settings.azul, 3
+            )
+            cv2.circle(
+                self.frame, settings.pontos_calibracao[1], 5, settings.azul, 3
+            )
+            cv2.circle(
+                self.frame, settings.pontos_calibracao[2], 5, settings.azul, 3
+            )
+            cv2.circle(
+                self.frame, settings.pontos_calibracao[3], 5, settings.azul, 3
+            )
+
+            # Exibe a janela de captura
+            cv2.imshow("Tela de Captura", self.frame)
 
     def close_camera(self):
-        """Libera a câmera e fecha a janela."""
+        """Libera a câmera e fecha a janela de captura."""
         if self.cap is not None:
             self.cap.release()
-        # cv2.destroyWindow("Tela de Captura")
-        try:
-            if (
-                cv2.getWindowProperty("Tela de Captura", cv2.WND_PROP_VISIBLE)
-                >= 0
-            ):
-                cv2.destroyWindow("Tela de Captura")
-        except Exception:
-            pass  # ignora se a janela não existir
-
-        cv2.destroyAllWindows()
+        cv2.destroyWindow("Tela de Captura")

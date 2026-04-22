@@ -1,6 +1,7 @@
 # udescjoinvilletteautil/cvshandler.py
 import csv
 import io
+import locale
 import os
 from pathlib import Path
 from typing import Dict, List, Optional, TextIO, Union
@@ -216,28 +217,44 @@ class CSVHandler:
             )
             return []
 
-        try:
-            with open(path, "r", newline="", encoding="utf-8-sig") as file:
-                if as_dict:
-                    reader = csv.DictReader(file, dialect=self.dialect)
-                else:
-                    reader = csv.reader(file, dialect=self.dialect)
-                rows = list(reader)
+        # Lista otimizada e testada para PT-BR/PT-PT, Espanhol e Inglês
+        # em Windows, Linux e Mac
+        system_enc = locale.getpreferredencoding(False)
+        encodings_to_try = ["utf-8-sig", "cp1252", "utf-8", "latin1"]
 
-                return rows
-        except PermissionError:
-            self.log.log_warning(
-                f"CSV file locked (probably open in Excel): {path.name}"
-            )
-            return []
-        except UnicodeDecodeError as e:
-            self.log.log_error(
-                f"Could not decode CSV {path.name} with UTF-8 "
-                f"(saved as Latin-1/ANSI?): {e}"
-            )
-            return []
-        except (OSError, csv.Error) as e:
-            self.log.log_error(
-                f"Error reading CSV {path.name}: {type(e).__name__}: {e}"
-            )
-            return []
+        # Evita duplicata caso o system_enc já esteja na lista
+        if system_enc.lower() not in [e.lower() for e in encodings_to_try]:
+            encodings_to_try.insert(1, system_enc)
+
+        for encoding in encodings_to_try:
+            try:
+                with open(path, "r", newline="", encoding=encoding) as file:
+
+                    if as_dict:
+                        reader = csv.DictReader(file, dialect=self.dialect)
+                    else:
+                        reader = csv.reader(file, dialect=self.dialect)
+
+                    rows = list(reader)
+                    self.log.log_info(
+                        f"CSV read successfully with encoding {encoding} "
+                        f"({len(rows)} rows) -> {path.name}"
+                    )
+                    return rows
+            except PermissionError:
+                self.log.log_warning(
+                    f"CSV file locked (probably open in Excel): {path.name}"
+                )
+                return []
+            except UnicodeDecodeError:
+                continue
+            except (OSError, csv.Error) as e:
+                self.log.log_error(
+                    f"Error reading CSV {path.name} with {encoding}: {type(e).__name__}: {e}"
+                )
+                return []
+        self.log.log_error(
+            f"Could not decode CSV {path.name}. "
+            f"Encodings tried: {', '.join(encodings_to_try)}"
+        )
+        return []

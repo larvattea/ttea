@@ -1,123 +1,127 @@
 import pygame
 
-from udescjoinvilletteagames.kartea.gameutil import GameSettings
+# from settings import *
 
 
 class UI:
-    """
-    Classe responsável por desenhar elementos de interface (texto e botões).
-    Usa as configurações globais da classe GameSettings.
-    """
+    """Classe utilitária responsável por desenhar textos e botões na interface do jogo."""
 
-    UI_POS_TOP_LEFT = "top_left"
-    UI_POS_CENTER = "center"
-
-    def __init__(self, settings: GameSettings = None):
-        self.settings = settings or GameSettings()
-
+    @staticmethod
     def draw_text(
-        self,
         surface: pygame.Surface,
         text: str,
         pos: tuple,
         color: tuple,
-        font=None,
-        pos_mode: str = UI_POS_TOP_LEFT,
+        font=FONTS["medium"],
+        pos_mode: str = "top_left",
         shadow: bool = False,
         shadow_color: tuple = (0, 0, 0),
         shadow_offset: int = 2,
     ):
-        """Desenha texto com suporte a sombra."""
-        if font is None:
-            font = self.settings.FONTS["medium"]
+        """
+        Desenha texto na tela com opção de sombra.
 
+        Args:
+            surface (pygame.Surface): Superfície onde desenhar
+            text (str): Texto a ser renderizado
+            pos (tuple): Posição (x, y)
+            color (tuple): Cor do texto
+            font: Fonte do pygame
+            pos_mode (str): "top_left" ou "center"
+            shadow (bool): Se deve desenhar sombra
+            shadow_color (tuple): Cor da sombra
+            shadow_offset (int): Deslocamento da sombra
+        """
         label = font.render(text, True, color)
         label_rect = label.get_rect()
 
-        if pos_mode == UI.UI_POS_TOP_LEFT:
-            label_rect.topleft = pos
-        elif pos_mode == UI.UI_POS_CENTER:
+        if pos_mode == "top_left":
+            label_rect.x, label_rect.y = pos
+        elif pos_mode == "center":
             label_rect.center = pos
 
+        # Desenha sombra (se ativada)
         if shadow:
-            shadow_label = font.render(text, True, shadow_color)
+            label_shadow = font.render(text, True, shadow_color)
             surface.blit(
-                shadow_label,
+                label_shadow,
                 (label_rect.x - shadow_offset, label_rect.y + shadow_offset),
             )
 
+        # Desenha o texto principal
         surface.blit(label, label_rect)
 
+    @staticmethod
     def button(
-        self,
         surface: pygame.Surface,
-        pos_x: int,  # 1 = esquerda, 2 = direita, outro = centro
+        pos_x: int,
         pos_y: int,
         text: str = None,
-        click_sound=None,
+        click_sound: pygame.mixer.Sound = None,
     ) -> bool:
-        """Desenha um botão e retorna True se foi clicado."""
+        """
+        Desenha um botão e retorna True se ele foi clicado.
 
+        Args:
+            surface (pygame.Surface): Superfície onde desenhar
+            pos_x (int): 0 = centro, 1 = esquerda, 2 = direita
+            pos_y (int): Posição Y do botão
+            text (str): Texto do botão (opcional)
+            click_sound (pygame.mixer.Sound): Som a tocar ao clicar
+
+        Returns:
+            bool: True se o botão foi pressionado neste frame
+        """
+        # Define a posição horizontal do botão
         if pos_x == 1:  # esquerda
             rect = pygame.Rect(
-                (
-                    self.settings.SCREEN_WIDTH // 4
-                    - self.settings.BUTTONS_SIZES[0] // 2,
-                    pos_y,
-                ),
-                self.settings.BUTTONS_SIZES,
+                (SCREEN_WIDTH // 4 - BUTTONS_SIZES[0] // 2, pos_y),
+                BUTTONS_SIZES,
             )
         elif pos_x == 2:  # direita
             rect = pygame.Rect(
-                (
-                    3 * self.settings.SCREEN_WIDTH // 4
-                    - self.settings.BUTTONS_SIZES[0] // 2,
-                    pos_y,
-                ),
-                self.settings.BUTTONS_SIZES,
+                (3 * SCREEN_WIDTH // 4 - BUTTONS_SIZES[0] // 2, pos_y),
+                BUTTONS_SIZES,
             )
-        else:  # centro
+        else:  # centro (padrão)
             rect = pygame.Rect(
-                (
-                    self.settings.SCREEN_WIDTH // 2
-                    - self.settings.BUTTONS_SIZES[0] // 2,
-                    pos_y,
-                ),
-                self.settings.BUTTONS_SIZES,
+                (SCREEN_WIDTH // 2 - BUTTONS_SIZES[0] // 2, pos_y),
+                BUTTONS_SIZES,
             )
 
-        # Hover effect
-        mouse_pos = pygame.mouse.get_pos()
-        on_button = rect.collidepoint(mouse_pos)
+        # Verifica se o mouse está sobre o botão
+        on_button = rect.collidepoint(pygame.mouse.get_pos())
+
+        # Define a cor do botão
         color = (
-            self.settings.COLORS["buttons"]["second"]
+            COLORS["buttons"]["second"]
             if on_button
-            else self.settings.COLORS["buttons"]["default"]
+            else COLORS["buttons"]["default"]
         )
 
-        # Sombra do botão
+        # Desenha sombra do botão
         pygame.draw.rect(
             surface,
-            self.settings.COLORS["buttons"]["shadow"],
+            COLORS["buttons"]["shadow"],
             (rect.x - 6, rect.y - 6, rect.w, rect.h),
         )
 
-        # Botão principal
+        # Desenha o botão principal
         pygame.draw.rect(surface, color, rect)
 
-        # Texto do botão
+        # Desenha o texto dentro do botão (se houver)
         if text is not None:
-            self.draw_text(
+            UI.draw_text(
                 surface,
                 text,
                 rect.center,
-                self.settings.COLORS["buttons"]["text"],
-                pos_mode=self.UI_POS_CENTER,
+                COLORS["buttons"]["text"],
+                pos_mode="center",
                 shadow=True,
-                shadow_color=self.settings.COLORS["buttons"]["shadow"],
+                shadow_color=COLORS["buttons"]["shadow"],
             )
 
-        # Clique
+        # Verifica clique do mouse
         if on_button and pygame.mouse.get_pressed()[0]:
             if click_sound is not None:
                 click_sound.play()

@@ -235,6 +235,7 @@ class PlayerCsvDAO(DAO[Player]):
         Scans the players directory, parses each matching CSV file,
         converts data types appropriately, and populates the cache.
         """
+        # TODO bug quando cadastra com acento uma palavra rever o csv handler
         PathConfig.ensure_user_dirs()
         for file_path in PathConfig.PLAYERS_DIR.glob("*_player.csv"):
             player_data = self.csv_handler.read_csv(

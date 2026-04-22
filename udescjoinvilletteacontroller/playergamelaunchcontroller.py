@@ -32,6 +32,9 @@ class PlayerGameLaunchController(QObject):
     def launch_game(self):
         # Recupera os dados do jogo selecionado no combo da View
         game_data = self.view.cbx_game.currentData()
+        player_data = self.view.cbx_player.currentData()
+        profession_data = self.view.cbx_health.currentData()
+
         language_app = AppModel.get_instance().current_language
 
         if not game_data:
@@ -40,7 +43,7 @@ class PlayerGameLaunchController(QObject):
 
         folder = game_data["folder_path"]
         # Pega o 'exec' (ex: main.py) definido no JSON do jogo
-        executable = game_data.get("exec", "main.py")
+        executable = game_data.get("exec")
         script_path = os.path.join(folder, executable)
 
         if os.path.exists(script_path):
@@ -49,7 +52,7 @@ class PlayerGameLaunchController(QObject):
                 [sys.executable, script_path, "--lang", language_app],
                 cwd=folder,
             )
-            self.view.accept()
+            # self.view.accept()
 
     def update_tooltip(self, index):
         if index >= 0:

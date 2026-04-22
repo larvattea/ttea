@@ -1,96 +1,255 @@
+import random
+import time
+
 import pygame
 
 from udescjoinvilletteagames.kartea.gamemodel import Image
-from udescjoinvilletteagames.kartea.gameutil import GameSettings
-from udescjoinvilletteagames.kartea.service import PlayerKarteaConfigService
+
+# import settings
+# from settings import *
 
 
 class Target:
-    def __init__(self, road_index: int):
-        """
-        Inicializa um alvo em uma das três faixas da pista.
-        road_index: 0 (esquerda), 1 (centro), 2 (direita)
-        """
-        # Propriedades de Tamanho e Identificação
-        self.settings = GameSettings()
-        self.service = PlayerKarteaConfigService()
+    """Classe base que representa um alvo (estrela) no jogo."""
 
-        self.default_config = self.service.get_kartea_ini_config()
-        self.size = self.settings.TARGETS_SIZES
-        self.current_road = road_index
+    def __init__(self, r: int = None):
+        """
+        Inicializa um alvo.
 
-        # Estado de Animação
-        self.images = [
-            Image.load(
-                self.default_config["visual_resources"][
-                    "target_image_default"
-                ],
-                size=self.size,
-            )
-        ]
+        Args:
+            r (int, optional): Índice da pista (0, 1 ou 2). Se None, escolhe aleatoriamente.
+        """
+        # Tamanho do alvo
+        size = TARGETS_SIZES
+
+        # Define posição inicial de spawn
+        road, start_pos = self.define_spawn_pos(r)
+
+        # Configurações visuais e de posição
+        self.tam = size
+        self.rect = pygame.Rect(start_pos[0], start_pos[1], size[0], size[1])
+        self.images = [Image.load("Assets/Kartea/Star.png", size=size)]
         self.current_frame = 0
+        self.current_pos = start_pos
+        self.current_road = road
         self.animation_timer = 0
-        self.animation_speed = 0.1  # Ajuste conforme necessário
+        self.line = None
 
-        # Posição Lógica (Coordenadas de Tela calculadas pela Line)
-        self.rect = pygame.Rect(0, 0, self.size[0], self.size[1])
-        self.current_pos = [0, 0]  # [x, y] na tela
+    def define_spawn_pos(self, r: int = None):
+        """
+        Define a pista e posição inicial do alvo.
 
-    def animate(self):
-        """Usa o animation_speed para alternar entre os frames da lista."""
-        if len(self.images) > 1:
-            # Incrementa o timer com base na velocidade definida
-            self.animation_timer += self.animation_speed
+        Args:
+            r (int, optional): Pista desejada (0=esquerda, 1=meio, 2=direita)
 
-            # Quando o timer atinge 1 (ou o limite desejado), troca o frame
-            if self.animation_timer >= 1:
-                self.current_frame = (self.current_frame + 1) % len(
-                    self.images
-                )
-                self.animation_timer = 0
+        Returns:
+            tuple: (road, start_pos)
+        """
+        if r is not None and 0 <= r <= 2:
+            road = r
+        else:
+            road = random.randint(0, 2)  # 0 esq, 1 meio, 2 dir
+
+        start_pos = OBJ_POS[road]
+        return road, start_pos
 
     def define_pos(self, x: float, y: float):
         """
-        Sincroniza a posição calculada pela projeção da Line com o Rect
-        de colisão. Chamado por Line.drawTarget().
+        Atualiza a posição do retângulo do alvo com base nas coordenadas projetadas.
         """
-        self.current_pos = [int(x), int(y)]
-        self.rect.topleft = (int(x), int(y))
+        # Mantém o tamanho atual do rect
+        self.rect = pygame.Rect(x, y, self.rect.width, self.rect.height)
+
+    def move(self):
+        """
+        Movimento padrão do alvo: desce a tela com pequena variação lateral
+        dependendo da pista e da velocidade atual.
+        """
+        ve = TARGETS_MOVE_SPEED
+        vel = [0, ve]
+
+        if ve == 1:
+            if self.current_pos[1] % 10 == 0:
+                if self.current_road == 0:
+                    vel = [-3, ve]
+                elif self.current_road == 2:
+                    vel = [3, ve]
+            elif self.current_pos[1] % 5 == 0:
+                self.rect.inflate_ip(3, 3)
+                self.tam = (int(self.tam[0] + 3), int(self.tam[1] + 3))
+                self.images = [
+                    Image.load("Assets/Kartea/Star.png", size=self.tam)
+                ]
+                if self.current_road == 0:
+                    vel = [-3, ve]
+                elif self.current_road == 2:
+                    vel = [3, ve]
+            else:
+                vel = [0, ve]
+
+        elif ve == 2:
+            if self.current_pos[1] % 8 == 0:
+                if self.current_road == 0:
+                    vel = [-2, ve]
+                elif self.current_road == 2:
+                    vel = [2, ve]
+            elif self.current_pos[1] % 4 == 0:
+                self.rect.inflate_ip(3, 3)
+                self.tam = (int(self.tam[0] + 3), int(self.tam[1] + 3))
+                self.images = [
+                    Image.load("Assets/Kartea/Star.png", size=self.tam)
+                ]
+                if self.current_road == 0:
+                    vel = [-2, ve]
+                elif self.current_road == 2:
+                    vel = [2, ve]
+            else:
+                vel = [0, ve]
+
+        elif ve == 3:
+            if self.current_pos[1] % 12 == 0:
+                if self.current_road == 0:
+                    vel = [-1, ve]
+                elif self.current_road == 2:
+                    vel = [1, ve]
+            elif self.current_pos[1] % 6 == 0:
+                self.rect.inflate_ip(3, 3)
+                self.tam = (int(self.tam[0] + 3), int(self.tam[1] + 3))
+                self.images = [
+                    Image.load("Assets/Kartea/Star.png", size=self.tam)
+                ]
+                if self.current_road == 0:
+                    vel = [-1, ve]
+                elif self.current_road == 2:
+                    vel = [1, ve]
+            else:
+                vel = [0, ve]
+
+        elif ve == 4:
+            if self.current_pos[1] % 16 == 0:
+                if self.current_road == 0:
+                    vel = [-1, ve]
+                elif self.current_road == 2:
+                    vel = [1, ve]
+            elif self.current_pos[1] % 8 == 0:
+                self.rect.inflate_ip(3, 3)
+                self.tam = (int(self.tam[0] + 3), int(self.tam[1] + 3))
+                self.images = [
+                    Image.load("Assets/Kartea/Star.png", size=self.tam)
+                ]
+                if self.current_road == 0:
+                    vel = [-1, ve]
+                elif self.current_road == 2:
+                    vel = [1, ve]
+            else:
+                vel = [0, ve]
+
+        else:  # velocidade padrão
+            if self.current_pos[1] % 10 == 0:
+                if self.current_road == 0:
+                    vel = [-3, ve]
+                elif self.current_road == 2:
+                    vel = [3, ve]
+            else:
+                self.rect.inflate_ip(3, 3)
+                self.tam = (int(self.tam[0] + 3), int(self.tam[1] + 3))
+                self.images = [
+                    Image.load("Assets/Kartea/Star.png", size=self.tam)
+                ]
+                if self.current_road == 0:
+                    vel = [-3, ve]
+                elif self.current_road == 2:
+                    vel = [3, ve]
+
+        # Aplica o movimento
+        self.rect.move_ip(vel)
+        self.current_pos = (
+            self.current_pos[0] + vel[0],
+            self.current_pos[1] + vel[1],
+        )
+
+    def move_to(self, x: float, y: float):
+        """
+        Movimento direto para uma posição específica (versão sobrecarregada).
+        Usado em alguns contextos de atualização de posição.
+        """
+        vel = [x - self.current_pos[0], y - self.current_pos[1]]
+        print("vel: ", vel)
+        self.rect.move_ip(vel)
+        self.current_pos = (x, y)
 
     def att_current_pos(self, x: float, y: float):
-        """Atualiza a posição lógica (usado pelo BackGround)."""
-        self.current_pos = [int(x), int(y)]
+        """Atualiza diretamente a posição atual (usado pelo background)."""
+        self.current_pos = (x, y)
 
-    def check_collision(self, player_rect: pygame.Rect) -> bool:
-        """Centraliza a lógica de colisão."""
-        return self.rect.colliderect(player_rect)
+    def animate(self):
+        """Troca o frame da animação quando necessário."""
+        t = time.time()
+        if t > self.animation_timer:
+            self.animation_timer = t + ANIMATION_SPEED
+            self.current_frame += 1
+            if self.current_frame > len(self.images) - 1:
+                self.current_frame = 0
 
-    def draw_debug_hitbox(self, surface: pygame.Surface):
-        """Desenha apenas o contorno da colisão para debug."""
-        if self.settings.DRAW_HITBOX:  # Constante do gamesettings.py
-            pygame.draw.rect(surface, (255, 0, 0), self.rect, 2)
+    def draw_hitbox(self, surface: pygame.Surface):
+        """Desenha a hitbox do alvo (quando ativada)."""
+        pygame.draw.rect(surface, (200, 60, 0), self.rect)
 
-    # TODO fazer a parte de gravação de informações da sessão
-    # TODO reve a questão de som e imagens
-    def kill(self, surface, objects_list, sounds, player_hit: bool = False):
-        """Alvo normal: colidir = ganha pontos, desviar = perde."""
-        if player_hit:
-            if sounds and "slap" in sounds:
-                sounds["slap"].play()
-            # settings.Alvo_c += 1
-            # arquivo.grava_Detalhado(...) 'Colidiu com Alvo'
-            self.settings.target_c += 1
-            points = 10
+    def draw(self, surface: pygame.Surface):
+        """Desenha o alvo na tela com animação."""
+        self.animate()
+        Image.draw(
+            surface,
+            self.images[self.current_frame],
+            self.rect.center,
+            pos_mode="center",
+        )
+
+        if DRAW_HITBOX:
+            self.draw_hitbox(surface)
+
+    def kill(
+        self, surface: pygame.Surface, targets: list, sounds: dict
+    ) -> int:
+        """
+        Remove o alvo da lista e retorna a pontuação.
+
+        Retorna:
+            10 se o jogador colidiu com o alvo (acerto)
+            0 se o alvo saiu da tela por baixo (desvio)
+        """
+        triste_fig = Image.load("Assets/Kartea/triste.png")
+        feliz_fig = Image.load("Assets/Kartea/feliz.png")
+
+        if self.current_pos[1] > SCREEN_HEIGHT:
+            # Desviou do alvo (não acertou)
+            targets.remove(self)
+            sounds["screaming"].play()
+            Image.draw(surface, triste_fig, (0, 0))
+            arquivo.grava_Detalhado(
+                arquivo.get_Player(),
+                arquivo.get_Sessao(),
+                arquivo.get_Fase(),
+                arquivo.get_Nivel(),
+                settings.pista,
+                self.current_road,
+                "Desviou de Alvo",
+            )
+            settings.Alvo_d += 1
+            return 0
         else:
-            if sounds and "screaming" in sounds:
-                sounds["screaming"].play()
-            # settings.Alvo_d += 1
-            # arquivo.grava_Detalhado(...) 'Desviou de Alvo'
-            self.settings.target_d += 1
-            points = 0
-
-        if self in objects_list:
-            objects_list.remove(self)
-        return points
-
-    # def save_session_detail
+            # Colidiu com o alvo (acerto)
+            targets.remove(self)
+            sounds["slap"].play()
+            Image.draw(surface, feliz_fig, (0, 0))
+            arquivo.grava_Detalhado(
+                arquivo.get_Player(),
+                arquivo.get_Sessao(),
+                arquivo.get_Fase(),
+                arquivo.get_Nivel(),
+                settings.pista,
+                self.current_road,
+                "Colidiu com Alvo",
+            )
+            settings.Alvo_c += 1
+            return 10

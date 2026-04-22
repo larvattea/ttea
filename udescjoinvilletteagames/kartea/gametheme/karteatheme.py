@@ -1,6 +1,6 @@
 import pygame
 
-from udescjoinvilletteagames.gamemodel.basetheme import BaseTheme
+from udescjoinvilletteagames.gametheme.basetheme import BaseTheme
 
 
 class KarTEATheme(BaseTheme):

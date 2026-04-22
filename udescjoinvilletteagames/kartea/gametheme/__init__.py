@@ -1,7 +1,7 @@
 """
-A Python package for KarTEA Game model. Developed by the Larva UDESC team.
+A Python package for KarTEA Game themes. Developed by the Larva UDESC team.
 
-This package provides models for KarTEA game.
+This package provides themes for KarTEA game.
 
 Attributes
 ----------
@@ -16,20 +16,8 @@ __license__ : str
 
 See Also
 --------
-Background
-    Background.
-Car
-    Car.
-Image
-    Image.
-KarTEATheme
-    KarTEATheme.
-Line
-    Line.
-Obstacle
-    Obstacle.
-Target
-    Target.
+GameSettings
+    GameSettings.
 
 Notes
 -----
@@ -40,13 +28,7 @@ https://github.com/larva-udesc/udesc_ttea_view
 
 # Define the __all__ variable
 __all__ = [
-    "Background",
-    "Car",
-    "Image",
-    "Line",
-    "Obstacle",
-    "Target",
-    "World",
+    "KarTEATheme",
 ]
 
 __version__ = "1.0.0"
@@ -55,10 +37,4 @@ __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
 # Import the submodules
-from .background import Background
-from .car import Car
-from .image import Image
-from .line import Line
-from .obstacle import Obstacle
-from .target import Target
-from .world import World
+from .karteatheme import KarTEATheme

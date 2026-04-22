@@ -3,7 +3,7 @@ udescjoinvilletteagames
 
 A Python package for games. Developed by the Larva UDESC team.
 
-This package provides models for for application
+This package provides themes for application
 management for the T-TEA platform.
 
 Attributes

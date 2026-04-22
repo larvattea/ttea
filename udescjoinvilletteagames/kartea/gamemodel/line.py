@@ -1,130 +1,155 @@
-from typing import TYPE_CHECKING, Optional
+from typing import Optional
 
 import pygame
 
-from udescjoinvilletteagames.kartea.gameutil import GameSettings
+# from settings import *
+from udescjoinvilletteagames.kartea.gamemodel import Target
 
-if TYPE_CHECKING:
-    from udescjoinvilletteagames.kartea.gamemodel import Target
+# Constantes (mantidas como no original)
+roadW = 400  # Tamanho da pista
+segL = 200  # Tamanho do segmento
+camD = 3  # Camera depth
 
 
 class Line:
+    """Representa uma linha (segmento) da estrada no sistema pseudo-3D."""
 
     def __init__(self):
-        self.settings = GameSettings()
-        self.x = self.y = self.z = 0.0
-        self.X = self.Y = self.W = 0.0
+        # Posição 3D
+        self.x: float = 0.0
+        self.y: float = 0.0
+        self.z: float = 0.0
 
-        self.scale = 0.0
-        self.curve = 0.0
-        self.clip = 0.0
+        # Posição projetada 2D
+        self.X: float = 0.0
+        self.Y: float = 0.0
+        self.W: float = 0.0
 
-        self.grass_color = self.rumble_color = self.road_color = (
-            self.div_color
-        ) = None
+        self.scale: float = 0.0  # Escala de projeção
+        self.curve: float = 0.0
+        self.clip: float = 0.0
 
-        # Sprites de Ambiente (Lado Esquerdo e Direito)
-        self.sprite_x = 0.0
+        # Sprite lateral esquerdo (árvore)
+        self.spriteX: float = 0.0
         self.sprite: Optional[pygame.Surface] = None
-        self.sprite_2x = 0.0
+        self.sprite_rect: Optional[pygame.Rect] = None
+
+        # Sprite lateral direito (árvore)
+        self.sprite2X: float = 0.0
         self.sprite2: Optional[pygame.Surface] = None
+        self.sprite2_rect: Optional[pygame.Rect] = None
 
-        # Objetivos (Targets)
-        self.target_x = 0.0
-        self.target: Optional["Target"] = None  # pode ser Target ou Obstacle
+        # Target / Obstáculo
+        self.targetX: float = 0.0
+        self.target: Optional[Target] = None
+        self.target_rect: Optional[pygame.Rect] = None
 
-    def project(self, cam_x: float, cam_y: float, cam_z: float):
-        """Projeta as coordenadas 3D para o plano 2D da tela."""
-        self.scale = self.settings.CAMERA_DEPTH / (self.z - cam_z)
-        self.X = (
-            (1 + self.scale * (self.x - cam_x))
-            * self.settings.SCREEN_WIDTH
-            / 2
-        )
-        self.Y = (
-            (1 - self.scale * (self.y - cam_y))
-            * self.settings.SCREEN_HEIGHT
-            / self.settings.PERSPECTIVE_DIVISOR
-        )
-        self.W = (
-            self.scale
-            * self.settings.ROAD_WIDTH
-            * self.settings.SCREEN_WIDTH
-            / 2
-        )
+    def project(self, camX: float, camY: float, camZ: float):
+        """Projeta a posição 3D para coordenadas 2D na tela."""
+        self.scale = camD / (self.z - camZ)
+        self.X = (1 + self.scale * (self.x - camX)) * SCREEN_WIDTH / 2
+        self.Y = (1 - self.scale * (self.y - camY)) * SCREEN_HEIGHT / 5
+        self.W = self.scale * roadW * SCREEN_WIDTH / 2
 
-    def draw_sprite(self, draw_surface: pygame.Surface):
-        """Desenha o sprite de ambiente principal (ex: árvore esquerda)."""
+    def drawSprite(self, draw_surface: pygame.Surface):
+        """Desenha o sprite lateral esquerdo (árvore esquerda)."""
         if self.sprite is None:
             return
-        self._render_sprite(draw_surface, self.sprite, self.sprite_x)
 
-    def draw_sprite2(self, draw_surface: pygame.Surface):
-        """Desenha o segundo sprite de ambiente (ex: árvore direita)."""
+        w = self.sprite.get_width()
+        h = self.sprite.get_height()
+
+        destX = self.X + self.scale * self.spriteX * SCREEN_WIDTH / 2
+        destY = self.Y + 4
+        destW = w * self.W / 266
+        destH = h * self.W / 266
+
+        destX += destW * self.spriteX
+        destY += destH * -1
+
+        clipH = destY * self.spriteX
+        if clipH < 0:
+            clipH = 0
+        if clipH >= destH:
+            return
+
+        if destW > (2 * w):
+            return
+
+        scaled_sprite = pygame.transform.scale(self.sprite, (destW, destH))
+        draw_surface.blit(scaled_sprite, (destX, destY))
+
+    def drawSprite2(self, draw_surface: pygame.Surface):
+        """Desenha o sprite lateral direito (árvore direita)."""
         if self.sprite2 is None:
             return
-        self._render_sprite(draw_surface, self.sprite2, self.sprite_2x)
 
-    def _render_sprite(
-        self, surface: pygame.Surface, sprite: pygame.Surface, sprite_x: float
-    ):
-        """Lógica interna de renderização de sprites com escala e clip."""
-        w = sprite.get_width()
-        h = sprite.get_height()
+        w = self.sprite2.get_width()
+        h = self.sprite2.get_height()
 
-        dest_x = (
-            self.X + self.scale * sprite_x * self.settings.SCREEN_WIDTH / 2
-        )
-        dest_y = self.Y + 4
-        dest_w = w * self.W / self.settings.PROJECTION_SCALE_FACTOR
-        dest_h = h * self.W / self.settings.PROJECTION_SCALE_FACTOR
+        destX = self.X + self.scale * self.sprite2X * SCREEN_WIDTH / 2
+        destY = self.Y + 4
+        destW = w * self.W / 266
+        destH = h * self.W / 266
 
-        dest_x += dest_w * sprite_x
-        dest_y += dest_h * -1
+        destX += destW * self.sprite2X
+        destY += destH * -1
 
-        # Clip para não desenhar abaixo da linha do horizonte ou fora da tela
-        if dest_y + dest_h < self.clip or dest_w <= 0 or dest_h <= 0:
+        clipH = destY * self.sprite2X
+        if clipH < 0:
+            clipH = 0
+        if clipH >= destH:
             return
 
-        # Redimensiona o sprite conforme a distância
-        scaled = pygame.transform.scale(sprite, (int(dest_w), int(dest_h)))
-        surface.blit(scaled, (dest_x, dest_y))
+        if destW > (2 * w):
+            return
 
-    def draw_target(self, surface: pygame.Surface):
-        """Desenha o alvo na pista e atualiza sua posição lógica."""
+        scaled_sprite = pygame.transform.scale(self.sprite2, (destW, destH))
+        draw_surface.blit(scaled_sprite, (destX, destY))
+
+    def drawTarget(self, draw_surface: pygame.Surface):
+        """Desenha o alvo ou obstáculo associado a esta linha."""
         if self.target is None:
             return
 
-        # Define a posição X baseada na 'estrada' (lane) que o alvo está
+        w = self.target.images[0].get_width()
+        h = self.target.images[0].get_height()
+
+        # Define posição lateral na pista conforme a road atual
         if self.target.current_road == 0:
-            self.target_x = -2.25
+            self.targetX = -2.25
         elif self.target.current_road == 1:
-            self.target_x = -0.5
+            self.targetX = -0.5
         else:
-            self.target_x = 1.25
+            self.targetX = 1.25
 
-        dest_x = (
-            self.X
-            + self.scale * self.target_x * self.settings.SCREEN_WIDTH / 2
+        destX = self.X + self.scale * self.targetX * SCREEN_WIDTH / 2
+        destY = self.Y + 4
+        destW = w * self.W / 266
+        destH = h * self.W / 266
+
+        destX += destW * self.targetX
+        destY += destH * -1
+
+        # Atualiza posição do target
+        self.target.define_pos(destX, destY)
+
+        # Clipping
+        clipH = destY + destH - self.clip
+        if clipH < 0:
+            clipH = 0
+        if clipH >= destH:
+            return
+
+        if destW > 1.5 * w:
+            return
+
+        # Desenha o target escalado
+        scaled_sprite = pygame.transform.scale(
+            self.target.images[0], (destW, destH)
         )
-        dest_y = self.Y + 4
-        base_w = self.target.images[0].get_width()
-        base_h = self.target.images[0].get_height()
+        draw_surface.blit(scaled_sprite, (destX, destY))
 
-        dest_w = base_w * self.W / self.settings.PROJECTION_SCALE_FACTOR
-        dest_h = base_h * self.W / self.settings.PROJECTION_SCALE_FACTOR
-
-        dest_x += dest_w * self.target_x
-        dest_y += dest_h * -1
-
-        # Atualiza a posição do objeto Target para detecção de colisão no Game.py
-        self.target.define_pos(dest_x, dest_y)
-        self.target.animate()
-
-        if dest_w > 0 and dest_h > 0:
-            sprite = self.target.images[self.target.current_frame]
-            scaled = pygame.transform.scale(sprite, (int(dest_w), int(dest_h)))
-            surface.blit(scaled, (dest_x, dest_y))
-
-        if self.settings.DRAW_HITBOX:
-            self.target.draw_debug_hitbox(surface)
+        # Desenha hitbox se estiver ativada
+        if DRAW_HITBOX:
+            self.target.draw_hitbox(draw_surface)

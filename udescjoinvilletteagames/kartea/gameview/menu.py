@@ -4,343 +4,353 @@ import pygame
 
 from udescjoinvilletteagames.kartea.gamemodel import Background, Image
 from udescjoinvilletteagames.kartea.gameui import UI
-from udescjoinvilletteagames.kartea.gameutil import GameSettings
-from udescjoinvilletteagames.kartea.util import KarteaPathConfig
+
+# import settings
+# from settings import *
+# from background import Background
 
 
 class Menu:
-    """Gerencia todas as telas de menu, pausa e feedback."""
+    """Classe responsável por gerenciar todos os menus e telas de feedback do jogo."""
 
-    def __init__(self, surface: pygame.Surface):
-        self.settings = GameSettings()
-        self.ui = UI()
+    def __init__(self, surface):
         self.surface = surface
+
+        # Background do menu
         self.background = Background()
-        self.click_sound = pygame.mixer.Sound(
-            KarteaPathConfig.game_sound("point.wav")
-        )
+        self.background.background_menu()
 
-        # Carrega background do menu (mantido compatível)
-        self.background_menu_image = Image.load(
-            KarteaPathConfig.game_image("background_menu.png"),
-            # "Assets/Kartea/Background_Menu.png",
-            size=(self.settings.SCREEN_WIDTH, self.settings.SCREEN_HEIGHT),
-        )
+        # Som de clique (usado em todos os botões)
+        self.click_sound = pygame.mixer.Sound("Assets/Kartea/Sounds/point.wav")
 
-    def draw_background(self):
-        """Desenha o fundo comum do menu."""
-        self.background.draw(
-            self.surface
-        )  # usa o background da pista como base
-        Image.draw(self.surface, self.background_menu_image, (0, 0))
+    def draw(self):
+        """Desenha o fundo básico do menu."""
+        self.background.draw(self.surface)
+        fundo = Image.load(
+            "Assets/Kartea/Fundo.png", size=(SCREEN_WIDTH, SCREEN_HEIGHT)
+        )
+        Image.draw(self.surface, fundo, (0, 0))
 
     def draw_feedback(self):
-        """Desenha as estatísticas na tela de feedback."""
-        center_x = self.settings.SCREEN_WIDTH // 2
-
-        self.ui.draw_text(
+        """Desenha a tela de feedback com estatísticas do nível."""
+        ui.draw_text(
             self.surface,
             "Feedback",
-            (center_x + 50, 100),
-            self.settings.COLORS["title"],
-            font=self.settings.FONTS["medium"],
+            ((SCREEN_WIDTH // 2) + 50, 100),
+            COLORS["title"],
+            font=FONTS["medium"],
             shadow=True,
             shadow_color=(255, 255, 255),
         )
 
-        self.ui.draw_text(
+        UI.draw_text(
             self.surface,
             "Quantidade",
-            (center_x + 250, 100),
-            self.settings.COLORS["title"],
-            font=self.settings.FONTS["medium"],
+            ((SCREEN_WIDTH // 2) + 250, 100),
+            COLORS["title"],
+            font=FONTS["medium"],
             shadow=True,
             shadow_color=(255, 255, 255),
         )
 
         # Pontuação
-        self.ui.draw_text(
+        UI.draw_text(
             self.surface,
             "Pontuação",
-            (center_x + 50, 130),
-            self.settings.COLORS["title"],
-            font=self.settings.FONTS["medium"],
+            ((SCREEN_WIDTH // 2) + 50, 130),
+            COLORS["title"],
+            font=FONTS["medium"],
             shadow=True,
+            shadow_color=(255, 255, 255),
         )
-
-        self.ui.draw_text(
+        UI.draw_text(
             self.surface,
-            str(self.settings.score),
-            (center_x + 250, 130),
-            self.settings.COLORS["title"],
-            font=self.settings.FONTS["medium"],
+            str(settings.score),
+            ((SCREEN_WIDTH // 2) + 250, 130),
+            COLORS["title"],
+            font=FONTS["medium"],
             shadow=True,
+            shadow_color=(255, 255, 255),
         )
 
         # Movimentos
-        self.ui.draw_text(
+        UI.draw_text(
             self.surface,
             "Movimentos",
-            (center_x + 50, 160),
-            self.settings.COLORS["title"],
-            font=self.settings.FONTS["medium"],
+            ((SCREEN_WIDTH // 2) + 50, 160),
+            COLORS["title"],
+            font=FONTS["medium"],
             shadow=True,
+            shadow_color=(255, 255, 255),
         )
-        self.ui.draw_text(
+        UI.draw_text(
             self.surface,
-            str(self.settings.move),
-            (center_x + 250, 160),
-            self.settings.COLORS["title"],
-            font=self.settings.FONTS["medium"],
+            str(settings.movimento),
+            ((SCREEN_WIDTH // 2) + 250, 160),
+            COLORS["title"],
+            font=FONTS["medium"],
             shadow=True,
+            shadow_color=(255, 255, 255),
         )
 
         # Alvos
-        self.ui.draw_text(
+        UI.draw_text(
             self.surface,
             "Alvos Gerados",
-            (center_x + 50, 190),
-            self.settings.COLORS["title"],
-            font=self.settings.FONTS["medium"],
+            ((SCREEN_WIDTH // 2) + 50, 190),
+            COLORS["title"],
+            font=FONTS["medium"],
             shadow=True,
+            shadow_color=(255, 255, 255),
         )
-        self.ui.draw_text(
+        UI.draw_text(
             self.surface,
-            str(self.settings.target),
-            (center_x + 250, 190),
-            self.settings.COLORS["title"],
-            font=self.settings.FONTS["medium"],
+            str(settings.Alvo),
+            ((SCREEN_WIDTH // 2) + 250, 190),
+            COLORS["title"],
+            font=FONTS["medium"],
             shadow=True,
+            shadow_color=(255, 255, 255),
         )
 
-        self.ui.draw_text(
+        UI.draw_text(
             self.surface,
             "Alvos Colididos",
-            (center_x + 50, 220),
-            self.settings.COLORS["title"],
-            font=self.settings.FONTS["medium"],
+            ((SCREEN_WIDTH // 2) + 50, 220),
+            COLORS["title"],
+            font=FONTS["medium"],
             shadow=True,
+            shadow_color=(255, 255, 255),
         )
-        self.ui.draw_text(
+        UI.draw_text(
             self.surface,
-            str(self.settings.target_c),
-            (center_x + 250, 220),
-            self.settings.COLORS["title"],
-            font=self.settings.FONTS["medium"],
+            str(settings.Alvo_c),
+            ((SCREEN_WIDTH // 2) + 250, 220),
+            COLORS["title"],
+            font=FONTS["medium"],
             shadow=True,
+            shadow_color=(255, 255, 255),
         )
 
-        self.ui.draw_text(
+        UI.draw_text(
             self.surface,
             "Alvos Desviados",
-            (center_x + 50, 250),
-            self.settings.COLORS["title"],
-            font=self.settings.FONTS["medium"],
+            ((SCREEN_WIDTH // 2) + 50, 250),
+            COLORS["title"],
+            font=FONTS["medium"],
             shadow=True,
+            shadow_color=(255, 255, 255),
         )
-        self.ui.draw_text(
+        UI.draw_text(
             self.surface,
-            str(self.settings.target_d),
-            (center_x + 250, 250),
-            self.settings.COLORS["title"],
-            font=self.settings.FONTS["medium"],
+            str(settings.Alvo_d),
+            ((SCREEN_WIDTH // 2) + 250, 250),
+            COLORS["title"],
+            font=FONTS["medium"],
             shadow=True,
+            shadow_color=(255, 255, 255),
         )
 
         # Obstáculos
-        self.ui.draw_text(
+        UI.draw_text(
             self.surface,
             "Obst. Gerados",
-            (center_x + 50, 280),
-            self.settings.COLORS["title"],
-            font=self.settings.FONTS["medium"],
+            ((SCREEN_WIDTH // 2) + 50, 280),
+            COLORS["title"],
+            font=FONTS["medium"],
             shadow=True,
+            shadow_color=(255, 255, 255),
         )
-        self.ui.draw_text(
+        UI.draw_text(
             self.surface,
-            str(self.settings.obstacle),
-            (center_x + 250, 280),
-            self.settings.COLORS["title"],
-            font=self.settings.FONTS["medium"],
+            str(settings.Obst),
+            ((SCREEN_WIDTH // 2) + 250, 280),
+            COLORS["title"],
+            font=FONTS["medium"],
             shadow=True,
+            shadow_color=(255, 255, 255),
         )
 
-        self.ui.draw_text(
+        UI.draw_text(
             self.surface,
             "Obst. Desviados",
-            (center_x + 50, 310),
-            self.settings.COLORS["title"],
-            font=self.settings.FONTS["medium"],
+            ((SCREEN_WIDTH // 2) + 50, 310),
+            COLORS["title"],
+            font=FONTS["medium"],
             shadow=True,
+            shadow_color=(255, 255, 255),
         )
-        self.ui.draw_text(
+        UI.draw_text(
             self.surface,
-            str(self.settings.obstacle_d),
-            (center_x + 250, 310),
-            self.settings.COLORS["title"],
-            font=self.settings.FONTS["medium"],
+            str(settings.Obst_d),
+            ((SCREEN_WIDTH // 2) + 250, 310),
+            COLORS["title"],
+            font=FONTS["medium"],
             shadow=True,
+            shadow_color=(255, 255, 255),
         )
 
-        self.ui.draw_text(
+        UI.draw_text(
             self.surface,
             "Obst. Colididos",
-            (center_x + 50, 340),
-            self.settings.COLORS["title"],
-            font=self.settings.FONTS["medium"],
+            ((SCREEN_WIDTH // 2) + 50, 340),
+            COLORS["title"],
+            font=FONTS["medium"],
             shadow=True,
+            shadow_color=(255, 255, 255),
         )
-        self.ui.draw_text(
+        UI.draw_text(
             self.surface,
-            str(self.settings.obstacle_c),
-            (center_x + 250, 340),
-            self.settings.COLORS["title"],
-            font=self.settings.FONTS["medium"],
+            str(settings.Obst_c),
+            ((SCREEN_WIDTH // 2) + 250, 340),
+            COLORS["title"],
+            font=FONTS["medium"],
             shadow=True,
+            shadow_color=(255, 255, 255),
         )
 
-    def update(self):
-        """Atualiza e desenha a tela atual do menu."""
-        self.draw_background()
-
-        current_menu = self.settings.MENU
-
-        if current_menu == "Inicial":
-            return self._draw_initial_menu()
-
-        if current_menu == "Pause":
-            return self._draw_pause_menu()
-
-        if current_menu in ("Feedback_1", "Feedback_2", "Feedback_3"):
-            return self._draw_feedback_menu(current_menu)
-
-        # Retorna string indicando ação (usado pelo KarTEA.py)
-        return None
-
-    def _draw_initial_menu(self):
-        """Tela inicial do jogo."""
-        self.ui.draw_text(
+    def _handle_inicial_menu(self):
+        """Gerencia o menu inicial (tela principal)."""
+        UI.draw_text(
             self.surface,
-            self.settings.GAME_TITLE,
-            (self.settings.SCREEN_WIDTH // 2, 120),
-            self.settings.COLORS["title"],
-            font=self.settings.FONTS["big"],
+            GAME_TITLE,
+            (SCREEN_WIDTH // 2, 120),
+            COLORS["title"],
+            font=FONTS["big"],
             shadow=True,
             shadow_color=(255, 255, 255),
             pos_mode="center",
         )
 
-        if self.ui.button(
+        if UI.button(
             self.surface, 0, 300, "Jogar", click_sound=self.click_sound
         ):
             return "game"
 
-        if self.ui.button(
+        if UI.button(
             self.surface,
             0,
-            300 + self.settings.BUTTONS_SIZES[1] * 4,
+            300 + BUTTONS_SIZES[1] * 4,
             "Sair",
             click_sound=self.click_sound,
         ):
-            pygame.quit()
+            pygame.display.quit()
             sys.exit()
 
         return None
 
-    def _draw_pause_menu(self):
-        """Tela de pausa."""
-        self.ui.draw_text(
+    def _handle_pause_menu(self):
+        """Gerencia o menu de pausa."""
+        UI.draw_text(
             self.surface,
             "Pause",
-            (self.settings.SCREEN_WIDTH // 2, 120),
-            self.settings.COLORS["title"],
-            font=self.settings.FONTS["big"],
+            (SCREEN_WIDTH // 2, 120),
+            COLORS["title"],
+            font=FONTS["big"],
             shadow=True,
             shadow_color=(255, 255, 255),
             pos_mode="center",
         )
 
-        if self.ui.button(
+        if UI.button(
             self.surface, 0, 300, "Continuar", click_sound=self.click_sound
         ):
             return "game"
 
-        if self.ui.button(
+        if UI.button(
             self.surface,
             1,
-            300 + self.settings.BUTTONS_SIZES[1] * 2,
+            300 + BUTTONS_SIZES[1] * 2,
             "Retroceder",
             click_sound=self.click_sound,
         ):
             return "prev"
 
-        if self.ui.button(
+        if UI.button(
             self.surface,
             0,
-            300 + self.settings.BUTTONS_SIZES[1] * 2,
+            300 + BUTTONS_SIZES[1] * 2,
             "Reiniciar",
             click_sound=self.click_sound,
         ):
             return "rest"
 
-        if self.ui.button(
+        if UI.button(
             self.surface,
             2,
-            300 + self.settings.BUTTONS_SIZES[1] * 2,
+            300 + BUTTONS_SIZES[1] * 2,
             "Avançar",
             click_sound=self.click_sound,
         ):
             return "next"
 
-        if self.ui.button(
+        if UI.button(
             self.surface,
             0,
-            300 + self.settings.BUTTONS_SIZES[1] * 4,
+            300 + BUTTONS_SIZES[1] * 4,
             "Sair",
             click_sound=self.click_sound,
         ):
-            pygame.quit()
+            pygame.display.quit()
             sys.exit()
 
         return None
 
-    def _draw_feedback_menu(self, feedback_type: str):
-        """Telas de feedback (1 = ruim, 2 = médio, 3 = bom)."""
-        # Desenha troféu correspondente
+    def _handle_feedback_menu(self, feedback_type: str):
+        """Gerencia as telas de feedback (Feedback_1, Feedback_2, Feedback_3)."""
         if feedback_type == "Feedback_1":
             trofeu = Image.load("Assets/Kartea/trofeu - 25.png")
+            Image.draw(self.surface, trofeu, (0, 0))
+            action_on_play = "prev"
+
         elif feedback_type == "Feedback_2":
             trofeu = Image.load("Assets/Kartea/trofeu - 50.png")
-        else:  # Feedback_3
-            trofeu = Image.load("Assets/Kartea/trofeu - 75.png")
+            Image.draw(self.surface, trofeu, (0, 0))
+            action_on_play = "rest"
 
-        Image.draw(self.surface, trofeu, (0, 0))
+        elif feedback_type == "Feedback_3":
+            trofeu = Image.load("Assets/Kartea/trofeu - 75.png")
+            Image.draw(self.surface, trofeu, (0, 0))
+            action_on_play = "next"
+        else:
+            return None
 
         self.draw_feedback()
 
-        # Botões
-        if self.ui.button(
+        if UI.button(
             self.surface,
             2,
-            300 + self.settings.BUTTONS_SIZES[1] * 4,
+            300 + BUTTONS_SIZES[1] * 4,
             "Jogar",
             click_sound=self.click_sound,
         ):
-            if feedback_type == "Feedback_1":
-                return "prev"
-            elif feedback_type == "Feedback_2":
-                return "rest"
-            else:
-                return "next"
+            return action_on_play
 
-        if self.ui.button(
+        if UI.button(
             self.surface,
             1,
-            300 + self.settings.BUTTONS_SIZES[1] * 4,
+            300 + BUTTONS_SIZES[1] * 4,
             "Sair",
             click_sound=self.click_sound,
         ):
-            pygame.quit()
+            pygame.display.quit()
             sys.exit()
 
         return None
+
+    def update(self):
+        """Atualiza o menu atual e retorna a ação escolhida (game, prev, rest, next, etc.)."""
+        self.draw()
+
+        result = None
+
+        if settings.MENU == "Inicial":
+            result = self._handle_inicial_menu()
+
+        elif settings.MENU == "Pause":
+            result = self._handle_pause_menu()
+
+        elif settings.MENU in ("Feedback_1", "Feedback_2", "Feedback_3"):
+            result = self._handle_feedback_menu(settings.MENU)
+
+        return result

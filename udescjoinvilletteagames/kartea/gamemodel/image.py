@@ -1,107 +1,77 @@
-import io
-from typing import Tuple, Union
-
 import pygame
-from PySide6.QtCore import QFile, QIODevice
-
-from udescjoinvilletteagames.kartea.util import KarteaPathConfig
 
 
 class Image:
-    """
-    Classe utilitária para carregamento, escala e desenho de imagens.
-    """
-
-    IMAGE_SIZE_DEFAULT_NAME = "default"
-    IMAGE_CONVERT_ALPHA = "alpha"
-
-    IMAGE_POS_TOP_LEFT = "top_left"
-    IMAGE_POS_CENTER = "center"
-    IMAGE_POS_BOTTOM_CENTER = "bottom_center"
+    """Classe utilitária para carregamento, escalonamento e desenho de imagens no Pygame."""
 
     @staticmethod
     def load(
-        img_name: str,
-        size: Union[str, Tuple[int, int]] = IMAGE_SIZE_DEFAULT_NAME,
-        convert: str = IMAGE_CONVERT_ALPHA,
+        img_path: str,
+        size: tuple = "default",
+        convert: str = "alpha",
         flip: bool = False,
-    ) -> pygame.Surface:
-        """Carrega imagem usando o sistema de paths do projeto."""
-        full_path = KarteaPathConfig.kartea_image(img_name)
+    ):
+        """
+        Carrega uma imagem do disco.
 
-        if not full_path:
-            # Retorna uma superfície vazia para evitar crash se a imagem sumir
-            return pygame.Surface((1, 1))
+        Args:
+            img_path (str): Caminho da imagem
+            size (tuple or str): Tamanho desejado (ex: (800, 600)) ou "default"
+            convert (str): "alpha" para convert_alpha() ou qualquer outro valor para convert()
+            flip (bool): Se True, espelha a imagem horizontalmente
 
-        # Verificação: Se o caminho for um recurso do Qt
-        if full_path.startswith(":/"):
-            file = QFile(full_path)
-            if file.open(QIODevice.ReadOnly):
-                img_data = file.readAll().data()
-                file.close()
-                # Transforma os bytes em algo que o Pygame entende
-                img = pygame.image.load(io.BytesIO(img_data))
-            else:
-                raise FileNotFoundError(
-                    f"Não foi possível abrir o recurso Qt: {full_path}"
-                )
+        Returns:
+            pygame.Surface: Imagem carregada e processada
+        """
+        if convert == "alpha":
+            img = pygame.image.load(img_path).convert_alpha()
         else:
-            # Caminho físico normal
-            img = pygame.image.load(full_path)
-
-        if convert == Image.IMAGE_CONVERT_ALPHA:
-            img = img.convert_alpha()
-        else:
-            img = img.convert()
+            img = pygame.image.load(img_path).convert()
 
         if flip:
             img = pygame.transform.flip(img, True, False)
 
-        if size != Image.IMAGE_SIZE_DEFAULT_NAME:
+        if size != "default":
             img = Image.scale(img, size)
 
         return img
 
     @staticmethod
-    def scale(img: pygame.Surface, size: Tuple[int, int]) -> pygame.Surface:
-        """Redimensiona com smoothscale e tamanho mínimo seguro."""
-        width = max(1, int(size[0]))
-        height = max(1, int(size[1]))
-        return pygame.transform.smoothscale(img, (width, height))
+    def scale(img: pygame.Surface, size: tuple) -> pygame.Surface:
+        """
+        Escala uma imagem usando smoothscale (melhor qualidade).
+
+        Args:
+            img (pygame.Surface): Imagem original
+            size (tuple): Novo tamanho (largura, altura)
+
+        Returns:
+            pygame.Surface: Imagem escalada
+        """
+        return pygame.transform.smoothscale(img, size)
 
     @staticmethod
     def draw(
         surface: pygame.Surface,
         img: pygame.Surface,
-        pos: Tuple[int, int],
-        pos_mode: str = IMAGE_POS_TOP_LEFT,
+        pos: tuple,
+        pos_mode: str = "top_left",
     ):
-        """Desenha a imagem com diferentes modos de ancoragem."""
-        render_pos = list(pos)
+        """
+        Desenha uma imagem na superfície.
 
-        # TODO verificar se precisa manter o IMAGE_POS_BOTTOM_CENTER
-        # no código original não tinha
-        if pos_mode == Image.IMAGE_POS_CENTER:
-            render_pos[0] -= img.get_width() // 2
-            render_pos[1] -= img.get_height() // 2
-        elif pos_mode == Image.IMAGE_POS_BOTTOM_CENTER:  # new position mode
-            render_pos[0] -= img.get_width() // 2
-            render_pos[1] -= img.get_height()
+        Args:
+            surface (pygame.Surface): Superfície onde desenhar (geralmente a tela)
+            img (pygame.Surface): Imagem a ser desenhada
+            pos (tuple): Posição (x, y)
+            pos_mode (str): "top_left" ou "center"
+        """
+        if pos_mode == "center":
+            # Calcula o centro da imagem
+            x = pos[0] - img.get_width() // 2
+            y = pos[1] - img.get_height() // 2
+            draw_pos = (x, y)
+        else:
+            draw_pos = pos
 
-        surface.blit(img, render_pos)
-
-    @staticmethod
-    def load_image_resource(img_name: str) -> pygame.Surface:
-        resource_path = KarteaPathConfig.kartea_image(img_name)
-
-        if resource_path.startswith(":/"):
-            # É recurso Qt: carrega via memória (Alta performance)
-            file = QFile(resource_path)
-            if file.open(QIODevice.ReadOnly):
-                img_data = file.readAll().data()
-                file.close()
-                byte_stream = io.BytesIO(img_data)
-                # O Pygame lê os bytes e transforma em imagem
-                surface = pygame.image.load(byte_stream).convert_alpha()
-                return surface
-        return pygame.Surface((1, 1))
+        surface.blit(img, draw_pos)

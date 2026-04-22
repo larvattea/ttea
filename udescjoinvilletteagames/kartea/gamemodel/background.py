@@ -1,201 +1,247 @@
-from typing import TYPE_CHECKING, List
+import time
+from typing import List
 
 import pygame
 
+from udescjoinvilletteagames.kartea.gamemodel import Image, Line
+from udescjoinvilletteagames.kartea.gametheme import KarTEATheme
 from udescjoinvilletteagames.kartea.gameutil import GameSettings
-from udescjoinvilletteagames.kartea.service import PlayerKarteaConfigService
-from udescjoinvilletteagames.kartea.util import KarteaPathConfig
 
-if TYPE_CHECKING:
-    from udescjoinvilletteagames.kartea.gamemodel import KarTEATheme
+# Constantes de cores (mantidas globais como no original)
+roadW = 400  # Tamanho da pista
+segL = 200  # Tamanho do segmento
+camD = 3  # Camera depth
+
+dark_grass = pygame.Color(0, 154, 0)
+light_grass = pygame.Color(16, 200, 16)
+dark_rumble = pygame.Color(255, 0, 0)
+light_rumble = pygame.Color(255, 255, 255)
+dark_road = pygame.Color(75, 75, 75)
+light_road = pygame.Color(107, 107, 107)
+finish_light = pygame.Color(255, 255, 255)
+finish_dark = pygame.Color(0, 0, 0)
 
 
 class Background:
-    def __init__(self, theme: "KarTEATheme" = None):
-        from udescjoinvilletteagames.kartea.gamemodel import KarTEATheme
+    """Classe responsável pela renderização do fundo, estrada e sprites do jogo."""
 
-        self.settings = GameSettings()
-        self.theme = theme or KarTEATheme()
-        self._pos = 0
-        self._speed = 0
-        self.player_x = self.settings.PLAYERX_INITIAL_VALUE
-        self.player_y = self.settings.PLAYERY_INITIAL_VALUE
+    def __init__(self):
+        self.theme = KarTEATheme()
+        self.clock = pygame.time.Clock()
+        self.last_time = time.time()
+        self.time_left = time.time()
+        self.dt = 0
 
-        # Inject assets and generate road segments
-        self.service = PlayerKarteaConfigService()
-        self.default_config = self.service.get_kartea_ini_config()
-        self._load_assets()
-        self._generate_road(self.settings.ROAD_TOTAL_SEGMENTS)
-
-    def _load_assets(self):
-        from udescjoinvilletteagames.kartea.gamemodel import Image
-
-        # TODO: Refatorar a parte de carregamento do ini também no
-        # edit colocar um campo para o lado direito e esquero do ambiente
-        # hoje só tem um campo.
-
-        """Carrega e prepara superfícies de imagem."""
-        img_name = self.default_config["visual_resources"][
-            "environment_image_default"
-        ]
-
-        # self.sprite_env_left = pygame.image.load(
-        #    KarteaPathConfig.kartea_image(img_name)
-        # ).convert_alpha()
-        self.sprite_env_left = Image.load_image_resource(img_name)
-        # self.sprite_env_right = pygame.image.load(
-        #    KarteaPathConfig.kartea_image(img_name)
-        # ).convert_alpha()
-        self.sprite_env_right = self.sprite_env_left.copy()
-
-        # Background infinito (Parallax)
-        # TODO: Colocar campo para backgroud no ini e na tela de edição
-        horizon_img = pygame.image.load(
-            KarteaPathConfig.game_image("horizon.png")
+        # Sprites laterais
+        self.sprite_arv_esq = pygame.image.load(
+            "Assets/Kartea/5.png"
         ).convert_alpha()
-        self.bg_surface = pygame.Surface(
-            (horizon_img.get_width() * 2, horizon_img.get_height())
-        )
-        self.bg_surface.blit(horizon_img, (0, 0))
-        self.bg_surface.blit(horizon_img, (horizon_img.get_width(), 0))
-        self.bg_rect = self.bg_surface.get_rect()
+        self.sprite_arv_dir = pygame.image.load(
+            "Assets/Kartea/5,1.png"
+        ).convert_alpha()
 
-    def _generate_road(self, total_segments: int):
-        """Inicializa a estrutura de dados da pista."""
-        from udescjoinvilletteagames.kartea.gamemodel import Line
-
-        self.lines: List[Line] = []
-        for i in range(total_segments):
-            line = Line()
-            line.z = i * self.settings.SEGMENT_LENGTH + 0.00001
-
-            # Lógica de cores baseada em alternância (modulo)
-            is_alternate = (i // 3) % 2
-            line.grass_color = self.theme.grass[
-                "light" if is_alternate else "dark"
-            ]
-            line.rumble_color = self.theme.rumble[
-                "light" if is_alternate else "dark"
-            ]
-            line.road_color = self.theme.road["light"]
-            line.div_color = (
-                self.theme.rumble["light"]
-                if is_alternate
-                else self.theme.road["light"]
+        # Background image (usado no menu e no jogo)
+        self.background_image = pygame.image.load(
+            "Assets/Kartea/bg.png"
+        ).convert_alpha()
+        self.background_surface = pygame.Surface(
+            (
+                self.background_image.get_width() * 2,
+                self.background_image.get_height(),
             )
+        )
+        self.background_surface.blit(self.background_image, (0, 0))
+        self.background_surface.blit(
+            self.background_image, (self.background_image.get_width(), 0)
+        )
+        self.background_rect = self.background_surface.get_rect(topleft=(0, 0))
 
-            # Decoração (Árvores)
+        # Imagem específica para o menu
+        self.menu_image = None
+
+        # Lista de linhas da estrada (pseudo-3D)
+        self.lines: List[Line] = []
+        self._create_road_lines()
+
+        self.N = len(self.lines)
+        self.pos = 0
+        self.playerX = 0
+        self.playerY = 1500
+
+        self.speed = 0
+
+    def _create_road_lines(self):
+        """Cria as 5000 linhas que compõem a estrada (mantido exatamente como original)."""
+        for i in range(5000):
+            line = Line()
+            line.z = i * segL + 0.00001
+
+            grass_color = light_grass if (i // 3) % 2 else dark_grass
+            rumble_color = light_rumble if (i // 3) % 2 else dark_rumble
+            road_color = light_road
+            div_color = light_rumble if (i // 3) % 2 else light_road
+
+            line.grass_color = grass_color
+            line.rumble_color = rumble_color
+            line.road_color = road_color
+            line.div_color = div_color
+
+            # Árvores a cada 70 segmentos
             if i % 70 == 0:
-                self._add_scenery(
-                    line, -2.5, self.sprite_env_left, 1, self.sprite_env_right
-                )
-                # line.sprite_x = -2.5
-                # line.sprite = self.sprite_env_left
-                # line.sprite_2x = 1.0
-                # line.sprite2 = self.sprite_env_right
+                line.spriteX = -2.5
+                line.sprite = self.sprite_arv_esq
+                line.sprite2X = 1
+                line.sprite2 = self.sprite_arv_dir
 
             self.lines.append(line)
-        self.total_lines = len(self.lines)
 
-    def _add_scenery(self, line, x1, s1, x2, s2):
-        line.sprite_x, line.sprite = x1, s1
-        line.sprite_2x, line.sprite2 = x2, s2
+    def speed1(self):
+        """Velocidade lenta."""
+        self.speed = segL
 
-    def set_speed_by_level(self, level: int):
-        """Mapeia o nível do jogo para a velocidade da pista (Encapsulamento)."""
-        speeds = {
-            1: self.settings.SEGMENT_LENGTH,
-            2: 2 * self.settings.SEGMENT_LENGTH,
-            3: 3 * self.settings.SEGMENT_LENGTH,
-        }
-        self._speed = speeds.get(level, self.settings.SEGMENT_LENGTH)
+    def speed2(self):
+        """Velocidade média."""
+        self.speed = 2 * segL
+
+    def speed3(self):
+        """Velocidade rápida."""
+        self.speed = 3 * segL
 
     def stop(self):
-        self._speed = 0
+        """Para o movimento da estrada."""
+        self.speed = 0
 
-    def get_start_pos_index(self):
-        """Retorna o índice da linha onde o jogador está."""
-        return (self._pos // self.settings.SEGMENT_LENGTH) % self.total_lines
-
-    def _update_position(self):
-        self._pos = (self._pos + self._speed) % (
-            self.total_lines * self.settings.SEGMENT_LENGTH
+    def background_menu(self):
+        """Carrega a imagem de fundo específica para o menu."""
+        self.menu_image = Image.load(
+            "Assets/Kartea/Background_Menu.png",
+            size=(GameSettings.SCREEN_WIDTH, GameSettings.SCREEN_HEIGHT),
+            convert="default",
         )
+
+    def get_startPos(self) -> int:
+        """Retorna a posição inicial para spawn de alvos/obstáculos."""
+        return (self.pos // segL) + 200
 
     def draw(self, surface: pygame.Surface):
-        """Método principal de renderização."""
-        self._update_position()
+        """Desenha o background, estrada e sprites (lógica original mantida)."""
+        # Desenha o background fixo
+        surface.blit(self.background_surface, self.background_rect)
 
-        # 1. Desenha o fundo estático/parallax
-        surface.blit(self.bg_surface, self.bg_rect)
+        # Limpa com preto e redesenha (efeito original)
+        surface.fill("black")
+        surface.blit(self.background_surface, self.background_rect)
 
-        start_idx = self.get_start_pos_index()
-        cam_h = self.player_y + self.lines[start_idx].y
-        max_y = self.settings.SCREEN_HEIGHT * 2
+        # Atualiza posição da estrada
+        self.pos += self.speed
 
-        x_offset = dx = 0.0
+        # Loop infinito da estrada
+        while self.pos >= self.N * segL:
+            self.pos -= self.N * segL
+        while self.pos < 0:
+            self.pos += self.N * segL
 
-        # 2. Renderização da Geometria (Frente para trás ou baixo para cima)
-        for n in range(start_idx, start_idx + 300):
-            curr = self.lines[n % self.total_lines]
-            # Ajuste de perspectiva
-            curr.project(self.player_x - x_offset, cam_h, self._pos)
-            x_offset += dx
-            dx += curr.curve
-            curr.clip = max_y
+        startPos = self.pos // segL
 
-            if curr.Y >= max_y:
+        x = dx = 0.0
+        camH = self.playerY + self.lines[startPos].y
+        maxy = GameSettings.SCREEN_HEIGHT * 2
+
+        # Renderiza os segmentos da estrada
+        for n in range(startPos, startPos + 300):
+            current = self.lines[n % self.N]
+            current.project(
+                self.playerX - x,
+                camH,
+                self.pos - (self.N * segL if n >= self.N else 0),
+            )
+            x += dx
+            dx += current.curve
+
+            current.clip = maxy
+
+            if current.Y >= maxy:
                 continue
+            maxy = current.Y
 
-            prev = self.lines[(n - 1) % self.total_lines]
-            self._draw_road_segment(surface, prev, curr)
+            prev = self.lines[(n - 1) % self.N]
 
-        # 3. Renderização de Sprites/Objetos (Trás para frente
-        # para sobreposição correta)
-        for n in range(start_idx + 300, start_idx, -1):
-            line = self.lines[n % self.total_lines]
-            line.draw_sprite(surface)
-            line.draw_sprite2(surface)
+            # Desenha camadas da estrada
+            self.drawQuad(
+                surface,
+                current.grass_color,
+                0,
+                prev.Y,
+                GameSettings.SCREEN_WIDTH,
+                0,
+                current.Y,
+                GameSettings.SCREEN_WIDTH,
+            )
+            self.drawQuad(
+                surface,
+                current.rumble_color,
+                prev.X,
+                prev.Y,
+                prev.W * 1.2,
+                current.X,
+                current.Y,
+                current.W * 1.2,
+            )
+            self.drawQuad(
+                surface,
+                current.road_color,
+                prev.X,
+                prev.Y,
+                prev.W,
+                current.X,
+                current.Y,
+                current.W,
+            )
+            self.drawQuad(
+                surface,
+                current.div_color,
+                prev.X,
+                prev.Y,
+                prev.W * 0.35,
+                current.X,
+                current.Y,
+                current.W * 0.35,
+            )
+            self.drawQuad(
+                surface,
+                current.road_color,
+                prev.X,
+                prev.Y,
+                prev.W * 0.3,
+                current.X,
+                current.Y,
+                current.W * 0.3,
+            )
+
+        # Desenha sprites, árvores e targets (de trás para frente)
+        for n in range(startPos + 300, startPos, -1):
+            line = self.lines[n % self.N]
+
+            if line.sprite is not None:
+                line.drawSprite(surface)
+            if line.sprite2 is not None:
+                line.drawSprite2(surface)
             if line.target is not None:
-                line.draw_target(surface)
-                line.target.att_current_pos(line.X, line.Y)
+                line.drawTarget(surface)
+                line.target.att_current_pos(line.target.current_pos[0], line.Y)
 
-    def _draw_road_segment(self, surface, p, c):
-        """Abstração do desenho de um polígono da pista."""
-        # Grama
-        Background.draw_quad(
-            surface,
-            c.grass_color,
-            0,
-            p.Y,
-            self.settings.SCREEN_WIDTH,
-            0,
-            c.Y,
-            self.settings.SCREEN_WIDTH,
-        )
-        # Rumble (Zebra)
-        Background.draw_quad(
-            surface, c.rumble_color, p.X, p.Y, p.W * 1.2, c.X, c.Y, c.W * 1.2
-        )
-        # Pista Principal
-        Background.draw_quad(
-            surface, c.road_color, p.X, p.Y, p.W, c.X, c.Y, c.W
-        )
-
-        # Faixas centrais
-        Background.draw_quad(
-            surface, c.div_color, p.X, p.Y, p.W * 0.35, c.X, c.Y, c.W * 0.35
-        )
-        Background.draw_quad(
-            surface, c.road_color, p.X, p.Y, p.W * 0.3, c.X, c.Y, c.W * 0.3
-        )
-
-    @staticmethod
-    def draw_quad(surface, color, x1, y1, w1, x2, y2, w2):
-        """
-        Desenha o polígono que forma os segmentos da estrada.
-        Mantemos como staticmethod pois é uma função utilitária de desenho.
-        """
+    def drawQuad(
+        self,
+        surface: pygame.Surface,
+        color: pygame.Color,
+        x1: int,
+        y1: int,
+        w1: int,
+        x2: int,
+        y2: int,
+        w2: int,
+    ):
+        """Desenha um quadrilátero (trapézio) usado para renderizar a estrada."""
         pygame.draw.polygon(
             surface,
             color,

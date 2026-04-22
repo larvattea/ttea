@@ -1,56 +1,77 @@
-from typing import TYPE_CHECKING
-
 import pygame
 
-from udescjoinvilletteagames.kartea.gameutil import GameSettings
-from udescjoinvilletteagames.kartea.service import PlayerKarteaConfigService
+# import arquivo
+from udescjoinvilletteagames.kartea.gamemodel import Image
 
-if TYPE_CHECKING:
-    from udescjoinvilletteagames.kartea.gamemodel import Target
+# from settings import *
 
 
 class Car:
-    POS_MODE = "center"
+    """Classe que representa o carro controlado pelo jogador (posição dos pés via MediaPipe)."""
 
     def __init__(self):
-        from udescjoinvilletteagames.kartea.gamemodel import Image
+        # Carrega a imagem principal do carro
+        self.orig_image = Image.load(
+            "Assets/Kartea/Carro.png", size=(CAR_SIZE, CAR_SIZE)
+        )
+        self.image = self.orig_image.copy()
+        self.image_smaller = Image.load(
+            "Assets/Kartea/Carro.png", size=(CAR_SIZE, CAR_SIZE)
+        )
 
-        self.settings = GameSettings()
-        self.service = PlayerKarteaConfigService()
-        self.default_config = self.service.get_kartea_ini_config()
-        self.image = Image.load(
-            self.default_config["visual_resources"]["vehicle_image_default"],
-            size=(self.settings.CAR_SIZE, self.settings.CAR_SIZE),
-        )
+        # Retângulo de colisão (hitbox)
         self.rect = pygame.Rect(
-            self.settings.SCREEN_WIDTH // 2,
-            self.settings.SCREEN_HEIGHT // 2,
-            self.settings.CAR_HITBOX_SIZE[0],
-            self.settings.CAR_HITBOX_SIZE[1],
+            SCREEN_WIDTH // 2,
+            SCREEN_HEIGHT // 2,
+            CAR_HITBOX_SIZE[0],
+            CAR_HITBOX_SIZE[1],
         )
+
+        # Controle de interação (clique / pés fechados)
+        self.left_click = False
+
+        # self.hand_tracking = HandTracking()  # comentado no original
+
+    def follow_mouse(self):
+        """Atualiza a posição do carro para seguir o mouse (usado para testes)."""
+        self.rect.center = pygame.mouse.get_pos()
+        # self.hand_tracking.display_hand()  # mantido comentado
+
+    def follow_mediapipe_hand(self, x: int, y: int):
+        """Atualiza a posição do carro com base na posição detectada pelos pés (MediaPipe)."""
+        self.rect.center = (x, y)
+
+    def draw_hitbox(self, surface: pygame.Surface):
+        """Desenha a hitbox do carro (ativado pela variável DRAW_HITBOX)."""
+        pygame.draw.rect(surface, (200, 60, 0), self.rect)
 
     def draw(self, surface: pygame.Surface):
-        from udescjoinvilletteagames.kartea.gamemodel import Image
+        """Desenha o carro na tela."""
+        # Desenha a imagem do carro centralizada
+        Image.draw(surface, self.image, self.rect.center, pos_mode="center")
 
-        Image.draw(
-            surface, self.image, self.rect.center, pos_mode=Car.POS_MODE
-        )
+        # Desenha a hitbox se estiver ativada nas configurações
+        if DRAW_HITBOX:
+            self.draw_hitbox(surface)
 
-        if self.settings.DRAW_HITBOX:
-            pygame.draw.rect(surface, (200, 60, 0), self.rect, 2)
-
-    def on_target(self, targets: list["Target"]):
-        """Retorna lista de alvos que colidem com o carro."""
-        return [t for t in targets if self.rect.colliderect(t.rect)]
+    def on_target(self, targets):
+        """
+        Retorna uma lista com todos os alvos/obstáculos que estão colidindo
+        com a hitbox do carro.
+        """
+        return [
+            target for target in targets if self.rect.colliderect(target.rect)
+        ]
 
     def kill_targets(
-        self,
-        surface: pygame.Surface,
-        targets: list["Target"],
-        score: int,
-        sounds: dict,
+        self, surface: pygame.Surface, targets: list, score: int, sounds: dict
     ) -> int:
-        """Processa colisões quando o jogador acerta os alvos."""
+        """
+        Mata os alvos que colidem com o carro quando o jogador "clica" (left_click = True).
+        Retorna o score atualizado.
+        """
         for target in self.on_target(targets):
-            score += target.kill(surface, targets, sounds, player_hit=True)
+            target_score = target.kill(surface, targets, sounds)
+            score += target_score
+
         return score
