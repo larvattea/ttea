@@ -51,7 +51,7 @@ class PlayerGameLaunchView(QDialog, Ui_PlayerGameLaunchView, WindowConfig):
         )
 
         # Professionals
-        self.cbx_profession.addItems(
+        self.cbx_professional.addItems(
             [h.name for h in self.service.get_all_professionals()]
         )
 
