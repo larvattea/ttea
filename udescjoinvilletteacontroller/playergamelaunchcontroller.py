@@ -34,7 +34,7 @@ class PlayerGameLaunchController(QObject):
         # Recupera os dados do jogo selecionado no combo da View
         game_data = self.view.cbx_game.currentData()
         player_data = self.view.cbx_player.currentData()
-        profession_data = self.view.cbx_profession.currentData()
+        profession_data = self.view.cbx_professional.currentData()
 
         language_app = AppModel.get_instance().current_language
 
@@ -53,7 +53,7 @@ class PlayerGameLaunchController(QObject):
                 [sys.executable, script_path, "--lang", language_app],
                 cwd=folder,
             )
-            self.view.accept()
+            # self.view.accept()
 
     def update_tooltip(self, index):
         if index >= 0:
