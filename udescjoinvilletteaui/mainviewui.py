@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'mainview.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.11.0
+## Created by: Qt User Interface Compiler version 6.10.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -18,7 +18,7 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QTransform)
 from PySide6.QtWidgets import (QApplication, QMainWindow, QMenu, QMenuBar,
     QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
-from resources import resources_rc
+import resources.resources_rc
 
 class Ui_MainView(object):
     def setupUi(self, MainView):
@@ -37,12 +37,12 @@ class Ui_MainView(object):
         self.act_institutionfacility = QAction(MainView)
         self.act_institutionfacility.setObjectName(u"act_institutionfacility")
         icon2 = QIcon()
-        icon2.addFile(u":/icons/ui/menu/hospitalicon", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon2.addFile(u":/icons/ui/menu/buildingicon", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.act_institutionfacility.setIcon(icon2)
         self.act_professional = QAction(MainView)
         self.act_professional.setObjectName(u"act_professional")
         icon3 = QIcon()
-        icon3.addFile(u":/icons/ui/menu/stethoscopeicon", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
+        icon3.addFile(u":/icons/ui/menu/idcardicon", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.act_professional.setIcon(icon3)
         self.act_player = QAction(MainView)
         self.act_player.setObjectName(u"act_player")

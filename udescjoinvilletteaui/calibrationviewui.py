@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'calibrationview.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.11.0
+## Created by: Qt User Interface Compiler version 6.10.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -18,7 +18,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QHBoxLayout,
     QLabel, QPushButton, QSizePolicy, QSpacerItem,
     QVBoxLayout, QWidget)
-from resources import resources_rc
+import resources.resources_rc
 
 class Ui_CalibrationView(object):
     def setupUi(self, CalibrationView):

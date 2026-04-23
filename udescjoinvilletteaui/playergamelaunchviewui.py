@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'playergamelaunchview.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.11.0
+## Created by: Qt User Interface Compiler version 6.10.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -18,7 +18,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QFormLayout,
     QHBoxLayout, QLabel, QPushButton, QSizePolicy,
     QSpacerItem, QVBoxLayout, QWidget)
-from resources import resources_rc
+import resources.resources_rc
 
 class Ui_PlayerGameLaunchView(object):
     def setupUi(self, PlayerGameLaunchView):
@@ -69,18 +69,18 @@ class Ui_PlayerGameLaunchView(object):
 
         self.frm_data.setWidget(0, QFormLayout.ItemRole.FieldRole, self.cbx_player)
 
-        self.lbl_health = QLabel(PlayerGameLaunchView)
-        self.lbl_health.setObjectName(u"lbl_health")
-        self.lbl_health.setFont(font1)
+        self.lbl_professional = QLabel(PlayerGameLaunchView)
+        self.lbl_professional.setObjectName(u"lbl_professional")
+        self.lbl_professional.setFont(font1)
 
-        self.frm_data.setWidget(1, QFormLayout.ItemRole.LabelRole, self.lbl_health)
+        self.frm_data.setWidget(1, QFormLayout.ItemRole.LabelRole, self.lbl_professional)
 
-        self.cbx_health = QComboBox(PlayerGameLaunchView)
-        self.cbx_health.setObjectName(u"cbx_health")
-        self.cbx_health.setMinimumSize(QSize(0, 0))
-        self.cbx_health.setMaxVisibleItems(5)
+        self.cbx_professional = QComboBox(PlayerGameLaunchView)
+        self.cbx_professional.setObjectName(u"cbx_professional")
+        self.cbx_professional.setMinimumSize(QSize(0, 0))
+        self.cbx_professional.setMaxVisibleItems(5)
 
-        self.frm_data.setWidget(1, QFormLayout.ItemRole.FieldRole, self.cbx_health)
+        self.frm_data.setWidget(1, QFormLayout.ItemRole.FieldRole, self.cbx_professional)
 
         self.lbl_game = QLabel(PlayerGameLaunchView)
         self.lbl_game.setObjectName(u"lbl_game")
@@ -160,7 +160,7 @@ class Ui_PlayerGameLaunchView(object):
         PlayerGameLaunchView.setWindowTitle(QCoreApplication.translate("PlayerGameLaunchView", u"Plataforma T-TEA - Iniciar Sess\u00e3o de Jogo", None))
         self.lbl_title.setText(QCoreApplication.translate("PlayerGameLaunchView", u"Iniciar Sess\u00e3o de Jogo", None))
         self.lbl_player.setText(QCoreApplication.translate("PlayerGameLaunchView", u"Jogador:", None))
-        self.lbl_health.setText(QCoreApplication.translate("PlayerGameLaunchView", u"Profissional:", None))
+        self.lbl_professional.setText(QCoreApplication.translate("PlayerGameLaunchView", u"Profissional:", None))
         self.lbl_game.setText(QCoreApplication.translate("PlayerGameLaunchView", u"Jogo:", None))
 #if QT_CONFIG(tooltip)
         self.pb_play.setToolTip(QCoreApplication.translate("PlayerGameLaunchView", u"Jogar", None))

@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'professionallistview.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.11.0
+## Created by: Qt User Interface Compiler version 6.10.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (QAbstractItemView, QApplication, QDialog, QGridLa
     QHBoxLayout, QHeaderView, QLabel, QLineEdit,
     QPushButton, QSizePolicy, QSpacerItem, QTabWidget,
     QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
-from resources import resources_rc
+import resources.resources_rc
 
 class Ui_ProfessionalListView(object):
     def setupUi(self, ProfessionalListView):
@@ -49,31 +49,31 @@ class Ui_ProfessionalListView(object):
 
         self.lay_left.addLayout(self.lay_search)
 
-        self.tbl_health = QTableWidget(ProfessionalListView)
-        if (self.tbl_health.columnCount() < 2):
-            self.tbl_health.setColumnCount(2)
+        self.tbl_professional = QTableWidget(ProfessionalListView)
+        if (self.tbl_professional.columnCount() < 2):
+            self.tbl_professional.setColumnCount(2)
         __qtablewidgetitem = QTableWidgetItem()
-        self.tbl_health.setHorizontalHeaderItem(0, __qtablewidgetitem)
+        self.tbl_professional.setHorizontalHeaderItem(0, __qtablewidgetitem)
         __qtablewidgetitem1 = QTableWidgetItem()
-        self.tbl_health.setHorizontalHeaderItem(1, __qtablewidgetitem1)
-        self.tbl_health.setObjectName(u"tbl_health")
-        self.tbl_health.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
-        self.tbl_health.setAlternatingRowColors(True)
-        self.tbl_health.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
-        self.tbl_health.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
-        self.tbl_health.setSortingEnabled(True)
-        self.tbl_health.setColumnCount(2)
-        self.tbl_health.horizontalHeader().setStretchLastSection(True)
+        self.tbl_professional.setHorizontalHeaderItem(1, __qtablewidgetitem1)
+        self.tbl_professional.setObjectName(u"tbl_professional")
+        self.tbl_professional.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+        self.tbl_professional.setAlternatingRowColors(True)
+        self.tbl_professional.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
+        self.tbl_professional.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        self.tbl_professional.setSortingEnabled(True)
+        self.tbl_professional.setColumnCount(2)
+        self.tbl_professional.horizontalHeader().setStretchLastSection(True)
 
-        self.lay_left.addWidget(self.tbl_health)
+        self.lay_left.addWidget(self.tbl_professional)
 
 
         self.mainLayout.addLayout(self.lay_left)
 
         self.lay_right = QVBoxLayout()
         self.lay_right.setObjectName(u"lay_right")
-        self.tab_health = QTabWidget(ProfessionalListView)
-        self.tab_health.setObjectName(u"tab_health")
+        self.tab_professional = QTabWidget(ProfessionalListView)
+        self.tab_professional.setObjectName(u"tab_professional")
         self.lay_detail = QWidget()
         self.lay_detail.setObjectName(u"lay_detail")
         self.detailsLayout = QVBoxLayout(self.lay_detail)
@@ -123,9 +123,9 @@ class Ui_ProfessionalListView(object):
 
         self.detailsLayout.addItem(self.sp_detail)
 
-        self.tab_health.addTab(self.lay_detail, "")
+        self.tab_professional.addTab(self.lay_detail, "")
 
-        self.lay_right.addWidget(self.tab_health)
+        self.lay_right.addWidget(self.tab_professional)
 
         self.lay_button = QHBoxLayout()
         self.lay_button.setObjectName(u"lay_button")
@@ -162,7 +162,7 @@ class Ui_ProfessionalListView(object):
 
         self.retranslateUi(ProfessionalListView)
 
-        self.tab_health.setCurrentIndex(0)
+        self.tab_professional.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(ProfessionalListView)
@@ -172,17 +172,17 @@ class Ui_ProfessionalListView(object):
         ProfessionalListView.setWindowTitle(QCoreApplication.translate("ProfessionalListView", u"Plataforma T-TEA - Profissional", None))
         self.lbl_search.setText(QCoreApplication.translate("ProfessionalListView", u"Pesquisar:", None))
         self.led_search.setPlaceholderText(QCoreApplication.translate("ProfessionalListView", u"Digite o nome ou ID", None))
-        ___qtablewidgetitem = self.tbl_health.horizontalHeaderItem(0)
-        ___qtablewidgetitem.setText(QCoreApplication.translate("ProfessionalListView", u"ID", None))
-        ___qtablewidgetitem1 = self.tbl_health.horizontalHeaderItem(1)
-        ___qtablewidgetitem1.setText(QCoreApplication.translate("ProfessionalListView", u"Nome", None))
+        ___qtablewidgetitem = self.tbl_professional.horizontalHeaderItem(0)
+        ___qtablewidgetitem.setText(QCoreApplication.translate("ProfessionalListView", u"ID", None));
+        ___qtablewidgetitem1 = self.tbl_professional.horizontalHeaderItem(1)
+        ___qtablewidgetitem1.setText(QCoreApplication.translate("ProfessionalListView", u"Nome", None));
         self.lbl_id.setText(QCoreApplication.translate("ProfessionalListView", u"ID:", None))
         self.lbl_id_value.setText(QCoreApplication.translate("ProfessionalListView", u"ID:", None))
         self.lbl_name.setText(QCoreApplication.translate("ProfessionalListView", u"Nome:", None))
         self.lbl_name_value.setText(QCoreApplication.translate("ProfessionalListView", u"Nome: ", None))
         self.lbl_type.setText(QCoreApplication.translate("ProfessionalListView", u"Tipo:", None))
         self.lbl_type_value.setText(QCoreApplication.translate("ProfessionalListView", u"Tipo:", None))
-        self.tab_health.setTabText(self.tab_health.indexOf(self.lay_detail), QCoreApplication.translate("ProfessionalListView", u"Detalhes", None))
+        self.tab_professional.setTabText(self.tab_professional.indexOf(self.lay_detail), QCoreApplication.translate("ProfessionalListView", u"Detalhes", None))
 #if QT_CONFIG(tooltip)
         self.pb_new.setToolTip(QCoreApplication.translate("ProfessionalListView", u"Criar um novo registro", None))
 #endif // QT_CONFIG(tooltip)

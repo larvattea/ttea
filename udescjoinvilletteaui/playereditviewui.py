@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'playereditview.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.11.0
+## Created by: Qt User Interface Compiler version 6.10.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (QApplication, QDateEdit, QDialog, QFormLayout,
     QHBoxLayout, QLabel, QLineEdit, QPushButton,
     QSizePolicy, QSpacerItem, QTabWidget, QTextEdit,
     QVBoxLayout, QWidget)
-from resources import resources_rc
+import resources.resources_rc
 
 class Ui_PlayerEditView(object):
     def setupUi(self, PlayerEditView):

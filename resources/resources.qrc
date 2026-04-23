@@ -22,11 +22,13 @@
     </qresource>
 
     <qresource prefix="/icons/ui/menu">
+        <file alias="buildingicon">icons/ui/menu/building_solid.png</file> 
         <file alias="cameraicon">icons/ui/menu/camera_solid.png</file>
         <file alias="cogsicon">icons/ui/menu/cogs_solid.png</file>
         <file alias="dooropenicon">icons/ui/menu/door_open_solid.png</file>
         <file alias="gamepadicon">icons/ui/menu/gamepad_solid.png</file>   
-        <file alias="hospitalicon">icons/ui/menu/hospital_solid.png</file> 
+        <file alias="hospitalicon">icons/ui/menu/hospital_solid.png</file>
+        <file alias="idcardicon">icons/ui/menu/id_card_solid.png</file> 
         <file alias="infoicon">icons/ui/menu/info_circle_solid.png</file>
         <file alias="info2icon">icons/ui/menu/info_solid.png</file>
         <file alias="karteaicon">icons/ui/menu/kartea.ico</file>

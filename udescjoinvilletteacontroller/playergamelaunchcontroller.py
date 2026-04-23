@@ -34,7 +34,7 @@ class PlayerGameLaunchController(QObject):
         # Recupera os dados do jogo selecionado no combo da View
         game_data = self.view.cbx_game.currentData()
         player_data = self.view.cbx_player.currentData()
-        profession_data = self.view.cbx_health.currentData()
+        profession_data = self.view.cbx_profession.currentData()
 
         language_app = AppModel.get_instance().current_language
 

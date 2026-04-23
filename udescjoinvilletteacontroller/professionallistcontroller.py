@@ -7,8 +7,10 @@ from udescjoinvilletteaservice import ProfessionalService
 from udescjoinvilletteautil import MessageService
 
 if TYPE_CHECKING:
-    from udescjoinvilletteaview import (ProfessionalEditView,
-                                        ProfessionalListView)
+    from udescjoinvilletteaview import (
+        ProfessionalEditView,
+        ProfessionalListView,
+    )
 
 
 class ProfessionalListController(QObject):
@@ -82,10 +84,8 @@ class ProfessionalListController(QObject):
         self.view.pb_new.clicked.connect(self.create_professional)
         self.view.pb_edit.clicked.connect(self.update_professional)
         self.view.pb_delete.clicked.connect(self.delete_professional)
-        self.view.led_search.textChanged.connect(
-            self.filter_professionals
-        )
-        self.view.tbl_health.selectionModel().selectionChanged.connect(
+        self.view.led_search.textChanged.connect(self.filter_professionals)
+        self.view.tbl_professional.selectionModel().selectionChanged.connect(
             self.on_table_selection
         )
 
@@ -117,9 +117,7 @@ class ProfessionalListController(QObject):
             Search term to filter professionals
             (default is empty string).
         """
-        load_professionals = self.service.search_professionals(
-            query
-        )
+        load_professionals = self.service.search_professionals(query)
         self.view.populate_table(load_professionals)
         self.view.clear_details()
 
@@ -146,22 +144,16 @@ class ProfessionalListController(QObject):
         if dialog.exec():
             data = dialog.controller.get_data()
             if self.service.create_professional(data):
-                self.msg.info(
-                    self.tr("Profissional cadastrado com sucesso!")
-                )
+                self.msg.info(self.tr("Profissional cadastrado com sucesso!"))
             else:
-                self.msg.critical(
-                    self.tr("Erro ao salvar profissional.")
-                )
+                self.msg.critical(self.tr("Erro ao salvar profissional."))
 
     def update_professional(self) -> None:
         """Open dialog to edit the selected professional
         and update if accepted."""
         professional_id = self.view.get_selected_id()
         if not professional_id:
-            self.msg.warning(
-                self.tr("Selecione um professional para editar.")
-            )
+            self.msg.warning(self.tr("Selecione um professional para editar."))
             return
 
         professional = self.service.find_by_id(professional_id)
@@ -169,21 +161,13 @@ class ProfessionalListController(QObject):
             self.msg.critical(self.tr("Profissional não encontrado."))
             return
 
-        dialog: "ProfessionalEditView" = self.factory(
-            self.view, professional
-        )
+        dialog: "ProfessionalEditView" = self.factory(self.view, professional)
         if dialog.exec():
             data = dialog.controller.get_data()
-            if self.service.update_professional(
-                professional_id, data
-            ):
-                self.msg.info(
-                    self.tr("Profissional atualizado com sucesso.")
-                )
+            if self.service.update_professional(professional_id, data):
+                self.msg.info(self.tr("Profissional atualizado com sucesso."))
             else:
-                self.msg.critical(
-                    self.tr("Erro ao atualizar profissional.")
-                )
+                self.msg.critical(self.tr("Erro ao atualizar profissional."))
 
     def delete_professional(self) -> None:
         """Delete the selected professional after user confirmation."""
@@ -204,13 +188,9 @@ class ProfessionalListController(QObject):
         ):
             if self.service.delete_professional(professional_id):
                 self.view.clear_details()
-                self.msg.info(
-                    self.tr("Profissional excluído com sucesso.")
-                )
+                self.msg.info(self.tr("Profissional excluído com sucesso."))
             else:
-                self.msg.critical(
-                    self.tr("Erro ao excluir profissional.")
-                )
+                self.msg.critical(self.tr("Erro ao excluir profissional."))
 
     def get_professional_types(self) -> Dict[int, str]:
         return self.service.get_professional_types()

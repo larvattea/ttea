@@ -100,9 +100,7 @@ class Professional:
         12: QT_TRANSLATE_NOOP("Professional", "Neurologista"),
         13: QT_TRANSLATE_NOOP("Professional", "Nutricionista"),
         14: QT_TRANSLATE_NOOP("Professional", "Pediatra"),
-        15: QT_TRANSLATE_NOOP(
-            "Professional", "Professor Educação Especial"
-        ),
+        15: QT_TRANSLATE_NOOP("Professional", "Professor Educação Especial"),
         16: QT_TRANSLATE_NOOP("Professional", "Psicopedagogo"),
         17: QT_TRANSLATE_NOOP("Professional", "Psicólogo"),
         18: QT_TRANSLATE_NOOP("Professional", "Psiquiatra"),
@@ -183,7 +181,7 @@ class Professional:
         Returns
         -------
         List[Dict]
-            A list containing a single dictionary with health professional
+            A list containing a single dictionary with professional
             attributes and facility ID.
 
         Examples

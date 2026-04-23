@@ -42,7 +42,7 @@
       </layout>
      </item>
      <item>
-      <widget class="QTableWidget" name="tbl_health">
+      <widget class="QTableWidget" name="tbl_professional">
        <property name="editTriggers">
         <set>QAbstractItemView::EditTrigger::NoEditTriggers</set>
        </property>
@@ -81,7 +81,7 @@
    <item>
     <layout class="QVBoxLayout" name="lay_right">
      <item>
-      <widget class="QTabWidget" name="tab_health">
+      <widget class="QTabWidget" name="tab_professional">
        <property name="currentIndex">
         <number>0</number>
        </property>

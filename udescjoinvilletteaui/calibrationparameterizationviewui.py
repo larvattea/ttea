@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'calibrationparameterizationview.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.11.0
+## Created by: Qt User Interface Compiler version 6.10.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -20,7 +20,7 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDialog,
     QLabel, QPushButton, QRadioButton, QSizePolicy,
     QSpacerItem, QSpinBox, QTabWidget, QVBoxLayout,
     QWidget)
-from resources import resources_rc
+import resources.resources_rc
 
 class Ui_CalibrationParameterizationView(object):
     def setupUi(self, CalibrationParameterizationView):

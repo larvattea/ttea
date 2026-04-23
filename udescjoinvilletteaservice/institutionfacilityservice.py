@@ -172,8 +172,8 @@ class InstitutionFacilityService(QObject):
         from udescjoinvilletteaservice import ProfessionalService
 
         # Validação de integridade referencial (Negócio)
-        health_service = ProfessionalService()
-        professionals = health_service.get_all_professionals()
+        professional_service = ProfessionalService()
+        professionals = professional_service.get_all_professionals()
         if any(
             professional.institutionfacility.id == institutionfacility_id
             for professional in professionals

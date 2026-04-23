@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'playerlistview.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.11.0
+## Created by: Qt User Interface Compiler version 6.10.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (QAbstractItemView, QApplication, QDialog, QGridLa
     QHBoxLayout, QHeaderView, QLabel, QLineEdit,
     QPushButton, QSizePolicy, QSpacerItem, QTabWidget,
     QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
-from resources import resources_rc
+import resources.resources_rc
 
 class Ui_PlayerListView(object):
     def setupUi(self, PlayerListView):
@@ -185,9 +185,9 @@ class Ui_PlayerListView(object):
         self.lbl_search.setText(QCoreApplication.translate("PlayerListView", u"Pesquisar:", None))
         self.led_search.setPlaceholderText(QCoreApplication.translate("PlayerListView", u"Digite o nome ou ID", None))
         ___qtablewidgetitem = self.tbl_player.horizontalHeaderItem(0)
-        ___qtablewidgetitem.setText(QCoreApplication.translate("PlayerListView", u"ID", None))
+        ___qtablewidgetitem.setText(QCoreApplication.translate("PlayerListView", u"ID", None));
         ___qtablewidgetitem1 = self.tbl_player.horizontalHeaderItem(1)
-        ___qtablewidgetitem1.setText(QCoreApplication.translate("PlayerListView", u"Nome", None))
+        ___qtablewidgetitem1.setText(QCoreApplication.translate("PlayerListView", u"Nome", None));
         self.lbl_id.setText(QCoreApplication.translate("PlayerListView", u"ID:", None))
         self.lbl_id_value.setText(QCoreApplication.translate("PlayerListView", u"ID: ", None))
         self.lbl_name.setText(QCoreApplication.translate("PlayerListView", u"Nome:", None))

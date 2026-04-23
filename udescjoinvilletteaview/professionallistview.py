@@ -5,8 +5,9 @@ from PySide6.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 
 # Local module import
 from udescjoinvilletteacontroller import ProfessionalListController
-from udescjoinvilletteaui import \
-    Ui_ProfessionalListView  # Assuming generated UI class
+from udescjoinvilletteaui import (
+    Ui_ProfessionalListView,
+)  # Assuming generated UI class
 from udescjoinvilletteautil import MessageService
 from udescjoinvilletteawindow import WindowConfig
 
@@ -16,9 +17,7 @@ if TYPE_CHECKING:
     from udescjoinvilletteaview import ProfessionalEditView
 
 
-class ProfessionalListView(
-    QDialog, Ui_ProfessionalListView, WindowConfig
-):
+class ProfessionalListView(QDialog, Ui_ProfessionalListView, WindowConfig):
     def __init__(
         self,
         parent: Optional[QDialog] = None,
@@ -51,34 +50,32 @@ class ProfessionalListView(
         )
 
         # Perfect column widths
-        self.tbl_health.horizontalHeader().setSectionResizeMode(
+        self.tbl_professional.horizontalHeader().setSectionResizeMode(
             0, QHeaderView.ResizeToContents
         )
-        self.tbl_health.horizontalHeader().setSectionResizeMode(
+        self.tbl_professional.horizontalHeader().setSectionResizeMode(
             1, QHeaderView.Stretch
         )
 
     # =====================================================================
     # High-level methods used by the Controller (required for decoupling)
     # =====================================================================
-    def populate_table(
-        self, professionals: List["Professional"]
-    ) -> None:
+    def populate_table(self, professionals: List["Professional"]) -> None:
         """Fill the table with a list of professionals."""
-        self.tbl_health.blockSignals(True)
-        self.tbl_health.setRowCount(0)
+        self.tbl_professional.blockSignals(True)
+        self.tbl_professional.setRowCount(0)
 
         for professional in professionals:
-            row = self.tbl_health.rowCount()
-            self.tbl_health.insertRow(row)
-            self.tbl_health.setItem(
+            row = self.tbl_professional.rowCount()
+            self.tbl_professional.insertRow(row)
+            self.tbl_professional.setItem(
                 row, 0, QTableWidgetItem(str(professional.id))
             )
-            self.tbl_health.setItem(
+            self.tbl_professional.setItem(
                 row, 1, QTableWidgetItem(professional.name)
             )
 
-        self.tbl_health.blockSignals(False)
+        self.tbl_professional.blockSignals(False)
 
     def clear_details(self) -> None:
         """Clear all fields in the details panel."""
@@ -86,9 +83,7 @@ class ProfessionalListView(
         self.lbl_name_value.setText("")
         self.lbl_type_value.setText("")
 
-    def display_details(
-        self, professional: Optional["Professional"]
-    ) -> None:
+    def display_details(self, professional: Optional["Professional"]) -> None:
         """Show the selected professional's
         details in the right panel."""
 
@@ -99,17 +94,13 @@ class ProfessionalListView(
         self.lbl_id_value.setText(str(professional.id))
         self.lbl_name_value.setText(professional.name)
         self.lbl_type_value.setText(
-            str(
-                self.controller.get_professional_types()[
-                    professional.type
-                ]
-            )
+            str(self.controller.get_professional_types()[professional.type])
         )
 
     def get_selected_id(self) -> Optional[int]:
         """Return the ID of the currently selected professional
         or None."""
-        items = self.tbl_health.selectedItems()
+        items = self.tbl_professional.selectedItems()
         if not items:
             return None
         try:
@@ -123,14 +114,14 @@ class ProfessionalListView(
         if professional_id <= 0:
             return
 
-        self.tbl_health.blockSignals(True)
-        for row in range(self.tbl_health.rowCount()):
-            item = self.tbl_health.item(row, 0)
+        self.tbl_professional.blockSignals(True)
+        for row in range(self.tbl_professional.rowCount()):
+            item = self.tbl_professional.item(row, 0)
             if item and int(item.text()) == professional_id:
-                self.tbl_health.selectRow(row)
-                self.tbl_health.scrollToItem(item)
+                self.tbl_professional.selectRow(row)
+                self.tbl_professional.scrollToItem(item)
                 break
-        self.tbl_health.blockSignals(False)
+        self.tbl_professional.blockSignals(False)
         self.controller.on_table_selection()
 
     def closeEvent(self, event: QCloseEvent) -> None:
