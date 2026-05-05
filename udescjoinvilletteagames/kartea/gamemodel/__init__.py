@@ -61,4 +61,3 @@ from .image import Image
 from .line import Line
 from .obstacle import Obstacle
 from .target import Target
-from .world import World

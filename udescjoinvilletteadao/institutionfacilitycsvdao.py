@@ -56,7 +56,7 @@ class InstitutionFacilityCsvDAO(DAO[InstitutionFacility]):
         headers : List[str]
             Ordered list of column names.
         """
-        PathConfig.ensure_user_dirs()
+        PathConfig.ensure_dirs()
         with portalocker.Lock(filepath, mode="w", timeout=10) as f:
             self.csv_handler.write_csv(f, data, headers)
 
@@ -211,7 +211,7 @@ class InstitutionFacilityCsvDAO(DAO[InstitutionFacility]):
         matching CSV file, converts data types appropriately,
         and populates the cache.
         """
-        PathConfig.ensure_user_dirs()
+        PathConfig.ensure_dirs()
         for file_path in PathConfig.INSTITUTIONFACILITY_DIR.glob(
             "*_institutionfacility.csv"
         ):

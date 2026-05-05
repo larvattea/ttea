@@ -1,6 +1,6 @@
-import numpy as np
 import cv2 as cv
- 
+import numpy as np
+
 filename = "udescjoinvilleiputil\projecao1.jpg"
 img = cv.imread(filename)
 gray = cv.cvtColor(img,cv.COLOR_BGR2GRAY)

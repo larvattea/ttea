@@ -7,7 +7,6 @@ from PySide6.QtCore import QObject, Qt
 
 from udescjoinvilletteamodel import AppModel
 from udescjoinvilletteaservice import PlayerGameLaunchService
-
 # Local module imports
 from udescjoinvilletteautil import MessageService
 
@@ -33,8 +32,8 @@ class PlayerGameLaunchController(QObject):
     def launch_game(self):
         # Recupera os dados do jogo selecionado no combo da View
         game_data = self.view.cbx_game.currentData()
-        player_data = self.view.cbx_player.currentData()
-        profession_data = self.view.cbx_professional.currentData()
+        player_id = str(self.view.cbx_player.currentData())
+        professional_id = str(self.view.cbx_professional.currentData())
 
         language_app = AppModel.get_instance().current_language
 
@@ -50,7 +49,16 @@ class PlayerGameLaunchController(QObject):
         if os.path.exists(script_path):
             # Executa o Pygame com o ambiente correto e passa o idioma
             subprocess.Popen(
-                [sys.executable, script_path, "--lang", language_app],
+                [
+                    sys.executable,
+                    script_path,
+                    "--lang",
+                    language_app,
+                    "--player_id",
+                    player_id,
+                    "--professional_id",
+                    professional_id,
+                ],
                 cwd=folder,
             )
             # self.view.accept()

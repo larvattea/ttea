@@ -1,6 +1,7 @@
 import cv2
 
 # import settings
+from udescjoinvilletteagames.kartea.gameutil import GameSettings
 
 
 class Camera:
@@ -8,7 +9,7 @@ class Camera:
 
     def __init__(self):
         """Inicializa a captura de vídeo usando a configuração definida em settings."""
-        self.cap = cv2.VideoCapture(settings.CAMERA, cv2.CAP_DSHOW)
+        self.cap = cv2.VideoCapture(GameSettings.CAMERA, cv2.CAP_DSHOW)
         self.ret = False
         self.frame = None
 
@@ -29,48 +30,64 @@ class Camera:
             # Desenha as linhas da área de calibração
             cv2.line(
                 self.frame,
-                settings.pontos_calibracao[0],
-                settings.pontos_calibracao[1],
-                settings.verde,
+                GameSettings.pontos_calibracao[0],
+                GameSettings.pontos_calibracao[1],
+                GameSettings.verde,
                 2,
             )
 
             cv2.line(
                 self.frame,
-                settings.pontos_calibracao[1],
-                settings.pontos_calibracao[3],
-                settings.verde,
+                GameSettings.pontos_calibracao[1],
+                GameSettings.pontos_calibracao[3],
+                GameSettings.verde,
                 2,
             )
 
             cv2.line(
                 self.frame,
-                settings.pontos_calibracao[2],
-                settings.pontos_calibracao[0],
-                settings.verde,
+                GameSettings.pontos_calibracao[2],
+                GameSettings.pontos_calibracao[0],
+                GameSettings.verde,
                 2,
             )
 
             cv2.line(
                 self.frame,
-                settings.pontos_calibracao[2],
-                settings.pontos_calibracao[3],
-                settings.verde,
+                GameSettings.pontos_calibracao[2],
+                GameSettings.pontos_calibracao[3],
+                GameSettings.verde,
                 2,
             )
 
             # Desenha os pontos de calibração como círculos
             cv2.circle(
-                self.frame, settings.pontos_calibracao[0], 5, settings.azul, 3
+                self.frame,
+                GameSettings.pontos_calibracao[0],
+                5,
+                GameSettings.azul,
+                3,
             )
             cv2.circle(
-                self.frame, settings.pontos_calibracao[1], 5, settings.azul, 3
+                self.frame,
+                GameSettings.pontos_calibracao[1],
+                5,
+                GameSettings.azul,
+                3,
             )
             cv2.circle(
-                self.frame, settings.pontos_calibracao[2], 5, settings.azul, 3
+                self.frame,
+                GameSettings.pontos_calibracao[2],
+                5,
+                GameSettings.azul,
+                3,
             )
             cv2.circle(
-                self.frame, settings.pontos_calibracao[3], 5, settings.azul, 3
+                self.frame,
+                GameSettings.pontos_calibracao[3],
+                5,
+                GameSettings.azul,
+                3,
             )
 
             # Exibe a janela de captura

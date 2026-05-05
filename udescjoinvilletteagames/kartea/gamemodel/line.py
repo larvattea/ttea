@@ -1,14 +1,11 @@
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
 import pygame
 
-# from settings import *
-from udescjoinvilletteagames.kartea.gamemodel import Target
+from udescjoinvilletteagames.kartea.gameutil import GameSettings
 
-# Constantes (mantidas como no original)
-roadW = 400  # Tamanho da pista
-segL = 200  # Tamanho do segmento
-camD = 3  # Camera depth
+if TYPE_CHECKING:
+    from udescjoinvilletteagames.kartea.gamemodel import Target
 
 
 class Line:
@@ -41,15 +38,24 @@ class Line:
 
         # Target / Obstáculo
         self.targetX: float = 0.0
-        self.target: Optional[Target] = None
+        self.target: Optional["Target"] = None
         self.target_rect: Optional[pygame.Rect] = None
 
     def project(self, camX: float, camY: float, camZ: float):
         """Projeta a posição 3D para coordenadas 2D na tela."""
-        self.scale = camD / (self.z - camZ)
-        self.X = (1 + self.scale * (self.x - camX)) * SCREEN_WIDTH / 2
-        self.Y = (1 - self.scale * (self.y - camY)) * SCREEN_HEIGHT / 5
-        self.W = self.scale * roadW * SCREEN_WIDTH / 2
+        self.scale = GameSettings.CAMERA_DEPTH / (self.z - camZ)
+        self.X = (
+            (1 + self.scale * (self.x - camX)) * GameSettings.SCREEN_WIDTH / 2
+        )
+        self.Y = (
+            (1 - self.scale * (self.y - camY)) * GameSettings.SCREEN_HEIGHT / 5
+        )
+        self.W = (
+            self.scale
+            * GameSettings.ROAD_WIDTH
+            * GameSettings.SCREEN_WIDTH
+            / 2
+        )
 
     def drawSprite(self, draw_surface: pygame.Surface):
         """Desenha o sprite lateral esquerdo (árvore esquerda)."""
@@ -59,7 +65,9 @@ class Line:
         w = self.sprite.get_width()
         h = self.sprite.get_height()
 
-        destX = self.X + self.scale * self.spriteX * SCREEN_WIDTH / 2
+        destX = (
+            self.X + self.scale * self.spriteX * GameSettings.SCREEN_WIDTH / 2
+        )
         destY = self.Y + 4
         destW = w * self.W / 266
         destH = h * self.W / 266
@@ -87,7 +95,9 @@ class Line:
         w = self.sprite2.get_width()
         h = self.sprite2.get_height()
 
-        destX = self.X + self.scale * self.sprite2X * SCREEN_WIDTH / 2
+        destX = (
+            self.X + self.scale * self.sprite2X * GameSettings.SCREEN_WIDTH / 2
+        )
         destY = self.Y + 4
         destW = w * self.W / 266
         destH = h * self.W / 266
@@ -123,7 +133,9 @@ class Line:
         else:
             self.targetX = 1.25
 
-        destX = self.X + self.scale * self.targetX * SCREEN_WIDTH / 2
+        destX = (
+            self.X + self.scale * self.targetX * GameSettings.SCREEN_WIDTH / 2
+        )
         destY = self.Y + 4
         destW = w * self.W / 266
         destH = h * self.W / 266
@@ -151,5 +163,5 @@ class Line:
         draw_surface.blit(scaled_sprite, (destX, destY))
 
         # Desenha hitbox se estiver ativada
-        if DRAW_HITBOX:
+        if GameSettings.DRAW_HITBOX:
             self.target.draw_hitbox(draw_surface)

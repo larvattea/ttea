@@ -54,8 +54,6 @@ from .aboutviewui import Ui_AboutView
 from .calibrationparameterizationviewui import \
     Ui_CalibrationParameterizationView
 from .calibrationviewui import Ui_CalibrationView
-from .professionaleditviewui import Ui_ProfessionalEditView
-from .professionallistviewui import Ui_ProfessionalListView
 from .institutionfacilityeditviewui import Ui_InstitutionFacilityEditView
 from .institutionfacilitylistviewui import Ui_InstitutionFacilityListView
 from .languageviewui import Ui_LanguageView
@@ -63,3 +61,5 @@ from .mainviewui import Ui_MainView
 from .playereditviewui import Ui_PlayerEditView
 from .playergamelaunchviewui import Ui_PlayerGameLaunchView
 from .playerlistviewui import Ui_PlayerListView
+from .professionaleditviewui import Ui_ProfessionalEditView
+from .professionallistviewui import Ui_ProfessionalListView

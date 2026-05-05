@@ -63,8 +63,6 @@ __license__ = "MIT License"
 # Import the submodules
 from .aboutview import AboutView
 from .calibrationview import CalibrationView
-from .professionaleditview import ProfessionalEditView
-from .professionallistview import ProfessionalListView
 from .institutionfacilityeditview import InstitutionFacilityEditView
 from .institutionfacilitylistview import InstitutionFacilityListView
 from .languageview import LanguageView
@@ -72,4 +70,6 @@ from .mainview import MainView
 from .playereditview import PlayerEditView
 from .playergamelaunchview import PlayerGameLaunchView
 from .playerlistview import PlayerListView
+from .professionaleditview import ProfessionalEditView
+from .professionallistview import ProfessionalListView
 from .splashscreen import SplashScreen

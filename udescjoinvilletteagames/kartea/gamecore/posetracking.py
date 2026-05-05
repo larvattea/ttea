@@ -4,7 +4,7 @@ import numpy as np
 
 # from settings import *
 # import settings as st
-
+from udescjoinvilletteagames.kartea.gameutil import GameSettings
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
@@ -71,7 +71,7 @@ class PoseTracking:
             self.feet_x, self.feet_y = self.posicao(x, y)
 
             # Força a posição Y fixa (movimento apenas lateral)
-            self.feet_y = SCREEN_HEIGHT - 50
+            self.feet_y = GameSettings.SCREEN_HEIGHT - 50
 
             # Desenha os landmarks na imagem
             mp_drawing.draw_landmarks(
@@ -111,6 +111,7 @@ class PoseTracking:
         da câmera para as coordenadas do jogo.
         """
         # Pontos de calibração da câmera para a tela de controle
+        # TODO pontos de calibração devem ser configuráveis (atualmente fixos no settings)
         pts1 = np.float32(
             [
                 pontos_calibracao[0],
@@ -122,16 +123,22 @@ class PoseTracking:
         pts2 = np.float32(
             [
                 [0, 0],
-                [largura_tela_controle, 0],
-                [0, altura_tela_controle],
-                [largura_tela_controle, altura_tela_controle],
+                [GameSettings.largura_tela_controle, 0],
+                [0, GameSettings.altura_tela_controle],
+                [
+                    GameSettings.largura_tela_controle,
+                    GameSettings.altura_tela_controle,
+                ],
             ]
         )
 
         matrix = cv2.getPerspectiveTransform(pts1, pts2)
 
         # Posição normalizada do jogador
-        p = (int(x * largura_tela_controle), int(y * altura_tela_controle))
+        p = (
+            int(x * GameSettings.largura_tela_controle),
+            int(y * GameSettings.altura_tela_controle),
+        )
 
         # Aplica a transformação de perspectiva
         position_x = (
@@ -143,8 +150,8 @@ class PoseTracking:
 
         # Converte para as dimensões reais da tela do jogo
         p_after = (
-            int(position_x * relacao_largura),
-            int(position_y * relacao_altura),
+            int(position_x * GameSettings.relacao_largura),
+            int(position_y * GameSettings.relacao_altura),
         )
 
         return p_after

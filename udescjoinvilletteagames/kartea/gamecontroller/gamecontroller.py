@@ -27,7 +27,9 @@ class GameController:
         self.cap = Camera()
 
         # Configuração do jogador
-        self.config = f"Jogadores/{arquivo.get_Player()}_KarTEA_config.csv"
+        self.config_player = (
+            f"Jogadores/{arquivo.get_Player()}_KarTEA_config.csv"
+        )
 
         # Sons
         self.sounds = {}
@@ -51,8 +53,8 @@ class GameController:
         self.obst_d = 0
         self.finish = 0
 
-        self.SOM = arquivo.get_K_SOM(self.config)
-        self.HUD = arquivo.get_K_HUD(self.config)
+        self.SOM = arquivo.get_K_SOM(self.config_player)
+        self.HUD = arquivo.get_K_HUD(self.config_player)
         self.PAUSE = False
 
         self.game_start_time = time.time()
@@ -70,7 +72,7 @@ class GameController:
             "Assets/Kartea/Sounds/miss.wav"
         )
 
-        volume = 1 if arquivo.get_K_SOM(self.config) else 0
+        volume = 1 if arquivo.get_K_SOM(self.config_player) else 0
         self.sounds["slap"].set_volume(volume)
         self.sounds["screaming"].set_volume(volume)
 
@@ -132,7 +134,7 @@ class GameController:
 
         self.targets_spawn_timer = t + settings.TARGETS_SPAWN_TIME
 
-        fase = arquivo.get_K_FASE(self.config)
+        fase = arquivo.get_K_FASE(self.config_player)
         pos = self.background.get_startPos()
 
         # Lógica de escolha do tipo de objeto
@@ -506,7 +508,7 @@ class GameController:
                     volume = 1 if self.SOM else 0
                     self.sounds["slap"].set_volume(volume)
                     self.sounds["screaming"].set_volume(volume)
-                    arquivo.set_K_SOM(self.config, self.SOM)
+                    arquivo.set_K_SOM(self.config_player, self.SOM)
                     status = "Habilita Som" if self.SOM else "Desabilita Som"
                     arquivo.grava_Detalhado(
                         arquivo.get_Player(),
@@ -520,7 +522,7 @@ class GameController:
 
                 if event.key in (pygame.K_h, pygame.K_2):
                     self.HUD = not self.HUD
-                    arquivo.set_K_HUD(self.config, self.HUD)
+                    arquivo.set_K_HUD(self.config_player, self.HUD)
                     status = "Habilita HUD" if self.HUD else "Desabilita HUD"
                     arquivo.grava_Detalhado(
                         arquivo.get_Player(),

@@ -55,8 +55,6 @@ __license__ = "MIT License"
 
 # Import the submodules
 from .calibrationcontroller import CalibrationController
-from .professionaleditcontroller import ProfessionalEditController
-from .professionallistcontroller import ProfessionalListController
 from .institutionfacilityeditcontroller import \
     InstitutionFacilityEditController
 from .institutionfacilitylistcontroller import \
@@ -66,3 +64,5 @@ from .maincontroller import MainController
 from .playereditcontroller import PlayerEditController
 from .playergamelaunchcontroller import PlayerGameLaunchController
 from .playerlistcontroller import PlayerListController
+from .professionaleditcontroller import ProfessionalEditController
+from .professionallistcontroller import ProfessionalListController

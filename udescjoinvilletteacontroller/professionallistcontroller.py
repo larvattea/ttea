@@ -7,10 +7,8 @@ from udescjoinvilletteaservice import ProfessionalService
 from udescjoinvilletteautil import MessageService
 
 if TYPE_CHECKING:
-    from udescjoinvilletteaview import (
-        ProfessionalEditView,
-        ProfessionalListView,
-    )
+    from udescjoinvilletteaview import (ProfessionalEditView,
+                                        ProfessionalListView)
 
 
 class ProfessionalListController(QObject):

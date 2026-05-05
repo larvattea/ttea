@@ -47,6 +47,10 @@ class GameSettings:
 
     OBJ_POS = [(368, 80), (393, 80), (419, 80)]
 
+    ROAD_WIDTH = 400
+    SEGMENT_LENGTH = 200
+    CAMERA_DEPTH = 3
+
     # ====================== Desenho e Depuração ======================
     DRAW_HITBOX = False
 

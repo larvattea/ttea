@@ -2,7 +2,9 @@ import pygame
 
 # import settings
 # from settings import *
-from udescjoinvilletteagames.kartea.gamemodel import Image, Target
+from udescjoinvilletteagames.kartea.gamemodel import Image
+from udescjoinvilletteagames.kartea.gamemodel.target import Target
+from udescjoinvilletteagames.kartea.gameutil import GameSettings
 
 
 class Obstacle(Target):
@@ -13,10 +15,11 @@ class Obstacle(Target):
         Inicializa um obstáculo com base na pista (r).
 
         Args:
-            r (int): Índice da pista (0, 1 ou 2) onde o obstáculo deve aparecer.
+            r (int): Índice da pista (0, 1 ou 2) onde o obstáculo
+            deve aparecer.
         """
         # Define tamanho
-        size = OBSTACLE_SIZES
+        size = GameSettings.OBSTACLE_SIZES
 
         # Define posição inicial de spawn
         road, start_pos = self.define_spawn_pos(r)
@@ -32,7 +35,7 @@ class Obstacle(Target):
 
     def move(self):
         """Move o obstáculo para baixo com variação lateral dependendo da pista e velocidade."""
-        ve = TARGETS_MOVE_SPEED
+        ve = GameSettings.TARGETS_MOVE_SPEED
         vel = [0, ve]
 
         if ve == 1:
@@ -146,7 +149,7 @@ class Obstacle(Target):
         triste_fig = Image.load("Assets/Kartea/triste.png")
         feliz_fig = Image.load("Assets/Kartea/feliz.png")
 
-        if self.current_pos[1] > SCREEN_HEIGHT:
+        if self.current_pos[1] > GameSettings.SCREEN_HEIGHT:
             # Desviou do obstáculo
             objects.remove(self)
             sounds["slap"].play()
@@ -156,11 +159,11 @@ class Obstacle(Target):
                 arquivo.get_Sessao(),
                 arquivo.get_Fase(),
                 arquivo.get_Nivel(),
-                settings.pista,
+                GameSettings.pista,
                 self.current_road,
                 "Desviou de Obstaculo",
             )
-            settings.Obst_d += 1
+            GameSettings.Obst_d += 1
             return 10
         else:
             # Colidiu com o obstáculo
@@ -172,9 +175,9 @@ class Obstacle(Target):
                 arquivo.get_Sessao(),
                 arquivo.get_Fase(),
                 arquivo.get_Nivel(),
-                settings.pista,
+                GameSettings.pista,
                 self.current_road,
                 "Colidiu com Obstaculo",
             )
-            settings.Obst_c += 1
+            GameSettings.Obst_c += 1
             return 0

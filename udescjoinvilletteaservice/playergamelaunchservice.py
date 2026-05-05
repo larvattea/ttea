@@ -2,7 +2,7 @@ import json
 from typing import List
 
 # Local module import
-from udescjoinvilletteamodel import Professional, Player
+from udescjoinvilletteamodel import Player, Professional
 from udescjoinvilletteautil import PathConfig
 
 
@@ -10,8 +10,8 @@ class PlayerGameLaunchService:
     METADATA_FILENAME = "metadata.json"
 
     def __init__(self):
-        from udescjoinvilletteaservice import (ProfessionalService,
-                                               PlayerService)
+        from udescjoinvilletteaservice import (PlayerService,
+                                               ProfessionalService)
 
         self.player_service = PlayerService()
         self.professional_service = ProfessionalService()

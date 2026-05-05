@@ -4,6 +4,7 @@ import time
 import pygame
 
 from udescjoinvilletteagames.kartea.gamemodel import Image
+from udescjoinvilletteagames.kartea.gameutil import GameSettings
 
 # import settings
 # from settings import *
@@ -20,7 +21,7 @@ class Target:
             r (int, optional): Índice da pista (0, 1 ou 2). Se None, escolhe aleatoriamente.
         """
         # Tamanho do alvo
-        size = TARGETS_SIZES
+        size = GameSettings.TARGETS_SIZES
 
         # Define posição inicial de spawn
         road, start_pos = self.define_spawn_pos(r)
@@ -50,7 +51,7 @@ class Target:
         else:
             road = random.randint(0, 2)  # 0 esq, 1 meio, 2 dir
 
-        start_pos = OBJ_POS[road]
+        start_pos = GameSettings.OBJ_POS[road]
         return road, start_pos
 
     def define_pos(self, x: float, y: float):
@@ -65,7 +66,7 @@ class Target:
         Movimento padrão do alvo: desce a tela com pequena variação lateral
         dependendo da pista e da velocidade atual.
         """
-        ve = TARGETS_MOVE_SPEED
+        ve = GameSettings.TARGETS_MOVE_SPEED
         vel = [0, ve]
 
         if ve == 1:
@@ -186,7 +187,7 @@ class Target:
         """Troca o frame da animação quando necessário."""
         t = time.time()
         if t > self.animation_timer:
-            self.animation_timer = t + ANIMATION_SPEED
+            self.animation_timer = t + GameSettings.ANIMATION_SPEED
             self.current_frame += 1
             if self.current_frame > len(self.images) - 1:
                 self.current_frame = 0
@@ -205,7 +206,7 @@ class Target:
             pos_mode="center",
         )
 
-        if DRAW_HITBOX:
+        if GameSettings.DRAW_HITBOX:
             self.draw_hitbox(surface)
 
     def kill(
@@ -221,7 +222,7 @@ class Target:
         triste_fig = Image.load("Assets/Kartea/triste.png")
         feliz_fig = Image.load("Assets/Kartea/feliz.png")
 
-        if self.current_pos[1] > SCREEN_HEIGHT:
+        if self.current_pos[1] > GameSettings.SCREEN_HEIGHT:
             # Desviou do alvo (não acertou)
             targets.remove(self)
             sounds["screaming"].play()

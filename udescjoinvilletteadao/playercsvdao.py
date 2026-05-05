@@ -86,7 +86,7 @@ class PlayerCsvDAO(DAO[Player]):
         headers : List[str]
             Ordered list of column names.
         """
-        PathConfig.ensure_user_dirs()
+        PathConfig.ensure_dirs()
         with portalocker.Lock(filepath, mode="w", timeout=10) as f:
             self.csv_handler.write_csv(f, data, headers)
 
@@ -236,7 +236,7 @@ class PlayerCsvDAO(DAO[Player]):
         converts data types appropriately, and populates the cache.
         """
         # TODO bug quando cadastra com acento uma palavra rever o csv handler
-        PathConfig.ensure_user_dirs()
+        PathConfig.ensure_dirs()
         for file_path in PathConfig.PLAYERS_DIR.glob("*_player.csv"):
             player_data = self.csv_handler.read_csv(
                 str(file_path), as_dict=True

@@ -46,14 +46,19 @@ class PlayerGameLaunchView(QDialog, Ui_PlayerGameLaunchView, WindowConfig):
 
     def populate_comboboxes(self):
         # Players
-        self.cbx_player.addItems(
-            [p.name for p in self.service.get_all_players()]
-        )
+        for p in self.service.get_all_players():
+            self.cbx_player.addItem(p.name, p.id)
+
+        # self.cbx_player.addItems(
+        #    [p.name for p in self.service.get_all_players()]
+        # )
 
         # Professionals
-        self.cbx_professional.addItems(
-            [h.name for h in self.service.get_all_professionals()]
-        )
+        for h in self.service.get_all_professionals():
+            self.cbx_professional.addItem(h.name, h.id)
+        # self.cbx_professional.addItems(
+        #    [h.name for h in self.service.get_all_professionals()]
+        # )
 
         # 2. Popular Jogos com Metadados e Idioma
         language_app = AppModel.get_instance().current_language

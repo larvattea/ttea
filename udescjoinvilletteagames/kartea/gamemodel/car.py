@@ -1,30 +1,42 @@
 import pygame
 
 # import arquivo
-from udescjoinvilletteagames.kartea.gamemodel import Image
-
-# from settings import *
+from udescjoinvilletteagames.kartea.gameutil import GameSettings
+from udescjoinvilletteagames.kartea.service import PlayerKarteaConfigService
 
 
 class Car:
-    """Classe que representa o carro controlado pelo jogador (posição dos pés via MediaPipe)."""
+    """Classe que representa o carro controlado pelo jogador (posição dos pés
+    via MediaPipe)."""
 
     def __init__(self):
         # Carrega a imagem principal do carro
+        from udescjoinvilletteagames.kartea.gamemodel import Image
+
+        self.service = PlayerKarteaConfigService()
+        self.default_config = self.service.get_kartea_ini_config()
+
+        image_path = self.default_config["visual_resources"][
+            "vehicle_image_default"
+        ]
         self.orig_image = Image.load(
-            "Assets/Kartea/Carro.png", size=(CAR_SIZE, CAR_SIZE)
+            # "Assets/Kartea/Carro.png",
+            image_path,
+            size=(GameSettings.CAR_SIZE, GameSettings.CAR_SIZE),
         )
         self.image = self.orig_image.copy()
         self.image_smaller = Image.load(
-            "Assets/Kartea/Carro.png", size=(CAR_SIZE, CAR_SIZE)
+            # "Assets/Kartea/Carro.png",
+            image_path,
+            size=(GameSettings.CAR_SIZE, GameSettings.CAR_SIZE),
         )
 
         # Retângulo de colisão (hitbox)
         self.rect = pygame.Rect(
-            SCREEN_WIDTH // 2,
-            SCREEN_HEIGHT // 2,
-            CAR_HITBOX_SIZE[0],
-            CAR_HITBOX_SIZE[1],
+            GameSettings.SCREEN_WIDTH // 2,
+            GameSettings.SCREEN_HEIGHT // 2,
+            GameSettings.CAR_HITBOX_SIZE[0],
+            GameSettings.CAR_HITBOX_SIZE[1],
         )
 
         # Controle de interação (clique / pés fechados)
@@ -33,12 +45,14 @@ class Car:
         # self.hand_tracking = HandTracking()  # comentado no original
 
     def follow_mouse(self):
-        """Atualiza a posição do carro para seguir o mouse (usado para testes)."""
+        """Atualiza a posição do carro para seguir o mouse
+        (usado para testes)."""
         self.rect.center = pygame.mouse.get_pos()
         # self.hand_tracking.display_hand()  # mantido comentado
 
     def follow_mediapipe_hand(self, x: int, y: int):
-        """Atualiza a posição do carro com base na posição detectada pelos pés (MediaPipe)."""
+        """Atualiza a posição do carro com base na posição detectada
+        pelos pés (MediaPipe)."""
         self.rect.center = (x, y)
 
     def draw_hitbox(self, surface: pygame.Surface):
@@ -47,11 +61,13 @@ class Car:
 
     def draw(self, surface: pygame.Surface):
         """Desenha o carro na tela."""
+        from udescjoinvilletteagames.kartea.gamemodel import Image
+
         # Desenha a imagem do carro centralizada
         Image.draw(surface, self.image, self.rect.center, pos_mode="center")
 
         # Desenha a hitbox se estiver ativada nas configurações
-        if DRAW_HITBOX:
+        if GameSettings.DRAW_HITBOX:
             self.draw_hitbox(surface)
 
     def on_target(self, targets):
@@ -67,8 +83,8 @@ class Car:
         self, surface: pygame.Surface, targets: list, score: int, sounds: dict
     ) -> int:
         """
-        Mata os alvos que colidem com o carro quando o jogador "clica" (left_click = True).
-        Retorna o score atualizado.
+        Mata os alvos que colidem com o carro quando
+        o jogador "clica" (left_click = True). Retorna o score atualizado.
         """
         for target in self.on_target(targets):
             target_score = target.kill(surface, targets, sounds)

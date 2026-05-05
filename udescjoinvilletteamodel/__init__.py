@@ -49,7 +49,7 @@ __license__ = "MIT License"
 # Import the submodules
 from .appmodel import AppModel
 from .calibration import Calibration
-from .professional import Professional
 from .institutionfacility import InstitutionFacility
 from .language import Language
 from .player import Player
+from .professional import Professional

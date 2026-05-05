@@ -1,65 +1,49 @@
-import os
 import sys
 from pathlib import Path
 from typing import List
 
+from platformdirs import user_data_dir
+
 
 class PathConfig:
     """
-    Central de caminhos do aplicativo.
-    Separa claramente:
-      • Recursos embutidos (imagens, .ui, .qm) -> :/ (Qt Resource System)
-      • Dados do usuário (logs, jogadores, configs) -> pasta appdata
+    Centralizador de caminhos da aplicação.
+
+    - Suporte completo a PyInstaller e modo desenvolvimento
     """
 
-    # ===================================================================
-    # 1. PASTA DE DADOS DO USUÁRIO (escrita permitida)
-    # ===================================================================
-    # Nome do app
-    APP_NAME = "ttea"  # Nome do app
+    APP_NAME = "ttea"
+    APP_AUTHOR = "udesc"
 
-    # Arquivo de calibração
+    CONFIG_FILENAME = "config.ini"
     CALIBRATION_FILENAME = "calibration.ini"
 
-    # Nome do arquivo principal de configuração
-    CONFIG_FILENAME = "config.ini"
-
-    if sys.platform.startswith("win"):
-        APPDATA_DIR = Path(os.getenv("APPDATA")) / APP_NAME
-    elif sys.platform == "darwin":  # macOS
-        APPDATA_DIR = (
-            Path.home() / "Library" / "Application Support" / APP_NAME
-        )
-    else:  # Linux e outros
-        APPDATA_DIR = Path.home() / ".local" / "share" / APP_NAME
-
-    CALIBRATION_DIR = APPDATA_DIR / "calibration"
-    CONFIG_DIR = APPDATA_DIR / "config"
-    EXERGAME_DIR = APPDATA_DIR / "exergames"  # jogos da aplicação
-    EXPORTS_DIR = APPDATA_DIR / "exports"  # CSV, relatórios, etc.
-    PROFESSIONAL_DIR = APPDATA_DIR / "professionals"
-    INSTITUTIONFACILITY_DIR = APPDATA_DIR / "institutionfacilities"
-    LOG_DIR = APPDATA_DIR / "log"
-    PLAYERS_DIR = APPDATA_DIR / "players"
-    MODELS_DIR = APPDATA_DIR / "mediapipemodels"
-
     # ===================================================================
-    # 2. PASTA RAIZ DO PROJETO (apenas para desenvolvimento)
+    # Diretório base
     # ===================================================================
     if getattr(sys, "frozen", False):
-        # App empacotado (PyInstaller)
-        PROJECT_ROOT = Path(sys.executable).parent
+        BASE_DIR: Path = Path(user_data_dir(APP_NAME, APP_AUTHOR))
+        EXERGAME_DIR: Path = BASE_DIR / "exergames"
     else:
-        PROJECT_ROOT = Path(__file__).parent.parent.parent
+        BASE_DIR: Path = Path(__file__).parent.parent
+        EXERGAME_DIR: Path = BASE_DIR / "udescjoinvilletteagames"
+        BASE_DIR: Path = BASE_DIR / "data"
 
-    RESOURCES_DIR = PROJECT_ROOT / "resources"
+    # Subdiretórios — adicione aqui novas pastas
+    CONFIG_DIR: Path = BASE_DIR / "config"
+    CALIBRATION_DIR: Path = BASE_DIR / "calibration"
+    EXPORTS_DIR: Path = BASE_DIR / "exports"
+    INSTITUTIONFACILITY_DIR: Path = BASE_DIR / "institutionfacilities"
+    LOG_DIR: Path = BASE_DIR / "log"
+    MODELS_DIR: Path = BASE_DIR / "mediapipemodels"
+    PLAYERS_DIR: Path = BASE_DIR / "players"
+    PROFESSIONAL_DIR: Path = BASE_DIR / "professionals"
 
     # ===================================================================
-    # 3. MÉTODOS DE RECURSOS EMBUTIDOS (usam :/ -> funcionam no .exe)
+    # Recursos embutidos (Qt)
     # ===================================================================
     @staticmethod
     def resource(path: str = "") -> str:
-        """Retorna caminho Qt Resource (funciona no .exe)"""
         return f":/{path}".rstrip("/")
 
     @staticmethod
@@ -99,113 +83,112 @@ class PathConfig:
         return f":/help/{path}".rstrip("/")
 
     # ===================================================================
-    # 4. MÉTODOS DE DADOS DO USUÁRIO (escrita)
+    # Introspecção automática
     # ===================================================================
     @classmethod
-    def ensure_user_dirs(cls) -> None:
-        """Cria todas as pastas de dados do usuário na primeira execução"""
-        for directory in [
-            cls.APPDATA_DIR,
-            cls.CALIBRATION_DIR,
-            cls.CONFIG_DIR,
-            cls.EXERGAME_DIR,
-            cls.EXPORTS_DIR,
-            cls.PROFESSIONAL_DIR,
-            cls.INSTITUTIONFACILITY_DIR,
-            cls.LOG_DIR,
-            cls.PLAYERS_DIR,
-            cls.MODELS_DIR,
-        ]:
+    def _get_dir_names(cls) -> List[str]:
+        """Retorna nomes de todos os atributos que terminam com _DIR"""
+        return [
+            name
+            for name in vars(cls)
+            if name.endswith("_DIR") and not name.startswith("_")
+        ]
+
+    @classmethod
+    def _get_user_dirs(cls) -> List[Path]:
+        """Retorna os objetos Path dos diretórios"""
+        return [
+            value
+            for name, value in vars(cls).items()
+            if name.endswith("_DIR") and not name.startswith("_")
+        ]
+
+    # ===================================================================
+    # Métodos de dados do usuário
+    # ===================================================================
+    @classmethod
+    def ensure_dirs(cls) -> None:
+        """Cria todos os diretórios automaticamente."""
+        for directory in cls._get_user_dirs():
             directory.mkdir(parents=True, exist_ok=True)
 
     @classmethod
+    def _user_file(cls, directory: Path, filename: str) -> str:
+        cls.ensure_dirs()
+        return str(directory / filename)
+
+    @classmethod
+    def config(cls, filename: str = CONFIG_FILENAME) -> str:
+        return cls._user_file(cls.CONFIG_DIR, filename)
+
+    @classmethod
+    def calibration(cls, filename: str = CALIBRATION_FILENAME) -> str:
+        return cls._user_file(cls.CALIBRATION_DIR, filename)
+
+    @classmethod
     def professional(cls, filename: str) -> str:
-        cls.ensure_user_dirs()
-        return str(cls.PROFESSIONAL_DIR / filename)
+        return cls._user_file(cls.PROFESSIONAL_DIR, filename)
 
     @classmethod
     def institutionfacility(cls, filename: str) -> str:
-        cls.ensure_user_dirs()
-        return str(cls.INSTITUTIONFACILITY_DIR / filename)
-
-    @classmethod
-    def log(cls, filename: str) -> str:
-        cls.ensure_user_dirs()
-        return str(cls.LOG_DIR / filename)
+        return cls._user_file(cls.INSTITUTIONFACILITY_DIR, filename)
 
     @classmethod
     def player(cls, filename: str) -> str:
-        cls.ensure_user_dirs()
-        return str(cls.PLAYERS_DIR / filename)
+        return cls._user_file(cls.PLAYERS_DIR, filename)
+
+    @classmethod
+    def model(cls, filename: str) -> str:
+        return cls._user_file(cls.MODELS_DIR, filename)
+
+    @classmethod
+    def export(cls, filename: str) -> str:
+        return cls._user_file(cls.EXPORTS_DIR, filename)
+
+    @classmethod
+    def log(cls, filename: str) -> str:
+        return cls._user_file(cls.LOG_DIR, filename)
 
     @classmethod
     def game_save(cls, game_name: str, filename: str) -> str:
-        cls.ensure_user_dirs()
+        cls.ensure_dirs()
         game_dir = cls.EXERGAME_DIR / game_name
         game_dir.mkdir(exist_ok=True)
         return str(game_dir / filename)
 
+    # ===================================================================
+    # Suporte a testes
+    # ===================================================================
     @classmethod
-    def export(cls, filename: str) -> str:
-        cls.ensure_user_dirs()
-        return str(cls.EXPORTS_DIR / filename)
+    def set_base_dir(cls, path: str | Path) -> None:
+        """Altera o diretório base (útil para testes)."""
+        new_base = Path(path).resolve()
 
-    @classmethod
-    def config(cls, filename: str = CONFIG_FILENAME) -> str:
-        cls.ensure_user_dirs()
-        return str(cls.CONFIG_DIR / filename)
+        cls.BASE_DIR = new_base
+        cls.EXERGAME_DIR = new_base / "exergames"
 
+        for dir_name in cls._get_dir_names():
+            if dir_name in ("BASE_DIR", "EXERGAME_DIR"):
+                continue
+            subdir = dir_name.replace("_DIR", "").lower()
+            setattr(cls, dir_name, new_base / subdir)
+
+    # ===================================================================
+    # Verificações
+    # ===================================================================
     @classmethod
     def config_file_exists(cls, filename: str = CONFIG_FILENAME) -> bool:
-        """Verifica se o arquivo de configuração existe no diretório do usuário.
-
-        Returns
-        -------
-        bool
-            True se o arquivo config.ini existir, False caso contrário.
-        """
-        cls.ensure_user_dirs()  # Garante que as pastas existam (não cria o arquivo)
-        config_path = Path(cls.config(filename))
-        return config_path.exists()
-
-    @classmethod
-    def calibration(cls, filename: str = CALIBRATION_FILENAME) -> str:
-        cls.ensure_user_dirs()
-        return str(cls.CALIBRATION_DIR / filename)
+        return Path(cls.config(filename)).exists()
 
     @classmethod
     def calibration_file_exists(
         cls, filename: str = CALIBRATION_FILENAME
     ) -> bool:
-        """Verifica se o arquivo de configuração existe no diretório do usuário.
-
-        Returns
-        -------
-        bool
-            True se o arquivo config.ini existir, False caso contrário.
-        """
-        cls.ensure_user_dirs()  # Garante que as pastas existam (não cria o arquivo)
-        config_path = Path(cls.config(filename))
-        return config_path.exists()
-
-    @classmethod
-    def model_path(cls, filename: str) -> str:
-        """Retorna o caminho absoluto para um modelo .task"""
-        return str(cls.MODELS_DIR / filename)
+        return Path(cls.calibration(filename)).exists()
 
     # ===================================================================
-    # 5. MÉTODOS LEGADOS (mantidos para compatibilidade)
+    # Utilitários
     # ===================================================================
-    @classmethod
-    def path_games(cls) -> List[str]:
-        """Lista jogos salvos pelo usuário (não mais usado agora)"""
-        cls.ensure_user_dirs()
-        return [
-            d.name
-            for d in cls.EXERGAME_DIR.iterdir()
-            if d.is_dir() and not d.name.startswith(".")
-        ]
-
     @classmethod
     def path_help_pt(cls, filename: str) -> str:
         return cls.help(f"pt/{filename}")

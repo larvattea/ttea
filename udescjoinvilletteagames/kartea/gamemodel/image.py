@@ -1,77 +1,120 @@
+import io
+from typing import Literal, Tuple, Union
+
 import pygame
+from PySide6.QtCore import QFile, QIODevice
+
+from udescjoinvilletteagames.kartea.util import KarteaPathConfig
 
 
 class Image:
-    """Classe utilitária para carregamento, escalonamento e desenho de imagens no Pygame."""
+    """
+    Classe utilitária para carregamento, escala e desenho de imagens.
+    Suporta caminhos físicos e recursos Qt (.qrc).
+    """
+
+    IMAGE_SIZE_DEFAULT_NAME = "default"
+    IMAGE_CONVERT_ALPHA = "alpha"
+    IMAGE_CONVERT_BASE: str = "base"
+
+    IMAGE_POS_TOP_LEFT = "top_left"
+    IMAGE_POS_CENTER = "center"
+    IMAGE_POS_BOTTOM_CENTER = "bottom_center"
 
     @staticmethod
     def load(
-        img_path: str,
-        size: tuple = "default",
-        convert: str = "alpha",
+        img_name: str,
+        size: Union[
+            Literal["default"], Tuple[int, int]
+        ] = IMAGE_SIZE_DEFAULT_NAME,
+        convert: str = IMAGE_CONVERT_ALPHA,
         flip: bool = False,
-    ):
-        """
-        Carrega uma imagem do disco.
+    ) -> pygame.Surface:
+        """Carrega imagem (física ou Qt), aplica conversão, flip e scale."""
+        full_path = KarteaPathConfig.kartea_image(img_name)
 
-        Args:
-            img_path (str): Caminho da imagem
-            size (tuple or str): Tamanho desejado (ex: (800, 600)) ou "default"
-            convert (str): "alpha" para convert_alpha() ou qualquer outro valor para convert()
-            flip (bool): Se True, espelha a imagem horizontalmente
+        if not full_path:
+            return Image._fallback_surface()
 
-        Returns:
-            pygame.Surface: Imagem carregada e processada
-        """
-        if convert == "alpha":
-            img = pygame.image.load(img_path).convert_alpha()
-        else:
-            img = pygame.image.load(img_path).convert()
+        try:
+            # Verificação: Se o caminho for um recurso do Qt
+            if full_path.startswith(":/"):
+                img = Image._load_from_qt_resource(full_path)
+            else:
+                # Caminho físico normal
+                img = pygame.image.load(full_path)
 
-        if flip:
-            img = pygame.transform.flip(img, True, False)
+            # Conversão de pixel format
+            if convert == Image.IMAGE_CONVERT_ALPHA:
+                img = img.convert_alpha()
+            elif convert == Image.IMAGE_CONVERT_BASE:
+                img = img.convert()
+            else:
+                img = img.convert_alpha()
 
-        if size != "default":
-            img = Image.scale(img, size)
+            # Transformações
+            if flip:
+                img = pygame.transform.flip(img, True, False)
 
-        return img
+            if size != Image.IMAGE_SIZE_DEFAULT_NAME:
+                if isinstance(size, (tuple, list)) and len(size) == 2:
+                    img = Image.scale(img, size)
+
+            return img
+        except Exception as e:
+            print(f"[Image.load] Erro ao carregar '{img_name}': {e}.")
+            return Image._fallback_surface()
 
     @staticmethod
-    def scale(img: pygame.Surface, size: tuple) -> pygame.Surface:
-        """
-        Escala uma imagem usando smoothscale (melhor qualidade).
+    def _load_from_qt_resource(resource_path: str) -> pygame.Surface:
+        """Carrega recurso Qt via QFile."""
+        file = QFile(resource_path)
+        if not file.open(QIODevice.ReadOnly):
+            raise FileNotFoundError(
+                f"Não foi possível abrir recurso Qt: {resource_path}."
+            )
 
-        Args:
-            img (pygame.Surface): Imagem original
-            size (tuple): Novo tamanho (largura, altura)
+        img_data = file.readAll().data()
+        file.close()
+        return pygame.image.load(io.BytesIO(img_data))
 
-        Returns:
-            pygame.Surface: Imagem escalada
-        """
-        return pygame.transform.smoothscale(img, size)
+    @staticmethod
+    def scale(img: pygame.Surface, size: Tuple[int, int]) -> pygame.Surface:
+        """Redimensiona com smoothscale e tamanho mínimo seguro."""
+        width = max(1, int(size[0]))
+        height = max(1, int(size[1]))
+        return pygame.transform.smoothscale(img, (width, height))
 
     @staticmethod
     def draw(
         surface: pygame.Surface,
         img: pygame.Surface,
-        pos: tuple,
-        pos_mode: str = "top_left",
+        pos: Tuple[int, int],
+        pos_mode: str = IMAGE_POS_TOP_LEFT,
     ):
-        """
-        Desenha uma imagem na superfície.
+        """Desenha a imagem com diferentes modos de ancoragem."""
+        if not isinstance(pos, (tuple, list)) or len(pos) != 2:
+            raise ValueError(
+                "POS deve ser uma tupla/lista com exatamente 2 valores (x, y)."
+            )
 
-        Args:
-            surface (pygame.Surface): Superfície onde desenhar (geralmente a tela)
-            img (pygame.Surface): Imagem a ser desenhada
-            pos (tuple): Posição (x, y)
-            pos_mode (str): "top_left" ou "center"
-        """
-        if pos_mode == "center":
-            # Calcula o centro da imagem
-            x = pos[0] - img.get_width() // 2
-            y = pos[1] - img.get_height() // 2
-            draw_pos = (x, y)
-        else:
-            draw_pos = pos
+        render_pos = list(pos)
+        mode = pos_mode.lower()
 
-        surface.blit(img, draw_pos)
+        # TODO verificar se precisa manter o IMAGE_POS_BOTTOM_CENTER
+        # no código original não tinha
+        if mode == Image.IMAGE_POS_CENTER:
+            render_pos[0] -= img.get_width() // 2
+            render_pos[1] -= img.get_height() // 2
+        elif mode == Image.IMAGE_POS_BOTTOM_CENTER:  # new position mode
+            render_pos[0] -= img.get_width() // 2
+            render_pos[1] -= img.get_height()
+
+        surface.blit(img, render_pos)
+
+    @staticmethod
+    def _fallback_surface() -> pygame.Surface:
+        """Superfície magenta 32x32 para facilitar identificação de imagens faltantes."""
+        surf = pygame.Surface((32, 32))
+        surf.fill((255, 0, 255))
+        return surf

@@ -1,6 +1,7 @@
 import pygame
 
 # from settings import *
+from udescjoinvilletteagames.kartea.gameutil import GameSettings
 
 
 class UI:
@@ -12,7 +13,7 @@ class UI:
         text: str,
         pos: tuple,
         color: tuple,
-        font=FONTS["medium"],
+        font=GameSettings.FONTS["medium"],
         pos_mode: str = "top_left",
         shadow: bool = False,
         shadow_color: tuple = (0, 0, 0),

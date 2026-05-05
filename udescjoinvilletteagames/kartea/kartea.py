@@ -1,3 +1,4 @@
+import argparse
 import sys
 
 import cv2
@@ -17,6 +18,26 @@ class KarTEA:
 
     def __init__(self):
         """Inicializa o jogo, janela, objetos e variáveis de estado."""
+        parser = argparse.ArgumentParser(description="KarTEA Exergame")
+
+        # Define os argumentos esperados
+        parser.add_argument(
+            "--lang", type=str, default="pt", help="Idioma do app"
+        )
+        parser.add_argument(
+            "--player_id", type=int, default=0, help="ID do Jogador"
+        )
+        parser.add_argument(
+            "--professional_id", type=int, default=0, help="ID do Profissional"
+        )
+
+        args = parser.parse_args()
+
+        # Agora você pode acessar os valores
+        self.current_lang = args.lang
+        self.player_id = args.player_id
+        self.professional_id = args.professional_id
+
         self.service = PlayerKarteaConfigService()
         self.default_config = self.service.get_kartea_ini_config()
         pygame.init()
@@ -42,6 +63,13 @@ class KarTEA:
 
         # Variáveis de controle
         self.running = True
+
+        # TODO colocar no settings
+        self.phase = self.default_config["game_settings"]["phase_default"]
+        self.level = self.default_config["game_settings"]["level_default"]
+        self.level_time = self.default_config["game_settings"][
+            "level_time_default"
+        ]
 
         # (Música comentada - mantida como no original)
         # pygame.mixer.music.load("Assets/Kartea/Sounds/Komiku_-_12_-_Bicycle.mp3")
@@ -74,8 +102,8 @@ class KarTEA:
             self.state = "game"
 
         elif menu_result == "prev":
-            if arquivo.get_Nivel() != 1:
-                arquivo.set_Nivel(arquivo.get_Nivel() - 1)
+            if self.level != 1:
+                self.level = self.level - 1
             self.game.reset()
             self.state = "game"
 
@@ -84,12 +112,12 @@ class KarTEA:
             self.state = "game"
 
         elif menu_result == "next":
-            if arquivo.get_Nivel() != 6:
-                arquivo.set_Nivel(arquivo.get_Nivel() + 1)
+            if self.level != 6:
+                self.level = self.level + 1
             else:
-                if arquivo.get_Fase() != 3:
-                    arquivo.set_Fase(arquivo.get_Fase() + 1)
-                    arquivo.set_Nivel(1)
+                if self.phase != 3:
+                    self.phase = self.phase + 1
+                    self.level = 1
             self.game.reset()
             self.state = "game"
 

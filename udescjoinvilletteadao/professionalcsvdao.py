@@ -64,7 +64,7 @@ class ProfessionalCsvDAO(DAO[Professional]):
         headers : List[str]
             Ordered list of column names.
         """
-        PathConfig.ensure_user_dirs()
+        PathConfig.ensure_dirs()
         with portalocker.Lock(filepath, mode="w", timeout=10) as f:
             self.csv_handler.write_csv(f, data, headers)
 
@@ -95,9 +95,7 @@ class ProfessionalCsvDAO(DAO[Professional]):
         self.professionals[obj.id] = obj
         filename = self.get_filename(obj)
         self.file_map[obj.id] = filename
-        self.write_with_lock(
-            filename, obj.get_data(), Professional.PROPERTIES
-        )
+        self.write_with_lock(filename, obj.get_data(), Professional.PROPERTIES)
         return obj.id
 
     def update(self, obj: Professional) -> bool:
@@ -209,9 +207,7 @@ class ProfessionalCsvDAO(DAO[Professional]):
             <id>_<sanitized_name>_professional.csv
         """
         sanitized_name = self.sanitize_filename(professional.name)
-        filename = (
-            f"{professional.id}_{sanitized_name}_professional.csv"
-        )
+        filename = f"{professional.id}_{sanitized_name}_professional.csv"
         return PathConfig.professional(filename)
 
     def load_all_professionals(self) -> None:
@@ -221,7 +217,7 @@ class ProfessionalCsvDAO(DAO[Professional]):
         matching CSV file, converts data types appropriately,
         and populates the cache.
         """
-        PathConfig.ensure_user_dirs()
+        PathConfig.ensure_dirs()
         for file_path in PathConfig.PROFESSIONAL_DIR.glob(
             "*_professional.csv"
         ):
@@ -253,23 +249,15 @@ class ProfessionalCsvDAO(DAO[Professional]):
                             int(row[prop]) if row[prop].isdigit() else 0
                         )
                     elif prop in self.bool_properties:
-                        professional_kwargs[prop] = (
-                            row[prop].lower() == "true"
-                        )
+                        professional_kwargs[prop] = row[prop].lower() == "true"
                     else:
                         professional_kwargs[prop] = row[prop]
 
-            professional = Professional(
-                **professional_kwargs
-            )
-            self.professionals[professional.id] = (
-                professional
-            )
+            professional = Professional(**professional_kwargs)
+            self.professionals[professional.id] = professional
             self.file_map[professional.id] = str(file_path)
 
-    def search_professionals(
-        self, query: str = ""
-    ) -> List[Professional]:
+    def search_professionals(self, query: str = "") -> List[Professional]:
         """Retorna a lista de instituições, opcionalmente filtrada."""
         all_professionals = list(self.professionals.values())
 

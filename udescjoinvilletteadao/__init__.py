@@ -47,6 +47,6 @@ __license__ = "MIT License"
 
 from .calibrationinidao import CalibrationIniDAO
 from .dao import DAO
-from .professionalcsvdao import ProfessionalCsvDAO
 from .institutionfacilitycsvdao import InstitutionFacilityCsvDAO
 from .playercsvdao import PlayerCsvDAO
+from .professionalcsvdao import ProfessionalCsvDAO

@@ -5,7 +5,7 @@ from PySide6.QtCore import QCoreApplication, QObject, Signal
 
 # Local module import
 from udescjoinvilletteadao import ProfessionalCsvDAO
-from udescjoinvilletteamodel import Professional, InstitutionFacility
+from udescjoinvilletteamodel import InstitutionFacility, Professional
 
 
 class ProfessionalService(QObject):

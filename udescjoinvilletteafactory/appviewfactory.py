@@ -4,18 +4,17 @@ from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QDialog, QMainWindow
 
 from udescjoinvilletteaview import (AboutView, CalibrationView,
-                                    ProfessionalEditView,
-                                    ProfessionalListView,
                                     InstitutionFacilityEditView,
                                     InstitutionFacilityListView, LanguageView,
                                     MainView, PlayerEditView,
-                                    PlayerGameLaunchView, PlayerListView)
+                                    PlayerGameLaunchView, PlayerListView,
+                                    ProfessionalEditView, ProfessionalListView)
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
     # Local module import
-    from udescjoinvilletteamodel import (Professional,
-                                         InstitutionFacility, Player)
+    from udescjoinvilletteamodel import (InstitutionFacility, Player,
+                                         Professional)
 
 
 class AppViewFactory:
