@@ -19,6 +19,17 @@ class GameSettings:
     FPS = 60
     DRAW_FPS = False
 
+    CURRENT_LANG = "pt_BR"
+    PLAYER_ID = 0
+    PROFESSIONAL_ID = 0
+
+    PHASE = 1
+    LEVEL = 1
+    LEVEL_TIME = 120
+
+    SOUND = False
+    HUD = False
+
     # ====================== Variáveis de Jogo ======================
     CONTADOR = 0
     pontos_calibracao = np.zeros((4, 2), dtype=int)
@@ -58,7 +69,7 @@ class GameSettings:
     ANIMATION_SPEED = 0.01
 
     # ====================== Dificuldade ======================
-    GAME_DURATION = 30
+    # GAME_DURATION = 30
     TIME_PAST = 0
 
     TARGETS_SPAWN_TIME = 8
@@ -123,77 +134,35 @@ class GameSettings:
         (altura_tela_controle, largura_tela_controle, 3), np.uint8
     )
 
+    @classmethod
+    def setup(cls, args, player_config, default_config):
+        cls.CURRENT_LANG = args.lang
+        cls.PLAYER_ID = args.player_id
+        cls.PROFESSIONAL_ID = args.professional_id
 
-# ====================== Instância Global (para compatibilidade) ======================
-# Permite que o resto do código continue usando `settings.VARIAVEL` sem alterações
-# settings = Settings()
+        if not player_config or player_config.phase.id is None:
+            cls.PHASE = int(default_config["game_settings"]["phase_default"])
+        else:
+            cls.PHASE = player_config.phase.id
 
+        if not player_config or player_config.phase.id is None:
+            cls.LEVEL = int(default_config["game_settings"]["level_default"])
+        else:
+            cls.LEVEL = player_config.level.id
 
-# ====================== Funções Legacy (para máxima compatibilidade) ======================
-# Estas funções/variáveis mantêm o código antigo funcionando sem precisar mudar imports
+        if not player_config or player_config.level_time is None:
+            cls.LEVEL_TIME = int(
+                default_config["game_settings"]["level_time_default"]
+            )
+        else:
+            cls.LEVEL_TIME = player_config.level_time
 
-# WINDOW_NAME = Settings.WINDOW_NAME
-# GAME_TITLE = Settings.GAME_TITLE
-# CAMERA = Settings.CAMERA
-# CAMERA_FLIP = Settings.CAMERA_FLIP
-# SCREEN_WIDTH = Settings.SCREEN_WIDTH
-# SCREEN_HEIGHT = Settings.SCREEN_HEIGHT
-#
-# CONTADOR = Settings.CONTADOR
-# pontos_calibracao = Settings.pontos_calibracao
-# div0_pista = Settings.div0_pista
-# div1_pista = Settings.div1_pista
-# div2_pista = Settings.div2_pista
-# div3_pista = Settings.div3_pista
-# pista = Settings.pista
-# score = Settings.score
-# movimento = Settings.movimento
-# Alvo = Settings.Alvo
-# Alvo_c = Settings.Alvo_c
-# Alvo_d = Settings.Alvo_d
-# Obst = Settings.Obst
-# Obst_c = Settings.Obst_c
-# Obst_d = Settings.Obst_d
-#
-# FPS = Settings.FPS
-# DRAW_FPS = Settings.DRAW_FPS
-#
-# BUTTONS_SIZES = Settings.BUTTONS_SIZES
-# CAR_SIZE = Settings.CAR_SIZE
-# CAR_HITBOX_SIZE = Settings.CAR_HITBOX_SIZE
-# TARGETS_SIZES = Settings.TARGETS_SIZES
-# OBSTACLE_SIZES = Settings.OBSTACLE_SIZES
-# OBJ_POS = Settings.OBJ_POS
-#
-# DRAW_HITBOX = Settings.DRAW_HITBOX
-# ANIMATION_SPEED = Settings.ANIMATION_SPEED
-# GAME_DURATION = Settings.GAME_DURATION
-# TIME_PAST = Settings.TIME_PAST
-# TARGETS_SPAWN_TIME = Settings.TARGETS_SPAWN_TIME
-# TARGETS_MOVE_SPEED = Settings.TARGETS_MOVE_SPEED
-# OBSTACLE_PENALITY = Settings.OBSTACLE_PENALITY
-#
-# COLORS = Settings.COLORS
-# MUSIC_VOLUME = Settings.MUSIC_VOLUME
-# SOUNDS_VOLUME = Settings.SOUNDS_VOLUME
-# FONTS = Settings.FONTS
-# MENU = Settings.MENU
-#
-# azul = Settings.azul
-# verde = Settings.verde
-# vermelho = Settings.vermelho
-# amarelo = Settings.amarelo
-# branco = Settings.branco
-# preto = Settings.preto
-#
-# fonte = Settings.fonte
-# font = Settings.font
-#
-# largura_projetor = Settings.largura_projetor
-# altura_projetor = Settings.altura_projetor
-# largura_tela_controle = Settings.largura_tela_controle
-# altura_tela_controle = Settings.altura_tela_controle
-# relacao_largura = Settings.relacao_largura
-# relacao_altura = Settings.relacao_altura
-# tela_de_calibracao = Settings.tela_de_calibracao
-# tela_de_controle = Settings.tela_de_controle
+        if not player_config or player_config.sound is None:
+            cls.SOUND = default_config["interface_settings"]["sound_default"]
+        else:
+            cls.SOUND = player_config.sound
+
+        if not player_config or player_config.hud is None:
+            cls.HUD = default_config["interface_settings"]["hud_default"]
+        else:
+            cls.HUD = player_config.hud

@@ -1,3 +1,4 @@
+import os
 from typing import Optional
 
 from PySide6.QtCore import Qt
@@ -9,7 +10,7 @@ from udescjoinvilletteacontroller import PlayerGameLaunchController
 from udescjoinvilletteamodel import AppModel, Language
 from udescjoinvilletteaservice import PlayerGameLaunchService
 from udescjoinvilletteaui import Ui_PlayerGameLaunchView
-from udescjoinvilletteautil import MessageService, PathConfig
+from udescjoinvilletteautil import MessageService
 from udescjoinvilletteawindow import WindowConfig
 
 
@@ -75,7 +76,10 @@ class PlayerGameLaunchView(QDialog, Ui_PlayerGameLaunchView, WindowConfig):
 
             # Adiciona no combo e associa o dicionário completo ao item
             self.cbx_game.addItem(
-                QIcon(PathConfig.icon_ui_menu(g.get("icon", ""))),
+                # QIcon(PathConfig.icon_ui_menu(g.get("icon", ""))),
+                QIcon(
+                    os.path.join(g.get("folder_path", ""), g.get("icon", ""))
+                ),
                 nome_exibicao,
                 g,
             )

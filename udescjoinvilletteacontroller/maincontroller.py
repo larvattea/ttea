@@ -4,7 +4,6 @@ from typing import TYPE_CHECKING
 from PySide6.QtCore import QObject
 
 from udescjoinvilletteaservice import MainService
-from udescjoinvilletteautil import PathConfig
 
 if TYPE_CHECKING:
     from udescjoinvilletteamodel import AppModel
@@ -114,21 +113,3 @@ class MainController(QObject):
     def open_playergamelaunch(self) -> None:
         dialog = self.app_factory.create_playergamelauch_view(parent=self.view)
         dialog.exec()
-        """try:
-            if "KarTEA" in game_name:
-                from udescjoinvillettea.games.kartea.main import launch_kartea
-
-                launch_kartea(parent=self.view)
-            else:
-                self.view.update_status_message(
-                    self.tr("Jogo '{}' não implementado ainda.").format(
-                        game_name
-                    )
-                )
-        except Exception as e:
-            self.view.show_critical_error(
-                self.tr("Erro ao iniciar jogo"),
-                self.tr("{} não pôde ser iniciado:\n{}").format(
-                    game_name, str(e)
-                ),
-            )"""

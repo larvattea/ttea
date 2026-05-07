@@ -62,6 +62,13 @@ class PlayerGameLaunchController(QObject):
                 cwd=folder,
             )
             # self.view.accept()
+        else:
+            self.msg.critical(
+                self.tr(
+                    "Erro: Executável do jogo não encontrado em: {0}.\n"
+                    "Verifique se o arquivo existe e se os metadados de configuração estão corretos."
+                ).format(script_path)
+            )
 
     def update_tooltip(self, index):
         if index >= 0:

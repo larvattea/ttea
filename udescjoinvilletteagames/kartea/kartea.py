@@ -4,9 +4,6 @@ import sys
 import cv2
 import pygame
 
-# import arquivo
-# import settings
-# from settings import *
 from udescjoinvilletteagames.kartea.gamecontroller import GameController
 from udescjoinvilletteagames.kartea.gameutil import GameSettings
 from udescjoinvilletteagames.kartea.gameview import Menu
@@ -20,9 +17,9 @@ class KarTEA:
         """Inicializa o jogo, janela, objetos e variáveis de estado."""
         parser = argparse.ArgumentParser(description="KarTEA Exergame")
 
-        # Define os argumentos esperados
+        # 1. Parse de argumentos
         parser.add_argument(
-            "--lang", type=str, default="pt", help="Idioma do app"
+            "--lang", type=str, default="pt_BR", help="Idioma do app"
         )
         parser.add_argument(
             "--player_id", type=int, default=0, help="ID do Jogador"
@@ -33,13 +30,17 @@ class KarTEA:
 
         args = parser.parse_args()
 
-        # Agora você pode acessar os valores
-        self.current_lang = args.lang
-        self.player_id = args.player_id
-        self.professional_id = args.professional_id
-
+        # 2. Busca de dados
         self.service = PlayerKarteaConfigService()
+        self.player_config = self.service.find_config_by_player_id(
+            args.player_id
+        )
         self.default_config = self.service.get_kartea_ini_config()
+
+        # 3. DELEGAÇÃO: Passa tudo para o GameSettings
+        GameSettings.setup(args, self.player_config, self.default_config)
+
+        # 4. Inicialização do Pygame usando os valores que agora estão no GameSettings
         pygame.init()
         pygame.display.set_caption(GameSettings.WINDOW_NAME)
 
@@ -63,18 +64,6 @@ class KarTEA:
 
         # Variáveis de controle
         self.running = True
-
-        # TODO colocar no settings
-        self.phase = self.default_config["game_settings"]["phase_default"]
-        self.level = self.default_config["game_settings"]["level_default"]
-        self.level_time = self.default_config["game_settings"][
-            "level_time_default"
-        ]
-
-        # (Música comentada - mantida como no original)
-        # pygame.mixer.music.load("Assets/Kartea/Sounds/Komiku_-_12_-_Bicycle.mp3")
-        # pygame.mixer.music.set_volume(MUSIC_VOLUME)
-        # pygame.mixer.music.play(-1)
 
     def handle_events(self):
         """Gerencia todos os eventos do usuário."""
@@ -102,8 +91,8 @@ class KarTEA:
             self.state = "game"
 
         elif menu_result == "prev":
-            if self.level != 1:
-                self.level = self.level - 1
+            if GameSettings.LEVEL != 1:
+                GameSettings.LEVEL = GameSettings.LEVEL - 1
             self.game.reset()
             self.state = "game"
 
@@ -112,12 +101,12 @@ class KarTEA:
             self.state = "game"
 
         elif menu_result == "next":
-            if self.level != 6:
-                self.level = self.level + 1
+            if GameSettings.LEVEL != 6:
+                GameSettings.LEVEL = GameSettings.LEVEL + 1
             else:
-                if self.phase != 3:
-                    self.phase = self.phase + 1
-                    self.level = 1
+                if GameSettings.PHASE != 3:
+                    GameSettings.PHASE = GameSettings.PHASE + 1
+                    GameSettings.LEVEL = 1
             self.game.reset()
             self.state = "game"
 
