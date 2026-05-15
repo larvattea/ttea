@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import pygame
 
-# import arquivo
+from udescjoinvilletteagames.kartea.util import KarteaPathConfig
 
 
 class GameSettings:
@@ -27,8 +27,9 @@ class GameSettings:
     LEVEL = 1
     LEVEL_TIME = 120
 
-    SOUND = False
-    HUD = False
+    PALETTE = 0
+    SOUND = True
+    HUD = True
 
     # ====================== Variáveis de Jogo ======================
     CONTADOR = 0
@@ -93,6 +94,12 @@ class GameSettings:
     MUSIC_VOLUME = 0
     SOUNDS_VOLUME = 1
 
+    MISS_SOUND = ""
+    CRASH_SOUND = ""
+    POINT_SOUND = ""
+    WIN_SOUND = ""
+    CLOCK_TICK_SOUND = ""
+
     # ====================== Fontes ======================
     pygame.font.init()
     FONTS = {
@@ -101,8 +108,13 @@ class GameSettings:
         "big": pygame.font.Font(None, 50),
     }
 
-    # ====================== Estado do Menu ======================
+    # ====================== Config e Estado do Menu ======================
     MENU = "Inicial"
+    MENU_BACKGROUND = ""
+    MENU_CLICK_SOUND = ""
+    MENU_FEEDBACK_25 = ""
+    MENU_FEEDBACK_50 = ""
+    MENU_FEEDBACK_75 = ""
 
     # ====================== Cores para OpenCV ======================
     azul = (0, 0, 255)
@@ -114,6 +126,21 @@ class GameSettings:
 
     fonte = cv2.FONT_HERSHEY_SIMPLEX
     font = pygame.font.SysFont(None, 25)
+
+    # ====================== Resources ======================
+    ENVIRONMENT_IMAGE = ""
+    ENVIRONMENT_IMAGE_OTHER_SIDE = ""
+    FINISH_IMAGE = ""
+    HORIZON_BG_IMAGE = ""
+    NEGATIVE_FEEDBACK_SOUND = ""
+    NEGATIVE_FEEDBACK_IMAGE = ""
+    NEUTRAL_FEEDBACK_IMAGE = ""
+    NEUTRAL_FEEDBACK_SOUND = ""
+    OBSTACLE_IMAGE = ""
+    POSITIVE_FEEDBACK_IMAGE = ""
+    POSITIVE_FEEDBACK_SOUND = ""
+    TARGET_IMAGE = ""
+    VEHICLE_IMAGE = ""
 
     # ====================== Configurações de Hardware ======================
     # Tamanhos das telas
@@ -140,6 +167,7 @@ class GameSettings:
         cls.PLAYER_ID = args.player_id
         cls.PROFESSIONAL_ID = args.professional_id
 
+        # ====================== Game Settings ======================
         if not player_config or player_config.phase.id is None:
             cls.PHASE = int(default_config["game_settings"]["phase_default"])
         else:
@@ -157,12 +185,133 @@ class GameSettings:
         else:
             cls.LEVEL_TIME = player_config.level_time
 
+        # ====================== Visual Resources ======================
+        if not player_config or player_config.car_image is None:
+            cls.VEHICLE_IMAGE = default_config["visual_resources"][
+                "vehicle_image_default"
+            ]
+        else:
+            cls.VEHICLE_IMAGE = player_config.car_image
+
+        if not player_config or player_config.environment_image is None:
+            cls.ENVIRONMENT_IMAGE = default_config["visual_resources"][
+                "environment_image_default"
+            ]
+        else:
+            cls.ENVIRONMENT_IMAGE = player_config.environment_image
+
+        cls.ENVIRONMENT_IMAGE_OTHER_SIDE = KarteaPathConfig.kartea_image(
+            "variant1environment"
+        )
+
+        if not player_config or player_config.obstacle_image is None:
+            cls.OBSTACLE_IMAGE = default_config["visual_resources"][
+                "obstacle_image_default"
+            ]
+        else:
+            cls.OBSTACLE_IMAGE = player_config.obstacle_image
+
+        if not player_config or player_config.target_image is None:
+            cls.TARGET_IMAGE = default_config["visual_resources"][
+                "target_image_default"
+            ]
+        else:
+            cls.TARGET_IMAGE = player_config.target_image
+
+        # ====================== Visual Feedback ======================
+        if not player_config or player_config.positive_feedback_image is None:
+            cls.POSITIVE_FEEDBACK_IMAGE = default_config["visual_feedback"][
+                "positive_feedback_image_default"
+            ]
+        else:
+            cls.POSITIVE_FEEDBACK_IMAGE = player_config.positive_feedback_image
+
+        if (
+            not player_config
+            or player_config.neutral_feedback_image_default is None
+        ):
+            cls.NEUTRAL_FEEDBACK_IMAGE = default_config["visual_feedback"][
+                "neutral_feedback_image_default"
+            ]
+        else:
+            cls.NEUTRAL_FEEDBACK_IMAGE = (
+                player_config.neutral_feedback_image_default
+            )
+
+        if (
+            not player_config
+            or player_config.negative_feedback_image_default is None
+        ):
+            cls.NEGATIVE_FEEDBACK_IMAGE = default_config["visual_feedback"][
+                "negative_feedback_image_default"
+            ]
+        else:
+            cls.NEGATIVE_FEEDBACK_IMAGE = (
+                player_config.negative_feedback_image_default
+            )
+
+        # ====================== Sound Feedback =========================
+        if not player_config or player_config.positive_feedback_sound is None:
+            cls.POSITIVE_FEEDBACK_SOUND = default_config["sound_feedback"][
+                "positive_feedback_sound_default"
+            ]
+        else:
+            cls.POSITIVE_FEEDBACK_SOUND = player_config.positive_feedback_sound
+
+        if not player_config or player_config.neutral_feedback_sound is None:
+            cls.NEUTRAL_FEEDBACK_SOUND = default_config["sound_feedback"][
+                "neutral_feedback_sound_default"
+            ]
+        else:
+            cls.NEUTRAL_FEEDBACK_SOUND = player_config.neutral_feedback_sound
+
+        if not player_config or player_config.negative_feedback_sound is None:
+            cls.NEGATIVE_FEEDBACK_SOUND = default_config["sound_feedback"][
+                "negative_feedback_sound_default"
+            ]
+        else:
+            cls.NEGATIVE_FEEDBACK_SOUND = player_config.negative_feedback_sound
+
+        # ====================== Interface Settings ======================
+        if not player_config or player_config.hud is None:
+            cls.HUD = default_config["interface_settings"]["hud_default"]
+        else:
+            cls.HUD = player_config.hud
+
+        if not player_config or player_config.palette is None:
+            cls.PALETTE = default_config["interface_settings"][
+                "palette_default"
+            ]
+        else:
+            cls.PALETTE = player_config.palette
+
         if not player_config or player_config.sound is None:
             cls.SOUND = default_config["interface_settings"]["sound_default"]
         else:
             cls.SOUND = player_config.sound
 
-        if not player_config or player_config.hud is None:
-            cls.HUD = default_config["interface_settings"]["hud_default"]
-        else:
-            cls.HUD = player_config.hud
+        # ====================== Config e Estado do Menu ======================
+        cls.MENU_BACKGROUND = KarteaPathConfig.kartea_image("menu")
+        cls.MENU_CLICK_SOUND = KarteaPathConfig.game_sound("point.wav")
+        cls.MENU_FEEDBACK_25 = KarteaPathConfig.kartea_image("trophy25")
+        cls.MENU_FEEDBACK_50 = KarteaPathConfig.kartea_image("trophy50")
+        cls.MENU_FEEDBACK_75 = KarteaPathConfig.kartea_image("trophy75")
+
+        # ====================== Som e Música ======================
+        cls.MISS_SOUND = KarteaPathConfig.game_sound("miss.wav")
+        cls.CRASH_SOUND = KarteaPathConfig.game_sound("crash.wav")
+        cls.POINT_SOUND = KarteaPathConfig.game_sound("point.wav")
+        cls.WIN_SOUND = KarteaPathConfig.game_sound("win.wav")
+        cls.CLOCK_TICK_SOUND = KarteaPathConfig.game_sound("clocktick.wav")
+
+        # ====================== Resources ===================================
+        cls.FINISH_IMAGE = KarteaPathConfig.kartea_image("finish")
+        cls.HORIZON_BG_IMAGE = KarteaPathConfig.kartea_image("horizon")
+
+    @classmethod
+    def session_data():
+        pass
+
+    @classmethod
+    def session_detail_data():
+        pass

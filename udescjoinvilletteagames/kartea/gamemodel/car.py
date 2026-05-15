@@ -2,7 +2,6 @@ import pygame
 
 # import arquivo
 from udescjoinvilletteagames.kartea.gameutil import GameSettings
-from udescjoinvilletteagames.kartea.service import PlayerKarteaConfigService
 
 
 class Car:
@@ -13,21 +12,15 @@ class Car:
         # Carrega a imagem principal do carro
         from udescjoinvilletteagames.kartea.gamemodel import Image
 
-        self.service = PlayerKarteaConfigService()
-        self.default_config = self.service.get_kartea_ini_config()
-
-        image_path = self.default_config["visual_resources"][
-            "vehicle_image_default"
-        ]
         self.orig_image = Image.load(
             # "Assets/Kartea/Carro.png",
-            image_path,
+            GameSettings.VEHICLE_IMAGE,
             size=(GameSettings.CAR_SIZE, GameSettings.CAR_SIZE),
         )
         self.image = self.orig_image.copy()
         self.image_smaller = Image.load(
             # "Assets/Kartea/Carro.png",
-            image_path,
+            GameSettings.VEHICLE_IMAGE,
             size=(GameSettings.CAR_SIZE, GameSettings.CAR_SIZE),
         )
 

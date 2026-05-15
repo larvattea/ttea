@@ -1,3 +1,5 @@
+"""classe alvo"""
+
 import random
 import time
 
@@ -5,9 +7,6 @@ import pygame
 
 from udescjoinvilletteagames.kartea.gamemodel import Image
 from udescjoinvilletteagames.kartea.gameutil import GameSettings
-
-# import settings
-# from settings import *
 
 
 class Target:
@@ -18,7 +17,8 @@ class Target:
         Inicializa um alvo.
 
         Args:
-            r (int, optional): Índice da pista (0, 1 ou 2). Se None, escolhe aleatoriamente.
+            r (int, optional): Índice da pista (0, 1 ou 2). Se None,
+            escolhe aleatoriamente.
         """
         # Tamanho do alvo
         size = GameSettings.TARGETS_SIZES
@@ -29,7 +29,8 @@ class Target:
         # Configurações visuais e de posição
         self.tam = size
         self.rect = pygame.Rect(start_pos[0], start_pos[1], size[0], size[1])
-        self.images = [Image.load("Assets/Kartea/Star.png", size=size)]
+        # self.images = [Image.load("Assets/Kartea/Star.png", size=size)]
+        self.images = [Image.load(GameSettings.TARGET_IMAGE, size=size)]
         self.current_frame = 0
         self.current_pos = start_pos
         self.current_road = road
@@ -56,7 +57,8 @@ class Target:
 
     def define_pos(self, x: float, y: float):
         """
-        Atualiza a posição do retângulo do alvo com base nas coordenadas projetadas.
+        Atualiza a posição do retângulo do alvo com base
+        nas coordenadas projetadas.
         """
         # Mantém o tamanho atual do rect
         self.rect = pygame.Rect(x, y, self.rect.width, self.rect.height)
@@ -79,7 +81,8 @@ class Target:
                 self.rect.inflate_ip(3, 3)
                 self.tam = (int(self.tam[0] + 3), int(self.tam[1] + 3))
                 self.images = [
-                    Image.load("Assets/Kartea/Star.png", size=self.tam)
+                    # Image.load("Assets/Kartea/Star.png", size=self.tam)
+                    Image.load(GameSettings.TARGET_IMAGE, size=self.tam)
                 ]
                 if self.current_road == 0:
                     vel = [-3, ve]
@@ -98,7 +101,8 @@ class Target:
                 self.rect.inflate_ip(3, 3)
                 self.tam = (int(self.tam[0] + 3), int(self.tam[1] + 3))
                 self.images = [
-                    Image.load("Assets/Kartea/Star.png", size=self.tam)
+                    # Image.load("Assets/Kartea/Star.png", size=self.tam)
+                    Image.load(GameSettings.TARGET_IMAGE, size=self.tam)
                 ]
                 if self.current_road == 0:
                     vel = [-2, ve]
@@ -117,7 +121,8 @@ class Target:
                 self.rect.inflate_ip(3, 3)
                 self.tam = (int(self.tam[0] + 3), int(self.tam[1] + 3))
                 self.images = [
-                    Image.load("Assets/Kartea/Star.png", size=self.tam)
+                    # Image.load("Assets/Kartea/Star.png", size=self.tam)
+                    Image.load(GameSettings.TARGET_IMAGE, size=self.tam)
                 ]
                 if self.current_road == 0:
                     vel = [-1, ve]
@@ -136,7 +141,8 @@ class Target:
                 self.rect.inflate_ip(3, 3)
                 self.tam = (int(self.tam[0] + 3), int(self.tam[1] + 3))
                 self.images = [
-                    Image.load("Assets/Kartea/Star.png", size=self.tam)
+                    # Image.load("Assets/Kartea/Star.png", size=self.tam)
+                    Image.load(GameSettings.TARGET_IMAGE, size=self.tam)
                 ]
                 if self.current_road == 0:
                     vel = [-1, ve]
@@ -155,7 +161,8 @@ class Target:
                 self.rect.inflate_ip(3, 3)
                 self.tam = (int(self.tam[0] + 3), int(self.tam[1] + 3))
                 self.images = [
-                    Image.load("Assets/Kartea/Star.png", size=self.tam)
+                    # Image.load("Assets/Kartea/Star.png", size=self.tam)
+                    Image.load(GameSettings.TARGET_IMAGE, size=self.tam)
                 ]
                 if self.current_road == 0:
                     vel = [-3, ve]
@@ -219,38 +226,42 @@ class Target:
             10 se o jogador colidiu com o alvo (acerto)
             0 se o alvo saiu da tela por baixo (desvio)
         """
-        triste_fig = Image.load("Assets/Kartea/triste.png")
-        feliz_fig = Image.load("Assets/Kartea/feliz.png")
+        # triste_fig = image.load('Assets/Kartea/triste.png')
+        # feliz_fig = image.load('Assets/Kartea/feliz.png')
+        negative_fig = Image.load(GameSettings.NEGATIVE_FEEDBACK_IMAGE)
+        positive_fig = Image.load(GameSettings.POSITIVE_FEEDBACK_IMAGE)
 
         if self.current_pos[1] > GameSettings.SCREEN_HEIGHT:
             # Desviou do alvo (não acertou)
             targets.remove(self)
             sounds["screaming"].play()
-            Image.draw(surface, triste_fig, (0, 0))
-            arquivo.grava_Detalhado(
-                arquivo.get_Player(),
-                arquivo.get_Sessao(),
-                arquivo.get_Fase(),
-                arquivo.get_Nivel(),
-                settings.pista,
-                self.current_road,
-                "Desviou de Alvo",
-            )
-            settings.Alvo_d += 1
+            Image.draw(surface, negative_fig, (0, 0))
+            # TODO gravar aqui os dados
+            # arquivo.grava_Detalhado(
+            #    arquivo.get_Player(),
+            #    arquivo.get_Sessao(),
+            #    arquivo.get_Fase(),
+            #    arquivo.get_Nivel(),
+            #    settings.pista,
+            #    self.current_road,
+            #    "Desviou de Alvo",
+            # )
+            GameSettings.Alvo_d += 1
             return 0
         else:
             # Colidiu com o alvo (acerto)
             targets.remove(self)
             sounds["slap"].play()
-            Image.draw(surface, feliz_fig, (0, 0))
-            arquivo.grava_Detalhado(
-                arquivo.get_Player(),
-                arquivo.get_Sessao(),
-                arquivo.get_Fase(),
-                arquivo.get_Nivel(),
-                settings.pista,
-                self.current_road,
-                "Colidiu com Alvo",
-            )
-            settings.Alvo_c += 1
+            Image.draw(surface, positive_fig, (0, 0))
+            # TODO gravar aqui os dados
+            # arquivo.grava_Detalhado(
+            #    arquivo.get_Player(),
+            #    arquivo.get_Sessao(),
+            #    arquivo.get_Fase(),
+            #    arquivo.get_Nivel(),
+            #    settings.pista,
+            #    self.current_road,
+            #    "Colidiu com Alvo",
+            # )
+            GameSettings.Alvo_c += 1
             return 10

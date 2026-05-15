@@ -5,6 +5,7 @@ import pygame
 from udescjoinvilletteagames.kartea.gamemodel import Background, Image
 from udescjoinvilletteagames.kartea.gameui import UI
 from udescjoinvilletteagames.kartea.gameutil import GameSettings
+from udescjoinvilletteagames.kartea.util import KarteaPathConfig
 
 # import settings
 # from settings import *
@@ -23,13 +24,20 @@ class Menu:
 
         # Som de clique (usado em todos os botões)
 
-        self.click_sound = pygame.mixer.Sound("Assets/Kartea/Sounds/point.wav")
+        # self.click_sound = pygame.mixer.Sound("Assets/Kartea/Sounds/point.wav")
+        self.click_sound = pygame.mixer.Sound(
+            # KarteaPathConfig.game_sound("point.wav")
+            GameSettings.MENU_CLICK_SOUND
+        )
 
     def draw(self):
         """Desenha o fundo básico do menu."""
         self.background.draw(self.surface)
         fundo = Image.load(
-            "Assets/Kartea/Fundo.png",
+            # KarteaPathConfig.kartea_image(":bottom"),
+            # KarteaPathConfig.game_image("fundo.png"),
+            # "Assets/Kartea/Fundo.png",
+            GameSettings.MENU_BACKGROUND,
             size=(GameSettings.SCREEN_WIDTH, GameSettings.SCREEN_HEIGHT),
         )
         Image.draw(self.surface, fundo, (0, 0))
@@ -302,17 +310,18 @@ class Menu:
     def _handle_feedback_menu(self, feedback_type: str):
         """Gerencia as telas de feedback (Feedback_1, Feedback_2, Feedback_3)."""
         if feedback_type == "Feedback_1":
-            trofeu = Image.load("Assets/Kartea/trofeu - 25.png")
+            # trofeu = Image.load("Assets/Kartea/trofeu - 25.png")
+            trofeu = Image.load(GameSettings.MENU_FEEDBACK_25)
             Image.draw(self.surface, trofeu, (0, 0))
             action_on_play = "prev"
-
         elif feedback_type == "Feedback_2":
-            trofeu = Image.load("Assets/Kartea/trofeu - 50.png")
+            # trofeu = Image.load("Assets/Kartea/trofeu - 50.png")
+            trofeu = Image.load(GameSettings.MENU_FEEDBACK_50)
             Image.draw(self.surface, trofeu, (0, 0))
             action_on_play = "rest"
-
         elif feedback_type == "Feedback_3":
-            trofeu = Image.load("Assets/Kartea/trofeu - 75.png")
+            # trofeu = Image.load("Assets/Kartea/trofeu - 75.png")
+            trofeu = Image.load(GameSettings.MENU_FEEDBACK_75)
             Image.draw(self.surface, trofeu, (0, 0))
             action_on_play = "next"
         else:

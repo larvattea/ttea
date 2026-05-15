@@ -1,7 +1,6 @@
 import random
 import time
 
-# import arquivo
 import cv2
 import pygame
 
@@ -9,15 +8,12 @@ from udescjoinvilletteagames.kartea.gamecore import Camera, PoseTracking
 from udescjoinvilletteagames.kartea.gamemodel import (
     Background,
     Car,
+    Image,
     Obstacle,
     Target,
 )
 from udescjoinvilletteagames.kartea.gameui import UI
 from udescjoinvilletteagames.kartea.gameutil import GameSettings
-from udescjoinvilletteagames.kartea.util import KarteaPathConfig
-
-# import settings
-# from settings import *
 
 
 class GameController:
@@ -77,13 +73,9 @@ class GameController:
         #    "Assets/Kartea/Sounds/point.wav"
         # )
 
-        self.sounds["slap"] = pygame.mixer.Sound(
-            KarteaPathConfig.game_sound("point.wav")
-        )
+        self.sounds["slap"] = pygame.mixer.Sound(GameSettings.POINT_SOUND)
 
-        self.sounds["screaming"] = pygame.mixer.Sound(
-            KarteaPathConfig.game_sound("miss.wav")
-        )
+        self.sounds["screaming"] = pygame.mixer.Sound(GameSettings.MISS_SOUND)
 
         # volume = 1 if arquivo.get_K_SOM(self.config_player) else 0
         volume = 1 if self.SOM else 0
@@ -240,10 +232,13 @@ class GameController:
 
     def spawn_finish(self):
         """Coloca a linha de chegada no fundo."""
+
         pos = self.background.get_startPos()
-        self.background.lines[pos].sprite = pygame.image.load(
-            "Assets/Kartea/Finish.png"
-        ).convert_alpha()
+        # "Assets/Kartea/Finish.png"
+        self.background.lines[pos].sprite = Image.load(
+            GameSettings.FINISH_IMAGE
+        )
+
         self.background.lines[pos].spriteX = -0.5
 
     def load_camera(self):

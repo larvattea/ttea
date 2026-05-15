@@ -76,18 +76,30 @@ class UI:
         # Define a posição horizontal do botão
         if pos_x == 1:  # esquerda
             rect = pygame.Rect(
-                (SCREEN_WIDTH // 4 - BUTTONS_SIZES[0] // 2, pos_y),
-                BUTTONS_SIZES,
+                (
+                    GameSettings.SCREEN_WIDTH // 4
+                    - GameSettings.BUTTONS_SIZES[0] // 2,
+                    pos_y,
+                ),
+                GameSettings.BUTTONS_SIZES,
             )
         elif pos_x == 2:  # direita
             rect = pygame.Rect(
-                (3 * SCREEN_WIDTH // 4 - BUTTONS_SIZES[0] // 2, pos_y),
-                BUTTONS_SIZES,
+                (
+                    3 * GameSettings.SCREEN_WIDTH // 4
+                    - GameSettings.BUTTONS_SIZES[0] // 2,
+                    pos_y,
+                ),
+                GameSettings.BUTTONS_SIZES,
             )
         else:  # centro (padrão)
             rect = pygame.Rect(
-                (SCREEN_WIDTH // 2 - BUTTONS_SIZES[0] // 2, pos_y),
-                BUTTONS_SIZES,
+                (
+                    GameSettings.SCREEN_WIDTH // 2
+                    - GameSettings.BUTTONS_SIZES[0] // 2,
+                    pos_y,
+                ),
+                GameSettings.BUTTONS_SIZES,
             )
 
         # Verifica se o mouse está sobre o botão
@@ -95,15 +107,15 @@ class UI:
 
         # Define a cor do botão
         color = (
-            COLORS["buttons"]["second"]
+            GameSettings.COLORS["buttons"]["second"]
             if on_button
-            else COLORS["buttons"]["default"]
+            else GameSettings.COLORS["buttons"]["default"]
         )
 
         # Desenha sombra do botão
         pygame.draw.rect(
             surface,
-            COLORS["buttons"]["shadow"],
+            GameSettings.COLORS["buttons"]["shadow"],
             (rect.x - 6, rect.y - 6, rect.w, rect.h),
         )
 
@@ -116,10 +128,10 @@ class UI:
                 surface,
                 text,
                 rect.center,
-                COLORS["buttons"]["text"],
+                GameSettings.COLORS["buttons"]["text"],
                 pos_mode="center",
                 shadow=True,
-                shadow_color=COLORS["buttons"]["shadow"],
+                shadow_color=GameSettings.COLORS["buttons"]["shadow"],
             )
 
         # Verifica clique do mouse

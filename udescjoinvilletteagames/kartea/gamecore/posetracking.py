@@ -114,10 +114,14 @@ class PoseTracking:
         # TODO pontos de calibração devem ser configuráveis (atualmente fixos no settings)
         pts1 = np.float32(
             [
-                pontos_calibracao[0],
-                pontos_calibracao[1],
-                pontos_calibracao[2],
-                pontos_calibracao[3],
+                GameSettings.pontos_calibracao[0],
+                GameSettings.pontos_calibracao[1],
+                GameSettings.pontos_calibracao[2],
+                GameSettings.pontos_calibracao[3],
+                # pontos_calibracao[0],
+                # pontos_calibracao[1],
+                # pontos_calibracao[2],
+                # pontos_calibracao[3],
             ]
         )
         pts2 = np.float32(

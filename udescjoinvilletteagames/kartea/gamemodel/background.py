@@ -5,25 +5,9 @@ import pygame
 
 from udescjoinvilletteagames.kartea.gametheme import KarTEATheme
 from udescjoinvilletteagames.kartea.gameutil import GameSettings
-from udescjoinvilletteagames.kartea.service import PlayerKarteaConfigService
-from udescjoinvilletteagames.kartea.util import KarteaPathConfig
 
 if TYPE_CHECKING:
     from udescjoinvilletteagames.kartea.gamemodel import Line
-
-# Constantes de cores (mantidas globais como no original)
-# roadW = 400  # Tamanho da pista
-# segL = 200  # Tamanho do segmento
-# camD = 3  # Camera depth
-
-# dark_grass = pygame.Color(0, 154, 0)
-# light_grass = pygame.Color(16, 200, 16)
-# dark_rumble = pygame.Color(255, 0, 0)
-# light_rumble = pygame.Color(255, 255, 255)
-# dark_road = pygame.Color(75, 75, 75)
-# light_road = pygame.Color(107, 107, 107)
-# finish_light = pygame.Color(255, 255, 255)
-# finish_dark = pygame.Color(0, 0, 0)
 
 
 class Background:
@@ -34,20 +18,12 @@ class Background:
         from udescjoinvilletteagames.kartea.gamemodel import Image
 
         self.theme = KarTEATheme()
-        self.service = PlayerKarteaConfigService()
-        self.default_config = self.service.get_kartea_ini_config()
         self.clock = pygame.time.Clock()
         self.last_time = time.time()
         self.time_left = time.time()
         self.dt = 0
 
-        # Sprites laterais
-        img_name = self.default_config["visual_resources"][
-            "environment_image_default"
-        ]
-        self.sprite_arv_esq = Image.load(img_name)
-        self.sprite_arv_dir = self.sprite_arv_esq.copy()
-
+        # TODO precisa da árvore do lado direito no cadastro
         # self.sprite_arv_esq = pygame.image.load(
         #    "Assets/Kartea/5.png"
         # ).convert_alpha()
@@ -55,11 +31,17 @@ class Background:
         #    "Assets/Kartea/5,1.png"
         # ).convert_alpha()
 
+        self.sprite_arv_esq = Image.load(GameSettings.ENVIRONMENT_IMAGE)
+
+        self.sprite_arv_dir = Image.load(
+            GameSettings.ENVIRONMENT_IMAGE_OTHER_SIDE
+        )
+
         # Background image (usado no menu e no jogo)
-        self.background_image = pygame.image.load(
-            # "Assets/Kartea/bg.png"
-            KarteaPathConfig.game_image("horizon.png")
-        ).convert_alpha()
+        # "Assets/Kartea/bg.png"
+        # GameSettings.background_image
+        self.background_image = Image.load(GameSettings.HORIZON_BG_IMAGE)
+
         self.background_surface = pygame.Surface(
             (
                 self.background_image.get_width() * 2,
@@ -153,7 +135,9 @@ class Background:
         from udescjoinvilletteagames.kartea.gamemodel import Image
 
         self.menu_image = Image.load(
-            "Assets/Kartea/Background_Menu.png",
+            # "Assets/Kartea/Background_Menu.png",
+            # KarteaPathConfig.game_image("background_menu.png"),
+            GameSettings.MENU_BACKGROUND,
             size=(GameSettings.SCREEN_WIDTH, GameSettings.SCREEN_HEIGHT),
             convert="default",
         )
