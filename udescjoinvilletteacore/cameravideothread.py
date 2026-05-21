@@ -50,7 +50,7 @@ class CameraVideoThread(QThread, QObject):
         if self.service.is_windows():
             cap = cv2.VideoCapture(self.camera_index, cv2.CAP_MSMF)
         else:
-            cap = cv2.VideoCapture(self.camera_index, cv2.CAP_DSHOW)
+            cap = cv2.VideoCapture(self.camera_index, cv2.CAP_V4L2)
 
         if not cap.isOpened():
             self.error_signal.emit(
