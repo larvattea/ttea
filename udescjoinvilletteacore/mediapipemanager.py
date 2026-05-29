@@ -13,8 +13,8 @@ class MediaPipeManager:
         self.is_windows = self.service.is_windows()
 
         # 2. Definição de Caminhos
-        path_full = PathConfig.model_path("pose_landmarker_full.task")
-        path_heavy = PathConfig.model_path("pose_landmarker_heavy.task")
+        path_full = PathConfig.model("pose_landmarker_full.task")
+        path_heavy = PathConfig.model("pose_landmarker_heavy.task")
         # path_full = PathConfig.model_path("pose_landmarker_lite.task")
         # path_heavy = PathConfig.model_path("pose_landmarker_lite.task")
 

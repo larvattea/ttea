@@ -42,6 +42,15 @@ class CalibrationController(QObject):
             self.thread.stop()
         self.view.reject()
 
+    def handle_calibrate_auto(self) -> None:
+        self.view.msg.info(self.tr("Em construção!"))
+
+    def handle_calibrate_semi(self) -> None:
+        self.view.msg.info(self.tr("Em construção!"))
+
+    def handle_calibrate_manual(self) -> None:
+        self.view.msg.info(self.tr("Em construção!"))
+
     def _initialize_view(self):
         self.list_proportions()
         self.list_monitors()
@@ -164,8 +173,8 @@ class CalibrationController(QObject):
         )
 
         # 2. Resolução e FPS da Câmera
-        formatos = camera_device.videoFormats()
-        melhor_formato = formatos[0] if formatos else None
+        formats = camera_device.videoFormats()
+        best_format = formats[0] if formats else None
 
         # 3. Cálculo da Área de Projeção (Math)
         # Extrai os números da string "16:9" por exemplo -> (16, 9)
@@ -184,16 +193,16 @@ class CalibrationController(QObject):
             "camera_id": camera_device.id().data().decode(),
             "camera_position": camera_idx,
             "camera_width": (
-                melhor_formato.resolution().width() if melhor_formato else 0
+                best_format.resolution().width() if best_format else 0
             ),
             "camera_height": (
-                melhor_formato.resolution().height() if melhor_formato else 0
+                best_format.resolution().height() if best_format else 0
             ),
             "camera_max_fps": (
-                int(melhor_formato.maxFrameRate()) if melhor_formato else 0
+                int(best_format.maxFrameRate()) if best_format else 0
             ),
             "camera_min_fps": (
-                int(melhor_formato.minFrameRate()) if melhor_formato else 0
+                int(best_format.minFrameRate()) if best_format else 0
             ),
             "screen_manufacturer": screen.manufacturer(),
             "screen_model": screen.model(),
