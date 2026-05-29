@@ -1,0 +1,19 @@
+{
+    "game": "KarTEA",
+    "exec": "kartea.py",
+    "icon": "resources/icons/kartea4.ico",
+    "language":{
+        "pt_BR": {
+            "name": "KarTEA: Jogo de Corrida",
+            "description": "Um jogo para auxiliar no desenvolvimento do processamento sensorial"
+        },
+        "es_ES": {
+            "name": "KarTEA: Juego de Carreras",
+            "description": "Un juego para ayudar en el desarrollo del procesamiento sensorial"
+        },
+        "en_US":{
+             "name": "KarTEA: Racing Game",
+             "description": "A game to aid in the development of sensory processing"
+        }
+    }
+}
