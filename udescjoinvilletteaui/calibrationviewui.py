@@ -26,7 +26,7 @@ class Ui_CalibrationView(object):
     def setupUi(self, CalibrationView):
         if not CalibrationView.objectName():
             CalibrationView.setObjectName(u"CalibrationView")
-        CalibrationView.resize(720, 644)
+        CalibrationView.resize(796, 806)
         icon = QIcon()
         icon.addFile(u":/icons/system/appicon", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         CalibrationView.setWindowIcon(icon)
@@ -107,6 +107,33 @@ class Ui_CalibrationView(object):
 
         self.verticalLayout.addWidget(self.pb_camera)
 
+        self.lay_calibration_buttons = QHBoxLayout()
+        self.lay_calibration_buttons.setSpacing(8)
+        self.lay_calibration_buttons.setObjectName(u"lay_calibration_buttons")
+        self.pb_calibrate_auto = QPushButton(CalibrationView)
+        self.pb_calibrate_auto.setObjectName(u"pb_calibrate_auto")
+        self.pb_calibrate_auto.setMinimumSize(QSize(0, 38))
+        self.pb_calibrate_auto.setFont(font1)
+
+        self.lay_calibration_buttons.addWidget(self.pb_calibrate_auto)
+
+        self.pb_calibrate_semi = QPushButton(CalibrationView)
+        self.pb_calibrate_semi.setObjectName(u"pb_calibrate_semi")
+        self.pb_calibrate_semi.setMinimumSize(QSize(0, 38))
+        self.pb_calibrate_semi.setFont(font1)
+
+        self.lay_calibration_buttons.addWidget(self.pb_calibrate_semi)
+
+        self.pb_calibrate_manual = QPushButton(CalibrationView)
+        self.pb_calibrate_manual.setObjectName(u"pb_calibrate_manual")
+        self.pb_calibrate_manual.setMinimumSize(QSize(0, 38))
+        self.pb_calibrate_manual.setFont(font1)
+
+        self.lay_calibration_buttons.addWidget(self.pb_calibrate_manual)
+
+
+        self.verticalLayout.addLayout(self.lay_calibration_buttons)
+
         self.lay_button = QHBoxLayout()
         self.lay_button.setObjectName(u"lay_button")
         self.hs_button = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
@@ -153,6 +180,9 @@ class Ui_CalibrationView(object):
         self.lbl_camera.setText(QCoreApplication.translate("CalibrationView", u"C\u00e2mera:", None))
         self.lbl_video.setText(QCoreApplication.translate("CalibrationView", u"V\u00eddeo aparecer\u00e1 aqui", None))
         self.pb_camera.setText(QCoreApplication.translate("CalibrationView", u"Iniciar C\u00e2mera", None))
+        self.pb_calibrate_auto.setText(QCoreApplication.translate("CalibrationView", u"Calibra\u00e7\u00e3o Autom\u00e1tica", None))
+        self.pb_calibrate_semi.setText(QCoreApplication.translate("CalibrationView", u"Calibra\u00e7\u00e3o Semi-Autom\u00e1tica", None))
+        self.pb_calibrate_manual.setText(QCoreApplication.translate("CalibrationView", u"Calibra\u00e7\u00e3o Manual", None))
 #if QT_CONFIG(tooltip)
         self.pb_ok.setToolTip(QCoreApplication.translate("CalibrationView", u"Gravar opera\u00e7\u00e3o corrente", None))
 #endif // QT_CONFIG(tooltip)

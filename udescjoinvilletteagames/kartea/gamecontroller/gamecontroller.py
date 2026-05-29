@@ -5,13 +5,8 @@ import cv2
 import pygame
 
 from udescjoinvilletteagames.kartea.gamecore import Camera, PoseTracking
-from udescjoinvilletteagames.kartea.gamemodel import (
-    Background,
-    Car,
-    Image,
-    Obstacle,
-    Target,
-)
+from udescjoinvilletteagames.kartea.gamemodel import (Background, Car, Image,
+                                                      Obstacle, Target)
 from udescjoinvilletteagames.kartea.gameui import UI
 from udescjoinvilletteagames.kartea.gameutil import GameSettings
 
@@ -27,13 +22,6 @@ class GameController:
         self.pose_tracking = PoseTracking()
         self.car = Car()
         self.cap = Camera()
-
-        # Configuração do jogador
-        # TODO fazer um alerta antes de iniciar o jogo
-        # caso o arquivo de configuração do jogador não exista
-        # self.config_player = (
-        #    f"Jogadores/{arquivo.get_Player()}_KarTEA_config.csv"
-        # )
 
         # Configurações baseadas no nível
         self._setup_level_settings()
@@ -506,10 +494,10 @@ class GameController:
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    print("Space game.py")
+                    # print("Space game.py")
                     if self.background.speed == 0:
                         self.PAUSE = False
-                        print("Unpause")
+                        # print("Unpause")
                         # TODO gravar sessão detalhado
                         # arquivo.grava_Detalhado(
                         #    arquivo.get_Player(),
@@ -522,7 +510,7 @@ class GameController:
                         # )
                     else:
                         self.PAUSE = True
-                        print("Pause")
+                        # print("Pause")
                         # TODO gravar sessão detalhado
                         # arquivo.grava_Detalhado(
                         #    arquivo.get_Player(),

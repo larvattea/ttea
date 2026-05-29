@@ -1,8 +1,16 @@
+from typing import TYPE_CHECKING, Dict
+
 import cv2
 import numpy as np
 import pygame
 
+from udescjoinvilletteagames.kartea.model import PlayerKarteaSession
 from udescjoinvilletteagames.kartea.util import KarteaPathConfig
+
+if TYPE_CHECKING:
+    from udescjoinvilletteagames.kartea.model import PlayerKarteaConfig
+    from udescjoinvilletteagames.kartea.service import \
+        PlayerKarteaConfigService
 
 
 class GameSettings:
@@ -30,6 +38,8 @@ class GameSettings:
     PALETTE = 0
     SOUND = True
     HUD = True
+
+    PLAYER_KARTEA_SERVICE = None
 
     # ====================== Variáveis de Jogo ======================
     CONTADOR = 0
@@ -162,10 +172,17 @@ class GameSettings:
     )
 
     @classmethod
-    def setup(cls, args, player_config, default_config):
+    def setup(
+        cls,
+        args,
+        player_kartea_service: "PlayerKarteaConfigService",
+        player_config: "PlayerKarteaConfig",
+        default_config: Dict[str, str],
+    ) -> None:
         cls.CURRENT_LANG = args.lang
         cls.PLAYER_ID = args.player_id
         cls.PROFESSIONAL_ID = args.professional_id
+        cls.PLAYER_KARTEA_SERVICE = player_kartea_service
 
         # ====================== Game Settings ======================
         if not player_config or player_config.phase.id is None:
@@ -309,8 +326,41 @@ class GameSettings:
         cls.HORIZON_BG_IMAGE = KarteaPathConfig.kartea_image("horizon")
 
     @classmethod
-    def session_data():
-        pass
+    def session_data(
+        cls,
+        player_id: int,
+        professional_id: int,
+        phase_reached: int,
+        level_reached: int,
+        general_score: int,
+        q_movement: int,
+        q_collided_target: int,
+        q_avoided_target: int,
+        q_collided_obstacle: int,
+        q_avoided_obstacle: int,
+    ) -> None:
+        player = cls.PLAYER_KARTEA_SERVICE.dao.player_dao.select(player_id)
+
+        professional = cls.PLAYER_KARTEA_SERVICE.dao.professional_dao.select(
+            professional_id
+        )
+        phase = cls.PLAYER_KARTEA_SERVICE.dao.phase_dao.select(phase_reached)
+        level = cls.PLAYER_KARTEA_SERVICE.dao.level_dao.select(
+            phase_reached, level_reached
+        )
+
+        player_kartea_session = PlayerKarteaSession(
+            player=player, professional=professional, phase=phase, level=level
+        )
+
+        player_kartea_session.phase_reached = phase_reached
+        player_kartea_session.level_reached = level_reached
+        player_kartea_session.general_score = general_score
+        player_kartea_session.q_movement = q_movement
+        player_kartea_session.q_collided_target = q_collided_target
+        player_kartea_session.q_avoided_target = q_avoided_target
+        player_kartea_session.q_collided_obstacle = q_collided_obstacle
+        player_kartea_session.q_avoided_obstacle = q_avoided_obstacle
 
     @classmethod
     def session_detail_data():

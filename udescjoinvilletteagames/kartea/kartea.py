@@ -38,7 +38,9 @@ class KarTEA:
         self.default_config = self.service.get_kartea_ini_config()
 
         # 3. DELEGAÇÃO: Passa tudo para o GameSettings
-        GameSettings.setup(args, self.player_config, self.default_config)
+        GameSettings.setup(
+            args, self.service, self.player_config, self.default_config
+        )
 
         # 4. Inicialização do Pygame usando os valores que agora estão no GameSettings
         pygame.init()

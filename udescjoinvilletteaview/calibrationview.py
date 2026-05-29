@@ -39,12 +39,22 @@ class CalibrationView(QDialog, Ui_CalibrationView, WindowConfig):
             None,
             WindowConfig.INCREMENT_SIZE_PERCENT,  # status
             5,  # width
-            58,  # height
+            75,  # height
             parent,  # parent
         )
         # Initialize controller
         self.controller = CalibrationController(self)
         self.pb_camera.clicked.connect(self.controller.control_camera)
+        self.pb_calibrate_auto.clicked.connect(
+            self.controller.handle_calibrate_auto
+        )
+        self.pb_calibrate_semi.clicked.connect(
+            self.controller.handle_calibrate_auto
+        )
+        self.pb_calibrate_manual.clicked.connect(
+            self.controller.handle_calibrate_manual
+        )
+
         self.pb_ok.clicked.connect(self.controller.handle_ok)
         self.pb_cancel.clicked.connect(self.controller.handle_cancel)
 

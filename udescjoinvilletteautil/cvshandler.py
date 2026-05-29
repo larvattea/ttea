@@ -236,10 +236,10 @@ class CSVHandler:
                         reader = csv.reader(file, dialect=self.dialect)
 
                     rows = list(reader)
-                    self.log.log_info(
-                        f"CSV read successfully with encoding {encoding} "
-                        f"({len(rows)} rows) -> {path.name}"
-                    )
+                    # self.log.log_info(
+                    #    f"CSV read successfully with encoding {encoding} "
+                    #    f"({len(rows)} rows) -> {path.name}"
+                    # )
                     return rows
             except PermissionError:
                 self.log.log_warning(
