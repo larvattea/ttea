@@ -7,9 +7,6 @@ sonar-project.properties
 env/
 *.scannerwork
 *.csv
-*.json
 *.txt
-*.json
 *.pyc
 report-task.txt
-testearuco/

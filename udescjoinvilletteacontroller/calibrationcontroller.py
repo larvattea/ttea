@@ -34,6 +34,8 @@ class CalibrationController(QObject):
         if calibration:
             self.view.msg.info(self.tr("Calibração cadastrada com sucesso!"))
             self.view.accept()
+            self.thread.stop()
+
         else:
             self.view.msg.critical(self.tr("Erro salvar a calibração."))
 
