@@ -11,3 +11,4 @@ env/
 *.pyc
 report-task.txt
 testearuco/
+*.exe
