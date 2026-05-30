@@ -1,6 +1,0 @@
-projectKey=T-TEA2.0-1
-serverUrl=http://localhost:9000
-serverVersion=25.5.0.107428
-dashboardUrl=http://localhost:9000/dashboard?id=T-TEA2.0-1
-ceTaskId=ab55e520-d24c-4233-91fa-af1c939057ad
-ceTaskUrl=http://localhost:9000/api/ce/task?id=ab55e520-d24c-4233-91fa-af1c939057ad
