@@ -16,9 +16,15 @@ class LanguageController(QObject):
     ):
         self.view = view
         self.service = service or LanguageService()
+        # self.model = (
+        #    view.parent().model.language_model if view.parent() else Language()
+        # )  # ou injetar
+
         self.model = (
-            view.parent().model.language_model if view.parent() else Language()
-        )  # ou injetar
+            p.model.language_model
+            if (p := view.parent()) and hasattr(p, "model") and p.model
+            else Language()
+        )
 
         self._current_preview_lang = None
         self._initialize_view()

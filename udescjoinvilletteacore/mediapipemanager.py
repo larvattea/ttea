@@ -15,8 +15,6 @@ class MediaPipeManager:
         # 2. Definição de Caminhos
         path_full = PathConfig.model("pose_landmarker_full.task")
         path_heavy = PathConfig.model("pose_landmarker_heavy.task")
-        # path_full = PathConfig.model_path("pose_landmarker_lite.task")
-        # path_heavy = PathConfig.model_path("pose_landmarker_lite.task")
 
         # 3. Lógica de Seleção de Modelo e Delegate
         if self.is_windows:

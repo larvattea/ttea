@@ -138,7 +138,10 @@ class PlayerListView(QDialog, Ui_PlayerListView, WindowConfig):
         self.lbl_birth_date_value.setText(
             QtDateFormat.format_python_date(player.birth_date)
         )
-
+        self.lbl_observation_value.setWordWrap(True)
+        self.lbl_observation_value.setMaximumWidth(
+            int(PlayerListView.size().width()) / 2
+        )
         self.lbl_observation_value.setText(player.observation or "—")
 
     def get_selected_id(self) -> Optional[int]:

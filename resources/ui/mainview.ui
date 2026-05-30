@@ -80,6 +80,8 @@
      <string>S&amp;istema</string>
     </property>
     <addaction name="act_calibration_parameterization"/>
+    <addaction name="separator"/>
+    <addaction name="act_language"/>
    </widget>
    <widget class="QMenu" name="mnu_help">
     <property name="title">
@@ -174,6 +176,15 @@
    </property>
    <property name="shortcut">
     <string>F5</string>
+   </property>
+  </action>
+  <action name="act_language">
+   <property name="icon">
+    <iconset resource="../resources.qrc">
+     <normaloff>:/icons/ui/menu/flagicon</normaloff>:/icons/ui/menu/flagicon</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Idioma</string>
    </property>
   </action>
   <action name="act_help">

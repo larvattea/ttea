@@ -25,6 +25,9 @@ class PlayerGameLaunchController(QObject):
         self.view = view
         self.msg = message_service or MessageService(view)
         self.service = service or PlayerGameLaunchService()
+        self.current_process: Optional[subprocess.Popen] = None
+
+        self.view.finished.connect(self.cleanup)
 
     def handle_cancel(self) -> None:
         self.view.reject()
@@ -41,15 +44,42 @@ class PlayerGameLaunchController(QObject):
             self.msg.warning(self.tr("Selecione um jogo antes de iniciar."))
             return
 
+        if self.current_process and self.current_process.poll() is None:
+            self.msg.warning(
+                self.tr(
+                    "Já existe um jogo em execução.\n"
+                    "Feche o jogo atual antes de iniciar outro."
+                )
+            )
+            return
+
         folder = game_data["folder_path"]
         # Pega o 'exec' (ex: main.py) definido no JSON do jogo
         executable = game_data.get("exec")
         script_path = os.path.join(folder, executable)
 
         if os.path.exists(script_path):
+            # Detecta o tipo de executável de forma cross-platform
             # Executa o Pygame com o ambiente correto e passa o idioma
-            subprocess.Popen(
-                [
+            # self.current_process = subprocess.Popen(
+            #    [
+            #        sys.executable,
+            #        script_path,
+            #        "--lang",
+            #        language_app,
+            #        "--player_id",
+            #        player_id,
+            #        "--professional_id",
+            #        professional_id,
+            #    ],
+            #    cwd=folder,
+            # )
+
+            ext = os.path.splitext(executable.lower())[1] if executable else ""
+            if ext in (".py", ".pyw"):
+                # Jogos em Python -> usa o interpretador Python
+                # (funciona em Win/Linux/mac)
+                cmd = [
                     sys.executable,
                     script_path,
                     "--lang",
@@ -58,10 +88,22 @@ class PlayerGameLaunchController(QObject):
                     player_id,
                     "--professional_id",
                     professional_id,
-                ],
-                cwd=folder,
-            )
-            # self.view.accept()
+                ]
+            else:
+                # Qualquer outro executável (.exe no Windows,
+                # binário sem extensão no Linux/mac, etc.)
+                # O sistema operacional vai tratar corretamente
+                cmd = [
+                    script_path,
+                    "--lang",
+                    language_app,
+                    "--player_id",
+                    player_id,
+                    "--professional_id",
+                    professional_id,
+                ]
+
+            self.current_process = subprocess.Popen(cmd, cwd=folder)
         else:
             self.msg.critical(
                 self.tr(
@@ -76,3 +118,17 @@ class PlayerGameLaunchController(QObject):
                 index, Qt.ItemDataRole.ToolTipRole
             )
             self.view.cbx_game.setToolTip(novo_hint)
+
+    def cleanup(self) -> None:
+        """Encerra o jogo em execução quando a janela do launcher é fechada."""
+        if self.current_process and self.current_process.poll() is None:
+            try:
+                # Tenta encerrar via (SIGTERM)
+                self.current_process.terminate()
+                # Dá um tempo para o jogo fechar
+                self.current_process.wait(timeout=3.0)
+            except Exception:
+                # Ignora erros (processo já pode ter sido fechado)
+                pass
+            finally:
+                self.current_process = None

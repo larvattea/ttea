@@ -35,61 +35,83 @@ def global_exception_hook(
     sys.exit(1)
 
 
-def main():
-    sys.excepthook = global_exception_hook
-    Log.get_log().log_info("Application started successfully.")
+class App:
+    """
+    Classe principal da aplicação que encapsula toda a inicialização
+    e execução do aplicativo Qt.
+    """
 
-    app = QApplication(sys.argv)
-    app.setApplicationName(AppConfig.get_title())
-    app.setApplicationVersion(AppConfig.VERSION)
-    app.setWindowIcon(QIcon(AppConfig.ICON_APP))
+    def __init__(self):
+        self.app: QApplication | None = None
+        self.splash: SplashScreen | None = None
+        self.language_view = None
+        self.main_view = None
 
-    # === Detecta idioma inicial e aplica ===
-    language_service = LanguageService()
-    initial_lang = language_service.get_initial_language()
-    language_service.preview_language(initial_lang)
-    # selected_lang = initial_lang
+    def run(self) -> None:
+        """Método principal que inicia a aplicação."""
+        # Configuração global de exceções
+        sys.excepthook = global_exception_hook
+        Log.get_log().log_info("Application started successfully.")
 
-    # ======================
-    # SPLASH SCREEN
-    # ======================
-    splash = SplashScreen()
-    splash.show()
-    app.processEvents()
-    splash.raise_()
+        # Criação da QApplication
+        self.app = QApplication(sys.argv)
+        self.app.setApplicationName(AppConfig.get_title())
+        self.app.setApplicationVersion(AppConfig.VERSION)
+        self.app.setWindowIcon(QIcon(AppConfig.ICON_APP))
 
-    # if not AppConfig.config_file_exists():
-    # === Tela de escolha de idioma ===
-    language_view = ViewFactory.get_app_view_factory().create_language_view()
+        # === Detecta idioma inicial e aplica ===
+        language_service = LanguageService()
+        initial_lang = language_service.get_initial_language()
+        language_service.preview_language(initial_lang)
+        selected_lang = initial_lang
 
-    # === Aplica o idioma inicial como preview ===
-    language_view.controller.service.preview_language(initial_lang)
-    language_view.retranslateUi(language_view)  # força tradução imediata
+        # ======================
+        # SPLASH SCREEN
+        # ======================
+        self.splash = SplashScreen()
+        self.splash.show()
+        self.app.processEvents()
+        self.splash.raise_()
 
-    splash.finish(language_view)
+        if not AppConfig.config_file_exists():
+            # === Tela de escolha de idioma ===
+            language_view = (
+                ViewFactory.get_app_view_factory().create_language_view()
+            )
 
-    result = language_view.exec()
+            # === Aplica o idioma inicial como preview ===
+            language_view.controller.service.preview_language(initial_lang)
+            language_view.retranslateUi(
+                language_view
+            )  # força tradução imediata
 
-    if result == QDialog.DialogCode.Rejected:
-        sys.exit(0)
+            self.splash.finish(language_view)
 
-    selected_lang = language_view.get_selected_language() or initial_lang
+            result = language_view.exec()
 
-    if selected_lang != initial_lang:
-        language_service.apply_language(selected_lang)
-    # else:
-    #    splash.finish(None)
+            if result == QDialog.DialogCode.Rejected:
+                sys.exit(0)
 
-    # === Inicializa o app model e menu da aplicação ===
-    model = AppModel.get_instance()
-    model.current_language = selected_lang
+            selected_lang = (
+                language_view.get_selected_language() or initial_lang
+            )
 
-    main_view = ViewFactory.get_app_view_factory().create_main_view()
-    main_view.show()
+            if selected_lang != initial_lang:
+                language_service.apply_language(selected_lang)
+        else:
+            self.splash.finish(None)
 
-    Log.get_log().log_info("Application finished successfully.")
-    sys.exit(app.exec())
+        # === Inicializa o app model e menu da aplicação ===
+        model = AppModel.get_instance()
+        model.current_language = selected_lang
+
+        self.main_view = ViewFactory.get_app_view_factory().create_main_view()
+        self.main_view.show()
+
+        Log.get_log().log_info("Application finished successfully.")
+        sys.exit(self.app.exec())
 
 
 if __name__ == "__main__":
-    main()
+    application = App()
+    application.run()

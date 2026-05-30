@@ -106,6 +106,14 @@ class MainController(QObject):
                 self.tr("Erro ao abrir ajuda."), str(e)
             )"""
 
+    def open_language(self) -> None:
+        dialog = self.app_factory.create_language_view(parent=self.view)
+        dialog.exec()
+
+        if hasattr(self.view, "retranslateUi"):
+            self.view.retranslateUi(self.view)
+            self.view.setup_status_bar()
+
     def open_about(self) -> None:
         dialog = self.app_factory.create_about_view(parent=self.view)
         dialog.exec()

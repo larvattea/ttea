@@ -127,11 +127,6 @@ class Ui_PlayerListView(object):
 
         self.lbl_observation_value = QLabel(self.lay_detail)
         self.lbl_observation_value.setObjectName(u"lbl_observation_value")
-
-        self.lbl_observation_value.setWordWrap(True)
-        self.lbl_observation_value.setMaximumWidth(int(PlayerListView.size().width())/2)
-
-
         self.lbl_observation_value.setAlignment(Qt.AlignmentFlag.AlignLeading)
 
         self.grd_detail.addWidget(self.lbl_observation_value, 3, 1, 1, 1)
