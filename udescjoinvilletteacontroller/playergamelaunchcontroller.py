@@ -27,10 +27,20 @@ class PlayerGameLaunchController(QObject):
         self.service = service or PlayerGameLaunchService()
         self.current_process: Optional[subprocess.Popen] = None
 
-        self.view.finished.connect(self.cleanup)
-
     def handle_cancel(self) -> None:
-        self.view.reject()
+        if self.current_process and self.current_process.poll() is None:
+            if self.msg.question(
+                self.tr(
+                    "Existe um jogo em execução, ele será finalizado. Deseja sair da tela de sessão de jogo?"
+                ),
+                None,
+                True,
+            ):
+                self.view.reject()
+            else:
+                return
+        else:
+            self.view.reject()
 
     def launch_game(self):
         # Recupera os dados do jogo selecionado no combo da View
@@ -54,27 +64,11 @@ class PlayerGameLaunchController(QObject):
             return
 
         folder = game_data["folder_path"]
-        # Pega o 'exec' (ex: main.py) definido no JSON do jogo
+        # Pega o 'exec' (ex: main.py, jogo.exe) definido no JSON do jogo
         executable = game_data.get("exec")
         script_path = os.path.join(folder, executable)
 
         if os.path.exists(script_path):
-            # Detecta o tipo de executável de forma cross-platform
-            # Executa o Pygame com o ambiente correto e passa o idioma
-            # self.current_process = subprocess.Popen(
-            #    [
-            #        sys.executable,
-            #        script_path,
-            #        "--lang",
-            #        language_app,
-            #        "--player_id",
-            #        player_id,
-            #        "--professional_id",
-            #        professional_id,
-            #    ],
-            #    cwd=folder,
-            # )
-
             ext = os.path.splitext(executable.lower())[1] if executable else ""
             if ext in (".py", ".pyw"):
                 # Jogos em Python -> usa o interpretador Python
@@ -103,6 +97,14 @@ class PlayerGameLaunchController(QObject):
                     professional_id,
                 ]
 
+            # 1. Muda o estado do botão ANTES de lançar
+            # self.view.pb_play.setEnabled(False)
+            # self.view.pb_cancel.setEnabled(False)
+            # self.view.pb_play.setText(self.tr("Carregando jogo..."))
+
+            # Força o Qt a repintar a interface imediatamente
+            # self.view.repaint()
+
             self.current_process = subprocess.Popen(cmd, cwd=folder)
         else:
             self.msg.critical(
@@ -120,15 +122,52 @@ class PlayerGameLaunchController(QObject):
             self.view.cbx_game.setToolTip(novo_hint)
 
     def cleanup(self) -> None:
-        """Encerra o jogo em execução quando a janela do launcher é fechada."""
+        """Encerra o jogo e todos os seus processos filhos quando a janela é fechada."""
         if self.current_process and self.current_process.poll() is None:
             try:
-                # Tenta encerrar via (SIGTERM)
-                self.current_process.terminate()
-                # Dá um tempo para o jogo fechar
-                self.current_process.wait(timeout=3.0)
+                import psutil
+
+                # Captura o processo pai criado pelo subprocess
+                parent = psutil.Process(self.current_process.pid)
+
+                # Captura recursivamente todos os processos filhos gerados pelo .exe
+                children = parent.children(recursive=True)
+
+                # 1. Tenta encerrar de forma amigável (SIGTERM) todos os filhos e o pai
+                for child in children:
+                    child.terminate()
+                parent.terminate()
+
+                # Aguarda um curto período para o encerramento amigável
+                _, alive = psutil.wait_procs(children + [parent], timeout=3.0)
+
+                # 2. Se algum processo ainda insistir em ficar vivo, força o encerramento (Kill)
+                for survivor in alive:
+                    survivor.kill()
+
+            except ImportError:
+                # Caso o psutil não esteja instalado por algum motivo,
+                # mantém o seu fallback nativo original
+                try:
+                    self.current_process.terminate()
+                    self.current_process.wait(timeout=3.0)
+                except subprocess.TimeoutExpired:
+                    try:
+                        self.current_process.kill()
+                        self.current_process.wait(timeout=2.0)
+                    except Exception:
+                        pass
+                except Exception:
+                    pass
+            except psutil.NoSuchProcess:
+                # O processo já havia fechado sozinho
+                pass
             except Exception:
-                # Ignora erros (processo já pode ter sido fechado)
                 pass
             finally:
                 self.current_process = None
+
+                # Restaura os botões originais
+                # self.view.pb_play.setText(self.tr("Jogar"))
+                # self.view.pb_play.setEnabled(True)
+                # self.view.pb_cancel.setEnabled(True)

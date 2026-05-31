@@ -42,6 +42,9 @@ class PlayerGameLaunchView(QDialog, Ui_PlayerGameLaunchView, WindowConfig):
         self.cbx_game.currentIndexChanged.connect(
             self.controller.update_tooltip
         )
+        # Analisando sinal finished (o QDialog emite um int)
+        # abordagem diferente
+        self.finished.connect(lambda result: self.controller.cleanup())
 
         self.populate_comboboxes()
 
@@ -50,16 +53,9 @@ class PlayerGameLaunchView(QDialog, Ui_PlayerGameLaunchView, WindowConfig):
         for p in self.service.get_all_players():
             self.cbx_player.addItem(p.name, p.id)
 
-        # self.cbx_player.addItems(
-        #    [p.name for p in self.service.get_all_players()]
-        # )
-
         # Professionals
         for h in self.service.get_all_professionals():
             self.cbx_professional.addItem(h.name, h.id)
-        # self.cbx_professional.addItems(
-        #    [h.name for h in self.service.get_all_professionals()]
-        # )
 
         # 2. Popular Jogos com Metadados e Idioma
         language_app = AppModel.get_instance().current_language
@@ -76,7 +72,6 @@ class PlayerGameLaunchView(QDialog, Ui_PlayerGameLaunchView, WindowConfig):
 
             # Adiciona no combo e associa o dicionário completo ao item
             self.cbx_game.addItem(
-                # QIcon(PathConfig.icon_ui_menu(g.get("icon", ""))),
                 QIcon(
                     os.path.join(g.get("folder_path", ""), g.get("icon", ""))
                 ),
@@ -107,9 +102,24 @@ class PlayerGameLaunchView(QDialog, Ui_PlayerGameLaunchView, WindowConfig):
         event : QCloseEvent
             The close event to accept or ignore.
         """
-        if self.msg.question(
-            self.tr("Deseja sair da tela de sessão de jogo?"), None, True
+        if (
+            self.controller.current_process
+            and self.controller.current_process.poll() is None
         ):
-            event.accept()
+            if self.msg.question(
+                self.tr(
+                    "Existe um jogo em execução, ele será finalizado. Deseja sair da tela de sessão de jogo?"
+                ),
+                None,
+                True,
+            ):
+                self.reject()
+            else:
+                event.ignore()
         else:
-            event.ignore()
+            if self.msg.question(
+                self.tr("Deseja sair da tela de sessão de jogo?"), None, True
+            ):
+                event.accept()
+            else:
+                event.ignore()

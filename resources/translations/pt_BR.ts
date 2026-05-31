@@ -62,22 +62,29 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="38"/>
+        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="40"/>
         <source>Erro salvar a calibração.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="117"/>
-        <source>Parar Câmera</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="126"/>
-        <source>Iniciar Câmera</source>
+        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="48"/>
+        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="51"/>
+        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="54"/>
+        <source>Em construção!</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="128"/>
+        <source>Parar Câmera</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="137"/>
+        <source>Iniciar Câmera</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="139"/>
         <source>Câmera Parada</source>
         <translation></translation>
     </message>
@@ -301,27 +308,57 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="1120"/>
-        <source>Configurações de telemetria serão adicionadas aqui...</source>
+        <location filename="../ui/calibrationparameterizationview.ui" line="1125"/>
+        <source>Habilitar painel telemetria:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="1149"/>
+        <location filename="../ui/calibrationparameterizationview.ui" line="1158"/>
+        <source>Calibração Automática</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationparameterizationview.ui" line="1164"/>
+        <source>Configurações de calibração automática serão adicionadas aqui...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationparameterizationview.ui" line="1188"/>
+        <source>Calibração Semi-Automática</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationparameterizationview.ui" line="1194"/>
+        <source>Configurações de calibração semi-automática serão adicionadas aqui...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationparameterizationview.ui" line="1218"/>
+        <source>Calibração Manual</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationparameterizationview.ui" line="1224"/>
+        <source>Configurações de calibração manual serão adicionadas aqui...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationparameterizationview.ui" line="1266"/>
         <source>Gravar operação corrente</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="1152"/>
+        <location filename="../ui/calibrationparameterizationview.ui" line="1269"/>
         <source>OK</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="1166"/>
+        <location filename="../ui/calibrationparameterizationview.ui" line="1283"/>
         <source>Cancelar operação corrente</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="1169"/>
+        <location filename="../ui/calibrationparameterizationview.ui" line="1286"/>
         <source>Cancelar</source>
         <translation></translation>
     </message>
@@ -424,27 +461,42 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationview.ui" line="186"/>
+        <location filename="../ui/calibrationview.ui" line="182"/>
+        <source>Calibração Automática</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationview.ui" line="201"/>
+        <source>Calibração Semi-Automática</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationview.ui" line="220"/>
+        <source>Calibração Manual</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationview.ui" line="250"/>
         <source>Gravar operação corrente</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationview.ui" line="189"/>
+        <location filename="../ui/calibrationview.ui" line="253"/>
         <source>OK</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationview.ui" line="206"/>
+        <location filename="../ui/calibrationview.ui" line="270"/>
         <source>Cancelar operação corrente</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationview.ui" line="209"/>
+        <location filename="../ui/calibrationview.ui" line="273"/>
         <source>Cancelar</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/calibrationview.py" line="62"/>
+        <location filename="../../udescjoinvilletteaview/calibrationview.py" line="72"/>
         <source>Deseja sair da calibração?</source>
         <translation></translation>
     </message>
@@ -794,7 +846,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 <context>
     <name>LanguageController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/languagecontroller.py" line="50"/>
+        <location filename="../../udescjoinvilletteacontroller/languagecontroller.py" line="56"/>
         <source>Erro ao carregar o idioma.</source>
         <translation></translation>
     </message>
@@ -840,12 +892,12 @@ Detalhes do erro: {0}</source>
 <context>
     <name>MainController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="112"/>
+        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="93"/>
         <source>Funcionalidade do parâmetro de calibração em desenvolvimento...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="118"/>
+        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="99"/>
         <source>Funcionalidade do help em desenvolvimento...</source>
         <translation></translation>
     </message>
@@ -886,113 +938,123 @@ Detalhes do erro: {0}</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="80"/>
-        <source>S&amp;istema</source>
+        <location filename="../ui/mainview.ui" line="75"/>
+        <source>Exergames</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../ui/mainview.ui" line="86"/>
-        <location filename="../ui/mainview.ui" line="185"/>
+        <source>S&amp;istema</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/mainview.ui" line="94"/>
+        <location filename="../ui/mainview.ui" line="202"/>
         <source>&amp;Ajuda</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="104"/>
+        <location filename="../ui/mainview.ui" line="112"/>
         <source>&amp;Sair</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="107"/>
+        <location filename="../ui/mainview.ui" line="115"/>
         <source>Ctrl+Q</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="116"/>
+        <location filename="../ui/mainview.ui" line="124"/>
         <source>Instituição/Estabelecimento</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="119"/>
+        <location filename="../ui/mainview.ui" line="127"/>
         <source>Ctrl+I</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="128"/>
+        <location filename="../ui/mainview.ui" line="136"/>
         <source>Profissional</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="131"/>
+        <location filename="../ui/mainview.ui" line="139"/>
         <source>Ctrl+H</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="140"/>
+        <location filename="../ui/mainview.ui" line="148"/>
         <source>Jogador</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="143"/>
+        <location filename="../ui/mainview.ui" line="151"/>
         <source>Ctrl+J</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="152"/>
+        <location filename="../ui/mainview.ui" line="160"/>
         <source>KarTEA</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="161"/>
+        <location filename="../ui/mainview.ui" line="169"/>
         <source>&amp;Calibração</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="164"/>
+        <location filename="../ui/mainview.ui" line="172"/>
         <source>F4</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="173"/>
+        <location filename="../ui/mainview.ui" line="181"/>
         <source>&amp;Parametrização da Calibração</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="176"/>
+        <location filename="../ui/mainview.ui" line="184"/>
         <source>F5</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="188"/>
+        <location filename="../ui/mainview.ui" line="193"/>
+        <source>&amp;Idioma</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/mainview.ui" line="205"/>
         <source>F1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="197"/>
+        <location filename="../ui/mainview.ui" line="214"/>
         <source>&amp;Sobre...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="206"/>
+        <location filename="../ui/mainview.ui" line="223"/>
         <source>Sessão de Jogo</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="209"/>
+        <location filename="../ui/mainview.ui" line="226"/>
         <source>Ctrl+P</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/mainview.py" line="73"/>
+        <location filename="../../udescjoinvilletteaview/mainview.py" line="74"/>
         <source>Versão da plataforma: {0}</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/mainview.py" line="76"/>
+        <location filename="../../udescjoinvilletteaview/mainview.py" line="77"/>
         <source>Data atual: {0}</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/mainview.py" line="93"/>
+        <location filename="../../udescjoinvilletteaview/mainview.py" line="94"/>
         <source>Exergames (nenhum encontrado)</source>
         <translation></translation>
     </message>
@@ -1095,8 +1157,25 @@ Detalhes do erro: {0}</source>
 <context>
     <name>PlayerGameLaunchController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="42"/>
+        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="35"/>
+        <source>Existe um jogo em execução, ele será finalizado. Deseja sair da tela de sessão de jogo?</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="55"/>
         <source>Selecione um jogo antes de iniciar.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="61"/>
+        <source>Já existe um jogo em execução.
+Feche o jogo atual antes de iniciar outro.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="113"/>
+        <source>Erro: Executável do jogo não encontrado em: {0}.
+Verifique se o arquivo existe e se os metadados de configuração estão corretos.</source>
         <translation></translation>
     </message>
 </context>
@@ -1144,7 +1223,12 @@ Detalhes do erro: {0}</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/playergamelaunchview.py" line="102"/>
+        <location filename="../../udescjoinvilletteaview/playergamelaunchview.py" line="111"/>
+        <source>Existe um jogo em execução, ele será finalizado. Deseja sair da tela de sessão de jogo?</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteaview/playergamelaunchview.py" line="121"/>
         <source>Deseja sair da tela de sessão de jogo?</source>
         <translation></translation>
     </message>
@@ -1687,7 +1771,7 @@ Detalhes do erro: {0}</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/playerlistview.py" line="179"/>
+        <location filename="../../udescjoinvilletteaview/playerlistview.py" line="182"/>
         <source>Deseja sair do cadastro?</source>
         <translation></translation>
     </message>
@@ -1802,27 +1886,27 @@ Detalhes do erro: {0}</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="106"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="104"/>
         <source>Psicopedagogo</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="107"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="105"/>
         <source>Psicólogo</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="108"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="106"/>
         <source>Psiquiatra</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="109"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="107"/>
         <source>Terapeuta Ocupacional</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="110"/>
+        <location filename="../../udescjoinvilletteamodel/professional.py" line="108"/>
         <source>Voluntário</source>
         <translation></translation>
     </message>
@@ -1902,52 +1986,52 @@ Detalhes do erro: {0}</source>
 <context>
     <name>ProfessionalListController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="150"/>
+        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="145"/>
         <source>Profissional cadastrado com sucesso!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="154"/>
+        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="147"/>
         <source>Erro ao salvar profissional.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="163"/>
+        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="154"/>
         <source>Selecione um professional para editar.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="169"/>
+        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="159"/>
         <source>Profissional não encontrado.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="181"/>
+        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="166"/>
         <source>Profissional atualizado com sucesso.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="185"/>
+        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="168"/>
         <source>Erro ao atualizar profissional.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="194"/>
+        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="176"/>
         <source>Selecione um profissional para excluir.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="208"/>
+        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="189"/>
         <source>Profissional excluído com sucesso.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="212"/>
+        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="191"/>
         <source>Erro ao excluir profissional.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="203"/>
+        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="185"/>
         <source>Deseja excluir?
 {0}</source>
         <translation></translation>
@@ -2038,7 +2122,7 @@ Detalhes do erro: {0}</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/professionallistview.py" line="146"/>
+        <location filename="../../udescjoinvilletteaview/professionallistview.py" line="136"/>
         <source>Deseja sair do cadastro?</source>
         <translation></translation>
     </message>

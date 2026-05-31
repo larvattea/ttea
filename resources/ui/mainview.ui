@@ -70,7 +70,13 @@
     <property name="title">
      <string>C&amp;onfigurações</string>
     </property>
-    <addaction name="act_kartea"/>
+    <widget class="QMenu" name="mnu_settings_exergames_sub">
+     <property name="title">
+      <string>Exergames</string>
+     </property>
+     <addaction name="act_kartea"/>
+    </widget>
+    <addaction name="mnu_settings_exergames_sub"/>
     <addaction name="separator"/>
     <addaction name="act_calibration"/>
     <addaction name="separator"/>
