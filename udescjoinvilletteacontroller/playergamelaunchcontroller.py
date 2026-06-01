@@ -3,7 +3,16 @@ import subprocess
 import sys
 from typing import TYPE_CHECKING, Optional
 
-from PySide6.QtCore import QObject, Qt
+# Import opcional do psutil (não quebra o programa se não estiver instalado)
+try:
+    import psutil
+
+    PSUTIL_AVAILABLE = True
+except ImportError:
+    psutil = None
+    PSUTIL_AVAILABLE = False
+
+from PySide6.QtCore import QObject, Qt, QTimer
 
 from udescjoinvilletteamodel import AppModel
 from udescjoinvilletteaservice import PlayerGameLaunchService
@@ -22,13 +31,16 @@ class PlayerGameLaunchController(QObject):
         message_service: Optional[MessageService] = None,
         service: Optional[PlayerGameLaunchService] = None,
     ):
+        super().__init__()
         self.view = view
         self.msg = message_service or MessageService(view)
         self.service = service or PlayerGameLaunchService()
         self.current_process: Optional[subprocess.Popen] = None
+        self.monitor_timer: Optional[QTimer] = None
 
     def handle_cancel(self) -> None:
-        if self.current_process and self.current_process.poll() is None:
+        """Trata o clique no botão Cancelar baseado no estado do jogo."""
+        if self.is_game_running():
             if self.msg.question(
                 self.tr(
                     "Existe um jogo em execução, ele será finalizado. Deseja sair da tela de sessão de jogo?"
@@ -43,7 +55,7 @@ class PlayerGameLaunchController(QObject):
             self.view.reject()
 
     def launch_game(self):
-        # Recupera os dados do jogo selecionado no combo da View
+        """Valida e inicia o processo do jogo selecionado."""
         game_data = self.view.cbx_game.currentData()
         player_id = str(self.view.cbx_player.currentData())
         professional_id = str(self.view.cbx_professional.currentData())
@@ -54,7 +66,7 @@ class PlayerGameLaunchController(QObject):
             self.msg.warning(self.tr("Selecione um jogo antes de iniciar."))
             return
 
-        if self.current_process and self.current_process.poll() is None:
+        if self.is_game_running():
             self.msg.warning(
                 self.tr(
                     "Já existe um jogo em execução.\n"
@@ -64,57 +76,129 @@ class PlayerGameLaunchController(QObject):
             return
 
         folder = game_data["folder_path"]
-        # Pega o 'exec' (ex: main.py, jogo.exe) definido no JSON do jogo
         executable = game_data.get("exec")
         script_path = os.path.join(folder, executable)
 
-        if os.path.exists(script_path):
-            ext = os.path.splitext(executable.lower())[1] if executable else ""
-            if ext in (".py", ".pyw"):
-                # Jogos em Python -> usa o interpretador Python
-                # (funciona em Win/Linux/mac)
-                cmd = [
-                    sys.executable,
-                    script_path,
-                    "--lang",
-                    language_app,
-                    "--player_id",
-                    player_id,
-                    "--professional_id",
-                    professional_id,
-                ]
-            else:
-                # Qualquer outro executável (.exe no Windows,
-                # binário sem extensão no Linux/mac, etc.)
-                # O sistema operacional vai tratar corretamente
-                cmd = [
-                    script_path,
-                    "--lang",
-                    language_app,
-                    "--player_id",
-                    player_id,
-                    "--professional_id",
-                    professional_id,
-                ]
-
-            # 1. Muda o estado do botão ANTES de lançar
-            # self.view.pb_play.setEnabled(False)
-            # self.view.pb_cancel.setEnabled(False)
-            # self.view.pb_play.setText(self.tr("Carregando jogo..."))
-
-            # Força o Qt a repintar a interface imediatamente
-            # self.view.repaint()
-
-            self.current_process = subprocess.Popen(cmd, cwd=folder)
-        else:
+        if not os.path.exists(script_path):
             self.msg.critical(
                 self.tr(
                     "Erro: Executável do jogo não encontrado em: {0}.\n"
                     "Verifique se o arquivo existe e se os metadados de configuração estão corretos."
                 ).format(script_path)
             )
+            return
+
+        ext = os.path.splitext(executable.lower())[1] if executable else ""
+        if ext in (".py", ".pyw"):
+            cmd = [
+                sys.executable,
+                script_path,
+                "--lang",
+                language_app,
+                "--player_id",
+                player_id,
+                "--professional_id",
+                professional_id,
+            ]
+        else:
+            cmd = [
+                script_path,
+                "--lang",
+                language_app,
+                "--player_id",
+                player_id,
+                "--professional_id",
+                professional_id,
+            ]
+
+        # UX: desabilita botões durante o lançamento
+        self.view.pb_play.setEnabled(False)
+        self.view.pb_cancel.setEnabled(False)
+        self.view.pb_play.setText(self.tr("Espere"))
+        self.view.repaint()
+
+        # Cria um novo grupo de processos (melhora o controle da árvore no Windows)
+        creationflags = (
+            subprocess.CREATE_NEW_PROCESS_GROUP
+            if sys.platform.startswith("win")
+            else 0
+        )
+
+        # Inicia o processo do jogo
+        self.current_process = subprocess.Popen(
+            cmd, cwd=folder, creationflags=creationflags
+        )
+
+        # Monitora quando o jogo realmente abre a janela
+        self.monitor_timer = QTimer(self)
+        self.monitor_timer.timeout.connect(self._check_if_game_is_visible)
+        self.monitor_timer.start(500)
+
+        # Proteção contra falha no lançamento
+        QTimer.singleShot(7000, self._restore_buttons_after_timeout)
+
+    def _restore_buttons_after_timeout(self) -> None:
+        """Garante que a interface seja liberada após o tempo limite."""
+        if self.monitor_timer and self.monitor_timer.isActive():
+            self.monitor_timer.stop()
+            self._restore_buttons_state()
+
+    def is_game_running(self) -> bool:
+        """Retorna True se existe um jogo realmente em execução."""
+        return bool(
+            self.current_process and self.current_process.poll() is None
+        )
+
+    def _check_if_game_is_visible(self) -> None:
+        """Verifica se o processo do jogo já abriu uma janela gráfica."""
+        if not self.current_process or self.current_process.poll() is not None:
+            if self.monitor_timer and self.monitor_timer.isActive():
+                self.monitor_timer.stop()
+            self._restore_buttons_state()
+            return
+
+        if not PSUTIL_AVAILABLE:
+            # Sem psutil, liberamos os botões imediatamente para o usuário
+            # já que não temos como monitorar o estado das threads.
+            self._game_ready()
+            return
+
+        try:
+            parent = psutil.Process(self.current_process.pid)
+            processes = [parent] + parent.children(recursive=True)
+
+            for proc in processes:
+                if sys.platform.startswith("win"):
+                    if (
+                        proc.num_threads() > 1
+                        and proc.status() == psutil.STATUS_RUNNING
+                    ):
+                        self._game_ready()
+                        return
+                else:
+                    if proc.status() in (
+                        psutil.STATUS_RUNNING,
+                        psutil.STATUS_SLEEPING,
+                    ):
+                        self._game_ready()
+                        return
+        except Exception:
+            pass  # fallback silencioso
+
+    def _game_ready(self) -> None:
+        """Chamado quando o jogo está pronto (janela visível)."""
+        if self.monitor_timer and self.monitor_timer.isActive():
+            self.monitor_timer.stop()
+        self._restore_buttons_state()
+
+    def _restore_buttons_state(self) -> None:
+        """Restaura o estado original dos botões da interface."""
+        self.view.pb_play.setText(self.tr("Jogar"))
+        self.view.pb_play.setEnabled(True)
+        self.view.pb_cancel.setEnabled(True)
 
     def update_tooltip(self, index):
+        """Atualiza o tooltip do combobox quando o jogo selecionado muda."""
         if index >= 0:
             novo_hint = self.view.cbx_game.itemData(
                 index, Qt.ItemDataRole.ToolTipRole
@@ -123,51 +207,43 @@ class PlayerGameLaunchController(QObject):
 
     def cleanup(self) -> None:
         """Encerra o jogo e todos os seus processos filhos quando a janela é fechada."""
-        if self.current_process and self.current_process.poll() is None:
-            try:
-                import psutil
+        if not self.is_game_running():
+            # Limpeza final mesmo sem processo rodando
+            if self.monitor_timer and self.monitor_timer.isActive():
+                self.monitor_timer.stop()
+            self.current_process = None
+            self._restore_buttons_state()
+            return
 
-                # Captura o processo pai criado pelo subprocess
+        try:
+            if PSUTIL_AVAILABLE:
                 parent = psutil.Process(self.current_process.pid)
-
-                # Captura recursivamente todos os processos filhos gerados pelo .exe
                 children = parent.children(recursive=True)
 
-                # 1. Tenta encerrar de forma amigável (SIGTERM) todos os filhos e o pai
+                # Tenta encerramento gracioso
                 for child in children:
                     child.terminate()
                 parent.terminate()
 
-                # Aguarda um curto período para o encerramento amigável
-                _, alive = psutil.wait_procs(children + [parent], timeout=3.0)
+                # Aguarda
+                _, alive = psutil.wait_procs(children + [parent], timeout=2.0)
 
-                # 2. Se algum processo ainda insistir em ficar vivo, força o encerramento (Kill)
+                # Força kill no que sobrar
                 for survivor in alive:
                     survivor.kill()
+            else:
+                # Fallback sem psutil
+                self.current_process.terminate()
+                self.current_process.wait(timeout=2.0)
 
-            except ImportError:
-                # Caso o psutil não esteja instalado por algum motivo,
-                # mantém o seu fallback nativo original
-                try:
-                    self.current_process.terminate()
-                    self.current_process.wait(timeout=3.0)
-                except subprocess.TimeoutExpired:
-                    try:
-                        self.current_process.kill()
-                        self.current_process.wait(timeout=2.0)
-                    except Exception:
-                        pass
-                except Exception:
-                    pass
-            except psutil.NoSuchProcess:
-                # O processo já havia fechado sozinho
-                pass
+        except Exception:
+            try:
+                self.current_process.kill()
             except Exception:
                 pass
-            finally:
-                self.current_process = None
 
-                # Restaura os botões originais
-                # self.view.pb_play.setText(self.tr("Jogar"))
-                # self.view.pb_play.setEnabled(True)
-                # self.view.pb_cancel.setEnabled(True)
+        finally:
+            if self.monitor_timer and self.monitor_timer.isActive():
+                self.monitor_timer.stop()
+            self.current_process = None
+            self._restore_buttons_state()

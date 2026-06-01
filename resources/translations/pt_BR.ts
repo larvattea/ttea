@@ -1157,25 +1157,35 @@ Detalhes do erro: {0}</source>
 <context>
     <name>PlayerGameLaunchController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="35"/>
+        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="46"/>
         <source>Existe um jogo em execução, ele será finalizado. Deseja sair da tela de sessão de jogo?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="55"/>
+        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="66"/>
         <source>Selecione um jogo antes de iniciar.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="61"/>
+        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="72"/>
         <source>Já existe um jogo em execução.
 Feche o jogo atual antes de iniciar outro.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="113"/>
+        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="85"/>
         <source>Erro: Executável do jogo não encontrado em: {0}.
 Verifique se o arquivo existe e se os metadados de configuração estão corretos.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="117"/>
+        <source>Espere</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="196"/>
+        <source>Jogar</source>
         <translation></translation>
     </message>
 </context>
@@ -1223,12 +1233,12 @@ Verifique se o arquivo existe e se os metadados de configuração estão correto
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/playergamelaunchview.py" line="111"/>
+        <location filename="../../udescjoinvilletteaview/playergamelaunchview.py" line="108"/>
         <source>Existe um jogo em execução, ele será finalizado. Deseja sair da tela de sessão de jogo?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/playergamelaunchview.py" line="121"/>
+        <location filename="../../udescjoinvilletteaview/playergamelaunchview.py" line="118"/>
         <source>Deseja sair da tela de sessão de jogo?</source>
         <translation></translation>
     </message>

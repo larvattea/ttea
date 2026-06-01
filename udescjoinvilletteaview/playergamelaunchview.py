@@ -57,7 +57,7 @@ class PlayerGameLaunchView(QDialog, Ui_PlayerGameLaunchView, WindowConfig):
         for h in self.service.get_all_professionals():
             self.cbx_professional.addItem(h.name, h.id)
 
-        # 2. Popular Jogos com Metadados e Idioma
+        # Jogos com metadados e tradução
         language_app = AppModel.get_instance().current_language
 
         games = self.service.get_games_metadata()
@@ -102,10 +102,7 @@ class PlayerGameLaunchView(QDialog, Ui_PlayerGameLaunchView, WindowConfig):
         event : QCloseEvent
             The close event to accept or ignore.
         """
-        if (
-            self.controller.current_process
-            and self.controller.current_process.poll() is None
-        ):
+        if self.controller.is_game_running():
             if self.msg.question(
                 self.tr(
                     "Existe um jogo em execução, ele será finalizado. Deseja sair da tela de sessão de jogo?"
