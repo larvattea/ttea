@@ -5,8 +5,9 @@ from PySide6.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 
 # Local module import
 from udescjoinvilletteacontroller import PlayerListController
-from udescjoinvilletteaui import \
-    Ui_PlayerListView  # Assuming generated UI class
+from udescjoinvilletteaui import (
+    Ui_PlayerListView,
+)  # Assuming generated UI class
 from udescjoinvilletteautil import MessageService, QtDateFormat
 from udescjoinvilletteawindow import WindowConfig
 
@@ -140,7 +141,7 @@ class PlayerListView(QDialog, Ui_PlayerListView, WindowConfig):
         )
         self.lbl_observation_value.setWordWrap(True)
         self.lbl_observation_value.setMaximumWidth(
-            int(PlayerListView.size().width()) / 2
+            int(self.size().width()) / 2
         )
         self.lbl_observation_value.setText(player.observation or "—")
 
