@@ -90,12 +90,31 @@ class Ui_PlayerGameLaunchView(object):
 
         self.frm_data.setWidget(2, QFormLayout.ItemRole.LabelRole, self.lbl_game)
 
+        self.lay_game = QHBoxLayout()
+        self.lay_game.setSpacing(6)
+        self.lay_game.setObjectName(u"lay_game")
         self.cbx_game = QComboBox(PlayerGameLaunchView)
         self.cbx_game.setObjectName(u"cbx_game")
         self.cbx_game.setMinimumSize(QSize(0, 0))
         self.cbx_game.setMaxVisibleItems(5)
 
-        self.frm_data.setWidget(2, QFormLayout.ItemRole.FieldRole, self.cbx_game)
+        self.lay_game.addWidget(self.cbx_game)
+
+        self.pb_game_info = QPushButton(PlayerGameLaunchView)
+        self.pb_game_info.setObjectName(u"pb_game_info")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.pb_game_info.sizePolicy().hasHeightForWidth())
+        self.pb_game_info.setSizePolicy(sizePolicy)
+        self.pb_game_info.setMinimumSize(QSize(28, 28))
+        self.pb_game_info.setMaximumSize(QSize(28, 28))
+        self.pb_game_info.setFont(font)
+
+        self.lay_game.addWidget(self.pb_game_info)
+
+
+        self.frm_data.setLayout(2, QFormLayout.ItemRole.FieldRole, self.lay_game)
 
 
         self.verticalLayout.addLayout(self.frm_data)
@@ -137,9 +156,6 @@ class Ui_PlayerGameLaunchView(object):
 
         self.pb_cancel = QPushButton(PlayerGameLaunchView)
         self.pb_cancel.setObjectName(u"pb_cancel")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.pb_cancel.sizePolicy().hasHeightForWidth())
         self.pb_cancel.setSizePolicy(sizePolicy)
         icon2 = QIcon()
@@ -164,6 +180,10 @@ class Ui_PlayerGameLaunchView(object):
         self.lbl_player.setText(QCoreApplication.translate("PlayerGameLaunchView", u"Jogador:", None))
         self.lbl_professional.setText(QCoreApplication.translate("PlayerGameLaunchView", u"Profissional:", None))
         self.lbl_game.setText(QCoreApplication.translate("PlayerGameLaunchView", u"Jogo:", None))
+#if QT_CONFIG(tooltip)
+        self.pb_game_info.setToolTip(QCoreApplication.translate("PlayerGameLaunchView", u"Informa\u00e7\u00f5es sobre o jogo", None))
+#endif // QT_CONFIG(tooltip)
+        self.pb_game_info.setText(QCoreApplication.translate("PlayerGameLaunchView", u"i", None))
 #if QT_CONFIG(tooltip)
         self.pb_play.setToolTip(QCoreApplication.translate("PlayerGameLaunchView", u"Jogar", None))
 #endif // QT_CONFIG(tooltip)

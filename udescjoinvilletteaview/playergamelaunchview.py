@@ -39,6 +39,7 @@ class PlayerGameLaunchView(QDialog, Ui_PlayerGameLaunchView, WindowConfig):
         self.controller = PlayerGameLaunchController(self)
         self.pb_cancel.clicked.connect(self.controller.handle_cancel)
         self.pb_play.clicked.connect(self.controller.launch_game)
+        self.pb_game_info.clicked.connect(self.controller.handle_game_info)
         self.cbx_game.currentIndexChanged.connect(
             self.controller.update_tooltip
         )

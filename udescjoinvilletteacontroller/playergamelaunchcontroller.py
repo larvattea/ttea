@@ -1,6 +1,7 @@
 import os
 import subprocess
 import sys
+from datetime import datetime
 from typing import TYPE_CHECKING, Optional
 
 # Import opcional do psutil (não quebra o programa se não estiver instalado)
@@ -53,6 +54,34 @@ class PlayerGameLaunchController(QObject):
                 return
         else:
             self.view.reject()
+
+    def handle_game_info(self) -> None:
+        game_data = self.view.cbx_game.currentData()
+
+        if (
+            game_data.get("authors") is not None
+            and game_data.get("version") is not None
+            and game_data.get("since") is not None
+        ):
+            self.msg.info(
+                self.tr(
+                    "Este jogo foi desenvolvido por:\n\n{0}\n\n"
+                    "Versão: {1}\n"
+                    "Desde: {2} - {3}"
+                ).format(
+                    "\n".join(game_data.get("authors", [])),
+                    game_data.get("version", "N/A"),
+                    game_data.get("since", "N/A"),
+                    datetime.now().strftime("%Y"),
+                )
+            )
+        else:
+            self.msg.warning(
+                self.tr(
+                    "Informações de autoria do jogo não estão disponíveis.\n"
+                    "Verifique se os metadados de configuração estão corretos."
+                )
+            )
 
     def launch_game(self):
         """Valida e inicia o processo do jogo selecionado."""

@@ -5,9 +5,8 @@ from PySide6.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 
 # Local module import
 from udescjoinvilletteacontroller import PlayerListController
-from udescjoinvilletteaui import (
-    Ui_PlayerListView,
-)  # Assuming generated UI class
+from udescjoinvilletteaui import \
+    Ui_PlayerListView  # Assuming generated UI class
 from udescjoinvilletteautil import MessageService, QtDateFormat
 from udescjoinvilletteawindow import WindowConfig
 
