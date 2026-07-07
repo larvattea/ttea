@@ -1,36 +1,31 @@
-"""
-udescjoinvilletteawindow
+"""Package for window management utilities in the T-TEA platform.
 
-A Python package for window management in the T-TEA platform,
-supporting and configuration management. Developed by the
-Larva UDESC team.
-
-This package provides tools for handling window layouts,
-and appearance settings.
+This package provides tools for window layout, icon, title, and size
+management in the exergame application.
 
 Attributes
 ----------
 __version__ : str
-    The current version of the package.
+    Current package version.
 __date__ : str
-    The release date of this version.
+    Release date of the package version.
 __author__ : str
-    The development team.
+    Package author or team.
 __license__ : str
-    The license under which the package is distributed.
+    Package license.
 
 See Also
 --------
-ViewFactory
-    Creates view instances for the application.
 WindowConfig
     Manages window layout and appearance settings.
 
 Notes
 -----
 This package is maintained by the Larva UDESC team and is under active
-development. Contributions and bug reports are welcome at:
-https://github.com/larva-udesc/udesc_ttea_view
+development.
+
+Contributions and bug reports are welcome at:
+https://github.com/larvattea/T-TEA2.0
 """
 
 # Define the __all__ variable

@@ -1,13 +1,14 @@
-"""Main module for the T-TEA Qt application entry point."""
+"""Main entry point for the T-TEA Qt application.
+
+This module initializes global exception hooks, imports application
+components, and defines the App class responsible for starting the Qt
+event loop.
+"""
 
 import os
 import sys
 
 os.environ["QT_LOGGING_RULES"] = "*.debug=false"
-
-from udescjoinvilletteautil import CriticalHooks
-
-CriticalHooks.setup_exception_hooks()
 
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication, QDialog, QMainWindow
@@ -16,6 +17,7 @@ from udescjoinvilletteaapp import AppConfig
 from udescjoinvilletteafactory import ViewFactory
 from udescjoinvillettealog import Log
 from udescjoinvilletteaservice import LanguageService
+from udescjoinvilletteautil import CriticalHooks
 from udescjoinvilletteaview import SplashScreen
 
 
@@ -32,6 +34,17 @@ class App:
         The language selection view instance.
     main_view : QMainWindow | None
         The main application window.
+
+    Methods
+    -------
+    run()
+        Create the Qt application, initialize language, show the splash
+        screen and main window, and execute the event loop.
+
+    Examples
+    --------
+    >>> app = App()
+    >>> app.run()  # doctest: +SKIP
     """
 
     def __init__(self) -> None:
@@ -63,6 +76,7 @@ class App:
         >>> app = App()
         >>> app.run()  # doctest: +SKIP
         """
+        CriticalHooks.setup_exception_hooks()
         Log.get_log().log_info("Application started successfully.")
 
         # Creation of the QApplication

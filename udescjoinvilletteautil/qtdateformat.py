@@ -1,4 +1,10 @@
-# udescjoinvilletteautil/qtdateformat.py
+"""Conversion helpers for Python date formats and Qt date widgets.
+
+This module converts Python ``strftime`` masks to Qt date-format strings
+and provides helpers for creating ``QDate`` objects from Python date
+values.
+"""
+
 from typing import Final
 
 from PySide6.QtCore import QDate
@@ -17,6 +23,10 @@ class QtDateFormat:
         Return the Qt date format based on the current application setting.
     strftime_to_qt(strftime_mask) -> str
         Convert an arbitrary strftime mask to Qt syntax.
+    format_python_date(python_date) -> str
+        Format a Python date using the configured Qt mask.
+    to_qdate(python_date) -> QDate
+        Convert a Python date or datetime object to ``QDate``.
 
     Examples
     --------
@@ -43,11 +53,20 @@ class QtDateFormat:
             Format string suitable for ``QDateEdit.setDisplayFormat()``,
             ``QDateTimeEdit.setDisplayFormat()`` or ``QDate.toString()``.
 
+        Notes
+        -----
+        The returned format is derived from the application config mask
+        after converting Python ``strftime`` directives to Qt syntax.
+
+        Examples
+        --------
+        >>> QtDateFormat.from_config()
+        'dd/MM/yyyy'
+
         See Also
         --------
         strftime_to_qt : low-level conversion function.
         """
-        # Local module import
         from udescjoinvilletteaapp import AppConfig
 
         strftime_mask = AppConfig.get_geral_date_mask()
@@ -122,6 +141,27 @@ class QtDateFormat:
 
     @staticmethod
     def format_python_date(python_date) -> str:
+        """Format a Python date object using the configured Qt mask.
+
+        Parameters
+        ----------
+        python_date : date or datetime
+            Python date or datetime object to format.
+
+        Returns
+        -------
+        str
+            Formatted date string according to the Qt display mask.
+            Returns an empty string when ``python_date`` is ``None``.
+
+        Examples
+        --------
+        >>> from datetime import date
+        >>> QtDateFormat.format_python_date(date(2024, 1, 5))
+        '05/01/2024'
+        >>> QtDateFormat.format_python_date(None)
+        ''
+        """
         if python_date is None:
             return ""
         qt_mask = QtDateFormat.from_config()
@@ -131,9 +171,26 @@ class QtDateFormat:
 
     @staticmethod
     def to_qdate(python_date) -> QDate:
-        """
-        Converte um objeto date/datetime do Python para QDate.
-        Se a data for None, retorna a data atual.
+        """Convert a Python date or datetime object to ``QDate``.
+
+        Parameters
+        ----------
+        python_date : date or datetime or None
+            Python date or datetime object to convert.
+
+        Returns
+        -------
+        QDate
+            Corresponding Qt date. Returns the current date when
+            ``python_date`` is ``None`` or falsy.
+
+        Examples
+        --------
+        >>> from datetime import date
+        >>> QtDateFormat.to_qdate(date(2024, 1, 5))
+        QDate(2024, 1, 5)
+        >>> QtDateFormat.to_qdate(None)
+        QDate.currentDate()
         """
         if not python_date:
             return QDate.currentDate()

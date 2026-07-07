@@ -16,10 +16,29 @@ from PySide6.QtWidgets import QApplication
 class CriticalHooks:
     """Encapsulate global exception hooks for the application.
 
+    This class registers handlers for uncaught exceptions in the main
+    thread and worker threads, and displays a translated error dialog when
+    Qt is available.
+
+    Methods
+    -------
+    show_critical_error(exception)
+        Display a translated critical error dialog for the given exception.
+    global_exception_hook(exctype, value, traceback_obj)
+        Handle uncaught exceptions on the main thread.
+    threading_exception_hook(args)
+        Handle uncaught exceptions in worker threads.
+    setup_exception_hooks()
+        Register global exception hooks for the application.
+
     Notes
     -----
-    The class uses QCoreApplication.translate for translated error
-    text. This mapping is intended for localized internationalization.
+    The class uses QCoreApplication.translate for translated error text.
+    This mapping is intended for localized internationalization.
+
+    Examples
+    --------
+    >>> CriticalHooks.setup_exception_hooks()
     """
 
     @staticmethod

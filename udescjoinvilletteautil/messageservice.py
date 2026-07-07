@@ -1,3 +1,9 @@
+"""Centralized Qt message dialog service.
+
+This module provides a MessageService class for showing translated
+information, warning, critical, and question dialogs in a Qt application.
+"""
+
 from typing import Optional
 
 from PySide6.QtCore import QCoreApplication
@@ -19,8 +25,6 @@ class MessageService:
         The widget used as parent for all dialogs.
     title : str
         Default window title obtained from the main window.
-    tr : callable
-        Translation function (parent.tr) for localized strings.
 
     Methods
     -------
@@ -158,7 +162,30 @@ class MessageService:
 
     @staticmethod
     def critical_global(text: str, title: Optional[str] = None) -> None:
-        """Para uso em exceções globais sem parent real."""
+        """Show a critical dialog when no parent widget is available.
+
+        Parameters
+        ----------
+        text : str
+            The error message to display.
+        title : str, optional
+            Dialog title. Uses the application title if not provided.
+
+        Returns
+        -------
+        None
+            Displays a modal critical message box without requiring a real
+            parent widget.
+
+        Notes
+        -----
+        This method creates a temporary hidden QWidget to satisfy Qt's
+        parent requirement for modal dialogs.
+
+        Examples
+        --------
+        >>> MessageService.critical_global('Fatal error occurred.', 'Error')
+        """
         from udescjoinvilletteaapp import AppConfig
 
         window = QWidget()

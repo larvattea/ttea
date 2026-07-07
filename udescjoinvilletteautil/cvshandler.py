@@ -1,4 +1,9 @@
-# udescjoinvilletteautil/cvshandler.py
+"""CSV file handling utilities for the T-TEA platform.
+
+This module provides a CSVHandler class for reading and writing CSV files
+with a custom dialect and robust error handling.
+"""
+
 import csv
 import io
 import locale
@@ -36,9 +41,9 @@ class CSVHandler:
     Attributes
     ----------
     dialect : str
-        The registered CSV dialect name.
+        Registered CSV dialect name.
     log : Log
-        Singleton logger instance used throughout the application.
+        Singleton logger instance used by the handler.
 
     Methods
     -------
@@ -48,6 +53,11 @@ class CSVHandler:
         Write data to a CSV file or an already-opened file object.
     read_csv(filename, as_dict=False)
         Read a CSV file safely, returning an empty list on any error.
+
+    Examples
+    --------
+    >>> handler = CSVHandler()
+    >>> handler.write_csv("test.csv", [["a", "b"], ["1", "2"]])
     """
 
     def __init__(
@@ -93,7 +103,8 @@ class CSVHandler:
             quoting=quoting,
         )
         self.dialect = dialect
-        self.log = Log.get_log()  # Same logger used throughout the application
+        # Same logger used throughout the application
+        self.log = Log.get_log()
 
     def write_csv(
         self,
@@ -116,6 +127,11 @@ class CSVHandler:
         headers : list of str, optional
             Field names when writing dictionaries. If provided, a header
             row is written first.
+
+        Returns
+        -------
+        None
+            The CSV file is written to disk or the open file object.
 
         Notes
         -----
@@ -160,13 +176,18 @@ class CSVHandler:
             Data rows to write.
         headers : list of str or None
             Field names for DictWriter, or None to write plain rows.
+
+        Returns
+        -------
+        None
+            Writes rows to the open file object.
         """
         if headers:
             writer = csv.DictWriter(
                 file, fieldnames=headers, dialect=self.dialect
             )
             writer.writeheader()
-            writer.writerows(data)  # Fast then loop
+            writer.writerows(data)
         else:
             writer = csv.writer(file, dialect=self.dialect)
             writer.writerows(data)
@@ -175,7 +196,7 @@ class CSVHandler:
         self,
         filename: Optional[Union[str, os.PathLike]] = None,
         as_dict: bool = False,
-        content: Optional[str] = None,  # Novo parâmetro para conteúdo direto
+        content: Optional[str] = None,
     ) -> List[Union[Dict, List]]:
         """
         Read a CSV file with comprehensive error handling.
@@ -186,16 +207,28 @@ class CSVHandler:
 
         Parameters
         ----------
-        filename : str or PathLike
+        filename : str or PathLike, optional
             Path to the CSV file.
         as_dict : bool, default False
             If True, returns a list of dictionaries (using first row as keys).
+        content : str, optional
+            CSV content provided directly as a string.
 
         Returns
         -------
         list
             List of rows (dicts if ``as_dict=True``, otherwise lists).
             Empty list on any read error.
+
+        Notes
+        -----
+        If ``content`` is provided, the ``filename`` parameter is ignored.
+
+        Examples
+        --------
+        >>> handler = CSVHandler()
+        >>> handler.read_csv(content='a;b\n1;2', as_dict=False)
+        [['a', 'b'], ['1', '2']]
         """
         if content is not None:
             try:
@@ -217,12 +250,12 @@ class CSVHandler:
             )
             return []
 
-        # Lista otimizada e testada para PT-BR/PT-PT, Espanhol e Inglês
-        # em Windows, Linux e Mac
+        # List optimized and tested for PT-BR/PT-PT, Spanish, and English
+        # on Windows, Linux, and Mac
         system_enc = locale.getpreferredencoding(False)
         encodings_to_try = ["utf-8-sig", "cp1252", "utf-8", "latin1"]
 
-        # Evita duplicata caso o system_enc já esteja na lista
+        # Avoids duplicates if system_enc is already in the list
         if system_enc.lower() not in [e.lower() for e in encodings_to_try]:
             encodings_to_try.insert(1, system_enc)
 
@@ -236,10 +269,6 @@ class CSVHandler:
                         reader = csv.reader(file, dialect=self.dialect)
 
                     rows = list(reader)
-                    # self.log.log_info(
-                    #    f"CSV read successfully with encoding {encoding} "
-                    #    f"({len(rows)} rows) -> {path.name}"
-                    # )
                     return rows
             except PermissionError:
                 self.log.log_warning(

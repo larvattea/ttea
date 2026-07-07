@@ -42,6 +42,22 @@ class AppConfig:
         Alternative date format string used for English locale.
     TRANSLATION_EXTENSION : str
         File extension for Qt translation files.
+
+    Methods
+    -------
+    get_title()
+        Return the translated application title.
+    get_geral_date_mask()
+        Return the configured general date format mask.
+    config_file_exists(filename)
+        Check whether the configuration file exists.
+
+    Examples
+    --------
+    >>> AppConfig.get_title()
+    'Plataforma T-TEA'
+    >>> AppConfig.config_file_exists()
+    True
     """
 
     ICON_APP: str = PathConfig.icon_system("appicon")

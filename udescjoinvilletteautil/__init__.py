@@ -1,36 +1,34 @@
 """
 udescjoinvilletteautil
 
-A Python package for utility functions in the T-TEA platform,
-supporting and configuration management. Developed by the
-Larva UDESC team.
-
-This package provides tools for handling CSV files,
-Message Dialog, Date conversion and central path management.
+Utility functions for the T-TEA platform, including configuration and
+path management.
 
 Attributes
 ----------
 __version__ : str
-    The current version of the package.
+    Current package version.
 __date__ : str
-    The release date of this version.
+    Release date of the package version.
 __author__ : str
-    The development team.
+    Package author or team.
 __license__ : str
-    The license under which the package is distributed.
+    Package license.
 
 See Also
 --------
 CSVHandler
     Handling CSV files with a custom dialect.
 PathConfig
-    Manages file paths and directory structures.
+    Manage file paths and directory structures.
 
 Notes
 -----
 This package is maintained by the Larva UDESC team and is under active
-development. Contributions and bug reports are welcome at:
-https://github.com/larva-udesc/udesc_ttea_view
+development.
+
+Contributions and bug reports are welcome at:
+https://github.com/larvattea/T-TEA2.0
 """
 
 # Define the __all__ variable
