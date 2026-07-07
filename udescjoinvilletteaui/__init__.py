@@ -33,6 +33,7 @@ __all__ = [
     "Ui_AboutView",
     "Ui_CalibrationParameterizationView",
     "Ui_CalibrationView",
+    "Ui_GameCalibrationView",
     "Ui_ProfessionalEditView",
     "Ui_ProfessionalListView",
     "Ui_InstitutionFacilityEditView",
@@ -54,6 +55,7 @@ from .aboutviewui import Ui_AboutView
 from .calibrationparameterizationviewui import \
     Ui_CalibrationParameterizationView
 from .calibrationviewui import Ui_CalibrationView
+from .gamecalibrationviewui import Ui_GameCalibrationView
 from .institutionfacilityeditviewui import Ui_InstitutionFacilityEditView
 from .institutionfacilitylistviewui import Ui_InstitutionFacilityListView
 from .languageviewui import Ui_LanguageView

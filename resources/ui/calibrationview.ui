@@ -155,11 +155,11 @@
       </font>
      </property>
      <property name="text">
-      <string>Iniciar Câmera</string>
+      <string>&amp;Iniciar Câmera</string>
      </property>
     </widget>
    </item>
-      <item>
+   <item>
     <layout class="QHBoxLayout" name="lay_calibration_buttons">
      <property name="spacing">
       <number>8</number>
@@ -179,7 +179,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Calibração Automática</string>
+        <string>Calibração &amp;Automática</string>
        </property>
       </widget>
      </item>
@@ -198,7 +198,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Calibração Semi-Automática</string>
+        <string>Calibração S&amp;emi-Automática</string>
        </property>
       </widget>
      </item>
@@ -217,7 +217,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Calibração Manual</string>
+        <string>Calibração &amp;Manual</string>
        </property>
       </widget>
      </item>

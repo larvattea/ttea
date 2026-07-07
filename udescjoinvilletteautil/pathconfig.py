@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import List
 
 from platformdirs import user_data_dir
+from PySide6.QtCore import QDir, QDirIterator
 
 
 class PathConfig:
@@ -17,6 +18,7 @@ class PathConfig:
 
     CONFIG_FILENAME = "config.ini"
     CALIBRATION_FILENAME = "calibration.ini"
+    CALIBRATION_POINT_FILENAME = "calibration_point.csv"
 
     # ===================================================================
     # Diretório base
@@ -126,6 +128,12 @@ class PathConfig:
         return cls._user_file(cls.CALIBRATION_DIR, filename)
 
     @classmethod
+    def calibration_point(
+        cls, filename: str = CALIBRATION_POINT_FILENAME
+    ) -> str:
+        return cls._user_file(cls.CALIBRATION_DIR, filename)
+
+    @classmethod
     def professional(cls, filename: str) -> str:
         return cls._user_file(cls.PROFESSIONAL_DIR, filename)
 
@@ -192,3 +200,11 @@ class PathConfig:
     @classmethod
     def path_help_pt(cls, filename: str) -> str:
         return cls.help(f"pt/{filename}")
+
+    @classmethod
+    def find_resource_built_in(cls, base_path: str, name: str) -> str:
+        """Auxiliar para buscar recursos embutidos."""
+        it = QDirIterator(
+            base_path, [name], QDir.Files, QDirIterator.Subdirectories
+        )
+        return it.next() if it.hasNext() else ""

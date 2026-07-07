@@ -217,7 +217,7 @@ class GameSettings:
         else:
             cls.ENVIRONMENT_IMAGE = player_config.environment_image
 
-        cls.ENVIRONMENT_IMAGE_OTHER_SIDE = KarteaPathConfig.kartea_image(
+        cls.ENVIRONMENT_IMAGE_OTHER_SIDE = KarteaPathConfig.game_builtin_image(
             "variant1environment"
         )
 
@@ -308,11 +308,11 @@ class GameSettings:
             cls.SOUND = player_config.sound
 
         # ====================== Config e Estado do Menu ======================
-        cls.MENU_BACKGROUND = KarteaPathConfig.kartea_image("menu")
+        cls.MENU_BACKGROUND = KarteaPathConfig.game_builtin_image("menu")
         cls.MENU_CLICK_SOUND = KarteaPathConfig.game_sound("point.wav")
-        cls.MENU_FEEDBACK_25 = KarteaPathConfig.kartea_image("trophy25")
-        cls.MENU_FEEDBACK_50 = KarteaPathConfig.kartea_image("trophy50")
-        cls.MENU_FEEDBACK_75 = KarteaPathConfig.kartea_image("trophy75")
+        cls.MENU_FEEDBACK_25 = KarteaPathConfig.game_builtin_image("trophy25")
+        cls.MENU_FEEDBACK_50 = KarteaPathConfig.game_builtin_image("trophy50")
+        cls.MENU_FEEDBACK_75 = KarteaPathConfig.game_builtin_image("trophy75")
 
         # ====================== Som e Música ======================
         cls.MISS_SOUND = KarteaPathConfig.game_sound("miss.wav")
@@ -322,8 +322,8 @@ class GameSettings:
         cls.CLOCK_TICK_SOUND = KarteaPathConfig.game_sound("clocktick.wav")
 
         # ====================== Resources ===================================
-        cls.FINISH_IMAGE = KarteaPathConfig.kartea_image("finish")
-        cls.HORIZON_BG_IMAGE = KarteaPathConfig.kartea_image("horizon")
+        cls.FINISH_IMAGE = KarteaPathConfig.game_builtin_image("finish")
+        cls.HORIZON_BG_IMAGE = KarteaPathConfig.game_builtin_image("horizon")
 
     @classmethod
     def session_data(

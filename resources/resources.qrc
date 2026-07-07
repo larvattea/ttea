@@ -45,9 +45,15 @@
     </qresource>          
 
     <!-- Images -->
-    <qresource prefix="/images">        
-        <file alias="kartealogo">images/kartealogo.jpg</file>        
+    <qresource prefix="/images">     
+        <file alias="calibrationokpt">images/calibration_ok_pt.png</file>  
+        <file alias="calibrationpt">images/calibration_pt.png</file>       
+        <file alias="kartealogo">images/kartealogo.jpg</file>  
+        <file alias="larvaico">images/larvaico.png</file>      
         <file alias="ttealogo">images/ttealogo.png</file>
+        <file alias="warningen">images/warning_en.png</file>
+        <file alias="warninges">images/warning_es.png</file>
+        <file alias="warningpt">images/warning_pt.png</file>
     </qresource>
 
     <!-- Translations -->

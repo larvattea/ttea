@@ -3,6 +3,7 @@
         "Gabriel Brunelli Pereira",
         "Alexandre Altair de Melo"
     ],
+    "contact_email": "",
     "exec": "kartea.py",
     "game": "KarTEA",
     "icon": "resources/icons/kartea4.ico",
@@ -21,5 +22,6 @@
         }
     },
     "since": "2023",
+    "website": "https://udescmove2learn.wordpress.com/",
     "version": "2.0.0"
 }

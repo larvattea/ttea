@@ -2,7 +2,7 @@ from PySide6.QtCore import QLocale, QSettings, QTranslator
 from PySide6.QtWidgets import QApplication
 
 from udescjoinvilletteaapp import AppConfig
-from udescjoinvilletteamodel import Language
+from udescjoinvilletteamodel import AppModel, Language
 from udescjoinvilletteautil import PathConfig
 
 
@@ -103,4 +103,6 @@ class LanguageService:
         )
         self.settings.setValue(AppConfig.SETTINGS_GERAL_DATE_MASK, date_mask)
         self.save_language(code)
+        model = AppModel.get_instance()
+        model.current_language = code
         return True

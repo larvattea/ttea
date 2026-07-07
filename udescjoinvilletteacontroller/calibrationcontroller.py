@@ -5,7 +5,8 @@ from PySide6.QtCore import QObject, Qt, Slot
 from PySide6.QtGui import QImage, QPixmap
 
 from udescjoinvilletteaapp import AppConfig
-from udescjoinvilletteacore import CalibrationMath, CameraVideoThread
+from udescjoinvilletteacore import CalibrationMath  # GameCalibration,
+from udescjoinvilletteacore import CameraVideoThread
 from udescjoinvilletteaservice import CalibrationService
 
 if TYPE_CHECKING:
@@ -51,7 +52,26 @@ class CalibrationController(QObject):
         self.view.msg.info(self.tr("Em construção!"))
 
     def handle_calibrate_manual(self) -> None:
-        self.view.msg.info(self.tr("Em construção!"))
+        from udescjoinvilletteafactory import ViewFactory
+
+        # self.view.msg.info(self.tr("Em construção!"))
+        # available_geo = self.service.get_available_geometry_of_screen(
+        #    self.view.cbx_monitor.currentIndex()
+        # )
+        # game_calibration = GameCalibration(
+        #    self.view.cbx_camera.currentIndex(),
+        #    available_geo.height(),
+        #    available_geo.width(),
+        # )
+        # game_calibration.run()
+        # dialog =
+        # dialog.exec()
+        dialog = (
+            ViewFactory.get_app_view_factory().create_gamecalibration_view(
+                self.view
+            )
+        )
+        dialog.exec()
 
     def _initialize_view(self):
         self.list_proportions()
@@ -146,8 +166,6 @@ class CalibrationController(QObject):
 
     @Slot(QImage)
     def update_image(self, qt_img):
-        # self.view.lbl_video.setPixmap(QPixmap.fromImage(qt_img))
-        # Criamos o pixmap a partir da cópia enviada pela thread
         pixmap = QPixmap.fromImage(qt_img)
 
         # Redimensionamos dinamicamente com base no tamanho ATUAL do label na UI

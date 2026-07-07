@@ -16,9 +16,6 @@ class LanguageController(QObject):
     ):
         self.view = view
         self.service = service or LanguageService()
-        # self.model = (
-        #    view.parent().model.language_model if view.parent() else Language()
-        # )  # ou injetar
 
         self.model = (
             p.model.language_model
@@ -34,7 +31,6 @@ class LanguageController(QObject):
         preferred = self.service.get_initial_language()
         self.view.set_preselected_language(preferred)
         self._current_preview_lang = preferred
-        # Preview inicial já aplicado via serviço ou main
 
     def handle_preview(self):
         code = self.view.get_selected_language()

@@ -43,6 +43,7 @@ https://github.com/larva-udesc/udesc_ttea_view
 __all__ = [
     "AboutView",
     "CalibrationView",
+    "ManualCalibrationView",
     "ProfessionalEditView",
     "ProfessionalListView",
     "InstitutionFacilityEditView",
@@ -67,6 +68,7 @@ from .institutionfacilityeditview import InstitutionFacilityEditView
 from .institutionfacilitylistview import InstitutionFacilityListView
 from .languageview import LanguageView
 from .mainview import MainView
+from .manualcalibrationview import ManualCalibrationView
 from .playereditview import PlayerEditView
 from .playergamelaunchview import PlayerGameLaunchView
 from .playerlistview import PlayerListView

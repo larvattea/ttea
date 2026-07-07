@@ -34,7 +34,14 @@ https://github.com/larva-udesc/udesc_ttea_view
 """
 
 # Define the __all__ variable
-__all__ = ["CSVHandler", "MessageService", "QtDateFormat", "PathConfig"]
+__all__ = [
+    "CriticalHooks",
+    "CSVHandler",
+    "Image",
+    "MessageService",
+    "QtDateFormat",
+    "PathConfig",
+]
 
 __version__ = "1.0.0"
 __date__ = "2025-12-25"
@@ -42,7 +49,9 @@ __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
 # Import the submodules
+from .criticalhooks import CriticalHooks
 from .cvshandler import CSVHandler
+from .image import Image
 from .messageservice import MessageService
 from .pathconfig import PathConfig
 from .qtdateformat import QtDateFormat

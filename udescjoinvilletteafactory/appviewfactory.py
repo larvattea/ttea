@@ -6,9 +6,10 @@ from PySide6.QtWidgets import QDialog, QMainWindow
 from udescjoinvilletteaview import (AboutView, CalibrationView,
                                     InstitutionFacilityEditView,
                                     InstitutionFacilityListView, LanguageView,
-                                    MainView, PlayerEditView,
-                                    PlayerGameLaunchView, PlayerListView,
-                                    ProfessionalEditView, ProfessionalListView)
+                                    MainView, ManualCalibrationView,
+                                    PlayerEditView, PlayerGameLaunchView,
+                                    PlayerListView, ProfessionalEditView,
+                                    ProfessionalListView)
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
@@ -251,3 +252,9 @@ class AppViewFactory:
             translator and parent.
         """
         return MainView(parent)
+
+    @staticmethod
+    def create_gamecalibration_view(
+        parent: Optional[QDialog] = None,
+    ) -> ManualCalibrationView:
+        return ManualCalibrationView(parent)
