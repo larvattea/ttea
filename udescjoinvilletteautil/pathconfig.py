@@ -53,6 +53,33 @@ class PathConfig:
     PROFESSIONAL_DIR : Path
         Directory for professional files.
 
+    Methods
+    -------
+    resource(path='')
+        Build a Qt resource path.
+    icon_system(name)
+        Return a Qt system icon resource path.
+    icon_ui_button(name)
+        Return a Qt UI button icon resource path.
+    icon_ui_menu(name)
+        Return a Qt UI menu icon resource path.
+    flag(name)
+        Return a Qt flag resource path.
+    image(name)
+        Return a Qt image resource path.
+    ui(name)
+        Return a Qt UI resource path.
+    translation(name)
+        Return a Qt translation resource path.
+    sounds(name)
+        Return a Qt sound resource path.
+    help(path='')
+        Return a Qt help resource path.
+    ensure_dirs()
+        Create all user directories.
+    config(filename=CONFIG_FILENAME)
+        Return application config file path.
+
     Examples
     --------
     >>> PathConfig.ensure_dirs()

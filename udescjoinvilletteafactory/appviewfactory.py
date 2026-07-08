@@ -9,19 +9,28 @@ from typing import TYPE_CHECKING, Callable, Optional
 from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QDialog, QMainWindow
 
-from udescjoinvilletteaview import (AboutView, CalibrationView,
-                                    InstitutionFacilityEditView,
-                                    InstitutionFacilityListView, LanguageView,
-                                    MainView, ManualCalibrationView,
-                                    PlayerEditView, PlayerGameLaunchView,
-                                    PlayerListView, ProfessionalEditView,
-                                    ProfessionalListView)
+from udescjoinvilletteaview import (
+    AboutView,
+    CalibrationView,
+    InstitutionFacilityEditView,
+    InstitutionFacilityListView,
+    LanguageView,
+    MainView,
+    ManualCalibrationView,
+    PlayerEditView,
+    PlayerGameLaunchView,
+    PlayerListView,
+    ProfessionalEditView,
+    ProfessionalListView,
+)
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
-    # Local module import
-    from udescjoinvilletteamodel import (InstitutionFacility, Player,
-                                         Professional)
+    from udescjoinvilletteamodel import (
+        InstitutionFacility,
+        Player,
+        Professional,
+    )
 
 
 class AppViewFactory:

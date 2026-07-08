@@ -5,6 +5,7 @@ and provides helpers for creating ``QDate`` objects from Python date
 values.
 """
 
+from datetime import date, datetime
 from typing import Final
 
 from PySide6.QtCore import QDate
@@ -140,7 +141,7 @@ class QtDateFormat:
         return qt_mask
 
     @staticmethod
-    def format_python_date(python_date) -> str:
+    def format_python_date(python_date: date | datetime | None) -> str:
         """Format a Python date object using the configured Qt mask.
 
         Parameters
@@ -170,7 +171,7 @@ class QtDateFormat:
         return q_date.toString(qt_mask)
 
     @staticmethod
-    def to_qdate(python_date) -> QDate:
+    def to_qdate(python_date: date | datetime | None) -> QDate:
         """Convert a Python date or datetime object to ``QDate``.
 
         Parameters

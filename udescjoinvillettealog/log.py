@@ -39,6 +39,10 @@ class Log:
 
     Methods
     -------
+    __new__(cls, *args, **kwargs)
+        Create or return the singleton Log instance.
+    __init__(log_file=None, log_level=logging.DEBUG)
+        Initialize the logger and configure file handling.
     get_log()
         Retrieve the singleton Log instance.
     ensure_log_directory_exists()
@@ -72,7 +76,7 @@ class Log:
     LOG_FILE_PATH = PathConfig.log(LOG_FILE_NAME)
     _instance = None
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args: tuple, **kwargs: dict) -> "Log":
         """Implements the Singleton pattern to ensure a single instance of
         the Log class.
 
@@ -150,7 +154,7 @@ class Log:
         self.logger.info("Log instance initialized.")
 
     @classmethod
-    def get_log(cls):
+    def get_log(cls) -> "Log":
         """Retrieve the singleton instance of the Log class.
 
         Parameters
