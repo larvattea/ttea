@@ -1,0 +1,21 @@
+Sessao;Data;Hora;Fase;Nivel;Posicao jogador;Tipo de Evento;Obs.
+1;03/31/25;21:42:44;1;1;0;Inicio Nivel;
+1;03/31/25;21:42:44;1;1;0;Inicio da jogada;1
+1;03/31/25;21:42:44;1;1;0;Roupa certa;calca27.png
+1;03/31/25;21:42:45;1;1;0;Roupa errada;biquini1.png
+1;03/31/25;21:42:45;1;1;0;Desafio: clima;Frio
+1;03/31/25;21:42:56;1;1;3;Escolheu Roupa Certa;
+1;03/31/25;21:43:04;1;1;0;Inicio da jogada;2
+1;03/31/25;21:43:04;1;1;0;Roupa certa;calca25.png
+1;03/31/25;21:43:04;1;1;0;Roupa errada;casaco13.png
+1;03/31/25;21:43:04;1;1;0;Desafio: corpo;Pernas
+1;03/31/25;21:43:13;1;1;3;Escolheu Roupa Certa;
+1;03/31/25;21:43:24;1;1;0;Inicio da jogada;3
+1;03/31/25;21:43:24;1;1;0;Roupa certa;saia13.png
+1;03/31/25;21:43:24;1;1;0;Roupa errada;chinelo1.png
+1;03/31/25;21:43:24;1;1;0;Desafio: corpo;Pernas
+1;03/31/25;21:43:28;1;1;4;Escolheu Roupa Errada;
+1;03/31/25;21:43:35;1;1;0;Concluiu Nivel;
+1;03/31/25;21:43:35;1;1;0;Pontuacao;50
+1;03/31/25;21:43:35;1;1;0;Resultado;Avanca nivel
+1;03/31/25;21:43:39;1;1;0;Acao profissional;Botao Sair para Menu
