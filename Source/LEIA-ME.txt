@@ -13,6 +13,17 @@ REQUISITOS DO COMPUTADOR
     KB2533623 instalada (Windows 7 atualizado via Windows Update já a possui).
   - Webcam conectada antes de abrir o programa.
 
+CÂMERA
+  - Clique na engrenagem (⚙) no canto superior direito do menu para escolher
+    qual webcam usar. A escolha vale para todos os jogos e para a calibração,
+    e fica salva em "config.json".
+
+REGISTROS (LOGS)
+  - log.txt   : mensagens dos jogos (jogador, fase, nível, calibração).
+  - debug.txt : tudo do log.txt + erros e diagnóstico. Se algo não funcionar,
+    envie este arquivo para a equipe do projeto.
+  - Os dois arquivos nunca passam de 2 MB (as linhas antigas são apagadas).
+
 DADOS
   - Os cadastros e sessões dos jogadores ficam na pasta "Jogadores".
   - A calibração fica em "calibracao.csv".

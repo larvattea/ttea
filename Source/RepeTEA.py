@@ -13,6 +13,8 @@ import random
 from pygame import mixer
 import datetime
 import arquivo
+import settings
+import ttea_log
 
 pygame.init()
 #################################################################################
@@ -112,7 +114,8 @@ relacao_altura = (altura_projetor / altura_tela_controle)  # Esta relação é u
 tela_de_calibracao = np.zeros((altura_projetor, largura_projetor, 3),np.uint8)  # Tela que será usada para o projetar o jogo.
 tela_de_controle = np.zeros((altura_tela_controle, largura_tela_controle, 3),np.uint8)  # Tela que será usada para o projetar o jogo.
 
-camera = cv2.VideoCapture(camera,cv2.CAP_DSHOW)  # O valor entre parênteses indica qual câmera será utilizada. 0=default; 1,2,3...= câmeras externas.
+camera = cv2.VideoCapture(settings.CAMERA, cv2.CAP_DSHOW)  # Câmera escolhida na engrenagem do menu (config.json).
+ttea_log.debug(f'RepeTEA: camera {settings.CAMERA} aberta={camera.isOpened()}')
 
 tamanho_sequencia = int (fase_no_hud)
 tamanho_sequencia_atual = int (fase_no_hud)
@@ -651,11 +654,18 @@ while not gameWarning:
 #################################################################################
 #################### Inicialização do MediaPipe e Calibração ####################
 #################################################################################
+falhas_camera = 0
 while not gameExit:
 
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
         while camera.isOpened():
             ret, frame = camera.read()
+            if not ret or frame is None:
+                falhas_camera += 1
+                if falhas_camera == 1 or falhas_camera % 300 == 0:
+                    ttea_log.debug(f'RepeTEA: falha ao ler frame da camera (total={falhas_camera})')
+                time.sleep(0.05)
+                continue
 
             # Tela de Controle para RGB.
             tela_de_controle = cv2.cvtColor(cv2.flip(frame,1), cv2.COLOR_BGR2RGB)

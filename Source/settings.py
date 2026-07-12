@@ -1,13 +1,49 @@
+import json
 import pygame
 import numpy as np
 import cv2
 import arquivo
+import ttea_log
 
 #Variáveis do Pygame
 WINDOW_NAME = "KarTEA"
 GAME_TITLE = WINDOW_NAME
 CAMERA = 0
 CAMERA_FLIP = 0
+
+# A câmera escolhida na engrenagem do menu fica salva em config.json,
+# ao lado do executável. Todos os jogos leem settings.CAMERA.
+CONFIG_ARQUIVO = 'config.json'
+
+def _carregar_config():
+    global CAMERA
+    try:
+        with open(CONFIG_ARQUIVO, 'r', encoding='utf-8') as f:
+            cfg = json.load(f)
+        CAMERA = int(cfg.get('camera', CAMERA))
+        ttea_log.debug(f'config.json carregado: camera={CAMERA}')
+    except FileNotFoundError:
+        pass
+    except Exception as e:
+        ttea_log.debug(f'Falha ao ler {CONFIG_ARQUIVO}: {e!r}')
+
+def salvar_camera(indice):
+    global CAMERA
+    CAMERA = int(indice)
+    try:
+        try:
+            with open(CONFIG_ARQUIVO, 'r', encoding='utf-8') as f:
+                cfg = json.load(f)
+        except Exception:
+            cfg = {}
+        cfg['camera'] = CAMERA
+        with open(CONFIG_ARQUIVO, 'w', encoding='utf-8') as f:
+            json.dump(cfg, f, indent=2)
+        ttea_log.debug(f'Camera {CAMERA} salva em {CONFIG_ARQUIVO}')
+    except Exception as e:
+        ttea_log.debug(f'Falha ao salvar {CONFIG_ARQUIVO}: {e!r}')
+
+_carregar_config()
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 
 

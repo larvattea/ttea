@@ -1,4 +1,8 @@
 
+# O logging precisa ser a primeira coisa: captura erros ate dos imports.
+import ttea_log
+ttea_log.init()
+
 import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
@@ -53,6 +57,8 @@ def show_cad():
     menu_frame.forget()
 
 root = tk.Tk()
+# Erros dentro de callbacks do tkinter vao para o debug.txt
+root.report_callback_exception = ttea_log.hook_tk
 
 # config the root window
 root.resizable(False, False)
@@ -311,6 +317,70 @@ imagemUdesc.imageUdesc = photoUdesc
 imagemUdesc.pack(pady=10)
 
 menu_frame.pack()
+
+# Configurações (engrenagem no canto superior direito) -------------------------
+def detectar_cameras():
+    # Testa os indices de camera e devolve [(indice, largura, altura), ...]
+    ttea_log.debug('Config: procurando cameras...')
+    encontradas = []
+    falhas_seguidas = 0
+    for i in range(10):
+        cap = cv2.VideoCapture(i, cv2.CAP_DSHOW)
+        if cap.isOpened():
+            largura = altura = 0
+            ret, frame = cap.read()
+            if ret and frame is not None:
+                altura, largura = frame.shape[:2]
+            encontradas.append((i, largura, altura))
+            falhas_seguidas = 0
+            ttea_log.debug(f'Config: camera {i} disponivel ({largura}x{altura})')
+        else:
+            falhas_seguidas += 1
+            ttea_log.debug(f'Config: camera {i} indisponivel')
+        cap.release()
+        if falhas_seguidas >= 2:
+            break
+    return encontradas
+
+def abrir_configuracoes():
+    win = tk.Toplevel(root)
+    win.title('Configurações')
+    win.resizable(False, False)
+    win.grab_set()
+    win.geometry('+{}+{}'.format(root.winfo_x() + 40, root.winfo_y() + 40))
+
+    frame = tk.Frame(win, padx=15, pady=15)
+    frame.pack()
+    ttk.Label(frame, text='Câmera:').grid(column=0, row=0, sticky=tk.W)
+    cam_cb = ttk.Combobox(frame, state='readonly', width=24)
+    cam_cb.grid(column=1, row=0, padx=10)
+    aviso = ttk.Label(frame, text='Procurando câmeras...')
+    aviso.grid(column=0, row=1, columnspan=2, pady=5)
+    win.update()
+
+    cameras = detectar_cameras()
+    if cameras:
+        cam_cb['values'] = [
+            'Câmera {} ({}x{})'.format(i, w, h) if w else 'Câmera {}'.format(i)
+            for i, w, h in cameras
+        ]
+        indices = [i for i, w, h in cameras]
+        cam_cb.current(indices.index(settings.CAMERA) if settings.CAMERA in indices else 0)
+        aviso['text'] = '{} câmera(s) encontrada(s). Em uso: câmera {}'.format(len(cameras), settings.CAMERA)
+    else:
+        aviso['text'] = 'Nenhuma câmera encontrada!'
+
+    def salvar():
+        if cameras:
+            settings.salvar_camera(cameras[cam_cb.current()][0])
+        win.destroy()
+
+    tk.Button(frame, text='Salvar', width=10, command=salvar).grid(column=0, row=2, pady=10)
+    tk.Button(frame, text='Cancelar', width=10, command=win.destroy).grid(column=1, row=2, pady=10)
+
+botao_config = tk.Button(root, text='⚙', font=('Segoe UI Symbol', 13),
+                         relief='flat', cursor='hand2', command=abrir_configuracoes)
+botao_config.place(relx=1.0, x=-4, y=4, anchor='ne')
 
 #Frame Cadastro
 arr_Jogadores = ler_nome_jogadores()
