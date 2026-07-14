@@ -1,7 +1,4 @@
-"""
-udescjoinvillettealog
-
-Package that provides application logging support for the T-TEA platform.
+"""Package that provides application logging support for the T-TEA platform.
 
 Attributes
 ----------

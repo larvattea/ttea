@@ -1,7 +1,4 @@
-"""
-udescjoinvilletteaapp
-
-Package for application configuration and startup support in the
+"""Package for application configuration and startup support in the
 T-TEA platform.
 
 Attributes

@@ -84,7 +84,7 @@ class ManualCalibrationController(QObject):
                     self.camera_timer.start(30)  # ~33 FPS
                 else:
                     self.view.msg.critical(
-                        self.view.tr("Não foi possível abrir a câmera.")
+                        self.tr("Não foi possível abrir a câmera.")
                     )
                     self.camera = None
 
@@ -104,7 +104,7 @@ class ManualCalibrationController(QObject):
                 if self.click_calibration_count == 4:
                     self._load_image("calibrationokpt")
                     self.view.msg.info(
-                        self.view.tr("Calibração concluída com sucesso!")
+                        self.tr("Calibração concluída com sucesso!")
                     )
 
     def _load_image(self, image_name: str):
@@ -176,7 +176,7 @@ class ManualCalibrationController(QObject):
 
             else:
                 self.view.msg.critical(
-                    self.view.tr("Falha ao capturar imagem da câmera.")
+                    self.tr("Falha ao capturar imagem da câmera.")
                 )
 
     def get_available_geometry_of_screen(self) -> Optional[QRect]:
@@ -193,7 +193,7 @@ class ManualCalibrationController(QObject):
             )
         else:
             self.view.msg.critical(
-                self.tr("Erro ao salvar ponto de calibração.")
+                self.tr("Erro ao salvar os pontos da calibração manual.")
             )
 
     def get_data(self) -> Dict[str, Union[str, int]]:

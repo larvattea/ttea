@@ -155,7 +155,10 @@
       </font>
      </property>
      <property name="text">
-      <string>&amp;Iniciar Câmera</string>
+      <string>Iniciar Câmera - F5</string>
+     </property>
+     <property name="shortcut">
+      <string>F5</string>
      </property>
     </widget>
    </item>
@@ -179,7 +182,10 @@
         </font>
        </property>
        <property name="text">
-        <string>Calibração &amp;Automática</string>
+        <string>Calibração Automática - F6</string>
+       </property>
+       <property name="shortcut">
+        <string>F6</string>
        </property>
       </widget>
      </item>
@@ -198,7 +204,10 @@
         </font>
        </property>
        <property name="text">
-        <string>Calibração S&amp;emi-Automática</string>
+        <string>Calibração Semi-Automática - F7</string>
+       </property>
+       <property name="shortcut">
+        <string>F7</string>
        </property>
       </widget>
      </item>
@@ -217,7 +226,10 @@
         </font>
        </property>
        <property name="text">
-        <string>Calibração &amp;Manual</string>
+        <string>Calibração Manual - F8</string>
+       </property>
+       <property name="shortcut">
+        <string>F8</string>
        </property>
       </widget>
      </item>

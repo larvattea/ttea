@@ -1,7 +1,4 @@
-"""
-udescjoinvilletteautil
-
-Utility functions for the T-TEA platform, including configuration and
+"""Utility functions for the T-TEA platform, including configuration and
 path management.
 
 Attributes

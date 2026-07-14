@@ -49,7 +49,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/aboutview.py" line="48"/>
+        <location filename="../../udescjoinvilletteaview/aboutview.py" line="67"/>
         <source>Desde: 2021 - {}</source>
         <translation></translation>
     </message>
@@ -57,34 +57,33 @@ li.checked::marker { content: &quot;\2612&quot;; }
 <context>
     <name>CalibrationController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="35"/>
+        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="36"/>
         <source>Calibração cadastrada com sucesso!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="40"/>
+        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="41"/>
         <source>Erro salvar a calibração.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="48"/>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="51"/>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="54"/>
+        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="49"/>
+        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="52"/>
         <source>Em construção!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="128"/>
+        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="148"/>
         <source>Parar Câmera</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="137"/>
+        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="157"/>
         <source>Iniciar Câmera</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="139"/>
+        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="159"/>
         <source>Câmera Parada</source>
         <translation></translation>
     </message>
@@ -457,47 +456,77 @@ li.checked::marker { content: &quot;\2612&quot;; }
     </message>
     <message>
         <location filename="../ui/calibrationview.ui" line="158"/>
-        <source>Iniciar Câmera</source>
+        <source>Iniciar Câmera - F5</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationview.ui" line="182"/>
-        <source>Calibração Automática</source>
+        <location filename="../ui/calibrationview.ui" line="161"/>
+        <source>F5</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationview.ui" line="201"/>
-        <source>Calibração Semi-Automática</source>
+        <location filename="../ui/calibrationview.ui" line="185"/>
+        <source>Calibração Automática - F6</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationview.ui" line="220"/>
-        <source>Calibração Manual</source>
+        <location filename="../ui/calibrationview.ui" line="188"/>
+        <source>F6</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationview.ui" line="250"/>
+        <location filename="../ui/calibrationview.ui" line="207"/>
+        <source>Calibração Semi-Automática - F7</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationview.ui" line="210"/>
+        <source>F7</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationview.ui" line="229"/>
+        <source>Calibração Manual - F8</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationview.ui" line="232"/>
+        <source>F8</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationview.ui" line="262"/>
         <source>Gravar operação corrente</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationview.ui" line="253"/>
+        <location filename="../ui/calibrationview.ui" line="265"/>
         <source>OK</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationview.ui" line="270"/>
+        <location filename="../ui/calibrationview.ui" line="282"/>
         <source>Cancelar operação corrente</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationview.ui" line="273"/>
+        <location filename="../ui/calibrationview.ui" line="285"/>
         <source>Cancelar</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../../udescjoinvilletteaview/calibrationview.py" line="72"/>
         <source>Deseja sair da calibração?</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>CriticalHooks</name>
+    <message>
+        <location filename="../../udescjoinvilletteautil/criticalhooks.py" line="64"/>
+        <source>Ocorreu um erro inesperado e o aplicativo será encerrado.
+Por favor, entre em contato com o suporte e envie o arquivo de log.
+Detalhes do erro: {0}</source>
         <translation></translation>
     </message>
 </context>
@@ -846,7 +875,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
 <context>
     <name>LanguageController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/languagecontroller.py" line="56"/>
+        <location filename="../../udescjoinvilletteacontroller/languagecontroller.py" line="52"/>
         <source>Erro ao carregar o idioma.</source>
         <translation></translation>
     </message>
@@ -876,16 +905,6 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <message>
         <location filename="../../udescjoinvilletteaview/languageview.py" line="66"/>
         <source>Por favor, selecione um idioma.</source>
-        <translation></translation>
-    </message>
-</context>
-<context>
-    <name>Main</name>
-    <message>
-        <location filename="../../main.py" line="18"/>
-        <source>Ocorreu um erro inesperado e o aplicativo será encerrado.
-Por favor, entre em contato com o suporte e envie o arquivo de log.
-Detalhes do erro: {0}</source>
         <translation></translation>
     </message>
 </context>
@@ -1060,14 +1079,60 @@ Detalhes do erro: {0}</source>
     </message>
 </context>
 <context>
+    <name>ManualCalibrationController</name>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/manualcalibrationcontroller.py" line="20"/>
+        <source>Tela de Monitoramento</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/manualcalibrationcontroller.py" line="87"/>
+        <source>Não foi possível abrir a câmera.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/manualcalibrationcontroller.py" line="107"/>
+        <source>Calibração concluída com sucesso!</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/manualcalibrationcontroller.py" line="179"/>
+        <source>Falha ao capturar imagem da câmera.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/manualcalibrationcontroller.py" line="192"/>
+        <source>Calibração manual cadastrada com sucesso!</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/manualcalibrationcontroller.py" line="196"/>
+        <source>Erro ao salvar os pontos da calibração manual.</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>ManualCalibrationView</name>
+    <message>
+        <location filename="../ui/manualcalibrationview.ui" line="14"/>
+        <source>Plataforma T-TEA - Calibração da Visualização da Tela do Jogo</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteaview/manualcalibrationview.py" line="67"/>
+        <source>Deseja sair da calibração manual?</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>MessageService</name>
     <message>
-        <location filename="../../udescjoinvilletteautil/messageservice.py" line="151"/>
+        <location filename="../../udescjoinvilletteautil/messageservice.py" line="155"/>
         <source>Sim</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteautil/messageservice.py" line="154"/>
+        <location filename="../../udescjoinvilletteautil/messageservice.py" line="158"/>
         <source>Não</source>
         <translation></translation>
     </message>
@@ -1157,12 +1222,12 @@ Detalhes do erro: {0}</source>
 <context>
     <name>PlayerGameLaunchController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="48"/>
+        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="47"/>
         <source>Existe um jogo em execução, ele será finalizado. Deseja sair da tela de sessão de jogo?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="69"/>
+        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="68"/>
         <source>Este jogo foi desenvolvido por:
 
 {0}
@@ -1172,35 +1237,35 @@ Desde: {2} - {3}</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="82"/>
+        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="81"/>
         <source>Informações de autoria do jogo não estão disponíveis.
 Verifique se os metadados de configuração estão corretos.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="96"/>
+        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="95"/>
         <source>Selecione um jogo antes de iniciar.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="102"/>
+        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="101"/>
         <source>Já existe um jogo em execução.
 Feche o jogo atual antes de iniciar outro.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="115"/>
+        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="114"/>
         <source>Erro: Executável do jogo não encontrado em: {0}.
 Verifique se o arquivo existe e se os metadados de configuração estão corretos.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="147"/>
+        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="146"/>
         <source>Espere</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="226"/>
+        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="225"/>
         <source>Jogar</source>
         <translation></translation>
     </message>
@@ -2193,33 +2258,33 @@ Verifique se o arquivo existe e se os metadados de configuração estão correto
 <context>
     <name>SplashScreen</name>
     <message>
-        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="25"/>
-        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="72"/>
+        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="92"/>
+        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="135"/>
         <source>Iniciando aplicação...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="73"/>
+        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="136"/>
         <source>Carregando módulos...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="74"/>
+        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="137"/>
         <source>Inicializando interface...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="75"/>
+        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="138"/>
         <source>Verificando configurações...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="76"/>
+        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="139"/>
         <source>Quase lá...</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="102"/>
+        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="204"/>
         <source>Concluído!</source>
         <translation></translation>
     </message>
@@ -2227,7 +2292,7 @@ Verifique se o arquivo existe e se os metadados de configuração estão correto
 <context>
     <name>TTeaApp</name>
     <message>
-        <location filename="../../udescjoinvilletteaapp/appconfig.py" line="117"/>
+        <location filename="../../udescjoinvilletteaapp/appconfig.py" line="96"/>
         <source>Plataforma T-TEA</source>
         <translation></translation>
     </message>
