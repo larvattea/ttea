@@ -1,95 +1,142 @@
-import sys
-import traceback
+"""Main entry point for the T-TEA Qt application.
 
-from PySide6.QtCore import QCoreApplication
+This module initializes global exception hooks, imports application
+components, and defines the App class responsible for starting the Qt
+event loop.
+"""
+
+import os
+import sys
+
+os.environ["QT_LOGGING_RULES"] = "*.debug=false"
+
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QApplication, QDialog
+from PySide6.QtWidgets import QApplication, QDialog, QMainWindow
 
 from udescjoinvilletteaapp import AppConfig
 from udescjoinvilletteafactory import ViewFactory
 from udescjoinvillettealog import Log
-from udescjoinvilletteamodel import AppModel
 from udescjoinvilletteaservice import LanguageService
-from udescjoinvilletteautil import MessageService
+from udescjoinvilletteautil import CriticalHooks
 from udescjoinvilletteaview import SplashScreen
 
 
-def show_critical_error(exception: Exception):
-    message = QCoreApplication.translate(
-        "Main",
-        "Ocorreu um erro inesperado e o aplicativo será encerrado.\n"
-        "Por favor, entre em contato com o suporte e envie o arquivo de log.\n"
-        "Detalhes do erro: {0}",
-    ).format(str(exception))
+class App:
+    """Main application class that initializes and runs the Qt app.
 
-    MessageService.critical_global(message, None)
+    Attributes
+    ----------
+    app : QApplication | None
+        The Qt application instance used for the event loop.
+    splash : SplashScreen | None
+        The splash screen displayed while the application starts.
+    language_view : QDialog | None
+        The language selection view instance.
+    main_view : QMainWindow | None
+        The main application window.
 
+    Methods
+    -------
+    run()
+        Create the Qt application, initialize language, show the splash
+        screen and main window, and execute the event loop.
 
-def global_exception_hook(
-    exctype: type, value: Exception, traceback_obj: traceback
-):
-    Log.get_log().log_error("Untreated global exception")
-    Log.get_log().log_error_with_stack(value, traceback_obj=traceback_obj)
-    show_critical_error(value)
-    sys.__excepthook__(exctype, value, traceback_obj)
-    sys.exit(1)
+    Examples
+    --------
+    >>> app = App()
+    >>> app.run()  # doctest: +SKIP
+    """
 
+    def __init__(self) -> None:
+        """Initialize application state before Qt startup."""
+        self.app: QApplication | None = None
+        self.splash: SplashScreen | None = None
+        self.language_view: QDialog | None = None
+        self.main_view: QMainWindow | None = None
 
-def main():
-    sys.excepthook = global_exception_hook
-    Log.get_log().log_info("Application started successfully.")
+    def run(self) -> None:
+        """Run the main application and start the Qt event loop.
 
-    app = QApplication(sys.argv)
-    app.setApplicationName(AppConfig.get_title())
-    app.setApplicationVersion(AppConfig.VERSION)
-    app.setWindowIcon(QIcon(AppConfig.ICON_APP))
+        This method creates the QApplication, applies the initial language,
+        shows the splash screen, optionally prompts the user for language
+        selection, and then shows the main window.
 
-    # === Detecta idioma inicial e aplica ===
-    language_service = LanguageService()
-    initial_lang = language_service.get_initial_language()
-    language_service.preview_language(initial_lang)
-    # selected_lang = initial_lang
+        Notes
+        -----
+        The method handles both first-run language setup and normal startup
+        flow. If the language selection dialog is rejected, the application
+        exits with status 0.
 
-    # ======================
-    # SPLASH SCREEN
-    # ======================
-    splash = SplashScreen()
-    splash.show()
-    app.processEvents()
-    splash.raise_()
+        Returns
+        -------
+        None
 
-    # if not AppConfig.config_file_exists():
-    # === Tela de escolha de idioma ===
-    language_view = ViewFactory.get_app_view_factory().create_language_view()
+        Examples
+        --------
+        >>> app = App()
+        >>> app.run()  # doctest: +SKIP
+        """
+        CriticalHooks.setup_exception_hooks()
+        Log.get_log().log_info("Application started successfully.")
 
-    # === Aplica o idioma inicial como preview ===
-    language_view.controller.service.preview_language(initial_lang)
-    language_view.retranslateUi(language_view)  # força tradução imediata
+        # Creation of the QApplication
+        self.app = QApplication(sys.argv)
+        self.app.setApplicationName(AppConfig.get_title())
+        self.app.setApplicationVersion(AppConfig.VERSION)
+        self.app.setWindowIcon(QIcon(AppConfig.ICON_APP))
 
-    splash.finish(language_view)
+        # === Detects initial language and applies it ===
+        language_service = LanguageService()
+        initial_lang = language_service.get_initial_language()
+        language_service.preview_language(initial_lang)
+        selected_lang = initial_lang
 
-    result = language_view.exec()
+        # ======================
+        # SPLASH SCREEN
+        # ======================
+        self.splash = SplashScreen()
+        self.splash.show()
+        self.app.processEvents()
+        self.splash.raise_()
 
-    if result == QDialog.DialogCode.Rejected:
-        sys.exit(0)
+        if not AppConfig.config_file_exists():
+            # === Language selection screen ===
+            language_view = (
+                ViewFactory.get_app_view_factory().create_language_view()
+            )
 
-    selected_lang = language_view.get_selected_language() or initial_lang
+            # === Applies the initial language as preview ===
+            language_view.controller.service.preview_language(initial_lang)
+            language_view.retranslateUi(
+                language_view
+            )  # forces immediate translation
 
-    if selected_lang != initial_lang:
-        language_service.apply_language(selected_lang)
-    # else:
-    #    splash.finish(None)
+            self.splash.finish(language_view)
 
-    # === Inicializa o app model e menu da aplicação ===
-    model = AppModel.get_instance()
-    model.current_language = selected_lang
+            result = language_view.exec()
 
-    main_view = ViewFactory.get_app_view_factory().create_main_view()
-    main_view.show()
+            if result == QDialog.DialogCode.Rejected:
+                sys.exit(0)
 
-    Log.get_log().log_info("Application finished successfully.")
-    sys.exit(app.exec())
+            selected_lang = (
+                language_view.get_selected_language() or initial_lang
+            )
+
+            if selected_lang != initial_lang:
+                language_service.apply_language(selected_lang)
+        else:
+            self.splash.finish(None)
+
+        # === Initializes the app model and menu ===
+        self.main_view = ViewFactory.get_app_view_factory().create_main_view()
+        self.main_view.show()
+        Log.get_log().log_info("Main window shown. Starting event loop.")
+
+        exit_code = self.app.exec()
+        Log.get_log().log_info(f"Application exited with code: {exit_code}.")
+        sys.exit(exit_code)
 
 
 if __name__ == "__main__":
-    main()
+    application = App()
+    application.run()

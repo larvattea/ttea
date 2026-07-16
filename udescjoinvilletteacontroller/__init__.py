@@ -37,6 +37,7 @@ https://github.com/larva-udesc/udesc_ttea_view
 # Define the __all__ variable
 __all__ = [
     "CalibrationController",
+    "ManualCalibrationController",
     "ProfessionalEditController",
     "ProfessionalListController",
     "InstitutionFacilityEditController",
@@ -61,6 +62,7 @@ from .institutionfacilitylistcontroller import \
     InstitutionFacilityListController
 from .languagecontroller import LanguageController
 from .maincontroller import MainController
+from .manualcalibrationcontroller import ManualCalibrationController
 from .playereditcontroller import PlayerEditController
 from .playergamelaunchcontroller import PlayerGameLaunchController
 from .playerlistcontroller import PlayerListController

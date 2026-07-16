@@ -1,3 +1,10 @@
+"""Factory accessors for application and game view factories.
+
+This module exposes the ViewFactory class, which provides static methods
+for retrieving application-specific and game-specific view factory
+instances.
+"""
+
 from udescjoinvilletteafactory import AppViewFactory
 from udescjoinvilletteagames.kartea.factory import KarteaViewFactory
 

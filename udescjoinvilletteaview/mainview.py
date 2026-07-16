@@ -56,6 +56,7 @@ class MainView(QMainWindow, Ui_MainView, WindowConfig):
             self.controller.open_calibration_parameterization
         )
 
+        self.act_language.triggered.connect(self.controller.open_language)
         self.act_help.triggered.connect(self.controller.open_help)
         self.act_about.triggered.connect(self.controller.open_about)
 
@@ -64,9 +65,9 @@ class MainView(QMainWindow, Ui_MainView, WindowConfig):
         )
 
         self.msg = MessageService(self)
-        self._setup_status_bar()
+        self.setup_status_bar()
 
-    def _setup_status_bar(self):
+    def setup_status_bar(self):
         """Cria o QLabel com versão e data e adiciona permanentemente na status bar"""
         date_mask = AppConfig.get_geral_date_mask() or "%d/%m/%Y"
 

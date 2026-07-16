@@ -28,7 +28,7 @@ class Ui_CalibrationParameterizationView(object):
     def setupUi(self, CalibrationParameterizationView):
         if not CalibrationParameterizationView.objectName():
             CalibrationParameterizationView.setObjectName(u"CalibrationParameterizationView")
-        CalibrationParameterizationView.resize(680, 594)
+        CalibrationParameterizationView.resize(800, 600)
         CalibrationParameterizationView.setModal(True)
         self.main_layout = QVBoxLayout(CalibrationParameterizationView)
         self.main_layout.setObjectName(u"main_layout")
@@ -662,15 +662,75 @@ class Ui_CalibrationParameterizationView(object):
         self.tab_widget.addTab(self.tab_filter, "")
         self.tab_telemetry = QWidget()
         self.tab_telemetry.setObjectName(u"tab_telemetry")
-        self.vboxLayout = QVBoxLayout(self.tab_telemetry)
-        self.vboxLayout.setObjectName(u"vboxLayout")
-        self.lbl_telemetry_placeholder = QLabel(self.tab_telemetry)
-        self.lbl_telemetry_placeholder.setObjectName(u"lbl_telemetry_placeholder")
-        self.lbl_telemetry_placeholder.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.lay_telemetry = QVBoxLayout(self.tab_telemetry)
+        self.lay_telemetry.setObjectName(u"lay_telemetry")
+        self.frm_telemetry = QFormLayout()
+        self.frm_telemetry.setObjectName(u"frm_telemetry")
+        self.frm_telemetry.setLabelAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
+        self.lbl_habilitar_painel_telemetria = QLabel(self.tab_telemetry)
+        self.lbl_habilitar_painel_telemetria.setObjectName(u"lbl_habilitar_painel_telemetria")
 
-        self.vboxLayout.addWidget(self.lbl_telemetry_placeholder)
+        self.frm_telemetry.setWidget(0, QFormLayout.ItemRole.LabelRole, self.lbl_habilitar_painel_telemetria)
+
+        self.chk_habilitar_painel_telemetria = QCheckBox(self.tab_telemetry)
+        self.chk_habilitar_painel_telemetria.setObjectName(u"chk_habilitar_painel_telemetria")
+        self.chk_habilitar_painel_telemetria.setChecked(False)
+
+        self.frm_telemetry.setWidget(0, QFormLayout.ItemRole.FieldRole, self.chk_habilitar_painel_telemetria)
+
+
+        self.lay_telemetry.addLayout(self.frm_telemetry)
+
+        self.vs_telemetry = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.lay_telemetry.addItem(self.vs_telemetry)
 
         self.tab_widget.addTab(self.tab_telemetry, "")
+        self.tab_calibracao_automatica = QWidget()
+        self.tab_calibracao_automatica.setObjectName(u"tab_calibracao_automatica")
+        self.lay_calibracao_automatica = QVBoxLayout(self.tab_calibracao_automatica)
+        self.lay_calibracao_automatica.setObjectName(u"lay_calibracao_automatica")
+        self.lbl_auto_placeholder = QLabel(self.tab_calibracao_automatica)
+        self.lbl_auto_placeholder.setObjectName(u"lbl_auto_placeholder")
+        self.lbl_auto_placeholder.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.lay_calibracao_automatica.addWidget(self.lbl_auto_placeholder)
+
+        self.vs_calibracao_automatica = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.lay_calibracao_automatica.addItem(self.vs_calibracao_automatica)
+
+        self.tab_widget.addTab(self.tab_calibracao_automatica, "")
+        self.tab_calibracao_semi_automatica = QWidget()
+        self.tab_calibracao_semi_automatica.setObjectName(u"tab_calibracao_semi_automatica")
+        self.lay_calibracao_semi_automatica = QVBoxLayout(self.tab_calibracao_semi_automatica)
+        self.lay_calibracao_semi_automatica.setObjectName(u"lay_calibracao_semi_automatica")
+        self.lbl_semi_placeholder = QLabel(self.tab_calibracao_semi_automatica)
+        self.lbl_semi_placeholder.setObjectName(u"lbl_semi_placeholder")
+        self.lbl_semi_placeholder.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.lay_calibracao_semi_automatica.addWidget(self.lbl_semi_placeholder)
+
+        self.vs_calibracao_semi_automatica = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.lay_calibracao_semi_automatica.addItem(self.vs_calibracao_semi_automatica)
+
+        self.tab_widget.addTab(self.tab_calibracao_semi_automatica, "")
+        self.tab_calibracao_manual = QWidget()
+        self.tab_calibracao_manual.setObjectName(u"tab_calibracao_manual")
+        self.lay_calibracao_manual = QVBoxLayout(self.tab_calibracao_manual)
+        self.lay_calibracao_manual.setObjectName(u"lay_calibracao_manual")
+        self.lbl_manual_placeholder = QLabel(self.tab_calibracao_manual)
+        self.lbl_manual_placeholder.setObjectName(u"lbl_manual_placeholder")
+        self.lbl_manual_placeholder.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.lay_calibracao_manual.addWidget(self.lbl_manual_placeholder)
+
+        self.vs_calibracao_manual = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+
+        self.lay_calibracao_manual.addItem(self.vs_calibracao_manual)
+
+        self.tab_widget.addTab(self.tab_calibracao_manual, "")
 
         self.main_layout.addWidget(self.tab_widget)
 
@@ -788,8 +848,15 @@ class Ui_CalibrationParameterizationView(object):
         self.lbl_gamma_lum_above.setText(QCoreApplication.translate("CalibrationParameterizationView", u"Filtro Gamma Aplicar Quando Valor de Luminosidade Acima de:", None))
         self.lbl_landmark_limit.setText(QCoreApplication.translate("CalibrationParameterizationView", u"Filtro Landmark Limite de Movimento:", None))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.tab_filter), QCoreApplication.translate("CalibrationParameterizationView", u"Filtros", None))
-        self.lbl_telemetry_placeholder.setText(QCoreApplication.translate("CalibrationParameterizationView", u"Configura\u00e7\u00f5es de telemetria ser\u00e3o adicionadas aqui...", None))
+        self.lbl_habilitar_painel_telemetria.setText(QCoreApplication.translate("CalibrationParameterizationView", u"Habilitar painel telemetria:", None))
+        self.chk_habilitar_painel_telemetria.setText("")
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.tab_telemetry), QCoreApplication.translate("CalibrationParameterizationView", u"Telemetria", None))
+        self.lbl_auto_placeholder.setText(QCoreApplication.translate("CalibrationParameterizationView", u"Configura\u00e7\u00f5es de calibra\u00e7\u00e3o autom\u00e1tica ser\u00e3o adicionadas aqui...", None))
+        self.tab_widget.setTabText(self.tab_widget.indexOf(self.tab_calibracao_automatica), QCoreApplication.translate("CalibrationParameterizationView", u"Calibra\u00e7\u00e3o Autom\u00e1tica", None))
+        self.lbl_semi_placeholder.setText(QCoreApplication.translate("CalibrationParameterizationView", u"Configura\u00e7\u00f5es de calibra\u00e7\u00e3o semi-autom\u00e1tica ser\u00e3o adicionadas aqui...", None))
+        self.tab_widget.setTabText(self.tab_widget.indexOf(self.tab_calibracao_semi_automatica), QCoreApplication.translate("CalibrationParameterizationView", u"Calibra\u00e7\u00e3o Semi-Autom\u00e1tica", None))
+        self.lbl_manual_placeholder.setText(QCoreApplication.translate("CalibrationParameterizationView", u"Configura\u00e7\u00f5es de calibra\u00e7\u00e3o manual ser\u00e3o adicionadas aqui...", None))
+        self.tab_widget.setTabText(self.tab_widget.indexOf(self.tab_calibracao_manual), QCoreApplication.translate("CalibrationParameterizationView", u"Calibra\u00e7\u00e3o Manual", None))
 #if QT_CONFIG(tooltip)
         self.pb_ok.setToolTip(QCoreApplication.translate("CalibrationParameterizationView", u"Gravar opera\u00e7\u00e3o corrente", None))
 #endif // QT_CONFIG(tooltip)

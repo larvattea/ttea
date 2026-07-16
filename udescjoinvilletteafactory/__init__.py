@@ -1,23 +1,18 @@
-"""
-udescjoinvilletteafactory
+"""Factory package for creating and managing application views.
 
-A Python package for creating and managing views in the T-TEA platform,
-supporting and configuration management. Developed by the
-Larva UDESC team.
-
-This package provides tools for handling view layouts,
-and appearance settings.
+This package provides view factory classes used to create and configure
+application views consistently across the T-TEA platform.
 
 Attributes
 ----------
 __version__ : str
-    The current version of the package.
+    Current package version.
 __date__ : str
-    The release date of this version.
+    Release date of the package version.
 __author__ : str
-    The development team.
+    Package author or team.
 __license__ : str
-    The license under which the package is distributed.
+    Package license.
 
 See Also
 --------
@@ -27,8 +22,10 @@ ViewFactory
 Notes
 -----
 This package is maintained by the Larva UDESC team and is under active
-development. Contributions and bug reports are welcome at:
-https://github.com/larva-udesc/udesc_ttea_view
+development.
+
+Contributions and bug reports are welcome at:
+https://github.com/larvattea/T-TEA2.0
 """
 
 # Define the __all__ variable

@@ -1,3 +1,10 @@
+"""Logging utilities for the T-TEA Qt application.
+
+This module provides a singleton Log class for application diagnostics,
+including rotating file logging, system information capture, and exception
+stack trace reporting.
+"""
+
 import importlib.metadata
 import json
 import logging
@@ -11,61 +18,49 @@ from typing import Any, Dict, Optional
 
 import psutil
 
-# Local module import
 from udescjoinvilletteautil import PathConfig
 
 
 class Log:
-    """Class for creating and managing detailed application logs.
+    """Logging manager for application diagnostics and exceptions.
 
-    This class configures a logging system to record information, warnings, and
-    errors in a log file, including system information and error stack traces.
-    It uses Python's standard `logging` module with a `RotatingFileHandler`
-    to manage log files, ensuring controlled file sizes and automatic backups.
+    This singleton class configures a rotating log file handler and provides
+    methods to record informational events, warnings, and errors. It also
+    collects system and Python environment data for richer diagnostics.
 
     Attributes
     ----------
-    FILE : str
-        Default log file path, defined by the `PathConfig` class.
-    log_file : str
-        Path of the log file used by the logger instance.
-    logger : logging.Logger
-        Configured logger instance for recording log messages.
-    LOG_FILE_NAME : str, class attribute
-        Default name of the log file (`tteaapp.log`).
-    LOG_FILE_PATH : str, class attribute
-        Default log file path derived from `PathConfig.log(LOG_FILE_NAME)`.
+    LOG_FILE_NAME : str
+        Default log file name used for logging.
+    LOG_FILE_PATH : str
+        Default resolved path for the log file.
+    _instance : Optional[Log]
+        Cached singleton instance.
 
     Methods
     -------
     __new__(cls, *args, **kwargs)
-        Implements the Singleton pattern to ensure a single instance of the
-        Log class.
-    __init__(log_file: Optional[str] = None, log_level: int = logging.DEBUG)
-    -> None
-        Initialize the logger with a specified file and log level.
-    get_log(cls)
-        Retrieve the singleton instance of the Log class.
-    ensure_log_directory_exists() -> None
-        Ensure the log directory exists, creating it if necessary.
-    get_system_info() -> Dict[str, str]
-        Retrieve system, hardware, and memory information.
-    get_python_info() -> Dict[str, str]
-        Retrieve Python installation and installed package information.
-    log_system_info() -> None
-        Log system and Python environment information to the log file.
-    log_error_with_stack(exception: Exception, variables: Optional[Dict[str,
-    Any]] = None, traceback_obj: Optional[Any] = None) -> None
-        Log an error with its stack trace, optional variables,
-        and local variables.
-    log_info(message: str) -> None
-        Log an informational message.
-    log_warning(message: str) -> None
-        Log a warning message.
-    log_error(message: str) -> None
-        Log an error message.
-    log_error_exc(message: str, exc_info: Any) -> None
-        Log an error message with exception information.
+        Create or return the singleton Log instance.
+    __init__(log_file=None, log_level=logging.DEBUG)
+        Initialize the logger and configure file handling.
+    get_log()
+        Retrieve the singleton Log instance.
+    ensure_log_directory_exists()
+        Create the log directory if necessary.
+    get_system_info()
+        Return system and hardware diagnostics.
+    get_python_info()
+        Return Python environment diagnostics.
+    log_system_info()
+        Write system and Python environment information to the log.
+    log_error_with_stack(exception, variables=None, traceback_obj=None)
+        Log exceptions with stack traces and optional context.
+    log_info(message)
+        Write an informational message to the log.
+    log_warning(message)
+        Write a warning message to the log.
+    log_error(message)
+        Write an error message to the log.
 
     Examples
     --------
@@ -81,7 +76,7 @@ class Log:
     LOG_FILE_PATH = PathConfig.log(LOG_FILE_NAME)
     _instance = None
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args: tuple, **kwargs: dict) -> "Log":
         """Implements the Singleton pattern to ensure a single instance of
         the Log class.
 
@@ -111,16 +106,15 @@ class Log:
     def __init__(
         self, log_file: Optional[str] = None, log_level: int = logging.DEBUG
     ) -> None:
-        """Initialize the logger with a specified file and log level.
+        """Initialize the logger with an optional file and log level.
 
         Parameters
         ----------
         log_file : str, optional
-            Path to the log file. If None, uses the default `LOG_FILE_PATH`
-            (default is None).
+            Path to the log file. If None, uses `LOG_FILE_PATH`.
         log_level : int, optional
-            Logging level (e.g., logging.DEBUG, logging.INFO). Default is
-            logging.DEBUG.
+            Logging level such as logging.DEBUG or logging.INFO.
+            Defaults to logging.DEBUG.
 
         Returns
         -------
@@ -128,20 +122,14 @@ class Log:
 
         Notes
         -----
-        - Creates the log directory if it does not exist.
-        - Configures a `RotatingFileHandler` with a maximum file size of 10MB
-        and up to 5 backup files.
-        - Sets a log format with timestamp, log level, and message.
-        - Clears existing handlers to prevent duplicate logging.
+        Creates the log directory if it does not exist.
+        Configures a rotating file handler with a maximum size of 10 MiB and
+        up to five backup files.
+        Clears existing handlers to prevent duplicate output.
         """
 
         # Use default file if none specified
         self.log_file = log_file if log_file else self.LOG_FILE_PATH
-        # Import PathConfig here to avoid circular import
-
-        # self.log_file = (
-        # log_file if log_file else PathConfig.log(self.LOG_FILE_NAME)
-        # )
         # Ensure log directory exists
         self.ensure_log_directory_exists()
         # Configure logger
@@ -166,7 +154,7 @@ class Log:
         self.logger.info("Log instance initialized.")
 
     @classmethod
-    def get_log(cls):
+    def get_log(cls) -> "Log":
         """Retrieve the singleton instance of the Log class.
 
         Parameters
@@ -292,18 +280,17 @@ class Log:
         variables: Optional[Dict[str, Any]] = None,
         traceback_obj: Optional[Any] = None,
     ) -> None:
-        """Log an error with its stack trace, optional variables,
-        and local variables.
+        """Log an error with stack trace and optional context.
 
         Parameters
         ----------
         exception : Exception
-            The exception object to log.
+            The exception to log.
         variables : Dict[str, Any], optional
-            Additional variables to log (default is None).
+            Variables to include in the log output.
         traceback_obj : Any, optional
-            Traceback object for the stack trace. If None, uses
-            `traceback.format_exc()` (default is None).
+            Traceback object to format. If None, uses the current exception
+            traceback.
 
         Returns
         -------
@@ -311,12 +298,8 @@ class Log:
 
         Notes
         -----
-        - Logs provided variables (if any) and local variables from
-        the caller's frame.
-        - Excludes Python built-in variables (starting with '__')
-        from local variables.
-        - Includes system and Python environment information.
-        - Logs the exception message and stack trace.
+        Logs provided variables and non-builtin local variables from the
+        caller frame. Also logs system and Python environment details.
         """
         # Log provided variables if any
         if variables:

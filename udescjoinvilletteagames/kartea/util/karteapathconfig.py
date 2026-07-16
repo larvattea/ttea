@@ -66,11 +66,11 @@ class KarteaPathConfig(PathConfig):
         return it.next() if it.hasNext() else ""
 
     @staticmethod
-    def kartea_image(name: str) -> str:
+    def game_builtin_image(name: str) -> str:
         return KarteaPathConfig._find_resource(":/images", name)
 
     @staticmethod
-    def kartea_sound(name: str) -> str:
+    def game_builtin_sound(name: str) -> str:
         return KarteaPathConfig._find_resource(":/sounds", name)
 
     # ===================================================================

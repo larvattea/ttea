@@ -1,33 +1,28 @@
-"""
-udescjoinvillettealog
-
-A Python package for log functions in the T-TEA platform,
-supporting logging. Developed by the Larva UDESC team.
-
-This package provides tools for logging.
+"""Package that provides application logging support for the T-TEA platform.
 
 Attributes
 ----------
 __version__ : str
-    The current version of the package.
+    Current package version.
 __date__ : str
-    The release date of this version.
+    Release date of the package version.
 __author__ : str
-    The development team.
+    Package author or team.
 __license__ : str
-    The license under which the package is distributed.
+    Package license.
 
 See Also
 --------
 Log
-    Provides logging functionality for the application.
-
+    Provides application logging functionality.
 
 Notes
 -----
 This package is maintained by the Larva UDESC team and is under active
-development. Contributions and bug reports are welcome at:
-https://github.com/larva-udesc/udesc_ttea_view
+development.
+
+Contributions and bug reports are welcome at:
+https://github.com/larvattea/T-TEA2.0
 """
 
 # Define the __all__ variable

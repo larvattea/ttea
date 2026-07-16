@@ -1,35 +1,29 @@
-"""
-udescjoinvilletteaapp
-
-A Python package for application management
-in the T-TEA platform. Developed by the Larva UDESC team.
-
-This package provides tools for for application
-management for the T-TEA platform.
+"""Package for application configuration and startup support in the
+T-TEA platform.
 
 Attributes
 ----------
 __version__ : str
-    The current version of the package.
+    Current package version.
 __date__ : str
-    The release date of this version.
+    Release date of the package version.
 __author__ : str
-    The development team.
+    Package author or team.
 __license__ : str
-    The license under which the package is distributed.
+    Package license.
 
 See Also
 --------
 AppConfig
     Manages application configuration settings.
-TTeaApp
-    Main application class for the T-TEA platform.
 
 Notes
 -----
 This package is maintained by the Larva UDESC team and is under active
-development. Contributions and bug reports are welcome at:
-https://github.com/larva-udesc/udesc_ttea_view
+development.
+
+Contributions and bug reports are welcome at:
+https://github.com/larvattea/T-TEA2.0
 """
 
 # Define the __all__ variable

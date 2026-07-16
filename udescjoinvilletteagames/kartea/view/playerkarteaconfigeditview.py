@@ -167,7 +167,7 @@ class PlayerKarteaConfigEditView(
         """Carrega o som do recurso QRC para o buffer de memória."""
         if filename:
             # KarteaPathConfig.kartea_sound deve retornar algo como ":/sounds/nome.wav"
-            path = KarteaPathConfig.kartea_sound(filename)
+            path = KarteaPathConfig.game_builtin_sound(filename)
 
             # Para recursos QRC, usamos o QUrl direto com o esquema qrc
             url = QUrl(path)
@@ -189,7 +189,7 @@ class PlayerKarteaConfigEditView(
             self.lbl_visual_preview.setText("Nenhuma imagem selecionada")
             return
 
-        path = KarteaPathConfig.kartea_image(filename)
+        path = KarteaPathConfig.game_builtin_image(filename)
         pixmap = QPixmap(path)
 
         if pixmap.isNull():
@@ -216,7 +216,7 @@ class PlayerKarteaConfigEditView(
             self.lbl_feedback_preview.setText("Nenhuma imagem selecionada")
             return
 
-        path = KarteaPathConfig.kartea_image(filename)
+        path = KarteaPathConfig.game_builtin_image(filename)
         pixmap = QPixmap(path)
 
         if pixmap.isNull():

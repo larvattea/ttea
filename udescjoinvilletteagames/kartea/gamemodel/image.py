@@ -31,7 +31,7 @@ class Image:
         flip: bool = False,
     ) -> pygame.Surface:
         """Carrega imagem (física ou Qt), aplica conversão, flip e scale."""
-        full_path = KarteaPathConfig.kartea_image(img_name)
+        full_path = KarteaPathConfig.game_builtin_image(img_name)
 
         if (img_name) and (not full_path):
             full_path = img_name

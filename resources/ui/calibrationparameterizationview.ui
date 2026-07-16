@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>680</width>
-    <height>594</height>
+    <width>800</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1113,16 +1113,133 @@
       <attribute name="title">
        <string>Telemetria</string>
       </attribute>
-      <layout class="QVBoxLayout">
+      <layout class="QVBoxLayout" name="lay_telemetry">
        <item>
-        <widget class="QLabel" name="lbl_telemetry_placeholder">
+        <layout class="QFormLayout" name="frm_telemetry">
+         <property name="labelAlignment">
+          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+         </property>
+         <item row="0" column="0">
+          <widget class="QLabel" name="lbl_habilitar_painel_telemetria">
+           <property name="text">
+            <string>Habilitar painel telemetria:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QCheckBox" name="chk_habilitar_painel_telemetria">
+           <property name="text">
+            <string/>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="vs_telemetry">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_calibracao_automatica">
+      <attribute name="title">
+       <string>Calibração Automática</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="lay_calibracao_automatica">
+       <item>
+        <widget class="QLabel" name="lbl_auto_placeholder">
          <property name="text">
-          <string>Configurações de telemetria serão adicionadas aqui...</string>
+          <string>Configurações de calibração automática serão adicionadas aqui...</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignmentFlag::AlignCenter</set>
          </property>
         </widget>
+       </item>
+       <item>
+        <spacer name="vs_calibracao_automatica">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_calibracao_semi_automatica">
+      <attribute name="title">
+       <string>Calibração Semi-Automática</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="lay_calibracao_semi_automatica">
+       <item>
+        <widget class="QLabel" name="lbl_semi_placeholder">
+         <property name="text">
+          <string>Configurações de calibração semi-automática serão adicionadas aqui...</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="vs_calibracao_semi_automatica">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_calibracao_manual">
+      <attribute name="title">
+       <string>Calibração Manual</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="lay_calibracao_manual">
+       <item>
+        <widget class="QLabel" name="lbl_manual_placeholder">
+         <property name="text">
+          <string>Configurações de calibração manual serão adicionadas aqui...</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="vs_calibracao_manual">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>

@@ -1,3 +1,9 @@
+"""Factory helpers for creating application views.
+
+This module provides the AppViewFactory class, which centralizes the
+creation of application views used across the T-TEA platform.
+"""
+
 from typing import TYPE_CHECKING, Callable, Optional
 
 from PySide6.QtCore import QObject
@@ -6,24 +12,23 @@ from PySide6.QtWidgets import QDialog, QMainWindow
 from udescjoinvilletteaview import (AboutView, CalibrationView,
                                     InstitutionFacilityEditView,
                                     InstitutionFacilityListView, LanguageView,
-                                    MainView, PlayerEditView,
-                                    PlayerGameLaunchView, PlayerListView,
-                                    ProfessionalEditView, ProfessionalListView)
+                                    MainView, ManualCalibrationView,
+                                    PlayerEditView, PlayerGameLaunchView,
+                                    PlayerListView, ProfessionalEditView,
+                                    ProfessionalListView)
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
-    # Local module import
     from udescjoinvilletteamodel import (InstitutionFacility, Player,
                                          Professional)
 
 
 class AppViewFactory:
-    """A factory class for creating application view instances.
-    This class provides static methods to instantiate various view classes
-    used in the application, such as PlayerEditView, PlayerListView,
-    AboutView, and LanguageView. It facilitates the creation of view
-    objects with optional parameters for parent widgets and other
-    dependencies.
+    """Factory for application view instances.
+
+    This class provides static methods to instantiate views used in the
+    application. It centralizes view construction so callers do not need
+    to import view classes directly.
 
     Methods
     -------
@@ -31,11 +36,26 @@ class AppViewFactory:
         Create an instance of PlayerEditView.
     create_player_list_view(parent=None, player_edit_view=None)
         Create an instance of PlayerListView.
+    create_professional_edit_view(parent=None, professional=None)
+        Create an instance of ProfessionalEditView.
+    create_professional_list_view(parent=None, professional_edit_view=None)
+        Create an instance of ProfessionalListView.
+    create_institutionfacility_edit_view(parent=None, institutionfacility=None)
+        Create an instance of InstitutionFacilityEditView.
+    create_institutionfacility_list_view(parent=None, institutionfacility_edit_view=None)
+        Create an instance of InstitutionFacilityListView.
     create_about_view(parent=None)
         Create an instance of AboutView.
-    create_language_view(translator=None, parent=None)
+    create_calibration_view(parent=None)
+        Create an instance of CalibrationView.
+    create_playergamelauch_view(parent=None)
+        Create an instance of PlayerGameLaunchView.
+    create_language_view(parent=None)
         Create an instance of LanguageView.
-
+    create_main_view(parent=None)
+        Create an instance of MainView.
+    create_gamecalibration_view(parent=None)
+        Create an instance of ManualCalibrationView.
     """
 
     @staticmethod
@@ -120,6 +140,21 @@ class AppViewFactory:
             ]
         ] = None,
     ) -> ProfessionalListView:
+        """Create an instance of ProfessionalListView.
+
+        Parameters
+        ----------
+        parent : Optional[QObject], optional
+            The parent object for the list view, by default None.
+        professional_edit_view : Optional[Callable], optional
+            Callable that creates a ProfessionalEditView instance, by
+            default None.
+
+        Returns
+        -------
+        ProfessionalListView
+            Configured ProfessionalListView instance.
+        """
         return ProfessionalListView(parent, professional_edit_view)
 
     @staticmethod
@@ -156,7 +191,21 @@ class AppViewFactory:
             ]
         ] = None,
     ) -> InstitutionFacilityListView:
+        """Create an instance of InstitutionFacilityListView.
 
+        Parameters
+        ----------
+        parent : Optional[QObject], optional
+            The parent object for the list view, by default None.
+        institutionfacility_edit_view : Optional[Callable], optional
+            Callable that creates an InstitutionFacilityEditView instance,
+            by default None.
+
+        Returns
+        -------
+        InstitutionFacilityListView
+            Configured InstitutionFacilityListView instance.
+        """
         return InstitutionFacilityListView(
             parent, institutionfacility_edit_view
         )
@@ -200,9 +249,8 @@ class AppViewFactory:
     @staticmethod
     def create_playergamelauch_view(
         parent: Optional[QDialog] = None,
-    ) -> CalibrationView:
-        """
-        Create an instance of PlayerGameLaunchView.
+    ) -> PlayerGameLaunchView:
+        """Create an instance of PlayerGameLaunchView.
 
         Parameters
         ----------
@@ -212,7 +260,8 @@ class AppViewFactory:
         Returns
         -------
         PlayerGameLaunchView
-            An instance of PlayerGameLaunchView configured with the provided parent.
+            Instance of PlayerGameLaunchView configured with the provided
+            parent.
         """
         return PlayerGameLaunchView(parent)
 
@@ -251,3 +300,23 @@ class AppViewFactory:
             translator and parent.
         """
         return MainView(parent)
+
+    @staticmethod
+    def create_gamecalibration_view(
+        parent: Optional[QDialog] = None,
+    ) -> ManualCalibrationView:
+        """Create an instance of ManualCalibrationView.
+
+        Parameters
+        ----------
+        parent : Optional[QDialog], optional
+            The parent dialog for the manual calibration view, by
+            default None.
+
+        Returns
+        -------
+        ManualCalibrationView
+            An instance of ManualCalibrationView configured with the
+            provided parent.
+        """
+        return ManualCalibrationView(parent)

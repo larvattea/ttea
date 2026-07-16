@@ -6,17 +6,24 @@ from PySide6.QtCore import QRect, QSettings
 from PySide6.QtGui import QGuiApplication, QScreen
 from PySide6.QtMultimedia import QCameraDevice, QMediaDevices
 
-from udescjoinvilletteadao import CalibrationIniDAO
-from udescjoinvilletteamodel import Calibration
+from udescjoinvilletteadao import CalibrationIniDAO, CalibrationPointDAO
+from udescjoinvilletteamodel import Calibration, CalibrationPoint
 from udescjoinvilletteautil import PathConfig
 
 
 class CalibrationService:
-    def __init__(self, dao: Optional[CalibrationIniDAO] = None):
+    def __init__(
+        self,
+        dao: Optional[CalibrationIniDAO] = None,
+        dao_calibration_point: Optional[CalibrationPointDAO] = None,
+    ):
         # Cache opcional se os monitores não mudarem durante a execução
         self._screens = QGuiApplication.screens()
         self.settings = QSettings(PathConfig.config(), QSettings.IniFormat)
         self.dao = dao or CalibrationIniDAO()
+        self.dao_calibration_point = (
+            dao_calibration_point or CalibrationPointDAO()
+        )
 
     def get_proportions(self) -> Dict[str, tuple[int, int]]:
         """Retorna o dicionário completo de proporções."""
@@ -71,3 +78,26 @@ class CalibrationService:
             return None
 
         return self.dao.update(calibration)
+
+    def create_calibration_point(
+        self, data: Dict[str, Any]
+    ) -> Optional[CalibrationPoint]:
+        """
+        Create a new calibration point from a dictionary of attributes.
+
+        Parameters
+        ----------
+        data : dict
+            Must contain the key ``id`` (int),  ``name`` (str),
+            ``birth_date`` (date) and optionally ``observation`` (str).
+
+        Returns
+        -------
+        CalibrationPoint or None
+            The created ``CalibrationPoint`` instance if validation and insertion
+            succeed; ``None`` otherwise.
+        """
+        calibration_point = CalibrationPoint(**data)
+
+        new_id = self.dao_calibration_point.insert(calibration_point)
+        return self.dao.select(new_id) if new_id > 0 else None

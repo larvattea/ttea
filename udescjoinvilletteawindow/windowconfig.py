@@ -1,3 +1,9 @@
+"""Window configuration helpers for exergame windows.
+
+This module provides the WindowConfig class, which centralizes common
+window setup logic such as title, icon, sizing, and centering.
+"""
+
 from typing import Optional, Tuple
 
 from PySide6.QtGui import QIcon

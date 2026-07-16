@@ -5,7 +5,8 @@ from PySide6.QtCore import QObject, Qt, Slot
 from PySide6.QtGui import QImage, QPixmap
 
 from udescjoinvilletteaapp import AppConfig
-from udescjoinvilletteacore import CalibrationMath, CameraVideoThread
+from udescjoinvilletteacore import CalibrationMath  # GameCalibration,
+from udescjoinvilletteacore import CameraVideoThread
 from udescjoinvilletteaservice import CalibrationService
 
 if TYPE_CHECKING:
@@ -43,6 +44,34 @@ class CalibrationController(QObject):
         if self.thread:
             self.thread.stop()
         self.view.reject()
+
+    def handle_calibrate_auto(self) -> None:
+        self.view.msg.info(self.tr("Em construção!"))
+
+    def handle_calibrate_semi(self) -> None:
+        self.view.msg.info(self.tr("Em construção!"))
+
+    def handle_calibrate_manual(self) -> None:
+        from udescjoinvilletteafactory import ViewFactory
+
+        # self.view.msg.info(self.tr("Em construção!"))
+        # available_geo = self.service.get_available_geometry_of_screen(
+        #    self.view.cbx_monitor.currentIndex()
+        # )
+        # game_calibration = GameCalibration(
+        #    self.view.cbx_camera.currentIndex(),
+        #    available_geo.height(),
+        #    available_geo.width(),
+        # )
+        # game_calibration.run()
+        # dialog =
+        # dialog.exec()
+        dialog = (
+            ViewFactory.get_app_view_factory().create_gamecalibration_view(
+                self.view
+            )
+        )
+        dialog.exec()
 
     def _initialize_view(self):
         self.list_proportions()
@@ -137,8 +166,6 @@ class CalibrationController(QObject):
 
     @Slot(QImage)
     def update_image(self, qt_img):
-        # self.view.lbl_video.setPixmap(QPixmap.fromImage(qt_img))
-        # Criamos o pixmap a partir da cópia enviada pela thread
         pixmap = QPixmap.fromImage(qt_img)
 
         # Redimensionamos dinamicamente com base no tamanho ATUAL do label na UI
@@ -166,8 +193,8 @@ class CalibrationController(QObject):
         )
 
         # 2. Resolução e FPS da Câmera
-        formatos = camera_device.videoFormats()
-        melhor_formato = formatos[0] if formatos else None
+        formats = camera_device.videoFormats()
+        best_format = formats[0] if formats else None
 
         # 3. Cálculo da Área de Projeção (Math)
         # Extrai os números da string "16:9" por exemplo -> (16, 9)
@@ -186,16 +213,16 @@ class CalibrationController(QObject):
             "camera_id": camera_device.id().data().decode(),
             "camera_position": camera_idx,
             "camera_width": (
-                melhor_formato.resolution().width() if melhor_formato else 0
+                best_format.resolution().width() if best_format else 0
             ),
             "camera_height": (
-                melhor_formato.resolution().height() if melhor_formato else 0
+                best_format.resolution().height() if best_format else 0
             ),
             "camera_max_fps": (
-                int(melhor_formato.maxFrameRate()) if melhor_formato else 0
+                int(best_format.maxFrameRate()) if best_format else 0
             ),
             "camera_min_fps": (
-                int(melhor_formato.minFrameRate()) if melhor_formato else 0
+                int(best_format.minFrameRate()) if best_format else 0
             ),
             "screen_manufacturer": screen.manufacturer(),
             "screen_model": screen.model(),

@@ -1,33 +1,52 @@
+"""About dialog view for the T-TEA application.
+
+This module defines the ``AboutView`` dialog, which displays project
+information, developer credits, and the current year in a Qt modal window.
+"""
+
 from datetime import datetime
 from typing import Optional
 
 from PySide6.QtWidgets import QDialog
 
-# Local module import
 from udescjoinvilletteaui import Ui_AboutView
 from udescjoinvilletteawindow import WindowConfig
 
 
 class AboutView(QDialog, Ui_AboutView, WindowConfig):
-    """
-    A modal dialog window displaying information about the T-TEA project.
+    """Modal dialog showing information about the T-TEA project.
 
-    This class creates a modal dialog that provides details about the T-TEA
-    project, including a description, logo, link to the platform, developer
-    credits, and a close button.
-    It inherits from `QDialog` for dialog functionality and `WindowConfig`
-    for window configuration.
+    This dialog displays the T-TEA project description, logo, platform link,
+    developer credits, and a close button. It inherits from ``QDialog`` and
+    uses ``WindowConfig`` for window sizing and positioning.
+
+    Attributes
+    ----------
+    lbl_developer : QLabel
+        Label widget that displays the developer credits and current year.
 
     Methods
     -------
     __init__(parent=None)
-        Initializes the AboutView dialog with the specified parent.
+        Initialize the AboutView dialog.
     """
 
     def __init__(
         self,
         parent: Optional[QDialog] = None,
     ) -> None:
+        """Initialize the AboutView dialog.
+
+        Parameters
+        ----------
+        parent : QDialog, optional
+            Parent widget for the dialog. Defaults to None.
+
+        Notes
+        -----
+        Sets up the dialog UI, configures window dimensions, and updates the
+        developer label with the current year.
+        """
 
         super().__init__(parent)
         self.setupUi(self)
@@ -41,13 +60,13 @@ class AboutView(QDialog, Ui_AboutView, WindowConfig):
             parent,  # parent
         )
 
-        # === Parte dinâmica: ano e tradução ===
+        # === Dynamic part: year and translation ===
         current_year = datetime.now().strftime("%Y")
 
-        # Texto traduzível
+        # Translatable text
         year_text = self.tr("Desde: 2021 - {}").format(current_year)
 
-        # HTML só da linha do ano
+        # HTML for the year line only
         year_html = f"""
         <p align="center" style="margin-top:12px; margin-bottom:12px;">
         <span style="font-size:10pt; font-weight:700; font-style:italic;">

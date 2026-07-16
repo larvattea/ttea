@@ -60,7 +60,6 @@ class CameraVideoThread(QThread, QObject):
 
         prev_time = 0
 
-        # Se estiver no Windows com MX Brio, considere aumentar para 1280x720 para melhor precisão nos pés
         if self.use_low_resolution:
             cap.set(
                 cv2.CAP_PROP_FRAME_WIDTH,
