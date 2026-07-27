@@ -9,4 +9,42 @@ Estes equipamentos serão instalados em uma estrutura mecânica de montagem simp
 
 ![hardware](https://user-images.githubusercontent.com/30929090/135135105-c4e4365d-09c5-4398-bc90-e53cc29ec4a9.PNG)
 
-Desenvolvido em Python 3.8.3
+## Desenvolvimento
+
+Requerimentos:
+- [uv](https://docs.astral.sh/uv/), que baixa e gerencia automaticamente o Python 3.10 caso ele ainda não esteja instalado.
+- Computador com arquitetura x86-64 ou ARM.
+
+### Instalar o uv
+
+macOS:
+
+```bash
+brew install uv
+```
+
+Windows (PowerShell):
+
+```powershell
+winget install --id=astral-sh.uv -e
+```
+
+Linux:
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+### Executar
+
+Na raiz do projeto, em qualquer sistema:
+
+```bash
+uv run dev
+```
+
+Esse comando baixa o Python 3.10, cria o `.venv`, sincroniza as dependências e inicia o T-TEA.
+
+Para usar `python main.py` diretamente, ative antes o ambiente com `source .venv/bin/activate` no macOS/Linux ou `.venv\Scripts\Activate.ps1` no Windows.
+
+No primeiro uso, permita o acesso à câmera nas configurações de privacidade do sistema.

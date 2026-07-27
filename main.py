@@ -137,6 +137,11 @@ class App:
         sys.exit(exit_code)
 
 
-if __name__ == "__main__":
+def main() -> None:
+    """Start the T-TEA application."""
     application = App()
     application.run()
+
+
+if __name__ == "__main__":
+    main()
