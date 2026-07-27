@@ -3,19 +3,19 @@ from typing import TYPE_CHECKING, Dict, Optional, Union
 
 from PySide6.QtCore import QObject
 
-from udescjoinvilletteagames.kartea.model import PlayerKarteaConfig
-from udescjoinvilletteagames.kartea.model.karteaphase import KarteaPhase
-from udescjoinvilletteagames.kartea.model.karteaphaselevel import \
+from games.kartea.model import PlayerKarteaConfig
+from games.kartea.model.karteaphase import KarteaPhase
+from games.kartea.model.karteaphaselevel import \
     KarteaPhaseLevel
-from udescjoinvilletteagames.kartea.service import PlayerKarteaConfigService
-from udescjoinvilletteagames.kartea.util import KarteaPathConfig
+from games.kartea.service import PlayerKarteaConfigService
+from games.kartea.util import KarteaPathConfig
 # Local module imports
-from udescjoinvilletteautil import MessageService
+from util import MessageService
 
 if TYPE_CHECKING:
-    from udescjoinvilletteagames.kartea.model import PlayerKarteaSession
-    from udescjoinvilletteagames.kartea.view import PlayerKarteaConfigEditView
-    from udescjoinvilletteamodel import Player
+    from games.kartea.model import PlayerKarteaSession
+    from games.kartea.view import PlayerKarteaConfigEditView
+    from model import Player
 
 
 class PlayerKarteaConfigEditController(QObject):

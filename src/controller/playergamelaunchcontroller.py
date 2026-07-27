@@ -15,13 +15,13 @@ except ImportError:
 
 from PySide6.QtCore import QObject, Qt, QTimer
 
-from udescjoinvilletteamodel import AppModel
-from udescjoinvilletteaservice import PlayerGameLaunchService
+from model import AppModel
+from service import PlayerGameLaunchService
 # Local module imports
-from udescjoinvilletteautil import MessageService
+from util import MessageService
 
 if TYPE_CHECKING:
-    from udescjoinvilletteaview import PlayerGameLaunchView
+    from view import PlayerGameLaunchView
 
 
 class PlayerGameLaunchController(QObject):

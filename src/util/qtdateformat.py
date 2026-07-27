@@ -68,7 +68,7 @@ class QtDateFormat:
         --------
         strftime_to_qt : low-level conversion function.
         """
-        from udescjoinvilletteaapp import AppConfig
+        from app import AppConfig
 
         strftime_mask = AppConfig.get_geral_date_mask()
         return QtDateFormat.strftime_to_qt(strftime_mask)

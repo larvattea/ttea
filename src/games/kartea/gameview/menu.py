@@ -2,10 +2,10 @@ import sys
 
 import pygame
 
-from udescjoinvilletteagames.kartea.gamemodel import Background, Image
-from udescjoinvilletteagames.kartea.gameui import UI
-from udescjoinvilletteagames.kartea.gameutil import GameSettings
-from udescjoinvilletteagames.kartea.util import KarteaPathConfig
+from games.kartea.gamemodel import Background, Image
+from games.kartea.gameui import UI
+from games.kartea.gameutil import GameSettings
+from games.kartea.util import KarteaPathConfig
 
 # import settings
 # from settings import *

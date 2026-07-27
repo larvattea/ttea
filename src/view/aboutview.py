@@ -9,8 +9,8 @@ from typing import Optional
 
 from PySide6.QtWidgets import QDialog
 
-from udescjoinvilletteaui import Ui_AboutView
-from udescjoinvilletteawindow import WindowConfig
+from ui import Ui_AboutView
+from window import WindowConfig
 
 
 class AboutView(QDialog, Ui_AboutView, WindowConfig):

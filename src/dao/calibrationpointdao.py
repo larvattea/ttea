@@ -3,9 +3,9 @@ from typing import Dict, List, Optional
 
 import portalocker
 
-from udescjoinvilletteamodel import CalibrationPoint
+from model import CalibrationPoint
 # Direct import de DAO to avoid circular import
-from udescjoinvilletteautil import CSVHandler, PathConfig
+from util import CSVHandler, PathConfig
 
 from .dao import DAO
 

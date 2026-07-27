@@ -4,17 +4,17 @@ from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 
 # Local module import
-from udescjoinvilletteagames.kartea.controller import \
+from games.kartea.controller import \
     PlayerKarteaConfigListController
-from udescjoinvilletteagames.kartea.ui import \
+from games.kartea.ui import \
     Ui_PlayerKarteaConfigListView  # Assuming generated UI class
-from udescjoinvilletteautil import MessageService
-from udescjoinvilletteawindow import WindowConfig
+from util import MessageService
+from window import WindowConfig
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
-    from udescjoinvilletteagames.kartea.model import PlayerKarteaConfig
-    from udescjoinvilletteagames.kartea.view import PlayerKarteaConfigEditView
+    from games.kartea.model import PlayerKarteaConfig
+    from games.kartea.view import PlayerKarteaConfigEditView
 
 
 class PlayerKarteaConfigListView(

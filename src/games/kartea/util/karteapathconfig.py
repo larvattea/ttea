@@ -5,8 +5,8 @@ from typing import Dict, List, Optional
 
 from PySide6.QtCore import QDir, QDirIterator, QFile, QIODevice
 
-from udescjoinvilletteagames.kartea.resources import resourceskartea_rc
-from udescjoinvilletteautil import PathConfig
+from games.kartea.resources import resourceskartea_rc
+from util import PathConfig
 
 
 class KarteaPathConfig(PathConfig):

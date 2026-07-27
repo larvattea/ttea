@@ -4,16 +4,16 @@ from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 
 # Local module import
-from udescjoinvilletteacontroller import ProfessionalListController
-from udescjoinvilletteaui import \
+from controller import ProfessionalListController
+from ui import \
     Ui_ProfessionalListView  # Assuming generated UI class
-from udescjoinvilletteautil import MessageService
-from udescjoinvilletteawindow import WindowConfig
+from util import MessageService
+from window import WindowConfig
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
-    from udescjoinvilletteamodel import Professional
-    from udescjoinvilletteaview import ProfessionalEditView
+    from model import Professional
+    from view import ProfessionalEditView
 
 
 class ProfessionalListView(QDialog, Ui_ProfessionalListView, WindowConfig):

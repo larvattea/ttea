@@ -1,7 +1,7 @@
 import pygame
 
 # import arquivo
-from udescjoinvilletteagames.kartea.gameutil import GameSettings
+from games.kartea.gameutil import GameSettings
 
 
 class Car:
@@ -10,7 +10,7 @@ class Car:
 
     def __init__(self):
         # Carrega a imagem principal do carro
-        from udescjoinvilletteagames.kartea.gamemodel import Image
+        from games.kartea.gamemodel import Image
 
         self.orig_image = Image.load(
             # "Assets/Kartea/Carro.png",
@@ -54,7 +54,7 @@ class Car:
 
     def draw(self, surface: pygame.Surface):
         """Desenha o carro na tela."""
-        from udescjoinvilletteagames.kartea.gamemodel import Image
+        from games.kartea.gamemodel import Image
 
         # Desenha a imagem do carro centralizada
         Image.draw(surface, self.image, self.rect.center, pos_mode="center")

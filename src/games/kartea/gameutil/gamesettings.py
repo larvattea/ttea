@@ -4,12 +4,12 @@ import cv2
 import numpy as np
 import pygame
 
-from udescjoinvilletteagames.kartea.model import PlayerKarteaSession
-from udescjoinvilletteagames.kartea.util import KarteaPathConfig
+from games.kartea.model import PlayerKarteaSession
+from games.kartea.util import KarteaPathConfig
 
 if TYPE_CHECKING:
-    from udescjoinvilletteagames.kartea.model import PlayerKarteaConfig
-    from udescjoinvilletteagames.kartea.service import \
+    from games.kartea.model import PlayerKarteaConfig
+    from games.kartea.service import \
         PlayerKarteaConfigService
 
 

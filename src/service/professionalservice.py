@@ -1,11 +1,11 @@
-# udescjoinvillettea/service/professionalservice.py
+# /service/professionalservice.py
 from typing import Any, Dict, List, Optional
 
 from PySide6.QtCore import QCoreApplication, QObject, Signal
 
 # Local module import
-from udescjoinvilletteadao import ProfessionalCsvDAO
-from udescjoinvilletteamodel import InstitutionFacility, Professional
+from dao import ProfessionalCsvDAO
+from model import InstitutionFacility, Professional
 
 
 class ProfessionalService(QObject):
@@ -56,7 +56,7 @@ class ProfessionalService(QObject):
             Instance used for persistence. If ``None``, a default
             ``InstitutionFacilityCsvDAO`` is created.
         """
-        from udescjoinvilletteaservice import InstitutionFacilityService
+        from service import InstitutionFacilityService
 
         if not hasattr(self, "_initialized"):
             super().__init__()

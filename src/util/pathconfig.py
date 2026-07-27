@@ -103,9 +103,9 @@ class PathConfig:
         BASE_DIR: Path = Path(user_data_dir(APP_NAME, APP_AUTHOR))
         EXERGAME_DIR: Path = BASE_DIR / "exergames"
     else:
-        BASE_DIR: Path = Path(__file__).parent.parent
-        EXERGAME_DIR: Path = BASE_DIR / "udescjoinvilletteagames"
-        BASE_DIR: Path = BASE_DIR / "data"
+        PROJECT_DIR: Path = Path(__file__).resolve().parents[2]
+        EXERGAME_DIR: Path = PROJECT_DIR / "src" / "games"
+        BASE_DIR: Path = PROJECT_DIR / "data"
 
     # Subdirectories — add new folders here
     CONFIG_DIR: Path = BASE_DIR / "config"

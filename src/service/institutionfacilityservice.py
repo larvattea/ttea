@@ -1,12 +1,12 @@
-# udescjoinvillettea/service/institutionfacilityservice.py
+# /service/institutionfacilityservice.py
 from typing import Any, Dict, List, Optional
 
 from PySide6.QtCore import QCoreApplication, QObject, Signal
 
 # Local module import
-from udescjoinvilletteadao import InstitutionFacilityCsvDAO
-from udescjoinvilletteaexception import BusinessRuleException
-from udescjoinvilletteamodel import InstitutionFacility
+from dao import InstitutionFacilityCsvDAO
+from exception import BusinessRuleException
+from model import InstitutionFacility
 
 
 class InstitutionFacilityService(QObject):
@@ -169,7 +169,7 @@ class InstitutionFacilityService(QObject):
             ``True`` if the institutionfacility was successfully deleted,
             ``False`` otherwise (e.g., institutionfacility not found).
         """
-        from udescjoinvilletteaservice import ProfessionalService
+        from service import ProfessionalService
 
         # Validação de integridade referencial (Negócio)
         professional_service = ProfessionalService()

@@ -1,5 +1,5 @@
 """
-udescjoinvilletteamodel
+model
 
 A Python package for model in the T-TEA platform,
 supporting data model description. Developed by the Larva UDESC team.

@@ -1,8 +1,8 @@
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
-from udescjoinvilletteaservice import CalibrationService
-from udescjoinvilletteautil import PathConfig
+from service import CalibrationService
+from util import PathConfig
 
 
 class MediaPipeManager:

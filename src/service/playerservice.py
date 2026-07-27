@@ -1,11 +1,11 @@
-# udescjoinvillettea/service/player_service.py
+# /service/player_service.py
 from typing import Any, Dict, List, Optional
 
 from PySide6.QtCore import QObject, Signal
 
-from udescjoinvilletteadao import PlayerCsvDAO
-from udescjoinvilletteaexception import BusinessRuleException
-from udescjoinvilletteamodel import Player
+from dao import PlayerCsvDAO
+from exception import BusinessRuleException
+from model import Player
 
 
 class PlayerService(QObject):
@@ -164,7 +164,7 @@ class PlayerService(QObject):
             ``True`` if the player was successfully deleted,
             ``False`` otherwise (e.g., player not found).
         """
-        from udescjoinvilletteagames.kartea.service import \
+        from games.kartea.service import \
             PlayerKarteaConfigService
 
         # Validação de integridade referencial (Negócio)

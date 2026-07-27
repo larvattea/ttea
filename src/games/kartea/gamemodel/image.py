@@ -4,7 +4,7 @@ from typing import Literal, Tuple, Union
 import pygame
 from PySide6.QtCore import QFile, QIODevice
 
-from udescjoinvilletteagames.kartea.util import KarteaPathConfig
+from games.kartea.util import KarteaPathConfig
 
 
 class Image:

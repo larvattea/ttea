@@ -1,4 +1,4 @@
-# udescjoinvilletteaview/mainview.py
+# view/mainview.py
 from datetime import date
 from typing import Optional
 
@@ -6,12 +6,12 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QCloseEvent, QIcon
 from PySide6.QtWidgets import QLabel, QMainWindow, QStatusBar, QWidget
 
-from udescjoinvilletteaapp import AppConfig
-from udescjoinvilletteacontroller import MainController
-from udescjoinvilletteamodel import AppModel
-from udescjoinvilletteaui import Ui_MainView
-from udescjoinvilletteautil import MessageService
-from udescjoinvilletteawindow import WindowConfig
+from app import AppConfig
+from controller import MainController
+from model import AppModel
+from ui import Ui_MainView
+from util import MessageService
+from window import WindowConfig
 
 
 class MainView(QMainWindow, Ui_MainView, WindowConfig):

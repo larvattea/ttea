@@ -1,14 +1,14 @@
-# udescjoinvillettea/controller/maincontroller.py
+# /controller/maincontroller.py
 from typing import TYPE_CHECKING
 
 from PySide6.QtCore import QObject
 
-from udescjoinvilletteaservice import MainService
+from service import MainService
 
 if TYPE_CHECKING:
-    from udescjoinvilletteamodel import AppModel
-    from udescjoinvilletteautil import MessageService
-    from udescjoinvilletteaview.mainview import \
+    from model import AppModel
+    from util import MessageService
+    from view.mainview import \
         MainView  # Apenas para type hint
 
 
@@ -19,7 +19,7 @@ class MainController(QObject):
         model: "AppModel",
         message_service: "MessageService",
     ):
-        from udescjoinvilletteafactory import ViewFactory
+        from factory import ViewFactory
 
         super().__init__(parent=view)
         self.view = view

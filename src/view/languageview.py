@@ -5,15 +5,15 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QCloseEvent, QIcon, QPixmap
 from PySide6.QtWidgets import QDialog, QWidget
 
-from udescjoinvilletteaui import Ui_LanguageView
-from udescjoinvilletteawindow import WindowConfig
+from ui import Ui_LanguageView
+from window import WindowConfig
 
 
 class LanguageView(QDialog, Ui_LanguageView, WindowConfig):
     """View para seleção de idioma — agora ativa como PlayerListView."""
 
     def __init__(self, parent: Optional[QWidget] = None):
-        from udescjoinvilletteacontroller import LanguageController
+        from controller import LanguageController
 
         super().__init__(parent)
         self.setupUi(self)
@@ -60,7 +60,7 @@ class LanguageView(QDialog, Ui_LanguageView, WindowConfig):
         return self.cbx_language.currentData()
 
     def show_warning(self) -> None:
-        from udescjoinvilletteautil import MessageService
+        from util import MessageService
 
         MessageService(self).warning(
             self.tr("Por favor, selecione um idioma.")

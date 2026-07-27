@@ -3,12 +3,12 @@ from typing import TYPE_CHECKING, Callable, Dict
 from PySide6.QtCore import QObject
 
 # Local module import
-from udescjoinvilletteaexception import BusinessRuleException
-from udescjoinvilletteaservice import InstitutionFacilityService
-from udescjoinvilletteautil import MessageService
+from exception import BusinessRuleException
+from service import InstitutionFacilityService
+from util import MessageService
 
 if TYPE_CHECKING:
-    from udescjoinvilletteaview import (InstitutionFacilityEditView,
+    from view import (InstitutionFacilityEditView,
                                         InstitutionFacilityListView)
 
 

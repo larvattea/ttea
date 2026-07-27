@@ -6,12 +6,12 @@ from PySide6.QtGui import QCloseEvent, QIcon
 from PySide6.QtWidgets import QDialog
 
 # Local module import
-from udescjoinvilletteacontroller import PlayerGameLaunchController
-from udescjoinvilletteamodel import AppModel, Language
-from udescjoinvilletteaservice import PlayerGameLaunchService
-from udescjoinvilletteaui import Ui_PlayerGameLaunchView
-from udescjoinvilletteautil import MessageService
-from udescjoinvilletteawindow import WindowConfig
+from controller import PlayerGameLaunchController
+from model import AppModel, Language
+from service import PlayerGameLaunchService
+from ui import Ui_PlayerGameLaunchView
+from util import MessageService
+from window import WindowConfig
 
 
 class PlayerGameLaunchView(QDialog, Ui_PlayerGameLaunchView, WindowConfig):

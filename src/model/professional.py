@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, ClassVar, Dict, List
 from PySide6.QtCore import QT_TRANSLATE_NOOP
 
 if TYPE_CHECKING:
-    from udescjoinvilletteamodel import InstitutionFacility
+    from model import InstitutionFacility
 
 
 def initialize_reflexive(cls):

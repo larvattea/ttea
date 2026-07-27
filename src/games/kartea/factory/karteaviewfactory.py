@@ -3,11 +3,11 @@ from typing import TYPE_CHECKING, Callable, Optional
 from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QDialog
 
-from udescjoinvilletteagames.kartea.view import (PlayerKarteaConfigEditView,
+from games.kartea.view import (PlayerKarteaConfigEditView,
                                                  PlayerKarteaConfigListView)
 
 if TYPE_CHECKING:
-    from udescjoinvilletteagames.kartea.model import PlayerKarteaConfig
+    from games.kartea.model import PlayerKarteaConfig
 
 
 class KarteaViewFactory:

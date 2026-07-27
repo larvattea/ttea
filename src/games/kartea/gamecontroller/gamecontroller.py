@@ -4,11 +4,11 @@ import time
 import cv2
 import pygame
 
-from udescjoinvilletteagames.kartea.gamecore import Camera, PoseTracking
-from udescjoinvilletteagames.kartea.gamemodel import (Background, Car, Image,
+from games.kartea.gamecore import Camera, PoseTracking
+from games.kartea.gamemodel import (Background, Car, Image,
                                                       Obstacle, Target)
-from udescjoinvilletteagames.kartea.gameui import UI
-from udescjoinvilletteagames.kartea.gameutil import GameSettings
+from games.kartea.gameui import UI
+from games.kartea.gameutil import GameSettings
 
 
 class GameController:

@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, Callable, Optional
 from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QDialog, QMainWindow
 
-from udescjoinvilletteaview import (AboutView, CalibrationView,
+from view import (AboutView, CalibrationView,
                                     InstitutionFacilityEditView,
                                     InstitutionFacilityListView, LanguageView,
                                     MainView, ManualCalibrationView,
@@ -19,7 +19,7 @@ from udescjoinvilletteaview import (AboutView, CalibrationView,
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
-    from udescjoinvilletteamodel import (InstitutionFacility, Player,
+    from model import (InstitutionFacility, Player,
                                          Professional)
 
 

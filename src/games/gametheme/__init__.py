@@ -1,5 +1,5 @@
 """
-udescjoinvilletteagames
+games
 
 A Python package for games. Developed by the Larva UDESC team.
 

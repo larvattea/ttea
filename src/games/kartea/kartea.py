@@ -4,10 +4,10 @@ import sys
 import cv2
 import pygame
 
-from udescjoinvilletteagames.kartea.gamecontroller import GameController
-from udescjoinvilletteagames.kartea.gameutil import GameSettings
-from udescjoinvilletteagames.kartea.gameview import Menu
-from udescjoinvilletteagames.kartea.service import PlayerKarteaConfigService
+from games.kartea.gamecontroller import GameController
+from games.kartea.gameutil import GameSettings
+from games.kartea.gameview import Menu
+from games.kartea.service import PlayerKarteaConfigService
 
 
 class KarTEA:

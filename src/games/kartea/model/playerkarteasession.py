@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, ClassVar, Dict, List
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
-    from udescjoinvilletteamodel.player import Player
+    from model.player import Player
 
 
 def initialize_reflexive(cls):
@@ -79,7 +79,7 @@ class PlayerKarteaSession:
     Examples
     --------
     >>> from datetime import datetime
-    >>> from udescjoinvilletteamodel.player import Player
+    >>> from model.player import Player
     >>> session = PlayerKarteaSession(id=1, player=Player(id=1, name="John",
     ...                                                  birth_date=datetime(2000, 1, 1)),
     ...                               date="17-09-2025", start_time="10:00:00",

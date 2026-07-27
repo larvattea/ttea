@@ -3,13 +3,13 @@ from typing import Any, List, Optional, Set
 
 from PySide6.QtCore import QDir, QDirIterator
 
-from udescjoinvilletteadao import DAO
-from udescjoinvilletteagames.kartea.model.karteaphase import KarteaPhase
-from udescjoinvilletteagames.kartea.model.karteaphaselevel import \
+from dao import DAO
+from games.kartea.model.karteaphase import KarteaPhase
+from games.kartea.model.karteaphaselevel import \
     KarteaPhaseLevel
-from udescjoinvilletteagames.kartea.util.karteapathconfig import \
+from games.kartea.util.karteapathconfig import \
     KarteaPathConfig
-from udescjoinvilletteautil import CSVHandler
+from util import CSVHandler
 
 
 class KarteaPhaseCsvDAO(DAO):

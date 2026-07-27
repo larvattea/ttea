@@ -1,7 +1,7 @@
 import cv2
 
 # import settings
-from udescjoinvilletteagames.kartea.gameutil import GameSettings
+from games.kartea.gameutil import GameSettings
 
 
 class Camera:

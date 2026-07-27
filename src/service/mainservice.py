@@ -4,8 +4,8 @@ from PySide6.QtCore import QCoreApplication
 from PySide6.QtWidgets import QApplication
 
 if TYPE_CHECKING:
-    from udescjoinvilletteamodel import AppModel
-    from udescjoinvilletteautil import MessageService
+    from model import AppModel
+    from util import MessageService
 
 
 class MainService:

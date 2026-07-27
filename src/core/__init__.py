@@ -1,5 +1,5 @@
 """
-udescjoinvilletteadao
+dao
 
 A Python package for Data Access Objects (DAOs) from the T-TEA platform,
 supporting data management and persistence. Developed by the Larva UDESC team.

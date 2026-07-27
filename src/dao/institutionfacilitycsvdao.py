@@ -6,9 +6,9 @@ from typing import Dict, List, Optional
 import portalocker
 
 # Local module import
-from udescjoinvilletteadao import DAO
-from udescjoinvilletteamodel import InstitutionFacility
-from udescjoinvilletteautil import CSVHandler, PathConfig
+from dao import DAO
+from model import InstitutionFacility
+from util import CSVHandler, PathConfig
 
 
 class InstitutionFacilityCsvDAO(DAO[InstitutionFacility]):

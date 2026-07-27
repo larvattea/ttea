@@ -3,10 +3,10 @@ from typing import TYPE_CHECKING, ClassVar, Dict, List
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
-    from udescjoinvilletteagames.kartea.model import (KarteaPhase,
+    from games.kartea.model import (KarteaPhase,
                                                       KarteaPhaseLevel,
                                                       PlayerKarteaSession)
-    from udescjoinvilletteamodel import Player
+    from model import Player
 
 
 def initialize_reflexive(cls):
@@ -92,8 +92,8 @@ class PlayerKarteaConfig:
     Examples
     --------
     >>> from datetime import datetime
-    >>> from udescjoinvilletteamodel import Player
-    >>> from udescjoinvilletteagames.kartea.model import (KarteaPhase,
+    >>> from model import Player
+    >>> from games.kartea.model import (KarteaPhase,
     ...                                                  KarteaPhaseLevel,
     ...                                                  PlayerKarteaSession)
     >>> config = PlayerKarteaConfig(player=Player(id=1, name="John",

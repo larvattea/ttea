@@ -5,10 +5,10 @@ from PySide6.QtGui import QCloseEvent, QKeyEvent
 from PySide6.QtWidgets import QDialog
 
 # Local module import
-from udescjoinvilletteacontroller import ManualCalibrationController
-from udescjoinvilletteaui import Ui_GameCalibrationView
-from udescjoinvilletteautil import MessageService
-from udescjoinvilletteawindow import WindowConfig
+from controller import ManualCalibrationController
+from ui import Ui_GameCalibrationView
+from util import MessageService
+from window import WindowConfig
 
 
 class ManualCalibrationView(QDialog, Ui_GameCalibrationView, WindowConfig):

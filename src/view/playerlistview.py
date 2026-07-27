@@ -4,16 +4,16 @@ from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 
 # Local module import
-from udescjoinvilletteacontroller import PlayerListController
-from udescjoinvilletteaui import \
+from controller import PlayerListController
+from ui import \
     Ui_PlayerListView  # Assuming generated UI class
-from udescjoinvilletteautil import MessageService, QtDateFormat
-from udescjoinvilletteawindow import WindowConfig
+from util import MessageService, QtDateFormat
+from window import WindowConfig
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
-    from udescjoinvilletteamodel import Player
-    from udescjoinvilletteaview import PlayerEditView
+    from model import Player
+    from view import PlayerEditView
 
 
 class PlayerListView(QDialog, Ui_PlayerListView, WindowConfig):

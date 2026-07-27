@@ -3,11 +3,11 @@ from typing import TYPE_CHECKING, Callable, Dict
 from PySide6.QtCore import QObject
 
 # Local module import
-from udescjoinvilletteaservice import ProfessionalService
-from udescjoinvilletteautil import MessageService
+from service import ProfessionalService
+from util import MessageService
 
 if TYPE_CHECKING:
-    from udescjoinvilletteaview import (ProfessionalEditView,
+    from view import (ProfessionalEditView,
                                         ProfessionalListView)
 
 

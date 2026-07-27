@@ -7,12 +7,12 @@ from mediapipe.tasks.python import vision
 from PySide6.QtCore import QCoreApplication, QObject, QRect, Qt, QTimer
 from PySide6.QtGui import QKeyEvent, QPixmap
 
-from udescjoinvilletteamodel import AppModel, Language
-from udescjoinvilletteaservice import CalibrationService
-from udescjoinvilletteautil import PathConfig
+from model import AppModel, Language
+from service import CalibrationService
+from util import PathConfig
 
 if TYPE_CHECKING:
-    from udescjoinvilletteaview import ManualCalibrationView
+    from view import ManualCalibrationView
 
 
 class ManualCalibrationController(QObject):

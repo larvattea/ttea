@@ -1,7 +1,7 @@
 from PySide6.QtCore import QSettings
 
-from udescjoinvilletteaapp import AppConfig
-from udescjoinvilletteautil import PathConfig
+from app import AppConfig
+from util import PathConfig
 
 
 class AppModel:
@@ -21,7 +21,7 @@ class AppModel:
         if AppModel._initialized:
             return  # Já foi inicializado anteriormente
 
-        from udescjoinvilletteamodel import Language
+        from model import Language
 
         self.language_model = Language()  # usado apenas no LanguageController
 
@@ -54,7 +54,7 @@ class AppModel:
     @current_language.setter
     def current_language(self, value: str) -> None:
         """Define o idioma atual, garantindo que seja válido."""
-        from udescjoinvilletteamodel import Language
+        from model import Language
 
         available_codes = [
             lang["code"] for lang in self.language_model.get_languages()

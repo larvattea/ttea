@@ -13,12 +13,12 @@ os.environ["QT_LOGGING_RULES"] = "*.debug=false"
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication, QDialog, QMainWindow
 
-from udescjoinvilletteaapp import AppConfig
-from udescjoinvilletteafactory import ViewFactory
-from udescjoinvillettealog import Log
-from udescjoinvilletteaservice import LanguageService
-from udescjoinvilletteautil import CriticalHooks
-from udescjoinvilletteaview import SplashScreen
+from app import AppConfig
+from factory import ViewFactory
+from log import Log
+from service import LanguageService
+from util import CriticalHooks
+from view import SplashScreen
 
 
 class App:

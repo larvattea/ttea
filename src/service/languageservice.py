@@ -1,9 +1,9 @@
 from PySide6.QtCore import QLocale, QSettings, QTranslator
 from PySide6.QtWidgets import QApplication
 
-from udescjoinvilletteaapp import AppConfig
-from udescjoinvilletteamodel import AppModel, Language
-from udescjoinvilletteautil import PathConfig
+from app import AppConfig
+from model import AppModel, Language
+from util import PathConfig
 
 
 class LanguageService:

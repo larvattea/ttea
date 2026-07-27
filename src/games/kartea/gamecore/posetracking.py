@@ -4,7 +4,7 @@ import numpy as np
 
 # from settings import *
 # import settings as st
-from udescjoinvilletteagames.kartea.gameutil import GameSettings
+from games.kartea.gameutil import GameSettings
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles

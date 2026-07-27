@@ -6,12 +6,12 @@ from typing import TYPE_CHECKING, Dict, List, Optional
 import portalocker
 
 # Local module import
-from udescjoinvilletteadao import DAO
-from udescjoinvilletteamodel import Professional
-from udescjoinvilletteautil import CSVHandler, PathConfig
+from dao import DAO
+from model import Professional
+from util import CSVHandler, PathConfig
 
 if TYPE_CHECKING:
-    from udescjoinvilletteadao import InstitutionFacilityCsvDAO
+    from dao import InstitutionFacilityCsvDAO
 
 
 class ProfessionalCsvDAO(DAO[Professional]):
@@ -24,7 +24,7 @@ class ProfessionalCsvDAO(DAO[Professional]):
     ) -> None:
         """Initialize the DAO and load all professionals
         from CSV files."""
-        from udescjoinvilletteadao import InstitutionFacilityCsvDAO
+        from dao import InstitutionFacilityCsvDAO
 
         self.csv_handler = CSVHandler()
         self.professionals: Dict[int, Professional] = {}

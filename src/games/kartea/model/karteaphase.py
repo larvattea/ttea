@@ -2,7 +2,7 @@ from dataclasses import dataclass, fields
 from typing import TYPE_CHECKING, ClassVar, Dict, List
 
 if TYPE_CHECKING:
-    from udescjoinvilletteagames.kartea.model.karteaphaselevel import \
+    from games.kartea.model.karteaphaselevel import \
         KarteaPhaseLevel
 
 
@@ -56,7 +56,7 @@ class KarteaPhase:
 
     Examples
     --------
-    >>> from udescjoinvilletteagames.kartea.model.karteaphaselevel import \
+    >>> from games.kartea.model.karteaphaselevel import \
     ...     KarteaPhaseLevel
     >>> phase = KarteaPhase(id=1, level_list=[])
     >>> phase.get_data()

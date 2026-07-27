@@ -1,5 +1,5 @@
 """
-udescjoinvilletteaservice
+service
 
 A Python package for service classes from the Kartea game,
 supporting service logic.

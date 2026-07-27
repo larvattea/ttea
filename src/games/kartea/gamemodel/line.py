@@ -2,10 +2,10 @@ from typing import TYPE_CHECKING, Optional
 
 import pygame
 
-from udescjoinvilletteagames.kartea.gameutil import GameSettings
+from games.kartea.gameutil import GameSettings
 
 if TYPE_CHECKING:
-    from udescjoinvilletteagames.kartea.gamemodel import Target
+    from games.kartea.gamemodel import Target
 
 
 class Line:

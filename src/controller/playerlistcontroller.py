@@ -3,12 +3,12 @@ from typing import TYPE_CHECKING, Callable
 from PySide6.QtCore import QObject
 
 # Local module import
-from udescjoinvilletteaexception import BusinessRuleException
-from udescjoinvilletteaservice import PlayerService
-from udescjoinvilletteautil import MessageService
+from exception import BusinessRuleException
+from service import PlayerService
+from util import MessageService
 
 if TYPE_CHECKING:
-    from udescjoinvilletteaview import PlayerEditView, PlayerListView
+    from view import PlayerEditView, PlayerListView
 
 
 class PlayerListController(QObject):

@@ -59,7 +59,7 @@ class CriticalHooks:
         If the Qt message dialog cannot be displayed, falls back to printing
         the error to standard output.
         """
-        from udescjoinvilletteautil import MessageService
+        from util import MessageService
 
         message = QCoreApplication.translate(
             "CriticalHooks",
@@ -100,7 +100,7 @@ class CriticalHooks:
         The hook logs the exception and shows a dialog only if a
         QApplication instance exists. The application exits with status 1.
         """
-        from udescjoinvillettealog import Log
+        from log import Log
 
         Log.get_log().log_error("Untreated global exception")
         Log.get_log().log_error_with_stack(value, traceback_obj=traceback_obj)
@@ -135,7 +135,7 @@ class CriticalHooks:
         This hook only logs the exception and does not show a dialog to
         avoid thread safety issues with Qt widgets.
         """
-        from udescjoinvillettealog import Log
+        from log import Log
 
         Log.get_log().log_error("Untreated exception in thread")
         Log.get_log().log_error_with_stack(

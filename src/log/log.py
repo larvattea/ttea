@@ -18,7 +18,7 @@ from typing import Any, Dict, Optional
 
 import psutil
 
-from udescjoinvilletteautil import PathConfig
+from util import PathConfig
 
 
 class Log:

@@ -12,7 +12,7 @@ from PySide6.QtGui import QPixmap, QResizeEvent
 from PySide6.QtMultimedia import QSoundEffect
 from PySide6.QtWidgets import QLabel, QProgressBar, QSplashScreen, QWidget
 
-from udescjoinvilletteautil import PathConfig
+from util import PathConfig
 
 
 class SplashScreen(QSplashScreen):

@@ -91,7 +91,7 @@ class CSVHandler:
             Quoting policy (csv.QUOTE_* constants).
         """
         # Singleton logger for the application
-        from udescjoinvillettealog import Log
+        from log import Log
 
         csv.register_dialect(
             dialect,

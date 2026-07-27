@@ -6,9 +6,9 @@ from PySide6.QtCore import QRect, QSettings
 from PySide6.QtGui import QGuiApplication, QScreen
 from PySide6.QtMultimedia import QCameraDevice, QMediaDevices
 
-from udescjoinvilletteadao import CalibrationIniDAO, CalibrationPointDAO
-from udescjoinvilletteamodel import Calibration, CalibrationPoint
-from udescjoinvilletteautil import PathConfig
+from dao import CalibrationIniDAO, CalibrationPointDAO
+from model import Calibration, CalibrationPoint
+from util import PathConfig
 
 
 class CalibrationService:

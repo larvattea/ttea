@@ -2,7 +2,7 @@ from dataclasses import dataclass, fields
 from typing import TYPE_CHECKING, ClassVar, Dict, List
 
 if TYPE_CHECKING:
-    from udescjoinvilletteagames.kartea.model import PlayerKarteaSession
+    from games.kartea.model import PlayerKarteaSession
 
 
 def initialize_reflexive(cls):
@@ -67,8 +67,8 @@ class PlayerKarteaSessionDetail:
 
     Examples
     --------
-    >>> from udescjoinvilletteagames.kartea.model import PlayerKarteaSession
-    >>> from udescjoinvilletteamodel.player import Player
+    >>> from games.kartea.model import PlayerKarteaSession
+    >>> from model.player import Player
     >>> from datetime import datetime
     >>> session = PlayerKarteaSession(id=1, player=Player(id=1, name="John",
     ...                                                  birth_date=datetime(2000, 1, 1)),

@@ -10,7 +10,7 @@ from mediapipe.python.solutions import pose as mp_pose
 from PySide6.QtCore import QObject, QThread, Signal
 from PySide6.QtGui import QImage
 
-from udescjoinvilletteaservice import CalibrationService
+from service import CalibrationService
 
 
 class CameraVideoThread(QThread, QObject):
@@ -21,7 +21,7 @@ class CameraVideoThread(QThread, QObject):
     CAMERA_VIDEO_THREAD_HEIGHT = 480
 
     def __init__(self, camera_index: int, use_low_resolution: bool = False):
-        from udescjoinvilletteacore import MediaPipeFilter, MediaPipeManager
+        from core import MediaPipeFilter, MediaPipeManager
 
         super().__init__()
         self.camera_index = camera_index

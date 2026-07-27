@@ -1,0 +1,2 @@
+﻿player;session;update_session_id;phase;level;level_time;car_image;environment_image;target_image;obstacle_image;positive_feedback_image;neutral_feedback_image;negative_feedback_image;positive_feedback_sound;neutral_feedback_sound;negative_feedback_sound;palette;hud;sound
+2;;True;1;1;120;defaultvehicle;defaultenvironment;defaultstar;defaultobstacle;positive;neutral;negative;hit;miss;error;0;True;True

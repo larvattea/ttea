@@ -1,5 +1,5 @@
 """
-udescjoinvilletteaservice
+service
 
 A Python package for service classes from the T-TEA platform,
 supporting service logic.

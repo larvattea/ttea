@@ -4,10 +4,10 @@ from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import QDialog
 
 # Local module import
-from udescjoinvilletteacontroller import CalibrationController
-from udescjoinvilletteaui import Ui_CalibrationView
-from udescjoinvilletteautil import MessageService
-from udescjoinvilletteawindow import WindowConfig
+from controller import CalibrationController
+from ui import Ui_CalibrationView
+from util import MessageService
+from window import WindowConfig
 
 
 class CalibrationView(QDialog, Ui_CalibrationView, WindowConfig):

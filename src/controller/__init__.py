@@ -1,5 +1,5 @@
 """
-udescjoinvilletteacontroller
+controller
 
 A Python package for controller classes from the T-TEA platform,
 supporting controller logic and data management from views.

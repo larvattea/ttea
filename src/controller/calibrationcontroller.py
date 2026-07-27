@@ -4,13 +4,13 @@ from typing import TYPE_CHECKING, Any, Dict, Optional
 from PySide6.QtCore import QObject, Qt, Slot
 from PySide6.QtGui import QImage, QPixmap
 
-from udescjoinvilletteaapp import AppConfig
-from udescjoinvilletteacore import CalibrationMath  # GameCalibration,
-from udescjoinvilletteacore import CameraVideoThread
-from udescjoinvilletteaservice import CalibrationService
+from app import AppConfig
+from core import CalibrationMath  # GameCalibration,
+from core import CameraVideoThread
+from service import CalibrationService
 
 if TYPE_CHECKING:
-    from udescjoinvilletteaview import CalibrationView
+    from view import CalibrationView
 
 
 class CalibrationController(QObject):
@@ -52,7 +52,7 @@ class CalibrationController(QObject):
         self.view.msg.info(self.tr("Em construção!"))
 
     def handle_calibrate_manual(self) -> None:
-        from udescjoinvilletteafactory import ViewFactory
+        from factory import ViewFactory
 
         # self.view.msg.info(self.tr("Em construção!"))
         # available_geo = self.service.get_available_geometry_of_screen(

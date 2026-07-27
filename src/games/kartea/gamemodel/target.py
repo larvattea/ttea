@@ -5,8 +5,8 @@ import time
 
 import pygame
 
-from udescjoinvilletteagames.kartea.gamemodel import Image
-from udescjoinvilletteagames.kartea.gameutil import GameSettings
+from games.kartea.gamemodel import Image
+from games.kartea.gameutil import GameSettings
 
 
 class Target:

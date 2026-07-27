@@ -1,5 +1,5 @@
 """
-udescjoinvilletteaui
+ui
 
 A Python package for UI interface.
 

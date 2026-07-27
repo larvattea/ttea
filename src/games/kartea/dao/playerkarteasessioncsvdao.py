@@ -5,11 +5,11 @@ from datetime import datetime
 from typing import Dict, List, Optional, Union
 
 # Local module import
-from udescjoinvilletteadao import DAO, PlayerCsvDAO
-from udescjoinvilletteagames.kartea.model import PlayerKarteaSession
-from udescjoinvilletteagames.kartea.util import KarteaPathConfig
-from udescjoinvilletteamodel import Player
-from udescjoinvilletteautil import CSVHandler
+from dao import DAO, PlayerCsvDAO
+from games.kartea.model import PlayerKarteaSession
+from games.kartea.util import KarteaPathConfig
+from model import Player
+from util import CSVHandler
 
 
 class PlayerKarteaSessionCsvDAO(DAO):

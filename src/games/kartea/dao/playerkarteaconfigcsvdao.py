@@ -4,14 +4,14 @@ from dataclasses import fields
 from typing import Dict, List, Optional, Union
 
 # Local module imports
-from udescjoinvilletteadao import DAO
-from udescjoinvilletteadao.playercsvdao import PlayerCsvDAO
-from udescjoinvilletteagames.kartea.model import (KarteaPhase,
+from dao import DAO
+from dao.playercsvdao import PlayerCsvDAO
+from games.kartea.model import (KarteaPhase,
                                                   KarteaPhaseLevel,
                                                   PlayerKarteaConfig)
-from udescjoinvilletteagames.kartea.util.karteapathconfig import \
+from games.kartea.util.karteapathconfig import \
     KarteaPathConfig
-from udescjoinvilletteautil import CSVHandler
+from util import CSVHandler
 
 
 class PlayerKarteaConfigCsvDAO(DAO):
@@ -64,7 +64,7 @@ class PlayerKarteaConfigCsvDAO(DAO):
         Creates necessary directories if they do not exist. Infers int and bool
         properties dynamically from PlayerKarteaConfig dataclass fields.
         """
-        from udescjoinvilletteagames.kartea.dao import (
+        from games.kartea.dao import (
             KarteaPhaseCsvDAO, KarteaPhaseLevelCsvDAO,
             PlayerKarteaSessionCsvDAO)
 

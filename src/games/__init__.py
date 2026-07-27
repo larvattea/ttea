@@ -1,5 +1,5 @@
 """
-udescjoinvilletteagames
+games
 
 A Python package for games in T-TEA console.
 

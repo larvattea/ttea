@@ -186,7 +186,7 @@ class MessageService:
         --------
         >>> MessageService.critical_global('Fatal error occurred.', 'Error')
         """
-        from udescjoinvilletteaapp import AppConfig
+        from app import AppConfig
 
         window = QWidget()
         window.setWindowTitle(title or AppConfig.get_title())

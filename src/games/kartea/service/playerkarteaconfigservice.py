@@ -1,13 +1,13 @@
 from typing import Any, Dict, List, Optional, Union
 
-from udescjoinvilletteagames.kartea.dao import PlayerKarteaConfigCsvDAO
-from udescjoinvilletteagames.kartea.model import (KarteaPhase,
+from games.kartea.dao import PlayerKarteaConfigCsvDAO
+from games.kartea.model import (KarteaPhase,
                                                   KarteaPhaseLevel,
                                                   PlayerKarteaConfig,
                                                   PlayerKarteaSession)
-from udescjoinvilletteagames.kartea.util import KarteaPathConfig
-from udescjoinvilletteamodel import Player
-from udescjoinvilletteaservice import PlayerService
+from games.kartea.util import KarteaPathConfig
+from model import Player
+from service import PlayerService
 
 
 class PlayerKarteaConfigService:

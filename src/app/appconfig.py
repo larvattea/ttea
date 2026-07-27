@@ -7,7 +7,7 @@ file checks.
 
 from PySide6.QtCore import QCoreApplication, QSettings
 
-from udescjoinvilletteautil import PathConfig
+from util import PathConfig
 
 
 class AppConfig:
@@ -115,7 +115,7 @@ class AppConfig:
         >>> AppConfig.get_geral_date_mask()
         '%d/%m/%Y'
         """
-        from udescjoinvilletteamodel import AppModel
+        from model import AppModel
 
         settings = QSettings(
             PathConfig.config(PathConfig.CONFIG_FILENAME), QSettings.IniFormat

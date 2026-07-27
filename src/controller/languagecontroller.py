@@ -2,12 +2,12 @@ from typing import TYPE_CHECKING, Optional
 
 from PySide6.QtCore import QObject
 
-from udescjoinvilletteamodel import Language
-from udescjoinvilletteaservice import LanguageService
-from udescjoinvilletteautil import MessageService
+from model import Language
+from service import LanguageService
+from util import MessageService
 
 if TYPE_CHECKING:
-    from udescjoinvilletteaview import LanguageView
+    from view import LanguageView
 
 
 class LanguageController(QObject):

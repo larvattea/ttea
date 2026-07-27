@@ -1,7 +1,7 @@
 import pygame
 
 # from settings import *
-from udescjoinvilletteagames.kartea.gameutil import GameSettings
+from games.kartea.gameutil import GameSettings
 
 
 class UI:

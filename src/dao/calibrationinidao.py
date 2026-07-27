@@ -2,8 +2,8 @@ from typing import List, Optional
 
 from PySide6.QtCore import QSettings
 
-from udescjoinvilletteamodel import Calibration
-from udescjoinvilletteautil import PathConfig
+from model import Calibration
+from util import PathConfig
 
 # Direct import de DAO to avoid circular import
 from .dao import DAO

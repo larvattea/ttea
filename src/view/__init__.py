@@ -1,5 +1,5 @@
 """
-udescjoinvilletteaview
+view
 
 A Python package for visualizing and editing data from the T-TEA platform,
 supporting internationalization and player data management. Developed by the

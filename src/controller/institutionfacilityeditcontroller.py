@@ -3,13 +3,13 @@ from typing import TYPE_CHECKING, Any, Dict, Optional, Union
 from PySide6.QtCore import QObject
 
 # Local module import
-from udescjoinvilletteaservice import InstitutionFacilityService
-from udescjoinvilletteautil import MessageService
+from service import InstitutionFacilityService
+from util import MessageService
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
-    from udescjoinvilletteamodel import InstitutionFacility
-    from udescjoinvilletteaview import InstitutionFacilityEditView
+    from model import InstitutionFacility
+    from view import InstitutionFacilityEditView
 
 
 class InstitutionFacilityEditController(QObject):

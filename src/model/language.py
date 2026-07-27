@@ -1,7 +1,7 @@
 from typing import Dict, List
 
 # Local module import
-from udescjoinvilletteautil import PathConfig
+from util import PathConfig
 
 
 class Language:

@@ -4,14 +4,14 @@ from typing import TYPE_CHECKING, Dict, Optional, Union
 from PySide6.QtCore import QDate, QObject
 
 # Local module import
-from udescjoinvilletteaservice import PlayerService
-from udescjoinvilletteautil import MessageService, QtDateFormat
+from service import PlayerService
+from util import MessageService, QtDateFormat
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
     # Local module import
-    from udescjoinvilletteamodel import Player
-    from udescjoinvilletteaview import PlayerEditView
+    from model import Player
+    from view import PlayerEditView
 
 
 class PlayerEditController(QObject):

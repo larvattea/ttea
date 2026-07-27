@@ -3,11 +3,11 @@ from typing import TYPE_CHECKING, List
 
 import pygame
 
-from udescjoinvilletteagames.kartea.gametheme import KarTEATheme
-from udescjoinvilletteagames.kartea.gameutil import GameSettings
+from games.kartea.gametheme import KarTEATheme
+from games.kartea.gameutil import GameSettings
 
 if TYPE_CHECKING:
-    from udescjoinvilletteagames.kartea.gamemodel import Line
+    from games.kartea.gamemodel import Line
 
 
 class Background:
@@ -15,7 +15,7 @@ class Background:
     e sprites do jogo."""
 
     def __init__(self):
-        from udescjoinvilletteagames.kartea.gamemodel import Image
+        from games.kartea.gamemodel import Image
 
         self.theme = KarTEATheme()
         self.clock = pygame.time.Clock()
@@ -70,7 +70,7 @@ class Background:
 
     def _create_road_lines(self):
         """Cria as 5000 linhas que compõem a estrada."""
-        from udescjoinvilletteagames.kartea.gamemodel import Line
+        from games.kartea.gamemodel import Line
 
         for i in range(5000):
             line = Line()
@@ -132,7 +132,7 @@ class Background:
 
     def background_menu(self):
         """Carrega a imagem de fundo específica para o menu."""
-        from udescjoinvilletteagames.kartea.gamemodel import Image
+        from games.kartea.gamemodel import Image
 
         self.menu_image = Image.load(
             # "Assets/Kartea/Background_Menu.png",

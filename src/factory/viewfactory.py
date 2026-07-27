@@ -5,8 +5,8 @@ for retrieving application-specific and game-specific view factory
 instances.
 """
 
-from udescjoinvilletteafactory import AppViewFactory
-from udescjoinvilletteagames.kartea.factory import KarteaViewFactory
+from factory import AppViewFactory
+from games.kartea.factory import KarteaViewFactory
 
 
 class ViewFactory:

@@ -1,8 +1,8 @@
 import pygame
 
-from udescjoinvilletteagames.kartea.gamemodel import Image
-from udescjoinvilletteagames.kartea.gamemodel.target import Target
-from udescjoinvilletteagames.kartea.gameutil import GameSettings
+from games.kartea.gamemodel import Image
+from games.kartea.gamemodel.target import Target
+from games.kartea.gameutil import GameSettings
 
 
 class Obstacle(Target):
