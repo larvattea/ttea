@@ -1,6 +1,7 @@
 import pygame
 
 # from settings import *
+from ttea.games.kartea.gameutil.alphablit import alpha_blit
 from ttea.games.kartea.gameutil import GameSettings
 
 
@@ -44,13 +45,14 @@ class UI:
         # Desenha sombra (se ativada)
         if shadow:
             label_shadow = font.render(text, True, shadow_color)
-            surface.blit(
+            alpha_blit(
+                surface,
                 label_shadow,
                 (label_rect.x - shadow_offset, label_rect.y + shadow_offset),
             )
 
         # Desenha o texto principal
-        surface.blit(label, label_rect)
+        alpha_blit(surface, label, label_rect)
 
     @staticmethod
     def button(

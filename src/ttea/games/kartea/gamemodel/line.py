@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING, Optional
 
 import pygame
 
+from ttea.games.kartea.gameutil.alphablit import alpha_blit
 from ttea.games.kartea.gameutil import GameSettings
 
 if TYPE_CHECKING:
@@ -85,7 +86,7 @@ class Line:
             return
 
         scaled_sprite = pygame.transform.scale(self.sprite, (destW, destH))
-        draw_surface.blit(scaled_sprite, (destX, destY))
+        alpha_blit(draw_surface, scaled_sprite, (destX, destY))
 
     def drawSprite2(self, draw_surface: pygame.Surface):
         """Desenha o sprite lateral direito (árvore direita)."""
@@ -115,7 +116,7 @@ class Line:
             return
 
         scaled_sprite = pygame.transform.scale(self.sprite2, (destW, destH))
-        draw_surface.blit(scaled_sprite, (destX, destY))
+        alpha_blit(draw_surface, scaled_sprite, (destX, destY))
 
     def drawTarget(self, draw_surface: pygame.Surface):
         """Desenha o alvo ou obstáculo associado a esta linha."""
@@ -160,7 +161,7 @@ class Line:
         scaled_sprite = pygame.transform.scale(
             self.target.images[0], (destW, destH)
         )
-        draw_surface.blit(scaled_sprite, (destX, destY))
+        alpha_blit(draw_surface, scaled_sprite, (destX, destY))
 
         # Desenha hitbox se estiver ativada
         if GameSettings.DRAW_HITBOX:

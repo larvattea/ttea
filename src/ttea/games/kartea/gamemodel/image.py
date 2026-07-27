@@ -4,6 +4,7 @@ from typing import Literal, Tuple, Union
 import pygame
 from PySide6.QtCore import QFile, QIODevice
 
+from ttea.games.kartea.gameutil.alphablit import alpha_blit
 from ttea.games.kartea.util import KarteaPathConfig
 
 
@@ -113,7 +114,7 @@ class Image:
             render_pos[0] -= img.get_width() // 2
             render_pos[1] -= img.get_height()
 
-        surface.blit(img, render_pos)
+        alpha_blit(surface, img, render_pos)
 
     @staticmethod
     def _fallback_surface() -> pygame.Surface:

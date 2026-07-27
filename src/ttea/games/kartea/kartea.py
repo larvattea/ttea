@@ -5,6 +5,7 @@ import cv2
 import pygame
 
 from ttea.games.kartea.gamecontroller import GameController
+from ttea.games.kartea.gameutil.alphablit import alpha_blit
 from ttea.games.kartea.gameutil import GameSettings
 from ttea.games.kartea.gameview import Menu
 from ttea.games.kartea.service import PlayerKarteaConfigService
@@ -132,7 +133,7 @@ class KarTEA:
             fps_label = self.fps_font.render(
                 f"FPS: {int(self.clock.get_fps())}", True, (255, 200, 20)
             )
-            self.screen.blit(fps_label, (5, 5))
+            alpha_blit(self.screen, fps_label, (5, 5))
 
     def run(self):
         """Loop principal do jogo."""
