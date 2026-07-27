@@ -20,7 +20,7 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QFormLayout,
                                QSizePolicy, QSpacerItem, QTabWidget,
                                QVBoxLayout, QWidget)
 
-import resources.resources_rc
+import qt_resources.resources_rc
 
 
 class Ui_InstitutionFacilityEditView(object):

@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QFormLayout,
                                QHBoxLayout, QLabel, QPushButton, QSizePolicy,
                                QSpacerItem, QVBoxLayout, QWidget)
 
-import resources.resources_rc
+import qt_resources.resources_rc
 
 
 class Ui_PlayerGameLaunchView(object):

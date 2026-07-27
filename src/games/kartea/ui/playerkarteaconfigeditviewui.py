@@ -20,7 +20,7 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDialog,
                                QSizePolicy, QSpacerItem, QSpinBox, QTabWidget,
                                QVBoxLayout, QWidget)
 
-import resources.resources_rc
+import qt_resources.resources_rc
 
 
 class Ui_PlayerKarteaConfigEditView(object):

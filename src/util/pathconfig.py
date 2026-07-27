@@ -46,8 +46,8 @@ class PathConfig:
         Directory for institution facility data.
     LOG_DIR : Path
         Directory for log files.
-    MODELS_DIR : Path
-        Directory for Mediapipe models.
+    MODELS_PATH : Path
+        Directory containing the bundled MediaPipe models.
     PLAYERS_DIR : Path
         Directory for player files.
     PROFESSIONAL_DIR : Path
@@ -102,10 +102,16 @@ class PathConfig:
     if getattr(sys, "frozen", False):
         BASE_DIR: Path = Path(user_data_dir(APP_NAME, APP_AUTHOR))
         EXERGAME_DIR: Path = BASE_DIR / "exergames"
+        RESOURCES_ROOT: Path = Path(
+            getattr(sys, "_MEIPASS", Path(sys.executable).parent)
+        ) / "resources"
     else:
         PROJECT_DIR: Path = Path(__file__).resolve().parents[2]
         EXERGAME_DIR: Path = PROJECT_DIR / "src" / "games"
         BASE_DIR: Path = PROJECT_DIR / "data"
+        RESOURCES_ROOT: Path = PROJECT_DIR / "resources"
+
+    MODELS_PATH: Path = RESOURCES_ROOT / "mediapipemodels"
 
     # Subdirectories — add new folders here
     CONFIG_DIR: Path = BASE_DIR / "config"
@@ -113,7 +119,6 @@ class PathConfig:
     EXPORTS_DIR: Path = BASE_DIR / "exports"
     INSTITUTIONFACILITY_DIR: Path = BASE_DIR / "institutionfacilities"
     LOG_DIR: Path = BASE_DIR / "log"
-    MODELS_DIR: Path = BASE_DIR / "mediapipemodels"
     PLAYERS_DIR: Path = BASE_DIR / "players"
     PROFESSIONAL_DIR: Path = BASE_DIR / "professionals"
 
@@ -476,7 +481,7 @@ class PathConfig:
         str
             Full path to the model file.
         """
-        return cls._user_file(cls.MODELS_DIR, filename)
+        return str(cls.MODELS_PATH / filename)
 
     @classmethod
     def export(cls, filename: str) -> str:
