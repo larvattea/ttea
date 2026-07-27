@@ -16,14 +16,11 @@ dependencies = [
 ]
 
 [project.scripts]
-dev = "main:main"
+dev = "ttea.main:main"
 
 [build-system]
 requires = ["setuptools>=80"]
 build-backend = "setuptools.build_meta"
-
-[tool.setuptools]
-py-modules = ["main"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
