@@ -8,18 +8,18 @@ TEMPLATE = aux
 
 # Graphical user interface (.ui) files created in Qt Designer
 FORMS += ../ui/*.ui \
-         ../../udescjoinvilletteagames/kartea/resources/ui/*.ui
+         ../../src/ttea/games/kartea/resources/ui/*.ui
 
 # Python files that must be parsed by lupdate
-SOURCES += ../../udescjoinvilletteaapp/*.py \
-            ../../udescjoinvilletteacontroller/*.py \
-            ../../udescjoinvilletteagames/kartea/controller/*.py \
-            ../../udescjoinvilletteagames/kartea/view/*.py \
-            ../../udescjoinvilletteamodel/*.py \
-            ../../udescjoinvilletteaservice/*.py \            
-            ../../udescjoinvilletteautil/*.py \
-            ../../udescjoinvilletteaview/*.py \
-            ../../*.py 
+SOURCES += ../../src/ttea/app/*.py \
+           ../../src/ttea/controller/*.py \
+           ../../src/ttea/games/kartea/controller/*.py \
+           ../../src/ttea/games/kartea/view/*.py \
+           ../../src/ttea/model/*.py \
+           ../../src/ttea/service/*.py \
+           ../../src/ttea/util/*.py \
+           ../../src/ttea/view/*.py \
+           ../../src/ttea/main.py
 
 # Translation files
 TRANSLATIONS += \

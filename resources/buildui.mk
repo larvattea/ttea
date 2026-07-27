@@ -11,9 +11,9 @@ UI_FILES    := $(wildcard $(UI_DIR)/*.ui)
 QRC_FILE    := $(firstword $(wildcard $(QRC_DIR)/*.qrc))
 
 PY_UI_FILES := $(patsubst $(UI_DIR)/%.ui,$(UI_DIR)/%ui.py,$(UI_FILES))
-PY_QRC_FILE := resources_rc.py
+PY_QRC_FILE := ../src/ttea/resources/resources_rc.py
 
-DEST_DIR    := ../udescjoinvilletteaui
+DEST_DIR    := ../src/ttea/ui
 
 # ==============================================================
 # OS detection and correct commands
