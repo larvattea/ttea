@@ -1,13 +1,18 @@
 # Torre para crianças com Transtorno do Espectro Autista (T-TEA)
-Software para um console de Chão Interativo desenvolvido pelo doutorando André Bonetto Trindade e Gabriel Brunelli Pereira, orientado pelo Prof. Marcelo da Silva Hounsell (UDESC), o projeto Torre para crianças com Transtorno do Espectro Autista (T-TEA) tem o objetivo de auxiliar na terapia do processamento sensorial de autistas, utilizando uma plataforma interativa de baixo custo e móvel provida de jogos sérios.
 
-O hardware é composto por projetor de vídeo, câmera webcam e computador convencionais. A webcam é um dispositivo relativamente barato e pode ser encontrado com facilidade, o que pode ser visto como fator positivo para adoção do jogo em instituições públicas. 
-
-Sendo que o projetor e o computador são convencionais, pode-se utilizar os que já se tem dísponíveis nas instituições. Desta forma, reutilizando equipamento, o custo final da plataforma T-TEA é significamente reduzido. 
-
-Estes equipamentos são instalados em uma estrutura física de montagem simples e de fácil portabilidade. 
-
-![hardware](https://user-images.githubusercontent.com/30929090/135135105-c4e4365d-09c5-4398-bc90-e53cc29ec4a9.PNG)
+<table>
+  <tr>
+    <td width="22%" valign="top">
+      <img src="resources/images/tteahardware.jpg" alt="Estrutura física do T-TEA" width="100%">
+    </td>
+    <td width="78%" valign="top">
+      <p align="justify">Software para um console de Chão Interativo desenvolvido pelo doutorando André Bonetto Trindade e Gabriel Brunelli Pereira, orientado pelo Prof. Marcelo da Silva Hounsell (UDESC), o projeto Torre para crianças com Transtorno do Espectro Autista (T-TEA) tem o objetivo de auxiliar na terapia do processamento sensorial de autistas, utilizando uma plataforma interativa de baixo custo e móvel provida de jogos sérios.</p>
+      <p align="justify">O hardware é composto por projetor de vídeo, câmera webcam e computador convencionais. A webcam é um dispositivo relativamente barato e pode ser encontrado com facilidade, o que pode ser visto como fator positivo para adoção do jogo em instituições públicas.</p>
+      <p align="justify">Sendo que o projetor e o computador são convencionais, pode-se utilizar os que já se tem dísponíveis nas instituições. Desta forma, reutilizando equipamento, o custo final da plataforma T-TEA é significamente reduzido.</p>
+      <p align="justify">Estes equipamentos são instalados em uma estrutura física de montagem simples e de fácil portabilidade.</p>
+    </td>
+  </tr>
+</table>
 
 ## Desenvolvimento
 
