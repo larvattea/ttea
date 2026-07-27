@@ -1,7 +1,20 @@
+import sys
+
 import cv2
 
 # import settings
 from ttea.games.kartea.gameutil import GameSettings
+
+
+def camera_backend() -> int:
+    """Return the native OpenCV camera backend for the current platform."""
+    if sys.platform == "win32":
+        return cv2.CAP_DSHOW
+    if sys.platform == "darwin":
+        return cv2.CAP_AVFOUNDATION
+    if sys.platform.startswith("linux"):
+        return cv2.CAP_V4L2
+    return cv2.CAP_ANY
 
 
 class Camera:
@@ -9,19 +22,23 @@ class Camera:
 
     def __init__(self):
         """Inicializa a captura de vídeo usando a configuração definida em settings."""
-        self.cap = cv2.VideoCapture(GameSettings.CAMERA, cv2.CAP_DSHOW)
+        self.cap = cv2.VideoCapture(GameSettings.CAMERA, camera_backend())
         self.ret = False
         self.frame = None
 
         # Lê o primeiro frame para inicialização
         self.ret, self.frame = self.cap.read()
 
-    def load_camera(self):
+    def load_camera(self) -> bool:
         """
         Lê um novo frame da câmera, aplica flip horizontal e desenha
         a área de calibração na imagem.
         """
         self.ret, self.frame = self.cap.read()
+
+        if not self.ret or self.frame is None:
+            self.frame = None
+            return False
 
         if self.frame is not None:
             # Espelha a imagem horizontalmente (efeito mirror)
@@ -92,6 +109,8 @@ class Camera:
 
             # Exibe a janela de captura
             cv2.imshow("Tela de Captura", self.frame)
+
+        return True
 
     def close_camera(self):
         """Libera a câmera e fecha a janela de captura."""

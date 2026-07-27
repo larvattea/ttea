@@ -1,11 +1,14 @@
 import os
 import unittest
+from unittest.mock import patch
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
+import cv2
 from PySide6.QtCore import QFile
 from PySide6.QtWidgets import QApplication, QMainWindow
 
+from ttea.games.kartea.gamecore.camera import camera_backend
 from ttea.main import App
 from ttea.ui import Ui_MainView
 from ttea.util import PathConfig
@@ -28,6 +31,19 @@ class SmokeTest(unittest.TestCase):
         )
 
         window.close()
+
+    def test_camera_uses_native_backends(self):
+        with patch("ttea.games.kartea.gamecore.camera.sys.platform", "win32"):
+            self.assertEqual(camera_backend(), cv2.CAP_DSHOW)
+
+        with patch("ttea.games.kartea.gamecore.camera.sys.platform", "darwin"):
+            self.assertEqual(camera_backend(), cv2.CAP_AVFOUNDATION)
+
+        with patch("ttea.games.kartea.gamecore.camera.sys.platform", "linux"):
+            self.assertEqual(camera_backend(), cv2.CAP_V4L2)
+
+        with patch("ttea.games.kartea.gamecore.camera.sys.platform", "freebsd14"):
+            self.assertEqual(camera_backend(), cv2.CAP_ANY)
 
 
 if __name__ == "__main__":

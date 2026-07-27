@@ -229,9 +229,9 @@ class GameController:
 
         self.background.lines[pos].spriteX = -0.5
 
-    def load_camera(self):
+    def load_camera(self) -> bool:
         """Carrega/atualiza o frame da câmera."""
-        self.cap.load_camera()
+        return self.cap.load_camera()
 
     def set_feet_position(self):
         """Atualiza a posição do carro com base na posição dos pés detectados."""
@@ -313,7 +313,9 @@ class GameController:
 
     def update(self):
         """Loop principal de atualização do jogo."""
-        self.load_camera()
+        if not self.load_camera():
+            return None
+
         self.set_feet_position()
 
         # Verifica pausa
