@@ -1,9 +1,8 @@
-# Torre para crianças com Transtorno do Espectro Autista (T-TEA)
+<h1>T-TEA</h1>
 
-<!-- The transparent right spacer narrows the text while keeping this layout borderless on GitHub. -->
-<img src="resources/images/readme-spacer.svg" alt="" width="28%" align="right">
-<img src="resources/images/tteahardware.jpg" alt="Estrutura física do T-TEA" width="20%" align="left" hspace="16">
+<img src="resources/images/tteahardware.jpg" alt="Estrutura física do T-TEA" width="16%" align="left">
 
+<h3>Console para Exergames de Chão Interativo</h3>
 <p align="justify">Software para um console de Chão Interativo desenvolvido pelo doutorando André Bonetto Trindade e Gabriel Brunelli Pereira, orientado pelo Prof. Marcelo da Silva Hounsell (UDESC), o projeto Torre para crianças com Transtorno do Espectro Autista (T-TEA) tem o objetivo de auxiliar na terapia do processamento sensorial de autistas, utilizando uma plataforma interativa de baixo custo e móvel provida de jogos sérios.</p>
 <p align="justify">O hardware é composto por projetor de vídeo, câmera webcam e computador convencionais. A webcam é um dispositivo relativamente barato e pode ser encontrado com facilidade, o que pode ser visto como fator positivo para adoção do jogo em instituições públicas.</p>
 <p align="justify">Sendo que o projetor e o computador são convencionais, pode-se utilizar os que já se tem dísponíveis nas instituições. Desta forma, reutilizando equipamento, o custo final da plataforma T-TEA é significamente reduzido.</p>
@@ -13,11 +12,15 @@
 
 ## Desenvolvimento
 
-Requerimentos:
-- [uv](https://docs.astral.sh/uv/), que baixa e gerencia automaticamente o Python 3.10 caso ele ainda não esteja instalado.
+### Requisitos
+
+- Python >= 3.10
+- [uv](https://docs.astral.sh/uv/) >= 0.11.32
 - Computador com arquitetura x86-64 ou ARM.
 
 ### Instalar o uv
+
+O uv baixa e gerencia automaticamente a versão correta do Python e as dependências do projeto.
 
 macOS:
 
@@ -45,6 +48,8 @@ Na raiz do projeto, em qualquer sistema:
 uv run dev
 ```
 
-Esse comando baixa o Python 3.10, cria o `.venv`, sincroniza as dependências e inicia o T-TEA.
+Esse comando baixa a versão correta do Python, cria o `.venv`, sincroniza as dependências e inicia o T-TEA.
+
+### Importante
 
 No primeiro uso, permita o acesso à câmera nas configurações de privacidade do sistema.

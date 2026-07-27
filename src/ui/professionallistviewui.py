@@ -21,7 +21,7 @@ from PySide6.QtWidgets import (QAbstractItemView, QApplication, QDialog,
                                QSpacerItem, QTableWidget, QTableWidgetItem,
                                QTabWidget, QVBoxLayout, QWidget)
 
-import qt_resources.resources_rc
+import resources.resources_rc
 
 
 class Ui_ProfessionalListView(object):

@@ -6,13 +6,12 @@ QRC_DIR     := .
 
 UIC         := pyside6-uic
 RCC         := pyside6-rcc
-PYTHON      ?= python
 
 UI_FILES    := $(wildcard $(UI_DIR)/*.ui)
 QRC_FILE    := $(firstword $(wildcard $(QRC_DIR)/*.qrc))
 
 PY_UI_FILES := $(patsubst $(UI_DIR)/%.ui,$(UI_DIR)/%ui.py,$(UI_FILES))
-PY_QRC_FILE := ../src/qt_resources/resources_rc.py
+PY_QRC_FILE := ../src/resources/resources_rc.py
 
 DEST_DIR    := ../src/ui
 
@@ -45,7 +44,6 @@ $(PY_QRC_FILE): $(QRC_FILE)
 
 $(UI_DIR)/%ui.py: $(UI_DIR)/%.ui $(PY_QRC_FILE)
 	$(UIC) $< -o $@ --absolute-imports
-	$(PYTHON) -c "from pathlib import Path; p = Path(r'$@'); p.write_text(p.read_text(encoding='utf-8').replace('import resources.resources_rc', 'import qt_resources.resources_rc'), encoding='utf-8')"
 
 # Copy rule (OS-specific)
 copy: $(PY_UI_FILES)

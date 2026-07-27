@@ -18,7 +18,7 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
 from PySide6.QtWidgets import (QApplication, QLabel, QSizePolicy, QVBoxLayout,
                                QWidget)
 
-import qt_resources.resources_rc
+import resources.resources_rc
 
 
 class Ui_GameCalibrationView(object):
