@@ -53,3 +53,11 @@ Esse comando baixa a versão correta do Python, cria o `.venv`, sincroniza as de
 ### Importante
 
 No primeiro uso, permita o acesso à câmera nas configurações de privacidade do sistema.
+
+<br clear="all">
+
+<h1 align="center">Realização</h1>
+<p align="center">
+  <a href="https://github.com/larvattea"><img height="100" hspace="10" alt="image" src="https://github.com/user-attachments/assets/cd3acfdc-6d5a-45cf-a2aa-5259c1be0cb7" /></a><a href="https://github.com/larvattea"><img height="100" hspace="10" alt="image" src="https://github.com/user-attachments/assets/9b388bc5-bc1f-467a-a674-0ee4a239b9d4" /></a><a href="https://github.com/larvattea"><img height="100" hspace="10" alt="image" src="https://github.com/user-attachments/assets/e4517a7b-de3e-4c8d-baf9-2ea0326aa1e4" /></a>
+</p>
+
