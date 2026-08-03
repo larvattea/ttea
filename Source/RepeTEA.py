@@ -654,6 +654,8 @@ else:
     gameWarning = False
 
 while not gameWarning:
+    if settings.PARAR_JOGO.is_set():
+        encerrar_repetea()
     for event in pygame.event.get():
         # SAIR ou CONCORDO
         if event.type == pygame.QUIT:
@@ -678,6 +680,8 @@ while not gameExit:
 
     with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
         while camera.isOpened():
+            if settings.PARAR_JOGO.is_set():
+                encerrar_repetea()
             ret, frame = camera.read()
             if not ret or frame is None:
                 falhas_camera += 1

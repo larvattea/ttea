@@ -62,11 +62,15 @@ def executar():
     SQUARE_SIZE_AVERAGE = (SQUARE_WIDTH + SQUARE_HEIGHT) / 2
     MARKER_SIZE = int(SQUARE_SIZE_AVERAGE * 0.75)
 
+    # opencv-contrib-python==4.5.4.60 (versao usada no build, para manter
+    # compatibilidade com Windows 7) so tem a API "antiga" do aruco: sem
+    # ArucoDetector, sem CharucoBoard(...)/generateImage - usa as funcoes
+    # *_create() e module-level detectMarkers().
     aruco = cv2.aruco
     dictionary = aruco.getPredefinedDictionary(aruco.DICT_4X4_250)
-    board = aruco.CharucoBoard((COLS, ROWS), SQUARE_SIZE_AVERAGE, MARKER_SIZE, dictionary)
+    board = aruco.CharucoBoard_create(COLS, ROWS, SQUARE_SIZE_AVERAGE, MARKER_SIZE, dictionary)
 
-    base_img = board.generateImage((COLS * 100, ROWS * 100), marginSize=0)
+    base_img = board.draw((COLS * 100, ROWS * 100), marginSize=0)
     board_img = cv2.resize(base_img, (PROJ_LARGURA, PROJ_ALTURA), interpolation=cv2.INTER_NEAREST)
 
     # ==========================
@@ -77,7 +81,10 @@ def executar():
         print(f"Não foi possível abrir a câmera USB (índice {camera_index}).")
         return
 
-    detector = aruco.ArucoDetector(dictionary)
+    deteccao_params = aruco.DetectorParameters_create()
+
+    def detectar_marcadores(gray):
+        return aruco.detectMarkers(gray, dictionary, parameters=deteccao_params)
 
     # ==========================
     # 4. CONFIGURAÇÃO DAS JANELAS
@@ -109,7 +116,7 @@ def executar():
                 break
 
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            corners, ids, rejected = detector.detectMarkers(gray)
+            corners, ids, rejected = detectar_marcadores(gray)
 
             if ids is not None:
                 try:
@@ -120,7 +127,7 @@ def executar():
                     if retval >= 4:
                         src_points = []
                         dst_points = []
-                        chess_corners = board.getChessboardCorners()
+                        chess_corners = board.chessboardCorners
 
                         for corner_id, detected_corner in zip(charucoIds.flatten(), charucoCorners):
                             world_pt = chess_corners[corner_id][:2]
@@ -199,7 +206,7 @@ def executar():
 
             if ret:
                 gray = cv2.cvtColor(frame_limpo, cv2.COLOR_BGR2GRAY)
-                corners, ids, rejected = detector.detectMarkers(gray)
+                corners, ids, rejected = detectar_marcadores(gray)
 
                 if ids is not None:
                     try:
@@ -210,7 +217,7 @@ def executar():
                         if retval >= 4:
                             src_points = []
                             dst_points = []
-                            chess_corners = board.getChessboardCorners()
+                            chess_corners = board.chessboardCorners
 
                             for corner_id, detected_corner in zip(charucoIds.flatten(), charucoCorners):
                                 world_pt = chess_corners[corner_id][:2]

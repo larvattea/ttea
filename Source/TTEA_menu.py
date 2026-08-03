@@ -3,11 +3,32 @@
 import ttea_log
 ttea_log.init()
 
+# Precisa rodar ANTES de qualquer janela ser criada (Tk ou pygame/SDL).
+# O SDL2 (usado pelo pygame) marca o processo como "DPI aware" na hora que
+# abre a primeira janela em tela cheia (calibrar/jogar). Se o Tk ja tiver
+# criado o menu antes disso, o Windows reescala essa janela retroativamente
+# para compensar - e o menu "encolhe" sozinho. Marcando o processo como DPI
+# aware aqui, antes do Tk existir, os dois ficam consistentes o tempo todo.
+if __import__('sys').platform == 'win32':
+    try:
+        import ctypes
+        try:
+            # PER_MONITOR_AWARE_V2 - mesmo nivel que o SDL2 pede sozinho.
+            ctypes.windll.user32.SetProcessDpiAwarenessContext(ctypes.c_void_p(-4))
+        except Exception:
+            try:
+                ctypes.windll.shcore.SetProcessDpiAwareness(2)  # PROCESS_PER_MONITOR_DPI_AWARE
+            except Exception:
+                ctypes.windll.user32.SetProcessDPIAware()
+    except Exception as _e:
+        ttea_log.debug(f'Falha ao marcar processo como DPI aware: {_e!r}')
+
 import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
 import os
 import sys
+import threading
 import arquivo
 from settings import *
 import cv2
@@ -36,7 +57,7 @@ def show_menu():
     # set combo values
     jogador_cb['values'] = arr_Jogadores
 
-    width, height = 400, 600
+    width, height = 520, 650
     center_window_on_screen(width, height)
     menu_frame.pack()
     cad_frame.forget()
@@ -64,7 +85,7 @@ root.report_callback_exception = ttea_log.hook_tk
 # config the root window
 root.resizable(False, False)
 root.title('Menu TTEA')
-width, height = 400, 600
+width, height = 520, 650
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 center_window_on_screen(width, height)
@@ -92,13 +113,13 @@ def CalibrarAutomaticaCallback():
     abrir_calibracao_automatica()
 
 calibrar_frame = tk.Frame(menu_frame)
-calibrar_frame.pack()
+calibrar_frame.pack(pady=(5, 10))
 
-B = tk.Button(calibrar_frame, text="Calibrar Manualmente", command=CalibrarCallback)
-B.pack(side=tk.LEFT, padx=5)
+botao_calibrar_manual = tk.Button(calibrar_frame, text="Calibrar Manualmente", command=CalibrarCallback)
+botao_calibrar_manual.pack(side=tk.LEFT, padx=8, ipadx=4, ipady=2)
 
-B = tk.Button(calibrar_frame, text="Calibrar Automaticamente", command=CalibrarAutomaticaCallback)
-B.pack(side=tk.LEFT, padx=5)
+botao_calibrar_auto = tk.Button(calibrar_frame, text="Calibrar Automaticamente", command=CalibrarAutomaticaCallback)
+botao_calibrar_auto.pack(side=tk.LEFT, padx=8, ipadx=4, ipady=2)
 
 # label
 label = ttk.Label(menu_frame, text="Jogos:")
@@ -125,7 +146,7 @@ def game_changed(event):
     global game
     game = selected_game.get()
     jogador_cb['state'] = 'readonly'
-    jogador_cb.set('')
+
     if game == 'KARTEA':
         fase_cb['values'] = ['1', '2', '3']
         nivel_cb['values'] = ['1', '2', '3', '4', '5', '6']
@@ -136,10 +157,17 @@ def game_changed(event):
         fase_cb['values'] = ['1', '2', '3']
         nivel_cb['values'] = ['1', '2', '3', '4', '5','6','7','8','9','10', '11', '12', '13','14','15']
 
-    fase_cb['state'] = 'disabled'
-    fase_cb.set('')
-    nivel_cb['state'] = 'disabled'
-    nivel_cb.set('')
+    if jogador_cb['values']:
+        # Seleciona o primeiro jogador automaticamente, poupando um clique,
+        # e ja popula fase/nivel dele (jogador_changed cuida disso).
+        jogador_cb.current(0)
+        jogador_changed(None)
+    else:
+        jogador_cb.set('')
+        fase_cb['state'] = 'disabled'
+        fase_cb.set('')
+        nivel_cb['state'] = 'disabled'
+        nivel_cb.set('')
 
 game_cb.bind('<<ComboboxSelected>>', game_changed)
 
@@ -231,7 +259,8 @@ def cadastrarCallback():
     show_cad()
 
 
-B = tk.Button(menu_frame, text ="Cadastrar Novo Jogador", command = cadastrarCallback)
+botao_cadastro = tk.Button(menu_frame, text ="Cadastrar Novo Jogador", command = cadastrarCallback)
+B = botao_cadastro
 
 B.pack(fill=tk.X, padx=100, pady=10)
 
@@ -284,7 +313,62 @@ def nivel_changed(event):
 nivel_cb.bind('<<ComboboxSelected>>', nivel_changed)
 
 
+jogo_thread = None
+
+def _rodar_jogo(jogo_selecionado, jogador_selecionado):
+    # Roda numa thread separada (nao a do Tk) para que o menu continue
+    # respondendo - e o botao "Parar de Jogar" consiga aparecer/funcionar.
+    try:
+        if jogo_selecionado == 'KARTEA':
+            import KarTEA
+            KarTEA.main()
+        elif jogo_selecionado == 'REPETEA':
+            import RepeTEA
+            # RepeTEA().main
+        elif jogo_selecionado == 'VESTEA':
+            from VesTEA import vestea_inicio
+            vestea_inicio.main(jogador_selecionado)
+    except SystemExit:
+        # Jogo encerrado pelo usuário (tecla Q, Parar de Jogar etc.).
+        pass
+    except Exception as e:
+        ttea_log.debug(f'Erro no jogo {jogo_selecionado}: {e!r}')
+    finally:
+        # O RepeTEA roda ao ser importado; tira do cache para poder jogar
+        # de novo na mesma sessão (e usar a câmera escolhida na hora).
+        sys.modules.pop('RepeTEA', None)
+        ttea_log.debug(f'Jogo {jogo_selecionado} encerrado, de volta ao menu')
+
+def _definir_estado_jogo_rodando(rodando):
+    estado_ocioso = 'disabled' if rodando else 'normal'
+    botao_jogar['state'] = estado_ocioso
+    botao_cadastro['state'] = estado_ocioso
+    botao_calibrar_manual['state'] = estado_ocioso
+    botao_calibrar_auto['state'] = estado_ocioso
+    botao_config['state'] = estado_ocioso
+    game_cb['state'] = 'disabled' if rodando else 'readonly'
+    jogador_cb['state'] = 'disabled' if rodando else 'readonly'
+    fase_cb['state'] = 'disabled' if rodando else 'readonly'
+    nivel_cb['state'] = 'disabled' if rodando else 'readonly'
+    if rodando:
+        botao_parar.pack(side=tk.LEFT, padx=8)
+    else:
+        botao_parar.pack_forget()
+
+def _checar_fim_jogo():
+    global jogo_thread
+    if jogo_thread is not None and jogo_thread.is_alive():
+        root.after(300, _checar_fim_jogo)
+        return
+    jogo_thread = None
+    settings.PARAR_JOGO.clear()
+    _definir_estado_jogo_rodando(False)
+
 def JogarCallback():
+    global jogo_thread
+    if jogo_thread is not None and jogo_thread.is_alive():
+        return  # ja tem um jogo rodando
+
     arquivo.set_Player(jogador)
     arquivo.set_Fase(arquivo.get_K_FASE(PLAYER_ARQ_CONFIG))
     arquivo.set_Nivel(arquivo.get_K_NIVEL(PLAYER_ARQ_CONFIG))
@@ -302,29 +386,24 @@ def JogarCallback():
 
     TARGETS_MOVE_SPEED = arquivo.get_Nivel()
 
-    try:
-        if game == 'KARTEA':
-            import KarTEA
-            KarTEA.main()
-        elif game == 'REPETEA':
-            import RepeTEA
-            # RepeTEA().main
-        elif game == 'VESTEA':
-            from VesTEA import vestea_inicio
-            vestea_inicio.main(jogador)
-    except SystemExit:
-        # Jogo encerrado pelo usuário (tecla Q etc.): volta ao menu.
-        pass
-    finally:
-        # O RepeTEA roda ao ser importado; tira do cache para poder jogar
-        # de novo na mesma sessão (e usar a câmera escolhida na hora).
-        sys.modules.pop('RepeTEA', None)
-        ttea_log.debug(f'Jogo {game} encerrado, de volta ao menu')
+    settings.PARAR_JOGO.clear()
+    _definir_estado_jogo_rodando(True)
+    jogo_thread = threading.Thread(target=_rodar_jogo, args=(game, jogador), daemon=True)
+    jogo_thread.start()
+    root.after(300, _checar_fim_jogo)
+
+def PararJogarCallback():
+    settings.PARAR_JOGO.set()
 
 
-B = tk.Button(menu_frame, text ="Jogar", command = JogarCallback)
+jogar_frame = tk.Frame(menu_frame)
+jogar_frame.pack(pady=(10, 5))
 
-B.pack()
+botao_jogar = tk.Button(jogar_frame, text="Jogar", command=JogarCallback)
+botao_jogar.pack(side=tk.LEFT, padx=8, ipadx=4, ipady=2)
+
+botao_parar = tk.Button(jogar_frame, text="Parar de Jogar", command=PararJogarCallback, fg='red')
+# So aparece (via pack) enquanto um jogo estiver rodando - ver _definir_estado_jogo_rodando.
 
 # Teste-Logo UDESC
 imageUdesc = Image.open("Assets/Logos UDESC Larva.png")
@@ -401,7 +480,15 @@ def abrir_configuracoes():
 
     # Preview ao vivo da câmera selecionada, com o esqueleto do mediapipe
     # desenhado por cima (mesmo desenho usado dentro dos jogos).
-    preview_label = tk.Label(frame, width=240, height=180, bg='black')
+    # Um Label sem imagem mede width/height em "unidades de texto" (~px por
+    # caractere da fonte), nao em pixels - por isso o placeholder ficava
+    # enorme antes do primeiro frame chegar. Da um PhotoImage preto de
+    # verdade logo de cara para o tamanho ficar certo (640x480) desde o
+    # início.
+    PREVIEW_W, PREVIEW_H = 640, 480
+    _preview_placeholder = ImageTk.PhotoImage(Image.new('RGB', (PREVIEW_W, PREVIEW_H), 'black'))
+    preview_label = tk.Label(frame, image=_preview_placeholder, bg='black')
+    preview_label.image = _preview_placeholder
     preview_label.grid(column=0, row=2, columnspan=2, pady=5)
 
     ttk.Label(frame, text='Tela (monitor):').grid(column=0, row=3, sticky=tk.W, pady=(10, 0))
@@ -459,7 +546,7 @@ def abrir_configuracoes():
                     mp.solutions.drawing_utils.draw_landmarks(
                         rgb, resultados.pose_landmarks, mp.solutions.pose.POSE_CONNECTIONS,
                         landmark_drawing_spec=mp.solutions.drawing_styles.get_default_pose_landmarks_style())
-                img = Image.fromarray(rgb).resize((240, 180))
+                img = Image.fromarray(rgb).resize((PREVIEW_W, PREVIEW_H))
                 estado_preview['foto'] = ImageTk.PhotoImage(img)
                 preview_label.configure(image=estado_preview['foto'])
         estado_preview['agendado'] = win.after(100, _preview_tick)

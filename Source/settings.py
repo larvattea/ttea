@@ -2,6 +2,7 @@ import json
 import pygame
 import numpy as np
 import cv2
+import threading
 import arquivo
 import ttea_log
 
@@ -13,6 +14,12 @@ CAMERA_FLIP = 0
 # Indice do monitor onde os jogos abrem em tela cheia (0 = principal),
 # escolhido na engrenagem do menu. Ver pygame.display.get_desktop_sizes().
 MONITOR = 0
+
+# Setado pelo botão "Parar de Jogar" do menu (o jogo roda numa thread
+# separada); cada jogo confere isso no seu laço principal e sai de forma
+# limpa quando estiver marcado, igual a apertar Q. Limpo pelo menu antes de
+# iniciar cada jogo.
+PARAR_JOGO = threading.Event()
 
 # A câmera/monitor escolhidos na engrenagem do menu ficam salvos em
 # config.json, ao lado do executável. Todos os jogos leem settings.CAMERA e

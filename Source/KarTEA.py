@@ -49,6 +49,8 @@ def sair():
 
 def user_events():
     global state
+    if settings.PARAR_JOGO.is_set():
+        sair()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sair()

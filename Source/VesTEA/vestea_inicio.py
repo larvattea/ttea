@@ -65,6 +65,14 @@ class Vestea():
     def rodar(self):
         #loop do jogo
         while self.esta_rodando:
+            if settings.PARAR_JOGO.is_set():
+                # Botao "Parar de Jogar" do menu (roda numa thread separada).
+                arq.grava_Detalhado(self.jogo.fase, self.jogo.nivel, 0, 'Acao profissional', 'Parar de Jogar')
+                arq.grava_Sessao(self.jogo.sessaoInicio, self.jogo.fase, self.jogo.nivel, self.jogo.sessaoAcertos,
+                                 self.jogo.sessaoAcertosAjuda, self.jogo.sessaoAjudas,
+                                 self.jogo.sessaoErros, self.jogo.sessaoOmissoes, self.jogo.totalColisoes)
+                self.esta_rodando = False
+                break
             #print(evento)
             for evento in event.get():  # Events
                 if evento.type == QUIT:
