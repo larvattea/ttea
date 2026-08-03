@@ -637,14 +637,15 @@ def sorteio_perto():
         tempo_de_exposição()
 
 
-tela_aviso = pygame.display.set_mode((largura_projetor, altura_projetor))
+_modo_tela = settings.modo_tela_cheia()
+tela_aviso = pygame.display.set_mode((largura_projetor, altura_projetor), _modo_tela['flags'], display=_modo_tela['display'])
 pygame.display.set_caption('RepeTEA')
 pygame.display.set_icon(icone_fig)
 
 if pontos_calibracao_repetea.any():
     # Calibração já feita no menu: entra direto no jogo, sem tela de aviso.
     ttea_log.debug('RepeTEA: calibracao ja definida, pulando tela de aviso')
-    gameDisplay = pygame.display.set_mode((largura_projetor, altura_projetor))
+    gameDisplay = pygame.display.set_mode((largura_projetor, altura_projetor), _modo_tela['flags'], display=_modo_tela['display'])
     pygame.display.update()
     gameWarning = True
 else:
@@ -659,7 +660,7 @@ while not gameWarning:
             encerrar_repetea()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_c:
-                gameDisplay = pygame.display.set_mode((largura_projetor, altura_projetor))
+                gameDisplay = pygame.display.set_mode((largura_projetor, altura_projetor), _modo_tela['flags'], display=_modo_tela['display'])
                 pygame.display.set_caption('RepeTEA')
                 pygame.display.set_icon(icone_fig)
                 #instrucao_calibrar()
@@ -725,7 +726,7 @@ while not gameExit:
                     #cv2.circle(tela_de_controle, (pontos_calibracao_repetea[2]), 5, azul, 3)
                     #cv2.circle(tela_de_controle, (pontos_calibracao_repetea[3]), 5, azul, 3)
                     #cv2.destroyWindow("TELA DE CALIBRACAO")
-                    gameDisplay = pygame.display.set_mode((largura_projetor, altura_projetor))
+                    gameDisplay = pygame.display.set_mode((largura_projetor, altura_projetor), _modo_tela['flags'], display=_modo_tela['display'])
                     pygame.display.set_caption('RepeTEA')
                     pygame.display.set_icon(icone_fig)
                     jogador=posicao()
@@ -2986,6 +2987,7 @@ while not gameExit:
 
             # Atualização das telas
             cv2.imshow("TELA DE CONTROLE", tela_de_controle)
+            cv2.moveWindow("TELA DE CONTROLE", *settings.janela_operador_pos())
             cv2.setMouseCallback("TELA DE CONTROLE", mousePoints)
 
 
@@ -3144,8 +3146,8 @@ while not gameExit:
 
 
 
-            # SAIR (ESC)
-                    if event.key == pygame.K_ESCAPE:
+            # SAIR (ESC ou Q)
+                    if event.key == pygame.K_ESCAPE or event.key == pygame.K_q:
                         data = datetime.date.today()
                         hora_esc = datetime.datetime.now().time()
 

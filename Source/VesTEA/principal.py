@@ -10,6 +10,7 @@ from pygame.time import Clock
 from VesTEA import botao
 from VesTEA.jogador import Jogador
 from VesTEA.inimigo import Inimigo
+import settings
 
 #se for executar de outra pasta, precisa de:
 #import os
@@ -27,7 +28,7 @@ class Jogo():
 
         self.superficie = display.set_mode(
             size=self.tamanho,
-            display=0
+            **settings.modo_tela_cheia()
         )
         display.set_caption(
             'Ship Shoot'

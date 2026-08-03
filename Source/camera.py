@@ -9,6 +9,7 @@ class Camera:
         self.cap = cv2.VideoCapture(settings.CAMERA, cv2.CAP_DSHOW)
         ttea_log.debug(f'Camera {settings.CAMERA}: aberta={self.cap.isOpened()}')
         self._falhas = 0
+        self._janela_posicionada = False
         self.ret, self.frame = self.cap.read()
         if not self.ret or self.frame is None:
             # Sem imagem: usa um frame preto para o jogo nao travar.
@@ -40,7 +41,17 @@ class Camera:
         cv2.circle(self.frame, (settings.pontos_calibracao[2]), 5, settings.azul, 3)
         cv2.circle(self.frame, (settings.pontos_calibracao[3]), 5, settings.azul, 3)
 
+    def show(self):
+        # Chamado DEPOIS do rastreamento de pose (que desenha o esqueleto em
+        # cima de self.frame) - se fosse chamado dentro de load_camera(), o
+        # esqueleto so apareceria um frame atrasado (nunca, na pratica, ja
+        # que o proximo load_camera() sobrescreve self.frame antes de exibir).
         cv2.imshow("Tela de Captura", self.frame)
+        if not self._janela_posicionada:
+            # A janela do operador vai sempre no monitor oposto ao da
+            # projecao do jogo (settings.MONITOR), para nao sobrepor.
+            cv2.moveWindow("Tela de Captura", *settings.janela_operador_pos())
+            self._janela_posicionada = True
 
     def close_camera(self):
         self.cap.release()

@@ -69,7 +69,9 @@ class Menu:
 
 
 
-    def update(self):
+    def update(self, pos_pes=None):
+        # pos_pes: posicao (x, y) central dos pes do jogador (rastreada por
+        # mediapipe), usada para selecionar botoes sem precisar do mouse.
         self.draw()
 
         if settings.MENU == 'Inicial':
@@ -77,10 +79,10 @@ class Menu:
             ui.draw_text(self.surface, GAME_TITLE, (SCREEN_WIDTH // 2, 120), COLORS["title"], font=FONTS["big"],
                          shadow=True, shadow_color=(255, 255, 255), pos_mode="center")
 
-            if ui.button(self.surface, 0, 300, "Jogar", click_sound=self.click_sound):
+            if ui.button(self.surface, 0, 300, "Jogar", click_sound=self.click_sound, extra_pos=pos_pes):
                 return "game"
 
-            if ui.button(self.surface, 0, 300 + BUTTONS_SIZES[1] * 4, "Sair", click_sound=self.click_sound):
+            if ui.button(self.surface, 0, 300 + BUTTONS_SIZES[1] * 4, "Sair", click_sound=self.click_sound, extra_pos=pos_pes):
                 pygame.display.quit()
                 sys.exit()
 
@@ -89,19 +91,19 @@ class Menu:
             ui.draw_text(self.surface, "Pause", (SCREEN_WIDTH // 2, 120), COLORS["title"], font=FONTS["big"],
                          shadow=True, shadow_color=(255, 255, 255), pos_mode="center")
 
-            if ui.button(self.surface, 0, 300, "Continuar", click_sound=self.click_sound):
+            if ui.button(self.surface, 0, 300, "Continuar", click_sound=self.click_sound, extra_pos=pos_pes):
                 return "game"
 
-            if ui.button(self.surface, 1, 300 + BUTTONS_SIZES[1] * 2, "Retroceder", click_sound=self.click_sound):
+            if ui.button(self.surface, 1, 300 + BUTTONS_SIZES[1] * 2, "Retroceder", click_sound=self.click_sound, extra_pos=pos_pes):
                 return "prev"
 
-            if ui.button(self.surface, 0, 300 + BUTTONS_SIZES[1] * 2, "Reiniciar", click_sound=self.click_sound):
+            if ui.button(self.surface, 0, 300 + BUTTONS_SIZES[1] * 2, "Reiniciar", click_sound=self.click_sound, extra_pos=pos_pes):
                 return "rest"
 
-            if ui.button(self.surface, 2, 300 + BUTTONS_SIZES[1] * 2, "Avançar", click_sound=self.click_sound):
+            if ui.button(self.surface, 2, 300 + BUTTONS_SIZES[1] * 2, "Avançar", click_sound=self.click_sound, extra_pos=pos_pes):
                 return "next"
 
-            if ui.button(self.surface, 0, 300 + BUTTONS_SIZES[1] * 4, "Sair", click_sound=self.click_sound):
+            if ui.button(self.surface, 0, 300 + BUTTONS_SIZES[1] * 4, "Sair", click_sound=self.click_sound, extra_pos=pos_pes):
                 pygame.display.quit()
                 sys.exit()
 
@@ -112,10 +114,10 @@ class Menu:
 
             self.draw_Feedback()
 
-            if ui.button(self.surface, 2, 300 + BUTTONS_SIZES[1] * 4, "Jogar", click_sound=self.click_sound):
+            if ui.button(self.surface, 2, 300 + BUTTONS_SIZES[1] * 4, "Jogar", click_sound=self.click_sound, extra_pos=pos_pes):
                 return "prev"
 
-            if ui.button(self.surface, 1, 300 + BUTTONS_SIZES[1] * 4, "Sair", click_sound=self.click_sound):
+            if ui.button(self.surface, 1, 300 + BUTTONS_SIZES[1] * 4, "Sair", click_sound=self.click_sound, extra_pos=pos_pes):
                 pygame.display.quit()
                 sys.exit()
 
@@ -126,10 +128,10 @@ class Menu:
 
             self.draw_Feedback()
 
-            if ui.button(self.surface, 2, 300 + BUTTONS_SIZES[1] * 4, "Jogar", click_sound=self.click_sound):
+            if ui.button(self.surface, 2, 300 + BUTTONS_SIZES[1] * 4, "Jogar", click_sound=self.click_sound, extra_pos=pos_pes):
                 return "rest"
 
-            if ui.button(self.surface, 1, 300 + BUTTONS_SIZES[1] * 4, "Sair", click_sound=self.click_sound):
+            if ui.button(self.surface, 1, 300 + BUTTONS_SIZES[1] * 4, "Sair", click_sound=self.click_sound, extra_pos=pos_pes):
                 pygame.display.quit()
                 sys.exit()
 
@@ -140,9 +142,9 @@ class Menu:
 
             self.draw_Feedback()
 
-            if ui.button(self.surface, 2, 300 + BUTTONS_SIZES[1] * 4, "Jogar", click_sound=self.click_sound):
+            if ui.button(self.surface, 2, 300 + BUTTONS_SIZES[1] * 4, "Jogar", click_sound=self.click_sound, extra_pos=pos_pes):
                 return "next"
 
-            if ui.button(self.surface, 1, 300 + BUTTONS_SIZES[1] * 4, "Sair", click_sound=self.click_sound):
+            if ui.button(self.surface, 1, 300 + BUTTONS_SIZES[1] * 4, "Sair", click_sound=self.click_sound, extra_pos=pos_pes):
                 pygame.display.quit()
                 sys.exit()

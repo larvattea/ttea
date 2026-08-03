@@ -35,21 +35,25 @@ rsync -a --delete --exclude='*Zone.Identifier' --exclude='__pycache__' \
     "$PROJ/" "$BUILD/app/"
 
 # 3. Dependências (pyobject saiu do PyPI e não é usado pelo código).
-# Troca opencv-contrib-python por opencv-python: o jogo não usa nenhum modulo
-# contrib (checado via grep), e a versão "contrib" carrega ~35 MB de DLL de
-# ffmpeg/módulos extras que só incham o pacote final sem uso.
+# ATENÇÃO: mantém opencv-contrib-python (não trocar por opencv-python). O
+# módulo cv2.aruco (usado pela calibração automática via ChArUco) só existe
+# na build "contrib" - opencv-python puro não tem aruco, o que quebra
+# auto_calibracao_espelho.py com "module cv2 has no attribute aruco".
 # Importante: o WSL não traduz argumentos para .exe do Windows, então o pip
 # deve rodar com cwd em C:\ e receber caminhos relativos.
-sed -e '/^pyobject/d' -e 's/^opencv-contrib-python==/opencv-python==/' \
+sed -e '/^pyobject/d' \
     "$PROJ/requisitos.txt" > "$BUILD/requisitos-build.txt"
 (cd "$BUILD" && "$PY" -m pip install --upgrade pip --quiet --no-warn-script-location)
 # opencv-contrib-python e opencv-python instalam os mesmos arquivos em cv2/;
 # ter os dois instalados ao mesmo tempo corrompe o pacote.
-(cd "$BUILD" && "$PY" -m pip uninstall -y opencv-contrib-python --quiet 2>/dev/null || true)
+(cd "$BUILD" && "$PY" -m pip uninstall -y opencv-python --quiet 2>/dev/null || true)
 (cd "$BUILD" && "$PY" -m pip install -r requisitos-build.txt "pyinstaller==5.13.2" \
     --no-warn-script-location --timeout 60 --retries 10)
 
 # 4. Compila (onedir; o jogo lê tudo por caminho relativo ao diretório do exe).
+#    A calibração automática (ChArUco, auto_calibracao_espelho.py na raiz do
+#    projeto) roda dentro do próprio T-TEA.exe (ver T-TEA.spec) em vez de
+#    virar um .exe separado - assim não duplica opencv/numpy (~65 MB) no zip.
 (cd "$BUILD/app/Source" && "$PY" -m PyInstaller T-TEA.spec --noconfirm)
 
 # 5. Junta as pastas de dados ao lado do exe.

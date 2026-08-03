@@ -1,34 +1,51 @@
-T-TEA — Versão compilada para Windows (64 bits)
-=================================================
+T-TEA — Windows build (64-bit)
+================================
 
-COMO EXECUTAR
-  1. Copie a pasta inteira "T-TEA" para o computador (ex.: C:\T-TEA).
-  2. Dê dois cliques em T-TEA.exe. Não é preciso instalar Python nem bibliotecas.
+QUICK START
+  1. Copy the whole "T-TEA" folder to the computer (example: C:\T-TEA).
+  2. Double-click T-TEA.exe.
+  3. That's it. No Python install, no extra setup.
 
-REQUISITOS DO COMPUTADOR
-  - Windows 64 bits (x64). NÃO funciona em Windows 32 bits — o MediaPipe
-    (detecção de pose do Google) nunca foi disponibilizado para 32 bits.
-  - Windows 10 e 11: funciona diretamente.
-  - Windows 7: precisa ser 64 bits com Service Pack 1 e a atualização
-    KB2533623 instalada (Windows 7 atualizado via Windows Update já a possui).
-  - Webcam conectada antes de abrir o programa.
+BEFORE YOU OPEN IT
+  - Plug in the webcam FIRST, then open the app.
+  - Needs 64-bit Windows. 32-bit will NOT work (pose detection has no
+    32-bit version, period — not fixable).
+  - Windows 10 / 11: just works.
+  - Windows 7: needs SP1 + update KB2533623. Windows Update usually already
+    has it installed.
 
-CÂMERA
-  - Clique na engrenagem (⚙) no canto superior direito do menu para escolher
-    qual webcam usar. A escolha vale para todos os jogos e para a calibração,
-    e fica salva em "config.json".
+SETTINGS (gear icon ⚙, top right of the menu)
+  - Pick your webcam. You'll see a live preview with the skeleton overlay,
+    so you know it's the right camera.
+  - Pick which monitor the games go fullscreen on.
+  - Both choices apply to every game and are remembered (saved to
+    config.json) — you only set them once.
 
-REGISTROS (LOGS)
-  - log.txt   : mensagens dos jogos (jogador, fase, nível, calibração).
-  - debug.txt : tudo do log.txt + erros e diagnóstico. Se algo não funcionar,
-    envie este arquivo para a equipe do projeto.
-  - Os dois arquivos nunca passam de 2 MB (as linhas antigas são apagadas).
+CALIBRATION (main menu, two buttons)
+  - "Calibrar Manualmente" — click the 4 corners yourself.
+  - "Calibrar Automaticamente" — projects a checkerboard pattern and
+    calibrates on its own. Faster, less room for error.
+  - The camera preview window always opens on the OTHER monitor from the
+    game, so it doesn't sit on top of the projection.
 
-DADOS
-  - Os cadastros e sessões dos jogadores ficam na pasta "Jogadores".
-  - A calibração fica em "calibracao.csv".
-  - Para preservar os dados ao atualizar o programa, copie a pasta "Jogadores"
-    e o arquivo "calibracao.csv" para a versão nova.
+HOW TO QUIT
+  - Press Q. Works in every game (KarTEA, RepeTEA, VesTEA). Takes you
+    straight back to the menu.
 
-Se o Windows SmartScreen bloquear a execução ("Windows protegeu o seu
-computador"), clique em "Mais informações" > "Executar assim mesmo".
+IF SOMETHING BREAKS
+  - Check debug.txt first — it logs errors automatically.
+  - Send debug.txt to the project team, they'll know what happened.
+  - log.txt is the lighter version (just player/phase/level/calibration
+    info, no error noise).
+  - Both files auto-trim at 2 MB, so they never get huge.
+
+YOUR DATA — DON'T LOSE IT
+  - Player accounts + session history: "Jogadores" folder.
+  - Calibration: "calibracao.csv".
+  - Updating to a new version? Copy those two things over BEFORE you
+    replace the folder. Otherwise you lose them.
+
+WINDOWS BLOCKS THE APP?
+  - You'll see "Windows protected your PC".
+  - Click "More info" → "Run anyway".
+  - This is normal for unsigned apps, not a virus warning.

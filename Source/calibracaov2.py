@@ -161,7 +161,8 @@ def calibrar_ttea():
     resetar_vars()
 
     camera = cv2.VideoCapture(settings.CAMERA, cv2.CAP_DSHOW)  # O valor entre parênteses indica qual câmera será utilizada. 0=default; 1,2,3...= câmeras externas.
-    gameWarning = pygame.display.set_mode((largura_projetor, altura_projetor))
+    modo_tela = settings.modo_tela_cheia()
+    gameWarning = pygame.display.set_mode((largura_projetor, altura_projetor), modo_tela['flags'], display=modo_tela['display'])
     pygame.display.set_caption('T-TEA')
     pygame.display.set_icon(icone_fig)
     gameWarning.blit(avisos_fig,(0, 0))
@@ -179,7 +180,7 @@ def calibrar_ttea():
                 return
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_c:
-                    gameDisplay = pygame.display.set_mode((largura_projetor, altura_projetor))
+                    gameDisplay = pygame.display.set_mode((largura_projetor, altura_projetor), modo_tela['flags'], display=modo_tela['display'])
                     pygame.display.set_caption('T-TEA')
                     pygame.display.set_icon(icone_fig)
                     instrucao_calibrar()
@@ -231,7 +232,7 @@ def calibrar_ttea():
                  #   cv2.circle(tela_de_controle, (pontos_calibracao[1]), 5, azul, 3)
                   #  cv2.circle(tela_de_controle, (pontos_calibracao[2]), 5, azul, 3)
                    # cv2.circle(tela_de_controle, (pontos_calibracao[3]), 5, azul, 3)
-                    gameDisplay = pygame.display.set_mode((largura_projetor, altura_projetor))
+                    gameDisplay = pygame.display.set_mode((largura_projetor, altura_projetor), modo_tela['flags'], display=modo_tela['display'])
                     pygame.display.set_caption('Calibracao')
                     pygame.display.set_icon(icone_fig)
 
@@ -259,6 +260,7 @@ def calibrar_ttea():
 
                 # Atualização das telas
                 cv2.imshow("TELA DE CONTROLE", tela_de_controle)
+                cv2.moveWindow("TELA DE CONTROLE", *settings.janela_operador_pos())
                 cv2.setMouseCallback("TELA DE CONTROLE", mousePoints)
 
                 # Teclas de Atalho

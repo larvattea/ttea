@@ -8,6 +8,7 @@ from VesTEA.config import Config
 from VesTEA.botao import Botao
 from VesTEA import arquivo as arq
 import random
+import settings
 
 #se for executar de outra pasta, precisa de:
 #import os
@@ -29,7 +30,7 @@ class Tela():
         self.tilesize = 25
         self.superficie = display.set_mode(
             size=self.tamanho,
-            display=0
+            **settings.modo_tela_cheia()
         )
         display.set_caption(
             'VesTEA'

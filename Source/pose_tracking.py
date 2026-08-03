@@ -38,6 +38,7 @@ class PoseTracking:
         self.feet2_y = 0
         self.results = None
         self.pose_closed = False
+        self.feet_y_livre = 0
 
 
 
@@ -72,6 +73,7 @@ class PoseTracking:
             #x, y = self.results.pose_landmarks.landmark[0].x, self.results.pose_landmarks.landmark[0].y  # nose
 
             self.feet_x, self.feet_y = posicao(x, y)
+            self.feet_y_livre = self.feet_y  # posicao Y real, sem o travamento usado durante a corrida
             self.feet_y = SCREEN_HEIGHT - 50  # Jogador deve se mover apenas lateralmente
 
             mp_drawing.draw_landmarks(
@@ -83,6 +85,11 @@ class PoseTracking:
 
     def get_feet_center(self):
         return (self.feet_x, self.feet_y)
+
+    def get_feet_center_menu(self):
+        # Posicao dos pes sem o travamento vertical usado durante a corrida -
+        # usada para selecionar botoes do menu nos dois eixos.
+        return (self.feet_x, self.feet_y_livre)
 
     def get_feet1(self):
         return posicao(self.feet1_x, self.feet1_y)

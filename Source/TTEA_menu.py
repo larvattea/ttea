@@ -83,15 +83,22 @@ imagem.image = photo
 imagem.pack()
 
 
-# Calibrar Button
+# Calibrar Buttons (manual + automática, lado a lado)
 def CalibrarCallback():
     #import calibracao
     calibracaov2.calibrar_ttea()
 
+def CalibrarAutomaticaCallback():
+    abrir_calibracao_automatica()
 
-B = tk.Button(menu_frame, text ="Calibrar", command = CalibrarCallback)
+calibrar_frame = tk.Frame(menu_frame)
+calibrar_frame.pack()
 
-B.pack()
+B = tk.Button(calibrar_frame, text="Calibrar Manualmente", command=CalibrarCallback)
+B.pack(side=tk.LEFT, padx=5)
+
+B = tk.Button(calibrar_frame, text="Calibrar Automaticamente", command=CalibrarAutomaticaCallback)
+B.pack(side=tk.LEFT, padx=5)
 
 # label
 label = ttk.Label(menu_frame, text="Jogos:")
@@ -352,6 +359,30 @@ def detectar_cameras():
             break
     return encontradas
 
+def detectar_monitores():
+    # Devolve [(largura, altura), ...] na ordem usada por settings.MONITOR /
+    # pygame display=<indice>.
+    try:
+        pygame.display.init()
+        return pygame.display.get_desktop_sizes()
+    except Exception as e:
+        ttea_log.debug(f'Config: falha ao listar monitores: {e!r}')
+        return [(SCREEN_WIDTH, SCREEN_HEIGHT)]
+
+def abrir_calibracao_automatica():
+    # auto_calibracao_espelho.py fica na raiz do projeto (um nível acima de
+    # Source/); em execução a partir do código-fonte, garante que ela esteja
+    # no sys.path. No build compilado, T-TEA.spec já a inclui no pacote.
+    raiz_projeto = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+    if raiz_projeto not in sys.path:
+        sys.path.insert(0, raiz_projeto)
+    try:
+        import auto_calibracao_espelho
+        auto_calibracao_espelho.executar()
+    except Exception as e:
+        ttea_log.debug(f'Config: falha ao rodar calibracao automatica: {e!r}')
+        messagebox.showerror('Calibração automática', f'Não foi possível rodar a ferramenta: {e}')
+
 def abrir_configuracoes():
     win = tk.Toplevel(root)
     win.title('Configurações')
@@ -361,11 +392,22 @@ def abrir_configuracoes():
 
     frame = tk.Frame(win, padx=15, pady=15)
     frame.pack()
+
     ttk.Label(frame, text='Câmera:').grid(column=0, row=0, sticky=tk.W)
     cam_cb = ttk.Combobox(frame, state='readonly', width=24)
     cam_cb.grid(column=1, row=0, padx=10)
     aviso = ttk.Label(frame, text='Procurando câmeras...')
     aviso.grid(column=0, row=1, columnspan=2, pady=5)
+
+    # Preview ao vivo da câmera selecionada, com o esqueleto do mediapipe
+    # desenhado por cima (mesmo desenho usado dentro dos jogos).
+    preview_label = tk.Label(frame, width=240, height=180, bg='black')
+    preview_label.grid(column=0, row=2, columnspan=2, pady=5)
+
+    ttk.Label(frame, text='Tela (monitor):').grid(column=0, row=3, sticky=tk.W, pady=(10, 0))
+    tela_cb = ttk.Combobox(frame, state='readonly', width=24)
+    tela_cb.grid(column=1, row=3, padx=10, pady=(10, 0))
+
     win.update()
 
     cameras = detectar_cameras()
@@ -380,13 +422,78 @@ def abrir_configuracoes():
     else:
         aviso['text'] = 'Nenhuma câmera encontrada!'
 
+    monitores = detectar_monitores()
+    tela_cb['values'] = [
+        'Monitor {} ({}x{})'.format(i + 1, w, h) for i, (w, h) in enumerate(monitores)
+    ]
+    tela_cb.current(settings.MONITOR if 0 <= settings.MONITOR < len(monitores) else 0)
+
+    # --- Preview da câmera (mediapipe pose) ---------------------------------
+    import mediapipe as mp
+    _preview_pose = mp.solutions.pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5)
+    estado_preview = {'cap': None, 'indice': None, 'foto': None, 'agendado': None, 'ativo': True}
+
+    def _preview_trocar_camera():
+        if not cameras:
+            return
+        indice = cameras[cam_cb.current()][0]
+        if indice == estado_preview['indice']:
+            return
+        if estado_preview['cap'] is not None:
+            estado_preview['cap'].release()
+        estado_preview['indice'] = indice
+        estado_preview['cap'] = cv2.VideoCapture(indice, cv2.CAP_DSHOW)
+
+    def _preview_tick():
+        if not estado_preview['ativo']:
+            return
+        _preview_trocar_camera()
+        cap = estado_preview['cap']
+        if cap is not None and cap.isOpened():
+            ret, frame = cap.read()
+            if ret and frame is not None:
+                frame = cv2.flip(frame, 1)
+                rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                resultados = _preview_pose.process(rgb)
+                if resultados.pose_landmarks:
+                    mp.solutions.drawing_utils.draw_landmarks(
+                        rgb, resultados.pose_landmarks, mp.solutions.pose.POSE_CONNECTIONS,
+                        landmark_drawing_spec=mp.solutions.drawing_styles.get_default_pose_landmarks_style())
+                img = Image.fromarray(rgb).resize((240, 180))
+                estado_preview['foto'] = ImageTk.PhotoImage(img)
+                preview_label.configure(image=estado_preview['foto'])
+        estado_preview['agendado'] = win.after(100, _preview_tick)
+
+    cam_cb.bind('<<ComboboxSelected>>', lambda e: _preview_trocar_camera())
+    if cameras:
+        _preview_tick()
+
+    def _fechar_preview():
+        estado_preview['ativo'] = False
+        if estado_preview['agendado'] is not None:
+            win.after_cancel(estado_preview['agendado'])
+        if estado_preview['cap'] is not None:
+            estado_preview['cap'].release()
+        try:
+            _preview_pose.close()
+        except Exception:
+            pass
+
     def salvar():
+        _fechar_preview()
         if cameras:
             settings.salvar_camera(cameras[cam_cb.current()][0])
+        settings.salvar_monitor(tela_cb.current())
         win.destroy()
 
-    tk.Button(frame, text='Salvar', width=10, command=salvar).grid(column=0, row=2, pady=10)
-    tk.Button(frame, text='Cancelar', width=10, command=win.destroy).grid(column=1, row=2, pady=10)
+    def cancelar():
+        _fechar_preview()
+        win.destroy()
+
+    tk.Button(frame, text='Salvar', width=10, command=salvar).grid(column=0, row=4, pady=10)
+    tk.Button(frame, text='Cancelar', width=10, command=cancelar).grid(column=1, row=4, pady=10)
+
+    win.protocol('WM_DELETE_WINDOW', cancelar)
 
 botao_config = tk.Button(root, text='⚙', font=('Segoe UI Symbol', 13),
                          relief='flat', cursor='hand2', command=abrir_configuracoes)

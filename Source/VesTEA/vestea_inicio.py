@@ -4,7 +4,7 @@ from pygame import display
 from pygame.image import load
 from pygame.transform import scale
 from pygame import event
-from pygame.locals import QUIT, KEYUP, K_SPACE, K_UP, K_DOWN, K_RIGHT, K_LEFT, K_s, K_h, K_f
+from pygame.locals import QUIT, KEYUP, KEYDOWN, K_SPACE, K_UP, K_DOWN, K_RIGHT, K_LEFT, K_s, K_h, K_f, K_q
 from pygame.time import Clock
 
 #from VesTEA.pose_tracking import PoseTracking
@@ -13,6 +13,7 @@ from VesTEA import botao
 from VesTEA.jogo import Jogo
 from VesTEA.tutorial import Tutorial
 from VesTEA.config_desafio import ConfigDesafio
+import settings
 
 
 #se for executar de outra pasta, precisa de:
@@ -33,7 +34,7 @@ class Vestea():
         self.fonte_legenda = font.SysFont('opensans', 25)
         self.superficie = display.set_mode(
             size=self.tamanho,
-            display=0
+            **settings.modo_tela_cheia()
         )
         display.set_caption(
             'VesTEA'
@@ -69,8 +70,15 @@ class Vestea():
                 if evento.type == QUIT:
                     #print("clicou em fechar")
                     arq.grava_Detalhado(self.jogo.fase, self.jogo.nivel, 0, 'Acao profissional', 'Botao X Fechar')
-                    arq.grava_Sessao(self.jogo.sessaoInicio, self.jogo.fase, self.jogo.nivel, self.jogo.sessaoAcertos, 
-                                     self.jogo.sessaoAcertosAjuda, self.jogo.sessaoAjudas, 
+                    arq.grava_Sessao(self.jogo.sessaoInicio, self.jogo.fase, self.jogo.nivel, self.jogo.sessaoAcertos,
+                                     self.jogo.sessaoAcertosAjuda, self.jogo.sessaoAjudas,
+                                     self.jogo.sessaoErros, self.jogo.sessaoOmissoes, self.jogo.totalColisoes)
+                    self.esta_rodando = False
+                if evento.type == KEYDOWN and evento.key == K_q:
+                    # SAIR (Q)
+                    arq.grava_Detalhado(self.jogo.fase, self.jogo.nivel, 0, 'Acao profissional', 'Tecla Q')
+                    arq.grava_Sessao(self.jogo.sessaoInicio, self.jogo.fase, self.jogo.nivel, self.jogo.sessaoAcertos,
+                                     self.jogo.sessaoAcertosAjuda, self.jogo.sessaoAjudas,
                                      self.jogo.sessaoErros, self.jogo.sessaoOmissoes, self.jogo.totalColisoes)
                     self.esta_rodando = False
                 if self.estado==1 or self.estado==2:

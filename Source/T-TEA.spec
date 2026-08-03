@@ -1,7 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
 # Build: python -m PyInstaller T-TEA.spec (run from the Source directory)
 import os
-from PyInstaller.utils.hooks import collect_all
+from PyInstaller.utils.hooks import collect_all, collect_submodules
 
 # mediapipe carries .tflite/.binarypb model files that must be bundled.
 # collect_all() grabs the data for every solution (hands, face, iris,
@@ -25,12 +25,18 @@ mp_datas = [
     if not any(alvo in dest for alvo in _MP_SOLUCOES_NAO_USADAS)
 ]
 
+# Ferramenta de calibração automática (ChArUco), auto_calibracao_espelho.py,
+# fica na raiz do projeto (um nível acima de Source/) e é chamada em processo
+# pelo botão "Calibração Automática" do menu - não vira um .exe separado
+# porque isso duplicaria opencv/numpy (~65 MB) no zip final.
+_screeninfo_hidden = collect_submodules('screeninfo')
+
 a = Analysis(
     ['TTEA_menu.py'],
-    pathex=[],
+    pathex=['..'],
     binaries=mp_binaries,
     datas=mp_datas,
-    hiddenimports=mp_hidden,
+    hiddenimports=mp_hidden + _screeninfo_hidden + ['auto_calibracao_espelho'],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

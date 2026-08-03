@@ -192,6 +192,9 @@ class Game:
     def load_camera(self):
         self.cap.load_camera()
 
+    def get_menu_feet_position(self):
+        return self.pose_tracking.get_feet_center_menu()
+
     def set_feet_position(self):
         self.cap.frame = self.pose_tracking.scan_feets(self.cap.frame)
         (x, y) = self.pose_tracking.get_feet_center()
@@ -228,6 +231,11 @@ class Game:
         # draw the car
         self.car.draw(self.surface)
 
+        # bolinha amarela na posicao real dos pes, como no RepeTEA
+        pos_pes = self.pose_tracking.get_feet_center_menu()
+        if pos_pes != (0, 0):
+            pygame.draw.circle(self.surface, (255, 255, 0), (int(pos_pes[0]), int(pos_pes[1])), 15)
+
         if self.HUD:
             # draw the score
             ui.draw_text(self.surface, f"Pontuação : {self.score}", (650, 5), COLORS["score"], font=FONTS["medium"],
@@ -253,6 +261,7 @@ class Game:
     def update(self):
         self.load_camera()
         self.set_feet_position()
+        self.cap.show()
         if self.PAUSE:
             settings.MENU = 'Pause'
             self.PAUSE = False

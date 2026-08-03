@@ -10,38 +10,84 @@ WINDOW_NAME = "KarTEA"
 GAME_TITLE = WINDOW_NAME
 CAMERA = 0
 CAMERA_FLIP = 0
+# Indice do monitor onde os jogos abrem em tela cheia (0 = principal),
+# escolhido na engrenagem do menu. Ver pygame.display.get_desktop_sizes().
+MONITOR = 0
 
-# A câmera escolhida na engrenagem do menu fica salva em config.json,
-# ao lado do executável. Todos os jogos leem settings.CAMERA.
+# A câmera/monitor escolhidos na engrenagem do menu ficam salvos em
+# config.json, ao lado do executável. Todos os jogos leem settings.CAMERA e
+# settings.MONITOR.
 CONFIG_ARQUIVO = 'config.json'
 
 def _carregar_config():
-    global CAMERA
+    global CAMERA, MONITOR
     try:
         with open(CONFIG_ARQUIVO, 'r', encoding='utf-8') as f:
             cfg = json.load(f)
         CAMERA = int(cfg.get('camera', CAMERA))
-        ttea_log.debug(f'config.json carregado: camera={CAMERA}')
+        MONITOR = int(cfg.get('monitor', MONITOR))
+        ttea_log.debug(f'config.json carregado: camera={CAMERA} monitor={MONITOR}')
     except FileNotFoundError:
         pass
     except Exception as e:
         ttea_log.debug(f'Falha ao ler {CONFIG_ARQUIVO}: {e!r}')
 
-def salvar_camera(indice):
-    global CAMERA
-    CAMERA = int(indice)
+def _salvar_config_chave(chave, valor):
     try:
         try:
             with open(CONFIG_ARQUIVO, 'r', encoding='utf-8') as f:
                 cfg = json.load(f)
         except Exception:
             cfg = {}
-        cfg['camera'] = CAMERA
+        cfg[chave] = valor
         with open(CONFIG_ARQUIVO, 'w', encoding='utf-8') as f:
             json.dump(cfg, f, indent=2)
-        ttea_log.debug(f'Camera {CAMERA} salva em {CONFIG_ARQUIVO}')
+        ttea_log.debug(f'{chave}={valor} salvo em {CONFIG_ARQUIVO}')
     except Exception as e:
         ttea_log.debug(f'Falha ao salvar {CONFIG_ARQUIVO}: {e!r}')
+
+def salvar_camera(indice):
+    global CAMERA
+    CAMERA = int(indice)
+    _salvar_config_chave('camera', CAMERA)
+
+def salvar_monitor(indice):
+    global MONITOR
+    MONITOR = int(indice)
+    _salvar_config_chave('monitor', MONITOR)
+
+def modo_tela_cheia():
+    # Flags/kwargs para abrir os jogos em tela cheia no monitor escolhido,
+    # escalando o canvas logico (SCREEN_WIDTH x SCREEN_HEIGHT) para a
+    # resolucao real do monitor (pygame.SCALED, disponivel no pygame 2).
+    try:
+        pygame.display.init()  # idempotente; get_desktop_sizes precisa do subsistema de video
+        n_monitores = len(pygame.display.get_desktop_sizes())
+    except Exception:
+        n_monitores = 1
+    display = MONITOR if 0 <= MONITOR < n_monitores else 0
+    return {'flags': pygame.FULLSCREEN | pygame.SCALED, 'display': display}
+
+def _monitores_screeninfo():
+    try:
+        from screeninfo import get_monitors
+        return get_monitors()
+    except Exception as e:
+        ttea_log.debug(f'settings: falha ao listar monitores via screeninfo: {e!r}')
+        return []
+
+def janela_operador_pos():
+    # (x, y) onde as janelas do operador (preview de camera/mediapipe, em
+    # cv2) devem abrir: sempre no monitor OPOSTO ao escolhido para o jogo
+    # (MONITOR), para nao ficar por cima da projecao. Só usa o mesmo monitor
+    # se nao houver outro disponivel.
+    monitores = _monitores_screeninfo()
+    if not monitores:
+        return (0, 0)
+    indice_jogo = MONITOR if 0 <= MONITOR < len(monitores) else 0
+    indice_operador = next((i for i in range(len(monitores)) if i != indice_jogo), indice_jogo)
+    m = monitores[indice_operador]
+    return (m.x, m.y)
 
 _carregar_config()
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
