@@ -115,7 +115,7 @@ relacao_altura = (altura_projetor / altura_tela_controle)  # Esta relação é u
 tela_de_calibracao = np.zeros((altura_projetor, largura_projetor, 3),np.uint8)  # Tela que será usada para o projetar o jogo.
 tela_de_controle = np.zeros((altura_tela_controle, largura_tela_controle, 3),np.uint8)  # Tela que será usada para o projetar o jogo.
 
-camera = cv2.VideoCapture(settings.CAMERA, cv2.CAP_DSHOW)  # Câmera escolhida na engrenagem do menu (config.json).
+camera = settings.abrir_camera(settings.CAMERA)  # Câmera escolhida na engrenagem do menu (config.json).
 ttea_log.debug(f'RepeTEA: camera {settings.CAMERA} aberta={camera.isOpened()}')
 
 def encerrar_repetea():
@@ -512,6 +512,16 @@ def posicao():
 
     return p_after
 
+def desenhar_bolinha_jogador(pos):
+    # jogador (posicao()) pode acabar fora da tela - a calibracao mapeia a
+    # altura do CHAO, e quando cai no fallback do nariz (pes fora de quadro)
+    # a posicao projetada pode passar bem longe dessa faixa e a bolinha
+    # nunca aparecia. Trava dentro da tela pra sempre ficar visivel.
+    raio = 15
+    x = max(raio, min(largura_projetor - raio, pos[0]))
+    y = max(raio, min(altura_projetor - raio, pos[1]))
+    pygame.draw.circle(gameDisplay, (amarelo), (x, y), raio)
+
 def rand():
     #Função para sortear a figura
     rand_figura = round(random.randrange(0, 4))
@@ -678,7 +688,8 @@ while not gameWarning:
 falhas_camera = 0
 while not gameExit:
 
-    with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
+    # model_complexity=0 (BlazePose Lite): bem mais rapido que o padrao.
+    with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5, model_complexity=0) as pose:
         while camera.isOpened():
             if settings.PARAR_JOGO.is_set():
                 encerrar_repetea()
@@ -704,10 +715,19 @@ while not gameExit:
             # Extração de coordenadas de pontos de referência.
             try:
                 landmarks = results.pose_landmarks.landmark
-                #x_pose = (landmarks[mp_pose.PoseLandmark.RIGHT_EAR.value].x + landmarks[mp_pose.PoseLandmark.LEFT_EAR.value].x)/2 # 33 Pontos de referência do MediaPipe. Ex: RIGHT_FOOT_INDEX; NOSE; RIGHT_INDEX; RIGHT_EAR, RIGHT_HEEL
-                #y_pose = (landmarks[mp_pose.PoseLandmark.RIGHT_EAR.value].y + landmarks[mp_pose.PoseLandmark.LEFT_EAR.value].y)/2# 33 Pontos de referência do MediaPipe. Ex: RIGHT_FOOT_INDEX; NOSE; RIGHT_INDEX; RIGHT_EAR
-                x_pose = (landmarks[mp_pose.PoseLandmark.RIGHT_FOOT_INDEX.value].x + landmarks[mp_pose.PoseLandmark.LEFT_FOOT_INDEX.value].x)/2
-                y_pose = (landmarks[mp_pose.PoseLandmark.RIGHT_FOOT_INDEX.value].y + landmarks[mp_pose.PoseLandmark.LEFT_FOOT_INDEX.value].y)/2
+                pe_dir = landmarks[mp_pose.PoseLandmark.RIGHT_FOOT_INDEX.value]
+                pe_esq = landmarks[mp_pose.PoseLandmark.LEFT_FOOT_INDEX.value]
+                # Fallback: pes fora de quadro (visibility baixa) -> usa o
+                # nariz como aproximacao do centro do jogador.
+                if pe_dir.visibility >= 0.5 and pe_esq.visibility >= 0.5:
+                    x_pose = (pe_dir.x + pe_esq.x) / 2
+                    y_pose = (pe_dir.y + pe_esq.y) / 2
+                else:
+                    # O frame ja chega espelhado (cv2.flip antes de
+                    # processar, algumas linhas acima), entao o x do
+                    # mediapipe ja esta no espelho certo.
+                    nariz = landmarks[mp_pose.PoseLandmark.NOSE.value]
+                    x_pose, y_pose = nariz.x, nariz.y
 
                 # Desenho dos pontos de referência
                 mp_drawing.draw_landmarks(tela_de_controle, results.pose_landmarks, mp_pose.POSE_CONNECTIONS,
@@ -807,7 +827,7 @@ while not gameExit:
                                     hud_info()
                                     #tela_update()
 
-                                pygame.draw.circle(gameDisplay, (amarelo), jogador, 15)
+                                desenhar_bolinha_jogador(jogador)
                                 tela_update()
 
                             ###############################
@@ -1896,7 +1916,7 @@ while not gameExit:
                                     hud_info()
                                     #tela_update()
 
-                                pygame.draw.circle(gameDisplay, (amarelo), jogador, 15)
+                                desenhar_bolinha_jogador(jogador)
                                 tela_update()
 
                             ###############################
@@ -2968,7 +2988,7 @@ while not gameExit:
 
                     else:
                         repetea_iniciar()
-                        pygame.draw.circle(gameDisplay, (amarelo), jogador, 15)
+                        desenhar_bolinha_jogador(jogador)
                         pygame.display.update()
 
 

@@ -14,12 +14,15 @@ class Menu:
         self.background = Background()
         self.background.background_menu()
         self.click_sound = pygame.mixer.Sound(f"Assets/Kartea/Sounds/point.wav")
+        # Carrega/escala uma unica vez - draw() roda a cada frame enquanto o
+        # menu/pause/feedback fica na tela, recarregar do disco toda vez
+        # (com smoothscale!) travava a interface.
+        self.fundo = image.load("Assets/Kartea/Fundo.png", size=(SCREEN_WIDTH,SCREEN_HEIGHT))
 
 
     def draw(self):
         self.background.draw(self.surface)
-        fundo = image.load("Assets/Kartea/Fundo.png", size=(SCREEN_WIDTH,SCREEN_HEIGHT))
-        image.draw(self.surface, fundo, (0,0))
+        image.draw(self.surface, self.fundo, (0,0))
 
     def draw_Feedback(self):
         ui.draw_text(self.surface, "Feedback", ((SCREEN_WIDTH // 2) + 50, 100), COLORS["title"], font=FONTS["medium"],

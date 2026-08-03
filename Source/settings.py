@@ -96,6 +96,27 @@ def janela_operador_pos():
     m = monitores[indice_operador]
     return (m.x, m.y)
 
+def abrir_camera(indice):
+    # MSMF é ~2x mais rápido que DSHOW pra ler frame (medido: ~15 fps vs
+    # ~30 fps na mesma câmera/resolução) - mas em webcams/drivers mais
+    # antigos (Windows 7 é o pior caso) o MSMF pode falhar ou nem abrir,
+    # enquanto DSHOW quase sempre funciona. Tenta MSMF primeiro e SÓ usa se
+    # realmente conseguir ler um frame; senão cai pro DSHOW.
+    cap = cv2.VideoCapture(indice, cv2.CAP_MSMF)
+    if cap.isOpened():
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+        ret, _ = cap.read()
+        if ret:
+            ttea_log.debug(f'Camera {indice}: aberta via MSMF')
+            return cap
+        cap.release()
+    ttea_log.debug(f'Camera {indice}: MSMF indisponivel, usando DSHOW')
+    cap = cv2.VideoCapture(indice, cv2.CAP_DSHOW)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+    return cap
+
 _carregar_config()
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 

@@ -231,10 +231,15 @@ class Game:
         # draw the car
         self.car.draw(self.surface)
 
-        # bolinha amarela na posicao real dos pes, como no RepeTEA
+        # bolinha amarela na posicao real dos pes, como no RepeTEA. Os
+        # calcanhares calibram perto da borda inferior da area - trava a
+        # bolinha dentro da tela pra nao ficar cortada/invisivel na borda.
         pos_pes = self.pose_tracking.get_feet_center_menu()
         if pos_pes != (0, 0):
-            pygame.draw.circle(self.surface, (255, 255, 0), (int(pos_pes[0]), int(pos_pes[1])), 15)
+            raio = 15
+            x_bolinha = max(raio, min(SCREEN_WIDTH - raio, int(pos_pes[0])))
+            y_bolinha = max(raio, min(SCREEN_HEIGHT - raio, int(pos_pes[1])))
+            pygame.draw.circle(self.surface, (255, 255, 0), (x_bolinha, y_bolinha), raio)
 
         if self.HUD:
             # draw the score

@@ -160,7 +160,7 @@ def calibrar_ttea():
 
     resetar_vars()
 
-    camera = cv2.VideoCapture(settings.CAMERA, cv2.CAP_DSHOW)  # O valor entre parênteses indica qual câmera será utilizada. 0=default; 1,2,3...= câmeras externas.
+    camera = settings.abrir_camera(settings.CAMERA)  # O valor indica qual câmera será utilizada. 0=default; 1,2,3...= câmeras externas.
     modo_tela = settings.modo_tela_cheia()
     gameWarning = pygame.display.set_mode((largura_projetor, altura_projetor), modo_tela['flags'], display=modo_tela['display'])
     pygame.display.set_caption('T-TEA')
@@ -199,7 +199,8 @@ def calibrar_ttea():
     #################################################################################
     while not gameExit:
 
-        with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
+        # model_complexity=0 (BlazePose Lite): bem mais rapido que o padrao.
+        with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5, model_complexity=0) as pose:
             if camera.isOpened():
                 ret, frame = camera.read()
 

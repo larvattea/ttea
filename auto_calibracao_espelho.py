@@ -173,6 +173,10 @@ def executar():
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 3, cv2.LINE_AA)
             cv2.putText(frame_exibicao, "Pressione 'S' para ocultar a tela e capturar", (20, 40),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 1, cv2.LINE_AA)
+            cv2.putText(frame_exibicao, "Pressione 'D' para modo desenvolvimento (tela inteira)", (22, 72),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 0, 0), 3, cv2.LINE_AA)
+            cv2.putText(frame_exibicao, "Pressione 'D' para modo desenvolvimento (tela inteira)", (20, 70),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 1, cv2.LINE_AA)
 
         else:
             frame_exibicao = frame_congelado.copy()
@@ -274,6 +278,29 @@ def executar():
 
                 cv2.namedWindow(nome_janela_cam, cv2.WINDOW_AUTOSIZE)
                 cv2.moveWindow(nome_janela_cam, operador.x, operador.y)
+
+        # --- AÇÃO D: MODO DESENVOLVIMENTO (sem projeção) ---
+        # Usa a imagem inteira da camera como area de jogo, pulando a
+        # deteccao do ChArUco - util pra testar sem ter um projetor/tela
+        # de verdade calibrando fisicamente.
+        elif (tecla == ord('d') or tecla == ord('D')) and not modo_preview:
+            print("\n[MODO DESENVOLVIMENTO] Selecionando a tela inteira da câmera (sem projeção).")
+            altura_cam, largura_cam_dev = frame.shape[:2]
+            ultimos_vertices_camera = np.array([
+                [0, 0], [largura_cam_dev, 0], [0, altura_cam], [largura_cam_dev, altura_cam]
+            ], dtype=int)
+
+            frame_congelado = frame.copy()
+            render_pts = np.array([
+                ultimos_vertices_camera[0], ultimos_vertices_camera[1],
+                ultimos_vertices_camera[3], ultimos_vertices_camera[2]
+            ], dtype=np.int32)
+            cv2.polylines(frame_congelado, [render_pts], True, (0, 255, 255), 4)
+            for pt in ultimos_vertices_camera:
+                cv2.circle(frame_congelado, (pt[0], pt[1]), 10, (0, 0, 255), -1)
+
+            modo_preview = True
+            print("[SUCESSO] Modo desenvolvimento: tela inteira selecionada. Janela em modo PREVIEW.")
 
         # --- AÇÃO R: VOLTA AO RASTREAMENTO REAL ---
         elif (tecla == ord('r') or tecla == ord('R')) and modo_preview:

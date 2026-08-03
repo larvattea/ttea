@@ -7,10 +7,18 @@
 #   - PyInstaller 5.13.2 -> último com bootloader testado em Windows 7
 #   - 32 bits é inviável: o MediaPipe nunca publicou wheels win32.
 #
-# Uso:  ./build_windows.sh
+# Uso:  ./build_windows.sh [--skip-zip]
+#   --skip-zip  pula o Compress-Archive (a parte mais lenta pra uma pasta de
+#               ~400 MB) - útil pra iterar rápido quando só precisa checar se
+#               o .exe compila/roda, sem gerar o zip pra distribuir de fato.
 # Saída: C:\Temp\ttea-build\app\Source\dist\T-TEA  (pasta pronta para copiar)
-#        C:\Temp\ttea-build\T-TEA-win64.zip
+#        C:\Temp\ttea-build\T-TEA-win64.zip (a menos que --skip-zip)
 set -euo pipefail
+
+SKIP_ZIP=0
+if [ "${1:-}" = "--skip-zip" ]; then
+    SKIP_ZIP=1
+fi
 
 BUILD=/mnt/c/Temp/ttea-build
 PROJ="$(cd "$(dirname "$0")" && pwd)"
@@ -50,6 +58,21 @@ sed -e '/^pyobject/d' \
 (cd "$BUILD" && "$PY" -m pip install -r requisitos-build.txt "pyinstaller==5.13.2" \
     --no-warn-script-location --timeout 60 --retries 10)
 
+# 3b. O pip install do mediapipe NÃO inclui o modelo "lite" do pose_landmark
+#     (usado via model_complexity=0, mais rápido - importante em PCs mais
+#     fracos); ele é baixado do Google sob demanda na primeira vez que é
+#     usado. Se isso só acontecesse dentro do T-TEA.exe já em campo, e o
+#     computador da clínica não tivesse internet, a detecção de pose
+#     simplesmente falharia. Então força esse download aqui, ainda no
+#     ambiente de build (que tem internet), pra collect_all('mediapipe') no
+#     passo 4 já empacotar o arquivo dentro do .exe.
+(cd "$BUILD" && "$PY" -c "import mediapipe as mp; mp.solutions.pose.Pose(model_complexity=0).close()")
+MODELO_LITE="$BUILD/py38full/lib/site-packages/mediapipe/modules/pose_landmark/pose_landmark_lite.tflite"
+if [ ! -f "$MODELO_LITE" ]; then
+    echo "ERRO: pose_landmark_lite.tflite nao foi baixado. Sem internet no ambiente de build?" >&2
+    exit 1
+fi
+
 # 4. Compila (onedir; o jogo lê tudo por caminho relativo ao diretório do exe).
 #    A calibração automática (ChArUco, auto_calibracao_espelho.py na raiz do
 #    projeto) roda dentro do próprio T-TEA.exe (ver T-TEA.spec) em vez de
@@ -67,13 +90,24 @@ DIST="$BUILD/app/Source/dist/T-TEA"
     cp -r VesTEA/config VesTEA/images VesTEA/labirintos "$DIST/VesTEA/" && \
     cp LEIA-ME.txt "$DIST/")
 
-# 6. Zip final. Compress-Archive já usa o nível "Optimal" do Deflate (o
-#    Windows PowerShell 5.1 nem expõe um nível mais forte que esse); o ganho
-#    real de tamanho vem de reduzir o conteúdo, não de trocar o algoritmo -
-#    um formato mais forte (7z/xz) quebraria a extração nativa no Windows 7.
-rm -f /mnt/c/Temp/ttea-build/T-TEA-win64.zip
-(cd "$BUILD/app/Source/dist" && powershell.exe -NoProfile -Command \
-    "Compress-Archive -Path 'T-TEA' -DestinationPath 'C:\\Temp\\ttea-build\\T-TEA-win64.zip' -Force")
+# Confere que o modelo lite realmente foi parar dentro do pacote compilado
+# (não só no venv de build) - é o que os jogos de fato usam em runtime.
+if [ ! -f "$DIST/mediapipe/modules/pose_landmark/pose_landmark_lite.tflite" ]; then
+    echo "ERRO: pose_landmark_lite.tflite nao foi incluido no pacote final." >&2
+    exit 1
+fi
 
 echo "OK: pasta $DIST"
-echo "OK: zip   C:\\Temp\\ttea-build\\T-TEA-win64.zip"
+
+if [ "$SKIP_ZIP" = "1" ]; then
+    echo "OK: zip pulado (--skip-zip)"
+else
+    # 6. Zip final. Compress-Archive já usa o nível "Optimal" do Deflate (o
+    #    Windows PowerShell 5.1 nem expõe um nível mais forte que esse); o
+    #    ganho real de tamanho vem de reduzir o conteúdo, não do algoritmo -
+    #    um formato mais forte (7z/xz) quebraria a extração nativa no Win7.
+    rm -f /mnt/c/Temp/ttea-build/T-TEA-win64.zip
+    (cd "$BUILD/app/Source/dist" && powershell.exe -NoProfile -Command \
+        "Compress-Archive -Path 'T-TEA' -DestinationPath 'C:\\Temp\\ttea-build\\T-TEA-win64.zip' -Force")
+    echo "OK: zip   C:\\Temp\\ttea-build\\T-TEA-win64.zip"
+fi

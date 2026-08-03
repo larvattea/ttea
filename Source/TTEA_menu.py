@@ -57,7 +57,7 @@ def show_menu():
     # set combo values
     jogador_cb['values'] = arr_Jogadores
 
-    width, height = 520, 650
+    width, height = 520, 760
     center_window_on_screen(width, height)
     menu_frame.pack()
     cad_frame.forget()
@@ -85,7 +85,7 @@ root.report_callback_exception = ttea_log.hook_tk
 # config the root window
 root.resizable(False, False)
 root.title('Menu TTEA')
-width, height = 520, 650
+width, height = 520, 760
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 center_window_on_screen(width, height)
@@ -517,7 +517,7 @@ def abrir_configuracoes():
 
     # --- Preview da câmera (mediapipe pose) ---------------------------------
     import mediapipe as mp
-    _preview_pose = mp.solutions.pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5)
+    _preview_pose = mp.solutions.pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5, model_complexity=0)
     estado_preview = {'cap': None, 'indice': None, 'foto': None, 'agendado': None, 'ativo': True}
 
     def _preview_trocar_camera():
@@ -529,7 +529,7 @@ def abrir_configuracoes():
         if estado_preview['cap'] is not None:
             estado_preview['cap'].release()
         estado_preview['indice'] = indice
-        estado_preview['cap'] = cv2.VideoCapture(indice, cv2.CAP_DSHOW)
+        estado_preview['cap'] = settings.abrir_camera(indice)
 
     def _preview_tick():
         if not estado_preview['ativo']:

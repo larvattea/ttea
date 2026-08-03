@@ -29,7 +29,10 @@ def posicao(x, y):
 
 class PoseTracking:
     def __init__(self):
-        self.pose_tracking = mp_poses.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5)
+        # model_complexity=0 (BlazePose Lite): bem mais rapido que o padrao
+        # (1, "Full"), com perda de precisao pequena - necessario pra rodar
+        # bem em computadores mais fracos.
+        self.pose_tracking = mp_poses.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5, model_complexity=0)
         self.feet_x = 0
         self.feet_y = 0
         self.feet1_x = 0
@@ -61,16 +64,27 @@ class PoseTracking:
         self.feet_closed = False
 
         if self.results.pose_landmarks:
-                        
-            self.feet1_x, self.feet1_y = self.results.pose_landmarks.landmark[30].x, self.results.pose_landmarks.landmark[30].y # left_heel
-            self.feet2_x, self.feet2_y = self.results.pose_landmarks.landmark[29].x, self.results.pose_landmarks.landmark[29].y # right_heel
+            landmarks = self.results.pose_landmarks.landmark
+            pe_esq = landmarks[30]  # left_heel
+            pe_dir = landmarks[29]  # right_heel
 
-            #Ponto medio entre os pes
-            x = (self.feet1_x+self.feet2_x)/2
-            y = (self.feet1_y+self.feet2_y)/2
-
-            #Usando o nariz - para usar utilizando apenas a ponta do nariz
-            #x, y = self.results.pose_landmarks.landmark[0].x, self.results.pose_landmarks.landmark[0].y  # nose
+            # Fallback: se a camera nao enquadra os pes (jogador perto
+            # demais, camera alta etc.), o mediapipe reporta visibility
+            # baixa nesses pontos - usa o nariz como aproximacao do centro
+            # do jogador em vez de deixar a posicao travada/errada.
+            if pe_esq.visibility >= 0.5 and pe_dir.visibility >= 0.5:
+                self.feet1_x, self.feet1_y = pe_esq.x, pe_esq.y
+                self.feet2_x, self.feet2_y = pe_dir.x, pe_dir.y
+                x = (self.feet1_x + self.feet2_x) / 2
+                y = (self.feet1_y + self.feet2_y) / 2
+            else:
+                # O frame ja chega espelhado (camera.py faz cv2.flip antes de
+                # processar), entao o x do mediapipe ja esta no espelho certo
+                # - nao espelhar de novo aqui.
+                nariz = landmarks[0]
+                self.feet1_x = self.feet2_x = nariz.x
+                self.feet1_y = self.feet2_y = nariz.y
+                x, y = nariz.x, nariz.y
 
             self.feet_x, self.feet_y = posicao(x, y)
             self.feet_y_livre = self.feet_y  # posicao Y real, sem o travamento usado durante a corrida

@@ -1,51 +1,53 @@
-T-TEA — Windows build (64-bit)
+T-TEA — Versão Windows (64 bits)
 ================================
 
-QUICK START
-  1. Copy the whole "T-TEA" folder to the computer (example: C:\T-TEA).
-  2. Double-click T-TEA.exe.
-  3. That's it. No Python install, no extra setup.
+COMEÇANDO RÁPIDO
+  1. Copie a pasta "T-TEA" inteira pro computador (ex.: C:\T-TEA).
+  2. Dois cliques em T-TEA.exe.
+  3. Pronto. Não precisa instalar Python nem nada.
 
-BEFORE YOU OPEN IT
-  - Plug in the webcam FIRST, then open the app.
-  - Needs 64-bit Windows. 32-bit will NOT work (pose detection has no
-    32-bit version, period — not fixable).
-  - Windows 10 / 11: just works.
-  - Windows 7: needs SP1 + update KB2533623. Windows Update usually already
-    has it installed.
+ANTES DE ABRIR
+  - Conecte a webcam PRIMEIRO, só depois abra o programa.
+  - Precisa de Windows 64 bits. 32 bits NÃO funciona (a detecção de pose
+    não existe em 32 bits — sem jeito de contornar isso).
+  - Windows 10 / 11: funciona direto.
+  - Windows 7: precisa do SP1 + atualização KB2533623. O Windows Update
+    normalmente já instala isso sozinho.
 
-SETTINGS (gear icon ⚙, top right of the menu)
-  - Pick your webcam. You'll see a live preview with the skeleton overlay,
-    so you know it's the right camera.
-  - Pick which monitor the games go fullscreen on.
-  - Both choices apply to every game and are remembered (saved to
-    config.json) — you only set them once.
+CONFIGURAÇÕES (engrenagem ⚙, canto superior direito do menu)
+  - Escolha a webcam. Aparece um preview ao vivo com o esqueleto desenhado
+    em cima, pra você confirmar que é a câmera certa.
+  - Escolha em qual monitor os jogos abrem em tela cheia.
+  - As duas escolhas valem pra todos os jogos e ficam salvas (config.json)
+    — só precisa configurar uma vez.
 
-CALIBRATION (main menu, two buttons)
-  - "Calibrar Manualmente" — click the 4 corners yourself.
-  - "Calibrar Automaticamente" — projects a checkerboard pattern and
-    calibrates on its own. Faster, less room for error.
-  - The camera preview window always opens on the OTHER monitor from the
-    game, so it doesn't sit on top of the projection.
+CALIBRAÇÃO (menu principal, dois botões)
+  - "Calibrar Manualmente" — você clica nos 4 cantos.
+  - "Calibrar Automaticamente" — projeta um tabuleiro e calibra sozinho.
+    Mais rápido, menos chance de erro.
+  - A janela de preview da câmera sempre abre no monitor OPOSTO ao do
+    jogo, pra não ficar em cima da projeção.
 
-HOW TO QUIT
-  - Press Q. Works in every game (KarTEA, RepeTEA, VesTEA). Takes you
-    straight back to the menu.
+COMO SAIR DE UM JOGO
+  - Aperte Q. Funciona em qualquer jogo (KarTEA, RepeTEA, VesTEA) e volta
+    direto pro menu.
+  - Ou clique em "Parar de Jogar", no menu, ao lado do botão "Jogar" —
+    esse botão só aparece enquanto um jogo está rodando.
 
-IF SOMETHING BREAKS
-  - Check debug.txt first — it logs errors automatically.
-  - Send debug.txt to the project team, they'll know what happened.
-  - log.txt is the lighter version (just player/phase/level/calibration
-    info, no error noise).
-  - Both files auto-trim at 2 MB, so they never get huge.
+SE ALGO QUEBRAR
+  - Olhe o debug.txt primeiro — ele registra os erros sozinho.
+  - Manda o debug.txt pra equipe do projeto, eles entendem o que houve.
+  - O log.txt é a versão mais leve (só jogador/fase/nível/calibração, sem
+    o barulho dos erros).
+  - Os dois arquivos se auto-limitam a 2 MB, então nunca ficam gigantes.
 
-YOUR DATA — DON'T LOSE IT
-  - Player accounts + session history: "Jogadores" folder.
-  - Calibration: "calibracao.csv".
-  - Updating to a new version? Copy those two things over BEFORE you
-    replace the folder. Otherwise you lose them.
+SEUS DADOS — NÃO PERCA
+  - Cadastros de jogadores + histórico de sessões: pasta "Jogadores".
+  - Calibração: "calibracao.csv".
+  - Vai atualizar pra uma versão nova? Copie essas duas coisas ANTES de
+    trocar a pasta. Senão elas se perdem.
 
-WINDOWS BLOCKS THE APP?
-  - You'll see "Windows protected your PC".
-  - Click "More info" → "Run anyway".
-  - This is normal for unsigned apps, not a virus warning.
+O WINDOWS BLOQUEIA O PROGRAMA?
+  - Vai aparecer "O Windows protegeu o computador".
+  - Clique em "Mais informações" → "Executar assim mesmo".
+  - É normal pra programas sem assinatura digital, não é aviso de vírus.
