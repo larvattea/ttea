@@ -1,9 +1,29 @@
 # -*- mode: python ; coding: utf-8 -*-
 # Build: python -m PyInstaller T-TEA.spec (run from the Source directory)
+import os
 from PyInstaller.utils.hooks import collect_all
 
-# mediapipe carries .tflite/.binarypb model files that must be bundled
+# mediapipe carries .tflite/.binarypb model files that must be bundled.
+# collect_all() grabs the data for every solution (hands, face, iris,
+# holistic, objectron, selfie_segmentation...), but the game only ever uses
+# mp.solutions.pose (confirmed via grep across the whole codebase). Drop the
+# model files for the other solutions - this alone is ~20 MB uncompressed.
 mp_datas, mp_binaries, mp_hidden = collect_all('mediapipe')
+_MP_SOLUCOES_NAO_USADAS = (
+    os.path.join('mediapipe', 'modules', 'face_detection'),
+    os.path.join('mediapipe', 'modules', 'face_geometry'),
+    os.path.join('mediapipe', 'modules', 'face_landmark'),
+    os.path.join('mediapipe', 'modules', 'hand_landmark'),
+    os.path.join('mediapipe', 'modules', 'holistic_landmark'),
+    os.path.join('mediapipe', 'modules', 'iris_landmark'),
+    os.path.join('mediapipe', 'modules', 'objectron'),
+    os.path.join('mediapipe', 'modules', 'palm_detection'),
+    os.path.join('mediapipe', 'modules', 'selfie_segmentation'),
+)
+mp_datas = [
+    (src, dest) for src, dest in mp_datas
+    if not any(alvo in dest for alvo in _MP_SOLUCOES_NAO_USADAS)
+]
 
 a = Analysis(
     ['TTEA_menu.py'],

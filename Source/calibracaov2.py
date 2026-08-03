@@ -172,6 +172,11 @@ def calibrar_ttea():
     while not gameWarning:
         for event in pygame.event.get():
             # SAIR ou CONCORDO
+            if event.type == pygame.QUIT:
+                camera.release()
+                cv2.destroyAllWindows()
+                pygame.display.quit()
+                return
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_c:
                     gameDisplay = pygame.display.set_mode((largura_projetor, altura_projetor))
@@ -181,12 +186,11 @@ def calibrar_ttea():
                     pygame.display.update()
                     gameWarning=True
                 if event.key == pygame.K_q:
-                    gameExit = True
-                    cv2.destroyWindow('tela_de_controle')
-                    pygame.quit()
+                    # Sai da calibração e volta ao menu.
                     camera.release()
-                    gameWarning = True
-                    exit()
+                    cv2.destroyAllWindows()
+                    pygame.display.quit()
+                    return
 
 
     #################################################################################

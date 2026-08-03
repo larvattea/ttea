@@ -35,10 +35,17 @@ rsync -a --delete --exclude='*Zone.Identifier' --exclude='__pycache__' \
     "$PROJ/" "$BUILD/app/"
 
 # 3. Dependências (pyobject saiu do PyPI e não é usado pelo código).
+# Troca opencv-contrib-python por opencv-python: o jogo não usa nenhum modulo
+# contrib (checado via grep), e a versão "contrib" carrega ~35 MB de DLL de
+# ffmpeg/módulos extras que só incham o pacote final sem uso.
 # Importante: o WSL não traduz argumentos para .exe do Windows, então o pip
 # deve rodar com cwd em C:\ e receber caminhos relativos.
-grep -v '^pyobject' "$PROJ/requisitos.txt" > "$BUILD/requisitos-build.txt"
+sed -e '/^pyobject/d' -e 's/^opencv-contrib-python==/opencv-python==/' \
+    "$PROJ/requisitos.txt" > "$BUILD/requisitos-build.txt"
 (cd "$BUILD" && "$PY" -m pip install --upgrade pip --quiet --no-warn-script-location)
+# opencv-contrib-python e opencv-python instalam os mesmos arquivos em cv2/;
+# ter os dois instalados ao mesmo tempo corrompe o pacote.
+(cd "$BUILD" && "$PY" -m pip uninstall -y opencv-contrib-python --quiet 2>/dev/null || true)
 (cd "$BUILD" && "$PY" -m pip install -r requisitos-build.txt "pyinstaller==5.13.2" \
     --no-warn-script-location --timeout 60 --retries 10)
 
@@ -46,14 +53,21 @@ grep -v '^pyobject' "$PROJ/requisitos.txt" > "$BUILD/requisitos-build.txt"
 (cd "$BUILD/app/Source" && "$PY" -m PyInstaller T-TEA.spec --noconfirm)
 
 # 5. Junta as pastas de dados ao lado do exe.
+#    Assets/Repetea_Figuras tem um .pptx de anotações (+ arquivo temporário do
+#    Office) que não é lido pelo jogo - fica de fora do pacote distribuído.
 DIST="$BUILD/app/Source/dist/T-TEA"
 (cd "$BUILD/app/Source" && \
-    cp -r Assets Jogadores "Kartea Fases" calibracao.csv "$DIST/" && \
+    rsync -a --exclude='*.pptx' --exclude='~$*' Assets "$DIST/" && \
+    cp -r Jogadores "Kartea Fases" calibracao.csv "$DIST/" && \
     mkdir -p "$DIST/VesTEA" && \
     cp -r VesTEA/config VesTEA/images VesTEA/labirintos "$DIST/VesTEA/" && \
     cp LEIA-ME.txt "$DIST/")
 
-# 6. Zip final.
+# 6. Zip final. Compress-Archive já usa o nível "Optimal" do Deflate (o
+#    Windows PowerShell 5.1 nem expõe um nível mais forte que esse); o ganho
+#    real de tamanho vem de reduzir o conteúdo, não de trocar o algoritmo -
+#    um formato mais forte (7z/xz) quebraria a extração nativa no Windows 7.
+rm -f /mnt/c/Temp/ttea-build/T-TEA-win64.zip
 (cd "$BUILD/app/Source/dist" && powershell.exe -NoProfile -Command \
     "Compress-Archive -Path 'T-TEA' -DestinationPath 'C:\\Temp\\ttea-build\\T-TEA-win64.zip' -Force")
 

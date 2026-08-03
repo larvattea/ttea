@@ -14,6 +14,7 @@ from pygame import mixer
 import datetime
 import arquivo
 import settings
+import sys
 import ttea_log
 
 pygame.init()
@@ -116,6 +117,17 @@ tela_de_controle = np.zeros((altura_tela_controle, largura_tela_controle, 3),np.
 
 camera = cv2.VideoCapture(settings.CAMERA, cv2.CAP_DSHOW)  # Câmera escolhida na engrenagem do menu (config.json).
 ttea_log.debug(f'RepeTEA: camera {settings.CAMERA} aberta={camera.isOpened()}')
+
+def encerrar_repetea():
+    # Encerra o RepeTEA de forma limpa e devolve o controle ao menu.
+    ttea_log.debug('RepeTEA: encerrando (voltando ao menu)')
+    try:
+        camera.release()
+    except Exception:
+        pass
+    cv2.destroyAllWindows()
+    pygame.display.quit()
+    sys.exit()
 
 tamanho_sequencia = int (fase_no_hud)
 tamanho_sequencia_atual = int (fase_no_hud)
@@ -625,16 +637,26 @@ def sorteio_perto():
         tempo_de_exposição()
 
 
-gameWarning = pygame.display.set_mode((largura_projetor, altura_projetor))
+tela_aviso = pygame.display.set_mode((largura_projetor, altura_projetor))
 pygame.display.set_caption('RepeTEA')
 pygame.display.set_icon(icone_fig)
-gameWarning.blit(avisos_fig,(0, 0))
-pygame.display.update()
-gameWarning=False
+
+if pontos_calibracao_repetea.any():
+    # Calibração já feita no menu: entra direto no jogo, sem tela de aviso.
+    ttea_log.debug('RepeTEA: calibracao ja definida, pulando tela de aviso')
+    gameDisplay = pygame.display.set_mode((largura_projetor, altura_projetor))
+    pygame.display.update()
+    gameWarning = True
+else:
+    tela_aviso.blit(avisos_fig,(0, 0))
+    pygame.display.update()
+    gameWarning = False
 
 while not gameWarning:
     for event in pygame.event.get():
         # SAIR ou CONCORDO
+        if event.type == pygame.QUIT:
+            encerrar_repetea()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_c:
                 gameDisplay = pygame.display.set_mode((largura_projetor, altura_projetor))
@@ -644,11 +666,7 @@ while not gameWarning:
                 pygame.display.update()
                 gameWarning=True
             if event.key == pygame.K_q:
-                gameExit = True
-                cv2.destroyWindow('tela_de_controle')
-                pygame.quit()
-                camera.release()
-                exit()
+                encerrar_repetea()
 
 
 #################################################################################
@@ -2994,10 +3012,7 @@ while not gameExit:
 
                     gameExit=True
                     print('QUIT')
-                    #cv2.destroyWindow('tela_de_controle')
-                    pygame.quit()
-                    camera.release()
-                    exit()
+                    encerrar_repetea()
                 # AJUDA F1
                 if event.type == pygame.KEYDOWN:
                     if event.key==pygame.K_F1:
@@ -3145,10 +3160,7 @@ while not gameExit:
 
                         gameExit = True
                         print('QUIT')
-                        #cv2.destroyWindow('tela_de_controle')
-                        pygame.quit()
-                        camera.release()
-                        exit()
+                        encerrar_repetea()
 
 
 

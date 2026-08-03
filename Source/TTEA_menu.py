@@ -7,6 +7,7 @@ import tkinter as tk
 from tkinter import ttk
 from PIL import Image, ImageTk
 import os
+import sys
 import arquivo
 from settings import *
 import cv2
@@ -294,15 +295,24 @@ def JogarCallback():
 
     TARGETS_MOVE_SPEED = arquivo.get_Nivel()
 
-    if game == 'KARTEA':
-        import KarTEA
-        KarTEA.main()
-    elif game == 'REPETEA':
-        import RepeTEA
-        # RepeTEA().main
-    elif game == 'VESTEA':
-        from VesTEA import vestea_inicio
-        vestea_inicio.main(jogador)
+    try:
+        if game == 'KARTEA':
+            import KarTEA
+            KarTEA.main()
+        elif game == 'REPETEA':
+            import RepeTEA
+            # RepeTEA().main
+        elif game == 'VESTEA':
+            from VesTEA import vestea_inicio
+            vestea_inicio.main(jogador)
+    except SystemExit:
+        # Jogo encerrado pelo usuário (tecla Q etc.): volta ao menu.
+        pass
+    finally:
+        # O RepeTEA roda ao ser importado; tira do cache para poder jogar
+        # de novo na mesma sessão (e usar a câmera escolhida na hora).
+        sys.modules.pop('RepeTEA', None)
+        ttea_log.debug(f'Jogo {game} encerrado, de volta ao menu')
 
 
 B = tk.Button(menu_frame, text ="Jogar", command = JogarCallback)

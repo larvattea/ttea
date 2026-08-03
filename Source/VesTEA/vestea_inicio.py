@@ -925,7 +925,7 @@ def main(jogador):
     g.rodar()
 
     #print("saiu")
-    pygame.quit()
-    exit()
+    # Fecha só a janela do jogo: o processo continua vivo para o menu.
+    pygame.display.quit()
 
 
