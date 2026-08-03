@@ -26,10 +26,7 @@ class Jogo():
         self.fonte = font.SysFont('comicsans', 50)
         self.fonte_destaque = font.SysFont('comicsans', 80)
 
-        self.superficie = display.set_mode(
-            size=self.tamanho,
-            **settings.modo_tela_cheia()
-        )
+        self.superficie = settings.obter_superficie(self.tamanho)
         display.set_caption(
             'Ship Shoot'
         )

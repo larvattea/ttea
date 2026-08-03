@@ -32,10 +32,7 @@ class Vestea():
         self.fonte_destaque = font.SysFont('opensans', 80)
         self.fonte = font.SysFont('opensans', 40)
         self.fonte_legenda = font.SysFont('opensans', 25)
-        self.superficie = display.set_mode(
-            size=self.tamanho,
-            **settings.modo_tela_cheia()
-        )
+        self.superficie = settings.obter_superficie(self.tamanho)
         display.set_caption(
             'VesTEA'
         )

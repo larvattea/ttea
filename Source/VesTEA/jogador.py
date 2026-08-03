@@ -71,15 +71,18 @@ class Jogador:
                 self.feet2_x, self.feet2_y = pe_dir.x, pe_dir.y
                 x = (self.feet1_x + self.feet2_x) / 2
                 y = (self.feet1_y + self.feet2_y) / 2
+                self.feet_x, self.feet_y = posicao(x, y)
             else:
                 # O frame ja chega espelhado (camera.py faz cv2.flip antes
-                # de processar), entao o x do mediapipe ja esta certo.
+                # de processar), entao o x do mediapipe ja esta certo. A
+                # calibracao mapeia o plano do CHAO; o nariz fica fora desse
+                # plano e a homografia jogaria o ponto pra fora da tela.
+                # Aqui mapeia direto camera -> tela.
                 nariz = landmarks[0]
                 self.feet1_x = self.feet2_x = nariz.x
                 self.feet1_y = self.feet2_y = nariz.y
-                x, y = nariz.x, nariz.y
-
-            self.feet_x, self.feet_y = posicao(x, y)
+                self.feet_x = int(nariz.x * SCREEN_WIDTH)
+                self.feet_y = int(nariz.y * SCREEN_HEIGHT)
             #self.feet_y = SCREEN_HEIGHT - 50  # Jogador deve se mover apenas lateralmente
             
             mp_drawing.draw_landmarks(

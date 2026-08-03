@@ -6,7 +6,7 @@ import ttea_log
 class Camera:
     def __init__(self):
         # Load camera
-        self.cap = settings.abrir_camera(settings.CAMERA)
+        self.cap = settings.LeitorCamera(settings.CAMERA)
         ttea_log.debug(f'Camera {settings.CAMERA}: aberta={self.cap.isOpened()}')
         self._falhas = 0
         self._janela_posicionada = False

@@ -115,7 +115,7 @@ relacao_altura = (altura_projetor / altura_tela_controle)  # Esta relação é u
 tela_de_calibracao = np.zeros((altura_projetor, largura_projetor, 3),np.uint8)  # Tela que será usada para o projetar o jogo.
 tela_de_controle = np.zeros((altura_tela_controle, largura_tela_controle, 3),np.uint8)  # Tela que será usada para o projetar o jogo.
 
-camera = settings.abrir_camera(settings.CAMERA)  # Câmera escolhida na engrenagem do menu (config.json).
+camera = settings.LeitorCamera(settings.CAMERA)  # Câmera escolhida na engrenagem do menu (config.json). Leitura em thread.
 ttea_log.debug(f'RepeTEA: camera {settings.CAMERA} aberta={camera.isOpened()}')
 
 def encerrar_repetea():
@@ -493,14 +493,30 @@ def mousePoints(event, x, y, flags, params):
 
 
 
+# A matriz de calibração não muda durante a partida - calcula uma vez só em
+# vez de recalcular (e de fazer um warpPerspective inteiro do frame, cujo
+# resultado nem era usado) a cada uma das ~125 chamadas de posicao() no
+# arquivo, varias vezes por frame.
+_pts1_calibracao = np.float32([pontos_calibracao_repetea[0], pontos_calibracao_repetea[1], pontos_calibracao_repetea[2], pontos_calibracao_repetea[3]])
+_pts2_calibracao = np.float32(
+    [[0, 0], [largura_tela_controle, 0], [0, altura_tela_controle], [largura_tela_controle, altura_tela_controle]])
+_matriz_calibracao = cv2.getPerspectiveTransform(_pts1_calibracao, _pts2_calibracao)
+
+# Ligado quando os pes nao estao visiveis e a posicao vem do nariz.
+usando_nariz = False
+
 def posicao():
     # Função para determinar a posição do jogador na área de projeçao:
-    # Transformação de Perspectiva:
-    pts1 = np.float32([pontos_calibracao_repetea[0], pontos_calibracao_repetea[1], pontos_calibracao_repetea[2], pontos_calibracao_repetea[3]])
-    pts2 = np.float32(
-        [[0, 0], [largura_tela_controle, 0], [0, altura_tela_controle], [largura_tela_controle, altura_tela_controle]])
-    matrix = cv2.getPerspectiveTransform(pts1, pts2)
-    perspectiva = cv2.warpPerspective(tela_de_controle, matrix, (largura_tela_controle, altura_tela_controle))
+    if usando_nariz:
+        # A calibração mapeia o plano do CHÃO. O nariz fica na altura da
+        # cabeça, fora desse plano, e passar ele pela homografia joga o
+        # ponto pra fora da tela (medido: y=918 numa tela de 600) - era por
+        # isso que a bolinha ficava presa na borda de baixo, só andando de
+        # lado. No fallback do nariz mapeia direto camera -> tela, que dá
+        # movimento natural nos dois eixos.
+        return (int(x_pose * largura_projetor), int(y_pose * altura_projetor))
+
+    matrix = _matriz_calibracao
 
     # Posição do jogador:
     p = (int(x_pose * largura_tela_controle), int(y_pose * altura_tela_controle))
@@ -527,14 +543,32 @@ def rand():
     rand_figura = round(random.randrange(0, 4))
     return rand_figura
 
+def _sleep_responsivo(segundos):
+    # RepeTEA pausa varias vezes por rodada (revelar figura, vez do
+    # jogador etc.) - um time.sleep() puro trava a janela inteira: o
+    # Windows para de receber mensagens da janela e ela fica "Não
+    # respondendo" (mesmo o jogo continuando normalmente depois), o que
+    # parece travamento/lentidão pro usuário. Dorme em passos curtos
+    # bombeando os eventos do pygame no meio, e ainda permite Q/Parar de
+    # Jogar interromperem uma pausa longa em vez de esperar ela terminar.
+    fim = time.time() + segundos
+    while True:
+        pygame.event.pump()
+        if settings.PARAR_JOGO.is_set():
+            encerrar_repetea()
+        restante = fim - time.time()
+        if restante <= 0:
+            break
+        time.sleep(min(0.03, restante))
+
 def delay():
-    time.sleep(0.5)
+    _sleep_responsivo(0.5)
 
 def tempo_de_vez_do_jogador():
-    time.sleep(t_vez_do_jogador)
+    _sleep_responsivo(t_vez_do_jogador)
 
 def tempo_de_exposição():
-    time.sleep(t_exposicao)
+    _sleep_responsivo(t_exposicao)
 
 def tela_update():
     pygame.display.update()
@@ -655,7 +689,9 @@ pygame.display.set_icon(icone_fig)
 if pontos_calibracao_repetea.any():
     # Calibração já feita no menu: entra direto no jogo, sem tela de aviso.
     ttea_log.debug('RepeTEA: calibracao ja definida, pulando tela de aviso')
-    gameDisplay = pygame.display.set_mode((largura_projetor, altura_projetor), _modo_tela['flags'], display=_modo_tela['display'])
+    # Reaproveita a superficie criada acima em vez de chamar set_mode de novo
+    # com os mesmos parametros (custa ~260 ms em tela cheia, sem necessidade).
+    gameDisplay = tela_aviso
     pygame.display.update()
     gameWarning = True
 else:
@@ -720,12 +756,16 @@ while not gameExit:
                 # Fallback: pes fora de quadro (visibility baixa) -> usa o
                 # nariz como aproximacao do centro do jogador.
                 if pe_dir.visibility >= 0.5 and pe_esq.visibility >= 0.5:
+                    usando_nariz = False
                     x_pose = (pe_dir.x + pe_esq.x) / 2
                     y_pose = (pe_dir.y + pe_esq.y) / 2
                 else:
                     # O frame ja chega espelhado (cv2.flip antes de
                     # processar, algumas linhas acima), entao o x do
-                    # mediapipe ja esta no espelho certo.
+                    # mediapipe ja esta no espelho certo. O y vai direto:
+                    # posicao() mapeia camera -> tela sem a homografia
+                    # quando usando_nariz esta ligado.
+                    usando_nariz = True
                     nariz = landmarks[mp_pose.PoseLandmark.NOSE.value]
                     x_pose, y_pose = nariz.x, nariz.y
 
@@ -750,9 +790,17 @@ while not gameExit:
                     #cv2.circle(tela_de_controle, (pontos_calibracao_repetea[2]), 5, azul, 3)
                     #cv2.circle(tela_de_controle, (pontos_calibracao_repetea[3]), 5, azul, 3)
                     #cv2.destroyWindow("TELA DE CALIBRACAO")
-                    gameDisplay = pygame.display.set_mode((largura_projetor, altura_projetor), _modo_tela['flags'], display=_modo_tela['display'])
-                    pygame.display.set_caption('RepeTEA')
-                    pygame.display.set_icon(icone_fig)
+                    # NAO recriar a janela aqui: este bloco roda TODO FRAME
+                    # (contador e sempre 4), e set_mode/set_caption/set_icon
+                    # recriam a superficie de video inteira. Em tela cheia
+                    # isso custava ~260 ms POR FRAME (~4 fps) - era a causa
+                    # da lentidao extrema do RepeTEA. gameDisplay ja foi
+                    # criado antes do loop principal, em todos os caminhos.
+                    # O set_mode tambem LIMPAVA a tela (devolve a superficie
+                    # zerada) todo frame, e o jogo depende disso pra apagar o
+                    # que foi desenhado antes - por isso o fill preto aqui,
+                    # que faz a mesma limpeza custando quase nada.
+                    gameDisplay.fill(preto)
                     jogador=posicao()
 
                     if jogador[0] > 350 and jogador[0] < 450 and jogador[1] > 400 and game_start==False:
@@ -784,7 +832,7 @@ while not gameExit:
                             ##########################
                             if tamanho_sequencia>0:
                                 if tentativa>1 and tamanho_sequencia_atual==tamanho_sequencia:
-                                    time.sleep(1.5)
+                                    _sleep_responsivo(1.5)
                                 sorteio_perto()
                                 tamanho_sequencia=tamanho_sequencia-1
                                 if tamanho_sequencia<=0:
@@ -1875,7 +1923,7 @@ while not gameExit:
                             ##########################
                             if tamanho_sequencia > 0:
                                 if tentativa>1 and tamanho_sequencia_atual==tamanho_sequencia:
-                                    time.sleep(1.5)
+                                    _sleep_responsivo(1.5)
                                 sorteio_longe()
                                 tamanho_sequencia = tamanho_sequencia - 1
                                 if tamanho_sequencia <= 0:
@@ -2992,7 +3040,15 @@ while not gameExit:
                         pygame.display.update()
 
 
-            except:
+            except Exception:
+                # Exception (nao bare except): deixa SystemExit passar direto.
+                # Um "except:" pelado tambem pega SystemExit (ele herda de
+                # BaseException) - isso engolia o sys.exit() do Parar de
+                # Jogar/Q disparado de dentro deste bloco (via
+                # _sleep_responsivo chamado por sorteio_perto() etc.),
+                # deixando o jogo "meio encerrado" com a tela ja fechada
+                # mas o loop tentando continuar, estourando
+                # "display Surface quit" na proxima operação de pygame.
                 if contador <= 3:
                     pass
                 if contador>3:

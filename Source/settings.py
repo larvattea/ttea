@@ -3,6 +3,7 @@ import pygame
 import numpy as np
 import cv2
 import threading
+import time
 import arquivo
 import ttea_log
 
@@ -74,6 +75,75 @@ def modo_tela_cheia():
         n_monitores = 1
     display = MONITOR if 0 <= MONITOR < n_monitores else 0
     return {'flags': pygame.FULLSCREEN | pygame.SCALED, 'display': display}
+
+class LeitorCamera:
+    # cap.read() BLOQUEIA esperando o proximo frame da webcam (~33 ms numa
+    # camera de 30 fps). Como o jogo fazia leitura e inferencia do mediapipe
+    # em sequencia, o tempo por frame virava a SOMA dos dois (~33+23 = 56 ms,
+    # ~18 fps) com a CPU parada durante a espera da camera. Lendo numa thread
+    # separada, read() devolve na hora o ultimo frame disponivel e o laco do
+    # jogo passa a custar so a inferencia (~23 ms), quase o dobro de fps.
+    # Mesma interface do cv2.VideoCapture usada pelos jogos (read/isOpened/
+    # release), entao e substituicao direta.
+    def __init__(self, indice):
+        self.cap = abrir_camera(indice)
+        self._frame = None
+        self._lock = threading.Lock()
+        self._rodando = True
+        self._thread = threading.Thread(target=self._loop, daemon=True)
+        self._thread.start()
+        # Espera o primeiro frame chegar (limite de 2 s) pra manter o mesmo
+        # comportamento do cv2.VideoCapture, que ja devolvia imagem na
+        # primeira leitura - senao quem le logo apos abrir pegaria None.
+        limite = time.time() + 2.0
+        while time.time() < limite:
+            with self._lock:
+                if self._frame is not None:
+                    break
+            time.sleep(0.01)
+
+    def _loop(self):
+        while self._rodando:
+            try:
+                ok, frame = self.cap.read()
+            except Exception:
+                break
+            if ok and frame is not None:
+                with self._lock:
+                    self._frame = frame
+            else:
+                time.sleep(0.005)
+
+    def read(self):
+        with self._lock:
+            if self._frame is None:
+                return False, None
+            # copia: o jogo escreve por cima do frame (flip, landmarks) e a
+            # thread pode trocar self._frame no meio disso.
+            return True, self._frame.copy()
+
+    def isOpened(self):
+        return self.cap.isOpened()
+
+    def release(self):
+        self._rodando = False
+        try:
+            self._thread.join(timeout=1.0)
+        except Exception:
+            pass
+        self.cap.release()
+
+def obter_superficie(tamanho):
+    # Devolve a superficie de video ja existente em vez de recriar. Chamar
+    # pygame.display.set_mode() de novo custa ~260 ms em tela cheia (ele
+    # recria a superficie inteira) - e varios pontos do codigo faziam isso
+    # DENTRO do laco do jogo, todo frame (VesTEA: Tela()/TelaTutorial() no
+    # gerenciaJogo; RepeTEA: bloco do contador==4). So cria de fato quando
+    # ainda nao existe display ou quando o tamanho logico mudou.
+    superficie = pygame.display.get_surface()
+    if superficie is not None and superficie.get_size() == tuple(tamanho):
+        return superficie
+    return pygame.display.set_mode(size=tuple(tamanho), **modo_tela_cheia())
 
 def _monitores_screeninfo():
     try:

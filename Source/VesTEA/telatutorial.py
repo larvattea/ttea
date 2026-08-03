@@ -27,10 +27,7 @@ class TelaTutorial():
         self.area_desafio = 800, 125
         self.area_jogo = 800, 475
         self.tilesize = 25
-        self.superficie = display.set_mode(
-            size=self.tamanho,
-            **settings.modo_tela_cheia()
-        )
+        self.superficie = settings.obter_superficie(self.tamanho)
         display.set_caption(
             'VesTEA'
         )

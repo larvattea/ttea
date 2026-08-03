@@ -77,16 +77,19 @@ class PoseTracking:
                 self.feet2_x, self.feet2_y = pe_dir.x, pe_dir.y
                 x = (self.feet1_x + self.feet2_x) / 2
                 y = (self.feet1_y + self.feet2_y) / 2
+                self.feet_x, self.feet_y = posicao(x, y)
             else:
                 # O frame ja chega espelhado (camera.py faz cv2.flip antes de
-                # processar), entao o x do mediapipe ja esta no espelho certo
-                # - nao espelhar de novo aqui.
+                # processar), entao o x do mediapipe ja esta no espelho certo.
+                # A calibracao mapeia o plano do CHAO; o nariz esta na altura
+                # da cabeca, fora desse plano, e passar ele pela homografia
+                # joga o ponto pra fora da tela. Aqui mapeia direto
+                # camera -> tela, que da movimento natural nos dois eixos.
                 nariz = landmarks[0]
                 self.feet1_x = self.feet2_x = nariz.x
                 self.feet1_y = self.feet2_y = nariz.y
-                x, y = nariz.x, nariz.y
-
-            self.feet_x, self.feet_y = posicao(x, y)
+                self.feet_x = int(nariz.x * SCREEN_WIDTH)
+                self.feet_y = int(nariz.y * SCREEN_HEIGHT)
             self.feet_y_livre = self.feet_y  # posicao Y real, sem o travamento usado durante a corrida
             self.feet_y = SCREEN_HEIGHT - 50  # Jogador deve se mover apenas lateralmente
 

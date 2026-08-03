@@ -169,6 +169,7 @@ def calibrar_ttea():
     pygame.display.update()
     gameWarning=False
     gameExit=False # Sai do completamente do jogo
+    titulo_calibracao_definido=False # troca o titulo da janela uma vez so
 
     while not gameWarning:
         for event in pygame.event.get():
@@ -233,13 +234,19 @@ def calibrar_ttea():
                  #   cv2.circle(tela_de_controle, (pontos_calibracao[1]), 5, azul, 3)
                   #  cv2.circle(tela_de_controle, (pontos_calibracao[2]), 5, azul, 3)
                    # cv2.circle(tela_de_controle, (pontos_calibracao[3]), 5, azul, 3)
-                    gameDisplay = pygame.display.set_mode((largura_projetor, altura_projetor), modo_tela['flags'], display=modo_tela['display'])
-                    pygame.display.set_caption('Calibracao')
-                    pygame.display.set_icon(icone_fig)
+                    # NAO recriar a janela aqui: este bloco roda todo frame
+                    # depois que os 4 pontos sao marcados, e set_mode recria
+                    # a superficie inteira (~260 ms por frame em tela cheia).
+                    # gameDisplay ja existe; so troca o titulo, uma vez.
+                    if not titulo_calibracao_definido:
+                        pygame.display.set_caption('Calibracao')
+                        titulo_calibracao_definido = True
 
+                    # O set_mode que estava aqui tambem limpava a tela; a
+                    # imagem de calibracao_ok nao cobre os 600px de altura.
+                    fill_preto()
                     calibracao_ok()
                     tela_update()
-                    pass
                 # Extração de coordenadas de pontos de referência.
                 try:
                     landmarks = results.pose_landmarks.landmark
