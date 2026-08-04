@@ -40,8 +40,7 @@ class TelaTutorial():
         #PARTE SUPERIOR
         ###############################
         # carrega fundo
-        self.fundo_desafio = pygame.image.load('VesTEA/images/space.jpg').convert_alpha()
-        self.fundo_desafio = pygame.transform.scale(self.fundo_desafio, self.area_desafio)
+        self.fundo_desafio = image.carregar_alpha('VesTEA/images/space.jpg', self.area_desafio)
         self.display_surface.blit(self.fundo_desafio,(0,0))
 
         # carrega frases desafio 
@@ -65,26 +64,20 @@ class TelaTutorial():
         if self.status >= 2:
             #mostra as imagens do desafio
             if desafio.nivel==3: 
-                self.desafio_corpo = pygame.image.load(f'Assets/vestea/imgs/desafios/Corpo{desafio.corpo}.png').convert_alpha()
-                self.desafio_corpo = pygame.transform.scale(self.desafio_corpo, (self.tilesize*4, self.tilesize*4))
+                self.desafio_corpo = image.carregar_alpha(f'Assets/vestea/imgs/desafios/Corpo{desafio.corpo}.png', (self.tilesize*4, self.tilesize*4))
                 self.display_surface.blit(self.desafio_corpo,(425,10))
         
         ###############################
         #PARTE INFERIOR
         ###############################
         #carrega imagens padrão
-        self.inicio_img = pygame.image.load('Assets/vestea/imgs/inicio.png').convert_alpha()
-        self.inicio_img = pygame.transform.scale(self.inicio_img, (2*self.tilesize, 2*self.tilesize))
-        self.parede_img = pygame.image.load(f'Assets/vestea/imgs/tijolo{arq.get_V_TIJOLO()}.jpg').convert_alpha()
-        self.parede_img = pygame.transform.scale(self.parede_img, (self.tilesize, self.tilesize))
-        self.paredeatingida_img = pygame.image.load('Assets/vestea/imgs/tijoloAtingido.jpg').convert_alpha()
-        self.paredeatingida_img = pygame.transform.scale(self.paredeatingida_img, (self.tilesize, self.tilesize))
+        self.inicio_img = image.carregar_alpha('Assets/vestea/imgs/inicio.png', (2*self.tilesize, 2*self.tilesize))
+        self.parede_img = image.carregar_alpha(f'Assets/vestea/imgs/tijolo{arq.get_V_TIJOLO()}.jpg', (self.tilesize, self.tilesize))
+        self.paredeatingida_img = image.carregar_alpha('Assets/vestea/imgs/tijoloAtingido.jpg', (self.tilesize, self.tilesize))
         
         #carrega imagens vestimentas
-        self.roupacerta_img = pygame.image.load('Assets/vestea/imgs/roupas/'+desafio.roupa_certa.nome).convert_alpha()
-        self.roupacerta_img = pygame.transform.scale(self.roupacerta_img, (self.tilesize*4, self.tilesize*4))
-        self.roupaerrada_img = pygame.image.load('Assets/vestea/imgs/roupas/'+desafio.roupa_errada.nome).convert_alpha()
-        self.roupaerrada_img = pygame.transform.scale(self.roupaerrada_img, (self.tilesize*4, self.tilesize*4))
+        self.roupacerta_img = image.carregar_alpha('Assets/vestea/imgs/roupas/'+desafio.roupa_certa.nome, (self.tilesize*4, self.tilesize*4), copia=True)
+        self.roupaerrada_img = image.carregar_alpha('Assets/vestea/imgs/roupas/'+desafio.roupa_errada.nome, (self.tilesize*4, self.tilesize*4), copia=True)
         mapa = desafio.labirinto
         #print(desafio.labirinto)
         #self.display_surface.blit(self.topo_img,(0,0))

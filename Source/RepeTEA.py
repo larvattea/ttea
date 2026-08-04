@@ -115,14 +115,14 @@ relacao_altura = (altura_projetor / altura_tela_controle)  # Esta relação é u
 tela_de_calibracao = np.zeros((altura_projetor, largura_projetor, 3),np.uint8)  # Tela que será usada para o projetar o jogo.
 tela_de_controle = np.zeros((altura_tela_controle, largura_tela_controle, 3),np.uint8)  # Tela que será usada para o projetar o jogo.
 
-camera = settings.LeitorCamera(settings.CAMERA)  # Câmera escolhida na engrenagem do menu (config.json). Leitura em thread.
+camera = settings.obter_leitor_camera(settings.CAMERA)  # Câmera escolhida na engrenagem do menu (config.json). Leitura em thread.
 ttea_log.debug(f'RepeTEA: camera {settings.CAMERA} aberta={camera.isOpened()}')
 
 def encerrar_repetea():
     # Encerra o RepeTEA de forma limpa e devolve o controle ao menu.
     ttea_log.debug('RepeTEA: encerrando (voltando ao menu)')
     try:
-        camera.release()
+        settings.liberar_leitor_camera(camera)
     except Exception:
         pass
     cv2.destroyAllWindows()
@@ -514,7 +514,8 @@ def posicao():
         # isso que a bolinha ficava presa na borda de baixo, só andando de
         # lado. No fallback do nariz mapeia direto camera -> tela, que dá
         # movimento natural nos dois eixos.
-        return (int(x_pose * largura_projetor), int(y_pose * altura_projetor))
+        nx, ny = settings.amplificar_nariz(x_pose, y_pose)
+        return (int(nx * largura_projetor), int(ny * altura_projetor))
 
     matrix = _matriz_calibracao
 

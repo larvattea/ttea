@@ -336,7 +336,17 @@ def _rodar_jogo(jogo_selecionado, jogador_selecionado):
     finally:
         # O RepeTEA roda ao ser importado; tira do cache para poder jogar
         # de novo na mesma sessão (e usar a câmera escolhida na hora).
+        # O RepeTEA e o KarTEA montam tudo no corpo do modulo (o KarTEA cria
+        # display, Game e Menu no import). Se ficarem no cache, na segunda
+        # partida o corpo nao roda de novo e eles herdam um display ja
+        # encerrado e a camera ja liberada - o jogo simplesmente nao abre.
+        # Tirando do cache, o proximo import monta tudo do zero.
         sys.modules.pop('RepeTEA', None)
+        sys.modules.pop('KarTEA', None)
+        # Garante que nenhuma webcam fique aberta se o jogo esquecer de
+        # liberar a dele - senao o proximo jogo abre a camera sem conseguir
+        # frames (ou disputando com o leitor antigo).
+        settings.fechar_todas_cameras()
         ttea_log.debug(f'Jogo {jogo_selecionado} encerrado, de volta ao menu')
 
 def _definir_estado_jogo_rodando(rodando):

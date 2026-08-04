@@ -130,6 +130,8 @@ class Jogo():
         #inserindo captura do jogador
         self.cap.load_camera()
         self.cap.frame = self.jogador.scan_feets(self.cap.frame)
+        # preview do operador com o esqueleto (mesma janela do KarTEA)
+        self.cap.show()
         x,y = self.jogador.get_feet_center()
         #print("Jogador em: ",x," - ",y)
         pygame.draw.circle(self.superficie, arq.get_V_COR_PONTO(), [x,y-90],15)
@@ -159,6 +161,8 @@ class Jogo():
         #print("Jogador 2 em: ",self.posicaoJogador)
         self.cap.load_camera()
         self.cap.frame = self.jogador.scan_feets(self.cap.frame)
+        # preview do operador com o esqueleto (mesma janela do KarTEA)
+        self.cap.show()
         x,y = self.jogador.get_feet_center()
         #print("Jogador em: ",x," - ",y)
         pygame.draw.circle(self.superficie, arq.get_V_COR_PONTO(), [x,y-90],15)
@@ -183,6 +187,8 @@ class Jogo():
         #inserindo captura do jogador
         self.cap.load_camera()
         self.cap.frame = self.jogador.scan_feets(self.cap.frame)
+        # preview do operador com o esqueleto (mesma janela do KarTEA)
+        self.cap.show()
         x, y = self.jogador.get_feet_center()
         #verifica se precisa de ajuda
         #print(f"Tempo parado:{(datetime.datetime.now() - self.tempoSemMovimento).seconds} segundos")
@@ -348,6 +354,8 @@ class Jogo():
             #inserindo captura do jogador
             self.cap.load_camera()
             self.cap.frame = self.jogador.scan_feets(self.cap.frame)
+            # preview do operador com o esqueleto (mesma janela do KarTEA)
+            self.cap.show()
             x,y = self.jogador.get_feet_center()
             #print("Jogador em: ",x," - ",y)
             pygame.draw.circle(self.superficie, arq.get_V_COR_PONTO(), [x,y-90],15)

@@ -76,6 +76,23 @@ def modo_tela_cheia():
     display = MONITOR if 0 <= MONITOR < n_monitores else 0
     return {'flags': pygame.FULLSCREEN | pygame.SCALED, 'display': display}
 
+# Quando o rastreamento cai no nariz (pes fora do quadro), o alcance do
+# movimento e MUITO menor: mexer a cabeca cobre uma fracao do que mexer os
+# pes cobre. Em vez de um fator fixo, o ganho ACELERA conforme se afasta do
+# centro: perto do centro fica 1:1 (movimento preciso, sem tremer), e vai
+# subindo ate 4x nas bordas (alcanca os cantos com pouco movimento).
+GANHO_NARIZ_CENTRO = 1.0
+GANHO_NARIZ_BORDA = 4.0
+
+def amplificar_nariz(x, y):
+    # Cada eixo acelera por conta propria, em torno do centro (0.5).
+    def eixo(v):
+        desvio = v - 0.5                        # -0.5 .. 0.5
+        t = min(abs(desvio) / 0.5, 1.0)         # 0 no centro, 1 na borda
+        ganho = GANHO_NARIZ_CENTRO + (GANHO_NARIZ_BORDA - GANHO_NARIZ_CENTRO) * t
+        return min(max(0.5 + desvio * ganho, 0.0), 1.0)
+    return (eixo(x), eixo(y))
+
 class LeitorCamera:
     # cap.read() BLOQUEIA esperando o proximo frame da webcam (~33 ms numa
     # camera de 30 fps). Como o jogo fazia leitura e inferencia do mediapipe
@@ -103,15 +120,26 @@ class LeitorCamera:
             time.sleep(0.01)
 
     def _loop(self):
+        falhas = 0
         while self._rodando:
             try:
                 ok, frame = self.cap.read()
-            except Exception:
+            except Exception as e:
+                ttea_log.debug(f'LeitorCamera: excecao lendo frame: {e!r}')
                 break
             if ok and frame is not None:
+                if falhas:
+                    ttea_log.debug(f'LeitorCamera: voltou a receber frames apos {falhas} falhas')
+                    falhas = 0
                 with self._lock:
                     self._frame = frame
             else:
+                # Sem isto o leitor fica servindo o ULTIMO frame pra sempre e
+                # o video parece "congelado no primeiro frame", sem nenhum
+                # aviso. Registra pra aparecer no debug.txt.
+                falhas += 1
+                if falhas == 1 or falhas % 150 == 0:
+                    ttea_log.debug(f'LeitorCamera: falha ao capturar frame (seguidas={falhas}) - imagem congelada')
                 time.sleep(0.005)
 
     def read(self):
@@ -132,6 +160,49 @@ class LeitorCamera:
         except Exception:
             pass
         self.cap.release()
+
+_leitores = {}            # indice -> [LeitorCamera, quantos estao usando]
+_leitores_lock = threading.Lock()
+
+def obter_leitor_camera(indice):
+    # O VesTEA cria DOIS objetos Camera (um no Jogo, outro no Tutorial), e o
+    # KarTEA pode recriar o seu. Com a leitura em thread, cada um abriria a
+    # mesma webcam e ficaria uma thread disputando frames com a outra - o
+    # video trava/pula porque os frames se dividem entre os leitores. Aqui
+    # existe UM leitor por indice de camera, compartilhado e contado.
+    indice = int(indice)
+    with _leitores_lock:
+        item = _leitores.get(indice)
+        if item is None or not item[0].isOpened():
+            item = [LeitorCamera(indice), 0]
+            _leitores[indice] = item
+        item[1] += 1
+        return item[0]
+
+def liberar_leitor_camera(leitor):
+    with _leitores_lock:
+        for indice, item in list(_leitores.items()):
+            if item[0] is leitor:
+                item[1] -= 1
+                if item[1] <= 0:
+                    item[0].release()
+                    del _leitores[indice]
+                return
+    try:
+        leitor.release()
+    except Exception:
+        pass
+
+def fechar_todas_cameras():
+    # Chamado pelo menu ao voltar de um jogo: garante que nenhuma camera
+    # fique aberta se algum jogo esquecer de liberar a sua.
+    with _leitores_lock:
+        for indice, item in list(_leitores.items()):
+            try:
+                item[0].release()
+            except Exception:
+                pass
+            del _leitores[indice]
 
 def obter_superficie(tamanho):
     # Devolve a superficie de video ja existente em vez de recriar. Chamar
@@ -167,22 +238,22 @@ def janela_operador_pos():
     return (m.x, m.y)
 
 def abrir_camera(indice):
-    # MSMF é ~2x mais rápido que DSHOW pra ler frame (medido: ~15 fps vs
-    # ~30 fps na mesma câmera/resolução) - mas em webcams/drivers mais
-    # antigos (Windows 7 é o pior caso) o MSMF pode falhar ou nem abrir,
-    # enquanto DSHOW quase sempre funciona. Tenta MSMF primeiro e SÓ usa se
-    # realmente conseguir ler um frame; senão cai pro DSHOW.
-    cap = cv2.VideoCapture(indice, cv2.CAP_MSMF)
+    # DSHOW e o backend historico do projeto e o mais confiavel aqui. Chegou
+    # a usar MSMF (le frame ~2x mais rapido), mas ele falha em capturar
+    # ("async ReadSample() call is failed") em algumas webcams/drivers e o
+    # video congela. Como a leitura agora roda numa thread separada
+    # (LeitorCamera), o tempo de leitura do backend nao trava mais o laco do
+    # jogo - entao a lentidao do DSHOW praticamente nao importa e vale mais
+    # a confiabilidade. Se o DSHOW nao abrir, tenta o backend padrao.
+    cap = cv2.VideoCapture(indice, cv2.CAP_DSHOW)
     if cap.isOpened():
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
-        ret, _ = cap.read()
-        if ret:
-            ttea_log.debug(f'Camera {indice}: aberta via MSMF')
-            return cap
-        cap.release()
-    ttea_log.debug(f'Camera {indice}: MSMF indisponivel, usando DSHOW')
-    cap = cv2.VideoCapture(indice, cv2.CAP_DSHOW)
+        ttea_log.debug(f'Camera {indice}: aberta via DSHOW')
+        return cap
+    cap.release()
+    ttea_log.debug(f'Camera {indice}: DSHOW nao abriu, tentando backend padrao')
+    cap = cv2.VideoCapture(indice)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
     return cap

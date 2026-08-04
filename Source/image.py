@@ -25,6 +25,26 @@ def load(img_path, size="default", convert="alpha", flip=False):
     return img
 
 
+_cache_alpha = {}
+
+def carregar_alpha(caminho, tamanho=None, copia=False):
+    # load + convert_alpha + scale com cache. O VesTEA reconstroi a Tela a
+    # cada frame e relia essas imagens do disco toda vez (so o space.jpg
+    # custava ~65 ms/frame). Usa transform.scale (nao smoothscale) pra
+    # manter exatamente o mesmo resultado visual de antes.
+    # copia=True para imagens que o jogo DESENHA por cima depois (as roupas
+    # recebem um retangulo de destaque via pygame.draw.rect) - sem a copia o
+    # destaque ficaria gravado no cache e apareceria pra sempre.
+    chave = (caminho, tamanho)
+    img = _cache_alpha.get(chave)
+    if img is None:
+        img = pygame.image.load(caminho).convert_alpha()
+        if tamanho is not None:
+            img = pygame.transform.scale(img, tamanho)
+        _cache_alpha[chave] = img
+    return img.copy() if copia else img
+
+
 def scale(img, size):
     return pygame.transform.smoothscale(img, size)
 

@@ -9,6 +9,7 @@ import settings
 from settings import *
 from game import Game
 from menu import Menu
+import ui
 
 # Setup pygame/window --------------------------------------------- #
 # os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (100, 32) # windows position
@@ -67,6 +68,7 @@ def user_events():
 def update():
     global state
 
+    era_menu = state != "game"
     if state != "game":
         # Fora do jogo (menu/pause/feedback), Game.update() nao roda, entao
         # a camera e o rastreamento dos pes precisam ser mantidos aqui para
@@ -102,6 +104,10 @@ def update():
         settings.TIME_PAST += mainClock.get_time()
         if game.update() == "menu":
             state = "menu"
+
+    if era_menu:
+        # Por cima dos botoes, pra o jogador enxergar onde esta apontando.
+        ui.desenhar_bolinha_jogador(SCREEN, pes_pos)
 
     pygame.display.update()
 

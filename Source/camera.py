@@ -6,7 +6,7 @@ import ttea_log
 class Camera:
     def __init__(self):
         # Load camera
-        self.cap = settings.LeitorCamera(settings.CAMERA)
+        self.cap = settings.obter_leitor_camera(settings.CAMERA)
         ttea_log.debug(f'Camera {settings.CAMERA}: aberta={self.cap.isOpened()}')
         self._falhas = 0
         self._janela_posicionada = False
@@ -52,7 +52,16 @@ class Camera:
             # projecao do jogo (settings.MONITOR), para nao sobrepor.
             cv2.moveWindow("Tela de Captura", *settings.janela_operador_pos())
             self._janela_posicionada = True
+        # Sem waitKey o OpenCV nao processa os eventos da janela e o preview
+        # nao chega a ser desenhado. Fica aqui pra valer pra todos os jogos
+        # que usam esta classe (KarTEA, inclusive no menu, e VesTEA).
+        cv2.waitKey(1)
 
     def close_camera(self):
-        self.cap.release()
-        cv2.destroyWindow("Tela de Captura")
+        settings.liberar_leitor_camera(self.cap)
+        try:
+            cv2.destroyWindow("Tela de Captura")
+        except Exception:
+            # Estoura se a janela nunca chegou a ser criada (o jogo saiu
+            # antes do primeiro show()). Nao e motivo pra derrubar a saida.
+            pass

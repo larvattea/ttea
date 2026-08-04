@@ -81,8 +81,9 @@ class Jogador:
                 nariz = landmarks[0]
                 self.feet1_x = self.feet2_x = nariz.x
                 self.feet1_y = self.feet2_y = nariz.y
-                self.feet_x = int(nariz.x * SCREEN_WIDTH)
-                self.feet_y = int(nariz.y * SCREEN_HEIGHT)
+                nx, ny = st.amplificar_nariz(nariz.x, nariz.y)
+                self.feet_x = int(nx * SCREEN_WIDTH)
+                self.feet_y = int(ny * SCREEN_HEIGHT)
             #self.feet_y = SCREEN_HEIGHT - 50  # Jogador deve se mover apenas lateralmente
             
             mp_drawing.draw_landmarks(
