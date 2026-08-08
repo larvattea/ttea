@@ -46,8 +46,12 @@
 
     <!-- Images -->
     <qresource prefix="/images">     
-        <file alias="calibrationokpt">images/calibration_ok_pt.png</file>  
-        <file alias="calibrationpt">images/calibration_pt.png</file>       
+        <file alias="calibrationen">images/calibration_en.png</file>  
+        <file alias="calibrationes">images/calibration_es.png</file>     
+        <file alias="calibrationpt">images/calibration_pt.png</file>  
+        <file alias="calibrationoken">images/calibrationok_en.png</file> 
+        <file alias="calibrationokes">images/calibrationok_es.png</file>
+        <file alias="calibrationokpt">images/calibrationok_pt.png</file>  
         <file alias="kartealogo">images/kartealogo.jpg</file>  
         <file alias="larvaico">images/larvaico.png</file>      
         <file alias="ttealogo">images/ttealogo.png</file>
@@ -66,7 +70,7 @@
     <!-- Interfaces (UI) -->
     <qresource prefix="/ui">
         <file alias="aboutviewui">ui/aboutview.ui</file>
-        <file alias="calibrationparameterizationviewui">ui/calibrationparameterizationview.ui</file>
+        <file alias="calibrationsettingviewui">ui/calibrationsettingview.ui</file>
         <file alias="calibrationviewui">ui/calibrationview.ui</file>
         <file alias="professionaleditviewui">ui/professionaleditview.ui</file>
         <file alias="professionallistviewui">ui/professionallistview.ui</file>

@@ -44,7 +44,7 @@ class App:
     Examples
     --------
     >>> app = App()
-    >>> app.run()  # doctest: +SKIP
+    >>> app.run()
     """
 
     def __init__(self) -> None:
@@ -74,7 +74,7 @@ class App:
         Examples
         --------
         >>> app = App()
-        >>> app.run()  # doctest: +SKIP
+        >>> app.run()
         """
         CriticalHooks.setup_exception_hooks()
         Log.get_log().log_info("Application started successfully.")
