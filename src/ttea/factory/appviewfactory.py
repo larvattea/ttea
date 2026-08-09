@@ -9,18 +9,17 @@ from typing import TYPE_CHECKING, Callable, Optional
 from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QDialog, QMainWindow
 
-from ttea.view import (AboutView, CalibrationView,
-                                    InstitutionFacilityEditView,
-                                    InstitutionFacilityListView, LanguageView,
-                                    MainView, ManualCalibrationView,
-                                    PlayerEditView, PlayerGameLaunchView,
-                                    PlayerListView, ProfessionalEditView,
-                                    ProfessionalListView)
+from ttea.view import (AboutView, AutomaticCalibrationView,
+                       CalibrationSettingView, CalibrationView,
+                       InstitutionFacilityEditView,
+                       InstitutionFacilityListView, LanguageView, MainView,
+                       ManualCalibrationView, PlayerEditView,
+                       PlayerGameLaunchView, PlayerListView,
+                       ProfessionalEditView, ProfessionalListView)
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
-    from ttea.model import (InstitutionFacility, Player,
-                                         Professional)
+    from ttea.model import InstitutionFacility, Player, Professional
 
 
 class AppViewFactory:
@@ -54,8 +53,10 @@ class AppViewFactory:
         Create an instance of LanguageView.
     create_main_view(parent=None)
         Create an instance of MainView.
-    create_gamecalibration_view(parent=None)
+    create_manualcalibration_view(parent=None)
         Create an instance of ManualCalibrationView.
+    create_automaticcalibration_view(parent=None)
+        Create an instance of AutomaticCalibrationView.
     """
 
     @staticmethod
@@ -302,7 +303,7 @@ class AppViewFactory:
         return MainView(parent)
 
     @staticmethod
-    def create_gamecalibration_view(
+    def create_manualcalibration_view(
         parent: Optional[QDialog] = None,
     ) -> ManualCalibrationView:
         """Create an instance of ManualCalibrationView.
@@ -320,3 +321,43 @@ class AppViewFactory:
             provided parent.
         """
         return ManualCalibrationView(parent)
+
+    @staticmethod
+    def create_automaticcalibration_view(
+        parent: Optional[QDialog] = None,
+    ) -> AutomaticCalibrationView:
+        """Create an instance of AutomaticCalibrationView.
+
+        Parameters
+        ----------
+        parent : Optional[QDialog], optional
+            The parent dialog for the automatic calibration view, by
+            default None.
+
+        Returns
+        -------
+        AutomaticCalibrationView
+            An instance of AutomaticCalibrationView configured with the
+            provided parent.
+        """
+        return AutomaticCalibrationView(parent)
+
+    @staticmethod
+    def create_calibrationsetting_view(
+        parent: Optional[QDialog] = None,
+    ) -> CalibrationSettingView:
+        """Create an instance of CalibrationSettingView.
+
+        Parameters
+        ----------
+        parent : Optional[QDialog], optional
+            The parent dialog for the calibration settings view, by
+            default None.
+
+        Returns
+        -------
+        CalibrationSettingView
+            An instance of CalibrationSettingView configured with the
+            provided parent.
+        """
+        return CalibrationSettingView(parent)

@@ -9,8 +9,7 @@ from ttea.games.kartea.util import KarteaPathConfig
 
 if TYPE_CHECKING:
     from ttea.games.kartea.model import PlayerKarteaConfig
-    from ttea.games.kartea.service import \
-        PlayerKarteaConfigService
+    from ttea.games.kartea.service import PlayerKarteaConfigService
 
 
 class GameSettings:

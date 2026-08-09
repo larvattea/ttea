@@ -10,8 +10,7 @@ class PlayerGameLaunchService:
     METADATA_FILENAME = "metadata.json"
 
     def __init__(self):
-        from ttea.service import (PlayerService,
-                                               ProfessionalService)
+        from ttea.service import PlayerService, ProfessionalService
 
         self.player_service = PlayerService()
         self.professional_service = ProfessionalService()

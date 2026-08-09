@@ -5,8 +5,8 @@ import cv2
 import pygame
 
 from ttea.games.kartea.gamecore import Camera, PoseTracking
-from ttea.games.kartea.gamemodel import (Background, Car, Image,
-                                                      Obstacle, Target)
+from ttea.games.kartea.gamemodel import (Background, Car, Image, Obstacle,
+                                         Target)
 from ttea.games.kartea.gameui import UI
 from ttea.games.kartea.gameutil import GameSettings
 

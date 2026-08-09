@@ -28,7 +28,9 @@ class PathConfig:
         directories.
     CONFIG_FILENAME : str
         Default file name for configuration files.
-    CALIBRATION_FILENAME : str
+    CALIBRATION_HARDWARE_FILENAME : str
+        Default file name for calibration hardware settings.
+    CALIBRATION_SETTING_FILENAME : str
         Default file name for calibration settings.
     CALIBRATION_POINT_FILENAME : str
         Default file name for calibration point CSV data.
@@ -46,7 +48,7 @@ class PathConfig:
         Directory for institution facility data.
     LOG_DIR : Path
         Directory for log files.
-    MODELS_PATH : Path
+    MODELS_DIR : Path
         Directory containing the bundled MediaPipe models.
     PLAYERS_DIR : Path
         Directory for player files.
@@ -79,6 +81,36 @@ class PathConfig:
         Create all user directories.
     config(filename=CONFIG_FILENAME)
         Return application config file path.
+    calibration_hardware(filename=CALIBRATION_HARDWARE_FILENAME)
+        Return calibration hardware file path.
+    calibration_setting(filename=CALIBRATION_SETTING_FILENAME)
+        Return calibration setting file path.
+    calibration_point(filename=CALIBRATION_POINT_FILENAME)
+        Return calibration point CSV file path.
+    professional(filename)
+        Return professional data file path.
+    institutionfacility(filename)
+        Return institution facility data file path.
+    player(filename)
+        Return player data file path.
+    model(filename)
+        Return Mediapipe model file path.
+    export(filename)
+        Return export file path.
+    log(filename)
+        Return log file path.
+    game_save(game_name, filename)
+        Return game save file path.
+    set_base_dir(path)
+        Set a different base directory for tests.
+    config_file_exists(filename=CONFIG_FILENAME)
+        Check if configuration file exists.
+    calibration_file_exists(filename=CALIBRATION_HARDWARE_FILENAME)
+        Check if calibration file exists.
+    path_help_pt(filename)
+        Return Portuguese help resource path.
+    find_resource_built_in(base_path, name)
+        Find an embedded Qt resource from a base path.
 
     Examples
     --------
@@ -93,7 +125,8 @@ class PathConfig:
     APP_AUTHOR = "udesc"
 
     CONFIG_FILENAME = "config.ini"
-    CALIBRATION_FILENAME = "calibration.ini"
+    CALIBRATION_HARDWARE_FILENAME = "calibration_hardware.ini"
+    CALIBRATION_SETTING_FILENAME = "calibration_setting.ini"
     CALIBRATION_POINT_FILENAME = "calibration_point.csv"
 
     # ===================================================================
@@ -102,16 +135,17 @@ class PathConfig:
     if getattr(sys, "frozen", False):
         BASE_DIR: Path = Path(user_data_dir(APP_NAME, APP_AUTHOR))
         EXERGAME_DIR: Path = BASE_DIR / "exergames"
-        RESOURCES_ROOT: Path = Path(
-            getattr(sys, "_MEIPASS", Path(sys.executable).parent)
-        ) / "resources"
+        RESOURCES_ROOT: Path = (
+            Path(getattr(sys, "_MEIPASS", Path(sys.executable).parent))
+            / "resources"
+        )
     else:
         PROJECT_DIR: Path = Path(__file__).resolve().parents[3]
         EXERGAME_DIR: Path = PROJECT_DIR / "src" / "ttea" / "games"
         BASE_DIR: Path = PROJECT_DIR / "data"
         RESOURCES_ROOT: Path = PROJECT_DIR / "resources"
 
-    MODELS_PATH: Path = RESOURCES_ROOT / "mediapipemodels"
+    MODELS_DIR: Path = RESOURCES_ROOT / "mediapipemodels"
 
     # Subdirectories — add new folders here
     CONFIG_DIR: Path = BASE_DIR / "config"
@@ -385,18 +419,38 @@ class PathConfig:
         return cls._user_file(cls.CONFIG_DIR, filename)
 
     @classmethod
-    def calibration(cls, filename: str = CALIBRATION_FILENAME) -> str:
-        """Return the calibration file path.
+    def calibration_hardware(
+        cls, filename: str = CALIBRATION_HARDWARE_FILENAME
+    ) -> str:
+        """Return the calibration hardware file path.
 
         Parameters
         ----------
         filename : str, optional
-            Name of the calibration file. Defaults to the class constant.
+            Name of the calibration hardware file. Defaults to the class constant.
 
         Returns
         -------
         str
-            Full path to the calibration file.
+            Full path to the calibration hardware file.
+        """
+        return cls._user_file(cls.CALIBRATION_DIR, filename)
+
+    @classmethod
+    def calibration_setting(
+        cls, filename: str = CALIBRATION_SETTING_FILENAME
+    ) -> str:
+        """Return the calibration setting file path.
+
+        Parameters
+        ----------
+        filename : str, optional
+            Name of the calibration setting file. Defaults to the class constant.
+
+        Returns
+        -------
+        str
+            Full path to the calibration setting file.
         """
         return cls._user_file(cls.CALIBRATION_DIR, filename)
 
@@ -481,7 +535,7 @@ class PathConfig:
         str
             Full path to the model file.
         """
-        return str(cls.MODELS_PATH / filename)
+        return str(cls.MODELS_DIR / filename)
 
     @classmethod
     def export(cls, filename: str) -> str:
@@ -591,7 +645,7 @@ class PathConfig:
 
     @classmethod
     def calibration_file_exists(
-        cls, filename: str = CALIBRATION_FILENAME
+        cls, filename: str = CALIBRATION_HARDWARE_FILENAME
     ) -> bool:
         """Return whether the calibration file exists.
 
@@ -605,7 +659,7 @@ class PathConfig:
         bool
             True if the calibration file exists, otherwise False.
         """
-        return Path(cls.calibration(filename)).exists()
+        return Path(cls.calibration_hardware(filename)).exists()
 
     # ===================================================================
     # Utilities

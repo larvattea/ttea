@@ -25,24 +25,25 @@ This package is maintained by the Larva UDESC team and is under active
 development.
 
 Contributions and bug reports are welcome at:
-https://github.com/larvattea/T-TEA2.0
+https://github.com/larvattea/ttea
 """
 
 # Define the __all__ variable
 __all__ = [
     "Ui_AboutView",
-    "Ui_CalibrationParameterizationView",
+    "Ui_AutomaticCalibrationView",
+    "Ui_CalibrationSettingView",
     "Ui_CalibrationView",
-    "Ui_GameCalibrationView",
-    "Ui_ProfessionalEditView",
-    "Ui_ProfessionalListView",
     "Ui_InstitutionFacilityEditView",
     "Ui_InstitutionFacilityListView",
     "Ui_LanguageView",
     "Ui_MainView",
+    "Ui_ManualCalibrationView",
     "Ui_PlayerEditView",
     "Ui_PlayerGameLaunchView",
     "Ui_PlayerListView",
+    "Ui_ProfessionalEditView",
+    "Ui_ProfessionalListView",
 ]
 
 __version__ = "1.0.0"
@@ -52,14 +53,14 @@ __license__ = "MIT License"
 
 # Import the submodules
 from .aboutviewui import Ui_AboutView
-from .calibrationparameterizationviewui import \
-    Ui_CalibrationParameterizationView
+from .automaticcalibrationviewui import Ui_AutomaticCalibrationView
+from .calibrationsettingviewui import Ui_CalibrationSettingView
 from .calibrationviewui import Ui_CalibrationView
-from .gamecalibrationviewui import Ui_GameCalibrationView
 from .institutionfacilityeditviewui import Ui_InstitutionFacilityEditView
 from .institutionfacilitylistviewui import Ui_InstitutionFacilityListView
 from .languageviewui import Ui_LanguageView
 from .mainviewui import Ui_MainView
+from .manualcalibrationviewui import Ui_ManualCalibrationView
 from .playereditviewui import Ui_PlayerEditView
 from .playergamelaunchviewui import Ui_PlayerGameLaunchView
 from .playerlistviewui import Ui_PlayerListView

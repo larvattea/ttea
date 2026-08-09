@@ -22,7 +22,7 @@ This package is maintained by the Larva UDESC team and is under active
 development.
 
 Contributions and bug reports are welcome at:
-https://github.com/larvattea/T-TEA2.0
+https://github.com/larvattea/ttea
 """
 
 # Define the __all__ variable

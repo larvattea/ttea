@@ -5,8 +5,7 @@ from PySide6.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 
 # Local module import
 from ttea.controller import PlayerListController
-from ttea.ui import \
-    Ui_PlayerListView  # Assuming generated UI class
+from ttea.ui import Ui_PlayerListView  # Assuming generated UI class
 from ttea.util import MessageService, QtDateFormat
 from ttea.window import WindowConfig
 

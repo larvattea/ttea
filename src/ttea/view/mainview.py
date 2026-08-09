@@ -1,9 +1,9 @@
-# view/mainview.py
-from datetime import date
+# mainview.py
+from datetime import date, datetime
 from typing import Optional
 
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QCloseEvent, QIcon
+from PySide6.QtCore import Qt, QTimer
+from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import QLabel, QMainWindow, QStatusBar, QWidget
 
 from ttea.app import AppConfig
@@ -52,8 +52,8 @@ class MainView(QMainWindow, Ui_MainView, WindowConfig):
             self.controller.open_calibration
         )
 
-        self.act_calibration_parameterization.triggered.connect(
-            self.controller.open_calibration_parameterization
+        self.act_calibration_setting.triggered.connect(
+            self.controller.open_calibration_setting
         )
 
         self.act_language.triggered.connect(self.controller.open_language)
@@ -69,39 +69,35 @@ class MainView(QMainWindow, Ui_MainView, WindowConfig):
 
     def setup_status_bar(self):
         """Cria o QLabel com versão e data e adiciona permanentemente na status bar"""
-        date_mask = AppConfig.get_geral_date_mask() or "%d/%m/%Y"
 
+        # Atualização inicial
+        self.update_status_info_time()
+
+        # Timer que atualiza a cada 1 segundo
+        self.status_timer = QTimer(self)
+        self.status_timer.timeout.connect(self.update_status_info_time)
+        self.status_timer.start(1000)
+
+    def update_status_info_time(self):
+        """Atualiza data + hora na status bar (chamado automaticamente pelo timer)"""
         version = self.tr("Versão da plataforma: {0}")
         version = version.format(AppConfig.VERSION)
 
-        current_date = self.tr("Data atual: {0}")
-        current_date = current_date.format(date.today().strftime(date_mask))
+        date_mask = AppConfig.get_geral_date_mask()
+        hour_mask = AppConfig.get_geral_hour_minute_mask()
 
-        status_text = version + " - " + current_date
+        current_date = self.tr("Data atual: {0}").format(
+            date.today().strftime(date_mask)
+        )
+        current_hour = datetime.now().strftime(hour_mask)
 
+        status_text = version + " | " + current_date + " - " + current_hour
         status_bar_label = QLabel(status_text)
         status_bar_label.setAlignment(Qt.AlignRight)
         status_bar_label.setStyleSheet("border: 1px sunken; padding: 2px;")
         status_bar = QStatusBar()
         status_bar.addPermanentWidget(status_bar_label)
         self.setStatusBar(status_bar)
-
-    def populate_games_menu(self, games: list[tuple[str, str]]):
-        """Chamado pelo controller para preencher menu (já ordenado)"""
-        self.mnu_exergames.clear()
-        if not games:
-            self.mnu_exergames.setTitle(
-                self.tr("Exergames (nenhum encontrado)")
-            )
-            self.mnu_exergames.setEnabled(False)
-            return
-        for display_name, icon_path in games:
-            action = self.mnu_exergames.addAction(display_name)
-            if icon_path:
-                action.setIcon(QIcon(icon_path))
-            action.setData(
-                display_name
-            )  # Controller pega via start_game(action.data())
 
     def update_status_message(self, message: str, timeout: int = 6000):
         self.statusBar().showMessage(message, timeout)
@@ -110,6 +106,8 @@ class MainView(QMainWindow, Ui_MainView, WindowConfig):
         self.msg.critical(text, title)
 
     def closeEvent(self, event: QCloseEvent) -> None:
+        if hasattr(self, "status_timer"):
+            self.status_timer.stop()
         if self.controller.try_close():
             event.accept()
         else:

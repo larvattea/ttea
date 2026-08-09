@@ -5,8 +5,7 @@ from PySide6.QtCore import QObject
 
 from ttea.games.kartea.model import PlayerKarteaConfig
 from ttea.games.kartea.model.karteaphase import KarteaPhase
-from ttea.games.kartea.model.karteaphaselevel import \
-    KarteaPhaseLevel
+from ttea.games.kartea.model.karteaphaselevel import KarteaPhaseLevel
 from ttea.games.kartea.service import PlayerKarteaConfigService
 from ttea.games.kartea.util import KarteaPathConfig
 # Local module imports

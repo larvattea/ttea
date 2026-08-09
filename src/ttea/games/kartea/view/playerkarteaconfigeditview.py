@@ -7,8 +7,7 @@ from PySide6.QtMultimedia import QSoundEffect
 from PySide6.QtWidgets import QComboBox, QDialog
 
 # Local module imports
-from ttea.games.kartea.controller import \
-    PlayerKarteaConfigEditController
+from ttea.games.kartea.controller import PlayerKarteaConfigEditController
 from ttea.games.kartea.service import PlayerKarteaConfigService
 from ttea.games.kartea.ui import \
     Ui_PlayerKarteaConfigEditView  # Assuming the UI is in this module or adjust import

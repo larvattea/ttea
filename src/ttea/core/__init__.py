@@ -1,7 +1,4 @@
-"""
-dao
-
-A Python package for Data Access Objects (DAOs) from the T-TEA platform,
+"""A Python package for Data Access Objects (DAOs) from the T-TEA platform,
 supporting data management and persistence. Developed by the Larva UDESC team.
 
 This package provides the DAO classes for the T-TEA platform.
@@ -28,7 +25,7 @@ Notes
 -----
 This package is maintained by the Larva UDESC team and is under active
 development. Contributions and bug reports are welcome at:
-https://github.com/larva-udesc/udesc_ttea_view
+https://github.com/larvattea/ttea
 """
 
 # Define the __all__ variable

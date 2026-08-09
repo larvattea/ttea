@@ -1,10 +1,8 @@
 from typing import Any, Dict, List, Optional, Union
 
 from ttea.games.kartea.dao import PlayerKarteaConfigCsvDAO
-from ttea.games.kartea.model import (KarteaPhase,
-                                                  KarteaPhaseLevel,
-                                                  PlayerKarteaConfig,
-                                                  PlayerKarteaSession)
+from ttea.games.kartea.model import (KarteaPhase, KarteaPhaseLevel,
+                                     PlayerKarteaConfig, PlayerKarteaSession)
 from ttea.games.kartea.util import KarteaPathConfig
 from ttea.model import Player
 from ttea.service import PlayerService

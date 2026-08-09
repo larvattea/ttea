@@ -1,12 +1,11 @@
-from datetime import date
+from datetime import date, datetime
 from typing import TYPE_CHECKING, Any, Dict, Optional
 
 from PySide6.QtCore import QObject, Qt, Slot
 from PySide6.QtGui import QImage, QPixmap
 
 from ttea.app import AppConfig
-from ttea.core import CalibrationMath  # GameCalibration,
-from ttea.core import CameraVideoThread
+from ttea.core import CalibrationMath, CameraVideoThread
 from ttea.service import CalibrationService
 
 if TYPE_CHECKING:
@@ -30,15 +29,24 @@ class CalibrationController(QObject):
         data = self.get_data()
 
         # O Service cria o objeto, valida e salva via DAO
-        calibration = self.service.create_update_calibration(data)
+        calibration = self.service.create_calibration_hardware(data)
 
         if calibration:
-            self.view.msg.info(self.tr("Calibração cadastrada com sucesso!"))
+            self.view.msg.info(
+                self.tr(
+                    "Dados do hardware do ambiente de calibração cadastrado com sucesso!"
+                )
+            )
             self.view.accept()
-            self.thread.stop()
+            if self.thread:
+                self.thread.stop()
 
         else:
-            self.view.msg.critical(self.tr("Erro salvar a calibração."))
+            self.view.msg.critical(
+                self.tr(
+                    "Erro ao salvar os dados do hardware do ambiente de calibração."
+                )
+            )
 
     def handle_cancel(self) -> None:
         if self.thread:
@@ -46,7 +54,12 @@ class CalibrationController(QObject):
         self.view.reject()
 
     def handle_calibrate_auto(self) -> None:
-        self.view.msg.info(self.tr("Em construção!"))
+        from ttea.factory import ViewFactory
+
+        dialog = ViewFactory.get_app_view_factory().create_automaticcalibration_view(
+            self.view
+        )
+        dialog.exec()
 
     def handle_calibrate_semi(self) -> None:
         self.view.msg.info(self.tr("Em construção!"))
@@ -54,20 +67,8 @@ class CalibrationController(QObject):
     def handle_calibrate_manual(self) -> None:
         from ttea.factory import ViewFactory
 
-        # self.view.msg.info(self.tr("Em construção!"))
-        # available_geo = self.service.get_available_geometry_of_screen(
-        #    self.view.cbx_monitor.currentIndex()
-        # )
-        # game_calibration = GameCalibration(
-        #    self.view.cbx_camera.currentIndex(),
-        #    available_geo.height(),
-        #    available_geo.width(),
-        # )
-        # game_calibration.run()
-        # dialog =
-        # dialog.exec()
         dialog = (
-            ViewFactory.get_app_view_factory().create_gamecalibration_view(
+            ViewFactory.get_app_view_factory().create_manualcalibration_view(
                 self.view
             )
         )
@@ -145,7 +146,8 @@ class CalibrationController(QObject):
             self.thread.change_pixmap_signal.connect(self.update_image)
             self.thread.error_signal.connect(self.handle_camera_error)
             self.thread.start()
-            self.view.pb_camera.setText(self.tr("Parar Câmera"))
+            self.view.pb_camera.setText(self.tr("Parar Câmera - F5"))
+            self.view.pb_camera.setShortcut(self.tr("F5"))
             self.view.cbx_proportion.setEnabled(False)
             self.view.cbx_monitor.setEnabled(False)
             self.view.cbx_camera.setEnabled(False)
@@ -154,7 +156,9 @@ class CalibrationController(QObject):
         """Limpa o estado da UI e garante a parada da thread."""
         if self.thread:
             self.thread.stop()
-        self.view.pb_camera.setText(self.tr("Iniciar Câmera"))
+            self.thread = None
+        self.view.pb_camera.setText(self.tr("Iniciar Câmera - F5"))
+        self.view.pb_camera.setShortcut(self.tr("F5"))
         self.view.lbl_video.clear()
         self.view.lbl_video.setText(self.tr("Câmera Parada"))
 
@@ -205,8 +209,9 @@ class CalibrationController(QObject):
         )
 
         # 4. Mapeamento do Dicionário
-        date_mask = AppConfig.get_geral_date_mask() or "%d/%m/%Y"
+        date_mask = AppConfig.get_geral_date_mask()
         current_date = date.today().strftime(date_mask)
+        current_hour = datetime.now().strftime("%H:%M:%S")
 
         data = {
             "camera_description": camera_device.description(),
@@ -238,6 +243,7 @@ class CalibrationController(QObject):
             "content_height_ratio": ratio_parts[1],
             "content_proportion": proportion_text,
             "calibration_date": current_date,
+            "calibration_hour": current_hour,
         }
 
         return data

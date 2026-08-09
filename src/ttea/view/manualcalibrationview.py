@@ -6,12 +6,13 @@ from PySide6.QtWidgets import QDialog
 
 # Local module import
 from ttea.controller import ManualCalibrationController
-from ttea.ui import Ui_GameCalibrationView
+from ttea.model import CalibrationSetting
+from ttea.ui import Ui_ManualCalibrationView
 from ttea.util import MessageService
 from ttea.window import WindowConfig
 
 
-class ManualCalibrationView(QDialog, Ui_GameCalibrationView, WindowConfig):
+class ManualCalibrationView(QDialog, Ui_ManualCalibrationView, WindowConfig):
 
     def __init__(
         self,
@@ -43,11 +44,46 @@ class ManualCalibrationView(QDialog, Ui_GameCalibrationView, WindowConfig):
             self, camera_index=camera_idx, monitor_index=monitor_idx
         )
 
-        self.setFixedSize(
-            self.controller.get_available_geometry_of_screen().width(),
-            self.controller.get_available_geometry_of_screen().height(),
-        )
-        self.move(self.controller.get_available_geometry_of_screen().topLeft())
+        if self.controller.service.is_manual_open_projector():
+            screen_geometry = self.controller.get_available_geometry_of_screen(
+                monitor_idx
+            )
+        else:
+            monitor_idx = 0
+            screen_geometry = self.controller.get_available_geometry_of_screen(
+                monitor_idx
+            )
+
+        position_name = self.controller.service.get_manual_window_position()
+
+        position_func = getattr(screen_geometry, position_name, None)
+
+        if callable(position_func):
+            target_point = position_func()
+        else:
+            target_point = screen_geometry.topLeft()
+
+        self.move(target_point)
+
+        mode = self.controller.service.get_manual_window_open_mode()
+
+        if mode == CalibrationSetting.FULLSCREEN:
+            self.showFullScreen()
+        elif mode == CalibrationSetting.MAXIMIZED:
+            self.showMaximized()
+            self.setFixedSize(
+                screen_geometry.width(),
+                screen_geometry.height(),
+            )
+        elif mode == CalibrationSetting.MAXIMIZED_UTIL:
+            screen_geometry = self.controller.get_available_geometry_of_screen(
+                monitor_idx
+            )
+            self.showMaximized()
+            self.setFixedSize(
+                screen_geometry.width(),
+                screen_geometry.height(),
+            )
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
         """Encaminha o evento de teclado para o controller"""

@@ -26,9 +26,7 @@ class AppModel:
         self.language_model = Language()  # usado apenas no LanguageController
 
         # === Carrega o idioma atual salvo nas configurações ===
-        settings = QSettings(
-            PathConfig.config("config.ini"), QSettings.IniFormat
-        )
+        settings = QSettings(PathConfig.config(), QSettings.IniFormat)
         saved_lang = settings.value(AppConfig.SETTINGS_GERAL_LANGUAGE)
 
         # Valida se o idioma salvo é um dos suportados

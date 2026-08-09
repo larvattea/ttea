@@ -13,15 +13,12 @@ class CalibrationIniDAO(DAO[Calibration]):
 
     def __init__(self) -> None:
         self.settings = QSettings(
-            PathConfig.calibration(), QSettings.IniFormat
+            PathConfig.calibration_hardware(), QSettings.IniFormat
         )
 
     def insert(self, obj: Calibration) -> int:
-        raise NotImplementedError
-
-    def update(self, obj: Calibration) -> bool:
         if not obj.is_valid():
-            return False
+            return 0
 
         for prop in obj.PROPERTIES:
             if prop in obj.IGNORED_PROPERTIES:
@@ -35,7 +32,10 @@ class CalibrationIniDAO(DAO[Calibration]):
             self.settings.endGroup()
 
         self.settings.sync()
-        return True
+        return Calibration.ID_VALUE
+
+    def update(self, obj: Calibration) -> bool:
+        raise NotImplementedError
 
     def delete(self, obj_id: int) -> bool:
         raise NotImplementedError

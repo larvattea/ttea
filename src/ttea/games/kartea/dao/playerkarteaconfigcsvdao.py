@@ -6,11 +6,9 @@ from typing import Dict, List, Optional, Union
 # Local module imports
 from ttea.dao import DAO
 from ttea.dao.playercsvdao import PlayerCsvDAO
-from ttea.games.kartea.model import (KarteaPhase,
-                                                  KarteaPhaseLevel,
-                                                  PlayerKarteaConfig)
-from ttea.games.kartea.util.karteapathconfig import \
-    KarteaPathConfig
+from ttea.games.kartea.model import (KarteaPhase, KarteaPhaseLevel,
+                                     PlayerKarteaConfig)
+from ttea.games.kartea.util.karteapathconfig import KarteaPathConfig
 from ttea.util import CSVHandler
 
 
@@ -64,9 +62,9 @@ class PlayerKarteaConfigCsvDAO(DAO):
         Creates necessary directories if they do not exist. Infers int and bool
         properties dynamically from PlayerKarteaConfig dataclass fields.
         """
-        from ttea.games.kartea.dao import (
-            KarteaPhaseCsvDAO, KarteaPhaseLevelCsvDAO,
-            PlayerKarteaSessionCsvDAO)
+        from ttea.games.kartea.dao import (KarteaPhaseCsvDAO,
+                                           KarteaPhaseLevelCsvDAO,
+                                           PlayerKarteaSessionCsvDAO)
 
         self.csv_handler = CSVHandler()
         self.configs: Dict[int, PlayerKarteaConfig] = {}

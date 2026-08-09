@@ -8,6 +8,7 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
+import resources.resources_rc
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
                             QMetaObject, QObject, QPoint, QRect, QSize, Qt,
                             QTime, QUrl)
@@ -17,8 +18,6 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient, QCursor,
                            QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QMainWindow, QMenu, QMenuBar,
                                QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
-
-import ttea.resources.resources_rc
 
 
 class Ui_MainView(object):
@@ -60,11 +59,11 @@ class Ui_MainView(object):
         icon6 = QIcon()
         icon6.addFile(u":/icons/ui/menu/videoicon", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
         self.act_calibration.setIcon(icon6)
-        self.act_calibration_parameterization = QAction(MainView)
-        self.act_calibration_parameterization.setObjectName(u"act_calibration_parameterization")
+        self.act_calibration_setting = QAction(MainView)
+        self.act_calibration_setting.setObjectName(u"act_calibration_setting")
         icon7 = QIcon()
         icon7.addFile(u":/icons/ui/menu/cogsicon", QSize(), QIcon.Mode.Normal, QIcon.State.Off)
-        self.act_calibration_parameterization.setIcon(icon7)
+        self.act_calibration_setting.setIcon(icon7)
         self.act_language = QAction(MainView)
         self.act_language.setObjectName(u"act_language")
         icon8 = QIcon()
@@ -128,7 +127,7 @@ class Ui_MainView(object):
         self.mnu_settings.addAction(self.act_calibration)
         self.mnu_settings.addSeparator()
         self.mnu_settings_exergames_sub.addAction(self.act_kartea)
-        self.mnu_system.addAction(self.act_calibration_parameterization)
+        self.mnu_system.addAction(self.act_calibration_setting)
         self.mnu_system.addSeparator()
         self.mnu_system.addAction(self.act_language)
         self.mnu_help.addAction(self.act_help)
@@ -163,9 +162,9 @@ class Ui_MainView(object):
 #if QT_CONFIG(shortcut)
         self.act_calibration.setShortcut(QCoreApplication.translate("MainView", u"F4", None))
 #endif // QT_CONFIG(shortcut)
-        self.act_calibration_parameterization.setText(QCoreApplication.translate("MainView", u"&Parametriza\u00e7\u00e3o da Calibra\u00e7\u00e3o", None))
+        self.act_calibration_setting.setText(QCoreApplication.translate("MainView", u"&Configura\u00e7\u00e3o de Calibra\u00e7\u00e3o", None))
 #if QT_CONFIG(shortcut)
-        self.act_calibration_parameterization.setShortcut(QCoreApplication.translate("MainView", u"F5", None))
+        self.act_calibration_setting.setShortcut(QCoreApplication.translate("MainView", u"F5", None))
 #endif // QT_CONFIG(shortcut)
         self.act_language.setText(QCoreApplication.translate("MainView", u"&Idioma", None))
         self.act_help.setText(QCoreApplication.translate("MainView", u"&Ajuda", None))

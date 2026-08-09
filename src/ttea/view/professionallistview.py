@@ -5,8 +5,7 @@ from PySide6.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 
 # Local module import
 from ttea.controller import ProfessionalListController
-from ttea.ui import \
-    Ui_ProfessionalListView  # Assuming generated UI class
+from ttea.ui import Ui_ProfessionalListView  # Assuming generated UI class
 from ttea.util import MessageService
 from ttea.window import WindowConfig
 

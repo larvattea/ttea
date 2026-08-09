@@ -5,10 +5,8 @@ from PySide6.QtCore import QDir, QDirIterator
 
 from ttea.dao import DAO
 from ttea.games.kartea.model.karteaphase import KarteaPhase
-from ttea.games.kartea.model.karteaphaselevel import \
-    KarteaPhaseLevel
-from ttea.games.kartea.util.karteapathconfig import \
-    KarteaPathConfig
+from ttea.games.kartea.model.karteaphaselevel import KarteaPhaseLevel
+from ttea.games.kartea.util.karteapathconfig import KarteaPathConfig
 from ttea.util import CSVHandler
 
 

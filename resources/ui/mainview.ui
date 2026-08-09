@@ -85,7 +85,7 @@
     <property name="title">
      <string>S&amp;istema</string>
     </property>
-    <addaction name="act_calibration_parameterization"/>
+    <addaction name="act_calibration_setting"/>
     <addaction name="separator"/>
     <addaction name="act_language"/>
    </widget>
@@ -172,13 +172,13 @@
     <string>F4</string>
    </property>
   </action>
-  <action name="act_calibration_parameterization">
+  <action name="act_calibration_setting">
    <property name="icon">
     <iconset resource="../resources.qrc">
      <normaloff>:/icons/ui/menu/cogsicon</normaloff>:/icons/ui/menu/cogsicon</iconset>
    </property>
    <property name="text">
-    <string>&amp;Parametrização da Calibração</string>
+    <string>&amp;Configuração de Calibração</string>
    </property>
    <property name="shortcut">
     <string>F5</string>

@@ -8,8 +8,7 @@ from ttea.service import MainService
 if TYPE_CHECKING:
     from ttea.model import AppModel
     from ttea.util import MessageService
-    from ttea.view.mainview import \
-        MainView  # Apenas para type hint
+    from ttea.view.mainview import MainView  # Apenas para type hint
 
 
 class MainController(QObject):
@@ -87,12 +86,11 @@ class MainController(QObject):
         dialog = self.app_factory.create_calibration_view(parent=self.view)
         dialog.exec()
 
-    def open_calibration_parameterization(self) -> None:
-        self.view.update_status_message(
-            self.tr(
-                "Funcionalidade do parâmetro de calibração em desenvolvimento..."
-            )
+    def open_calibration_setting(self) -> None:
+        dialog = self.app_factory.create_calibrationsetting_view(
+            parent=self.view
         )
+        dialog.exec()
 
     def open_help(self) -> None:
         self.view.update_status_message(
