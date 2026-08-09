@@ -2,14 +2,13 @@ import cv2
 from PySide6.QtCore import QThread, Signal
 from PySide6.QtGui import QImage
 
+from ttea.service import CalibrationService
+
 
 class CameraVideo(QThread):
     # Signal que vai disparar a cada novo frame capturado
     # Enviamos um QImage que o PySide6 consegue renderizar direto em um QLabel
     frame_ready = Signal(QImage)
-
-    CAMERA_VIDEO_DEFAULT_WIDTH = 640
-    CAMERA_VIDEO_DEFAULT_HEIGHT = 480
 
     def __init__(self, camera_index: int, use_low_resolution: bool = False):
         super().__init__()
@@ -24,9 +23,13 @@ class CameraVideo(QThread):
         # Inicializa a captura da câmera
 
         if self.service.is_windows():
-            self.cap = cv2.VideoCapture(self.camera_index, cv2.CAP_MSMF)
+            self.cap = cv2.VideoCapture(
+                self.camera_index, self.service.get_opencv_capture_backend()
+            )
         else:
-            self.cap = cv2.VideoCapture(self.camera_index, cv2.CAP_V4L2)
+            self.cap = cv2.VideoCapture(
+                self.camera_index, self.service.get_opencv_capture_backend()
+            )
 
         if not self.cap.isOpened():
             self.error_signal.emit(
@@ -37,10 +40,11 @@ class CameraVideo(QThread):
         # Define a resolução se não for "low_resolution"
         if not self.use_low_resolution:
             self.cap.set(
-                cv2.CAP_PROP_FRAME_WIDTH, self.CAMERA_VIDEO_DEFAULT_WIDTH
+                cv2.CAP_PROP_FRAME_WIDTH, self.service.get_opencv_width()
             )
             self.cap.set(
-                cv2.CAP_PROP_FRAME_HEIGHT, self.CAMERA_VIDEO_DEFAULT_HEIGHT
+                cv2.CAP_PROP_FRAME_HEIGHT,
+                self.service.get_opencv_height(),
             )
 
         self.running = True

@@ -9,7 +9,7 @@ from ttea.util import MessageService
 
 if TYPE_CHECKING:
     from ttea.view import (InstitutionFacilityEditView,
-                                        InstitutionFacilityListView)
+                           InstitutionFacilityListView)
 
 
 class InstitutionFacilityListController(QObject):

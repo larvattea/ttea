@@ -36,20 +36,22 @@ Notes
 -----
 This package is maintained by the Larva UDESC team and is under active
 development. Contributions and bug reports are welcome at:
-https://github.com/larva-udesc/udesc_ttea_view
+https://github.com/larvattea/ttea
 """
 
 # Define the __all__ variable
 __all__ = [
     "AboutView",
+    "AutomaticCalibrationView",
     "CalibrationView",
-    "ManualCalibrationView",
-    "ProfessionalEditView",
-    "ProfessionalListView",
+    "CalibrationSettingView",
     "InstitutionFacilityEditView",
     "InstitutionFacilityListView",
     "LanguageView",
     "MainView",
+    "ManualCalibrationView",
+    "ProfessionalEditView",
+    "ProfessionalListView",
     "PlayerEditView",
     "PlayerGameLaunchView",
     "PlayerListView",
@@ -63,6 +65,8 @@ __license__ = "MIT License"
 
 # Import the submodules
 from .aboutview import AboutView
+from .automaticcalibrationview import AutomaticCalibrationView
+from .calibrationsettingview import CalibrationSettingView
 from .calibrationview import CalibrationView
 from .institutionfacilityeditview import InstitutionFacilityEditView
 from .institutionfacilitylistview import InstitutionFacilityListView

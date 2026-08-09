@@ -2,8 +2,7 @@ from dataclasses import dataclass, fields
 from typing import TYPE_CHECKING, ClassVar, Dict, List
 
 if TYPE_CHECKING:
-    from ttea.games.kartea.model.karteaphaselevel import \
-        KarteaPhaseLevel
+    from ttea.games.kartea.model.karteaphaselevel import KarteaPhaseLevel
 
 
 def initialize_reflexive(cls):

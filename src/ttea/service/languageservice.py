@@ -101,7 +101,18 @@ class LanguageService:
             if code == "en_US"
             else AppConfig.DEFAULT_DATE_FORMAT
         )
+
+        hour_minute_mask = (
+            AppConfig.USA_HOUR_MINUTE_FORMAT
+            if code == "en_US"
+            else AppConfig.DEFAULT_HOUR_MINUTE_FORMAT
+        )
+
         self.settings.setValue(AppConfig.SETTINGS_GERAL_DATE_MASK, date_mask)
+        self.settings.setValue(
+            AppConfig.SETTINGS_GERAL_HOUR_MINUTE_MASK, hour_minute_mask
+        )
+
         self.save_language(code)
         model = AppModel.get_instance()
         model.current_language = code

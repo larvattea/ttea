@@ -1,22 +1,21 @@
 from typing import List, Optional
 
 from PySide6.QtCore import QSettings
-
-from ttea.model import Calibration
+from ttea.model import CalibrationSetting
 from ttea.util import PathConfig
 
 # Direct import de DAO to avoid circular import
 from .dao import DAO
 
 
-class CalibrationIniDAO(DAO[Calibration]):
+class CalibrationSettingIniDAO(DAO[CalibrationSetting]):
 
     def __init__(self) -> None:
         self.settings = QSettings(
-            PathConfig.calibration_hardware(), QSettings.IniFormat
+            PathConfig.calibration_setting(), QSettings.IniFormat
         )
 
-    def insert(self, obj: Calibration) -> int:
+    def insert(self, obj: CalibrationSetting) -> int:
         if not obj.is_valid():
             return 0
 
@@ -32,32 +31,32 @@ class CalibrationIniDAO(DAO[Calibration]):
             self.settings.endGroup()
 
         self.settings.sync()
-        return Calibration.ID_VALUE
+        return CalibrationSetting.ID_VALUE
 
-    def update(self, obj: Calibration) -> bool:
+    def update(self, obj: CalibrationSetting) -> bool:
         raise NotImplementedError
 
     def delete(self, obj_id: int) -> bool:
         raise NotImplementedError
 
-    def select(self, obj_id: int) -> Optional[Calibration]:
+    def select(self, obj_id: int) -> Optional[CalibrationSetting]:
         import typing
 
         data = {}
-        type_hints = typing.get_type_hints(Calibration)
+        type_hints = typing.get_type_hints(CalibrationSetting)
 
         # Create a temporary instance to access the section helper
         # or access it via a class if it's static
-        temp_obj = Calibration.__new__(Calibration)
+        temp_obj = CalibrationSetting.__new__(CalibrationSetting)
 
-        for prop in Calibration.PROPERTIES:
-            if prop in Calibration.IGNORED_PROPERTIES:
+        for prop in CalibrationSetting.PROPERTIES:
+            if prop in CalibrationSetting.IGNORED_PROPERTIES:
                 continue
 
             group_name = temp_obj.get_section_for_property(prop)
             val = self.settings.value(f"{group_name}/{prop}")
 
-            if val is not None:
+            if val is not None and str(val).strip() != "":
                 target_type = type_hints.get(prop)
                 if target_type == int:
                     data[prop] = int(val)
@@ -65,11 +64,11 @@ class CalibrationIniDAO(DAO[Calibration]):
                     data[prop] = float(val)
                 else:
                     data[prop] = val
+            else:
+                # If the value is None or empty, set it to None in the data dictionary
+                data[prop] = None
 
-        if not data.get("camera_id"):
-            return None
+        return CalibrationSetting(**data)
 
-        return Calibration(**data)
-
-    def list(self) -> List[Calibration]:
+    def list(self) -> List[CalibrationSetting]:
         raise NotImplementedError

@@ -3,17 +3,23 @@ from collections import deque
 import cv2
 import numpy as np
 
+from ttea.service import CalibrationService
+
 
 class MediaPipeFilter:
-    def __init__(
-        self, smoothing_frames: int = 5, gamma: float = 1.2
-    ):  # Gamma mais suave por padrão
-        self.clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
-        self.smoothing_frames = smoothing_frames
+    def __init__(self):  # Gamma mais suave por padrão
+        self.service = CalibrationService()
+        self.clahe = cv2.createCLAHE(
+            clipLimit=self.service.get_filter_clahe_clip(),
+            tileGridSize=(self.service.get_filter_clahe_grid()),
+        )
+        self.smoothing_frames = (
+            self.service.get_filter_average_smooth_frames()
+        )  # smoothing_frames
         self.history = {}
 
         # Pré-calcula Gamma
-        inv_gamma = 1.0 / gamma
+        inv_gamma = 1.0 / self.service.get_filter_gamma_factor()
         self.gamma_table = np.array(
             [((i / 255.0) ** inv_gamma) * 255 for i in np.arange(0, 256)]
         ).astype("uint8")
@@ -26,10 +32,11 @@ class MediaPipeFilter:
 
         # Se a imagem estiver escura (ex: < 100), aplica CLAHE para ajudar a IA
         # Se estiver em 'luz plena' (ex: > 150), aplica apenas um Gamma leve
-        if avg_brightness < 120:
+        if avg_brightness < self.service.get_filter_clahe_lum_below():
             frame = self.apply_clahe(frame)
 
-        frame = self.apply_gamma(frame)
+        if avg_brightness > self.service.get_filter_gamma_lum_above():
+            frame = self.apply_gamma(frame)
         return frame
 
     def apply_clahe(self, frame):
@@ -48,7 +55,7 @@ class MediaPipeFilter:
             self.history.clear()
             return []
 
-        movement_threshold = 0.15  #
+        movement_threshold = self.service.get_filter_landmark_limit()
 
         for landmarks in pose_landmarks_list:
             # Agora suavizamos o corpo inteiro para evitar trepidação visual

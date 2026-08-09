@@ -8,7 +8,7 @@ from typing import Dict, List, Optional, Union
 from ttea.dao import DAO
 from ttea.games.kartea.dao import PlayerKarteaSessionCsvDAO
 from ttea.games.kartea.model import (PlayerKarteaSession,
-                                                  PlayerKarteaSessionDetail)
+                                     PlayerKarteaSessionDetail)
 from ttea.games.kartea.util import KarteaPathConfig
 from ttea.model import Player
 from ttea.util import CSVHandler

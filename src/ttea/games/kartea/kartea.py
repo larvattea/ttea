@@ -5,8 +5,8 @@ import cv2
 import pygame
 
 from ttea.games.kartea.gamecontroller import GameController
-from ttea.games.kartea.gameutil.alphablit import alpha_blit
 from ttea.games.kartea.gameutil import GameSettings
+from ttea.games.kartea.gameutil.alphablit import alpha_blit
 from ttea.games.kartea.gameview import Menu
 from ttea.games.kartea.service import PlayerKarteaConfigService
 

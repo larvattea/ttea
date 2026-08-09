@@ -4,8 +4,7 @@ from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import QDialog, QHeaderView, QTableWidgetItem
 
 # Local module import
-from ttea.games.kartea.controller import \
-    PlayerKarteaConfigListController
+from ttea.games.kartea.controller import PlayerKarteaConfigListController
 from ttea.games.kartea.ui import \
     Ui_PlayerKarteaConfigListView  # Assuming generated UI class
 from ttea.util import MessageService

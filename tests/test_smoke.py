@@ -29,7 +29,7 @@ class SmokeTest(unittest.TestCase):
 
         self.assertTrue(QFile(":/icons/system/appicon").exists())
         self.assertTrue(
-            (PathConfig.MODELS_PATH / "pose_landmarker_full.task").is_file()
+            (PathConfig.MODELS_DIR / "pose_landmarker_full.task").is_file()
         )
 
         window.close()
@@ -44,14 +44,20 @@ class SmokeTest(unittest.TestCase):
         with patch("ttea.games.kartea.gamecore.camera.sys.platform", "linux"):
             self.assertEqual(camera_backend(), cv2.CAP_V4L2)
 
-        with patch("ttea.games.kartea.gamecore.camera.sys.platform", "freebsd14"):
+        with patch(
+            "ttea.games.kartea.gamecore.camera.sys.platform", "freebsd14"
+        ):
             self.assertEqual(camera_backend(), cv2.CAP_ANY)
 
     def test_macos_uses_sdl2_alpha_blitter(self):
-        with patch("ttea.games.kartea.gameutil.alphablit.sys.platform", "darwin"):
+        with patch(
+            "ttea.games.kartea.gameutil.alphablit.sys.platform", "darwin"
+        ):
             self.assertEqual(alpha_blit_flags(), pygame.BLEND_ALPHA_SDL2)
 
-        with patch("ttea.games.kartea.gameutil.alphablit.sys.platform", "win32"):
+        with patch(
+            "ttea.games.kartea.gameutil.alphablit.sys.platform", "win32"
+        ):
             self.assertEqual(alpha_blit_flags(), 0)
 
 

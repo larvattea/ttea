@@ -164,8 +164,7 @@ class PlayerService(QObject):
             ``True`` if the player was successfully deleted,
             ``False`` otherwise (e.g., player not found).
         """
-        from ttea.games.kartea.service import \
-            PlayerKarteaConfigService
+        from ttea.games.kartea.service import PlayerKarteaConfigService
 
         # Validação de integridade referencial (Negócio)
         karteaconfig = PlayerKarteaConfigService()

@@ -2,8 +2,8 @@ from typing import TYPE_CHECKING, Optional
 
 import pygame
 
-from ttea.games.kartea.gameutil.alphablit import alpha_blit
 from ttea.games.kartea.gameutil import GameSettings
+from ttea.games.kartea.gameutil.alphablit import alpha_blit
 
 if TYPE_CHECKING:
     from ttea.games.kartea.gamemodel import Target

@@ -55,9 +55,11 @@ class Calibration:
     content_proportion: str
 
     calibration_date: str
+    calibration_hour: str
 
     PROPERTIES: ClassVar[list[str]] = []
     DATA_PROPERTIES: ClassVar[list] = []
+    ID_VALUE: ClassVar[int] = 1  # Static ID for all calibration settings
     PROPORTIONS: ClassVar[dict[str, tuple[int, int]]] = {
         "4:3": (4, 3),
         "16:9": (16, 9),
@@ -75,6 +77,7 @@ class Calibration:
     IGNORED_PROPERTIES: ClassVar[list[str]] = [
         "PROPERTIES",
         "DATA_PROPERTIES",
+        "ID_VALUE",
         "PROPORTIONS",
         "SECTIONS_MAP",
     ]

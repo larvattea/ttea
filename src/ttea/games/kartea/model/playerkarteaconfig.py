@@ -3,9 +3,8 @@ from typing import TYPE_CHECKING, ClassVar, Dict, List
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
-    from ttea.games.kartea.model import (KarteaPhase,
-                                                      KarteaPhaseLevel,
-                                                      PlayerKarteaSession)
+    from ttea.games.kartea.model import (KarteaPhase, KarteaPhaseLevel,
+                                         PlayerKarteaSession)
     from ttea.model import Player
 
 

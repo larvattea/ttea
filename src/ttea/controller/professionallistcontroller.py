@@ -7,8 +7,7 @@ from ttea.service import ProfessionalService
 from ttea.util import MessageService
 
 if TYPE_CHECKING:
-    from ttea.view import (ProfessionalEditView,
-                                        ProfessionalListView)
+    from ttea.view import ProfessionalEditView, ProfessionalListView
 
 
 class ProfessionalListController(QObject):

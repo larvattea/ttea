@@ -8,8 +8,8 @@ from ttea.games.kartea.service import PlayerKarteaConfigService
 from ttea.util import MessageService
 
 if TYPE_CHECKING:
-    from ttea.games.kartea.view import (
-        PlayerKarteaConfigEditView, PlayerKarteaConfigListView)
+    from ttea.games.kartea.view import (PlayerKarteaConfigEditView,
+                                        PlayerKarteaConfigListView)
 
 
 class PlayerKarteaConfigListController(QObject):

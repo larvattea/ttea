@@ -1,7 +1,4 @@
-"""
-model
-
-A Python package for model in the T-TEA platform,
+"""A Python package for model in the T-TEA platform,
 supporting data model description. Developed by the Larva UDESC team.
 
 This package provides models for data representation and manipulation.
@@ -28,7 +25,7 @@ Notes
 -----
 This package is maintained by the Larva UDESC team and is under active
 development. Contributions and bug reports are welcome at:
-https://github.com/larva-udesc/udesc_ttea_view
+https://github.com/larvattea/ttea
 """
 
 # Define the __all__ variable
@@ -36,6 +33,7 @@ __all__ = [
     "AppModel",
     "Calibration",
     "CalibrationPoint",
+    "CalibrationSetting",
     "Professional",
     "InstitutionFacility",
     "Language",
@@ -51,6 +49,7 @@ __license__ = "MIT License"
 from .appmodel import AppModel
 from .calibration import Calibration
 from .calibrationpoint import CalibrationPoint
+from .calibrationsetting import CalibrationSetting
 from .institutionfacility import InstitutionFacility
 from .language import Language
 from .player import Player

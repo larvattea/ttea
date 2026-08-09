@@ -4,7 +4,7 @@ from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QDialog
 
 from ttea.games.kartea.view import (PlayerKarteaConfigEditView,
-                                                 PlayerKarteaConfigListView)
+                                    PlayerKarteaConfigListView)
 
 if TYPE_CHECKING:
     from ttea.games.kartea.model import PlayerKarteaConfig

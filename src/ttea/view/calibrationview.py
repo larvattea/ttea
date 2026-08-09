@@ -45,11 +45,12 @@ class CalibrationView(QDialog, Ui_CalibrationView, WindowConfig):
         # Initialize controller
         self.controller = CalibrationController(self)
         self.pb_camera.clicked.connect(self.controller.control_camera)
+
         self.pb_calibrate_auto.clicked.connect(
             self.controller.handle_calibrate_auto
         )
         self.pb_calibrate_semi.clicked.connect(
-            self.controller.handle_calibrate_auto
+            self.controller.handle_calibrate_semi
         )
         self.pb_calibrate_manual.clicked.connect(
             self.controller.handle_calibrate_manual

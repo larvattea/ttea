@@ -1,7 +1,4 @@
-"""
-controller
-
-A Python package for controller classes from the T-TEA platform,
+"""A Python package for controller classes from the T-TEA platform,
 supporting controller logic and data management from views.
 Developed by the Larva UDESC team.
 
@@ -31,19 +28,21 @@ Notes
 -----
 This package is maintained by the Larva UDESC team and is under active
 development. Contributions and bug reports are welcome at:
-https://github.com/larva-udesc/udesc_ttea_view
+https://github.com/larvattea/ttea
 """
 
 # Define the __all__ variable
 __all__ = [
+    "AutomaticCalibrationController",
     "CalibrationController",
-    "ManualCalibrationController",
-    "ProfessionalEditController",
-    "ProfessionalListController",
+    "CalibrationSettingController",
     "InstitutionFacilityEditController",
     "InstitutionFacilityListController",
     "LanguageController",
     "MainController",
+    "ManualCalibrationController",
+    "ProfessionalEditController",
+    "ProfessionalListController",
     "PlayerEditController",
     "PlayerGameLaunchController",
     "PlayerListController",
@@ -55,7 +54,9 @@ __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
 # Import the submodules
+from .automaticcalibrationcontroller import AutomaticCalibrationController
 from .calibrationcontroller import CalibrationController
+from .calibrationsettingcontroller import CalibrationSettingController
 from .institutionfacilityeditcontroller import \
     InstitutionFacilityEditController
 from .institutionfacilitylistcontroller import \

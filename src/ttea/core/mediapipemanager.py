@@ -7,52 +7,27 @@ from ttea.util import PathConfig
 
 class MediaPipeManager:
     def __init__(self):
-        # 1. Detecção de Hardware e Sistema
         self.service = CalibrationService()
-        self.is_rpi = self.service.is_raspberry_pi()
-        self.is_windows = self.service.is_windows()
 
-        # 2. Definição de Caminhos
-        path_full = PathConfig.model("pose_landmarker_full.task")
-        path_heavy = PathConfig.model("pose_landmarker_heavy.task")
-
-        # 3. Lógica de Seleção de Modelo e Delegate
-        if self.is_windows:
-            # No Windows/PC, usamos o modelo Heavy para máxima precisão.
-            # O Delegate deve ser CPU para evitar erros de compatibilidade com Python.
-            self.delegate = python.BaseOptions.Delegate.CPU
-            self.model_path = path_heavy
-        elif self.is_rpi:
-            # No Raspberry Pi, usamos o modelo Full (mais leve) para manter o FPS estável.
-            self.delegate = python.BaseOptions.Delegate.CPU
-            self.model_path = path_full
+        if self.service.is_raspberry_pi():
+            model_path = PathConfig.model(
+                self.service.get_mediapipe_model_embedded()
+            )
         else:
-            self.model_path = path_heavy
-            try:
-                self.delegate = python.BaseOptions.Delegate.GPU
-            except Exception:
-                self.delegate = python.BaseOptions.Delegate.CPU
+            model_path = PathConfig.model(
+                self.service.get_mediapipe_model_desktop()
+            )
 
-        # 4. Inicialização do Detector com Parâmetros Equilibrados
-        base_options = python.BaseOptions(
-            model_asset_path=self.model_path, delegate=self.delegate
-        )
-
+        base_options = python.BaseOptions(model_asset_path=model_path)
         options = vision.PoseLandmarkerOptions(
             base_options=base_options,
-            running_mode=vision.RunningMode.VIDEO,
-            # min_pose_detection_confidence: Rigor para detectar a pessoa pela primeira vez.
-            # 0.5 evita "fantasmas" em sombras sem ser exigente demais com câmeras simples.
-            min_pose_detection_confidence=0.5,
-            # min_pose_detection_confidence=0.55,
-            # min_pose_presence_confidence: Certeza de que o corpo ainda está na imagem.
-            min_pose_presence_confidence=0.5,
-            # min_tracking_confidence: Estabilidade dos pontos entre os frames.
-            # 0.5 garante que o pé não "pule" em câmeras com ruído, mantendo a precisão.
-            min_tracking_confidence=0.5,
-            # min_tracking_confidence=0.6,
-            num_poses=1,
+            running_mode=self.service.get_mediapipe_execution_mode(),
+            num_poses=self.service.get_mediapipe_num_position(),
+            min_pose_detection_confidence=self.service.get_mediapipe_detection_position(),
+            min_pose_presence_confidence=self.service.get_mediapipe_detection_presence(),
+            min_tracking_confidence=self.service.get_mediapipe_detection_tracking(),
         )
+
         self.detector = vision.PoseLandmarker.create_from_options(options)
 
     def detect(self, mp_image, timestamp_ms):

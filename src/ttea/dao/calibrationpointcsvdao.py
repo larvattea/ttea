@@ -10,7 +10,7 @@ from ttea.util import CSVHandler, PathConfig
 from .dao import DAO
 
 
-class CalibrationPointDAO(DAO[CalibrationPoint]):
+class CalibrationPointCsvDAO(DAO[CalibrationPoint]):
 
     def __init__(self) -> None:
         self.csv_handler = CSVHandler()
@@ -41,29 +41,15 @@ class CalibrationPointDAO(DAO[CalibrationPoint]):
             self.csv_handler.write_csv(f, data, headers)
 
     def insert(self, obj: CalibrationPoint) -> int:
-        """Insert a new institutionfacility into persistent storage.
-
-        Parameters
-        ----------
-        obj : InstitutionFacility
-            The InstitutionFacility instance to persist.
-
-        Returns
-        -------
-        int
-            The assigned institutionfacility ID on success,
-            0 on failure (invalid institutionfacility or ID already exists).
-        """
-
+        self.calibration_points[CalibrationPoint.ID_VALUE] = obj
         filename = PathConfig.calibration_point(
             PathConfig.CALIBRATION_POINT_FILENAME
         )
+        self.file_map[CalibrationPoint.ID_VALUE] = filename
         self.write_with_lock(
             filename, obj.get_data(), CalibrationPoint.PROPERTIES
         )
-        return (
-            CalibrationPoint.ID_VALUE
-        )  # Always return the static ID for calibration points
+        return CalibrationPoint.ID_VALUE
 
     def update(self, obj: CalibrationPoint) -> bool:
         raise NotImplementedError

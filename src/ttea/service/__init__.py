@@ -1,7 +1,4 @@
-"""
-service
-
-A Python package for service classes from the T-TEA platform,
+"""A Python package for service classes from the T-TEA platform,
 supporting service logic.
 Developed by the Larva UDESC team.
 
@@ -28,12 +25,13 @@ Notes
 -----
 This package is maintained by the Larva UDESC team and is under active
 development. Contributions and bug reports are welcome at:
-https://github.com/larva-udesc/udesc_ttea_view
+https://github.com/larvattea/ttea
 """
 
 # Define the __all__ variable
 __all__ = [
     "CalibrationService",
+    "CalibrationSettingService",
     "ProfessionalService",
     "InstitutionFacilityService",
     "LanguageService",
@@ -49,6 +47,7 @@ __license__ = "MIT License"
 
 # Import the submodules
 from .calibrationservice import CalibrationService
+from .calibrationsettingservice import CalibrationSettingService
 from .institutionfacilityservice import InstitutionFacilityService
 from .languageservice import LanguageService
 from .mainservice import MainService

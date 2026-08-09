@@ -55,375 +55,701 @@ li.checked::marker { content: &quot;\2612&quot;; }
     </message>
 </context>
 <context>
+    <name>AutomaticCalibrationController</name>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller copy.py" line="44"/>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="44"/>
+        <source>Tela de Monitoramento</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller copy.py" line="300"/>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="300"/>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="317"/>
+        <source>Não foi possível abrir a câmera.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller copy.py" line="341"/>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="349"/>
+        <source>Tecle [S] para ocultar a tela e capturar a imagem.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller copy.py" line="343"/>
+        <source>Tecle [ESC] para sair.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller copy.py" line="381"/>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="388"/>
+        <source>Amostra: Tecle [ESC] para salvar | Tecle [R] para repetir.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller copy.py" line="442"/>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="461"/>
+        <source>Sucesso! Captura realizada sem obstruções.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller copy.py" line="450"/>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="467"/>
+        <source>O Tabuleiro não pôde ser lido na foto limpa. Retornando...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller copy.py" line="457"/>
+        <source>Erro ao capturar a imagem da câmera para calibração automática.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller copy.py" line="476"/>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="487"/>
+        <source>Captura descartada. Rastreamento reativado.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller copy.py" line="506"/>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="517"/>
+        <source>Fechando sem salvar.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller copy.py" line="529"/>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="540"/>
+        <source>Calibração automática cadastrada com sucesso!</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller copy.py" line="533"/>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="544"/>
+        <source>Erro ao salvar os pontos da calibração automática.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="325"/>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="433"/>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="473"/>
+        <source>Erro ao capturar imagem da câmera. Dispositivo desconectado.
+Verifique a conexão cabo e ou instalação da câmera.
+Feche a janela e tente novamente.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="352"/>
+        <source>Tecle [ESC] para sair da tela de monitoramento.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="355"/>
+        <source>Tecle [ALT+F4 ou CMD+W] para fechar a tela das figuras.</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>AutomaticCalibrationView</name>
+    <message>
+        <location filename="../ui/automaticcalibrationview.ui" line="14"/>
+        <source>Plataforma T-TEA - Calibração Automática da Visualização da Tela do Jogo</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteaview/automaticcalibrationview.py" line="111"/>
+        <source>Calibração automática cadastrada com sucesso!</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteaview/automaticcalibrationview.py" line="112"/>
+        <source>Fechando sem salvar.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteaview/automaticcalibrationview.py" line="157"/>
+        <source>Deseja sair da calibração automática?</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
     <name>CalibrationController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="36"/>
-        <source>Calibração cadastrada com sucesso!</source>
+        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="43"/>
+        <source>Dados do hardware do ambiente de calibração cadastrado com sucesso!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="41"/>
-        <source>Erro salvar a calibração.</source>
+        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="53"/>
+        <source>Erro ao salvar os dados do hardware do ambiente de calibração.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="49"/>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="52"/>
+        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="71"/>
         <source>Em construção!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="148"/>
-        <source>Parar Câmera</source>
+        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="155"/>
+        <source>Parar Câmera - F5</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="157"/>
-        <source>Iniciar Câmera</source>
+        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="156"/>
+        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="167"/>
+        <source>F5</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="159"/>
+        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="166"/>
+        <source>Iniciar Câmera - F5</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="169"/>
         <source>Câmera Parada</source>
         <translation></translation>
     </message>
 </context>
 <context>
-    <name>CalibrationParameterizationView</name>
+    <name>CalibrationSettingController</name>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="14"/>
-        <source>Parâmetros de Calibração</source>
+        <location filename="../../udescjoinvilletteacontroller/calibrationsettingcontroller.py" line="61"/>
+        <source>Configuração de calibração cadastrada com sucesso!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="27"/>
+        <location filename="../../udescjoinvilletteacontroller/calibrationsettingcontroller.py" line="66"/>
+        <source>Erro ao salvar a configuração de calibração.</source>
+        <translation></translation>
+    </message>
+</context>
+<context>
+    <name>CalibrationSettingView</name>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="14"/>
+        <source>Configuração de Calibração</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="27"/>
         <source>MediaPipe</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="56"/>
+        <location filename="../ui/calibrationsettingview.ui" line="56"/>
         <source>Modelo MediaPipe Desktop:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="69"/>
-        <location filename="../ui/calibrationparameterizationview.ui" line="122"/>
+        <location filename="../ui/calibrationsettingview.ui" line="69"/>
+        <location filename="../ui/calibrationsettingview.ui" line="143"/>
         <source>Lite</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="79"/>
-        <location filename="../ui/calibrationparameterizationview.ui" line="132"/>
+        <location filename="../ui/calibrationsettingview.ui" line="85"/>
+        <location filename="../ui/calibrationsettingview.ui" line="159"/>
         <source>Full</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="86"/>
-        <location filename="../ui/calibrationparameterizationview.ui" line="139"/>
+        <location filename="../ui/calibrationsettingview.ui" line="101"/>
+        <location filename="../ui/calibrationsettingview.ui" line="175"/>
         <source>Heavy</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="109"/>
+        <location filename="../ui/calibrationsettingview.ui" line="130"/>
         <source>Modelo MediaPipe Embarcado:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="162"/>
+        <location filename="../ui/calibrationsettingview.ui" line="204"/>
         <source>Embarcado Processamento:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="175"/>
-        <location filename="../ui/calibrationparameterizationview.ui" line="221"/>
-        <location filename="../ui/calibrationparameterizationview.ui" line="267"/>
-        <location filename="../ui/calibrationparameterizationview.ui" line="313"/>
+        <location filename="../ui/calibrationsettingview.ui" line="217"/>
+        <location filename="../ui/calibrationsettingview.ui" line="269"/>
+        <location filename="../ui/calibrationsettingview.ui" line="321"/>
+        <location filename="../ui/calibrationsettingview.ui" line="373"/>
         <source>CPU</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="185"/>
-        <location filename="../ui/calibrationparameterizationview.ui" line="231"/>
-        <location filename="../ui/calibrationparameterizationview.ui" line="277"/>
-        <location filename="../ui/calibrationparameterizationview.ui" line="323"/>
+        <location filename="../ui/calibrationsettingview.ui" line="230"/>
+        <location filename="../ui/calibrationsettingview.ui" line="282"/>
+        <location filename="../ui/calibrationsettingview.ui" line="334"/>
+        <location filename="../ui/calibrationsettingview.ui" line="386"/>
         <source>GPU</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="208"/>
+        <location filename="../ui/calibrationsettingview.ui" line="256"/>
         <source>Linux Processamento:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="254"/>
+        <location filename="../ui/calibrationsettingview.ui" line="308"/>
         <source>Mac Processamento:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="300"/>
+        <location filename="../ui/calibrationsettingview.ui" line="360"/>
         <source>Windows Processamento:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="346"/>
+        <location filename="../ui/calibrationsettingview.ui" line="412"/>
         <source>Modo de Execução:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="359"/>
+        <location filename="../ui/calibrationsettingview.ui" line="425"/>
         <source>Vídeo</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="385"/>
+        <location filename="../ui/calibrationsettingview.ui" line="477"/>
         <source>Detecção de Posição (0–1):</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="411"/>
+        <location filename="../ui/calibrationsettingview.ui" line="506"/>
         <source>Detecção de Presença (0–1):</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="437"/>
+        <location filename="../ui/calibrationsettingview.ui" line="535"/>
         <source>Detecção de Rastreio (0–1):</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="463"/>
+        <location filename="../ui/calibrationsettingview.ui" line="564"/>
         <source>Número de posições:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="502"/>
+        <location filename="../ui/calibrationsettingview.ui" line="606"/>
         <source>OpenCV</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="528"/>
+        <location filename="../ui/calibrationsettingview.ui" line="632"/>
         <source>Embarcado Captura de Vídeo:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="541"/>
-        <location filename="../ui/calibrationparameterizationview.ui" line="587"/>
+        <location filename="../ui/calibrationsettingview.ui" line="645"/>
+        <location filename="../ui/calibrationsettingview.ui" line="697"/>
         <source>CAP_V4L2</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="551"/>
-        <location filename="../ui/calibrationparameterizationview.ui" line="597"/>
+        <location filename="../ui/calibrationsettingview.ui" line="658"/>
+        <location filename="../ui/calibrationsettingview.ui" line="710"/>
         <source>CAP_GSTREAMER</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="574"/>
+        <location filename="../ui/calibrationsettingview.ui" line="684"/>
         <source>Linux Captura de Vídeo:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="620"/>
+        <location filename="../ui/calibrationsettingview.ui" line="736"/>
         <source>Mac Captura de Vídeo:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="633"/>
+        <location filename="../ui/calibrationsettingview.ui" line="749"/>
         <source>CAP_AVFOUNDATION</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="643"/>
+        <location filename="../ui/calibrationsettingview.ui" line="762"/>
         <source>CAP_ANY</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="666"/>
+        <location filename="../ui/calibrationsettingview.ui" line="788"/>
         <source>Windows Captura de Vídeo:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="679"/>
+        <location filename="../ui/calibrationsettingview.ui" line="801"/>
         <source>CAP_DSHOW</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="689"/>
+        <location filename="../ui/calibrationsettingview.ui" line="814"/>
         <source>CAP_MSMF</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="712"/>
+        <location filename="../ui/calibrationsettingview.ui" line="840"/>
         <source>Tamanho do Buffer:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="735"/>
+        <location filename="../ui/calibrationsettingview.ui" line="866"/>
         <source>Customizar Informações Câmera?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="751"/>
+        <location filename="../ui/calibrationsettingview.ui" line="888"/>
         <source>Informações da Câmera</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="763"/>
-        <source>Proporção Câmera:</source>
+        <location filename="../ui/calibrationsettingview.ui" line="900"/>
+        <source>Proporção:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="777"/>
-        <source>Largura Câmera:</source>
+        <location filename="../ui/calibrationsettingview.ui" line="923"/>
+        <source>Largura:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="791"/>
-        <source>Altura Câmera:</source>
+        <location filename="../ui/calibrationsettingview.ui" line="949"/>
+        <source>Altura:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="805"/>
+        <location filename="../ui/calibrationsettingview.ui" line="975"/>
         <source>FPS:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="818"/>
+        <location filename="../ui/calibrationsettingview.ui" line="991"/>
         <source>30</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="828"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1004"/>
         <source>60</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="868"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1047"/>
         <source>Filtros</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="1114"/>
-        <source>Telemetria</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="1125"/>
-        <source>Habilitar painel telemetria:</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="1158"/>
-        <source>Calibração Automática</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="1164"/>
-        <source>Configurações de calibração automática serão adicionadas aqui...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="1188"/>
-        <source>Calibração Semi-Automática</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="1194"/>
-        <source>Configurações de calibração semi-automática serão adicionadas aqui...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="1218"/>
-        <source>Calibração Manual</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="1224"/>
-        <source>Configurações de calibração manual serão adicionadas aqui...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="1266"/>
-        <source>Gravar operação corrente</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="1269"/>
-        <source>OK</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="1283"/>
-        <source>Cancelar operação corrente</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="1286"/>
-        <source>Cancelar</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="894"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1073"/>
         <source>Usar Filtros?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="910"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1095"/>
         <source>Configurações de Filtros</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="919"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1104"/>
         <source>Média Móvel Smooth Frames:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="942"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1130"/>
         <source>Filtro Clahe Limite Clip:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="965"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1156"/>
         <source>Filtro Clahe Tamanho Grid:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="976"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1170"/>
         <source>4:4</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="981"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1175"/>
         <source>8:8</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="986"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1180"/>
         <source>16:16</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="991"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1185"/>
         <source>32:32</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="999"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1193"/>
         <source>Filtro Clahe Aplicar Quando Valor de Luminosidade Abaixo de:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="1022"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1219"/>
         <source>Filtro Gamma Fator de Divisão:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="1048"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1248"/>
         <source>Filtro Gamma Aplicar Quando Valor de Luminosidade Acima de:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationparameterizationview.ui" line="1071"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1274"/>
         <source>Filtro Landmark Limite de Movimento:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1320"/>
+        <source>Telemetria</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1331"/>
+        <source>Habilitar painel telemetria?</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1367"/>
+        <source>Calibração Automática</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1373"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1861"/>
+        <location filename="../ui/calibrationsettingview.ui" line="2081"/>
+        <source>Janela de Calibração</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1382"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1870"/>
+        <location filename="../ui/calibrationsettingview.ui" line="2090"/>
+        <source>Posição da abertura:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1395"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1883"/>
+        <location filename="../ui/calibrationsettingview.ui" line="2103"/>
+        <source>Topo-Esquerda</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1427"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1915"/>
+        <location filename="../ui/calibrationsettingview.ui" line="2135"/>
+        <source>Modo de abertura:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1440"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1928"/>
+        <location filename="../ui/calibrationsettingview.ui" line="2148"/>
+        <source>Tela Cheia</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1456"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1944"/>
+        <location filename="../ui/calibrationsettingview.ui" line="2164"/>
+        <source>Modo Janela (Maximizada)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1469"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1957"/>
+        <location filename="../ui/calibrationsettingview.ui" line="2177"/>
+        <source>Modo Janela (Maximizada Área Útil)</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1498"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1986"/>
+        <location filename="../ui/calibrationsettingview.ui" line="2206"/>
+        <source>Abrir diretamente no projetor?</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1518"/>
+        <location filename="../ui/calibrationsettingview.ui" line="2006"/>
+        <location filename="../ui/calibrationsettingview.ui" line="2226"/>
+        <source>Calibração padrão?</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1541"/>
+        <location filename="../ui/calibrationsettingview.ui" line="2029"/>
+        <location filename="../ui/calibrationsettingview.ui" line="2249"/>
+        <source>Leitura Pontos de Calibração</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1550"/>
+        <location filename="../ui/calibrationsettingview.ui" line="2038"/>
+        <location filename="../ui/calibrationsettingview.ui" line="2258"/>
+        <source>Modo espelho?</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1573"/>
+        <source>Marcador</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1582"/>
+        <source>Quantidade de colunas:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1608"/>
+        <source>Quantidade de linhas:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1634"/>
+        <source>Multiplicador:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1663"/>
+        <source>Dicionário:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1677"/>
+        <source>DICT_4X4_50</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1682"/>
+        <source>DICT_4X4_100</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1687"/>
+        <source>DICT_4X4_250</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1692"/>
+        <source>DICT_4X4_1000</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1697"/>
+        <source>DICT_5X5_50</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1702"/>
+        <source>DICT_5X5_100</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1707"/>
+        <source>DICT_5X5_250</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1712"/>
+        <source>DICT_5X5_1000</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1717"/>
+        <source>DICT_6X6_50</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1722"/>
+        <source>DICT_6X6_100</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1727"/>
+        <source>DICT_6X6_250</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1732"/>
+        <source>DICT_6X6_1000</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1737"/>
+        <source>DICT_7X7_50</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1742"/>
+        <source>DICT_7X7_100</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1747"/>
+        <source>DICT_7X7_250</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1752"/>
+        <source>DICT_7X7_1000</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1760"/>
+        <source>Largura em pixels:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1786"/>
+        <source>Altura em pixels:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1812"/>
+        <source>Tamanho da margem em pixels:</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1855"/>
+        <source>Calibração Semi-Automática</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="2075"/>
+        <source>Calibração Manual</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="2313"/>
+        <source>Gravar operação corrente</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="2316"/>
+        <source>OK</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="2330"/>
+        <source>Cancelar operação corrente</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="2333"/>
+        <source>Cancelar</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="457"/>
+        <source>Habilitar MediaPipe Pose?</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../udescjoinvilletteaview/calibrationsettingview.py" line="164"/>
+        <source>Deseja sair da configuração da calibração?</source>
         <translation></translation>
     </message>
 </context>
@@ -515,7 +841,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/calibrationview.py" line="72"/>
+        <location filename="../../udescjoinvilletteaview/calibrationview.py" line="73"/>
         <source>Deseja sair da calibração?</source>
         <translation></translation>
     </message>
@@ -911,12 +1237,7 @@ Detalhes do erro: {0}</source>
 <context>
     <name>MainController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="93"/>
-        <source>Funcionalidade do parâmetro de calibração em desenvolvimento...</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="99"/>
+        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="98"/>
         <source>Funcionalidade do help em desenvolvimento...</source>
         <translation></translation>
     </message>
@@ -1029,7 +1350,7 @@ Detalhes do erro: {0}</source>
     </message>
     <message>
         <location filename="../ui/mainview.ui" line="181"/>
-        <source>&amp;Parametrização da Calibração</source>
+        <source>&amp;Configuração de Calibração</source>
         <translation></translation>
     </message>
     <message>
@@ -1063,50 +1384,45 @@ Detalhes do erro: {0}</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/mainview.py" line="74"/>
+        <location filename="../../udescjoinvilletteaview/mainview.py" line="83"/>
         <source>Versão da plataforma: {0}</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/mainview.py" line="77"/>
+        <location filename="../../udescjoinvilletteaview/mainview.py" line="89"/>
         <source>Data atual: {0}</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../udescjoinvilletteaview/mainview.py" line="94"/>
-        <source>Exergames (nenhum encontrado)</source>
         <translation></translation>
     </message>
 </context>
 <context>
     <name>ManualCalibrationController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/manualcalibrationcontroller.py" line="20"/>
+        <location filename="../../udescjoinvilletteacontroller/manualcalibrationcontroller.py" line="37"/>
         <source>Tela de Monitoramento</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/manualcalibrationcontroller.py" line="87"/>
+        <location filename="../../udescjoinvilletteacontroller/manualcalibrationcontroller.py" line="102"/>
         <source>Não foi possível abrir a câmera.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/manualcalibrationcontroller.py" line="107"/>
+        <location filename="../../udescjoinvilletteacontroller/manualcalibrationcontroller.py" line="124"/>
         <source>Calibração concluída com sucesso!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/manualcalibrationcontroller.py" line="179"/>
+        <location filename="../../udescjoinvilletteacontroller/manualcalibrationcontroller.py" line="262"/>
         <source>Falha ao capturar imagem da câmera.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/manualcalibrationcontroller.py" line="192"/>
+        <location filename="../../udescjoinvilletteacontroller/manualcalibrationcontroller.py" line="276"/>
         <source>Calibração manual cadastrada com sucesso!</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/manualcalibrationcontroller.py" line="196"/>
+        <location filename="../../udescjoinvilletteacontroller/manualcalibrationcontroller.py" line="280"/>
         <source>Erro ao salvar os pontos da calibração manual.</source>
         <translation></translation>
     </message>
@@ -1119,7 +1435,7 @@ Detalhes do erro: {0}</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/manualcalibrationview.py" line="67"/>
+        <location filename="../../udescjoinvilletteaview/manualcalibrationview.py" line="103"/>
         <source>Deseja sair da calibração manual?</source>
         <translation></translation>
     </message>
@@ -2292,7 +2608,7 @@ Verifique se o arquivo existe e se os metadados de configuração estão correto
 <context>
     <name>TTeaApp</name>
     <message>
-        <location filename="../../udescjoinvilletteaapp/appconfig.py" line="96"/>
+        <location filename="../../udescjoinvilletteaapp/appconfig.py" line="115"/>
         <source>Plataforma T-TEA</source>
         <translation></translation>
     </message>
