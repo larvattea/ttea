@@ -75,7 +75,7 @@ class AppConfig:
 
     ICON_APP: str = PathConfig.icon_system("appicon")
     LOGO_APP: str = PathConfig.image("ttealogo")
-    PLATAFORM_SUFIX: str = "TEA"
+    PLATAFORM_SUFFIX: str = "TEA"
     PLATAFORM_MANUAL: str = "Manual"
     VERSION: str = "2.0"
 
@@ -170,7 +170,7 @@ class AppConfig:
         >>> AppConfig.get_geral_hour_mask()
         '%H:%M:%S'
         """
-        from udescjoinvilletteamodel import AppModel
+        from ttea.model import AppModel
 
         settings = QSettings(PathConfig.config(), QSettings.IniFormat)
         saved_mask = settings.value(AppConfig.SETTINGS_GERAL_HOUR_MASK)
