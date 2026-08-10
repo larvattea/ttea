@@ -338,7 +338,7 @@ class CalibrationSettingService:
     def get_automatic_num_columns(self) -> int:
         value = str(
             self.settings.value(
-                "automatic/automatic_num_columns_automatic", "1"
+                "automatic/automatic_num_columns_automatic", "6"
             )
         ).strip()
 
@@ -346,7 +346,7 @@ class CalibrationSettingService:
 
     def get_automatic_num_rows(self) -> int:
         value = str(
-            self.settings.value("automatic/automatic_num_rows_automatic", "1")
+            self.settings.value("automatic/automatic_num_rows_automatic", "4")
         ).strip()
 
         return int(value)
@@ -354,7 +354,7 @@ class CalibrationSettingService:
     def get_automatic_multiplier(self) -> float:
         value = str(
             self.settings.value(
-                "automatic/automatic_multiplier_automatic", "1"
+                "automatic/automatic_multiplier_automatic", "0.75"
             )
         ).strip()
 
@@ -385,7 +385,7 @@ class CalibrationSettingService:
 
     def get_automatic_margin(self) -> int:
         value = str(
-            self.settings.value("automatic/automatic_margin_automatic", "100")
+            self.settings.value("automatic/automatic_margin_automatic", "0")
         ).strip()
 
         return int(value)
