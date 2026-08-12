@@ -3,12 +3,11 @@
 ################################################################################
 ## Form generated from reading UI file 'automaticcalibrationview.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.10.1
+## Created by: Qt User Interface Compiler version 6.11.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-import resources.resources_rc
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
                             QMetaObject, QObject, QPoint, QRect, QSize, Qt,
                             QTime, QUrl)
@@ -18,6 +17,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
                            QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QLabel, QSizePolicy, QVBoxLayout,
                                QWidget)
+
+import ttea.resources.resources_rc
 
 
 class Ui_AutomaticCalibrationView(object):

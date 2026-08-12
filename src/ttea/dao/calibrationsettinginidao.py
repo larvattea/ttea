@@ -1,6 +1,7 @@
 from typing import List, Optional
 
 from PySide6.QtCore import QSettings
+
 from ttea.model import CalibrationSetting
 from ttea.util import PathConfig
 

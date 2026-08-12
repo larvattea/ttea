@@ -13,6 +13,7 @@ FORMS += ../ui/*.ui \
 # Python files that must be parsed by lupdate
 SOURCES += ../../src/ttea/app/*.py \
            ../../src/ttea/controller/*.py \
+            ../../src/ttea/core/*.py \
            ../../src/ttea/games/kartea/controller/*.py \
            ../../src/ttea/games/kartea/view/*.py \
            ../../src/ttea/model/*.py \

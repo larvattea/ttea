@@ -32,9 +32,7 @@ class CameraVideo(QThread):
             )
 
         if not self.cap.isOpened():
-            self.error_signal.emit(
-                self.tr("Não foi possível acessar a câmera selecionada.")
-            )
+            self.error_signal.emit(self.tr("Não foi possível abrir a câmera."))
             return
 
         # Define a resolução se não for "low_resolution"

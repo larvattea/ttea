@@ -64,7 +64,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/aboutview.py" line="67"/>
+        <location filename="../../src/ttea/view/aboutview.py" line="67"/>
         <source>Desde: 2021 - {}</source>
         <translation>Since: 2021 - {}</translation>
     </message>
@@ -72,80 +72,60 @@ li.checked::marker { content: &quot;\2612&quot;; }
 <context>
     <name>AutomaticCalibrationController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller copy.py" line="44"/>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="44"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="44"/>
         <source>Tela de Monitoramento</source>
         <translation>Monitoring Screen</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller copy.py" line="300"/>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="300"/>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="317"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="300"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="317"/>
         <source>Não foi possível abrir a câmera.</source>
         <translation>Could not open the camera.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller copy.py" line="341"/>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="349"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="349"/>
         <source>Tecle [S] para ocultar a tela e capturar a imagem.</source>
         <translation>Press [S] to hide screen and capture image.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller copy.py" line="343"/>
-        <source>Tecle [ESC] para sair.</source>
-        <translation>Press [ESC] to exit.</translation>
-    </message>
-    <message>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller copy.py" line="381"/>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="388"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="388"/>
         <source>Amostra: Tecle [ESC] para salvar | Tecle [R] para repetir.</source>
         <translation>Sample: Press [ESC] to save | Press [R] to repeat.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller copy.py" line="442"/>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="461"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="461"/>
         <source>Sucesso! Captura realizada sem obstruções.</source>
         <translation>Success! Capture completed without obstructions.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller copy.py" line="450"/>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="467"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="467"/>
         <source>O Tabuleiro não pôde ser lido na foto limpa. Retornando...</source>
         <translation>Board could not be read in the clean image. Returning...</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller copy.py" line="457"/>
-        <source>Erro ao capturar a imagem da câmera para calibração automática.</source>
-        <translation>Error capturing camera image for automatic calibration.</translation>
-    </message>
-    <message>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller copy.py" line="476"/>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="487"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="487"/>
         <source>Captura descartada. Rastreamento reativado.</source>
         <translation>Capture discarded. Tracking reactivated.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller copy.py" line="506"/>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="517"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="514"/>
         <source>Fechando sem salvar.</source>
         <translation>Closing without saving.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller copy.py" line="529"/>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="540"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="537"/>
         <source>Calibração automática cadastrada com sucesso!</source>
         <translation>Automatic calibration saved successfully!</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller copy.py" line="533"/>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="544"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="541"/>
         <source>Erro ao salvar os pontos da calibração automática.</source>
         <translation>Error saving automatic calibration points.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="325"/>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="433"/>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="473"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="325"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="433"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="473"/>
         <source>Erro ao capturar imagem da câmera. Dispositivo desconectado.
 Verifique a conexão cabo e ou instalação da câmera.
 Feche a janela e tente novamente.</source>
@@ -154,12 +134,12 @@ Check the cable connection and/or camera installation.
 Close the window and try again.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="352"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="352"/>
         <source>Tecle [ESC] para sair da tela de monitoramento.</source>
         <translation>Press [ESC] to exit the monitoring screen.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/automaticcalibrationcontroller.py" line="355"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="355"/>
         <source>Tecle [ALT+F4 ou CMD+W] para fechar a tela das figuras.</source>
         <translation>Press [ALT+F4 or CMD+W] to close the figures window.</translation>
     </message>
@@ -172,17 +152,17 @@ Close the window and try again.</translation>
         <translation>T-TEA Platform - Game Screen View Automatic Calibration</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/automaticcalibrationview.py" line="111"/>
+        <location filename="../../src/ttea/view/automaticcalibrationview.py" line="111"/>
         <source>Calibração automática cadastrada com sucesso!</source>
         <translation>Automatic calibration saved successfully!</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/automaticcalibrationview.py" line="112"/>
+        <location filename="../../src/ttea/view/automaticcalibrationview.py" line="112"/>
         <source>Fechando sem salvar.</source>
         <translation>Closing without saving.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/automaticcalibrationview.py" line="157"/>
+        <location filename="../../src/ttea/view/automaticcalibrationview.py" line="157"/>
         <source>Deseja sair da calibração automática?</source>
         <translation>Do you want to exit automatic calibration?</translation>
     </message>
@@ -190,38 +170,38 @@ Close the window and try again.</translation>
 <context>
     <name>CalibrationController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="43"/>
+        <location filename="../../src/ttea/controller/calibrationcontroller.py" line="37"/>
         <source>Dados do hardware do ambiente de calibração cadastrado com sucesso!</source>
         <translation>Calibration environment hardware data saved successfully!</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="53"/>
+        <location filename="../../src/ttea/controller/calibrationcontroller.py" line="47"/>
         <source>Erro ao salvar os dados do hardware do ambiente de calibração.</source>
         <translation>Error saving calibration environment hardware data.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="71"/>
+        <location filename="../../src/ttea/controller/calibrationcontroller.py" line="65"/>
         <source>Em construção!</source>
         <translation>Under Construction!</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="155"/>
+        <location filename="../../src/ttea/controller/calibrationcontroller.py" line="149"/>
         <source>Parar Câmera - F5</source>
         <translation>Stop Camera - F5</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="156"/>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="167"/>
+        <location filename="../../src/ttea/controller/calibrationcontroller.py" line="150"/>
+        <location filename="../../src/ttea/controller/calibrationcontroller.py" line="161"/>
         <source>F5</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="166"/>
+        <location filename="../../src/ttea/controller/calibrationcontroller.py" line="160"/>
         <source>Iniciar Câmera - F5</source>
         <translation>Start Camera - F5</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/calibrationcontroller.py" line="169"/>
+        <location filename="../../src/ttea/controller/calibrationcontroller.py" line="163"/>
         <source>Câmera Parada</source>
         <translation>Camera Stopped</translation>
     </message>
@@ -229,12 +209,12 @@ Close the window and try again.</translation>
 <context>
     <name>CalibrationSettingController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/calibrationsettingcontroller.py" line="61"/>
+        <location filename="../../src/ttea/controller/calibrationsettingcontroller.py" line="61"/>
         <source>Configuração de calibração cadastrada com sucesso!</source>
         <translation>Calibration settings saved successfully!</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/calibrationsettingcontroller.py" line="66"/>
+        <location filename="../../src/ttea/controller/calibrationsettingcontroller.py" line="66"/>
         <source>Erro ao salvar a configuração de calibração.</source>
         <translation>Error saving calibration settings.</translation>
     </message>
@@ -765,7 +745,7 @@ Close the window and try again.</translation>
         <translation>Enable MediaPipe Pose?</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/calibrationsettingview.py" line="164"/>
+        <location filename="../../src/ttea/view/calibrationsettingview.py" line="164"/>
         <source>Deseja sair da configuração da calibração?</source>
         <translation>Do you want to exit calibration setting?</translation>
     </message>
@@ -858,15 +838,55 @@ Close the window and try again.</translation>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/calibrationview.py" line="73"/>
+        <location filename="../../src/ttea/view/calibrationview.py" line="75"/>
         <source>Deseja sair da calibração?</source>
         <translation>Do you want to exit the calibration?</translation>
     </message>
 </context>
 <context>
+    <name>CameraVideo</name>
+    <message>
+        <location filename="../../src/ttea/core/cameravideo.py" line="35"/>
+        <source>Não foi possível abrir a câmera.</source>
+        <translation>Could not open the camera.</translation>
+    </message>
+</context>
+<context>
+    <name>CameraVideoThread</name>
+    <message>
+        <location filename="../../src/ttea/core/cameravideothread.py" line="51"/>
+        <source>Não foi possível abrir a câmera.</source>
+        <translation>Could not open the camera.</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/core/cameravideothread.py" line="131"/>
+        <source>Rastreio Pés (%): {:.2f}</source>
+        <translation>Feet Tracking (%): {:.2f}</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/core/cameravideothread.py" line="149"/>
+        <source>FPS: {}</source>
+        <translation>FPS: {}</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/core/cameravideothread.py" line="158"/>
+        <source>Brilho: {}</source>
+        <translation>Brightness: {}</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/core/cameravideothread.py" line="176"/>
+        <source>Erro ao capturar imagem da câmera. Dispositivo desconectado.
+Verifique a conexão cabo e ou instalação da câmera.
+Feche a janela e tente novamente.</source>
+        <translation>Error capturing camera image. Device disconnected.
+Check the cable connection and/or camera installation.
+Close the window and try again.</translation>
+    </message>
+</context>
+<context>
     <name>CriticalHooks</name>
     <message>
-        <location filename="../../udescjoinvilletteautil/criticalhooks.py" line="64"/>
+        <location filename="../../src/ttea/util/criticalhooks.py" line="64"/>
         <source>Ocorreu um erro inesperado e o aplicativo será encerrado.
 Por favor, entre em contato com o suporte e envie o arquivo de log.
 Detalhes do erro: {0}</source>
@@ -878,37 +898,37 @@ Error details: {0}</translation>
 <context>
     <name>InstitutionFacility</name>
     <message>
-        <location filename="../../udescjoinvilletteamodel/institutionfacility.py" line="95"/>
+        <location filename="../../src/ttea/model/institutionfacility.py" line="95"/>
         <source>Clínica</source>
         <translation>Clinic</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/institutionfacility.py" line="96"/>
+        <location filename="../../src/ttea/model/institutionfacility.py" line="96"/>
         <source>Consultório</source>
         <translation>Office</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/institutionfacility.py" line="97"/>
+        <location filename="../../src/ttea/model/institutionfacility.py" line="97"/>
         <source>Hospital</source>
         <translation>Hospital</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/institutionfacility.py" line="98"/>
+        <location filename="../../src/ttea/model/institutionfacility.py" line="98"/>
         <source>Instituição Comunitária</source>
         <translation>Community Center</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/institutionfacility.py" line="99"/>
+        <location filename="../../src/ttea/model/institutionfacility.py" line="99"/>
         <source>Instituição de Ensino</source>
         <translation>Educational Institution</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/institutionfacility.py" line="100"/>
+        <location filename="../../src/ttea/model/institutionfacility.py" line="100"/>
         <source>Outro</source>
         <translation>Other</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/institutionfacility.py" line="101"/>
+        <location filename="../../src/ttea/model/institutionfacility.py" line="101"/>
         <source>Posto de Saúde</source>
         <translation>Health Center</translation>
     </message>
@@ -916,7 +936,7 @@ Error details: {0}</translation>
 <context>
     <name>InstitutionFacilityEditController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/institutionfacilityeditcontroller.py" line="119"/>
+        <location filename="../../src/ttea/controller/institutionfacilityeditcontroller.py" line="119"/>
         <source>Por favor, corrija os dados inválidos:
 </source>
         <translation>Please, correct the invalid data:
@@ -1026,12 +1046,12 @@ Error details: {0}</translation>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/institutionfacilityeditview.py" line="75"/>
+        <location filename="../../src/ttea/view/institutionfacilityeditview.py" line="75"/>
         <source>Novo</source>
         <translation>New</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/institutionfacilityeditview.py" line="75"/>
+        <location filename="../../src/ttea/view/institutionfacilityeditview.py" line="75"/>
         <source>Editar</source>
         <translation>Edit</translation>
     </message>
@@ -1039,54 +1059,54 @@ Error details: {0}</translation>
 <context>
     <name>InstitutionFacilityListController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/institutionfacilitylistcontroller.py" line="154"/>
+        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="154"/>
         <source>Instituição/Estabelecimento cadastrada com sucesso!</source>
         <translation>Institution/facility saved successfully!</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/institutionfacilitylistcontroller.py" line="159"/>
+        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="159"/>
         <source>Erro ao salvar instuição/estabelecimento.</source>
         <translation>Error saving institution/facility.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/institutionfacilitylistcontroller.py" line="169"/>
+        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="169"/>
         <source>Selecione uma instituição/estabelecimento para editar.</source>
         <translation>Select a institution/facility to edit.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/institutionfacilitylistcontroller.py" line="177"/>
+        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="177"/>
         <source>Instituição/Estabelecimento não encontrada.</source>
         <translation>Institution/facility not found.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/institutionfacilitylistcontroller.py" line="191"/>
+        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="191"/>
         <source>Instituição/Estabelecimento atualizada com sucesso.</source>
         <translation>Institution/facility updated successfully.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/institutionfacilitylistcontroller.py" line="196"/>
+        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="196"/>
         <source>Erro ao atualizar instituição/estabelecimento.</source>
         <translation>Error updating institution/facility.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/institutionfacilitylistcontroller.py" line="205"/>
+        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="205"/>
         <source>Selecione uma instituição/estabelecimento para excluir.</source>
         <translation>Select a institution/facility to delete.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/institutionfacilitylistcontroller.py" line="215"/>
+        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="215"/>
         <source>Deseja excluir?
 {0}</source>
         <translation>Are you sure you want to delete?
 {0}</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/institutionfacilitylistcontroller.py" line="224"/>
+        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="224"/>
         <source>Instituição/Estabelecimento excluída com sucesso.</source>
         <translation>Institution/facility deleted successfully.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/institutionfacilitylistcontroller.py" line="229"/>
+        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="229"/>
         <source>Erro ao excluir instituição/estabelecimento.</source>
         <translation>Error deleting institution/facility.</translation>
     </message>
@@ -1182,7 +1202,7 @@ Error details: {0}</translation>
         <translation>Delete</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/institutionfacilitylistview.py" line="148"/>
+        <location filename="../../src/ttea/view/institutionfacilitylistview.py" line="148"/>
         <source>Deseja sair do cadastro?</source>
         <translation>Do you want to exit the form?</translation>
     </message>
@@ -1190,35 +1210,35 @@ Error details: {0}</translation>
 <context>
     <name>InstitutionFacilityService</name>
     <message>
-        <location filename="../../udescjoinvilletteaservice/institutionfacilityservice.py" line="83"/>
+        <location filename="../../src/ttea/service/institutionfacilityservice.py" line="83"/>
         <source>ID é obrigatório!
 </source>
         <translation>ID is required!
 </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaservice/institutionfacilityservice.py" line="85"/>
+        <location filename="../../src/ttea/service/institutionfacilityservice.py" line="85"/>
         <source>ID deve ser do tipo inteiro!
 </source>
         <translation>ID must be an integer!
 </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaservice/institutionfacilityservice.py" line="88"/>
+        <location filename="../../src/ttea/service/institutionfacilityservice.py" line="88"/>
         <source>Nome é obrigatório!
 </source>
         <translation>Name is required!
 </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaservice/institutionfacilityservice.py" line="91"/>
+        <location filename="../../src/ttea/service/institutionfacilityservice.py" line="91"/>
         <source>Tipo é obrigatório!
 </source>
         <translation>Type is required!
 </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaservice/institutionfacilityservice.py" line="183"/>
+        <location filename="../../src/ttea/service/institutionfacilityservice.py" line="183"/>
         <source>Exclusão negada: A instituição possui profissional vinculado.</source>
         <translation>Deletion denied: The institution/facility has a linked professional.</translation>
     </message>
@@ -1226,7 +1246,7 @@ Error details: {0}</translation>
 <context>
     <name>LanguageController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/languagecontroller.py" line="52"/>
+        <location filename="../../src/ttea/controller/languagecontroller.py" line="52"/>
         <source>Erro ao carregar o idioma.</source>
         <translation>Error loading language.</translation>
     </message>
@@ -1254,7 +1274,7 @@ Error details: {0}</translation>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/languageview.py" line="66"/>
+        <location filename="../../src/ttea/view/languageview.py" line="66"/>
         <source>Por favor, selecione um idioma.</source>
         <translation>Please, select a language.</translation>
     </message>
@@ -1262,7 +1282,7 @@ Error details: {0}</translation>
 <context>
     <name>MainController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/maincontroller.py" line="98"/>
+        <location filename="../../src/ttea/controller/maincontroller.py" line="97"/>
         <source>Funcionalidade do help em desenvolvimento...</source>
         <translation>Help functionality under development...</translation>
     </message>
@@ -1270,12 +1290,12 @@ Error details: {0}</translation>
 <context>
     <name>MainService</name>
     <message>
-        <location filename="../../udescjoinvilletteaservice/mainservice.py" line="22"/>
+        <location filename="../../src/ttea/service/mainservice.py" line="22"/>
         <source>Deseja sair do sistema?</source>
         <translation>Are you sure you want to exit?</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaservice/mainservice.py" line="25"/>
+        <location filename="../../src/ttea/service/mainservice.py" line="25"/>
         <source>Plataforma T-TEA</source>
         <translation>T-TEA Platform</translation>
     </message>
@@ -1409,12 +1429,12 @@ Error details: {0}</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/mainview.py" line="83"/>
+        <location filename="../../src/ttea/view/mainview.py" line="83"/>
         <source>Versão da plataforma: {0}</source>
         <translation>Platform version: {0}</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/mainview.py" line="89"/>
+        <location filename="../../src/ttea/view/mainview.py" line="89"/>
         <source>Data atual: {0}</source>
         <translation>Current date: {0}</translation>
     </message>
@@ -1422,32 +1442,32 @@ Error details: {0}</translation>
 <context>
     <name>ManualCalibrationController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/manualcalibrationcontroller.py" line="37"/>
+        <location filename="../../src/ttea/controller/manualcalibrationcontroller.py" line="37"/>
         <source>Tela de Monitoramento</source>
         <translation>Monitoring Screen</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/manualcalibrationcontroller.py" line="102"/>
+        <location filename="../../src/ttea/controller/manualcalibrationcontroller.py" line="103"/>
         <source>Não foi possível abrir a câmera.</source>
         <translation>Could not open the camera.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/manualcalibrationcontroller.py" line="124"/>
+        <location filename="../../src/ttea/controller/manualcalibrationcontroller.py" line="125"/>
         <source>Calibração concluída com sucesso!</source>
         <translation>Calibration completed successfully!</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/manualcalibrationcontroller.py" line="262"/>
+        <location filename="../../src/ttea/controller/manualcalibrationcontroller.py" line="263"/>
         <source>Falha ao capturar imagem da câmera.</source>
         <translation>Could not capture image from camera.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/manualcalibrationcontroller.py" line="276"/>
+        <location filename="../../src/ttea/controller/manualcalibrationcontroller.py" line="277"/>
         <source>Calibração manual cadastrada com sucesso!</source>
         <translation>Manual calibration saved successfully!</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/manualcalibrationcontroller.py" line="280"/>
+        <location filename="../../src/ttea/controller/manualcalibrationcontroller.py" line="281"/>
         <source>Erro ao salvar os pontos da calibração manual.</source>
         <translation>Error saving manual calibration points.</translation>
     </message>
@@ -1460,7 +1480,7 @@ Error details: {0}</translation>
         <translation>T-TEA Platform - Game Screen View Calibration</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/manualcalibrationview.py" line="103"/>
+        <location filename="../../src/ttea/view/manualcalibrationview.py" line="103"/>
         <source>Deseja sair da calibração manual?</source>
         <translation>Do you want to exit manual calibration?</translation>
     </message>
@@ -1468,12 +1488,12 @@ Error details: {0}</translation>
 <context>
     <name>MessageService</name>
     <message>
-        <location filename="../../udescjoinvilletteautil/messageservice.py" line="155"/>
+        <location filename="../../src/ttea/util/messageservice.py" line="155"/>
         <source>Sim</source>
         <translation>Yes</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteautil/messageservice.py" line="158"/>
+        <location filename="../../src/ttea/util/messageservice.py" line="158"/>
         <source>Não</source>
         <translation>No</translation>
     </message>
@@ -1481,7 +1501,7 @@ Error details: {0}</translation>
 <context>
     <name>PlayerEditController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playereditcontroller.py" line="106"/>
+        <location filename="../../src/ttea/controller/playereditcontroller.py" line="106"/>
         <source>Por favor, corrija os dados inválidos:
 </source>
         <translation>Please, correct the invalid data:
@@ -1551,12 +1571,12 @@ Error details: {0}</translation>
         <translation>Cancel current operation</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/playereditview.py" line="67"/>
+        <location filename="../../src/ttea/view/playereditview.py" line="66"/>
         <source>Novo</source>
         <translation>New</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/playereditview.py" line="67"/>
+        <location filename="../../src/ttea/view/playereditview.py" line="66"/>
         <source>Editar</source>
         <translation>Edit</translation>
     </message>
@@ -1564,12 +1584,12 @@ Error details: {0}</translation>
 <context>
     <name>PlayerGameLaunchController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="47"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="47"/>
         <source>Existe um jogo em execução, ele será finalizado. Deseja sair da tela de sessão de jogo?</source>
         <translation>A game is currently running and will be closed. Do you want to exit the game session screen?</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="68"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="68"/>
         <source>Este jogo foi desenvolvido por:
 
 {0}
@@ -1584,38 +1604,38 @@ Version: {1}
 Since: {2} - {3}</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="81"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="81"/>
         <source>Informações de autoria do jogo não estão disponíveis.
 Verifique se os metadados de configuração estão corretos.</source>
         <translation>Game authorship information is not available.
 Check if the configuration metadata is correct.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="95"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="95"/>
         <source>Selecione um jogo antes de iniciar.</source>
         <translation>Select a game before starting.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="101"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="101"/>
         <source>Já existe um jogo em execução.
 Feche o jogo atual antes de iniciar outro.</source>
         <translation>A game is already running. 
 Close the current game before starting another.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="114"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="114"/>
         <source>Erro: Executável do jogo não encontrado em: {0}.
 Verifique se o arquivo existe e se os metadados de configuração estão corretos.</source>
         <translation>Error: Game executable not found at: {0}. 
 Verify that the file exists and the configuration metadata is correct.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="146"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="146"/>
         <source>Espere</source>
         <translation>Wait</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playergamelaunchcontroller.py" line="225"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="225"/>
         <source>Jogar</source>
         <translation>Play</translation>
     </message>
@@ -1674,12 +1694,12 @@ Verify that the file exists and the configuration metadata is correct.</translat
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/playergamelaunchview.py" line="109"/>
+        <location filename="../../src/ttea/view/playergamelaunchview.py" line="109"/>
         <source>Existe um jogo em execução, ele será finalizado. Deseja sair da tela de sessão de jogo?</source>
         <translation>A game is currently running and will be closed. Do you want to exit the game session screen?</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/playergamelaunchview.py" line="119"/>
+        <location filename="../../src/ttea/view/playergamelaunchview.py" line="119"/>
         <source>Deseja sair da tela de sessão de jogo?</source>
         <translation>Do you want to exit the game session screen?</translation>
     </message>
@@ -1687,42 +1707,42 @@ Verify that the file exists and the configuration metadata is correct.</translat
 <context>
     <name>PlayerKarteaConfigEditController</name>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfigeditcontroller.py" line="246"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="245"/>
         <source>Jogador é obrigatório!
 </source>
         <translation>Player is required!
 </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfigeditcontroller.py" line="248"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="247"/>
         <source>Imagem do veículo é obrigatória!
 </source>
         <translation>A photo of the vehicle is required!
 </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfigeditcontroller.py" line="250"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="249"/>
         <source>Imagem do ambiente é obrigatória!
 </source>
         <translation>A picture of the environment is a required!
 </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfigeditcontroller.py" line="252"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="251"/>
         <source>Imagem do alvo é obrigatória!
 </source>
         <translation>A picture of the target is required!
 </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfigeditcontroller.py" line="254"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="253"/>
         <source>Imagem do obstáculo é obrigatória!
 </source>
         <translation>A picture of the obstacle is required!
 </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfigeditcontroller.py" line="258"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="257"/>
         <source>Por favor, corrija os dados inválidos:
 </source>
         <translation>Please correct the invalid data:
@@ -1732,169 +1752,169 @@ Verify that the file exists and the configuration metadata is correct.</translat
 <context>
     <name>PlayerKarteaConfigEditView</name>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/view/playerkarteaconfigeditview.py" line="60"/>
+        <location filename="../../src/ttea/games/kartea/view/playerkarteaconfigeditview.py" line="59"/>
         <source>Novo</source>
         <translation>New</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/view/playerkarteaconfigeditview.py" line="63"/>
+        <location filename="../../src/ttea/games/kartea/view/playerkarteaconfigeditview.py" line="62"/>
         <source>Editar</source>
         <translation>Edit</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="14"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="14"/>
         <source>Plataforma T-TEA - Configuração Kartea</source>
         <translation>T-TEA Platform - Kartea Configuration</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="31"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="31"/>
         <source>Configuração de Jogo</source>
         <translation>Game Configuration</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="42"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="42"/>
         <source>Jogador:</source>
         <translation>Player:</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="59"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="59"/>
         <source>Sessão:</source>
         <translation>Session:</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="73"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="73"/>
         <source>Fase Atual:</source>
         <translation>Current Phase:</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="87"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="87"/>
         <source>Nível Atual:</source>
         <translation>Current Level:</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="101"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="101"/>
         <source>Tempo de Nível:</source>
         <translation>Level Time:</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="134"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="134"/>
         <source>Recurso Visual</source>
         <translation>Visual Resource</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="161"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="161"/>
         <source>Selecione um recurso visual para visualizar</source>
         <translation>Select a visual resource to view</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="223"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="223"/>
         <source>Imagem do Veículo:</source>
         <translation>Vehicle Image:</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="240"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="240"/>
         <source>Imagem do Ambiente:</source>
         <translation>Environment Image:</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="257"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="257"/>
         <source>Imagem do Alvo:</source>
         <translation>Target Image:</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="274"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="274"/>
         <source>Imagem do Obstáculo:</source>
         <translation>Obstacle Image:</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="310"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="310"/>
         <source>Feedback Visual</source>
         <translation>Visual Feedback</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="322"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="322"/>
         <source>Selecione uma imagem de feedback para visualizar</source>
         <translation>Select a feedback image to view</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="384"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="384"/>
         <source>Imagem de Feedback Positivo:</source>
         <translation>Positive Feedback Image:</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="401"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="401"/>
         <source>Imagem de Feedback Neutro:</source>
         <translation>Neutral Feedback Image:</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="418"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="418"/>
         <source>Imagem de Feedback Negativo:</source>
         <translation>Negative Feedback Image:</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="451"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="451"/>
         <source>Feedback Sonoro</source>
         <translation>Audio Feedback</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="459"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="459"/>
         <source>Som de Feedback Positivo:</source>
         <translation>Positive Audio Feedback:</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="478"/>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="510"/>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="542"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="478"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="510"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="542"/>
         <source>Play</source>
         <translation>Play</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="491"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="491"/>
         <source>Som de Feedback Neutro:</source>
         <translation>Neutral Audio Feedback:</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="523"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="523"/>
         <source>Som de Feedback Negativo:</source>
         <translation>Negative Audio Feedback:</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="571"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="571"/>
         <source>Configuração de Interface</source>
         <translation>Interface Configuration</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="579"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="579"/>
         <source>Paleta:</source>
         <translation>Palette:</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="596"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="596"/>
         <source>HUD:</source>
         <translation>HUD:</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="606"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="606"/>
         <source>Som:</source>
         <translation>Sound:</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="650"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="650"/>
         <source>Gravar operação corrente</source>
         <translation>Save current operation</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="653"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="653"/>
         <source>OK</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="664"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="664"/>
         <source>Cancelar operação corrente</source>
         <translation>Cancel current operation</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfigeditview.ui" line="667"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="667"/>
         <source>Cancelar</source>
         <translation>Cancel</translation>
     </message>
@@ -1902,54 +1922,54 @@ Verify that the file exists and the configuration metadata is correct.</translat
 <context>
     <name>PlayerKarteaConfigListController</name>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfiglistcontroller.py" line="130"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="130"/>
         <source>Configuração cadastrada com sucesso!</source>
         <translation>Settings saved successfully!</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfiglistcontroller.py" line="132"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="132"/>
         <source>Erro ao salvar configuração.</source>
         <translation>Error saving configuration.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfiglistcontroller.py" line="140"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="140"/>
         <source>Selecione uma configuração para editar.</source>
         <translation>Select a configuration to edit.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfiglistcontroller.py" line="146"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="146"/>
         <source>Configuração não encontrada.</source>
         <translation>Configuration not found.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfiglistcontroller.py" line="157"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="157"/>
         <source>Configuração atualizada com sucesso.</source>
         <translation>Configuration updated successfully.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfiglistcontroller.py" line="159"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="159"/>
         <source>Erro ao atualizar configuração.</source>
         <translation>Error updating configuration.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfiglistcontroller.py" line="166"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="166"/>
         <source>Selecione uma configuração para excluir.</source>
         <translation>Select a configuration to delete.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfiglistcontroller.py" line="176"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="176"/>
         <source>Tem certeza que seja excluir a configuração do jogador?
 {0}</source>
         <translation>Are you sure you want to delete the player configuration?
 {0}</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfiglistcontroller.py" line="182"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="182"/>
         <source>Configuração excluída com sucesso.</source>
         <translation>Configuration successfully removed.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/controller/playerkarteaconfiglistcontroller.py" line="184"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="184"/>
         <source>Erro ao excluir configuração.</source>
         <translation>Error deleting configuration.</translation>
     </message>
@@ -1957,117 +1977,117 @@ Verify that the file exists and the configuration metadata is correct.</translat
 <context>
     <name>PlayerKarteaConfigListView</name>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/view/playerkarteaconfiglistview.py" line="193"/>
+        <location filename="../../src/ttea/games/kartea/view/playerkarteaconfiglistview.py" line="192"/>
         <source>Deseja sair do cadastro?</source>
         <translation>Do you want to exit the form?</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="14"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="14"/>
         <source>Plataforma T-TEA - Configurações Kartea</source>
         <translation>T-TEA Platform - Kartea Settings</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="31"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="31"/>
         <source>Pesquisar:</source>
         <translation>Search:</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="38"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="38"/>
         <source>Digite o nome ou ID do jogador</source>
         <translation>Enter player name or ID</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="69"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="69"/>
         <source>ID</source>
         <translation>ID</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="74"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="74"/>
         <source>Nome</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="90"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="90"/>
         <source>Detalhes</source>
         <translation>Details</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="98"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="98"/>
         <source>ID:</source>
         <translation>ID:</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="105"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="105"/>
         <source>ID: </source>
         <translation>ID: </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="112"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="112"/>
         <source>Nome:</source>
         <translation>Name:</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="119"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="119"/>
         <source>Nome: </source>
         <translation>Name: </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="126"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="126"/>
         <source>Fase Atual:</source>
         <translation>Current Phase:</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="133"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="133"/>
         <source>Fase Atual: </source>
         <translation>Current Phase: </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="140"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="140"/>
         <source>Nível Atual:</source>
         <translation>Current Level:</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="147"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="147"/>
         <source>Nível Atual: </source>
         <translation>Current Level: </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="154"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="154"/>
         <source>Tempo do Nível:</source>
         <translation>Level Time:</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="161"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="161"/>
         <source>Tempo do Nível: </source>
         <translation>Level Time: </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="189"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="189"/>
         <source>Criar um novo registro</source>
         <translation>Create new record</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="192"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="192"/>
         <source>Novo</source>
         <translation>New</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="203"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="203"/>
         <source>Editar o registro selecionado</source>
         <translation>Edit selected record</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="206"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="206"/>
         <source>Editar</source>
         <translation>Edit</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="217"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="217"/>
         <source>Excluir o registro selecionado</source>
         <translation>Delete selected record</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteagames/kartea/resources/ui/playerkarteaconfiglistview.ui" line="220"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="220"/>
         <source>Excluir</source>
         <translation>Delete</translation>
     </message>
@@ -2075,54 +2095,54 @@ Verify that the file exists and the configuration metadata is correct.</translat
 <context>
     <name>PlayerListController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="86"/>
+        <location filename="../../src/ttea/controller/playerlistcontroller.py" line="86"/>
         <source>Jogador cadastrado com sucesso!</source>
         <translation>Player saved successfully!</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="88"/>
+        <location filename="../../src/ttea/controller/playerlistcontroller.py" line="88"/>
         <source>Erro ao salvar jogador.</source>
         <translation>Error saving player.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="94"/>
+        <location filename="../../src/ttea/controller/playerlistcontroller.py" line="94"/>
         <source>Selecione um jogador para editar.</source>
         <translation>Select a player to edit.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="99"/>
+        <location filename="../../src/ttea/controller/playerlistcontroller.py" line="99"/>
         <source>Jogador não encontrado.</source>
         <translation>Player not found.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="107"/>
+        <location filename="../../src/ttea/controller/playerlistcontroller.py" line="107"/>
         <source>Jogador atualizado com sucesso.</source>
         <translation>Player updated successfully.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="109"/>
+        <location filename="../../src/ttea/controller/playerlistcontroller.py" line="109"/>
         <source>Erro ao atualizar jogador.</source>
         <translation>Error updating player.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="115"/>
+        <location filename="../../src/ttea/controller/playerlistcontroller.py" line="115"/>
         <source>Selecione um jogador para excluir.</source>
         <translation>Select a player to delete.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="123"/>
+        <location filename="../../src/ttea/controller/playerlistcontroller.py" line="123"/>
         <source>Deseja excluir?
 {0}</source>
         <translation>Are you sure you want to delete?
 {0}</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="128"/>
+        <location filename="../../src/ttea/controller/playerlistcontroller.py" line="128"/>
         <source>Jogador excluído com sucesso.</source>
         <translation>Player successfully deleted.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/playerlistcontroller.py" line="130"/>
+        <location filename="../../src/ttea/controller/playerlistcontroller.py" line="130"/>
         <source>Erro ao excluir jogador.</source>
         <translation>Error deleting player.</translation>
     </message>
@@ -2230,7 +2250,7 @@ Verify that the file exists and the configuration metadata is correct.</translat
         <translation>Delete</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/playerlistview.py" line="182"/>
+        <location filename="../../src/ttea/view/playerlistview.py" line="181"/>
         <source>Deseja sair do cadastro?</source>
         <translation>Do you want to exit the form?</translation>
     </message>
@@ -2238,35 +2258,35 @@ Verify that the file exists and the configuration metadata is correct.</translat
 <context>
     <name>PlayerService</name>
     <message>
-        <location filename="../../udescjoinvilletteaservice/playerservice.py" line="80"/>
+        <location filename="../../src/ttea/service/playerservice.py" line="80"/>
         <source>ID é obrigatório!
 </source>
         <translation>ID is required!
 </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaservice/playerservice.py" line="82"/>
+        <location filename="../../src/ttea/service/playerservice.py" line="82"/>
         <source>ID deve ser do tipo inteiro!
 </source>
         <translation>ID must be an integer!
 </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaservice/playerservice.py" line="85"/>
+        <location filename="../../src/ttea/service/playerservice.py" line="85"/>
         <source>Nome é obrigatório!
 </source>
         <translation>Name is required!
 </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaservice/playerservice.py" line="88"/>
+        <location filename="../../src/ttea/service/playerservice.py" line="88"/>
         <source>Data de nascimento é obrigatória!
 </source>
         <translation>Date of birth is required!
 </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaservice/playerservice.py" line="175"/>
+        <location filename="../../src/ttea/service/playerservice.py" line="174"/>
         <source>Exclusão negada: O jogador possui uma configuração do KarTEA ativa.</source>
         <translation>Deletion denied: The player has an active KarTEA configuration.</translation>
     </message>
@@ -2274,102 +2294,102 @@ Verify that the file exists and the configuration metadata is correct.</translat
 <context>
     <name>Professional</name>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="89"/>
+        <location filename="../../src/ttea/model/professional.py" line="89"/>
         <source>Arteterapeuta</source>
         <translation>Art Therapist</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="90"/>
+        <location filename="../../src/ttea/model/professional.py" line="90"/>
         <source>Assistente Social</source>
         <translation>Social Worker</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="91"/>
+        <location filename="../../src/ttea/model/professional.py" line="91"/>
         <source>Cuidador Especializado</source>
         <translation>Specialized Caregiver</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="92"/>
+        <location filename="../../src/ttea/model/professional.py" line="92"/>
         <source>Educador Físico</source>
         <translation>Physical Educator</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="93"/>
+        <location filename="../../src/ttea/model/professional.py" line="93"/>
         <source>Enfermeiro</source>
         <translation>Nurse</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="94"/>
+        <location filename="../../src/ttea/model/professional.py" line="94"/>
         <source>Fisioterapeuta</source>
         <translation>Physical Therapist</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="95"/>
+        <location filename="../../src/ttea/model/professional.py" line="95"/>
         <source>Fonoaudiólogo</source>
         <translation>Speech-Language Pathologist</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="96"/>
+        <location filename="../../src/ttea/model/professional.py" line="96"/>
         <source>Geneticista</source>
         <translation>Geneticist</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="97"/>
+        <location filename="../../src/ttea/model/professional.py" line="97"/>
         <source>Mediador Escolar</source>
         <translation>School Mediator</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="98"/>
+        <location filename="../../src/ttea/model/professional.py" line="98"/>
         <source>Musicoterapeuta</source>
         <translation>Music Therapist</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="99"/>
+        <location filename="../../src/ttea/model/professional.py" line="99"/>
         <source>Neuropediatra</source>
         <translation>Child Neurologist</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="100"/>
+        <location filename="../../src/ttea/model/professional.py" line="100"/>
         <source>Neurologista</source>
         <translation>Neurologist</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="101"/>
+        <location filename="../../src/ttea/model/professional.py" line="101"/>
         <source>Nutricionista</source>
         <translation>Nutritionist</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="102"/>
+        <location filename="../../src/ttea/model/professional.py" line="102"/>
         <source>Pediatra</source>
         <translation>Pediatrician</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="103"/>
+        <location filename="../../src/ttea/model/professional.py" line="103"/>
         <source>Professor Educação Especial</source>
         <translation>Special Education Teacher</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="104"/>
+        <location filename="../../src/ttea/model/professional.py" line="104"/>
         <source>Psicopedagogo</source>
         <translation>Educational Psychologist</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="105"/>
+        <location filename="../../src/ttea/model/professional.py" line="105"/>
         <source>Psicólogo</source>
         <translation>Psychologist</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="106"/>
+        <location filename="../../src/ttea/model/professional.py" line="106"/>
         <source>Psiquiatra</source>
         <translation>Psychiatrist</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="107"/>
+        <location filename="../../src/ttea/model/professional.py" line="107"/>
         <source>Terapeuta Ocupacional</source>
         <translation>Occupational Therapist</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteamodel/professional.py" line="108"/>
+        <location filename="../../src/ttea/model/professional.py" line="108"/>
         <source>Voluntário</source>
         <translation>Volunteer</translation>
     </message>
@@ -2377,7 +2397,7 @@ Verify that the file exists and the configuration metadata is correct.</translat
 <context>
     <name>ProfessionalEditController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/professionaleditcontroller.py" line="126"/>
+        <location filename="../../src/ttea/controller/professionaleditcontroller.py" line="126"/>
         <source>Por favor, corrija os dados inválidos:
 </source>
         <translation>Please, correct the invalid data:
@@ -2437,12 +2457,12 @@ Verify that the file exists and the configuration metadata is correct.</translat
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/professionaleditview.py" line="76"/>
+        <location filename="../../src/ttea/view/professionaleditview.py" line="76"/>
         <source>Novo</source>
         <translation>New</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/professionaleditview.py" line="76"/>
+        <location filename="../../src/ttea/view/professionaleditview.py" line="76"/>
         <source>Editar</source>
         <translation>Edit</translation>
     </message>
@@ -2450,54 +2470,54 @@ Verify that the file exists and the configuration metadata is correct.</translat
 <context>
     <name>ProfessionalListController</name>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="145"/>
+        <location filename="../../src/ttea/controller/professionallistcontroller.py" line="144"/>
         <source>Profissional cadastrado com sucesso!</source>
         <translation>Professional saved successfully!</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="147"/>
+        <location filename="../../src/ttea/controller/professionallistcontroller.py" line="146"/>
         <source>Erro ao salvar profissional.</source>
         <translation>Error saving professional.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="154"/>
+        <location filename="../../src/ttea/controller/professionallistcontroller.py" line="153"/>
         <source>Selecione um professional para editar.</source>
         <translation>Select a professional to edit.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="159"/>
+        <location filename="../../src/ttea/controller/professionallistcontroller.py" line="158"/>
         <source>Profissional não encontrado.</source>
         <translation>Professional not found.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="166"/>
+        <location filename="../../src/ttea/controller/professionallistcontroller.py" line="165"/>
         <source>Profissional atualizado com sucesso.</source>
         <translation>Professional updated successfully.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="168"/>
+        <location filename="../../src/ttea/controller/professionallistcontroller.py" line="167"/>
         <source>Erro ao atualizar profissional.</source>
         <translation>Error updating professional.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="176"/>
+        <location filename="../../src/ttea/controller/professionallistcontroller.py" line="175"/>
         <source>Selecione um profissional para excluir.</source>
         <translation>Select a professional to delete.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="185"/>
+        <location filename="../../src/ttea/controller/professionallistcontroller.py" line="184"/>
         <source>Deseja excluir?
 {0}</source>
         <translation>Are you sure you want to delete?
 {0}</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="189"/>
+        <location filename="../../src/ttea/controller/professionallistcontroller.py" line="188"/>
         <source>Profissional excluído com sucesso.</source>
         <translation>Professional deleted successfully.</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteacontroller/professionallistcontroller.py" line="191"/>
+        <location filename="../../src/ttea/controller/professionallistcontroller.py" line="190"/>
         <source>Erro ao excluir profissional.</source>
         <translation>Error deleting professional.</translation>
     </message>
@@ -2587,7 +2607,7 @@ Verify that the file exists and the configuration metadata is correct.</translat
         <translation>Delete</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/professionallistview.py" line="136"/>
+        <location filename="../../src/ttea/view/professionallistview.py" line="135"/>
         <source>Deseja sair do cadastro?</source>
         <translation>Do you want to exit the form?</translation>
     </message>
@@ -2595,28 +2615,28 @@ Verify that the file exists and the configuration metadata is correct.</translat
 <context>
     <name>ProfessionalService</name>
     <message>
-        <location filename="../../udescjoinvilletteaservice/professionalservice.py" line="87"/>
+        <location filename="../../src/ttea/service/professionalservice.py" line="87"/>
         <source>ID é obrigatório!
 </source>
         <translation>ID is required!
 </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaservice/professionalservice.py" line="89"/>
+        <location filename="../../src/ttea/service/professionalservice.py" line="89"/>
         <source>ID deve ser do tipo inteiro!
 </source>
         <translation>ID must be an integer!
 </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaservice/professionalservice.py" line="92"/>
+        <location filename="../../src/ttea/service/professionalservice.py" line="92"/>
         <source>Nome é obrigatório!
 </source>
         <translation>Name is required!
 </translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaservice/professionalservice.py" line="95"/>
+        <location filename="../../src/ttea/service/professionalservice.py" line="95"/>
         <source>Tipo é obrigatório!
 </source>
         <translation>Type is required!
@@ -2626,33 +2646,33 @@ Verify that the file exists and the configuration metadata is correct.</translat
 <context>
     <name>SplashScreen</name>
     <message>
-        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="92"/>
-        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="135"/>
+        <location filename="../../src/ttea/view/splashscreen.py" line="92"/>
+        <location filename="../../src/ttea/view/splashscreen.py" line="135"/>
         <source>Iniciando aplicação...</source>
         <translation>Starting application...</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="136"/>
+        <location filename="../../src/ttea/view/splashscreen.py" line="136"/>
         <source>Carregando módulos...</source>
         <translation>Loading modules…</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="137"/>
+        <location filename="../../src/ttea/view/splashscreen.py" line="137"/>
         <source>Inicializando interface...</source>
         <translation>Initializing interface…</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="138"/>
+        <location filename="../../src/ttea/view/splashscreen.py" line="138"/>
         <source>Verificando configurações...</source>
         <translation>Checking settings...</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="139"/>
+        <location filename="../../src/ttea/view/splashscreen.py" line="139"/>
         <source>Quase lá...</source>
         <translation>Almost there...</translation>
     </message>
     <message>
-        <location filename="../../udescjoinvilletteaview/splashscreen.py" line="204"/>
+        <location filename="../../src/ttea/view/splashscreen.py" line="204"/>
         <source>Concluído!</source>
         <translation>Completed!</translation>
     </message>
@@ -2660,7 +2680,7 @@ Verify that the file exists and the configuration metadata is correct.</translat
 <context>
     <name>TTeaApp</name>
     <message>
-        <location filename="../../udescjoinvilletteaapp/appconfig.py" line="115"/>
+        <location filename="../../src/ttea/app/appconfig.py" line="115"/>
         <source>Plataforma T-TEA</source>
         <translation>T-TEA Platform</translation>
     </message>

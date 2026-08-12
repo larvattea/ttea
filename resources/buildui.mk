@@ -42,8 +42,14 @@ all: $(PY_QRC_FILE) $(PY_UI_FILES) copy clean_local_ui
 $(PY_QRC_FILE): $(QRC_FILE)
 	$(RCC) $< -o $@
 
+#$(UI_DIR)/%ui.py: $(UI_DIR)/%.ui $(PY_QRC_FILE)
+#	$(UIC) $< -o $@ --absolute-imports
+
+PYTHON := python
+
 $(UI_DIR)/%ui.py: $(UI_DIR)/%.ui $(PY_QRC_FILE)
-	$(UIC) $< -o $@ --absolute-imports
+	$(UIC) $< -o $@
+	@$(PYTHON) -c "p='$@'; f=open(p,'r',encoding='utf-8'); c=f.read().replace('import resources_rc', 'import ttea.resources.resources_rc'); f.close(); f=open(p,'w',encoding='utf-8'); f.write(c); f.close()"
 
 # Copy rule (OS-specific)
 copy: $(PY_UI_FILES)
