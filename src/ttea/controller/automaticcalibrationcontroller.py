@@ -304,8 +304,8 @@ class AutomaticCalibrationController(QObject):
             detector = aruco.ArucoDetector(dictionary)
             cv2.namedWindow(self.monitor_screen, cv2.WINDOW_AUTOSIZE)
 
-            ultimos_vertices_camera = None
-            frame_congelado = None
+            last_camera_vertices = None
+            frozen_frame = None
 
             # -------------------------------------------------
             # LOOP PRINCIPAL
@@ -340,11 +340,11 @@ class AutomaticCalibrationController(QObject):
                     )
 
                     if vertices is not None:
-                        ultimos_vertices_camera = vertices
+                        last_camera_vertices = vertices
                         self._draw_quadrilateral(frame, vertices)
 
-                    frame_exibicao = frame.copy()
-                    linhas_hud = [
+                    display_frame = frame.copy()
+                    hud_lines = [
                         self.tr(
                             "Tecle [S] para ocultar a tela e capturar a imagem."
                         ),
@@ -356,16 +356,16 @@ class AutomaticCalibrationController(QObject):
                         ),
                     ]
 
-                    pos_x = 20  # Posição horizontal inicial
-                    pos_y_inicial = 40  # Posição vertical da primeira linha
-                    espacamento = 30  # Distância vertical entre linhas
+                    start_x_pos = 20  # Posição horizontal inicial
+                    start_y_pos = 40  # Posição vertical da primeira linha
+                    space_line = 30  # Distância vertical entre linhas
 
-                    for i, linha in enumerate(linhas_hud):
-                        y = pos_y_inicial + (i * espacamento)
+                    for i, line in enumerate(hud_lines):
+                        y = start_y_pos + (i * space_line)
                         cv2.putText(
-                            frame_exibicao,
-                            linha,
-                            (pos_x, y),
+                            display_frame,
+                            line,
+                            (start_x_pos, y),
                             cv2.FONT_HERSHEY_SIMPLEX,
                             0.6,
                             (0, 0, 0),
@@ -373,9 +373,9 @@ class AutomaticCalibrationController(QObject):
                             cv2.LINE_AA,
                         )
                         cv2.putText(
-                            frame_exibicao,
-                            linha,
-                            (pos_x, y),
+                            display_frame,
+                            line,
+                            (start_x_pos, y),
                             cv2.FONT_HERSHEY_SIMPLEX,
                             0.6,
                             (0, 255, 255),
@@ -383,12 +383,12 @@ class AutomaticCalibrationController(QObject):
                             cv2.LINE_AA,
                         )
                 else:
-                    frame_exibicao = frame_congelado.copy()
+                    display_frame = frozen_frame.copy()
                     msg_hud = self.tr(
                         "Amostra: Tecle [ESC] para salvar | Tecle [R] para repetir."
                     )
                     cv2.putText(
-                        frame_exibicao,
+                        display_frame,
                         msg_hud,
                         (22, 42),
                         cv2.FONT_HERSHEY_SIMPLEX,
@@ -398,7 +398,7 @@ class AutomaticCalibrationController(QObject):
                         cv2.LINE_AA,
                     )
                     cv2.putText(
-                        frame_exibicao,
+                        display_frame,
                         msg_hud,
                         (20, 40),
                         cv2.FONT_HERSHEY_SIMPLEX,
@@ -408,12 +408,12 @@ class AutomaticCalibrationController(QObject):
                         cv2.LINE_AA,
                     )
 
-                cv2.imshow(self.monitor_screen, frame_exibicao)
-                tecla = cv2.waitKey(1) & 0xFF
+                cv2.imshow(self.monitor_screen, display_frame)
+                key = cv2.waitKey(1) & 0xFF
 
                 # --- AÇÃO S: FECHAMENTO DA JANELA E CAPTURA LIMPA ---
                 if (
-                    tecla == ord("s") or tecla == ord("S")
+                    key == ord("s") or key == ord("S")
                 ) and not self.modo_preview:
                     cv2.destroyWindow(self.monitor_screen)
                     cv2.waitKey(1)
@@ -435,11 +435,11 @@ class AutomaticCalibrationController(QObject):
                         )
                         break
 
-                    ret, frame_limpo = cap.read()
+                    ret, clean_frame = cap.read()
 
                     if ret:
-                        vertices_limpos = self._process_frame_geometry(
-                            frame_limpo,
+                        clean_vertices = self._process_frame_geometry(
+                            clean_frame,
                             detector,
                             board,
                             square_size_average,
@@ -449,12 +449,12 @@ class AutomaticCalibrationController(QObject):
                             screen_height,
                         )
 
-                        if vertices_limpos is not None:
-                            ultimos_vertices_camera = vertices_limpos
+                        if clean_vertices is not None:
+                            last_camera_vertices = clean_vertices
                             self._draw_quadrilateral(
-                                frame_limpo, vertices_limpos, with_labels=True
+                                clean_frame, clean_vertices, with_labels=True
                             )
-                            frame_congelado = frame_limpo.copy()
+                            frozen_frame = clean_frame.copy()
                             self.modo_preview = True
                             self.msg_info_signal.emit(
                                 self.tr(
@@ -479,24 +479,21 @@ class AutomaticCalibrationController(QObject):
 
                 # --- AÇÃO R: VOLTA AO RASTREAMENTO REAL ---
                 elif (
-                    tecla == ord("r") or tecla == ord("R")
+                    key == ord("r") or key == ord("R")
                 ) and self.modo_preview:
                     self.modo_preview = False
-                    frame_congelado = None
+                    frozen_frame = None
                     self.msg_warning_signal.emit(
                         self.tr("Captura descartada. Rastreamento reativado.")
                     )
 
                 # --- AÇÃO ESC: SALVA E FECHA ---
-                elif tecla == 27:
-                    if (
-                        self.modo_preview
-                        and ultimos_vertices_camera is not None
-                    ):
-                        se, sd, ie, id_pt = ultimos_vertices_camera
+                elif key == 27:
+                    if self.modo_preview and last_camera_vertices is not None:
+                        se, sd, ie, id_pt = last_camera_vertices
 
                         if self.service.is_automatic_mirror_mode():
-                            largura_cam = frame_congelado.shape[1]
+                            largura_cam = frozen_frame.shape[1]
                             self.calibration_points = np.array(
                                 [
                                     [largura_cam - se[0], se[1]],  # SD

@@ -3,12 +3,11 @@
 ################################################################################
 ## Form generated from reading UI file 'calibrationsettingview.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.10.1
+## Created by: Qt User Interface Compiler version 6.11.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-import resources.resources_rc
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
                             QMetaObject, QObject, QPoint, QRect, QSize, Qt,
                             QTime, QUrl)
@@ -21,6 +20,8 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDialog,
                                QHBoxLayout, QLabel, QPushButton, QRadioButton,
                                QSizePolicy, QSpacerItem, QSpinBox, QTabWidget,
                                QVBoxLayout, QWidget)
+
+import ttea.resources.resources_rc
 
 
 class Ui_CalibrationSettingView(object):
@@ -268,7 +269,7 @@ class Ui_CalibrationSettingView(object):
 
         self.chk_enable_mediapipe_pose = QCheckBox(self.tab_mediapipe)
         self.chk_enable_mediapipe_pose.setObjectName(u"chk_enable_mediapipe_pose")
-        self.chk_enable_mediapipe_pose.setChecked(False)
+        self.chk_enable_mediapipe_pose.setChecked(True)
         self.chk_enable_mediapipe_pose.setProperty(u"dataclass_property", u"mediapipe_enable_mediapipe_pose")
 
         self.frm_mediapipe.setWidget(7, QFormLayout.ItemRole.FieldRole, self.chk_enable_mediapipe_pose)

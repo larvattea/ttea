@@ -1,14 +1,8 @@
 from typing import TYPE_CHECKING, Any, Dict, Optional, Union
 
 from PySide6.QtGui import QCloseEvent
-from PySide6.QtWidgets import (
-    QCheckBox,
-    QComboBox,
-    QDialog,
-    QDoubleSpinBox,
-    QRadioButton,
-    QSpinBox,
-)
+from PySide6.QtWidgets import (QCheckBox, QComboBox, QDialog, QDoubleSpinBox,
+                               QRadioButton, QSpinBox)
 
 # Local module import
 from ttea.controller import CalibrationSettingController

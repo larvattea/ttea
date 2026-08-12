@@ -3,12 +3,11 @@
 ################################################################################
 ## Form generated from reading UI file 'mainview.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.10.1
+## Created by: Qt User Interface Compiler version 6.11.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-import resources.resources_rc
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
                             QMetaObject, QObject, QPoint, QRect, QSize, Qt,
                             QTime, QUrl)
@@ -18,6 +17,8 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient, QCursor,
                            QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QMainWindow, QMenu, QMenuBar,
                                QSizePolicy, QSpacerItem, QVBoxLayout, QWidget)
+
+import ttea.resources.resources_rc
 
 
 class Ui_MainView(object):

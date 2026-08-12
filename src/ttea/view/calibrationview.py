@@ -52,6 +52,8 @@ class CalibrationView(QDialog, Ui_CalibrationView, WindowConfig):
         self.pb_calibrate_semi.clicked.connect(
             self.controller.handle_calibrate_semi
         )
+        self.pb_calibrate_semi.setVisible(False)
+
         self.pb_calibrate_manual.clicked.connect(
             self.controller.handle_calibrate_manual
         )
