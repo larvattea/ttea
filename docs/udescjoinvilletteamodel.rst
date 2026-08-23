@@ -20,6 +20,14 @@ udescjoinvilletteamodel.player module
    :show-inheritance:
    :undoc-members:
 
+udescjoinvilletteamodel.professional module
+-------------------------------------------
+
+.. automodule:: udescjoinvilletteamodel.professional
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
 Module contents
 ---------------
 

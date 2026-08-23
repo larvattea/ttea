@@ -209,12 +209,12 @@ Cierre la ventana e intente nuevamente.</translation>
 <context>
     <name>CalibrationSettingController</name>
     <message>
-        <location filename="../../src/ttea/controller/calibrationsettingcontroller.py" line="61"/>
+        <location filename="../../src/ttea/controller/calibrationsettingcontroller.py" line="63"/>
         <source>Configuração de calibração cadastrada com sucesso!</source>
         <translation>¡Configuración de calibración registrada con éxito!</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/calibrationsettingcontroller.py" line="66"/>
+        <location filename="../../src/ttea/controller/calibrationsettingcontroller.py" line="68"/>
         <source>Erro ao salvar a configuração de calibração.</source>
         <translation>Error al guardar la configuración de calibración.</translation>
     </message>
@@ -854,27 +854,27 @@ Cierre la ventana e intente nuevamente.</translation>
 <context>
     <name>CameraVideoThread</name>
     <message>
-        <location filename="../../src/ttea/core/cameravideothread.py" line="51"/>
+        <location filename="../../src/ttea/core/cameravideothread.py" line="56"/>
         <source>Não foi possível abrir a câmera.</source>
         <translation>No fue posible abrir la cámara.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/core/cameravideothread.py" line="131"/>
+        <location filename="../../src/ttea/core/cameravideothread.py" line="142"/>
         <source>Rastreio Pés (%): {:.2f}</source>
         <translation>Rastreo de Pies (%): {:.2f}</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/core/cameravideothread.py" line="149"/>
+        <location filename="../../src/ttea/core/cameravideothread.py" line="160"/>
         <source>FPS: {}</source>
         <translation>FPS: {}</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/core/cameravideothread.py" line="158"/>
+        <location filename="../../src/ttea/core/cameravideothread.py" line="169"/>
         <source>Brilho: {}</source>
         <translation>Brilho: {}</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/core/cameravideothread.py" line="176"/>
+        <location filename="../../src/ttea/core/cameravideothread.py" line="187"/>
         <source>Erro ao capturar imagem da câmera. Dispositivo desconectado.
 Verifique a conexão cabo e ou instalação da câmera.
 Feche a janela e tente novamente.</source>
@@ -1614,30 +1614,40 @@ Comprueba que los metadatos de configuración sean correctos.</translation>
     </message>
     <message>
         <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="95"/>
+        <source>Selecione um jogador antes de iniciar.</source>
+        <translation>Seleccione un jugador antes de comenzar.</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="102"/>
+        <source>Selecione um professional antes de iniciar.</source>
+        <translation>Seleccione un profesional antes de comenzar.</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="109"/>
         <source>Selecione um jogo antes de iniciar.</source>
         <translation>Seleccione un juego antes de comenzar.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="101"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="115"/>
         <source>Já existe um jogo em execução.
 Feche o jogo atual antes de iniciar outro.</source>
         <translation>Ya hay un juego en ejecución. 
 Cierra el juego actual antes de iniciar otro.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="114"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="128"/>
         <source>Erro: Executável do jogo não encontrado em: {0}.
 Verifique se o arquivo existe e se os metadados de configuração estão corretos.</source>
         <translation>Error: No se ha encontrado el ejecutable del juego en: {0}. 
 Comprueba que el archivo exista y que los metadatos de configuración sean correctos.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="146"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="160"/>
         <source>Espere</source>
         <translation>Esperar</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="225"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="239"/>
         <source>Jogar</source>
         <translation>Jugar</translation>
     </message>
@@ -1709,42 +1719,42 @@ Comprueba que el archivo exista y que los metadatos de configuración sean corre
 <context>
     <name>PlayerKarteaConfigEditController</name>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="245"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="256"/>
         <source>Jogador é obrigatório!
 </source>
         <translation>¡El jugador é obligatorio!
 </translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="247"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="258"/>
         <source>Imagem do veículo é obrigatória!
 </source>
         <translation>¡La imagen del vehículo es obligatoria!
 </translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="249"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="263"/>
         <source>Imagem do ambiente é obrigatória!
 </source>
         <translation>¡La imagen del entorno es obligatoria!
 </translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="251"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="265"/>
         <source>Imagem do alvo é obrigatória!
 </source>
         <translation>¡La imagen del blanco es obligatoria!
 </translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="253"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="267"/>
         <source>Imagem do obstáculo é obrigatória!
 </source>
         <translation>¡La imagen del obstáculo es obligatoria!
 </translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="257"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="271"/>
         <source>Por favor, corrija os dados inválidos:
 </source>
         <translation>Por favor, corrija los datos no válidos:
@@ -1804,119 +1814,124 @@ Comprueba que el archivo exista y que los metadatos de configuración sean corre
         <translation>Recurso Visual</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="161"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="173"/>
         <source>Selecione um recurso visual para visualizar</source>
         <translation>Seleccione un recurso visual para visualizar</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="223"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="244"/>
         <source>Imagem do Veículo:</source>
         <translation>Imagen del Vehículo:</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="240"/>
-        <source>Imagem do Ambiente:</source>
-        <translation>Imagen del Entorno:</translation>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="261"/>
+        <source>Imagem do Ambiente Direita:</source>
+        <translation>Imagen del Entorno Derecha:</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="257"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="278"/>
+        <source>Imagem do Ambiente Esquerda:</source>
+        <translation>Imagen del Entorno Izquierda:</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="295"/>
         <source>Imagem do Alvo:</source>
         <translation>Imagen del Blanco:</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="274"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="312"/>
         <source>Imagem do Obstáculo:</source>
         <translation>Imagen del Obstáculo:</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="310"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="348"/>
         <source>Feedback Visual</source>
         <translation>Retroalimentación Visual</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="322"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="372"/>
         <source>Selecione uma imagem de feedback para visualizar</source>
         <translation>Seleccione una imagen de retroalimentación para visualizar</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="384"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="443"/>
         <source>Imagem de Feedback Positivo:</source>
         <translation>Imagen de Retroalimentación Positiva:</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="401"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="460"/>
         <source>Imagem de Feedback Neutro:</source>
         <translation>Imagen de Retroalimentación Neutra:</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="418"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="477"/>
         <source>Imagem de Feedback Negativo:</source>
         <translation>Imagen de Retroalimentación Negativa:</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="451"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="510"/>
         <source>Feedback Sonoro</source>
         <translation>Retroalimentación Sonora</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="459"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="518"/>
         <source>Som de Feedback Positivo:</source>
         <translation>Sonido del Retroalimentación Positiva:</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="478"/>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="510"/>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="542"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="537"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="569"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="601"/>
         <source>Play</source>
         <translation>Reproducir</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="491"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="550"/>
         <source>Som de Feedback Neutro:</source>
         <translation>Sonido de Retroalimentación Neutra:</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="523"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="582"/>
         <source>Som de Feedback Negativo:</source>
         <translation>Sonido de Retroalimentación Negativa:</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="571"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="630"/>
         <source>Configuração de Interface</source>
         <translation>Configuración de Interfaz</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="579"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="638"/>
         <source>Paleta:</source>
         <translation>Paleta:</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="596"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="655"/>
         <source>HUD:</source>
         <translation>HUD:</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="606"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="665"/>
         <source>Som:</source>
         <translation>Sonido:</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="650"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="709"/>
         <source>Gravar operação corrente</source>
         <translation>Guardar operación actual</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="653"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="712"/>
         <source>OK</source>
         <translation>Aceptar</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="664"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="723"/>
         <source>Cancelar operação corrente</source>
         <translation>Cancelar operación actual</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="667"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="726"/>
         <source>Cancelar</source>
         <translation>Cancelar</translation>
     </message>
@@ -2296,102 +2311,102 @@ Comprueba que el archivo exista y que los metadatos de configuración sean corre
 <context>
     <name>Professional</name>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="89"/>
+        <location filename="../../src/ttea/model/professional.py" line="80"/>
         <source>Arteterapeuta</source>
         <translation>Arteterapeuta</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="90"/>
+        <location filename="../../src/ttea/model/professional.py" line="81"/>
         <source>Assistente Social</source>
         <translation>Trabajador Social</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="91"/>
+        <location filename="../../src/ttea/model/professional.py" line="82"/>
         <source>Cuidador Especializado</source>
         <translation>Cuidador Especializado</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="92"/>
+        <location filename="../../src/ttea/model/professional.py" line="83"/>
         <source>Educador Físico</source>
         <translation>Educador Físico</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="93"/>
+        <location filename="../../src/ttea/model/professional.py" line="84"/>
         <source>Enfermeiro</source>
         <translation>Enfermero</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="94"/>
+        <location filename="../../src/ttea/model/professional.py" line="85"/>
         <source>Fisioterapeuta</source>
         <translation>Fisioterapeuta</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="95"/>
+        <location filename="../../src/ttea/model/professional.py" line="86"/>
         <source>Fonoaudiólogo</source>
         <translation>Logopeda</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="96"/>
+        <location filename="../../src/ttea/model/professional.py" line="87"/>
         <source>Geneticista</source>
         <translation>Geneticista</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="97"/>
+        <location filename="../../src/ttea/model/professional.py" line="88"/>
         <source>Mediador Escolar</source>
         <translation>Mediador Escolar</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="98"/>
+        <location filename="../../src/ttea/model/professional.py" line="89"/>
         <source>Musicoterapeuta</source>
         <translation>Musicoterapeuta</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="99"/>
+        <location filename="../../src/ttea/model/professional.py" line="90"/>
         <source>Neuropediatra</source>
         <translation>Neuropediatra</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="100"/>
+        <location filename="../../src/ttea/model/professional.py" line="91"/>
         <source>Neurologista</source>
         <translation>Neurólogo</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="101"/>
+        <location filename="../../src/ttea/model/professional.py" line="92"/>
         <source>Nutricionista</source>
         <translation>Nutricionista</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="102"/>
+        <location filename="../../src/ttea/model/professional.py" line="93"/>
         <source>Pediatra</source>
         <translation>Pediatra</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="103"/>
+        <location filename="../../src/ttea/model/professional.py" line="94"/>
         <source>Professor Educação Especial</source>
         <translation>Maestro de Educación Especial</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="104"/>
+        <location filename="../../src/ttea/model/professional.py" line="95"/>
         <source>Psicopedagogo</source>
         <translation>Psicopedagogo</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="105"/>
+        <location filename="../../src/ttea/model/professional.py" line="96"/>
         <source>Psicólogo</source>
         <translation>Psicólogo</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="106"/>
+        <location filename="../../src/ttea/model/professional.py" line="97"/>
         <source>Psiquiatra</source>
         <translation>Psiquiatra</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="107"/>
+        <location filename="../../src/ttea/model/professional.py" line="98"/>
         <source>Terapeuta Ocupacional</source>
         <translation>Terapeuta Ocupacional</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="108"/>
+        <location filename="../../src/ttea/model/professional.py" line="99"/>
         <source>Voluntário</source>
         <translation>Voluntario</translation>
     </message>
@@ -2643,6 +2658,12 @@ Comprueba que el archivo exista y que los metadatos de configuración sean corre
 </source>
         <translation>¡El tipo es obligatorio!
 </translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/service/professionalservice.py" line="99"/>
+        <source>Instituição/Estabelecimento é obrigatório!
+</source>
+        <translation>¡Institución/Establecimiento es obligatorio! </translation>
     </message>
 </context>
 <context>

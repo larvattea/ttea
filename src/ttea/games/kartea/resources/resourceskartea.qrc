@@ -12,8 +12,8 @@
 
         <!-- Ambiente -->
         <file alias="environment/grass">images/environment/grass.png</file>
-        <file alias="environment/tree/defaultenvironment">images/environment/tree.png</file>
-        <file alias="environment/tree/variant1environment">images/environment/tree1.png</file>
+        <file alias="environment/tree/right">images/environment/treeright.png</file>
+        <file alias="environment/tree/left">images/environment/treeleft.png</file>
         <file alias="environment/gasstation">images/environment/gasstation.png</file>
 
         <!-- Obstáculos -->

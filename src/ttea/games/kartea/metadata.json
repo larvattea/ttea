@@ -4,7 +4,7 @@
         "Alexandre Altair de Melo"
     ],
     "contact_email": "",
-    "exec": "kartea.py",
+    "exec": "main.py",
     "game": "KarTEA",
     "icon": "resources/icons/kartea4.ico",
     "language":{

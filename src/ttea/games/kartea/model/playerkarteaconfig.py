@@ -149,7 +149,8 @@ class PlayerKarteaConfig:
     level: "KarteaPhaseLevel"
     level_time: int
     car_image: str
-    environment_image: str
+    environment_image_right: str
+    environment_image_left: str
     target_image: str
     obstacle_image: str
     positive_feedback_image: str

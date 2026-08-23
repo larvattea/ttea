@@ -46,6 +46,8 @@ class Calibration:
     screen_height: int
     screen_available_width: int
     screen_available_height: int
+    screen_pos_x: int
+    screen_pos_y: int
 
     # Available width and height for projection and aspect ratio 16:9 or 4:3
     content_width: int

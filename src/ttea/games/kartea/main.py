@@ -47,9 +47,18 @@ class KarTEA:
         pygame.init()
         pygame.display.set_caption(GameSettings.WINDOW_NAME)
 
-        self.screen = pygame.display.set_mode(
-            (GameSettings.SCREEN_WIDTH, GameSettings.SCREEN_HEIGHT)
-        )
+        if GameSettings.FULLSCREEN:
+            self.screen = pygame.display.set_mode(
+                (GameSettings.SCREEN_WIDTH, GameSettings.SCREEN_HEIGHT),
+                pygame.FULLSCREEN,
+                display=GameSettings.SCREEN_OS_INDEX,
+            )
+        else:
+            self.screen = pygame.display.set_mode(
+                (GameSettings.SCREEN_WIDTH, GameSettings.SCREEN_HEIGHT),
+                display=GameSettings.SCREEN_OS_INDEX,
+            )
+
         self.clock = pygame.time.Clock()
 
         # Fonts
@@ -162,7 +171,11 @@ class KarTEA:
         sys.exit()
 
 
-# ====================== EXECUÇÃO DO JOGO ======================
-if __name__ == "__main__":
+def main() -> None:
+    """Start the KarTEA Game."""
     kartea = KarTEA()
     kartea.run()
+
+
+if __name__ == "__main__":
+    main()

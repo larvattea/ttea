@@ -27,13 +27,18 @@ class CameraVideoThread(QThread, QObject):
         self.use_low_resolution = use_low_resolution
         self.filter = MediaPipeFilter()
         self.service = CalibrationService()
+        self.last_timestamp_ms = 0
 
     def _convert_to_proto(self, landmarks):
         """Converte landmarks da Task API para o formato esperado pelo draw_landmarks."""
         landmark_subset = landmark_pb2.NormalizedLandmarkList()
         for l in landmarks:
             landmark_subset.landmark.add(
-                x=l.x, y=l.y, z=l.z, visibility=l.visibility
+                x=l.x,
+                y=l.y,
+                z=l.z,
+                visibility=getattr(l, "visibility", 0.0),
+                presence=getattr(l, "presence", 0.0),
             )
         return landmark_subset
 
@@ -86,14 +91,20 @@ class CameraVideoThread(QThread, QObject):
 
                 if self.service.is_enable_mediapipe_pose():
                     # Preparação para MediaPipe
-                    timestamp = int(time.time() * 1000)
+                    timestamp_ms = int(time.time() * 1000)
+                    if timestamp_ms <= self.last_timestamp_ms:
+                        timestamp_ms = self.last_timestamp_ms + 1
+                    self.last_timestamp_ms = timestamp_ms
+
                     rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                     mp_image = mp.Image(
                         image_format=mp.ImageFormat.SRGB, data=rgb_frame
                     )
 
                     # Processamento MediaPipe
-                    result = self.mp_manager.detect(mp_image, timestamp)
+                    result = self.mp_manager.detect_for_video(
+                        mp_image, timestamp_ms
+                    )
 
                     if result.pose_landmarks:
                         # Suavização (agora aplicada a todos os pontos se desejar)

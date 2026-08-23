@@ -102,8 +102,11 @@ class PlayerKarteaConfigEditController(QObject):
             )
             self.view.spn_level_time.setValue(self.config.level_time)
             self.view.cbx_vehicle_image.setCurrentText(self.config.car_image)
-            self.view.cbx_environment_image.setCurrentText(
-                self.config.environment_image
+            self.view.cbx_environment_image_right.setCurrentText(
+                self.config.environment_image_right
+            )
+            self.view.cbx_environment_image_left.setCurrentText(
+                self.config.environment_image_left
             )
             self.view.cbx_target_image.setCurrentText(self.config.target_image)
             self.view.cbx_obstacle_image.setCurrentText(
@@ -160,8 +163,15 @@ class PlayerKarteaConfigEditController(QObject):
             self.view.cbx_vehicle_image.setCurrentText(
                 default_config["visual_resources"]["vehicle_image_default"]
             )
-            self.view.cbx_environment_image.setCurrentText(
-                default_config["visual_resources"]["environment_image_default"]
+            self.view.cbx_environment_image_right.setCurrentText(
+                default_config["visual_resources"][
+                    "environment_image_default_right"
+                ]
+            )
+            self.view.cbx_environment_image_left.setCurrentText(
+                default_config["visual_resources"][
+                    "environment_image_default_left"
+                ]
             )
             self.view.cbx_target_image.setCurrentText(
                 default_config["visual_resources"]["target_image_default"]
@@ -245,7 +255,10 @@ class PlayerKarteaConfigEditController(QObject):
             error_message += self.tr("Jogador é obrigatório!\n")
         if not self.view.cbx_vehicle_image.currentText():
             error_message += self.tr("Imagem do veículo é obrigatória!\n")
-        if not self.view.cbx_environment_image.currentText():
+        if (
+            not self.view.cbx_environment_image_right.currentText()
+            or not self.view.cbx_environment_image_left.currentText()
+        ):
             error_message += self.tr("Imagem do ambiente é obrigatória!\n")
         if not self.view.cbx_target_image.currentText():
             error_message += self.tr("Imagem do alvo é obrigatória!\n")
@@ -319,7 +332,8 @@ class PlayerKarteaConfigEditController(QObject):
             "level_id": level.id,
             "level_time": self.view.spn_level_time.value(),
             "car_image": self.view.cbx_vehicle_image.currentText(),
-            "environment_image": self.view.cbx_environment_image.currentText(),
+            "environment_image_right": self.view.cbx_environment_image_right.currentText(),
+            "environment_image_left": self.view.cbx_environment_image_left.currentText(),
             "target_image": self.view.cbx_target_image.currentText(),
             "obstacle_image": self.view.cbx_obstacle_image.currentText(),
             "positive_feedback_image": self.view.cbx_positive_feedback_image.currentText(),

@@ -23,19 +23,9 @@ class Background:
         self.time_left = time.time()
         self.dt = 0
 
-        # TODO precisa da árvore do lado direito no cadastro
-        # self.sprite_arv_esq = pygame.image.load(
-        #    "Assets/Kartea/5.png"
-        # ).convert_alpha()
-        # self.sprite_arv_dir = pygame.image.load(
-        #    "Assets/Kartea/5,1.png"
-        # ).convert_alpha()
+        self.sprite_arv_esq = Image.load(GameSettings.ENVIRONMENT_IMAGE_LEFT)
 
-        self.sprite_arv_esq = Image.load(GameSettings.ENVIRONMENT_IMAGE)
-
-        self.sprite_arv_dir = Image.load(
-            GameSettings.ENVIRONMENT_IMAGE_OTHER_SIDE
-        )
+        self.sprite_arv_dir = Image.load(GameSettings.ENVIRONMENT_IMAGE_RIGHT)
 
         # Background image (usado no menu e no jogo)
         # "Assets/Kartea/bg.png"
@@ -144,7 +134,8 @@ class Background:
 
     def get_startPos(self) -> int:
         """Retorna a posição inicial para spawn de alvos/obstáculos."""
-        return (self.pos // GameSettings.SEGMENT_LENGTH) + 200
+        # return (self.pos // GameSettings.SEGMENT_LENGTH) + 200
+        return (self.pos // GameSettings.SEGMENT_LENGTH) + 200 % self.N
 
     def draw(self, surface: pygame.Surface):
         """Desenha o background, estrada e sprites."""

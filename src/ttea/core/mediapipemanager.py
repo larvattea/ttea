@@ -30,6 +30,6 @@ class MediaPipeManager:
 
         self.detector = vision.PoseLandmarker.create_from_options(options)
 
-    def detect(self, mp_image, timestamp_ms):
+    def detect_for_video(self, mp_image, timestamp_ms):
         """Executa a detecção de pose para um frame de vídeo."""
         return self.detector.detect_for_video(mp_image, timestamp_ms)

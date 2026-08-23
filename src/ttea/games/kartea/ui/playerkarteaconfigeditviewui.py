@@ -3,11 +3,12 @@
 ################################################################################
 ## Form generated from reading UI file 'playerkarteaconfigeditview.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.10.1
+## Created by: Qt User Interface Compiler version 6.11.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
+import resources.resources_rc
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
                             QMetaObject, QObject, QPoint, QRect, QSize, Qt,
                             QTime, QUrl)
@@ -19,8 +20,6 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDialog,
                                QFormLayout, QHBoxLayout, QLabel, QPushButton,
                                QSizePolicy, QSpacerItem, QSpinBox, QTabWidget,
                                QVBoxLayout, QWidget)
-
-import ttea.resources.resources_rc
 
 
 class Ui_PlayerKarteaConfigEditView(object):
@@ -115,28 +114,40 @@ class Ui_PlayerKarteaConfigEditView(object):
         self.visual_resources_layout.setContentsMargins(10, 10, 10, 10)
         self.lbl_visual_current_type = QLabel(self.lay_visual_resources)
         self.lbl_visual_current_type.setObjectName(u"lbl_visual_current_type")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lbl_visual_current_type.sizePolicy().hasHeightForWidth())
+        self.lbl_visual_current_type.setSizePolicy(sizePolicy)
+        self.lbl_visual_current_type.setMinimumSize(QSize(0, 40))
         font = QFont()
         font.setPointSize(11)
         font.setBold(True)
         self.lbl_visual_current_type.setFont(font)
         self.lbl_visual_current_type.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.lbl_visual_current_type.setWordWrap(False)
         self.lbl_visual_current_type.setMargin(10)
 
-        self.visual_resources_layout.addWidget(self.lbl_visual_current_type)
+        self.visual_resources_layout.addWidget(self.lbl_visual_current_type, 0, Qt.AlignmentFlag.AlignHCenter)
 
         self.lbl_visual_preview = QLabel(self.lay_visual_resources)
         self.lbl_visual_preview.setObjectName(u"lbl_visual_preview")
-        self.lbl_visual_preview.setMinimumSize(QSize(280, 280))
-        self.lbl_visual_preview.setMaximumSize(QSize(350, 350))
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.lbl_visual_preview.sizePolicy().hasHeightForWidth())
+        self.lbl_visual_preview.setSizePolicy(sizePolicy1)
+        self.lbl_visual_preview.setMinimumSize(QSize(250, 250))
+        self.lbl_visual_preview.setMaximumSize(QSize(250, 250))
         self.lbl_visual_preview.setStyleSheet(u"border: 2px solid #666666; background-color: #ffffff; border-radius: 10px;")
         self.lbl_visual_preview.setScaledContents(True)
         self.lbl_visual_preview.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.visual_resources_layout.addWidget(self.lbl_visual_preview, 0, Qt.AlignmentFlag.AlignHCenter)
 
-        self.verticalSpacer_preview = QSpacerItem(20, 15, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.vs_visual_preview = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
-        self.visual_resources_layout.addItem(self.verticalSpacer_preview)
+        self.visual_resources_layout.addItem(self.vs_visual_preview)
 
         self.visual_form = QFormLayout()
         self.visual_form.setObjectName(u"visual_form")
@@ -153,41 +164,53 @@ class Ui_PlayerKarteaConfigEditView(object):
 
         self.visual_form.setWidget(0, QFormLayout.ItemRole.FieldRole, self.cbx_vehicle_image)
 
-        self.lbl_environment_image = QLabel(self.lay_visual_resources)
-        self.lbl_environment_image.setObjectName(u"lbl_environment_image")
+        self.lbl_environment_image_right = QLabel(self.lay_visual_resources)
+        self.lbl_environment_image_right.setObjectName(u"lbl_environment_image_right")
 
-        self.visual_form.setWidget(1, QFormLayout.ItemRole.LabelRole, self.lbl_environment_image)
+        self.visual_form.setWidget(1, QFormLayout.ItemRole.LabelRole, self.lbl_environment_image_right)
 
-        self.cbx_environment_image = QComboBox(self.lay_visual_resources)
-        self.cbx_environment_image.setObjectName(u"cbx_environment_image")
-        self.cbx_environment_image.setEditable(True)
-        self.cbx_environment_image.setMaxVisibleItems(5)
+        self.cbx_environment_image_right = QComboBox(self.lay_visual_resources)
+        self.cbx_environment_image_right.setObjectName(u"cbx_environment_image_right")
+        self.cbx_environment_image_right.setEditable(True)
+        self.cbx_environment_image_right.setMaxVisibleItems(5)
 
-        self.visual_form.setWidget(1, QFormLayout.ItemRole.FieldRole, self.cbx_environment_image)
+        self.visual_form.setWidget(1, QFormLayout.ItemRole.FieldRole, self.cbx_environment_image_right)
+
+        self.lbl_environment_image_left = QLabel(self.lay_visual_resources)
+        self.lbl_environment_image_left.setObjectName(u"lbl_environment_image_left")
+
+        self.visual_form.setWidget(2, QFormLayout.ItemRole.LabelRole, self.lbl_environment_image_left)
+
+        self.cbx_environment_image_left = QComboBox(self.lay_visual_resources)
+        self.cbx_environment_image_left.setObjectName(u"cbx_environment_image_left")
+        self.cbx_environment_image_left.setEditable(True)
+        self.cbx_environment_image_left.setMaxVisibleItems(5)
+
+        self.visual_form.setWidget(2, QFormLayout.ItemRole.FieldRole, self.cbx_environment_image_left)
 
         self.lbl_target_image = QLabel(self.lay_visual_resources)
         self.lbl_target_image.setObjectName(u"lbl_target_image")
 
-        self.visual_form.setWidget(2, QFormLayout.ItemRole.LabelRole, self.lbl_target_image)
+        self.visual_form.setWidget(3, QFormLayout.ItemRole.LabelRole, self.lbl_target_image)
 
         self.cbx_target_image = QComboBox(self.lay_visual_resources)
         self.cbx_target_image.setObjectName(u"cbx_target_image")
         self.cbx_target_image.setEditable(True)
         self.cbx_target_image.setMaxVisibleItems(5)
 
-        self.visual_form.setWidget(2, QFormLayout.ItemRole.FieldRole, self.cbx_target_image)
+        self.visual_form.setWidget(3, QFormLayout.ItemRole.FieldRole, self.cbx_target_image)
 
         self.lbl_obstracle_image = QLabel(self.lay_visual_resources)
         self.lbl_obstracle_image.setObjectName(u"lbl_obstracle_image")
 
-        self.visual_form.setWidget(3, QFormLayout.ItemRole.LabelRole, self.lbl_obstracle_image)
+        self.visual_form.setWidget(4, QFormLayout.ItemRole.LabelRole, self.lbl_obstracle_image)
 
         self.cbx_obstacle_image = QComboBox(self.lay_visual_resources)
         self.cbx_obstacle_image.setObjectName(u"cbx_obstacle_image")
         self.cbx_obstacle_image.setEditable(True)
         self.cbx_obstacle_image.setMaxVisibleItems(5)
 
-        self.visual_form.setWidget(3, QFormLayout.ItemRole.FieldRole, self.cbx_obstacle_image)
+        self.visual_form.setWidget(4, QFormLayout.ItemRole.FieldRole, self.cbx_obstacle_image)
 
 
         self.visual_resources_layout.addLayout(self.visual_form)
@@ -203,25 +226,31 @@ class Ui_PlayerKarteaConfigEditView(object):
         self.verticalLayout_visual_feedback.setObjectName(u"verticalLayout_visual_feedback")
         self.lbl_current_feedback_type = QLabel(self.lay_visual_feedback)
         self.lbl_current_feedback_type.setObjectName(u"lbl_current_feedback_type")
+        sizePolicy.setHeightForWidth(self.lbl_current_feedback_type.sizePolicy().hasHeightForWidth())
+        self.lbl_current_feedback_type.setSizePolicy(sizePolicy)
+        self.lbl_current_feedback_type.setMinimumSize(QSize(0, 40))
         self.lbl_current_feedback_type.setFont(font)
         self.lbl_current_feedback_type.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.lbl_current_feedback_type.setWordWrap(False)
         self.lbl_current_feedback_type.setMargin(10)
 
         self.verticalLayout_visual_feedback.addWidget(self.lbl_current_feedback_type, 0, Qt.AlignmentFlag.AlignHCenter)
 
         self.lbl_feedback_preview = QLabel(self.lay_visual_feedback)
         self.lbl_feedback_preview.setObjectName(u"lbl_feedback_preview")
-        self.lbl_feedback_preview.setMinimumSize(QSize(280, 280))
-        self.lbl_feedback_preview.setMaximumSize(QSize(350, 350))
+        sizePolicy1.setHeightForWidth(self.lbl_feedback_preview.sizePolicy().hasHeightForWidth())
+        self.lbl_feedback_preview.setSizePolicy(sizePolicy1)
+        self.lbl_feedback_preview.setMinimumSize(QSize(250, 250))
+        self.lbl_feedback_preview.setMaximumSize(QSize(250, 250))
         self.lbl_feedback_preview.setStyleSheet(u"border: 2px solid #666666; background-color: #ffffff; border-radius: 10px;")
         self.lbl_feedback_preview.setScaledContents(True)
         self.lbl_feedback_preview.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout_visual_feedback.addWidget(self.lbl_feedback_preview, 0, Qt.AlignmentFlag.AlignHCenter)
 
-        self.vs_preview = QSpacerItem(20, 15, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        self.vs_feedback_preview = QSpacerItem(20, 20, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
-        self.verticalLayout_visual_feedback.addItem(self.vs_preview)
+        self.verticalLayout_visual_feedback.addItem(self.vs_feedback_preview)
 
         self.frm_visual_feedback = QFormLayout()
         self.frm_visual_feedback.setObjectName(u"frm_visual_feedback")
@@ -450,7 +479,8 @@ class Ui_PlayerKarteaConfigEditView(object):
         self.lbl_visual_current_type.setText(QCoreApplication.translate("PlayerKarteaConfigEditView", u"Selecione um recurso visual para visualizar", None))
         self.lbl_visual_preview.setText("")
         self.lbl_vehicle_image.setText(QCoreApplication.translate("PlayerKarteaConfigEditView", u"Imagem do Ve\u00edculo:", None))
-        self.lbl_environment_image.setText(QCoreApplication.translate("PlayerKarteaConfigEditView", u"Imagem do Ambiente:", None))
+        self.lbl_environment_image_right.setText(QCoreApplication.translate("PlayerKarteaConfigEditView", u"Imagem do Ambiente Direita:", None))
+        self.lbl_environment_image_left.setText(QCoreApplication.translate("PlayerKarteaConfigEditView", u"Imagem do Ambiente Esquerda:", None))
         self.lbl_target_image.setText(QCoreApplication.translate("PlayerKarteaConfigEditView", u"Imagem do Alvo:", None))
         self.lbl_obstracle_image.setText(QCoreApplication.translate("PlayerKarteaConfigEditView", u"Imagem do Obst\u00e1culo:", None))
         self.tab_widget.setTabText(self.tab_widget.indexOf(self.lay_visual_resources), QCoreApplication.translate("PlayerKarteaConfigEditView", u"Recurso Visual", None))

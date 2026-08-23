@@ -161,7 +161,8 @@ class KarteaPathConfig(PathConfig):
         }
         config["visual_resources"] = {
             "vehicle_image_default": "defaultvehicle",
-            "environment_image_default": "defaultenvironment",
+            "environment_image_default_right": "right",
+            "environment_image_default_left": "left",
             "target_image_default": "defaultstar",
             "obstacle_image_default": "defaultobstacle",
         }

@@ -86,10 +86,24 @@ class PlayerGameLaunchController(QObject):
     def launch_game(self):
         """Valida e inicia o processo do jogo selecionado."""
         game_data = self.view.cbx_game.currentData()
-        player_id = str(self.view.cbx_player.currentData())
-        professional_id = str(self.view.cbx_professional.currentData())
+        player_id = self.view.cbx_player.currentData()
+        professional_id = self.view.cbx_professional.currentData()
 
         language_app = AppModel.get_instance().current_language
+
+        if player_id is None:
+            self.msg.warning(self.tr("Selecione um jogador antes de iniciar."))
+            return
+        else:
+            player_id = str(player_id)
+
+        if professional_id is None:
+            self.msg.warning(
+                self.tr("Selecione um professional antes de iniciar.")
+            )
+            return
+        else:
+            professional_id = str(professional_id)
 
         if not game_data:
             self.msg.warning(self.tr("Selecione um jogo antes de iniciar."))

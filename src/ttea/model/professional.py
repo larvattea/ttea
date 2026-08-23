@@ -1,3 +1,5 @@
+"""Data model for professionals associated with an institution facility."""
+
 from dataclasses import dataclass, fields
 from typing import TYPE_CHECKING, ClassVar, Dict, List
 
@@ -35,10 +37,7 @@ def initialize_reflexive(cls):
 @dataclass
 class Professional:
     """
-    Professional entity representing a professional.
-    A Professional instance encapsulates information about a
-    worker, including their identifier, name, professional type,
-    and associated institution or facility.
+    Represent a professional associated with an institution or facility.
 
     Attributes
     ----------
@@ -47,33 +46,25 @@ class Professional:
     name : str
         Full name of the professional.
     type : int
-        Professional type code mapping to TYPE_MAP dictionary.
+        Professional type code defined in ``TYPE_MAP``.
     institutionfacility : InstitutionFacility
-        Reference to the institution or facility where professional works.
-
-    CLASS VARIABLES
-    ---------------
+        Institution or facility where the professional works. It may be
+        ``None`` when validating or serializing an incomplete association.
     TYPE_MAP : ClassVar[dict[int, str]]
-        Mapping of professional type codes to translated type names.
-        Used for internationalization via QCoreApplication.
+        Class-level mapping from professional type codes to translated
+        labels. The values are registered with Qt for localized
+        internationalization (i18n).
     PROPERTIES : ClassVar[list[str]]
-        List of property names for serialization.
+        Class-level list of property names used for serialization.
     DATA_PROPERTIES : ClassVar[list]
-        List of data property definitions.
-
-    Methods
-    -------
-    is_valid() -> bool
-        Validates that all required fields are properly set.
-    set_data(data: Dict) -> None
-        Sets properties from a dictionary.
-    get_data() -> List[Dict]
-        Retrieves property data as a list of dictionaries.
+        Class-level list of default values for initializable properties.
 
     Notes
     -----
-    Type codes range from 0-20 representing different professions
-    including nurses, psychologists, physiotherapists, and others.
+    Type codes range from 0 to 20 and represent different professions.
+    Validation requires an integer identifier, a non-empty name, a known
+    type code, and non-``None`` values for non-core properties. Serialization
+    stores the associated facility by its identifier.
     """
 
     id: int
