@@ -1,10 +1,17 @@
+import time
+
 import cv2
 import mediapipe as mp
 import numpy as np
+from mediapipe.framework.formats import landmark_pb2
+from mediapipe.tasks import python
+from mediapipe.tasks.python import vision
 
 # from settings import *
 # import settings as st
 from ttea.games.kartea.gameutil import GameSettings
+from ttea.games.kartea.service import PlayerKarteaConfigService
+from ttea.games.kartea.util import KarteaPathConfig
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
@@ -15,9 +22,28 @@ class PoseTracking:
     """Classe responsável pela detecção de pose corporal usando MediaPipe, com foco nos pés."""
 
     def __init__(self):
-        self.pose_tracking = mp_poses.Pose(
-            min_detection_confidence=0.5, min_tracking_confidence=0.5
+        self.service = PlayerKarteaConfigService()
+        # ==================== MediaPipe Tasks (Pose Landmarker) =============
+        if self.service.is_raspberry_pi():
+            model_path = KarteaPathConfig.model(
+                self.service.get_mediapipe_model_embedded()
+            )
+        else:
+            model_path = KarteaPathConfig.model(
+                self.service.get_mediapipe_model_desktop()
+            )
+
+        base_options = python.BaseOptions(model_asset_path=model_path)
+        options = vision.PoseLandmarkerOptions(
+            base_options=base_options,
+            running_mode=self.service.get_mediapipe_execution_mode(),
+            num_poses=self.service.get_mediapipe_num_position(),
+            min_pose_detection_confidence=self.service.get_mediapipe_detection_position(),
+            min_pose_presence_confidence=self.service.get_mediapipe_detection_presence(),
+            min_tracking_confidence=self.service.get_mediapipe_detection_tracking(),
         )
+
+        self.pose_tracking = vision.PoseLandmarker.create_from_options(options)
 
         # Variáveis de posição dos pés
         self.feet_x = 0
@@ -29,8 +55,10 @@ class PoseTracking:
 
         self.results = None
         self.feet_closed = (
-            False  # Mantido como no original (apesar do método vazio)
+            False
+            # Mantido como no original (apesar do método vazio)
         )
+        self.last_timestamp_ms = 0
 
     def scan_feets(self, image):
         """
@@ -44,24 +72,33 @@ class PoseTracking:
         """
         rows, cols, _ = image.shape
 
-        # Converte BGR → RGB e marca como não writeable para melhor performance
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        image.flags.writeable = False
+        # Converte BGR para RGB
+        rgb_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
-        self.results = self.pose_tracking.process(image)
+        # Envelopa a imagem no formato esperado pelo Tasks API
+        mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb_image)
 
-        # Prepara a imagem para desenho
-        image.flags.writeable = True
-        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+        timestamp_ms = int(time.time() * 1000)
+        if timestamp_ms <= self.last_timestamp_ms:
+            timestamp_ms = self.last_timestamp_ms + 1
+        self.last_timestamp_ms = timestamp_ms
+
+        self.results = self.pose_tracking.detect_for_video(
+            mp_image, timestamp_ms
+        )
 
         self.feet_closed = False
 
-        if self.results.pose_landmarks:
+        if (
+            self.results.pose_landmarks
+            and len(self.results.pose_landmarks) > 0
+        ):
+            landmarks = self.results.pose_landmarks[0]
             # Landmark 30 = left heel, Landmark 29 = right heel
-            self.feet1_x = self.results.pose_landmarks.landmark[30].x
-            self.feet1_y = self.results.pose_landmarks.landmark[30].y
-            self.feet2_x = self.results.pose_landmarks.landmark[29].x
-            self.feet2_y = self.results.pose_landmarks.landmark[29].y
+            self.feet1_x = landmarks[30].x
+            self.feet1_y = landmarks[30].y
+            self.feet2_x = landmarks[29].x
+            self.feet2_y = landmarks[29].y
 
             # Calcula ponto central entre os dois pés
             x = (self.feet1_x + self.feet2_x) / 2
@@ -73,10 +110,24 @@ class PoseTracking:
             # Força a posição Y fixa (movimento apenas lateral)
             self.feet_y = GameSettings.SCREEN_HEIGHT - 50
 
+            pose_landmarks_proto = landmark_pb2.NormalizedLandmarkList()
+            pose_landmarks_proto.landmark.extend(
+                [
+                    landmark_pb2.NormalizedLandmark(
+                        x=landmark.x,
+                        y=landmark.y,
+                        z=landmark.z,
+                        visibility=landmark.visibility,
+                        presence=landmark.presence,
+                    )
+                    for landmark in landmarks
+                ]
+            )
+
             # Desenha os landmarks na imagem
             mp_drawing.draw_landmarks(
                 image,
-                self.results.pose_landmarks,
+                pose_landmarks_proto,
                 mp_poses.POSE_CONNECTIONS,
                 landmark_drawing_spec=mp_drawing_styles.get_default_pose_landmarks_style(),
             )
@@ -110,18 +161,12 @@ class PoseTracking:
         Aplica transformação de perspectiva para mapear a posição do jogador
         da câmera para as coordenadas do jogo.
         """
-        # Pontos de calibração da câmera para a tela de controle
-        # TODO pontos de calibração devem ser configuráveis (atualmente fixos no settings)
         pts1 = np.float32(
             [
                 GameSettings.pontos_calibracao[0],
                 GameSettings.pontos_calibracao[1],
                 GameSettings.pontos_calibracao[2],
                 GameSettings.pontos_calibracao[3],
-                # pontos_calibracao[0],
-                # pontos_calibracao[1],
-                # pontos_calibracao[2],
-                # pontos_calibracao[3],
             ]
         )
         pts2 = np.float32(

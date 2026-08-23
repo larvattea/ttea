@@ -4,8 +4,8 @@ from ttea.games.kartea.dao import PlayerKarteaConfigCsvDAO
 from ttea.games.kartea.model import (KarteaPhase, KarteaPhaseLevel,
                                      PlayerKarteaConfig, PlayerKarteaSession)
 from ttea.games.kartea.util import KarteaPathConfig
-from ttea.model import Player
-from ttea.service import PlayerService
+from ttea.model import CalibrationPoint, Player
+from ttea.service import CalibrationService, PlayerService
 
 
 class PlayerKarteaConfigService:
@@ -42,6 +42,7 @@ class PlayerKarteaConfigService:
     def __init__(
         self,
         dao: Optional[PlayerKarteaConfigCsvDAO] = None,
+        calibration_service: Optional[CalibrationService] = None,
         player_service: Optional[PlayerService] = None,
     ):
         """
@@ -54,6 +55,7 @@ class PlayerKarteaConfigService:
             ``PlayerKarteaConfigCsvDAO`` is created.
         """
         self.dao = dao or PlayerKarteaConfigCsvDAO()
+        self.calibration_service = calibration_service or CalibrationService()
         self.player_service = player_service or PlayerService()
 
     def get_all_configs(self) -> List[PlayerKarteaConfig]:
@@ -101,7 +103,8 @@ class PlayerKarteaConfigService:
             level=level,
             level_time=data.get("level_time", 0),
             car_image=data.get("car_image", ""),
-            environment_image=data.get("environment_image", ""),
+            environment_image_right=data.get("environment_image_right", ""),
+            environment_image_left=data.get("environment_image_left", ""),
             target_image=data.get("target_image", ""),
             obstacle_image=data.get("obstacle_image", ""),
             positive_feedback_image=data.get("positive_feedback_image", ""),
@@ -156,8 +159,8 @@ class PlayerKarteaConfigService:
 
         config.level_time = data.get("level_time", config.level_time)
         config.car_image = data.get("car_image", config.car_image)
-        config.environment_image = data.get(
-            "environment_image", config.environment_image
+        config.environment_image_right = data.get(
+            "environment_image", config.environment_image_right
         )
         config.target_image = data.get("target_image", config.target_image)
         config.obstacle_image = data.get(
@@ -243,3 +246,76 @@ class PlayerKarteaConfigService:
 
     def get_kartea_ini_config(self) -> Dict[str, str]:
         return KarteaPathConfig.read_config()
+
+    def is_raspberry_pi(self) -> bool:
+        return self.calibration_service.is_raspberry_pi()
+
+    # ======================
+    # Calibration
+    # ======================
+    def find_by_id_calibration_point(
+        self, calibration_point_id: int
+    ) -> Optional[CalibrationPoint]:
+        return self.calibration_service.find_by_id_calibration_point(
+            calibration_point_id
+        )
+
+    # ======================
+    # Hardware
+    # ======================
+    def is_fullscreen(self) -> bool:
+        return self.calibration_service.is_fullscreen()
+
+    def get_screen_size(self) -> Dict[str, int]:
+        return self.calibration_service.get_screen_size()
+
+    def get_camera_info(self) -> Dict[str, int]:
+        return self.calibration_service.get_camera_info()
+
+    def get_screen_info(self) -> Dict[str, int]:
+        return self.calibration_service.get_screen_info()
+
+    # ======================
+    # MEDIAPIPE
+    # ======================
+    def get_mediapipe_model_desktop(self) -> str:
+        return self.calibration_service.get_mediapipe_model_desktop()
+
+    def get_mediapipe_model_embedded(self) -> str:
+        return self.calibration_service.get_mediapipe_model_embedded()
+
+    def get_mediapipe_embedded_processing(self) -> str:
+        return self.calibration_service.get_mediapipe_embedded_processing()
+
+    def get_mediapipe_linux_processing(self) -> str:
+        return self.calibration_service.get_mediapipe_linux_processing()
+
+    def get_mediapipe_mac_processing(self) -> str:
+        return self.calibration_service.get_mediapipe_mac_processing()
+
+    def get_mediapipe_windows_processing(self) -> str:
+        return self.calibration_service.get_mediapipe_windows_processing()
+
+    def get_mediapipe_execution_mode(self) -> any:
+        return self.calibration_service.get_mediapipe_execution_mode()
+
+    def is_enable_mediapipe_pose(self) -> bool:
+        return self.calibration_service.is_mediapipe_enable_pose()
+
+    def get_mediapipe_detection_position(self) -> float:
+        return self.calibration_service.get_mediapipe_detection_position()
+
+    def get_mediapipe_detection_presence(self) -> float:
+        return self.calibration_service.get_mediapipe_detection_presence()
+
+    def get_mediapipe_detection_tracking(self) -> float:
+        return self.calibration_service.get_mediapipe_detection_tracking()
+
+    def get_mediapipe_num_position(self) -> int:
+        return self.calibration_service.get_mediapipe_num_position()
+
+    # ======================
+    # OpenCV
+    # ======================
+    def get_opencv_capture_backend(self) -> int:
+        return self.calibration_service.get_opencv_capture_backend()

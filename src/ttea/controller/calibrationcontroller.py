@@ -237,6 +237,8 @@ class CalibrationController(QObject):
             "screen_height": geometry.height(),
             "screen_available_width": available_geo.width(),
             "screen_available_height": available_geo.height(),
+            "screen_pos_x": geometry.x(),
+            "screen_pos_y": geometry.y(),
             "content_width": c_width,
             "content_height": c_height,
             "content_width_ratio": ratio_parts[0],

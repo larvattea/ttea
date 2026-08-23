@@ -7,7 +7,7 @@ from PySide6.QtGui import QGuiApplication, QScreen
 from PySide6.QtMultimedia import QCameraDevice, QMediaDevices
 
 from ttea.dao import CalibrationIniDAO, CalibrationPointCsvDAO
-from ttea.model import Calibration, CalibrationPoint
+from ttea.model import Calibration, CalibrationPoint, CalibrationSetting
 
 if TYPE_CHECKING:
     from ttea.service import CalibrationSettingService
@@ -120,6 +120,93 @@ class CalibrationService:
         return (
             self.dao_calibration_point.select(new_id) if new_id > 0 else None
         )
+
+    def find_by_id_calibration_point(
+        self, calibration_point_id: int
+    ) -> Optional[CalibrationPoint]:
+        """Retrieve a calibration point by its unique identifier.
+
+        Parameters
+        ----------
+        calibration_point_id : int
+            The calibration point's ID.
+
+        Returns
+        -------
+        CalibrationPoint or None
+            The matching ``CalibrationPoint`` instance or ``None`` if not found.
+        """
+        return self.dao_calibration_point.select(calibration_point_id)
+
+    # ======================
+    # Hardware
+    # ======================
+    def is_fullscreen(self) -> bool:
+        if (
+            self.calibration_setting_service.get_window_open_mode()
+            == CalibrationSetting.FULLSCREEN
+        ):
+            return True
+        else:
+            return False
+
+    def get_screen_size(self) -> Optional[Dict[str, int]]:
+        value = self.calibration_setting_service.get_window_open_mode()
+        calibration = self.dao.select(Calibration.ID_VALUE)
+
+        if calibration is None:
+            return None
+        else:
+            if value == CalibrationSetting.FULLSCREEN:
+                return {
+                    "width": calibration.screen_width,
+                    "height": calibration.screen_height,
+                }
+            elif value == CalibrationSetting.MAXIMIZED:
+                return {
+                    "width": calibration.screen_width,
+                    "height": calibration.screen_height,
+                }
+            elif value == CalibrationSetting.MAXIMIZED_UTIL:
+                return {
+                    "width": calibration.screen_available_width,
+                    "height": calibration.screen_available_height,
+                }
+
+    def get_camera_info(self) -> Optional[Dict[str, int]]:
+        calibration = self.dao.select(Calibration.ID_VALUE)
+
+        if calibration is None:
+            return None
+        else:
+            return {
+                "camera_description": calibration.camera_description,
+                "camera_id": calibration.camera_id,
+                "camera_position": calibration.camera_position,
+                "camera_width": calibration.camera_width,
+                "camera_height": calibration.camera_height,
+                "camera_max_fps": calibration.camera_max_fps,
+                "camera_min_fps": calibration.camera_min_fps,
+            }
+
+    def get_screen_info(self) -> Optional[Dict[str, int]]:
+        calibration = self.dao.select(Calibration.ID_VALUE)
+
+        if calibration is None:
+            return None
+        else:
+            return {
+                "screen_manufacturer": calibration.screen_manufacturer,
+                "screen_model": calibration.screen_model,
+                "screen_position": calibration.screen_position,
+                "screen_serial_number": calibration.screen_serial_number,
+                "screen_width": calibration.screen_width,
+                "screen_height": calibration.screen_height,
+                "screen_available_width": calibration.screen_available_width,
+                "screen_available_height": calibration.screen_available_height,
+                "screen_pos_x": calibration.screen_pos_x,
+                "screen_pos_y": calibration.screen_pos_y,
+            }
 
     # ======================
     # MEDIAPIPE

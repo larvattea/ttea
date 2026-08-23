@@ -4,17 +4,7 @@ import cv2
 
 # import settings
 from ttea.games.kartea.gameutil import GameSettings
-
-
-def camera_backend() -> int:
-    """Return the native OpenCV camera backend for the current platform."""
-    if sys.platform == "win32":
-        return cv2.CAP_DSHOW
-    if sys.platform == "darwin":
-        return cv2.CAP_AVFOUNDATION
-    if sys.platform.startswith("linux"):
-        return cv2.CAP_V4L2
-    return cv2.CAP_ANY
+from ttea.games.kartea.service import PlayerKarteaConfigService
 
 
 class Camera:
@@ -22,12 +12,19 @@ class Camera:
 
     def __init__(self):
         """Inicializa a captura de vídeo usando a configuração definida em settings."""
-        self.cap = cv2.VideoCapture(GameSettings.CAMERA, camera_backend())
+        self.service = PlayerKarteaConfigService()
+        self.cap = cv2.VideoCapture(
+            GameSettings.CAMERA_OS_INDEX, self.camera_backend()
+        )
         self.ret = False
         self.frame = None
 
         # Lê o primeiro frame para inicialização
         self.ret, self.frame = self.cap.read()
+
+    def camera_backend(self) -> int:
+        """Return the native OpenCV camera backend for the current platform."""
+        self.service.get_opencv_capture_backend()
 
     def load_camera(self) -> bool:
         """

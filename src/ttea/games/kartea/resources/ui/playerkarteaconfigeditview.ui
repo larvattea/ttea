@@ -14,7 +14,7 @@
    <string>Plataforma T-TEA - Configuração Kartea</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../../../resources/resources.qrc">
+   <iconset resource="../../../../../../resources/resources.qrc">
     <normaloff>:/icons/system/appicon</normaloff>:/icons/system/appicon</iconset>
   </property>
   <property name="modal">
@@ -149,8 +149,20 @@
        <property name="bottomMargin">
         <number>10</number>
        </property>
-       <item>
+       <item alignment="Qt::AlignmentFlag::AlignHCenter">
         <widget class="QLabel" name="lbl_visual_current_type">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>40</height>
+          </size>
+         </property>
          <property name="font">
           <font>
            <pointsize>11</pointsize>
@@ -163,6 +175,9 @@
          <property name="alignment">
           <set>Qt::AlignmentFlag::AlignCenter</set>
          </property>
+         <property name="wordWrap">
+          <bool>false</bool>
+         </property>
          <property name="margin">
           <number>10</number>
          </property>
@@ -170,16 +185,22 @@
        </item>
        <item alignment="Qt::AlignmentFlag::AlignHCenter">
         <widget class="QLabel" name="lbl_visual_preview">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="minimumSize">
           <size>
-           <width>280</width>
-           <height>280</height>
+           <width>250</width>
+           <height>250</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>350</width>
-           <height>350</height>
+           <width>250</width>
+           <height>250</height>
           </size>
          </property>
          <property name="styleSheet">
@@ -197,7 +218,7 @@
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer_preview">
+        <spacer name="vs_visual_preview">
          <property name="orientation">
           <enum>Qt::Orientation::Vertical</enum>
          </property>
@@ -207,7 +228,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>15</height>
+           <height>20</height>
           </size>
          </property>
         </spacer>
@@ -235,14 +256,14 @@
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="lbl_environment_image">
+          <widget class="QLabel" name="lbl_environment_image_right">
            <property name="text">
-            <string>Imagem do Ambiente:</string>
+            <string>Imagem do Ambiente Direita:</string>
            </property>
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QComboBox" name="cbx_environment_image">
+          <widget class="QComboBox" name="cbx_environment_image_right">
            <property name="editable">
             <bool>true</bool>
            </property>
@@ -252,14 +273,14 @@
           </widget>
          </item>
          <item row="2" column="0">
-          <widget class="QLabel" name="lbl_target_image">
+          <widget class="QLabel" name="lbl_environment_image_left">
            <property name="text">
-            <string>Imagem do Alvo:</string>
+            <string>Imagem do Ambiente Esquerda:</string>
            </property>
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QComboBox" name="cbx_target_image">
+          <widget class="QComboBox" name="cbx_environment_image_left">
            <property name="editable">
             <bool>true</bool>
            </property>
@@ -269,13 +290,30 @@
           </widget>
          </item>
          <item row="3" column="0">
+          <widget class="QLabel" name="lbl_target_image">
+           <property name="text">
+            <string>Imagem do Alvo:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QComboBox" name="cbx_target_image">
+           <property name="editable">
+            <bool>true</bool>
+           </property>
+           <property name="maxVisibleItems">
+            <number>5</number>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
           <widget class="QLabel" name="lbl_obstracle_image">
            <property name="text">
             <string>Imagem do Obstáculo:</string>
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
+         <item row="4" column="1">
           <widget class="QComboBox" name="cbx_obstacle_image">
            <property name="editable">
             <bool>true</bool>
@@ -312,6 +350,18 @@
       <layout class="QVBoxLayout" name="verticalLayout_visual_feedback">
        <item alignment="Qt::AlignmentFlag::AlignHCenter">
         <widget class="QLabel" name="lbl_current_feedback_type">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>40</height>
+          </size>
+         </property>
          <property name="font">
           <font>
            <pointsize>11</pointsize>
@@ -324,6 +374,9 @@
          <property name="alignment">
           <set>Qt::AlignmentFlag::AlignCenter</set>
          </property>
+         <property name="wordWrap">
+          <bool>false</bool>
+         </property>
          <property name="margin">
           <number>10</number>
          </property>
@@ -331,16 +384,22 @@
        </item>
        <item alignment="Qt::AlignmentFlag::AlignHCenter">
         <widget class="QLabel" name="lbl_feedback_preview">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="minimumSize">
           <size>
-           <width>280</width>
-           <height>280</height>
+           <width>250</width>
+           <height>250</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>350</width>
-           <height>350</height>
+           <width>250</width>
+           <height>250</height>
           </size>
          </property>
          <property name="styleSheet">
@@ -358,7 +417,7 @@
         </widget>
        </item>
        <item>
-        <spacer name="vs_preview">
+        <spacer name="vs_feedback_preview">
          <property name="orientation">
           <enum>Qt::Orientation::Vertical</enum>
          </property>
@@ -368,7 +427,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>15</height>
+           <height>20</height>
           </size>
          </property>
         </spacer>
@@ -478,7 +537,7 @@
               <string>Play</string>
              </property>
              <property name="icon">
-              <iconset resource="../../../../resources/resources.qrc">
+              <iconset resource="../../../../../../resources/resources.qrc">
                <normaloff>:/icons/ui/buttons/playicon</normaloff>:/icons/ui/buttons/playicon</iconset>
              </property>
             </widget>
@@ -510,7 +569,7 @@
               <string>Play</string>
              </property>
              <property name="icon">
-              <iconset resource="../../../../resources/resources.qrc">
+              <iconset resource="../../../../../../resources/resources.qrc">
                <normaloff>:/icons/ui/buttons/playicon</normaloff>:/icons/ui/buttons/playicon</iconset>
              </property>
             </widget>
@@ -542,7 +601,7 @@
               <string>Play</string>
              </property>
              <property name="icon">
-              <iconset resource="../../../../resources/resources.qrc">
+              <iconset resource="../../../../../../resources/resources.qrc">
                <normaloff>:/icons/ui/buttons/playicon</normaloff>:/icons/ui/buttons/playicon</iconset>
              </property>
             </widget>
@@ -653,7 +712,7 @@
         <string>OK</string>
        </property>
        <property name="icon">
-        <iconset resource="../../../../resources/resources.qrc">
+        <iconset resource="../../../../../../resources/resources.qrc">
          <normaloff>:/icons/ui/buttons/okicon</normaloff>:/icons/ui/buttons/okicon</iconset>
        </property>
       </widget>
@@ -667,7 +726,7 @@
         <string>Cancelar</string>
        </property>
        <property name="icon">
-        <iconset resource="../../../../resources/resources.qrc">
+        <iconset resource="../../../../../../resources/resources.qrc">
          <normaloff>:/icons/ui/buttons/cancelicon</normaloff>:/icons/ui/buttons/cancelicon</iconset>
        </property>
       </widget>
@@ -677,7 +736,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../../../../resources/resources.qrc"/>
+  <include location="../../../../../../resources/resources.qrc"/>
  </resources>
  <connections/>
 </ui>

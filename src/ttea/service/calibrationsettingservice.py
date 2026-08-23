@@ -52,6 +52,16 @@ class CalibrationSettingService:
     def is_raspberry_pi(self) -> bool:
         return self.calibration_service.is_raspberry_pi()
 
+    def get_window_open_mode(self) -> int:
+        if self.is_automatic_default_calibration():
+            return self.get_automatic_window_open_mode()
+        elif self.is_semiautomatic_default_calibration():
+            return self.get_semiautomatic_window_open_mode()
+        elif self.is_manual_default_calibration():
+            return self.get_manual_window_open_mode()
+        else:
+            return 1  # Default to fullscreen if no default calibration mode is set
+
     # ======================
     # MEDIAPIPE
     # ======================

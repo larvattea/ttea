@@ -36,6 +36,8 @@ class CalibrationSettingController(QObject):
             self.view.chk_default_calibration_semiautomatic
         )
 
+        self.view.chk_default_calibration_automatic.setChecked(True)
+
     def _initialize_view(self):
         self.list_proportions()
         self._load_saved_settings()

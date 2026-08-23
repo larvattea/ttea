@@ -6,6 +6,7 @@ import pygame
 
 from ttea.games.kartea.model import PlayerKarteaSession
 from ttea.games.kartea.util import KarteaPathConfig
+from ttea.model import CalibrationPoint
 
 if TYPE_CHECKING:
     from ttea.games.kartea.model import PlayerKarteaConfig
@@ -18,7 +19,7 @@ class GameSettings:
     # ====================== Configurações Gerais ======================
     WINDOW_NAME = "KarTEA"
     GAME_TITLE = WINDOW_NAME
-    CAMERA = 0
+    CAMERA_OS_INDEX = 0
     CAMERA_FLIP = 0
     SCREEN_WIDTH = 800
     SCREEN_HEIGHT = 600
@@ -39,6 +40,11 @@ class GameSettings:
     HUD = True
 
     PLAYER_KARTEA_SERVICE = None
+
+    FULLSCREEN = False
+    SCREEN_OS_INDEX = 0
+    SCREEN_POS_X = 0
+    SCREEN_POS_Y = 0
 
     # ====================== Variáveis de Jogo ======================
     CONTADOR = 0
@@ -137,8 +143,8 @@ class GameSettings:
     font = pygame.font.SysFont(None, 25)
 
     # ====================== Resources ======================
-    ENVIRONMENT_IMAGE = ""
-    ENVIRONMENT_IMAGE_OTHER_SIDE = ""
+    ENVIRONMENT_IMAGE_RIGHT = ""
+    ENVIRONMENT_IMAGE_LEFT = ""
     FINISH_IMAGE = ""
     HORIZON_BG_IMAGE = ""
     NEGATIVE_FEEDBACK_SOUND = ""
@@ -182,6 +188,27 @@ class GameSettings:
         cls.PLAYER_ID = args.player_id
         cls.PROFESSIONAL_ID = args.professional_id
         cls.PLAYER_KARTEA_SERVICE = player_kartea_service
+        cls.get_calibration_point()
+
+        # ====================== General Setting ======================
+        screen_size = cls.PLAYER_KARTEA_SERVICE.get_screen_size()
+        cls.SCREEN_WIDTH = screen_size["width"]
+        cls.SCREEN_HEIGHT = screen_size["height"]
+
+        screen_info = cls.PLAYER_KARTEA_SERVICE.get_screen_info()
+        cls.SCREEN_OS_INDEX = screen_info["screen_position"]
+        cls.SCREEN_POS_X = screen_info["screen_pos_x"]
+        cls.SCREEN_POS_Y = screen_info["screen_pos_y"]
+
+        camera_info = cls.PLAYER_KARTEA_SERVICE.get_camera_info()
+        cls.CAMERA_OS_INDEX = camera_info["camera_position"]
+
+        cls.FULLSCREEN = cls.PLAYER_KARTEA_SERVICE.is_fullscreen()
+
+        # =======================Game Variables======================
+        cls.div1_pista = cls.SCREEN_WIDTH // 3
+        cls.div2_pista = 2 * (cls.SCREEN_WIDTH // 3)
+        cls.div3_pista = cls.SCREEN_WIDTH
 
         # ====================== Game Settings ======================
         if not player_config or player_config.phase.id is None:
@@ -209,16 +236,19 @@ class GameSettings:
         else:
             cls.VEHICLE_IMAGE = player_config.car_image
 
-        if not player_config or player_config.environment_image is None:
-            cls.ENVIRONMENT_IMAGE = default_config["visual_resources"][
-                "environment_image_default"
+        if not player_config or player_config.environment_image_right is None:
+            cls.ENVIRONMENT_IMAGE_RIGHT = default_config["visual_resources"][
+                "environment_image_default_right"
             ]
         else:
-            cls.ENVIRONMENT_IMAGE = player_config.environment_image
+            cls.ENVIRONMENT_IMAGE_RIGHT = player_config.environment_image_right
 
-        cls.ENVIRONMENT_IMAGE_OTHER_SIDE = KarteaPathConfig.game_builtin_image(
-            "variant1environment"
-        )
+        if not player_config or player_config.environment_image_left is None:
+            cls.ENVIRONMENT_IMAGE_LEFT = default_config["visual_resources"][
+                "environment_image_default_left"
+            ]
+        else:
+            cls.ENVIRONMENT_IMAGE_LEFT = player_config.environment_image_left
 
         if not player_config or player_config.obstacle_image is None:
             cls.OBSTACLE_IMAGE = default_config["visual_resources"][
@@ -242,29 +272,19 @@ class GameSettings:
         else:
             cls.POSITIVE_FEEDBACK_IMAGE = player_config.positive_feedback_image
 
-        if (
-            not player_config
-            or player_config.neutral_feedback_image_default is None
-        ):
+        if not player_config or player_config.neutral_feedback_image is None:
             cls.NEUTRAL_FEEDBACK_IMAGE = default_config["visual_feedback"][
                 "neutral_feedback_image_default"
             ]
         else:
-            cls.NEUTRAL_FEEDBACK_IMAGE = (
-                player_config.neutral_feedback_image_default
-            )
+            cls.NEUTRAL_FEEDBACK_IMAGE = player_config.neutral_feedback_image
 
-        if (
-            not player_config
-            or player_config.negative_feedback_image_default is None
-        ):
+        if not player_config or player_config.negative_feedback_image is None:
             cls.NEGATIVE_FEEDBACK_IMAGE = default_config["visual_feedback"][
                 "negative_feedback_image_default"
             ]
         else:
-            cls.NEGATIVE_FEEDBACK_IMAGE = (
-                player_config.negative_feedback_image_default
-            )
+            cls.NEGATIVE_FEEDBACK_IMAGE = player_config.negative_feedback_image
 
         # ====================== Sound Feedback =========================
         if not player_config or player_config.positive_feedback_sound is None:
@@ -364,3 +384,19 @@ class GameSettings:
     @classmethod
     def session_detail_data():
         pass
+
+    @classmethod
+    def get_calibration_point(cls) -> None:
+        calibration_point = (
+            cls.PLAYER_KARTEA_SERVICE.find_by_id_calibration_point(
+                CalibrationPoint.ID_VALUE
+            )
+        )
+        cls.pontos_calibracao[0][0] = calibration_point.pointx1
+        cls.pontos_calibracao[0][1] = calibration_point.pointy1
+        cls.pontos_calibracao[1][0] = calibration_point.pointx2
+        cls.pontos_calibracao[1][1] = calibration_point.pointy2
+        cls.pontos_calibracao[2][0] = calibration_point.pointx3
+        cls.pontos_calibracao[2][1] = calibration_point.pointy3
+        cls.pontos_calibracao[3][0] = calibration_point.pointx4
+        cls.pontos_calibracao[3][1] = calibration_point.pointy4

@@ -81,7 +81,8 @@ class PlayerKarteaConfigEditView(
 
         self.combo_types = {
             self.cbx_vehicle_image: "Veículo",
-            self.cbx_environment_image: "Ambiente",
+            self.cbx_environment_image_right: "Ambiente",
+            self.cbx_environment_image_left: "Ambiente",
             self.cbx_target_image: "Alvo",
             self.cbx_obstacle_image: "Obstáculo",
             self.cbx_positive_feedback_image: "Positivo",
@@ -97,7 +98,11 @@ class PlayerKarteaConfigEditView(
             lambda text: self.update_resource_preview(text, "Veículo")
         )
 
-        self.cbx_environment_image.currentTextChanged.connect(
+        self.cbx_environment_image_right.currentTextChanged.connect(
+            lambda text: self.update_resource_preview(text, "Ambiente")
+        )
+
+        self.cbx_environment_image_left.currentTextChanged.connect(
             lambda text: self.update_resource_preview(text, "Ambiente")
         )
 
@@ -234,7 +239,10 @@ class PlayerKarteaConfigEditView(
             self.cbx_vehicle_image.addItem(name, path)
 
         for name, path in KarteaPathConfig.list_builtin_environment_images():
-            self.cbx_environment_image.addItem(name, path)
+            self.cbx_environment_image_right.addItem(name, path)
+
+        for name, path in KarteaPathConfig.list_builtin_environment_images():
+            self.cbx_environment_image_left.addItem(name, path)
 
         for name, path in KarteaPathConfig.list_builtin_target_images():
             self.cbx_target_image.addItem(name, path)

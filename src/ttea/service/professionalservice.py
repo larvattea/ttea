@@ -94,6 +94,11 @@ class ProfessionalService(QObject):
         if data.get("type") == 0:
             errors.append(self.tr("Tipo é obrigatório!\n"))
 
+        if not data.get("institutionfacility"):
+            errors.append(
+                self.tr("Instituição/Estabelecimento é obrigatório!\n")
+            )
+
         return errors
 
     def create_professional(
@@ -176,13 +181,11 @@ class ProfessionalService(QObject):
         success = self.dao.delete(professional_id)
 
         if success:
-            self.institutionfacility_change.emit(0)
+            self.professional_change.emit(0)
 
         return success
 
-    def find_by_id(
-        self, professional_id: int
-    ) -> Optional[Professional]:
+    def find_by_id(self, professional_id: int) -> Optional[Professional]:
         """Retrieve a professional by its unique identifier.
 
         Parameters
@@ -198,9 +201,7 @@ class ProfessionalService(QObject):
         """
         return self.dao.select(professional_id)
 
-    def search_professionals(
-        self, query: str = ""
-    ) -> List[Professional]:
+    def search_professionals(self, query: str = "") -> List[Professional]:
         """
         Search professionals by name or ID (case-insensitive).
 
