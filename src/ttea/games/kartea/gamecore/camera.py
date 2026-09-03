@@ -22,7 +22,7 @@ class Camera:
 
     def camera_backend(self) -> int:
         """Return the native OpenCV camera backend for the current platform."""
-        self.service.get_opencv_capture_backend()
+        return self.service.get_opencv_capture_backend()
 
     def load_camera(self) -> bool:
         """
