@@ -8,7 +8,6 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-import resources.resources_rc
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
                             QMetaObject, QObject, QPoint, QRect, QSize, Qt,
                             QTime, QUrl)
@@ -20,6 +19,8 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDialog,
                                QFormLayout, QHBoxLayout, QLabel, QPushButton,
                                QSizePolicy, QSpacerItem, QSpinBox, QTabWidget,
                                QVBoxLayout, QWidget)
+
+import ttea.resources.resources_rc
 
 
 class Ui_PlayerKarteaConfigEditView(object):
