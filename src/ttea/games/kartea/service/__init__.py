@@ -34,6 +34,8 @@ https://github.com/larva-udesc/udesc_ttea_view
 # Define the __all__ variable
 __all__ = [
     "PlayerKarteaConfigService",
+    "PlayerKarteaSessionDetailService",
+    "PlayerKarteaSessionService",
 ]
 
 __version__ = "1.0.0"
@@ -43,3 +45,5 @@ __license__ = "MIT License"
 
 # Import the submodules
 from .playerkarteaconfigservice import PlayerKarteaConfigService
+from .playerkarteasessiondetailservice import PlayerKarteaSessionDetailService
+from .playerkarteasessionservice import PlayerKarteaSessionService

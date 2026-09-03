@@ -16,7 +16,7 @@ except ImportError:
 from PySide6.QtCore import QObject, Qt, QTimer
 
 from ttea.model import AppModel
-from ttea.service import PlayerGameLaunchService
+from ttea.service import CalibrationService, PlayerGameLaunchService
 # Local module imports
 from ttea.util import MessageService
 
@@ -31,11 +31,13 @@ class PlayerGameLaunchController(QObject):
         view: "PlayerGameLaunchView",
         message_service: Optional[MessageService] = None,
         service: Optional[PlayerGameLaunchService] = None,
+        calibration_service: Optional[CalibrationService] = None,
     ):
         super().__init__()
         self.view = view
         self.msg = message_service or MessageService(view)
         self.service = service or PlayerGameLaunchService()
+        self.calibration_service = calibration_service or CalibrationService()
         self.current_process: Optional[subprocess.Popen] = None
         self.monitor_timer: Optional[QTimer] = None
 
@@ -83,6 +85,85 @@ class PlayerGameLaunchController(QObject):
                 )
             )
 
+    def _verify_hardware_configuration(self) -> bool:
+        """
+        Verifica se os dispositivos físicos atuais coincidem com os dados
+        salvos no arquivo de calibração do hardware.
+        """
+        mismatches = []
+
+        # Validação da Câmera
+        cam_info = self.calibration_service.get_camera_info()
+        if cam_info:
+            saved_cam_id = cam_info.get("camera_id")
+            saved_cam_desc = cam_info.get("camera_description")
+
+            current_cameras = self.calibration_service.get_video_inputs()
+            camera_found = any(
+                cam.id().data().decode(errors="ignore") == saved_cam_id
+                or cam.description() == saved_cam_desc
+                for cam in current_cameras
+            )
+
+            if not camera_found:
+                cam_name = (
+                    saved_cam_desc or saved_cam_id or self.tr("Desconhecida")
+                )
+                mismatches.append(
+                    self.tr(
+                        "- Câmera: O dispositivo '{0}' não foi detectado ou foi desconectado."
+                    ).format(cam_name)
+                )
+
+        # Validação do Monitor/Tela
+        screen_info = self.calibration_service.get_screen_info()
+        if screen_info:
+            saved_screen_pos = screen_info.get("screen_position", -1)
+            saved_screen_model = screen_info.get("screen_model")
+            saved_width = screen_info.get("screen_width")
+            saved_height = screen_info.get("screen_height")
+
+            current_screens = self.calibration_service.get_screens()
+            screen_found = False
+
+            if 0 <= saved_screen_pos < len(current_screens):
+                target_screen = current_screens[saved_screen_pos]
+                geo = target_screen.geometry()
+
+                # Valida compatibilidade de dimensões e modelo
+                if geo.width() == saved_width and geo.height() == saved_height:
+                    if (
+                        not saved_screen_model
+                        or target_screen.model() == saved_screen_model
+                    ):
+                        screen_found = True
+
+            if not screen_found:
+                screen_name = (
+                    saved_screen_model or f"Display #{saved_screen_pos}"
+                )
+                mismatches.append(
+                    self.tr(
+                        "- Monitor: A tela configurada ('{0}' - {1}x{2}) não corresponde à disposição atual do sistema."
+                    ).format(screen_name, saved_width, saved_height)
+                )
+
+        # Exibição de Alerta ao Usuário
+        if mismatches:
+            details = "\n".join(mismatches)
+            msg_text = self.tr(
+                "Foram detectadas divergências nos equipamentos configurados:\n\n"
+                "{0}\n\n"
+                "Recomenda-se verificar a instalação física, gravar os dados do hardware\n"
+                "atualizados na tela de calibração e ou realizar a calibração novamente.\n\n"
+                "Deseja iniciar o jogo mesmo assim?"
+            ).format(details)
+
+            # default_no=True para focar no 'Não' por segurança
+            return self.msg.question(msg_text, None, True)
+
+        return True
+
     def launch_game(self):
         """Valida e inicia o processo do jogo selecionado."""
         game_data = self.view.cbx_game.currentData()
@@ -129,6 +210,10 @@ class PlayerGameLaunchController(QObject):
                     "Verifique se o arquivo existe e se os metadados de configuração estão corretos."
                 ).format(script_path)
             )
+            return
+
+        # Validação do hardware antes de iniciar o jogo
+        if not self._verify_hardware_configuration():
             return
 
         ext = os.path.splitext(executable.lower())[1] if executable else ""
@@ -226,7 +311,7 @@ class PlayerGameLaunchController(QObject):
                         self._game_ready()
                         return
         except Exception:
-            pass  # fallback silencioso
+            pass
 
     def _game_ready(self) -> None:
         """Chamado quando o jogo está pronto (janela visível)."""

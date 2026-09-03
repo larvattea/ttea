@@ -1,8 +1,15 @@
 from dataclasses import dataclass, fields
+from enum import Enum
 from typing import TYPE_CHECKING, ClassVar, Dict, List
+
+# from PyQt6.QtCore import QT_TRANSLATE_NOOP, QCoreApplication
 
 if TYPE_CHECKING:
     from ttea.games.kartea.model import PlayerKarteaSession
+
+
+def QT_TRANSLATE_NOOP(context: str, text: str) -> str:
+    return text
 
 
 def initialize_reflexive(cls):
@@ -33,130 +40,112 @@ def initialize_reflexive(cls):
 @initialize_reflexive
 @dataclass
 class PlayerKarteaSessionDetail:
-    """Detailed model for Kartea player session event data.
+    """Detailed model for Kartea player session event data."""
 
-    Attributes
-    ----------
-    id : int
-        Unique identifier for the session detail.
-    session : PlayerKarteaSession
-        The session associated with this detail.
-    event_time : str
-        Time of the event in the game (format TBD).
-    phase : int
-        Phase number where the event occurred.
-    level : int
-        Level number where the event occurred.
-    player_position : int
-        Player's position during the event.
-    event_position : int
-        Position of the event in the game.
-    event_type : str
-        Type of the event (e.g., collision, movement).
-    PROPERTIES : ClassVar[list[str]]
-        Static list of the class's field names.
-    DATA_PROPERTIES : ClassVar[list]
-        Static list of default values for initializable fields.
+    class EventType(str, Enum):
+        # Collisions and Deviations
+        COLLIDED_TARGET = "Colidiu com Alvo"
+        COLLIDED_OBSTACLE = "Colidiu com Obstáculo"
+        AVOIDED_TARGET = "Desviou de Alvo"
+        AVOIDED_OBSTACLE = "Desviou de Obstáculo"
 
-    Methods
-    -------
-    set_data(data)
-        Updates session detail data from a dictionary.
-    get_data()
-        Returns session detail data as a list of dictionaries.
+        # Creation
+        CREATED_TARGET = "Criou Alvo"
+        CREATED_OBSTACLE = "Criou Obstáculo"
 
-    Examples
-    --------
-    >>> from ttea.games.kartea.model import PlayerKarteaSession
-    >>> from ttea.model.player import Player
-    >>> from datetime import datetime
-    >>> session = PlayerKarteaSession(id=1, player=Player(id=1, name="John",
-    ...                                                  birth_date=datetime(2000, 1, 1)),
-    ...                               date="17-09-2025", start_time="10:00:00",
-    ...                               end_time="10:30:00", phase_reached=2,
-    ...                               level_reached=3, general_score=100,
-    ...                               q_movement=50, q_collided_target=10,
-    ...                               q_avoided_target=20,
-    ...                               q_collided_obstacle=5,
-    ...                               q_avoided_obstacle=15)
-    >>> detail = PlayerKarteaSessionDetail(id=1, session=session,
-    ...                                    event_time="10:05:00", phase=2,
-    ...                                    level=3, player_position=100,
-    ...                                    event_position=150,
-    ...                                    event_type="collision")
-    >>> detail.get_data()
-    [{'id': 1, 'session': 1, 'event_time': '10:05:00', 'phase': 2,
-      'level': 3, 'player_position': 100, 'event_position': 150,
-      'event_type': 'collision'}]
-    """
+        # Player Movement
+        CHANGED_LANE = "Trocou de Pista"
+        LEFT_GAME_AREA = "Saiu da área do jogo"
+
+        # Game Control / Level Progression
+        GAME_CONTROL_ADVANCE_LEVEL = "Controle Jogo: Avanca Nível"
+        GAME_CONTROL_MAINTAIN_LEVEL = "Controle Jogo: Permanece Nível"
+        GAME_CONTROL_REGRESS_LEVEL = "Controle Jogo: Retrocede Nível"
+
+        # Control UFE (HUD, Áudio, Pause)
+        UFE_CONTROL_ENABLE_HUD = "Controle UFE: Habilita HUD"
+        UFE_CONTROL_DISABLE_HUD = "Controle UFE: Desabilita HUD"
+        UFE_CONTROL_ENABLE_SOUND = "Controle UFE: Habilita Som"
+        UFE_CONTROL_DISABLE_SOUND = "Controle UFE: Desabilita Som"
+        UFE_CONTROL_PAUSE = "Controle UFE: Pause"
+        UFE_CONTROL_UNPAUSE = "Controle UFE: Unpause"
+
+        @property
+        def display_name(self) -> str:
+            """Retorna o nome do evento traduzido no idioma ativo do Qt."""
+            try:
+                from PyQt6.QtCore import QCoreApplication
+
+                return QCoreApplication.translate(
+                    "PlayerKarteaSessionDetail", self.value
+                )
+            except ImportError:
+                return self.value
+
+    _TRANSLATIONS: ClassVar[tuple[str, ...]] = (
+        QT_TRANSLATE_NOOP("PlayerKarteaSessionDetail", "Colidiu com Alvo"),
+        QT_TRANSLATE_NOOP(
+            "PlayerKarteaSessionDetail", "Colidiu com Obstáculo"
+        ),
+        QT_TRANSLATE_NOOP("PlayerKarteaSessionDetail", "Desviou de Alvo"),
+        QT_TRANSLATE_NOOP("PlayerKarteaSessionDetail", "Desviou de Obstáculo"),
+        QT_TRANSLATE_NOOP("PlayerKarteaSessionDetail", "Criou Alvo"),
+        QT_TRANSLATE_NOOP("PlayerKarteaSessionDetail", "Criou Obstáculo"),
+        QT_TRANSLATE_NOOP("PlayerKarteaSessionDetail", "Trocou de Pista"),
+        QT_TRANSLATE_NOOP("PlayerKarteaSessionDetail", "Saiu da área do jogo"),
+        QT_TRANSLATE_NOOP(
+            "PlayerKarteaSessionDetail", "Controle Jogo: Avanca Nível"
+        ),
+        QT_TRANSLATE_NOOP(
+            "PlayerKarteaSessionDetail", "Controle Jogo: Permanece Nível"
+        ),
+        QT_TRANSLATE_NOOP(
+            "PlayerKarteaSessionDetail", "Controle Jogo: Retrocede Nível"
+        ),
+        QT_TRANSLATE_NOOP(
+            "PlayerKarteaSessionDetail", "Controle UFE: Habilita HUD"
+        ),
+        QT_TRANSLATE_NOOP(
+            "PlayerKarteaSessionDetail", "Controle UFE: Desabilita HUD"
+        ),
+        QT_TRANSLATE_NOOP(
+            "PlayerKarteaSessionDetail", "Controle UFE: Habilita Som"
+        ),
+        QT_TRANSLATE_NOOP(
+            "PlayerKarteaSessionDetail", "Controle UFE: Desabilita Som"
+        ),
+        QT_TRANSLATE_NOOP("PlayerKarteaSessionDetail", "Controle UFE: Pause"),
+        QT_TRANSLATE_NOOP(
+            "PlayerKarteaSessionDetail", "Controle UFE: Unpause"
+        ),
+    )
 
     id: int
     session: "PlayerKarteaSession"
+    date_time: str
     event_time: str
     phase: int
     level: int
     player_position: int
     event_position: int
-    event_type: str
+    event_type: EventType | str
     PROPERTIES: ClassVar[list[str]] = []
     DATA_PROPERTIES: ClassVar[list] = []
 
     def set_data(self, data: Dict) -> None:
-        """Update session detail data from a dictionary.
-
-        Parameters
-        ----------
-        data : Dict
-            Dictionary with session detail data. Expected keys:
-            - 'id': int
-            - 'session': PlayerKarteaSession
-            - 'event_time': str
-            - 'phase': int
-            - 'level': int
-            - 'player_position': int
-            - 'event_position': int
-            - 'event_type': str
-
-        Returns
-        -------
-        None
-
-        Notes
-        -----
-        - Updates attributes using PROPERTIES for dynamic assignment.
-        - For 'session', expects a full PlayerKarteaSession object.
-        - No validation is performed on the input data.
-        """
+        """Update session detail data from a dictionary."""
         for prop in self.PROPERTIES:
             if prop in data:
                 setattr(self, prop, data[prop])
 
     def get_data(self) -> List[Dict]:
-        """Return session detail data as a list of dictionaries.
-
-        Returns
-        -------
-        List[Dict]
-            List with a dictionary containing session detail data:
-            - 'id': int
-            - 'session': int (or None, extracted from session.id)
-            - 'event_time': str
-            - 'phase': int
-            - 'level': int
-            - 'player_position': int
-            - 'event_position': int
-            - 'event_type': str
-
-        Notes
-        -----
-        - Uses PROPERTIES to dynamically build the data dictionary.
-        - Extracts 'session' as the session's ID for serialization.
-        - Returns a list for consistency with potential multi-record returns.
-        """
+        """Return session detail data as a list of dictionaries."""
         info = {
             prop: getattr(self, prop)
             for prop in self.PROPERTIES
             if prop != "session"
         }
         info["session"] = self.session.id if self.session else None
+        if isinstance(info.get("event_type"), Enum):
+            info["event_type"] = info["event_type"].value
         return [info]

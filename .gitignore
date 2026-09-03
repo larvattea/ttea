@@ -33,3 +33,6 @@ dist/
 .DS_Store
 .idea/
 .vscode/
+
+# Game data
+src/ttea/games/kartea/players/*.csv

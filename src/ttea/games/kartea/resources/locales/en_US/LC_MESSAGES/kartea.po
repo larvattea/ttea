@@ -1,0 +1,108 @@
+# Translations template for PROJECT.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-08-29 22:27-0300\n"
+"PO-Revision-Date: 2026-08-29 22:28-0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+"X-Generator: Poedit 3.9\n"
+
+#: gamecontroller/gamecontroller.py:373
+#, python-brace-format
+msgid "Pontuação : {}"
+msgstr "Score : {}"
+
+#: gamecontroller/gamecontroller.py:389
+#, python-brace-format
+msgid "Tempo : {}"
+msgstr "Time : {}"
+
+#: gamecontroller/gamecontroller.py:400
+#, python-brace-format
+msgid "Fase : {}"
+msgstr "Phase : {}"
+
+#: gamecontroller/gamecontroller.py:411
+#, python-brace-format
+msgid "Nível : {}"
+msgstr "Level : {}"
+
+#: gameview/menu.py:32
+msgid "Feedback"
+msgstr "Feedback"
+
+#: gameview/menu.py:42
+msgid "Quantidade"
+msgstr "Quantity"
+
+#: gameview/menu.py:53
+msgid "Pontuação"
+msgstr "Score"
+
+#: gameview/menu.py:73
+msgid "Movimentos"
+msgstr "Moves"
+
+#: gameview/menu.py:93
+msgid "Alvos Gerados"
+msgstr "Generated Targets"
+
+#: gameview/menu.py:112
+msgid "Alvos Colididos"
+msgstr "Hit Targets"
+
+#: gameview/menu.py:131
+msgid "Alvos Desviados"
+msgstr "Avoided Targets"
+
+#: gameview/menu.py:151
+msgid "Obst. Gerados"
+msgstr "Gen. Obstacles"
+
+#: gameview/menu.py:170
+msgid "Obst. Desviados"
+msgstr "Avoided Obst."
+
+#: gameview/menu.py:189
+msgid "Obst. Colididos"
+msgstr "Hit Obst."
+
+#: gameview/menu.py:220 gameview/menu.py:316
+msgid "Jogar"
+msgstr "Play"
+
+#: gameview/menu.py:228 gameview/menu.py:285 gameview/menu.py:325
+msgid "Sair"
+msgstr "Exit"
+
+#: gameview/menu.py:240
+msgid "Pause"
+msgstr "Pause"
+
+#: gameview/menu.py:250
+msgid "Continuar"
+msgstr "Continue"
+
+#: gameview/menu.py:258
+msgid "Retroceder"
+msgstr "Back"
+
+#: gameview/menu.py:267
+msgid "Reiniciar"
+msgstr "Restart"
+
+#: gameview/menu.py:276
+msgid "Avançar"
+msgstr "Next"

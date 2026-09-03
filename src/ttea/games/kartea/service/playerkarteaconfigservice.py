@@ -5,7 +5,7 @@ from ttea.games.kartea.model import (KarteaPhase, KarteaPhaseLevel,
                                      PlayerKarteaConfig, PlayerKarteaSession)
 from ttea.games.kartea.util import KarteaPathConfig
 from ttea.model import CalibrationPoint, Player
-from ttea.service import CalibrationService, PlayerService
+from ttea.service import CalibrationService, PlayerService, ProfessionalService
 
 
 class PlayerKarteaConfigService:
@@ -44,6 +44,7 @@ class PlayerKarteaConfigService:
         dao: Optional[PlayerKarteaConfigCsvDAO] = None,
         calibration_service: Optional[CalibrationService] = None,
         player_service: Optional[PlayerService] = None,
+        professional_service: Optional[ProfessionalService] = None,
     ):
         """
         Initialize the service with a data access object.
@@ -57,6 +58,9 @@ class PlayerKarteaConfigService:
         self.dao = dao or PlayerKarteaConfigCsvDAO()
         self.calibration_service = calibration_service or CalibrationService()
         self.player_service = player_service or PlayerService()
+        self.professional_service = (
+            professional_service or ProfessionalService()
+        )
 
     def get_all_configs(self) -> List[PlayerKarteaConfig]:
         """Return a list of all registered configs.
