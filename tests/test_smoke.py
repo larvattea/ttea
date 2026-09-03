@@ -9,7 +9,7 @@ import pygame
 from PySide6.QtCore import QFile
 from PySide6.QtWidgets import QApplication, QMainWindow
 
-from ttea.games.kartea.gamecore.camera import camera_backend
+from ttea.games.kartea.gamecore.camera import Camera
 from ttea.games.kartea.gameutil.alphablit import alpha_blit_flags
 from ttea.main import App
 from ttea.ui import Ui_MainView
@@ -36,18 +36,18 @@ class SmokeTest(unittest.TestCase):
 
     def test_camera_uses_native_backends(self):
         with patch("ttea.games.kartea.gamecore.camera.sys.platform", "win32"):
-            self.assertEqual(camera_backend(), cv2.CAP_DSHOW)
+            self.assertEqual(Camera().camera_backend(), cv2.CAP_DSHOW)
 
         with patch("ttea.games.kartea.gamecore.camera.sys.platform", "darwin"):
-            self.assertEqual(camera_backend(), cv2.CAP_AVFOUNDATION)
+            self.assertEqual(Camera().camera_backend(), cv2.CAP_AVFOUNDATION)
 
         with patch("ttea.games.kartea.gamecore.camera.sys.platform", "linux"):
-            self.assertEqual(camera_backend(), cv2.CAP_V4L2)
+            self.assertEqual(Camera().camera_backend(), cv2.CAP_V4L2)
 
         with patch(
             "ttea.games.kartea.gamecore.camera.sys.platform", "freebsd14"
         ):
-            self.assertEqual(camera_backend(), cv2.CAP_ANY)
+            self.assertEqual(Camera().camera_backend(), cv2.CAP_ANY)
 
     def test_macos_uses_sdl2_alpha_blitter(self):
         with patch(
