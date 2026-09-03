@@ -2,11 +2,14 @@
 
 import random
 import time
+from datetime import datetime
 
 import pygame
 
 from ttea.games.kartea.gamemodel import Image
 from ttea.games.kartea.gameutil import GameSettings
+from ttea.games.kartea.model import PlayerKarteaSessionDetail
+from ttea.games.kartea.service import PlayerKarteaSessionDetailService
 
 
 class Target:
@@ -20,6 +23,8 @@ class Target:
             r (int, optional): Índice da pista (0, 1 ou 2). Se None,
             escolhe aleatoriamente.
         """
+        self.service_detail = PlayerKarteaSessionDetailService()
+
         # Tamanho do alvo
         size = GameSettings.TARGETS_SIZES
 
@@ -36,6 +41,25 @@ class Target:
         self.current_road = road
         self.animation_timer = 0
         self.line = None
+
+    def create_player_kartea_session_detail(
+        self, event_type: PlayerKarteaSessionDetail.EventType
+    ):
+        now = datetime.now()
+        data = {
+            "id": 0,
+            "session": GameSettings.PLAYER_KARTEA_CONFIG_SERVICE.dao.session_dao.select(
+                GameSettings.SESSION_ID
+            ),  # ou a sessão ativa
+            "date_time": now.strftime("%x"),
+            "event_time": now.strftime("%X"),
+            "phase": GameSettings.PHASE,
+            "level": GameSettings.LEVEL,
+            "player_position": GameSettings.pista,
+            "event_position": self.current_road,
+            "event_type": event_type,
+        }
+        self.service_detail.create_player_kartea_session_detail(data)
 
     def define_spawn_pos(self, r: int = None):
         """
@@ -236,6 +260,9 @@ class Target:
             targets.remove(self)
             sounds["screaming"].play()
             Image.draw(surface, negative_fig, (0, 0))
+            self.create_player_kartea_session_detail(
+                PlayerKarteaSessionDetail.EventType.AVOIDED_TARGET
+            )
             # TODO gravar aqui os dados
             # arquivo.grava_Detalhado(
             #    arquivo.get_Player(),
@@ -253,6 +280,9 @@ class Target:
             targets.remove(self)
             sounds["slap"].play()
             Image.draw(surface, positive_fig, (0, 0))
+            self.create_player_kartea_session_detail(
+                PlayerKarteaSessionDetail.EventType.COLLIDED_TARGET
+            )
             # TODO gravar aqui os dados
             # arquivo.grava_Detalhado(
             #    arquivo.get_Player(),

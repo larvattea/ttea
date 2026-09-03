@@ -30,6 +30,7 @@ class GameSettings:
     CURRENT_LANG = "pt_BR"
     PLAYER_ID = 0
     PROFESSIONAL_ID = 0
+    SESSION_ID = 0
 
     PHASE = 1
     LEVEL = 1
@@ -39,7 +40,7 @@ class GameSettings:
     SOUND = True
     HUD = True
 
-    PLAYER_KARTEA_SERVICE = None
+    PLAYER_KARTEA_CONFIG_SERVICE = None
 
     FULLSCREEN = False
     SCREEN_OS_INDEX = 0
@@ -180,30 +181,30 @@ class GameSettings:
     def setup(
         cls,
         args,
-        player_kartea_service: "PlayerKarteaConfigService",
+        player_kartea_config_service: "PlayerKarteaConfigService",
         player_config: "PlayerKarteaConfig",
         default_config: Dict[str, str],
     ) -> None:
         cls.CURRENT_LANG = args.lang
         cls.PLAYER_ID = args.player_id
         cls.PROFESSIONAL_ID = args.professional_id
-        cls.PLAYER_KARTEA_SERVICE = player_kartea_service
+        cls.PLAYER_KARTEA_CONFIG_SERVICE = player_kartea_config_service
         cls.get_calibration_point()
 
         # ====================== General Setting ======================
-        screen_size = cls.PLAYER_KARTEA_SERVICE.get_screen_size()
+        screen_size = cls.PLAYER_KARTEA_CONFIG_SERVICE.get_screen_size()
         cls.SCREEN_WIDTH = screen_size["width"]
         cls.SCREEN_HEIGHT = screen_size["height"]
 
-        screen_info = cls.PLAYER_KARTEA_SERVICE.get_screen_info()
+        screen_info = cls.PLAYER_KARTEA_CONFIG_SERVICE.get_screen_info()
         cls.SCREEN_OS_INDEX = screen_info["screen_position"]
         cls.SCREEN_POS_X = screen_info["screen_pos_x"]
         cls.SCREEN_POS_Y = screen_info["screen_pos_y"]
 
-        camera_info = cls.PLAYER_KARTEA_SERVICE.get_camera_info()
+        camera_info = cls.PLAYER_KARTEA_CONFIG_SERVICE.get_camera_info()
         cls.CAMERA_OS_INDEX = camera_info["camera_position"]
 
-        cls.FULLSCREEN = cls.PLAYER_KARTEA_SERVICE.is_fullscreen()
+        cls.FULLSCREEN = cls.PLAYER_KARTEA_CONFIG_SERVICE.is_fullscreen()
 
         # =======================Game Variables======================
         cls.div1_pista = cls.SCREEN_WIDTH // 3
@@ -358,13 +359,19 @@ class GameSettings:
         q_collided_obstacle: int,
         q_avoided_obstacle: int,
     ) -> None:
-        player = cls.PLAYER_KARTEA_SERVICE.dao.player_dao.select(player_id)
-
-        professional = cls.PLAYER_KARTEA_SERVICE.dao.professional_dao.select(
-            professional_id
+        player = cls.PLAYER_KARTEA_CONFIG_SERVICE.dao.player_dao.select(
+            player_id
         )
-        phase = cls.PLAYER_KARTEA_SERVICE.dao.phase_dao.select(phase_reached)
-        level = cls.PLAYER_KARTEA_SERVICE.dao.level_dao.select(
+
+        professional = (
+            cls.PLAYER_KARTEA_CONFIG_SERVICE.dao.professional_dao.select(
+                professional_id
+            )
+        )
+        phase = cls.PLAYER_KARTEA_CONFIG_SERVICE.dao.phase_dao.select(
+            phase_reached
+        )
+        level = cls.PLAYER_KARTEA_CONFIG_SERVICE.dao.level_dao.select(
             phase_reached, level_reached
         )
 
@@ -388,7 +395,7 @@ class GameSettings:
     @classmethod
     def get_calibration_point(cls) -> None:
         calibration_point = (
-            cls.PLAYER_KARTEA_SERVICE.find_by_id_calibration_point(
+            cls.PLAYER_KARTEA_CONFIG_SERVICE.find_by_id_calibration_point(
                 CalibrationPoint.ID_VALUE
             )
         )

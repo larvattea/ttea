@@ -1,5 +1,6 @@
 import random
 import time
+from datetime import datetime
 
 import cv2
 import pygame
@@ -9,12 +10,26 @@ from ttea.games.kartea.gamemodel import (Background, Car, Image, Obstacle,
                                          Target)
 from ttea.games.kartea.gameui import UI
 from ttea.games.kartea.gameutil import GameSettings
+from ttea.games.kartea.model import PlayerKarteaSessionDetail
+from ttea.games.kartea.service import (PlayerKarteaSessionDetailService,
+                                       PlayerKarteaSessionService)
 
 
 class GameController:
     """Classe principal responsável pela lógica do jogo KarTEA."""
 
     def __init__(self, surface):
+        self.service_session = PlayerKarteaSessionService()
+        self.service_session_detail = PlayerKarteaSessionDetailService()
+
+        # now = datetime.now()
+        # self.start_date = now.strftime("%x")
+        # self.start_time = now.strftime("%X")
+        # self.create_player_kartea_session()
+        self.current_session = None
+        self.start_date = None
+        self.start_time = None
+
         self.surface = surface
 
         # Componentes principais
@@ -41,8 +56,8 @@ class GameController:
         self.obst_d = 0
         self.finish = 0
 
-        self.SOM = GameSettings.SOUND  # arquivo.get_K_SOM(self.config_player)
-        self.HUD = GameSettings.HUD  # arquivo.get_K_HUD(self.config_player)
+        self.SOM = GameSettings.SOUND
+        self.HUD = GameSettings.HUD
         self.PAUSE = False
 
         self.game_start_time = time.time()
@@ -57,15 +72,10 @@ class GameController:
 
     def _load_sounds(self):
         """Carrega os sons do jogo."""
-        # self.sounds["slap"] = pygame.mixer.Sound(
-        #    "Assets/Kartea/Sounds/point.wav"
-        # )
-
         self.sounds["slap"] = pygame.mixer.Sound(GameSettings.POINT_SOUND)
 
         self.sounds["screaming"] = pygame.mixer.Sound(GameSettings.MISS_SOUND)
 
-        # volume = 1 if arquivo.get_K_SOM(self.config_player) else 0
         volume = 1 if self.SOM else 0
         self.sounds["slap"].set_volume(volume)
         self.sounds["screaming"].set_volume(volume)
@@ -92,6 +102,84 @@ class GameController:
         GameSettings.obst_c = self.obst_c
         GameSettings.obst_d = self.obst_d
         GameSettings.TIME_PAST = 0
+
+    def create_player_kartea_session(self):
+        """Substitui o antigo arquivo.grava_Detalhado."""
+        # now = datetime.now()
+        now = datetime.now()
+        self.start_date = now.strftime("%x")
+        self.start_time = now.strftime("%X")
+
+        session_data = {
+            "id": 0,
+            "player": GameSettings.PLAYER_KARTEA_CONFIG_SERVICE.player_service.find_by_id(
+                GameSettings.PLAYER_ID
+            ),
+            "professional": GameSettings.PLAYER_KARTEA_CONFIG_SERVICE.professional_service.find_by_id(
+                GameSettings.PROFESSIONAL_ID
+            ),
+            "start_date": self.start_date,
+            "start_time": self.start_time,
+            "end_date": now.strftime("%x"),
+            "end_time": now.strftime("%X"),
+            "phase_reached": GameSettings.PHASE,
+            "level_reached": GameSettings.LEVEL,
+            "general_score": GameSettings.score,
+            "q_movement": GameSettings.movimento,
+            "q_collided_target": GameSettings.Alvo_c,
+            "q_avoided_target": GameSettings.Alvo_d,
+            "q_collided_obstacle": GameSettings.Obst_c,
+            "q_avoided_obstacle": GameSettings.Obst_d,
+        }
+
+        self.current_session = (
+            self.service_session.create_player_kartea_session(session_data)
+        )
+
+        if self.current_session:
+            GameSettings.SESSION_ID = self.current_session.id
+
+    def create_player_kartea_session_detail(
+        self,
+        event_type: PlayerKarteaSessionDetail.EventType | str,
+        event_position: int = 0,
+    ):
+        """Substitui o antigo arquivo.grava_Detalhado."""
+        if self.current_session is None:
+            self.create_player_kartea_session()
+
+        now = datetime.now()
+        detail_data = {
+            "id": 0,
+            "session": self.current_session,  # Objeto PlayerKarteaSession ou fallback
+            "date_time": now.strftime("%x"),
+            "event_time": now.strftime("%X"),
+            "phase": GameSettings.PHASE,
+            "level": GameSettings.LEVEL,
+            "player_position": GameSettings.pista,
+            "event_position": event_position,
+            "event_type": event_type,
+        }
+
+        self.service_session_detail.create_player_kartea_session_detail(
+            detail_data
+        )
+
+    def update_player_kartea_session(self):
+        now = datetime.now()
+        self.service_session.update_player_kartea_session(
+            self.current_session.id,
+            {
+                "end_date": now.strftime("%x"),
+                "end_time": now.strftime("%X"),
+                "general_score": self.score,
+                "q_movement": self.movimento,
+                "q_collided_target": GameSettings.Alvo_c,
+                "q_avoided_target": GameSettings.Alvo_d,
+                "q_collided_obstacle": GameSettings.Obst_c,
+                "q_avoided_obstacle": GameSettings.Obst_d,
+            },
+        )
 
     def reset(self):
         """Reseta todas as variáveis necessárias para iniciar um novo nível."""
@@ -128,7 +216,7 @@ class GameController:
 
         self.targets_spawn_timer = t + GameSettings.TARGETS_SPAWN_TIME
 
-        fase = GameSettings.PHASE  # arquivo.get_K_FASE(self.config_player)
+        fase = GameSettings.PHASE
         pos = self.background.get_startPos()
 
         # Lógica de escolha do tipo de objeto
@@ -159,6 +247,10 @@ class GameController:
             self.background.lines[pos].target = target
             self.alvo += 1
             GameSettings.Alvo += 1
+            self.create_player_kartea_session_detail(
+                PlayerKarteaSessionDetail.EventType.CREATED_TARGET, r
+            )
+
             # TODO gravar sessão detalhado
             # arquivo.grava_Detalhado(
             #    arquivo.get_Player(),
@@ -175,6 +267,9 @@ class GameController:
             self.background.lines[pos].target = obstacle
             self.obst += 1
             GameSettings.Obst += 1
+            self.create_player_kartea_session_detail(
+                PlayerKarteaSessionDetail.EventType.CREATED_OBSTACLE, r
+            )
             # TODO gravar sessão detalhado
             # arquivo.grava_Detalhado(
             #    arquivo.get_Player(),
@@ -192,6 +287,9 @@ class GameController:
                 self.background.lines[pos].target = obstacle
                 self.obst += 1
                 GameSettings.Obst += 1
+                self.create_player_kartea_session_detail(
+                    PlayerKarteaSessionDetail.EventType.CREATED_OBSTACLE, r
+                )
                 # TODO gravar sessão detalhado
                 # arquivo.grava_Detalhado(
                 #    arquivo.get_Player(),
@@ -207,6 +305,9 @@ class GameController:
                 self.background.lines[pos].target = target
                 self.alvo += 1
                 GameSettings.Alvo += 1
+                self.create_player_kartea_session_detail(
+                    PlayerKarteaSessionDetail.EventType.CREATED_TARGET, r
+                )
                 # TODO gravar sessão detalhado
                 # arquivo.grava_Detalhado(
                 #    arquivo.get_Player(),
@@ -222,7 +323,6 @@ class GameController:
         """Coloca a linha de chegada no fundo."""
 
         pos = self.background.get_startPos()
-        # "Assets/Kartea/Finish.png"
         self.background.lines[pos].sprite = Image.load(
             GameSettings.FINISH_IMAGE
         )
@@ -262,7 +362,8 @@ class GameController:
         if self.HUD:
             UI.draw_text(
                 self.surface,
-                f"Pontuação : {self.score}",
+                # f"Pontuação : {self.score}",
+                _("Pontuação : {}").format(self.score),
                 (650, 5),
                 GameSettings.COLORS["score"],
                 font=GameSettings.FONTS["medium"],
@@ -277,7 +378,8 @@ class GameController:
             )
             UI.draw_text(
                 self.surface,
-                f"Tempo : {self.time_left}",
+                # f"Tempo : {self.time_left}",
+                _("Tempo : {}").format(self.time_left),
                 (350, 5),
                 timer_text_color,
                 font=GameSettings.FONTS["medium"],
@@ -287,7 +389,8 @@ class GameController:
 
             UI.draw_text(
                 self.surface,
-                f"Fase : {GameSettings.PHASE}",
+                # f"Fase : {GameSettings.PHASE}",
+                _("Fase : {}").format(GameSettings.PHASE),
                 (5, 5),
                 timer_text_color,
                 font=GameSettings.FONTS["medium"],
@@ -297,7 +400,8 @@ class GameController:
 
             UI.draw_text(
                 self.surface,
-                f"Nivel : {GameSettings.LEVEL}",
+                # f"Nivel : {GameSettings.LEVEL}",
+                _("Nível : {}").format(GameSettings.LEVEL),
                 (5, 25),
                 timer_text_color,
                 font=GameSettings.FONTS["medium"],
@@ -389,6 +493,10 @@ class GameController:
                 if GameSettings.pista != -1 and troca_pista != -1:
                     self.score += 2
                     self.movimento += 1
+                    self.create_player_kartea_session_detail(
+                        PlayerKarteaSessionDetail.EventType.CHANGED_LANE,
+                        troca_pista,
+                    )
                     # TODO gravar sessão detalhado
                     # arquivo.grava_Detalhado(
                     #    arquivo.get_Player(),
@@ -400,7 +508,11 @@ class GameController:
                     #    "Trocou de Pista",
                     # )
                 elif GameSettings.pista == -1:
-                    print("Perdeu o Sinal")
+                    # print("Perdeu o Sinal")
+                    self.create_player_kartea_session_detail(
+                        PlayerKarteaSessionDetail.EventType.LEFT_GAME_AREA,
+                        troca_pista,
+                    )
                     # TODO gravar sessão detalhado
                     # arquivo.grava_Detalhado(
                     #    arquivo.get_Player(),
@@ -435,6 +547,10 @@ class GameController:
             ponto_T = self.alvo * 12 + self.obst * 12
 
             if self.score >= (3 * ponto_T) / 4:
+                self.create_player_kartea_session_detail(
+                    PlayerKarteaSessionDetail.EventType.GAME_CONTROL_ADVANCE_LEVEL,
+                    GameSettings.pista,
+                )
                 # TODO gravar sessão detalhado
                 # arquivo.grava_Detalhado(
                 #    arquivo.get_Player(),
@@ -445,8 +561,13 @@ class GameController:
                 #    settings.pista,
                 #    "Controle Jogo: Avanca Nivel",
                 # )
+
                 GameSettings.MENU = "Feedback_3"
             elif self.score >= ponto_T / 4:
+                self.create_player_kartea_session_detail(
+                    PlayerKarteaSessionDetail.EventType.GAME_CONTROL_MAINTAIN_LEVEL,
+                    GameSettings.pista,
+                )
                 # TODO gravar sessão detalhado
                 # arquivo.grava_Detalhado(
                 #    arquivo.get_Player(),
@@ -459,6 +580,10 @@ class GameController:
                 # )
                 GameSettings.MENU = "Feedback_2"
             else:
+                self.create_player_kartea_session_detail(
+                    PlayerKarteaSessionDetail.EventType.GAME_CONTROL_REGRESS_LEVEL,
+                    GameSettings.pista,
+                )
                 # TODO gravar sessão detalhado
                 # arquivo.grava_Detalhado(
                 #    arquivo.get_Player(),
@@ -474,6 +599,8 @@ class GameController:
             # Gravação final da sessão
             GameSettings.score = self.score
             GameSettings.movimento = self.movimento
+            if self.current_session:
+                self.update_player_kartea_session()
             # TODO gravar sessão detalhado
             # arquivo.grava_Sessao(
             #    arquivo.get_Player(),
@@ -486,6 +613,7 @@ class GameController:
             #    GameSettings.Obst_c,
             #    GameSettings.Obst_d,
             # )
+            # self.create_player_kartea_session()
 
             return "menu"
 
@@ -496,9 +624,11 @@ class GameController:
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    # print("Space game.py")
                     if self.background.speed == 0:
                         self.PAUSE = False
+                        self.create_player_kartea_session_detail(
+                            PlayerKarteaSessionDetail.EventType.UFE_CONTROL_UNPAUSE
+                        )
                         # print("Unpause")
                         # TODO gravar sessão detalhado
                         # arquivo.grava_Detalhado(
@@ -523,6 +653,9 @@ class GameController:
                         #    GameSettings.pista,
                         #    "Controle UFE: Pause",
                         # )
+                        self.create_player_kartea_session_detail(
+                            PlayerKarteaSessionDetail.EventType.UFE_CONTROL_PAUSE
+                        )
                         self.background.stop()
                         GameSettings.MENU = "Pause"
                         return "menu"
@@ -533,8 +666,14 @@ class GameController:
                     volume = 1 if self.SOM else 0
                     self.sounds["slap"].set_volume(volume)
                     self.sounds["screaming"].set_volume(volume)
-                    arquivo.set_K_SOM(self.config_player, self.SOM)
-                    status = "Habilita Som" if self.SOM else "Desabilita Som"
+                    # arquivo.set_K_SOM(self.config_player, self.SOM)
+                    status = (
+                        PlayerKarteaSessionDetail.EventType.UFE_CONTROL_ENABLE_SOUND
+                        if self.SOM
+                        else PlayerKarteaSessionDetail.EventType.UFE_CONTROL_DISABLE_SOUND
+                    )
+                    self.create_player_kartea_session_detail(status)
+                    # status = "Habilita Som" if self.SOM else "Desabilita Som"
                     # TODO gravar sessão detalhado
                     # arquivo.grava_Detalhado(
                     #    arquivo.get_Player(),
@@ -548,8 +687,14 @@ class GameController:
 
                 if event.key in (pygame.K_h, pygame.K_2):
                     self.HUD = not self.HUD
-                    arquivo.set_K_HUD(self.config_player, self.HUD)
-                    status = "Habilita HUD" if self.HUD else "Desabilita HUD"
+                    status = (
+                        PlayerKarteaSessionDetail.EventType.UFE_CONTROL_ENABLE_HUD
+                        if self.HUD
+                        else PlayerKarteaSessionDetail.EventType.UFE_CONTROL_DISABLE_HUD
+                    )
+                    self.create_player_kartea_session_detail(status)
+                    # arquivo.set_K_HUD(self.config_player, self.HUD)
+                    # status = "Habilita HUD" if self.HUD else "Desabilita HUD"
                     # TODO gravar sessão detalhado
                     # arquivo.grava_Detalhado(
                     #    arquivo.get_Player(),

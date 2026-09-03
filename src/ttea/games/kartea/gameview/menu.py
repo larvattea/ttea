@@ -5,11 +5,6 @@ import pygame
 from ttea.games.kartea.gamemodel import Background, Image
 from ttea.games.kartea.gameui import UI
 from ttea.games.kartea.gameutil import GameSettings
-from ttea.games.kartea.util import KarteaPathConfig
-
-# import settings
-# from settings import *
-# from background import Background
 
 
 class Menu:
@@ -17,26 +12,14 @@ class Menu:
 
     def __init__(self, surface):
         self.surface = surface
-
-        # Background do menu
         self.background = Background()
         self.background.background_menu()
-
-        # Som de clique (usado em todos os botões)
-
-        # self.click_sound = pygame.mixer.Sound("Assets/Kartea/Sounds/point.wav")
-        self.click_sound = pygame.mixer.Sound(
-            # KarteaPathConfig.game_sound("point.wav")
-            GameSettings.MENU_CLICK_SOUND
-        )
+        self.click_sound = pygame.mixer.Sound(GameSettings.MENU_CLICK_SOUND)
 
     def draw(self):
         """Desenha o fundo básico do menu."""
         self.background.draw(self.surface)
         fundo = Image.load(
-            # KarteaPathConfig.kartea_image(":bottom"),
-            # KarteaPathConfig.game_image("fundo.png"),
-            # "Assets/Kartea/Fundo.png",
             GameSettings.MENU_BACKGROUND,
             size=(GameSettings.SCREEN_WIDTH, GameSettings.SCREEN_HEIGHT),
         )
@@ -46,7 +29,7 @@ class Menu:
         """Desenha a tela de feedback com estatísticas do nível."""
         UI.draw_text(
             self.surface,
-            "Feedback",
+            _("Feedback"),
             ((GameSettings.SCREEN_WIDTH // 2) + 50, 100),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
@@ -56,7 +39,7 @@ class Menu:
 
         UI.draw_text(
             self.surface,
-            "Quantidade",
+            _("Quantidade"),
             ((GameSettings.SCREEN_WIDTH // 2) + 250, 100),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
@@ -67,7 +50,7 @@ class Menu:
         # Pontuação
         UI.draw_text(
             self.surface,
-            "Pontuação",
+            _("Pontuação"),
             ((GameSettings.SCREEN_WIDTH // 2) + 50, 130),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
@@ -87,7 +70,7 @@ class Menu:
         # Movimentos
         UI.draw_text(
             self.surface,
-            "Movimentos",
+            _("Movimentos"),
             ((GameSettings.SCREEN_WIDTH // 2) + 50, 160),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
@@ -107,7 +90,7 @@ class Menu:
         # Alvos
         UI.draw_text(
             self.surface,
-            "Alvos Gerados",
+            _("Alvos Gerados"),
             ((GameSettings.SCREEN_WIDTH // 2) + 50, 190),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
@@ -126,7 +109,7 @@ class Menu:
 
         UI.draw_text(
             self.surface,
-            "Alvos Colididos",
+            _("Alvos Colididos"),
             ((GameSettings.SCREEN_WIDTH // 2) + 50, 220),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
@@ -145,7 +128,7 @@ class Menu:
 
         UI.draw_text(
             self.surface,
-            "Alvos Desviados",
+            _("Alvos Desviados"),
             ((GameSettings.SCREEN_WIDTH // 2) + 50, 250),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
@@ -165,7 +148,7 @@ class Menu:
         # Obstáculos
         UI.draw_text(
             self.surface,
-            "Obst. Gerados",
+            _("Obst. Gerados"),
             ((GameSettings.SCREEN_WIDTH // 2) + 50, 280),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
@@ -184,7 +167,7 @@ class Menu:
 
         UI.draw_text(
             self.surface,
-            "Obst. Desviados",
+            _("Obst. Desviados"),
             ((GameSettings.SCREEN_WIDTH // 2) + 50, 310),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
@@ -203,7 +186,7 @@ class Menu:
 
         UI.draw_text(
             self.surface,
-            "Obst. Colididos",
+            _("Obst. Colididos"),
             ((GameSettings.SCREEN_WIDTH // 2) + 50, 340),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
@@ -224,7 +207,7 @@ class Menu:
         """Gerencia o menu inicial (tela principal)."""
         UI.draw_text(
             self.surface,
-            GameSettings.GAME_TITLE,
+            _(GameSettings.GAME_TITLE),
             (GameSettings.SCREEN_WIDTH // 2, 120),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["big"],
@@ -234,7 +217,7 @@ class Menu:
         )
 
         if UI.button(
-            self.surface, 0, 300, "Jogar", click_sound=self.click_sound
+            self.surface, 0, 300, _("Jogar"), click_sound=self.click_sound
         ):
             return "game"
 
@@ -242,7 +225,7 @@ class Menu:
             self.surface,
             0,
             300 + GameSettings.BUTTONS_SIZES[1] * 4,
-            "Sair",
+            _("Sair"),
             click_sound=self.click_sound,
         ):
             pygame.display.quit()
@@ -254,7 +237,7 @@ class Menu:
         """Gerencia o menu de pausa."""
         UI.draw_text(
             self.surface,
-            "Pause",
+            _("Pause"),
             (GameSettings.SCREEN_WIDTH // 2, 120),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["big"],
@@ -264,7 +247,7 @@ class Menu:
         )
 
         if UI.button(
-            self.surface, 0, 300, "Continuar", click_sound=self.click_sound
+            self.surface, 0, 300, _("Continuar"), click_sound=self.click_sound
         ):
             return "game"
 
@@ -272,7 +255,7 @@ class Menu:
             self.surface,
             1,
             300 + GameSettings.BUTTONS_SIZES[1] * 2,
-            "Retroceder",
+            _("Retroceder"),
             click_sound=self.click_sound,
         ):
             return "prev"
@@ -281,7 +264,7 @@ class Menu:
             self.surface,
             0,
             300 + GameSettings.BUTTONS_SIZES[1] * 2,
-            "Reiniciar",
+            _("Reiniciar"),
             click_sound=self.click_sound,
         ):
             return "rest"
@@ -290,7 +273,7 @@ class Menu:
             self.surface,
             2,
             300 + GameSettings.BUTTONS_SIZES[1] * 2,
-            "Avançar",
+            _("Avançar"),
             click_sound=self.click_sound,
         ):
             return "next"
@@ -299,7 +282,7 @@ class Menu:
             self.surface,
             0,
             300 + GameSettings.BUTTONS_SIZES[1] * 4,
-            "Sair",
+            _("Sair"),
             click_sound=self.click_sound,
         ):
             pygame.display.quit()
@@ -310,17 +293,14 @@ class Menu:
     def _handle_feedback_menu(self, feedback_type: str):
         """Gerencia as telas de feedback (Feedback_1, Feedback_2, Feedback_3)."""
         if feedback_type == "Feedback_1":
-            # trofeu = Image.load("Assets/Kartea/trofeu - 25.png")
             trofeu = Image.load(GameSettings.MENU_FEEDBACK_25)
             Image.draw(self.surface, trofeu, (0, 0))
             action_on_play = "prev"
         elif feedback_type == "Feedback_2":
-            # trofeu = Image.load("Assets/Kartea/trofeu - 50.png")
             trofeu = Image.load(GameSettings.MENU_FEEDBACK_50)
             Image.draw(self.surface, trofeu, (0, 0))
             action_on_play = "rest"
         elif feedback_type == "Feedback_3":
-            # trofeu = Image.load("Assets/Kartea/trofeu - 75.png")
             trofeu = Image.load(GameSettings.MENU_FEEDBACK_75)
             Image.draw(self.surface, trofeu, (0, 0))
             action_on_play = "next"
@@ -333,7 +313,7 @@ class Menu:
             self.surface,
             2,
             300 + GameSettings.BUTTONS_SIZES[1] * 4,
-            "Jogar",
+            _("Jogar"),
             click_sound=self.click_sound,
         ):
             return action_on_play
@@ -342,7 +322,7 @@ class Menu:
             self.surface,
             1,
             300 + GameSettings.BUTTONS_SIZES[1] * 4,
-            "Sair",
+            _("Sair"),
             click_sound=self.click_sound,
         ):
             pygame.display.quit()

@@ -1,16 +1,13 @@
 import os
 import re
 from dataclasses import fields
-from datetime import datetime
 from typing import Dict, List, Optional, Union
 
 # Local module import
 from ttea.dao import DAO
 from ttea.games.kartea.dao import PlayerKarteaSessionCsvDAO
-from ttea.games.kartea.model import (PlayerKarteaSession,
-                                     PlayerKarteaSessionDetail)
+from ttea.games.kartea.model import PlayerKarteaSessionDetail
 from ttea.games.kartea.util import KarteaPathConfig
-from ttea.model import Player
 from ttea.util import CSVHandler
 
 
@@ -128,14 +125,14 @@ class PlayerKarteaSessionDetailCsvDAO(DAO):
         Notes
         -----
         Uses player ID and sanitized name with '_kartea_session_detail.csv'
-        suffix. Uses KarteaPathConfig.players_dir.
+        suffix. Uses KarteaPathConfig.KARTEA_PLAYER_DIR.
         """
         sanitized_name = self.sanitize_filename(detail.session.player.name)
         filename = (
             f"{detail.session.player.id}_{sanitized_name}_"
             f"kartea_session_detail.csv"
         )
-        return str(KarteaPathConfig.players_dir / filename)
+        return str(KarteaPathConfig.KARTEA_PLAYER_DIR / filename)
 
     def load_all_details(self) -> None:
         """Load all session detail CSV files into memory.
@@ -151,8 +148,8 @@ class PlayerKarteaSessionDetailCsvDAO(DAO):
         rows. Extracts player_id from filename. Loads session via
         PlayerKarteaSessionDAO, with fallback if session not found.
         """
-        KarteaPathConfig.create_directories()
-        for file_path in KarteaPathConfig.players_dir.glob(
+        KarteaPathConfig.ensure_kartea_dirs()
+        for file_path in KarteaPathConfig.KARTEA_PLAYER_DIR.glob(
             "*_*_kartea_session_detail.csv"
         ):
             # Extract player_id from filename
@@ -175,28 +172,6 @@ class PlayerKarteaSessionDetailCsvDAO(DAO):
 
                 # Load session via PlayerKarteaSessionDAO
                 session = self.session_dao.select(session_id)
-                if session is None:
-                    # Fallback if session not found
-                    session = PlayerKarteaSession(
-                        id=session_id,
-                        player=Player(
-                            id=player_id,
-                            name="Unknown",
-                            birth_date=datetime.now(),
-                            observation="",
-                        ),
-                        date="",
-                        start_time="",
-                        end_time="",
-                        phase_reached=0,
-                        level_reached=0,
-                        general_score=0,
-                        q_movement=0,
-                        q_collided_target=0,
-                        q_avoided_target=0,
-                        q_collided_obstacle=0,
-                        q_avoided_obstacle=0,
-                    )
 
                 # Ensure data types are converted appropriately
                 detail_kwargs = {
@@ -206,7 +181,8 @@ class PlayerKarteaSessionDetailCsvDAO(DAO):
                         else row[prop]
                     )
                     for prop in PlayerKarteaSessionDetail.PROPERTIES
-                    if prop != "session" and prop in row
+                    # if prop != "session" and prop in row
+                    if prop not in ("session", "id") and prop in row
                 }
 
                 detail = PlayerKarteaSessionDetail(

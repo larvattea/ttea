@@ -1,4 +1,6 @@
 import argparse
+import gettext
+import os
 import sys
 
 import cv2
@@ -9,6 +11,7 @@ from ttea.games.kartea.gameutil import GameSettings
 from ttea.games.kartea.gameutil.alphablit import alpha_blit
 from ttea.games.kartea.gameview import Menu
 from ttea.games.kartea.service import PlayerKarteaConfigService
+from ttea.games.kartea.util import KarteaPathConfig
 
 
 class KarTEA:
@@ -30,6 +33,8 @@ class KarTEA:
         )
 
         args = parser.parse_args()
+
+        self.set_game_language(args.lang)
 
         # 2. Busca de dados
         self.service = PlayerKarteaConfigService()
@@ -76,6 +81,18 @@ class KarTEA:
 
         # Variáveis de controle
         self.running = True
+
+    def set_game_language(self, lang_code="pt_BR"):
+        locales_dir = os.path.join(
+            KarteaPathConfig.KARTEA_RESOURCES_DIR, "locales"
+        )
+        translation = gettext.translation(
+            "kartea",
+            localedir=locales_dir,
+            languages=[lang_code],
+            fallback=True,
+        )
+        translation.install()
 
     def handle_events(self):
         """Gerencia todos os eventos do usuário."""

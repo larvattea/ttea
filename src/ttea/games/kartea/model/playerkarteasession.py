@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, ClassVar, Dict, List
 
 # Type checking to prevent circular import on run time
 if TYPE_CHECKING:
-    from ttea.model.player import Player
+    from ttea.model import Player, Professional
 
 
 def initialize_reflexive(cls):
@@ -99,8 +99,10 @@ class PlayerKarteaSession:
 
     id: int
     player: "Player"
-    date: str
+    professional: "Professional"
+    start_date: str
     start_time: str
+    end_date: str
     end_time: str
     phase_reached: int
     level_reached: int
@@ -178,7 +180,10 @@ class PlayerKarteaSession:
         info = {
             prop: getattr(self, prop)
             for prop in self.PROPERTIES
-            if prop != "player"
+            if prop not in ("player", "professional")
         }
         info["player"] = self.player.id if self.player else None
+        info["professional"] = (
+            self.professional.id if self.professional else None
+        )
         return [info]

@@ -124,11 +124,11 @@ class PlayerKarteaSessionCsvDAO(DAO):
         Notes
         -----
         Uses player ID and sanitized name with '_kartea_session.csv'
-        suffix. Uses KarteaPathConfig.players_dir.
+        suffix. Uses KarteaPathConfig.KARTEA_PLAYER_DIR.
         """
         sanitized_name = self.sanitize_filename(session.player.name)
         filename = f"{session.player.id}_{sanitized_name}_kartea_session.csv"
-        return str(KarteaPathConfig.players_dir / filename)
+        return str(KarteaPathConfig.KARTEA_PLAYER_DIR / filename)
 
     def load_all_sessions(self) -> None:
         """Load all session CSV files into memory.
@@ -157,18 +157,8 @@ class PlayerKarteaSessionCsvDAO(DAO):
             if not session_data:
                 continue
 
-            # if not session_data:
-            #    session_data = [["id", "1"]]
-
             # Load full player
             player = self.player_dao.select(player_id)
-            if player is None or not player.is_valid():
-                player = Player(
-                    id=player_id,
-                    name="Unknown",
-                    birth_date=datetime.now(),
-                    observation="",
-                )
 
             for row in session_data:
                 session_id = int(row["id"])
@@ -185,7 +175,7 @@ class PlayerKarteaSessionCsvDAO(DAO):
                         else row[prop]
                     )
                     for prop in PlayerKarteaSession.PROPERTIES
-                    if prop != "player" and prop in row
+                    if prop not in ("player", "id") and prop in row
                 }
 
                 session = PlayerKarteaSession(
@@ -218,6 +208,9 @@ class PlayerKarteaSessionCsvDAO(DAO):
         if not obj.player or not obj.player.is_valid():
             return False
 
+        if not obj.professional or not obj.professional.is_valid():
+            return False
+
         # Assign incremental ID
         session_id = self.next_session_id
         self.next_session_id += 1
@@ -227,9 +220,18 @@ class PlayerKarteaSessionCsvDAO(DAO):
         self.file_map[obj.player.id] = filename
 
         # Prepare data, storing player.id for 'player'
+        # and profession.id for 'professional'
         session_data = [
             {
-                prop: getattr(obj, prop) if prop != "player" else obj.player.id
+                prop: (
+                    obj.player.id
+                    if prop == "player"
+                    else (
+                        obj.professional.id
+                        if prop == "professional"
+                        else getattr(obj, prop)
+                    )
+                )
                 for prop in PlayerKarteaSession.PROPERTIES
             }
         ]
@@ -273,6 +275,9 @@ class PlayerKarteaSessionCsvDAO(DAO):
         if not obj.player or not obj.player.is_valid():
             return False
 
+        if not obj.professional or not obj.professional.is_valid():
+            return False
+
         old_filename = self.file_map.get(obj.player.id)
         new_filename = self.get_filename(obj)
 
@@ -294,7 +299,15 @@ class PlayerKarteaSessionCsvDAO(DAO):
 
         # Prepare updated row for obj.id
         updated_row = {
-            prop: getattr(obj, prop) if prop != "player" else obj.player.id
+            prop: (
+                obj.player.id
+                if prop == "player"
+                else (
+                    obj.professional.id
+                    if prop == "professional"
+                    else getattr(obj, prop)
+                )
+            )
             for prop in PlayerKarteaSession.PROPERTIES
         }
 

@@ -3,6 +3,7 @@ import pygame
 from ttea.games.kartea.gamemodel import Image
 from ttea.games.kartea.gamemodel.target import Target
 from ttea.games.kartea.gameutil import GameSettings
+from ttea.games.kartea.model import PlayerKarteaSessionDetail
 
 
 class Obstacle(Target):
@@ -173,6 +174,9 @@ class Obstacle(Target):
             targets.remove(self)
             sounds["slap"].play()
             Image.draw(surface, positive_fig, (0, 0))
+            self.create_player_kartea_session_detail(
+                PlayerKarteaSessionDetail.EventType.AVOIDED_OBSTACLE
+            )
             # TODO gravar aqui os dados
             # arquivo.grava_Detalhado(
             #    arquivo.get_Player(),
@@ -190,6 +194,10 @@ class Obstacle(Target):
             targets.remove(self)
             sounds["screaming"].play()
             Image.draw(surface, negative_fig, (0, 0))
+
+            self.create_player_kartea_session_detail(
+                PlayerKarteaSessionDetail.EventType.COLLIDED_OBSTACLE
+            )
             # TODO gravar aqui os dados
             # arquivo.grava_Detalhado(
             #    arquivo.get_Player(),
