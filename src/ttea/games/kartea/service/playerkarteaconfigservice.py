@@ -106,7 +106,7 @@ class PlayerKarteaConfigService:
             phase=phase,
             level=level,
             level_time=data.get("level_time", 0),
-            car_image=data.get("car_image", ""),
+            vehicle_image=data.get("vehicle_image", ""),
             environment_image_right=data.get("environment_image_right", ""),
             environment_image_left=data.get("environment_image_left", ""),
             target_image=data.get("target_image", ""),
@@ -162,9 +162,12 @@ class PlayerKarteaConfigService:
         config.level = level
 
         config.level_time = data.get("level_time", config.level_time)
-        config.car_image = data.get("car_image", config.car_image)
+        config.vehicle_image = data.get("vehicle_image", config.vehicle_image)
         config.environment_image_right = data.get(
-            "environment_image", config.environment_image_right
+            "environment_image_right", config.environment_image_right
+        )
+        config.environment_image_left = data.get(
+            "environment_image_left", config.environment_image_left
         )
         config.target_image = data.get("target_image", config.target_image)
         config.obstacle_image = data.get(

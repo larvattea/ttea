@@ -15,7 +15,7 @@ except ImportError:
 
 from PySide6.QtCore import QObject, Qt, QTimer
 
-from ttea.model import AppModel
+from ttea.model import AppModel, Calibration, CalibrationPoint
 from ttea.service import CalibrationService, PlayerGameLaunchService
 # Local module imports
 from ttea.util import MessageService
@@ -84,6 +84,14 @@ class PlayerGameLaunchController(QObject):
                     "Verifique se os metadados de configuração estão corretos."
                 )
             )
+
+    def _find_by_id_calibration_point(self, calibration_point_id: int) -> bool:
+        return self.calibration_service.find_by_id_calibration_point(
+            calibration_point_id
+        )
+
+    def _find_by_id_calibration(self, calibration_id: int) -> bool:
+        return self.calibration_service.find_by_id_calibration(calibration_id)
 
     def _verify_hardware_configuration(self) -> bool:
         """
@@ -209,6 +217,26 @@ class PlayerGameLaunchController(QObject):
                     "Erro: Executável do jogo não encontrado em: {0}.\n"
                     "Verifique se o arquivo existe e se os metadados de configuração estão corretos."
                 ).format(script_path)
+            )
+            return
+
+        # Validação da calibração antes de iniciar o jogo
+        if not self._find_by_id_calibration_point(CalibrationPoint.ID_VALUE):
+            self.msg.warning(
+                self.tr(
+                    "O arquivo de calibração não foi encontrado.\n"
+                    "Por favor, execute a calibração antes de iniciar o jogo."
+                )
+            )
+            return
+
+        # Validação do ambiente de hardware antes de iniciar o jogo
+        if not self._find_by_id_calibration(Calibration.ID_VALUE):
+            self.msg.warning(
+                self.tr(
+                    "O arquivo de configuração do hardware não foi encontrado.\n"
+                    "Por favor, salve a configuração do hardware antes de iniciar o jogo."
+                )
             )
             return
 

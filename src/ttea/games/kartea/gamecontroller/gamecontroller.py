@@ -1,3 +1,4 @@
+import math
 import random
 import time
 from datetime import datetime
@@ -22,10 +23,6 @@ class GameController:
         self.service_session = PlayerKarteaSessionService()
         self.service_session_detail = PlayerKarteaSessionDetailService()
 
-        # now = datetime.now()
-        # self.start_date = now.strftime("%x")
-        # self.start_time = now.strftime("%X")
-        # self.create_player_kartea_session()
         self.current_session = None
         self.start_date = None
         self.start_time = None
@@ -362,7 +359,6 @@ class GameController:
         if self.HUD:
             UI.draw_text(
                 self.surface,
-                # f"Pontuação : {self.score}",
                 _("Pontuação : {}").format(self.score),
                 (650, 5),
                 GameSettings.COLORS["score"],
@@ -378,7 +374,6 @@ class GameController:
             )
             UI.draw_text(
                 self.surface,
-                # f"Tempo : {self.time_left}",
                 _("Tempo : {}").format(self.time_left),
                 (350, 5),
                 timer_text_color,
@@ -389,7 +384,6 @@ class GameController:
 
             UI.draw_text(
                 self.surface,
-                # f"Fase : {GameSettings.PHASE}",
                 _("Fase : {}").format(GameSettings.PHASE),
                 (5, 5),
                 timer_text_color,
@@ -400,7 +394,6 @@ class GameController:
 
             UI.draw_text(
                 self.surface,
-                # f"Nivel : {GameSettings.LEVEL}",
                 _("Nível : {}").format(GameSettings.LEVEL),
                 (5, 25),
                 timer_text_color,
@@ -432,8 +425,13 @@ class GameController:
         self.draw()
 
         if self.time_left > 0:
-            # Spawn de alvos/obstáculos
-            if self.time_left > (2 * GameSettings.TARGETS_SPAWN_TIME):
+            finish_lead_time = 3.5 + 10.0 * math.exp(
+                -0.35 * GameSettings.LEVEL
+            )
+
+            # if self.time_left > GameSettings.TARGETS_SPAWN_TIME:
+            # if self.time_left > (2 * GameSettings.TARGETS_SPAWN_TIME):
+            if self.time_left > finish_lead_time:
                 self.spawn_targets()
             else:
                 if self.finish == 0:
@@ -487,9 +485,9 @@ class GameController:
 
             # Verifica troca de pista
             if GameSettings.pista != troca_pista:
-                print(
-                    f"Trocou da pista {troca_pista} para {GameSettings.pista}"
-                )
+                # print(
+                #    f"Trocou da pista {troca_pista} para {GameSettings.pista}"
+                # )
                 if GameSettings.pista != -1 and troca_pista != -1:
                     self.score += 2
                     self.movimento += 1
@@ -508,7 +506,6 @@ class GameController:
                     #    "Trocou de Pista",
                     # )
                 elif GameSettings.pista == -1:
-                    # print("Perdeu o Sinal")
                     self.create_player_kartea_session_detail(
                         PlayerKarteaSessionDetail.EventType.LEFT_GAME_AREA,
                         troca_pista,
@@ -541,9 +538,6 @@ class GameController:
                     )
 
         else:
-            # Fim do nível - Feedback
-            print("Terminou o Nível!")
-
             ponto_T = self.alvo * 12 + self.obst * 12
 
             if self.score >= (3 * ponto_T) / 4:
@@ -622,6 +616,11 @@ class GameController:
             if event.type == pygame.QUIT:
                 pygame.display.quit()
 
+            if event.type == pygame.ACTIVEEVENT:
+                # event.gain == 0 significa que a janela perdeu foco
+                if getattr(event, "gain", 1) == 0:
+                    GameSettings.regain_focus()
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     if self.background.speed == 0:
@@ -629,7 +628,6 @@ class GameController:
                         self.create_player_kartea_session_detail(
                             PlayerKarteaSessionDetail.EventType.UFE_CONTROL_UNPAUSE
                         )
-                        # print("Unpause")
                         # TODO gravar sessão detalhado
                         # arquivo.grava_Detalhado(
                         #    arquivo.get_Player(),
@@ -642,7 +640,6 @@ class GameController:
                         # )
                     else:
                         self.PAUSE = True
-                        # print("Pause")
                         # TODO gravar sessão detalhado
                         # arquivo.grava_Detalhado(
                         #    arquivo.get_Player(),
@@ -666,13 +663,23 @@ class GameController:
                     volume = 1 if self.SOM else 0
                     self.sounds["slap"].set_volume(volume)
                     self.sounds["screaming"].set_volume(volume)
-                    # arquivo.set_K_SOM(self.config_player, self.SOM)
+                    if GameSettings.PLAYER_KARTEA_CONFIG_SERVICE.find_config_by_player_id(
+                        GameSettings.PLAYER_ID
+                    ):
+                        GameSettings.PLAYER_KARTEA_CONFIG_SERVICE.update_config(
+                            GameSettings.PLAYER_ID,
+                            {
+                                "session_id": GameSettings.SESSION_ID,
+                                "sound": self.SOM,
+                            },
+                        )
                     status = (
                         PlayerKarteaSessionDetail.EventType.UFE_CONTROL_ENABLE_SOUND
                         if self.SOM
                         else PlayerKarteaSessionDetail.EventType.UFE_CONTROL_DISABLE_SOUND
                     )
                     self.create_player_kartea_session_detail(status)
+
                     # status = "Habilita Som" if self.SOM else "Desabilita Som"
                     # TODO gravar sessão detalhado
                     # arquivo.grava_Detalhado(
@@ -687,6 +694,18 @@ class GameController:
 
                 if event.key in (pygame.K_h, pygame.K_2):
                     self.HUD = not self.HUD
+
+                    if GameSettings.PLAYER_KARTEA_CONFIG_SERVICE.find_config_by_player_id(
+                        GameSettings.PLAYER_ID
+                    ):
+                        GameSettings.PLAYER_KARTEA_CONFIG_SERVICE.update_config(
+                            GameSettings.PLAYER_ID,
+                            {
+                                "session_id": GameSettings.SESSION_ID,
+                                "hud": self.HUD,
+                            },
+                        )
+
                     status = (
                         PlayerKarteaSessionDetail.EventType.UFE_CONTROL_ENABLE_HUD
                         if self.HUD

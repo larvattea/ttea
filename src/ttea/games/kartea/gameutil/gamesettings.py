@@ -1,3 +1,5 @@
+import subprocess
+import sys
 from typing import TYPE_CHECKING, Dict
 
 import cv2
@@ -230,12 +232,12 @@ class GameSettings:
             cls.LEVEL_TIME = player_config.level_time
 
         # ====================== Visual Resources ======================
-        if not player_config or player_config.car_image is None:
+        if not player_config or player_config.vehicle_image is None:
             cls.VEHICLE_IMAGE = default_config["visual_resources"][
                 "vehicle_image_default"
             ]
         else:
-            cls.VEHICLE_IMAGE = player_config.car_image
+            cls.VEHICLE_IMAGE = player_config.vehicle_image
 
         if not player_config or player_config.environment_image_right is None:
             cls.ENVIRONMENT_IMAGE_RIGHT = default_config["visual_resources"][
@@ -389,10 +391,6 @@ class GameSettings:
         player_kartea_session.q_avoided_obstacle = q_avoided_obstacle
 
     @classmethod
-    def session_detail_data():
-        pass
-
-    @classmethod
     def get_calibration_point(cls) -> None:
         calibration_point = (
             cls.PLAYER_KARTEA_CONFIG_SERVICE.find_by_id_calibration_point(
@@ -407,3 +405,40 @@ class GameSettings:
         cls.pontos_calibracao[2][1] = calibration_point.pointy3
         cls.pontos_calibracao[3][0] = calibration_point.pointx4
         cls.pontos_calibracao[3][1] = calibration_point.pointy4
+
+    @classmethod
+    def regain_focus(cls) -> None:
+        """Traz a janela do Pygame de volta para o foco ativo (Windows, Linux, macOS)."""
+        try:
+            wm_info = pygame.display.get_wm_info()
+            window_id = wm_info.get("window")
+            if not window_id:
+                return
+
+            # Windows (win32, win64, etc.)
+            if sys.platform.startswith("win"):
+                import ctypes
+
+                ctypes.windll.user32.SetForegroundWindow(window_id)
+                ctypes.windll.user32.SetActiveWindow(window_id)
+            elif sys.platform.startswith("linux"):
+                # Exige que a ferramenta xdotool esteja instalada no Linux/X11
+                subprocess.run(
+                    ["xdotool", "windowactivate", str(window_id)],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    check=False,
+                )
+            elif sys.platform.startswith("darwin"):  # macOS
+                apple_script = (
+                    'tell application "System Events" to set frontmost of '
+                    'first process whose unix id is (do shell script "echo $PPID") to true'
+                )
+                subprocess.run(
+                    ["osascript", "-e", apple_script],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.DEVNULL,
+                    check=False,
+                )
+        except Exception:
+            pass

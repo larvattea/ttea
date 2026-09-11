@@ -101,7 +101,9 @@ class PlayerKarteaConfigEditController(QObject):
                 str(self.config.level.id) if self.config.level else ""
             )
             self.view.spn_level_time.setValue(self.config.level_time)
-            self.view.cbx_vehicle_image.setCurrentText(self.config.car_image)
+            self.view.cbx_vehicle_image.setCurrentText(
+                self.config.vehicle_image
+            )
             self.view.cbx_environment_image_right.setCurrentText(
                 self.config.environment_image_right
             )
@@ -331,7 +333,7 @@ class PlayerKarteaConfigEditController(QObject):
             "phase_id": phase.id,
             "level_id": level.id,
             "level_time": self.view.spn_level_time.value(),
-            "car_image": self.view.cbx_vehicle_image.currentText(),
+            "vehicle_image": self.view.cbx_vehicle_image.currentText(),
             "environment_image_right": self.view.cbx_environment_image_right.currentText(),
             "environment_image_left": self.view.cbx_environment_image_left.currentText(),
             "target_image": self.view.cbx_target_image.currentText(),
