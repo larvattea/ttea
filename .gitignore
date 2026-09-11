@@ -4,3 +4,6 @@ TCC.txt
 *.pyc
 Source/log.txt
 Source/debug.txt
+
+# Windows NTFS alternate data streams leaked via WSL
+*:Zone.Identifier
