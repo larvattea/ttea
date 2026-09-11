@@ -1577,22 +1577,22 @@ Verifique se os metadados de configuração estão corretos.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="110"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="118"/>
         <source>Desconhecida</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="114"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="122"/>
         <source>- Câmera: O dispositivo &apos;{0}&apos; não foi detectado ou foi desconectado.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="147"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="155"/>
         <source>- Monitor: A tela configurada (&apos;{0}&apos; - {1}x{2}) não corresponde à disposição atual do sistema.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="155"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="163"/>
         <source>Foram detectadas divergências nos equipamentos configurados:
 
 {0}
@@ -1604,39 +1604,51 @@ Deseja iniciar o jogo mesmo assim?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="176"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="184"/>
         <source>Selecione um jogador antes de iniciar.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="183"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="191"/>
         <source>Selecione um professional antes de iniciar.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="190"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="198"/>
         <source>Selecione um jogo antes de iniciar.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="196"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="204"/>
         <source>Já existe um jogo em execução.
 Feche o jogo atual antes de iniciar outro.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="209"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="217"/>
         <source>Erro: Executável do jogo não encontrado em: {0}.
 Verifique se o arquivo existe e se os metadados de configuração estão corretos.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="245"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="227"/>
+        <source>O arquivo de calibração não foi encontrado.
+Por favor, execute a calibração antes de iniciar o jogo.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="237"/>
+        <source>O arquivo de configuração do hardware não foi encontrado.
+Por favor, salve a configuração do hardware antes de iniciar o jogo.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="273"/>
         <source>Espere</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="324"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="352"/>
         <source>Jogar</source>
         <translation></translation>
     </message>
@@ -1708,37 +1720,37 @@ Verifique se o arquivo existe e se os metadados de configuração estão correto
 <context>
     <name>PlayerKarteaConfigEditController</name>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="255"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="257"/>
         <source>Jogador é obrigatório!
 </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="257"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="259"/>
         <source>Imagem do veículo é obrigatória!
 </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="262"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="264"/>
         <source>Imagem do ambiente é obrigatória!
 </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="264"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="266"/>
         <source>Imagem do alvo é obrigatória!
 </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="266"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="268"/>
         <source>Imagem do obstáculo é obrigatória!
 </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="270"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="272"/>
         <source>Por favor, corrija os dados inválidos:
 </source>
         <translation></translation>

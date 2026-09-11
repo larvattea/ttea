@@ -207,7 +207,7 @@ class PlayerKarteaConfigEditView(
             )
             self.lbl_visual_preview.setPixmap(scaled)
 
-    # Método update_feedback_preview → mantém praticamente igual (só ajustei nomes para clareza)
+    # Método update_feedback_preview
     def update_feedback_preview(
         self, filename: str, feedback_type: str
     ) -> None:

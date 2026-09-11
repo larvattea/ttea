@@ -20,11 +20,6 @@
         <file alias="obstacle/defaultobstacle">images/obstacle/obstaculo.png</file>
         <file alias="obstacle/variant1obstacle">images/obstacle/obstaculo1.png</file>
 
-        <!-- Feedback -->
-        <file alias="feedback/positive">images/positive_feedback/feliz.png</file>
-        <file alias="feedback/neutral">images/neutral_feedback/neutro.png</file>
-        <file alias="feedback/negative">images/negative_feedback/triste.png</file>
-
         <!-- Alvos / Estrelas / Pontuação -->
         <file alias="target/star/defaultstar">images/target/star.png</file>
         <file alias="target/star/smallstar">images/target/star1.png</file>
@@ -59,31 +54,50 @@
         <file alias="trophy/goldtrophy">images/trofeu.png</file>
 
         <!-- Logo -->
-        <file alias="logo/ttea">images/ttea_logo.xcf</file>  <!-- manter só se realmente usar -->
+        <file alias="logo/ttea">images/ttea_logo.xcf</file>
+    </qresource>
+
+    <!-- Imagens de Feedback (separadas por pasta virtual real) -->
+    <qresource prefix="/images/feedback/positive">
+        <file alias="positive">images/positive_feedback/feliz.png</file>
+    </qresource>
+
+    <qresource prefix="/images/feedback/neutral">
+        <file alias="neutral">images/neutral_feedback/neutro.png</file>
+    </qresource>
+
+    <qresource prefix="/images/feedback/negative">
+        <file alias="negative">images/negative_feedback/triste.png</file>
     </qresource>
 
     <!-- ============================================= -->
     <!-- Sons                                          -->
     <!-- ============================================= -->
 
-    <qresource prefix="/sounds">
-        <!-- Feedback positivo -->
-        <file alias="feedback/positive/hit">sounds/positive_feedback/acertou.wav</file>
-        <file alias="feedback/positive/hit1">sounds/positive_feedback/acertou1.wav</file>
-        <file alias="feedback/positive/hit2">sounds/positive_feedback/acertou2.wav</file>
+    <!-- Feedback positivo -->
+    <qresource prefix="/sounds/feedback/positive">
+        <file alias="hit">sounds/positive_feedback/acertou.wav</file>
+        <file alias="hit1">sounds/positive_feedback/acertou1.wav</file>
+        <file alias="hit2">sounds/positive_feedback/acertou2.wav</file>
+    </qresource>
 
-        <!-- Feedback negativo / erro -->
-        <file alias="feedback/negative/error">sounds/negative_feedback/errou.wav</file>
-        <file alias="feedback/negative/error1">sounds/negative_feedback/errou1.wav</file>
+    <!-- Feedback neutro -->
+    <qresource prefix="/sounds/feedback/neutral">
+        <file alias="miss">sounds/neutral_feedback/miss.wav</file>
+    </qresource>
 
-        <!-- Feedback neutro -->
-        <file alias="feedback/neutral/miss">sounds/neutral_feedback/miss.wav</file>
+    <!-- Feedback negativo / erro -->
+    <qresource prefix="/sounds/feedback/negative">
+        <file alias="error">sounds/negative_feedback/errou.wav</file>
+        <file alias="error1">sounds/negative_feedback/errou1.wav</file>
+    </qresource>
 
-        <!-- Sons de jogo gerais -->
-        <file alias="game/crash">sounds/crash.wav</file>
-        <file alias="game/point">sounds/point.wav</file>
-        <file alias="game/win">sounds/win.wav</file>
-        <file alias="game/time">sounds/clocktick.wav</file>
+    <!-- Sons gerais do jogo -->
+    <qresource prefix="/sounds/game">
+        <file alias="crash">sounds/crash.wav</file>
+        <file alias="point">sounds/point.wav</file>
+        <file alias="win">sounds/win.wav</file>
+        <file alias="time">sounds/clocktick.wav</file>
     </qresource>
 
     <!-- ============================================= -->
@@ -96,9 +110,10 @@
     </qresource>
 
     <!-- ============================================= -->
-    <!-- Phases (files .csv)                     -->
+    <!-- Phases (arquivos .csv)                        -->
     <!-- ============================================= -->
-     <qresource prefix="/phases">
+
+    <qresource prefix="/phases">
         <file alias="1">phases/1.csv</file>
         <file alias="2">phases/2.csv</file>
         <file alias="3">phases/3.csv</file>

@@ -2,6 +2,7 @@ import argparse
 import gettext
 import os
 import sys
+from typing import Optional
 
 import cv2
 import pygame
@@ -10,6 +11,7 @@ from ttea.games.kartea.gamecontroller import GameController
 from ttea.games.kartea.gameutil import GameSettings
 from ttea.games.kartea.gameutil.alphablit import alpha_blit
 from ttea.games.kartea.gameview import Menu
+from ttea.games.kartea.model import PlayerKarteaConfig
 from ttea.games.kartea.service import PlayerKarteaConfigService
 from ttea.games.kartea.util import KarteaPathConfig
 
@@ -41,7 +43,13 @@ class KarTEA:
         self.player_config = self.service.find_config_by_player_id(
             args.player_id
         )
+
         self.default_config = self.service.get_kartea_ini_config()
+
+        if self.player_config is None:
+            self.player_config = self.create_player_config(
+                args.player_id, self.default_config
+            )
 
         # 3. DELEGAÇÃO: Passa tudo para o GameSettings
         GameSettings.setup(
@@ -64,10 +72,12 @@ class KarTEA:
                 display=GameSettings.SCREEN_OS_INDEX,
             )
 
+        GameSettings.regain_focus()
+
         self.clock = pygame.time.Clock()
 
         # Fonts
-        self.fps_font = pygame.font.SysFont("coopbl", 22)
+        self.fps_font = pygame.font.SysFont("cooperblack", 22)
 
         # Inicialização do mixer
         pygame.mixer.init()
@@ -81,6 +91,60 @@ class KarTEA:
 
         # Variáveis de controle
         self.running = True
+
+    def create_player_config(
+        self, player_id: int, ini_data: dict
+    ) -> Optional[PlayerKarteaConfig]:
+        game_settings = ini_data.get("game_settings", {})
+        visual_res = ini_data.get("visual_resources", {})
+        visual_feed = ini_data.get("visual_feedback", {})
+        sound_feed = ini_data.get("sound_feedback", {})
+        interface = ini_data.get("interface_settings", {})
+
+        data = {
+            "player_id": player_id,
+            "session_id": None,
+            "phase_id": int(game_settings.get("phase_default", 1)),
+            "level_id": int(game_settings.get("level_default", 1)),
+            "level_time": int(game_settings.get("level_time_default", 120)),
+            "vehicle_image": visual_res.get(
+                "vehicle_image_default", "defaultvehicle"
+            ),
+            "environment_image_right": visual_res.get(
+                "environment_image_default_right", "right"
+            ),
+            "environment_image_left": visual_res.get(
+                "environment_image_default_left", "left"
+            ),
+            "target_image": visual_res.get(
+                "target_image_default", "defaultstar"
+            ),
+            "obstacle_image": visual_res.get(
+                "obstacle_image_default", "defaultobstacle"
+            ),
+            "positive_feedback_image": visual_feed.get(
+                "positive_feedback_image_default", "positive"
+            ),
+            "neutral_feedback_image": visual_feed.get(
+                "neutral_feedback_image_default", "neutral"
+            ),
+            "negative_feedback_image": visual_feed.get(
+                "negative_feedback_image_default", "negative"
+            ),
+            "positive_feedback_sound": sound_feed.get(
+                "positive_feedback_sound_default", "hit"
+            ),
+            "neutral_feedback_sound": sound_feed.get(
+                "neutral_feedback_sound_default", "miss"
+            ),
+            "negative_feedback_sound": sound_feed.get(
+                "negative_feedback_sound_default", "error"
+            ),
+            "palette": int(interface.get("palette_default", 0)),
+            "hud": interface.get("hud_default", "true").lower() == "true",
+            "sound": interface.get("sound_default", "true").lower() == "true",
+        }
+        return self.service.create_config(data)
 
     def set_game_language(self, lang_code="pt_BR"):
         locales_dir = os.path.join(
@@ -118,19 +182,17 @@ class KarTEA:
 
         if menu_result == "game":
             self.state = "game"
-
+            GameSettings.regain_focus()  # Traz a janela do Pygame de volta para o foco ativo
         elif menu_result == "prev":
             if GameSettings.LEVEL != 1:
                 GameSettings.LEVEL = GameSettings.LEVEL - 1
             self.game.reset()
             self.state = "game"
-
         elif menu_result == "rest":
             self.game.reset()
             self.state = "game"
-
         elif menu_result == "next":
-            if GameSettings.LEVEL != 6:
+            if GameSettings.LEVEL != 7:
                 GameSettings.LEVEL = GameSettings.LEVEL + 1
             else:
                 if GameSettings.PHASE != 3:

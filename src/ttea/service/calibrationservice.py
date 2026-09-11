@@ -23,7 +23,7 @@ class CalibrationService:
         ] = None,
     ):
         # Cache opcional se os monitores não mudarem durante a execução
-        self._screens = QGuiApplication.screens()
+        # self._screens = QGuiApplication.screens()
         self.dao = dao or CalibrationIniDAO()
         self.dao_calibration_point = (
             dao_calibration_point or CalibrationPointCsvDAO()
@@ -95,6 +95,11 @@ class CalibrationService:
             return None
 
         return self.dao.insert(calibration)
+
+    def find_by_id_calibration(
+        self, calibration_id: int
+    ) -> Optional[Calibration]:
+        return self.dao.select(calibration_id)
 
     def create_calibration_point(
         self, data: Dict[str, Any]

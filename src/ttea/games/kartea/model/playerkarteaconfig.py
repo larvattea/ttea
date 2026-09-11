@@ -148,7 +148,7 @@ class PlayerKarteaConfig:
     phase: "KarteaPhase"
     level: "KarteaPhaseLevel"
     level_time: int
-    car_image: str
+    vehicle_image: str
     environment_image_right: str
     environment_image_left: str
     target_image: str
