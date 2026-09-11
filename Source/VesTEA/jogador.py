@@ -22,7 +22,11 @@ def posicao(x, y):
         (matrix[2][0] * p[0] + matrix[2][1] * p[1] + matrix[2][2]))
     position_y = (matrix[1][0] * p[0] + matrix[1][1] * p[1] + matrix[1][2]) / (
         (matrix[2][0] * p[0] + matrix[2][1] * p[1] + matrix[2][2]))
-    p_after = (int((position_x) * (relacao_largura)), int((position_y) * (relacao_altura)))
+    # Eixo vertical invertido (so no caminho dos pes; o fallback do nariz
+    # nao passa por aqui): sem isso, andar para frente/tras move a posicao
+    # ao contrario do esperado na tela.
+    y_tela = altura_projetor - int((position_y) * (relacao_altura))
+    p_after = (int((position_x) * (relacao_largura)), y_tela)
     #print("p_after: ",p_after)
     return p_after
 
