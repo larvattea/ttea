@@ -135,7 +135,7 @@ class Background:
     def get_startPos(self) -> int:
         """Retorna a posição inicial para spawn de alvos/obstáculos."""
         # return (self.pos // GameSettings.SEGMENT_LENGTH) + 200
-        return (self.pos // GameSettings.SEGMENT_LENGTH) + 200 % self.N
+        return ((self.pos // GameSettings.SEGMENT_LENGTH) + 200) % self.N
 
     def draw(self, surface: pygame.Surface):
         """Desenha o background, estrada e sprites."""
