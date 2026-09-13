@@ -161,20 +161,24 @@ class Obstacle(Target):
     ) -> int:
         """
         Remove o obstáculo da lista e retorna pontos.
-        - Se saiu da tela por baixo → Desviou (10 pontos)
-        - Se colidiu com o carro → Colidiu (0 pontos)
+        - Se saiu da tela por baixo -> Desviou (10 pontos)
+        - Se colidiu com o carro -> Colidiu (0 pontos)
         """
         # triste_fig = Image.load("Assets/Kartea/triste.png")
         # feliz_fig = Image.load("Assets/Kartea/feliz.png")
         negative_fig = Image.load(GameSettings.NEGATIVE_FEEDBACK_IMAGE)
         positive_fig = Image.load(GameSettings.POSITIVE_FEEDBACK_IMAGE)
 
+        screen_w = surface.get_width()
+        screen_h = surface.get_height()
+
         image_pos = (
-            surface.get_width() // 2,
-            int(GameSettings.SCREEN_HEIGHT * 0.20),
+            screen_w // 2,
+            # int(GameSettings.SCREEN_HEIGHT * 0.20),
+            int(screen_h * 0.20),
         )
 
-        if self.current_pos[1] > GameSettings.SCREEN_HEIGHT:
+        if self.current_pos[1] > screen_h:
             # Desviou do obstáculo
             targets.remove(self)
             sounds["slap"].play()

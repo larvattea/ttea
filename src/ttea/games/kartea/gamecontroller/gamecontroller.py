@@ -6,13 +6,20 @@ import cv2
 import pygame
 
 from ttea.games.kartea.gamecore import Camera, PoseTracking
-from ttea.games.kartea.gamemodel import (Background, Car, Image, Obstacle,
-                                         Target)
+from ttea.games.kartea.gamemodel import (
+    Background,
+    Car,
+    Image,
+    Obstacle,
+    Target,
+)
 from ttea.games.kartea.gameui import UI
 from ttea.games.kartea.gameutil import GameSettings
 from ttea.games.kartea.model import PlayerKarteaSessionDetail
-from ttea.games.kartea.service import (PlayerKarteaSessionDetailService,
-                                       PlayerKarteaSessionService)
+from ttea.games.kartea.service import (
+    PlayerKarteaSessionDetailService,
+    PlayerKarteaSessionService,
+)
 
 
 class GameController:
@@ -298,7 +305,8 @@ class GameController:
         """Atualiza a posição do carro com base na posição dos pés detectados."""
         self.cap.frame = self.pose_tracking.scan_feets(self.cap.frame)
         x, y = self.pose_tracking.get_feet_center()
-        Y = GameSettings.SCREEN_HEIGHT - GameSettings.CAR_SIZE / 2
+        # Y = GameSettings.SCREEN_HEIGHT - GameSettings.CAR_SIZE / 2
+        Y = self.surface.get_height() - GameSettings.CAR_SIZE / 2
         self.car.rect.center = (x, Y)
 
     def draw(self):
@@ -518,7 +526,8 @@ class GameController:
 
             # Remove alvos que saíram da tela
             for alvo in self.targets[:]:
-                if alvo.current_pos[1] > (GameSettings.SCREEN_HEIGHT + 100):
+                # if alvo.current_pos[1] > (GameSettings.SCREEN_HEIGHT + 100):
+                if alvo.current_pos[1] > (self.surface.get_height() + 100):
                     self.score += alvo.kill(
                         self.surface, self.targets, self.sounds
                     )

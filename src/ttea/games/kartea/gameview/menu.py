@@ -21,7 +21,8 @@ class Menu:
         self.background.draw(self.surface)
         fundo = Image.load(
             GameSettings.MENU_BACKGROUND,
-            size=(GameSettings.SCREEN_WIDTH, GameSettings.SCREEN_HEIGHT),
+            # size=(GameSettings.SCREEN_WIDTH, GameSettings.SCREEN_HEIGHT),
+            size=(self.surface.get_width(), self.surface.get_height()),
         )
         Image.draw(self.surface, fundo, (0, 0))
 
@@ -30,7 +31,8 @@ class Menu:
         UI.draw_text(
             self.surface,
             _("Feedback"),
-            ((GameSettings.SCREEN_WIDTH // 2) + 50, 100),
+            # ((GameSettings.SCREEN_WIDTH // 2) + 50, 100),
+            ((self.surface.get_width() // 2) + 50, 100),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
             shadow=True,
@@ -40,7 +42,8 @@ class Menu:
         UI.draw_text(
             self.surface,
             _("Quantidade"),
-            ((GameSettings.SCREEN_WIDTH // 2) + 250, 100),
+            # ((GameSettings.SCREEN_WIDTH // 2) + 250, 100),
+            ((self.surface.get_width() // 2) + 250, 100),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
             shadow=True,
@@ -51,7 +54,8 @@ class Menu:
         UI.draw_text(
             self.surface,
             _("Pontuação"),
-            ((GameSettings.SCREEN_WIDTH // 2) + 50, 130),
+            # ((GameSettings.SCREEN_WIDTH // 2) + 50, 130),
+            ((self.surface.get_width() // 2) + 50, 130),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
             shadow=True,
@@ -60,7 +64,8 @@ class Menu:
         UI.draw_text(
             self.surface,
             str(GameSettings.score),
-            ((GameSettings.SCREEN_WIDTH // 2) + 250, 130),
+            # ((GameSettings.SCREEN_WIDTH // 2) + 250, 130),
+            ((self.surface.get_width() // 2) + 250, 130),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
             shadow=True,
@@ -71,7 +76,8 @@ class Menu:
         UI.draw_text(
             self.surface,
             _("Movimentos"),
-            ((GameSettings.SCREEN_WIDTH // 2) + 50, 160),
+            # ((GameSettings.SCREEN_WIDTH // 2) + 50, 160),
+            ((self.surface.get_width() // 2) + 50, 160),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
             shadow=True,
@@ -80,7 +86,8 @@ class Menu:
         UI.draw_text(
             self.surface,
             str(GameSettings.movimento),
-            ((GameSettings.SCREEN_WIDTH // 2) + 250, 160),
+            # ((GameSettings.SCREEN_WIDTH // 2) + 250, 160),
+            ((self.surface.get_width() // 2) + 250, 160),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
             shadow=True,
@@ -91,7 +98,8 @@ class Menu:
         UI.draw_text(
             self.surface,
             _("Alvos Gerados"),
-            ((GameSettings.SCREEN_WIDTH // 2) + 50, 190),
+            # ((GameSettings.SCREEN_WIDTH // 2) + 50, 190),
+            ((self.surface.get_width() // 2) + 50, 190),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
             shadow=True,
@@ -100,7 +108,8 @@ class Menu:
         UI.draw_text(
             self.surface,
             str(GameSettings.Alvo),
-            ((GameSettings.SCREEN_WIDTH // 2) + 250, 190),
+            # ((GameSettings.SCREEN_WIDTH // 2) + 250, 190),
+            ((self.surface.get_width() // 2) + 250, 190),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
             shadow=True,
@@ -110,7 +119,8 @@ class Menu:
         UI.draw_text(
             self.surface,
             _("Alvos Colididos"),
-            ((GameSettings.SCREEN_WIDTH // 2) + 50, 220),
+            # ((GameSettings.SCREEN_WIDTH // 2) + 50, 220),
+            ((self.surface.get_width() // 2) + 50, 220),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
             shadow=True,
@@ -119,7 +129,8 @@ class Menu:
         UI.draw_text(
             self.surface,
             str(GameSettings.Alvo_c),
-            ((GameSettings.SCREEN_WIDTH // 2) + 250, 220),
+            # ((GameSettings.SCREEN_WIDTH // 2) + 250, 220),
+            ((self.surface.get_width() // 2) + 250, 220),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
             shadow=True,
@@ -129,7 +140,8 @@ class Menu:
         UI.draw_text(
             self.surface,
             _("Alvos Desviados"),
-            ((GameSettings.SCREEN_WIDTH // 2) + 50, 250),
+            # ((GameSettings.SCREEN_WIDTH // 2) + 50, 250),
+            ((self.surface.get_width() // 2) + 50, 250),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
             shadow=True,
@@ -138,7 +150,8 @@ class Menu:
         UI.draw_text(
             self.surface,
             str(GameSettings.Alvo_d),
-            ((GameSettings.SCREEN_WIDTH // 2) + 250, 250),
+            # ((GameSettings.SCREEN_WIDTH // 2) + 250, 250),
+            ((self.surface.get_width() // 2) + 250, 250),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
             shadow=True,
@@ -149,7 +162,8 @@ class Menu:
         UI.draw_text(
             self.surface,
             _("Obst. Gerados"),
-            ((GameSettings.SCREEN_WIDTH // 2) + 50, 280),
+            # ((GameSettings.SCREEN_WIDTH // 2) + 50, 280),
+            ((self.surface.get_width() // 2) + 50, 280),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
             shadow=True,
@@ -158,7 +172,8 @@ class Menu:
         UI.draw_text(
             self.surface,
             str(GameSettings.Obst),
-            ((GameSettings.SCREEN_WIDTH // 2) + 250, 280),
+            # ((GameSettings.SCREEN_WIDTH // 2) + 250, 280),
+            ((self.surface.get_width() // 2) + 250, 280),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
             shadow=True,
@@ -168,7 +183,8 @@ class Menu:
         UI.draw_text(
             self.surface,
             _("Obst. Desviados"),
-            ((GameSettings.SCREEN_WIDTH // 2) + 50, 310),
+            # ((GameSettings.SCREEN_WIDTH // 2) + 50, 310),
+            ((self.surface.get_width() // 2) + 50, 310),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
             shadow=True,
@@ -177,7 +193,8 @@ class Menu:
         UI.draw_text(
             self.surface,
             str(GameSettings.Obst_d),
-            ((GameSettings.SCREEN_WIDTH // 2) + 250, 310),
+            # ((GameSettings.SCREEN_WIDTH // 2) + 250, 310),
+            ((self.surface.get_width() // 2) + 250, 310),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
             shadow=True,
@@ -187,7 +204,8 @@ class Menu:
         UI.draw_text(
             self.surface,
             _("Obst. Colididos"),
-            ((GameSettings.SCREEN_WIDTH // 2) + 50, 340),
+            # ((GameSettings.SCREEN_WIDTH // 2) + 50, 340),
+            ((self.surface.get_width() // 2) + 50, 340),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
             shadow=True,
@@ -196,7 +214,8 @@ class Menu:
         UI.draw_text(
             self.surface,
             str(GameSettings.Obst_c),
-            ((GameSettings.SCREEN_WIDTH // 2) + 250, 340),
+            # ((GameSettings.SCREEN_WIDTH // 2) + 250, 340),
+            ((self.surface.get_width() // 2) + 250, 340),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["medium"],
             shadow=True,
@@ -208,7 +227,8 @@ class Menu:
         UI.draw_text(
             self.surface,
             _(GameSettings.GAME_TITLE),
-            (GameSettings.SCREEN_WIDTH // 2, 120),
+            # (GameSettings.SCREEN_WIDTH // 2, 120),
+            (self.surface.get_width() // 2, 120),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["big"],
             shadow=True,
@@ -238,7 +258,8 @@ class Menu:
         UI.draw_text(
             self.surface,
             _("Pause"),
-            (GameSettings.SCREEN_WIDTH // 2, 120),
+            # (GameSettings.SCREEN_WIDTH // 2, 120),
+            (self.surface.get_width() // 2, 120),
             GameSettings.COLORS["title"],
             font=GameSettings.FONTS["big"],
             shadow=True,
@@ -292,9 +313,13 @@ class Menu:
 
     def _handle_feedback_menu(self, feedback_type: str):
         """Gerencia as telas de feedback (Feedback_1, Feedback_2, Feedback_3)."""
+        # image_pos = (
+        #    GameSettings.SCREEN_WIDTH // 2,
+        #    int(GameSettings.SCREEN_HEIGHT * 0.35),
+        # )
         image_pos = (
-            GameSettings.SCREEN_WIDTH // 2,
-            int(GameSettings.SCREEN_HEIGHT * 0.35),
+            self.surface.get_width() // 2,
+            int(self.surface.get_height() * 0.35),
         )
         if feedback_type == "Feedback_1":
             trofeu = Image.load(GameSettings.MENU_FEEDBACK_25)
@@ -330,7 +355,7 @@ class Menu:
 
         if UI.button(
             self.surface,
-            2,
+            1,
             300 + GameSettings.BUTTONS_SIZES[1] * 4,
             _("Jogar"),
             click_sound=self.click_sound,
@@ -339,7 +364,7 @@ class Menu:
 
         if UI.button(
             self.surface,
-            1,
+            2,
             300 + GameSettings.BUTTONS_SIZES[1] * 4,
             _("Sair"),
             click_sound=self.click_sound,
