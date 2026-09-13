@@ -292,17 +292,36 @@ class Menu:
 
     def _handle_feedback_menu(self, feedback_type: str):
         """Gerencia as telas de feedback (Feedback_1, Feedback_2, Feedback_3)."""
+        image_pos = (
+            GameSettings.SCREEN_WIDTH // 2,
+            int(GameSettings.SCREEN_HEIGHT * 0.35),
+        )
         if feedback_type == "Feedback_1":
             trofeu = Image.load(GameSettings.MENU_FEEDBACK_25)
-            Image.draw(self.surface, trofeu, (0, 0))
+            Image.draw(
+                self.surface,
+                trofeu,
+                image_pos,
+                pos_mode=Image.IMAGE_POS_CENTER,
+            )
             action_on_play = "prev"
         elif feedback_type == "Feedback_2":
             trofeu = Image.load(GameSettings.MENU_FEEDBACK_50)
-            Image.draw(self.surface, trofeu, (0, 0))
+            Image.draw(
+                self.surface,
+                trofeu,
+                image_pos,
+                pos_mode=Image.IMAGE_POS_CENTER,
+            )
             action_on_play = "rest"
         elif feedback_type == "Feedback_3":
             trofeu = Image.load(GameSettings.MENU_FEEDBACK_75)
-            Image.draw(self.surface, trofeu, (0, 0))
+            Image.draw(
+                self.surface,
+                trofeu,
+                image_pos,
+                pos_mode=Image.IMAGE_POS_CENTER,
+            )
             action_on_play = "next"
         else:
             return None

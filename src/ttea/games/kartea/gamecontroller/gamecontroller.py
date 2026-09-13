@@ -1,4 +1,3 @@
-import math
 import random
 import time
 from datetime import datetime
@@ -60,6 +59,10 @@ class GameController:
         self.game_start_time = time.time()
         self.time_left = GameSettings.LEVEL_TIME  # GameSettings.GAME_DURATION
 
+        self.finish = 0
+        self.finish_line_segment = None
+        self.crossed_finish_line = False
+
         # Sons
         self.sounds = {}
         self._load_sounds()
@@ -102,7 +105,6 @@ class GameController:
 
     def create_player_kartea_session(self):
         """Substitui o antigo arquivo.grava_Detalhado."""
-        # now = datetime.now()
         now = datetime.now()
         self.start_date = now.strftime("%x")
         self.start_time = now.strftime("%X")
@@ -202,6 +204,9 @@ class GameController:
         self.obst_c = 0
         self.obst_d = 0
         self.finish = 0
+        self.finish = 0
+        self.finish_line_segment = None
+        self.crossed_finish_line = False
 
         self._sync_settings()
 
@@ -247,18 +252,6 @@ class GameController:
             self.create_player_kartea_session_detail(
                 PlayerKarteaSessionDetail.EventType.CREATED_TARGET, r
             )
-
-            # TODO gravar sessão detalhado
-            # arquivo.grava_Detalhado(
-            #    arquivo.get_Player(),
-            #    arquivo.get_Sessao(),
-            #    arquivo.get_Fase(),
-            #    arquivo.get_Nivel(),
-            #    settings.pista,
-            #    r,
-            #    "Criou Alvo",
-            # )
-
         elif fase == 2:
             self.targets.append(obstacle)
             self.background.lines[pos].target = obstacle
@@ -267,17 +260,6 @@ class GameController:
             self.create_player_kartea_session_detail(
                 PlayerKarteaSessionDetail.EventType.CREATED_OBSTACLE, r
             )
-            # TODO gravar sessão detalhado
-            # arquivo.grava_Detalhado(
-            #    arquivo.get_Player(),
-            #    arquivo.get_Sessao(),
-            #    arquivo.get_Fase(),
-            #    arquivo.get_Nivel(),
-            #    settings.pista,
-            #    r,
-            #    "Criou Obstaculo",
-            # )
-
         else:  # fase 3
             if random.randint(0, 100) < 50:
                 self.targets.append(obstacle)
@@ -287,16 +269,6 @@ class GameController:
                 self.create_player_kartea_session_detail(
                     PlayerKarteaSessionDetail.EventType.CREATED_OBSTACLE, r
                 )
-                # TODO gravar sessão detalhado
-                # arquivo.grava_Detalhado(
-                #    arquivo.get_Player(),
-                #    arquivo.get_Sessao(),
-                #    arquivo.get_Fase(),
-                #    arquivo.get_Nivel(),
-                #    settings.pista,
-                #    r,
-                #    "Criou Obstaculo",
-                # )
             else:
                 self.targets.append(target)
                 self.background.lines[pos].target = target
@@ -305,26 +277,18 @@ class GameController:
                 self.create_player_kartea_session_detail(
                     PlayerKarteaSessionDetail.EventType.CREATED_TARGET, r
                 )
-                # TODO gravar sessão detalhado
-                # arquivo.grava_Detalhado(
-                #    arquivo.get_Player(),
-                #    arquivo.get_Sessao(),
-                #    arquivo.get_Fase(),
-                #    arquivo.get_Nivel(),
-                #    settings.pista,
-                #    r,
-                #    "Criou Alvo",
-                # )
 
     def spawn_finish(self):
         """Coloca a linha de chegada no fundo."""
-
         pos = self.background.get_startPos()
         self.background.lines[pos].sprite = Image.load(
             GameSettings.FINISH_IMAGE
         )
-
         self.background.lines[pos].spriteX = -0.5
+
+        # Guarda a referência da linha para detectar o cruzamento
+        self.finish_line_segment = self.background.lines[pos]
+        self.crossed_finish_line = False
 
     def load_camera(self) -> bool:
         """Carrega/atualiza o frame da câmera."""
@@ -357,15 +321,30 @@ class GameController:
 
         # HUD
         if self.HUD:
+            screen_width = self.surface.get_width()
+            hud_font = GameSettings.FONTS["medium"]
+
+            # --- PONTUAÇÃO (Distante 5px da borda direita) ---
+            score_text = _("Pontuação : {}").format(self.score)
+            # Acessa o índice 0 explicitamente para garantir que seja int
+            score_width = hud_font.size(score_text)[0]
+            score_x = screen_width - score_width - 5
+
             UI.draw_text(
                 self.surface,
-                _("Pontuação : {}").format(self.score),
-                (650, 5),
+                score_text,
+                (score_x, 5),
                 GameSettings.COLORS["score"],
-                font=GameSettings.FONTS["medium"],
+                font=hud_font,
                 shadow=True,
                 shadow_color=(255, 255, 255),
             )
+
+            # --- TEMPO (Centralizado em relação à tela) ---
+            timer_text = _("Tempo : {}").format(self.time_left)
+            # Acessa o índice 0 explicitamente para garantir que seja int
+            timer_width = hud_font.size(timer_text)[0]
+            timer_x = (screen_width - timer_width) // 2
 
             timer_text_color = (
                 (160, 40, 0)
@@ -374,14 +353,15 @@ class GameController:
             )
             UI.draw_text(
                 self.surface,
-                _("Tempo : {}").format(self.time_left),
-                (350, 5),
+                timer_text,
+                (timer_x, 5),
                 timer_text_color,
-                font=GameSettings.FONTS["medium"],
+                font=hud_font,
                 shadow=True,
                 shadow_color=(255, 255, 255),
             )
 
+            # --- FASE E NÍVEL (Canto superior esquerdo) ---
             UI.draw_text(
                 self.surface,
                 _("Fase : {}").format(GameSettings.PHASE),
@@ -422,22 +402,51 @@ class GameController:
             return "menu"
 
         self.game_time_update()
+
+        finish_lead_time = 0
+        if GameSettings.LEVEL in [1, 2]:
+            finish_lead_time = 1.2 * GameSettings.TARGETS_SPAWN_TIME
+        elif GameSettings.LEVEL in [3, 4]:
+            finish_lead_time = 1.4 * GameSettings.TARGETS_SPAWN_TIME
+        elif GameSettings.LEVEL in [5, 6, 7]:
+            finish_lead_time = 1.6 * GameSettings.TARGETS_SPAWN_TIME
+        else:
+            finish_lead_time = 2.0 * GameSettings.TARGETS_SPAWN_TIME
+
+        # 1. Controle de Spawn (alvos normais vs linha de chegada)
+        if self.time_left > finish_lead_time:
+            self.spawn_targets()
+        else:
+            if self.finish == 0:
+                self.spawn_finish()
+                self.finish += 1
+
+        # 2. Monitoramento da Linha de Chegada e trava do tempo
+        if not getattr(self, "crossed_finish_line", False):
+            if self.finish > 0 and self.finish_line_segment is not None:
+                linha = self.finish_line_segment
+                y_carro = self.car.rect.bottom
+
+                # Se a coordenada Y da linha passou pelas rodas do carro ou se saiu da tela
+                if (hasattr(linha, "Y") and linha.Y >= y_carro) or (
+                    linha.sprite is None
+                ):
+                    self.crossed_finish_line = True
+                    self.time_left = 0  # ZERA NO INSTANTE QUE PASSOU DA LINHA
+                else:
+                    # Linha ainda está vindo: NUNCA deixa o tempo zerar antes de cruzar
+                    if self.time_left <= 0:
+                        self.time_left = 1
+            else:
+                # Antes da linha chegar, se o relógio acabar, segura em 1s
+                if self.time_left <= 0:
+                    self.time_left = 1
+
+        # Desenha elementos e HUD na tela com o tempo atualizado
         self.draw()
 
-        if self.time_left > 0:
-            finish_lead_time = 3.5 + 10.0 * math.exp(
-                -0.35 * GameSettings.LEVEL
-            )
-
-            # if self.time_left > GameSettings.TARGETS_SPAWN_TIME:
-            # if self.time_left > (2 * GameSettings.TARGETS_SPAWN_TIME):
-            if self.time_left > finish_lead_time:
-                self.spawn_targets()
-            else:
-                if self.finish == 0:
-                    self.spawn_finish()
-                    self.finish += 1
-
+        # 3. Execução do Jogo Ativo até cruzar a linha
+        if not getattr(self, "crossed_finish_line", False):
             # Detecção de pista e movimento
             x, y = self.pose_tracking.get_feet_center()
             feet1_x, feet1_y = self.pose_tracking.get_feet1()
@@ -485,9 +494,6 @@ class GameController:
 
             # Verifica troca de pista
             if GameSettings.pista != troca_pista:
-                # print(
-                #    f"Trocou da pista {troca_pista} para {GameSettings.pista}"
-                # )
                 if GameSettings.pista != -1 and troca_pista != -1:
                     self.score += 2
                     self.movimento += 1
@@ -495,31 +501,11 @@ class GameController:
                         PlayerKarteaSessionDetail.EventType.CHANGED_LANE,
                         troca_pista,
                     )
-                    # TODO gravar sessão detalhado
-                    # arquivo.grava_Detalhado(
-                    #    arquivo.get_Player(),
-                    #    arquivo.get_Sessao(),
-                    #    arquivo.get_Fase(),
-                    #    arquivo.get_Nivel(),
-                    #    GameSettings.pista,
-                    #    troca_pista,
-                    #    "Trocou de Pista",
-                    # )
                 elif GameSettings.pista == -1:
                     self.create_player_kartea_session_detail(
                         PlayerKarteaSessionDetail.EventType.LEFT_GAME_AREA,
                         troca_pista,
                     )
-                    # TODO gravar sessão detalhado
-                    # arquivo.grava_Detalhado(
-                    #    arquivo.get_Player(),
-                    #    arquivo.get_Sessao(),
-                    #    arquivo.get_Fase(),
-                    #    arquivo.get_Nivel(),
-                    #    GameSettings.pista,
-                    #    troca_pista,
-                    #    "Saiu da area do jogo",
-                    # )
                     self.PAUSE = True
                     GameSettings.pista = 0
 
@@ -538,6 +524,9 @@ class GameController:
                     )
 
         else:
+            # === CARRO ACABOU DE CRUZAR A LINHA DE CHEGADA: CRONOMÈTRO É 0 E ENCERRA ===
+            self.time_left = 0
+
             ponto_T = self.alvo * 12 + self.obst * 12
 
             if self.score >= (3 * ponto_T) / 4:
@@ -545,49 +534,18 @@ class GameController:
                     PlayerKarteaSessionDetail.EventType.GAME_CONTROL_ADVANCE_LEVEL,
                     GameSettings.pista,
                 )
-                # TODO gravar sessão detalhado
-                # arquivo.grava_Detalhado(
-                #    arquivo.get_Player(),
-                #    arquivo.get_Sessao(),
-                #    arquivo.get_Fase(),
-                #    arquivo.get_Nivel(),
-                #    settings.pista,
-                #    settings.pista,
-                #    "Controle Jogo: Avanca Nivel",
-                # )
-
                 GameSettings.MENU = "Feedback_3"
             elif self.score >= ponto_T / 4:
                 self.create_player_kartea_session_detail(
                     PlayerKarteaSessionDetail.EventType.GAME_CONTROL_MAINTAIN_LEVEL,
                     GameSettings.pista,
                 )
-                # TODO gravar sessão detalhado
-                # arquivo.grava_Detalhado(
-                #    arquivo.get_Player(),
-                #    arquivo.get_Sessao(),
-                #    arquivo.get_Fase(),
-                #    arquivo.get_Nivel(),
-                #    GameSettings.pista,
-                #    GameSettings.pista,
-                #    "Controle Jogo: Permanece Nivel",
-                # )
                 GameSettings.MENU = "Feedback_2"
             else:
                 self.create_player_kartea_session_detail(
                     PlayerKarteaSessionDetail.EventType.GAME_CONTROL_REGRESS_LEVEL,
                     GameSettings.pista,
                 )
-                # TODO gravar sessão detalhado
-                # arquivo.grava_Detalhado(
-                #    arquivo.get_Player(),
-                #    arquivo.get_Sessao(),
-                #    arquivo.get_Fase(),
-                #    arquivo.get_Nivel(),
-                #    GameSettings.pista,
-                #    GameSettings.pista,
-                #    "Controle Jogo: Retrocede Nivel",
-                # )
                 GameSettings.MENU = "Feedback_1"
 
             # Gravação final da sessão
@@ -595,29 +553,15 @@ class GameController:
             GameSettings.movimento = self.movimento
             if self.current_session:
                 self.update_player_kartea_session()
-            # TODO gravar sessão detalhado
-            # arquivo.grava_Sessao(
-            #    arquivo.get_Player(),
-            #    arquivo.get_Fase(),
-            #    arquivo.get_Nivel(),
-            #    self.score,
-            #    self.movimento,
-            #    GameSettings.Alvo_c,
-            #    GameSettings.Alvo_d,
-            #    GameSettings.Obst_c,
-            #    GameSettings.Obst_d,
-            # )
-            # self.create_player_kartea_session()
 
             return "menu"
 
-        # Eventos do Pygame (mantidos originais)
+        # Eventos do Pygame
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.display.quit()
 
             if event.type == pygame.ACTIVEEVENT:
-                # event.gain == 0 significa que a janela perdeu foco
                 if getattr(event, "gain", 1) == 0:
                     GameSettings.regain_focus()
 
@@ -628,28 +572,8 @@ class GameController:
                         self.create_player_kartea_session_detail(
                             PlayerKarteaSessionDetail.EventType.UFE_CONTROL_UNPAUSE
                         )
-                        # TODO gravar sessão detalhado
-                        # arquivo.grava_Detalhado(
-                        #    arquivo.get_Player(),
-                        #    arquivo.get_Sessao(),
-                        #    arquivo.get_Fase(),
-                        #    arquivo.get_Nivel(),
-                        #    GameSettings.pista,
-                        #    GameSettings.pista,
-                        #    "Controle UFE: Unpause",
-                        # )
                     else:
                         self.PAUSE = True
-                        # TODO gravar sessão detalhado
-                        # arquivo.grava_Detalhado(
-                        #    arquivo.get_Player(),
-                        #    arquivo.get_Sessao(),
-                        #    arquivo.get_Fase(),
-                        #    arquivo.get_Nivel(),
-                        #    GameSettings.pista,
-                        #    GameSettings.pista,
-                        #    "Controle UFE: Pause",
-                        # )
                         self.create_player_kartea_session_detail(
                             PlayerKarteaSessionDetail.EventType.UFE_CONTROL_PAUSE
                         )
@@ -657,7 +581,7 @@ class GameController:
                         GameSettings.MENU = "Pause"
                         return "menu"
 
-                # Atalhos de som e HUD (mantidos exatamente como no original)
+                # Atalhos de som e HUD
                 if event.key in (pygame.K_s, pygame.K_1):
                     self.SOM = not self.SOM
                     volume = 1 if self.SOM else 0
@@ -680,18 +604,6 @@ class GameController:
                     )
                     self.create_player_kartea_session_detail(status)
 
-                    # status = "Habilita Som" if self.SOM else "Desabilita Som"
-                    # TODO gravar sessão detalhado
-                    # arquivo.grava_Detalhado(
-                    #    arquivo.get_Player(),
-                    #    arquivo.get_Sessao(),
-                    #    arquivo.get_Fase(),
-                    #    arquivo.get_Nivel(),
-                    #    GameSettings.pista,
-                    #    GameSettings.pista,
-                    #    f"Controle UFE: {status}",
-                    # )
-
                 if event.key in (pygame.K_h, pygame.K_2):
                     self.HUD = not self.HUD
 
@@ -712,17 +624,5 @@ class GameController:
                         else PlayerKarteaSessionDetail.EventType.UFE_CONTROL_DISABLE_HUD
                     )
                     self.create_player_kartea_session_detail(status)
-                    # arquivo.set_K_HUD(self.config_player, self.HUD)
-                    # status = "Habilita HUD" if self.HUD else "Desabilita HUD"
-                    # TODO gravar sessão detalhado
-                    # arquivo.grava_Detalhado(
-                    #    arquivo.get_Player(),
-                    #    arquivo.get_Sessao(),
-                    #    arquivo.get_Fase(),
-                    #    arquivo.get_Nivel(),
-                    #    GameSettings.pista,
-                    #    GameSettings.pista,
-                    #    f"Controle UFE: {status}",
-                    # )
 
         cv2.waitKey(1)
