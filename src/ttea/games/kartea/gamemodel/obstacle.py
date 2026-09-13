@@ -169,44 +169,41 @@ class Obstacle(Target):
         negative_fig = Image.load(GameSettings.NEGATIVE_FEEDBACK_IMAGE)
         positive_fig = Image.load(GameSettings.POSITIVE_FEEDBACK_IMAGE)
 
+        image_pos = (
+            surface.get_width() // 2,
+            int(GameSettings.SCREEN_HEIGHT * 0.20),
+        )
+
         if self.current_pos[1] > GameSettings.SCREEN_HEIGHT:
             # Desviou do obstáculo
             targets.remove(self)
             sounds["slap"].play()
-            Image.draw(surface, positive_fig, (0, 0))
+            # Image.draw(surface, positive_fig, (0, 0))
+            Image.draw(
+                surface,
+                positive_fig,
+                image_pos,
+                pos_mode=Image.IMAGE_POS_CENTER,
+            )
             self.create_player_kartea_session_detail(
                 PlayerKarteaSessionDetail.EventType.AVOIDED_OBSTACLE
             )
-            # TODO gravar aqui os dados
-            # arquivo.grava_Detalhado(
-            #    arquivo.get_Player(),
-            #    arquivo.get_Sessao(),
-            #    arquivo.get_Fase(),
-            #    arquivo.get_Nivel(),
-            #    GameSettings.pista,
-            #    self.current_road,
-            #    "Desviou de Obstaculo",
-            # )
             GameSettings.Obst_d += 1
             return 10
         else:
             # Colidiu com o obstáculo
             targets.remove(self)
             sounds["screaming"].play()
-            Image.draw(surface, negative_fig, (0, 0))
+            # Image.draw(surface, negative_fig, (0, 0))
+            Image.draw(
+                surface,
+                negative_fig,
+                image_pos,
+                pos_mode=Image.IMAGE_POS_CENTER,
+            )
 
             self.create_player_kartea_session_detail(
                 PlayerKarteaSessionDetail.EventType.COLLIDED_OBSTACLE
             )
-            # TODO gravar aqui os dados
-            # arquivo.grava_Detalhado(
-            #    arquivo.get_Player(),
-            #    arquivo.get_Sessao(),
-            #    arquivo.get_Fase(),
-            #    arquivo.get_Nivel(),
-            #    GameSettings.pista,
-            #    self.current_road,
-            #    "Colidiu com Obstaculo",
-            # )
             GameSettings.Obst_c += 1
             return 0

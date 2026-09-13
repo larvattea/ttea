@@ -255,43 +255,40 @@ class Target:
         negative_fig = Image.load(GameSettings.NEGATIVE_FEEDBACK_IMAGE)
         positive_fig = Image.load(GameSettings.POSITIVE_FEEDBACK_IMAGE)
 
+        image_pos = (
+            surface.get_width() // 2,
+            int(GameSettings.SCREEN_HEIGHT * 0.20),
+        )
+
         if self.current_pos[1] > GameSettings.SCREEN_HEIGHT:
             # Desviou do alvo (não acertou)
             targets.remove(self)
             sounds["screaming"].play()
-            Image.draw(surface, negative_fig, (0, 0))
+            # Image.draw(surface, negative_fig, (0, 0))
+            Image.draw(
+                surface,
+                negative_fig,
+                image_pos,
+                pos_mode=Image.IMAGE_POS_CENTER,
+            )
             self.create_player_kartea_session_detail(
                 PlayerKarteaSessionDetail.EventType.AVOIDED_TARGET
             )
-            # TODO gravar aqui os dados
-            # arquivo.grava_Detalhado(
-            #    arquivo.get_Player(),
-            #    arquivo.get_Sessao(),
-            #    arquivo.get_Fase(),
-            #    arquivo.get_Nivel(),
-            #    settings.pista,
-            #    self.current_road,
-            #    "Desviou de Alvo",
-            # )
             GameSettings.Alvo_d += 1
             return 0
         else:
             # Colidiu com o alvo (acerto)
             targets.remove(self)
             sounds["slap"].play()
-            Image.draw(surface, positive_fig, (0, 0))
+            # Image.draw(surface, positive_fig, (0, 0))
+            Image.draw(
+                surface,
+                positive_fig,
+                image_pos,
+                pos_mode=Image.IMAGE_POS_CENTER,
+            )
             self.create_player_kartea_session_detail(
                 PlayerKarteaSessionDetail.EventType.COLLIDED_TARGET
             )
-            # TODO gravar aqui os dados
-            # arquivo.grava_Detalhado(
-            #    arquivo.get_Player(),
-            #    arquivo.get_Sessao(),
-            #    arquivo.get_Fase(),
-            #    arquivo.get_Nivel(),
-            #    settings.pista,
-            #    self.current_road,
-            #    "Colidiu com Alvo",
-            # )
             GameSettings.Alvo_c += 1
             return 10

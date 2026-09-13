@@ -105,8 +105,6 @@ class Image:
         render_pos = list(pos)
         mode = pos_mode.lower()
 
-        # TODO verificar se precisa manter o IMAGE_POS_BOTTOM_CENTER
-        # no código original não tinha
         if mode == Image.IMAGE_POS_CENTER:
             render_pos[0] -= img.get_width() // 2
             render_pos[1] -= img.get_height() // 2
