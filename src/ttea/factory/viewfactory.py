@@ -5,8 +5,10 @@ for retrieving application-specific and game-specific view factory
 instances.
 """
 
+from typing import List
+
 from ttea.factory import AppViewFactory
-from ttea.games.kartea.factory import KarteaViewFactory
+from ttea.service import PlayerGameLaunchService
 
 
 class ViewFactory:
@@ -26,6 +28,9 @@ class ViewFactory:
         Return the factory for Kartea-related views.
     """
 
+    _game_factories = {}
+    _game_metadata = {}
+
     @staticmethod
     def get_app_view_factory() -> AppViewFactory:
         """
@@ -40,14 +45,25 @@ class ViewFactory:
         return AppViewFactory()
 
     @staticmethod
-    def get_kartea_view_factory() -> KarteaViewFactory:
-        """
-        Return the factory for Kartea-related views.
+    def get_games_metadata() -> List[dict]:
+        return PlayerGameLaunchService().get_games_metadata()
 
-        Returns
-        -------
-        KarteaViewFactory
-            An instance of KarteaViewFactory for creating views related to
-            the Kartea game.
-        """
-        return KarteaViewFactory()
+    @staticmethod
+    def discover_games():
+        """Carrega fábricas dinamicamente a partir dos metadados."""
+        for metadata in ViewFactory.get_games_metadata():
+            factory_path = metadata.get("view_factory")
+            if factory_path:
+                module_name, class_name = factory_path.rsplit(".", 1)
+                module = __import__(module_name, fromlist=[class_name])
+                factory_cls = getattr(module, class_name)
+                ViewFactory._game_factories[metadata["game"]] = factory_cls()
+                ViewFactory._game_metadata[metadata["game"]] = metadata
+
+    @staticmethod
+    def get_game_view_factory(name: str):
+        return ViewFactory._game_factories[name]
+
+    @staticmethod
+    def get_game_metadata(name: str):
+        return ViewFactory._game_metadata.get(name)

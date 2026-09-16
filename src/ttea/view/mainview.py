@@ -1,9 +1,10 @@
 # mainview.py
+import os
 from datetime import date, datetime
 from typing import Optional
 
 from PySide6.QtCore import Qt, QTimer
-from PySide6.QtGui import QCloseEvent
+from PySide6.QtGui import QAction, QCloseEvent, QIcon
 from PySide6.QtWidgets import QLabel, QMainWindow, QStatusBar, QWidget
 
 from ttea.app import AppConfig
@@ -19,6 +20,7 @@ class MainView(QMainWindow, Ui_MainView, WindowConfig):
         self,
         parent: Optional[QWidget] = None,
     ):
+        from ttea.factory import ViewFactory
 
         super().__init__(parent)
         self.setupUi(self)
@@ -45,9 +47,34 @@ class MainView(QMainWindow, Ui_MainView, WindowConfig):
             self.controller.open_institutionfacility_list
         )
         self.act_player.triggered.connect(self.controller.open_player_list)
-        self.act_kartea.triggered.connect(
-            self.controller.open_kartea_player_config
-        )
+        # self.act_kartea.triggered.connect(
+        #    self.controller.open_kartea_player_config
+        # )
+
+        ViewFactory.discover_games()
+        for game_name, metadata in ViewFactory._game_metadata.items():
+            for action_info in metadata.get("menu_actions", {}).values():
+                act = QAction(action_info["label"], self)
+                act.setIcon(
+                    QIcon(
+                        os.path.join(
+                            metadata.get("folder_path", ""),
+                            metadata.get("icon", ""),
+                        )
+                    )
+                )
+
+                act.triggered.connect(
+                    lambda _, g=game_name, m=action_info[
+                        "method"
+                    ], e=action_info.get(
+                        "edit_method"
+                    ): self.controller.open_game_action(
+                        g, m, edit_method=e
+                    )
+                )
+                self.mnu_settings_exergames_sub.addAction(act)
+
         self.act_calibration.triggered.connect(
             self.controller.open_calibration
         )

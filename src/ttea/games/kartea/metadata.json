@@ -21,7 +21,15 @@
             "description": "Um jogo para auxiliar no desenvolvimento do processamento sensorial"
         }
     },
+    "menu_actions": {
+        "player_config": {
+            "label": "KarTEA",
+            "method": "create_player_config_list_view",
+            "edit_method": "create_player_config_edit_view"
+        }
+    },
     "since": "2023",
     "website": "https://udescmove2learn.wordpress.com/",
-    "version": "2.0.0"
+    "version": "2.0.0",
+    "view_factory": "ttea.games.kartea.factory.KarteaViewFactory"
 }
