@@ -143,7 +143,7 @@ class CSVHandler:
             try:
                 with open(path, "w", newline="", encoding="utf-8-sig") as f:
                     self._write_to_file(f, data, headers)
-                self.log.log_info(f"CSV saved successfully: {path.name}")
+                # self.log.log_info(f"CSV saved successfully: {path.name}")
             except Exception as e:
                 self.log.log_error(f"Failed to save CSV {path}: {e}")
                 raise

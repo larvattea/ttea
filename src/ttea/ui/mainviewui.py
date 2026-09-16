@@ -127,7 +127,6 @@ class Ui_MainView(object):
         self.mnu_settings.addSeparator()
         self.mnu_settings.addAction(self.act_calibration)
         self.mnu_settings.addSeparator()
-        self.mnu_settings_exergames_sub.addAction(self.act_kartea)
         self.mnu_system.addAction(self.act_calibration_setting)
         self.mnu_system.addSeparator()
         self.mnu_system.addAction(self.act_language)

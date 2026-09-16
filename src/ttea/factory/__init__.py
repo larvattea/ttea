@@ -31,6 +31,7 @@ https://github.com/larvattea/ttea
 # Define the __all__ variable
 __all__ = [
     "AppViewFactory",
+    "GameViewFactoryProtocol",
     "ViewFactory",
 ]
 
@@ -41,4 +42,5 @@ __license__ = "MIT License"
 
 # Import the submodules
 from .appviewfactory import AppViewFactory
+from .gameviewfactoryprotocol import GameViewFactoryProtocol
 from .viewfactory import ViewFactory

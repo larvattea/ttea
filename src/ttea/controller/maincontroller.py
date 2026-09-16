@@ -1,5 +1,5 @@
 # /controller/maincontroller.py
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 from PySide6.QtCore import QObject
 
@@ -32,7 +32,6 @@ class MainController(QObject):
 
         # Factories
         self.app_factory = ViewFactory.get_app_view_factory()
-        self.kartea_factory = ViewFactory.get_kartea_view_factory()
 
         self._is_quitting = False
 
@@ -75,13 +74,6 @@ class MainController(QObject):
         )
         dialog.exec()
 
-    def open_kartea_player_config(self) -> None:
-        dialog = self.kartea_factory.create_player_kartea_config_list_view(
-            self.view,
-            self.kartea_factory.create_player_kartea_config_edit_view,
-        )
-        dialog.exec()
-
     def open_calibration(self) -> None:
         dialog = self.app_factory.create_calibration_view(parent=self.view)
         dialog.exec()
@@ -90,6 +82,22 @@ class MainController(QObject):
         dialog = self.app_factory.create_calibrationsetting_view(
             parent=self.view
         )
+        dialog.exec()
+
+    def open_game_action(
+        self, game_name: str, method: str, edit_method: Optional[str] = None
+    ) -> None:
+        from ttea.factory import ViewFactory
+
+        factory = ViewFactory.get_game_view_factory(game_name)
+        view_creator = getattr(factory, method)
+
+        if edit_method and hasattr(factory, edit_method):
+            edit_creator = getattr(factory, edit_method)
+            dialog = view_creator(self.view, edit_creator)
+        else:
+            dialog = view_creator(self.view)
+
         dialog.exec()
 
     def open_help(self) -> None:
