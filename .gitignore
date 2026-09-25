@@ -12,3 +12,6 @@ Source/debug.txt
 .vs/
 .vscode/
 __pycache__/
+
+# Ambiente virtual
+.venv/
