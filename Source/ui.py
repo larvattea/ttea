@@ -23,7 +23,13 @@ def draw_text(surface, text, pos, color, font=FONTS["medium"], pos_mode="top_lef
 # com os pes/corpo. Sem isso, so encostar no botao ja clicava - passar por
 # cima do "Sair" indo pra outro botao fechava o jogo sem querer.
 TEMPO_SELECAO_PES = 1.2
-_selecao_pes = {'chave': None, 'inicio': 0.0}
+# Histerese: o rastreamento treme alguns pixels de um frame pro outro, e um
+# unico frame fora do botao zerava a barra. Depois que a selecao comeca, o
+# botao "cresce" MARGEM_SELECAO_PES px de cada lado, e sair de cima por menos
+# de TOLERANCIA_SAIDA_PES segundos nao interrompe a contagem.
+MARGEM_SELECAO_PES = 30
+TOLERANCIA_SAIDA_PES = 0.4
+_selecao_pes = {'chave': None, 'inicio': 0.0, 'visto': 0.0}
 
 
 def desenhar_bolinha_jogador(surface, pos, raio=15):
@@ -46,28 +52,35 @@ def button(surface, pos_x,  pos_y, text=None, click_sound=None, extra_pos=None):
     else: #meio
         rect = pygame.Rect((SCREEN_WIDTH // 2 - BUTTONS_SIZES[0] // 2, pos_y), BUTTONS_SIZES)
 
-    feet_on_button = extra_pos is not None and rect.collidepoint(extra_pos)
-    mouse_on_button = rect.collidepoint(pygame.mouse.get_pos())
-    on_button = feet_on_button or mouse_on_button
-    color = COLORS["buttons"]["second"] if on_button else COLORS["buttons"]["default"]
-
     # Selecao pelos pes: precisa PERMANECER em cima do botao. Enquanto conta,
     # o botao vai enchendo, pra o jogador ver que esta selecionando e poder
     # sair de cima antes de confirmar.
     chave = (pos_x, pos_y, text)
+    selecionando = _selecao_pes['chave'] == chave
+    area_pes = rect.inflate(2 * MARGEM_SELECAO_PES, 2 * MARGEM_SELECAO_PES) if selecionando else rect
+    feet_on_button = extra_pos is not None and tuple(extra_pos) != (0, 0) and area_pes.collidepoint(extra_pos)
+    mouse_on_button = rect.collidepoint(pygame.mouse.get_pos())
+
+    agora = time.time()
     progresso = 0.0
     pes_confirmou = False
     if feet_on_button:
-        agora = time.time()
-        if _selecao_pes['chave'] != chave:
+        if not selecionando:
             _selecao_pes['chave'] = chave
             _selecao_pes['inicio'] = agora
+            selecionando = True
+        _selecao_pes['visto'] = agora
+    elif selecionando and agora - _selecao_pes['visto'] > TOLERANCIA_SAIDA_PES:
+        _selecao_pes['chave'] = None
+        selecionando = False
+    if selecionando:
         progresso = min((agora - _selecao_pes['inicio']) / TEMPO_SELECAO_PES, 1.0)
         if progresso >= 1.0:
             pes_confirmou = True
             _selecao_pes['chave'] = None
-    elif _selecao_pes['chave'] == chave:
-        _selecao_pes['chave'] = None
+
+    on_button = selecionando or mouse_on_button
+    color = COLORS["buttons"]["second"] if on_button else COLORS["buttons"]["default"]
 
     pygame.draw.rect(surface, COLORS["buttons"]["shadow"], (rect.x - 6, rect.y - 6, rect.w, rect.h)) # draw the shadow rectangle
     pygame.draw.rect(surface, color, rect) # draw the rectangle

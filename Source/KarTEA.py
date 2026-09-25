@@ -80,17 +80,21 @@ def update():
     pes_pos = game.get_menu_feet_position()
 
     if state == "menu":
-        if menu.update(pes_pos) == "game":
+        # Uma chamada por frame: cada update() redesenha o menu e avalia os
+        # botoes, e a selecao pelos pes e consumida ao confirmar - chamando
+        # de novo pra testar outro retorno, a confirmacao se perdia.
+        acao = menu.update(pes_pos)
+        if acao == "game":
             state = "game"
-        elif menu.update(pes_pos) == "prev":
+        elif acao == "prev":
             if arquivo.get_Nivel() != 1:
                 arquivo.set_Nivel(arquivo.get_Nivel()-1)
             game.reset()  # reset the game to start a new game next level
             state = "game"
-        elif menu.update(pes_pos) == "rest":
+        elif acao == "rest":
             game.reset()  # reset the game to start a new game
             state = "game"
-        elif menu.update(pes_pos) == "next":
+        elif acao == "next":
             if arquivo.get_Nivel() != 6:
                 arquivo.set_Nivel(arquivo.get_Nivel()+1)
             else:
