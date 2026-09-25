@@ -76,7 +76,16 @@ def executar():
     # ==========================
     # 3. CONFIGURAÇÃO DA CÂMERA USB
     # ==========================
-    cap = cv2.VideoCapture(camera_index)
+    # Abre a camera do mesmo jeito que os jogos (DSHOW, 640x480): os pontos
+    # salvos no CSV sao coordenadas de pixel, e so valem nos jogos se a
+    # calibracao for feita na mesma resolucao.
+    try:
+        import settings
+        cap = settings.abrir_camera(camera_index)
+    except Exception:
+        cap = cv2.VideoCapture(camera_index, cv2.CAP_DSHOW)
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
     if not cap.isOpened():
         print(f"Não foi possível abrir a câmera USB (índice {camera_index}).")
         return

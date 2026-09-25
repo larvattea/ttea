@@ -505,6 +505,13 @@ def abrir_configuracoes():
     tela_cb = ttk.Combobox(frame, state='readonly', width=24)
     tela_cb.grid(column=1, row=3, padx=10, pady=(10, 0))
 
+    inverter_h_var = tk.BooleanVar(value=settings.INVERTER_HORIZONTAL)
+    ttk.Checkbutton(frame, text='Projeção invertida na horizontal (inverte o eixo horizontal dos pés)',
+                    variable=inverter_h_var).grid(column=0, row=4, columnspan=2, sticky=tk.W, pady=(10, 0))
+    inverter_v_var = tk.BooleanVar(value=settings.INVERTER_VERTICAL)
+    ttk.Checkbutton(frame, text='Projeção invertida na vertical (inverte o eixo vertical dos pés)',
+                    variable=inverter_v_var).grid(column=0, row=5, columnspan=2, sticky=tk.W)
+
     win.update()
 
     cameras = detectar_cameras()
@@ -581,14 +588,16 @@ def abrir_configuracoes():
         if cameras:
             settings.salvar_camera(cameras[cam_cb.current()][0])
         settings.salvar_monitor(tela_cb.current())
+        settings.salvar_inverter_horizontal(inverter_h_var.get())
+        settings.salvar_inverter_vertical(inverter_v_var.get())
         win.destroy()
 
     def cancelar():
         _fechar_preview()
         win.destroy()
 
-    tk.Button(frame, text='Salvar', width=10, command=salvar).grid(column=0, row=4, pady=10)
-    tk.Button(frame, text='Cancelar', width=10, command=cancelar).grid(column=1, row=4, pady=10)
+    tk.Button(frame, text='Salvar', width=10, command=salvar).grid(column=0, row=6, pady=10)
+    tk.Button(frame, text='Cancelar', width=10, command=cancelar).grid(column=1, row=6, pady=10)
 
     win.protocol('WM_DELETE_WINDOW', cancelar)
 

@@ -15,6 +15,12 @@ CAMERA_FLIP = 0
 # Indice do monitor onde os jogos abrem em tela cheia (0 = principal),
 # escolhido na engrenagem do menu. Ver pygame.display.get_desktop_sizes().
 MONITOR = 0
+# A projecao da torre sai invertida na vertical (para o corpo do jogador nao
+# fazer sombra na imagem), entao o eixo vertical do rastreamento dos pes
+# precisa ser invertido para acompanhar. Depende da montagem - os dois eixos
+# sao ajustaveis na engrenagem do menu e salvos em config.json.
+INVERTER_HORIZONTAL = False
+INVERTER_VERTICAL = True
 
 # Setado pelo botão "Parar de Jogar" do menu (o jogo roda numa thread
 # separada); cada jogo confere isso no seu laço principal e sai de forma
@@ -28,12 +34,14 @@ PARAR_JOGO = threading.Event()
 CONFIG_ARQUIVO = 'config.json'
 
 def _carregar_config():
-    global CAMERA, MONITOR
+    global CAMERA, MONITOR, INVERTER_HORIZONTAL, INVERTER_VERTICAL
     try:
         with open(CONFIG_ARQUIVO, 'r', encoding='utf-8') as f:
             cfg = json.load(f)
         CAMERA = int(cfg.get('camera', CAMERA))
         MONITOR = int(cfg.get('monitor', MONITOR))
+        INVERTER_HORIZONTAL = bool(cfg.get('inverter_horizontal', INVERTER_HORIZONTAL))
+        INVERTER_VERTICAL = bool(cfg.get('inverter_vertical', INVERTER_VERTICAL))
         ttea_log.debug(f'config.json carregado: camera={CAMERA} monitor={MONITOR}')
     except FileNotFoundError:
         pass
@@ -63,6 +71,26 @@ def salvar_monitor(indice):
     global MONITOR
     MONITOR = int(indice)
     _salvar_config_chave('monitor', MONITOR)
+
+def salvar_inverter_horizontal(valor):
+    global INVERTER_HORIZONTAL
+    INVERTER_HORIZONTAL = bool(valor)
+    _salvar_config_chave('inverter_horizontal', INVERTER_HORIZONTAL)
+
+def salvar_inverter_vertical(valor):
+    global INVERTER_VERTICAL
+    INVERTER_VERTICAL = bool(valor)
+    _salvar_config_chave('inverter_vertical', INVERTER_VERTICAL)
+
+def ponto_projecao(x, y, largura, altura):
+    # Ponto ja mapeado pela calibracao -> ponto na tela do jogo, considerando
+    # a projecao invertida (INVERTER_HORIZONTAL / INVERTER_VERTICAL). Usado so
+    # no caminho dos pes; o fallback do nariz nao passa pela calibracao do chao.
+    if INVERTER_HORIZONTAL:
+        x = largura - x
+    if INVERTER_VERTICAL:
+        y = altura - y
+    return (x, y)
 
 def modo_tela_cheia():
     # Flags/kwargs para abrir os jogos em tela cheia no monitor escolhido,

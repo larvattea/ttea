@@ -15,3 +15,7 @@ __pycache__/
 
 # Ambiente virtual
 .venv/
+
+# Gerados localmente (calibracao e configuracoes da maquina)
+Source/calibracao.csv
+Source/config.json

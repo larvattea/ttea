@@ -525,11 +525,8 @@ def posicao():
     (matrix[2][0] * p[0] + matrix[2][1] * p[1] + matrix[2][2]))
     position_y = (matrix[1][0] * p[0] + matrix[1][1] * p[1] + matrix[1][2]) / (
     (matrix[2][0] * p[0] + matrix[2][1] * p[1] + matrix[2][2]))
-    # Eixo vertical invertido: na area calibrada do chao, andar PARA FRENTE
-    # (se afastando da camera) subia na tela, o que fica ao contrario do
-    # esperado. So vale pro caminho dos pes - o fallback do nariz sai acima.
-    y_tela = altura_projetor - int((position_y) * (relacao_altura))
-    p_after = (int((position_x) * (relacao_largura)), y_tela)
+    p_after = settings.ponto_projecao(int((position_x) * (relacao_largura)), int((position_y) * (relacao_altura)),
+                                      largura_projetor, altura_projetor)
 
     return p_after
 
