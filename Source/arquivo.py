@@ -1,4 +1,5 @@
 import csv
+import os
 import pandas as pd
 import numpy as np
 import datetime as dt
@@ -218,6 +219,13 @@ def lerConfigs(filename): #Apenas para os arquivos gerais, nos detalhados retorn
 #Le os pontos de calibração realizados antes do jogo
 def lerCalibracao():
     pontos_calibracao = np.zeros((4, 2), int)
+    if not os.path.exists('calibracao.csv'):
+        # Ainda nao calibrado (instalacao nova): usa a imagem inteira da
+        # camera (640x480, ja espelhada) como area de jogo, em vez de travar.
+        # Os jogos funcionam, mas so ficam alinhados com a projecao depois de
+        # calibrar pelo menu.
+        pontos_calibracao[:] = [[0, 0], [640, 0], [0, 480], [640, 480]]
+        return pontos_calibracao
     df = pd.read_csv('calibracao.csv', sep=';')
 
     # getting value/data
