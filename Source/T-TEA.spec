@@ -1,5 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
-# Build: python -m PyInstaller T-TEA.spec (run from the Source directory)
+# Build: use build.ps1 na raiz do projeto (roda o PyInstaller a partir de Source/).
 import os
 from PyInstaller.utils.hooks import collect_all, collect_submodules
 
@@ -40,9 +40,7 @@ a = Analysis(
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=['TTEA_menu_copy', 'RepeTEA copy', 'calibracao copy'],
-    win_no_prefer_redirects=False,
-    win_private_assemblies=False,
+    excludes=[],
     noarchive=False,
 )
 pyz = PYZ(a.pure, a.zipped_data)
@@ -58,6 +56,10 @@ exe = EXE(
     strip=False,
     upx=False,
     console=False,
+    icon=os.path.join(SPECPATH, '..', 'installer', 'ttea.ico'),
+    # Mantem tudo ao lado do T-TEA.exe (o padrao do PyInstaller 6 e uma
+    # subpasta _internal), como nas versoes anteriores do pacote.
+    contents_directory='.',
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,

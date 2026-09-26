@@ -19,3 +19,8 @@ __pycache__/
 # Gerados localmente (calibracao e configuracoes da maquina)
 Source/calibracao.csv
 Source/config.json
+
+# Build (build.ps1)
+build/
+Source/build/
+Source/dist/
