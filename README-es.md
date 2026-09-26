@@ -97,6 +97,28 @@ uv run dev
 
 Este comando descarga la versión correcta de Python, crea el `.venv`, sincroniza las dependencias e inicia T-TEA.
 
+### Ejecutar sin uv (venv manual)
+
+Con Python 3.10, 3.11 o 3.12 instalado, en la raíz del proyecto:
+
+macOS / Linux:
+
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install -e .
+.venv/bin/dev
+```
+
+Windows (PowerShell):
+
+```powershell
+py -3.12 -m venv .venv
+.venv\Scripts\python -m pip install -e .
+.venv\Scripts\dev
+```
+
+pip instala las versiones fijadas en `pyproject.toml`. Las dependencias indirectas no quedan fijadas como en `uv.lock`, así que prefiera uv siempre que sea posible.
+
 ### Importante
 
 En el primer uso, permita el acceso a la cámara en la configuración de privacidad del sistema.
