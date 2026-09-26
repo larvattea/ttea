@@ -106,7 +106,6 @@ imagem.pack()
 
 # Calibrar Buttons (manual + automática, lado a lado)
 def CalibrarCallback():
-    #import calibracao
     calibracaov2.calibrar_ttea()
 
 def CalibrarAutomaticaCallback():
