@@ -95,6 +95,25 @@ def executar():
     def detectar_marcadores(gray):
         return aruco.detectMarkers(gray, dictionary, parameters=deteccao_params)
 
+    ids_tabuleiro = board.ids.flatten().tolist()
+    criterio_subpix = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.01)
+
+    def pontos_dos_marcadores(corners, ids, gray):
+        # Plano B para webcams de imagem fraca: quando a interpolacao do
+        # ChArUco acha menos de 4 cantos do tabuleiro, usa os 4 cantos de cada
+        # marcador ArUco detectado (a posicao de cada um no tabuleiro e
+        # conhecida). Com o refinamento subpixel, poucos marcadores ja bastam.
+        src, dst = [], []
+        for cantos, marcador in zip(corners, ids.flatten()):
+            if marcador not in ids_tabuleiro:
+                continue  # falso positivo, nao faz parte do tabuleiro
+            refinados = cv2.cornerSubPix(gray, cantos.reshape(-1, 1, 2).astype(np.float32),
+                                         (5, 5), (-1, -1), criterio_subpix)
+            for obj, pt in zip(board.objPoints[ids_tabuleiro.index(marcador)], refinados.reshape(-1, 2)):
+                src.append([obj[0] / SQUARE_SIZE_AVERAGE * SQUARE_WIDTH, obj[1] / SQUARE_SIZE_AVERAGE * SQUARE_HEIGHT])
+                dst.append(pt)
+        return src, dst
+
     # ==========================
     # 4. CONFIGURAÇÃO DAS JANELAS
     # ==========================
@@ -133,9 +152,15 @@ def executar():
                         corners, ids, gray, board
                     )
 
-                    if retval >= 4:
-                        src_points = []
-                        dst_points = []
+                    # Menos de 4 cantos do tabuleiro: tenta pelos cantos dos marcadores.
+                    src_marc, dst_marc = pontos_dos_marcadores(corners, ids, gray) if retval < 4 else ([], [])
+                    usar_marcadores = len(src_marc) >= 8
+                    if usar_marcadores:
+                        charucoCorners, charucoIds = np.zeros((0, 1, 2), np.float32), np.zeros((0, 1), int)
+
+                    if retval >= 4 or usar_marcadores:
+                        src_points = [] + src_marc
+                        dst_points = [] + dst_marc
                         chess_corners = board.chessboardCorners
 
                         for corner_id, detected_corner in zip(charucoIds.flatten(), charucoCorners):
@@ -227,9 +252,15 @@ def executar():
                             corners, ids, gray, board
                         )
 
-                        if retval >= 4:
-                            src_points = []
-                            dst_points = []
+                        # Menos de 4 cantos do tabuleiro: tenta pelos cantos dos marcadores.
+                        src_marc, dst_marc = pontos_dos_marcadores(corners, ids, gray) if retval < 4 else ([], [])
+                        usar_marcadores = len(src_marc) >= 8
+                        if usar_marcadores:
+                            charucoCorners, charucoIds = np.zeros((0, 1, 2), np.float32), np.zeros((0, 1), int)
+
+                        if retval >= 4 or usar_marcadores:
+                            src_points = [] + src_marc
+                            dst_points = [] + dst_marc
                             chess_corners = board.chessboardCorners
 
                             for corner_id, detected_corner in zip(charucoIds.flatten(), charucoCorners):
