@@ -97,6 +97,28 @@ uv run dev
 
 This command downloads the correct Python version, creates the `.venv`, syncs dependencies, and starts T-TEA.
 
+### Running without uv (manual venv)
+
+With Python 3.10, 3.11 or 3.12 installed, from the project root:
+
+macOS / Linux:
+
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install -e .
+.venv/bin/dev
+```
+
+Windows (PowerShell):
+
+```powershell
+py -3.12 -m venv .venv
+.venv\Scripts\python -m pip install -e .
+.venv\Scripts\dev
+```
+
+pip installs the versions pinned in `pyproject.toml`. Indirect dependencies aren't pinned the way `uv.lock` pins them, so prefer uv whenever possible.
+
 ### Important
 
 On first use, allow camera access in your system's privacy settings.
