@@ -108,7 +108,10 @@ class PoseTracking:
             self.feet_x, self.feet_y = self.posicao(x, y)
 
             # Força a posição Y fixa (movimento apenas lateral)
-            self.feet_y = GameSettings.SCREEN_HEIGHT - 50
+            # self.feet_y = GameSettings.SCREEN_HEIGHT - 50
+            self.feet_y = GameSettings.SCREEN_HEIGHT - int(
+                50 * GameSettings.SCREEN_HEIGHT / GameSettings.BASE_HEIGHT
+            )
 
             pose_landmarks_proto = landmark_pb2.NormalizedLandmarkList()
             pose_landmarks_proto.landmark.extend(

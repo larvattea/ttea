@@ -1,7 +1,6 @@
 import pygame
 
 from ttea.games.kartea.gameutil import GameSettings
-# from settings import *
 from ttea.games.kartea.gameutil.alphablit import alpha_blit
 
 

@@ -1,44 +1,43 @@
-# English (United States) translations for .
+# Portuguese (Brazil) translations for PROJECT.
 # Copyright (C) 2026 ORGANIZATION
-# This file is distributed under the same license as the  project.
+# This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2026-09-27 21:14-0300\n"
-"PO-Revision-Date: 2026-09-27 21:38-0300\n"
+"PO-Revision-Date: 2026-09-27 21:41-0300\n"
 "Last-Translator: \n"
-"Language-Team: \n"
-"Language: en_US\n"
+"Language-Team: pt_BR <LL@li.org>\n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "Generated-By: Babel 2.17.0\n"
 "X-Generator: Poedit 3.9\n"
 
 #: gamecontroller/gamecontroller.py:329
 #, python-brace-format
 msgid "Pontuação : {}"
-msgstr "Score : {}"
+msgstr "Pontuação : {}"
 
 #: gamecontroller/gamecontroller.py:345
 #, python-brace-format
 msgid "Tempo : {}"
-msgstr "Time : {}"
+msgstr "Tempo : {}"
 
 #: gamecontroller/gamecontroller.py:368
 #, python-brace-format
 msgid "Fase : {}"
-msgstr "Phase : {}"
+msgstr "Fase : {}"
 
 #: gamecontroller/gamecontroller.py:378
 #, python-brace-format
 msgid "Nível : {}"
-msgstr "Level : {}"
+msgstr "Nível : {}"
 
 #: gameview/menu.py:58
 msgid "Feedback"
@@ -46,47 +45,47 @@ msgstr "Feedback"
 
 #: gameview/menu.py:73
 msgid "Quantidade"
-msgstr "Quantity"
+msgstr "Quantidade"
 
 #: gameview/menu.py:89
 msgid "Pontuação"
-msgstr "Score"
+msgstr "Pontuação"
 
 #: gameview/menu.py:119
 msgid "Movimentos"
-msgstr "Moves"
+msgstr "Movimentos"
 
 #: gameview/menu.py:149
 msgid "Alvos Gerados"
-msgstr "Generated Targets"
+msgstr "Alvos Gerados"
 
 #: gameview/menu.py:178
 msgid "Alvos Colididos"
-msgstr "Hit Targets"
+msgstr "Alvos Colididos"
 
 #: gameview/menu.py:207
 msgid "Alvos Desviados"
-msgstr "Avoided Targets"
+msgstr "Alvos Desviados"
 
 #: gameview/menu.py:237
 msgid "Obst. Gerados"
-msgstr "Gen. Obstacles"
+msgstr "Obst. Gerados"
 
 #: gameview/menu.py:266
 msgid "Obst. Desviados"
-msgstr "Avoided Obst."
+msgstr "Obst. Desviados"
 
 #: gameview/menu.py:295
 msgid "Obst. Colididos"
-msgstr "Hit Obst."
+msgstr "Obst. Colididos"
 
 #: gameview/menu.py:345 gameview/menu.py:487
 msgid "Jogar [F2]"
-msgstr "Play [F2]"
+msgstr "Jogar [F2]"
 
 #: gameview/menu.py:358 gameview/menu.py:442 gameview/menu.py:500
 msgid "Sair [F7]"
-msgstr "Exit [F7]"
+msgstr "Sair [F7]"
 
 #: gameview/menu.py:372
 msgid "Pause"
@@ -94,16 +93,16 @@ msgstr "Pause"
 
 #: gameview/menu.py:390
 msgid "Continuar [F3]"
-msgstr "Continue [F3]"
+msgstr "Continuar [F3]"
 
 #: gameview/menu.py:403
 msgid "Retroceder [F4]"
-msgstr "Back [F4]"
+msgstr "Retroceder [F4]"
 
 #: gameview/menu.py:416
 msgid "Reiniciar [F5]"
-msgstr "Restart [F5]"
+msgstr "Reiniciar [F5]"
 
 #: gameview/menu.py:429
 msgid "Avançar [F6]"
-msgstr "Next [F6]"
+msgstr "Avançar [F6]"

@@ -30,18 +30,25 @@ class Background:
         # Background image (usado no menu e no jogo)
         # "Assets/Kartea/bg.png"
         # GameSettings.background_image
-        self.background_image = Image.load(GameSettings.HORIZON_BG_IMAGE)
+        raw_horizon = Image.load(GameSettings.HORIZON_BG_IMAGE)
+        native_w = raw_horizon.get_width()
+        native_h = raw_horizon.get_height()
+        scale_factor = GameSettings.SCREEN_HEIGHT / native_h
+        scaled_w = max(1, int(native_w * scale_factor))
+
+        self.background_image = Image.scale(
+            raw_horizon, (scaled_w, GameSettings.SCREEN_HEIGHT)
+        )
+
+        tiles = max(2, (GameSettings.SCREEN_WIDTH // scaled_w) + 2)
 
         self.background_surface = pygame.Surface(
-            (
-                self.background_image.get_width() * 2,
-                self.background_image.get_height(),
+            (scaled_w * tiles, GameSettings.SCREEN_HEIGHT)
+        )
+        for i in range(tiles):
+            self.background_surface.blit(
+                self.background_image, (scaled_w * i, 0)
             )
-        )
-        self.background_surface.blit(self.background_image, (0, 0))
-        self.background_surface.blit(
-            self.background_image, (self.background_image.get_width(), 0)
-        )
         self.background_rect = self.background_surface.get_rect(topleft=(0, 0))
 
         # Imagem específica para o menu

@@ -17,11 +17,13 @@ class KarteaPathConfig(PathConfig):
     """
 
     KARTEA_CONFIG_FILENAME = "kartea.ini"
+    KARTEA_LOG_FILENAME = "kartea.log"
 
     # ===================================================================
     # Diretórios específicos do KarTEA
     # ===================================================================
     KARTEA_DIR = PathConfig.EXERGAME_DIR / "kartea"
+    KARTEA_LOG_DIR = KARTEA_DIR / "log"
     KARTEA_RESOURCES_DIR = KARTEA_DIR / "resources"
     KARTEA_IMAGES_DIR = KARTEA_RESOURCES_DIR / "images"
     KARTEA_SOUNDS_DIR = KARTEA_RESOURCES_DIR / "sounds"
@@ -40,6 +42,7 @@ class KarteaPathConfig(PathConfig):
         cls.ensure_dirs()  # método do PathConfig
         for directory in [
             cls.KARTEA_DIR,
+            cls.KARTEA_LOG_DIR,
             cls.KARTEA_RESOURCES_DIR,
             cls.KARTEA_IMAGES_DIR,
             cls.KARTEA_SOUNDS_DIR,
@@ -49,6 +52,12 @@ class KarteaPathConfig(PathConfig):
             directory.mkdir(parents=True, exist_ok=True)
 
         cls.create_default_ini()
+
+    @classmethod
+    def log(cls, filename: str = KARTEA_LOG_FILENAME) -> str:
+        """Sobrescreve o log() genérico para usar a pasta de log do KarTEA."""
+        cls.ensure_kartea_dirs()
+        return str(cls.KARTEA_LOG_DIR / filename)
 
     # ===================================================================
     # Recursos embutidos (Qt)
