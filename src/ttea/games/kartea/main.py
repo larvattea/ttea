@@ -14,6 +14,8 @@ from ttea.games.kartea.gameview import Menu
 from ttea.games.kartea.model import PlayerKarteaConfig
 from ttea.games.kartea.service import PlayerKarteaConfigService
 from ttea.games.kartea.util import KarteaPathConfig
+from ttea.log import Log
+from ttea.util import CriticalHooks
 
 
 class KarTEA:
@@ -21,9 +23,11 @@ class KarTEA:
 
     def __init__(self):
         """Inicializa o jogo, janela, objetos e variáveis de estado."""
+        self.logger = Log.get_log()
+
         parser = argparse.ArgumentParser(description="KarTEA Exergame")
 
-        # 1. Parse de argumentos
+        # Parse de argumentos
         parser.add_argument(
             "--lang", type=str, default="pt_BR", help="Idioma do app"
         )
@@ -38,7 +42,7 @@ class KarTEA:
 
         self.set_game_language(args.lang)
 
-        # 2. Busca de dados
+        # Busca de dados
         self.service = PlayerKarteaConfigService()
         self.player_config = self.service.find_config_by_player_id(
             args.player_id
@@ -51,19 +55,20 @@ class KarTEA:
                 args.player_id, self.default_config
             )
 
-        # 3. DELEGAÇÃO: Passa tudo para o GameSettings
+        # DELEGAÇÃO: Passa tudo para o GameSettings
         GameSettings.setup(
             args, self.service, self.player_config, self.default_config
         )
 
-        # 4. Inicialização do Pygame usando os valores que agora estão no GameSettings
+        # Inicialização do Pygame usando os valores que agora estão no GameSettings
         pygame.init()
         pygame.display.set_caption(GameSettings.WINDOW_NAME)
 
         if GameSettings.FULLSCREEN:
             self.screen = pygame.display.set_mode(
                 (GameSettings.SCREEN_WIDTH, GameSettings.SCREEN_HEIGHT),
-                pygame.FULLSCREEN,
+                # pygame.FULLSCREEN,
+                pygame.NOFRAME,
                 display=GameSettings.SCREEN_OS_INDEX,
             )
         else:
@@ -171,7 +176,6 @@ class KarTEA:
                 if event.key == pygame.K_SPACE:
                     self.state = "menu"
 
-                # Teclas de atalho adicionais (mantidas do original)
                 if event.key == pygame.K_q:
                     self.running = False
                     cv2.destroyWindow("Tela de Captura")
@@ -182,7 +186,7 @@ class KarTEA:
 
         if menu_result == "game":
             self.state = "game"
-            GameSettings.regain_focus()  # Traz a janela do Pygame de volta para o foco ativo
+            GameSettings.regain_focus()
         elif menu_result == "prev":
             if GameSettings.LEVEL != 1:
                 GameSettings.LEVEL = GameSettings.LEVEL - 1
@@ -226,34 +230,32 @@ class KarTEA:
     def run(self):
         """Loop principal do jogo."""
         try:
-            pygame.init()
-        except Exception as e:
-            print(f"Erro ao iniciar pygame: {e}")
-            return
-
-        while self.running:
-            # Eventos
-            self.handle_events()
-
-            # Atualização
-            self.clock.tick(GameSettings.FPS)
-            self.update()
-
-            # Desenho / Renderização
-            pygame.display.update()
-
-            # FPS (mantido fora do update para ficar sempre visível)
-            self.draw_fps()
-
-        # Finalização limpa
-        pygame.quit()
-        sys.exit()
+            while self.running:
+                self.handle_events()
+                self.clock.tick(GameSettings.FPS)
+                self.update()
+                pygame.display.update()
+                self.draw_fps()
+        finally:
+            pygame.quit()
 
 
 def main() -> None:
     """Start the KarTEA Game."""
-    kartea = KarTEA()
-    kartea.run()
+    CriticalHooks.setup_exception_hooks()
+
+    log_file_path = KarteaPathConfig.log()
+    logger = Log(log_file=log_file_path)
+    logger.log_info("KarTEA started successfully.")
+
+    try:
+        kartea = KarTEA()
+        kartea.run()
+    except Exception as e:
+        logger.log_error(f"Critical error KarTEA: {e}")
+        raise
+    finally:
+        logger.log_info("KarTEA process finished.")
 
 
 if __name__ == "__main__":

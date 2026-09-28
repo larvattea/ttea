@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-08-29 22:27-0300\n"
+"POT-Creation-Date: 2026-09-27 21:14-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,91 +17,91 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#: gamecontroller/gamecontroller.py:373
+#: gamecontroller/gamecontroller.py:329
 #, python-brace-format
 msgid "Pontuação : {}"
 msgstr ""
 
-#: gamecontroller/gamecontroller.py:389
+#: gamecontroller/gamecontroller.py:345
 #, python-brace-format
 msgid "Tempo : {}"
 msgstr ""
 
-#: gamecontroller/gamecontroller.py:400
+#: gamecontroller/gamecontroller.py:368
 #, python-brace-format
 msgid "Fase : {}"
 msgstr ""
 
-#: gamecontroller/gamecontroller.py:411
+#: gamecontroller/gamecontroller.py:378
 #, python-brace-format
 msgid "Nível : {}"
 msgstr ""
 
-#: gameview/menu.py:32
+#: gameview/menu.py:58
 msgid "Feedback"
 msgstr ""
 
-#: gameview/menu.py:42
+#: gameview/menu.py:73
 msgid "Quantidade"
 msgstr ""
 
-#: gameview/menu.py:53
+#: gameview/menu.py:89
 msgid "Pontuação"
 msgstr ""
 
-#: gameview/menu.py:73
+#: gameview/menu.py:119
 msgid "Movimentos"
 msgstr ""
 
-#: gameview/menu.py:93
+#: gameview/menu.py:149
 msgid "Alvos Gerados"
 msgstr ""
 
-#: gameview/menu.py:112
+#: gameview/menu.py:178
 msgid "Alvos Colididos"
 msgstr ""
 
-#: gameview/menu.py:131
+#: gameview/menu.py:207
 msgid "Alvos Desviados"
 msgstr ""
 
-#: gameview/menu.py:151
+#: gameview/menu.py:237
 msgid "Obst. Gerados"
 msgstr ""
 
-#: gameview/menu.py:170
+#: gameview/menu.py:266
 msgid "Obst. Desviados"
 msgstr ""
 
-#: gameview/menu.py:189
+#: gameview/menu.py:295
 msgid "Obst. Colididos"
 msgstr ""
 
-#: gameview/menu.py:220 gameview/menu.py:316
-msgid "Jogar"
+#: gameview/menu.py:345 gameview/menu.py:487
+msgid "Jogar [F2]"
 msgstr ""
 
-#: gameview/menu.py:228 gameview/menu.py:285 gameview/menu.py:325
-msgid "Sair"
+#: gameview/menu.py:358 gameview/menu.py:442 gameview/menu.py:500
+msgid "Sair [F7]"
 msgstr ""
 
-#: gameview/menu.py:240
+#: gameview/menu.py:372
 msgid "Pause"
 msgstr ""
 
-#: gameview/menu.py:250
-msgid "Continuar"
+#: gameview/menu.py:390
+msgid "Continuar [F3]"
 msgstr ""
 
-#: gameview/menu.py:258
-msgid "Retroceder"
+#: gameview/menu.py:403
+msgid "Retroceder [F4]"
 msgstr ""
 
-#: gameview/menu.py:267
-msgid "Reiniciar"
+#: gameview/menu.py:416
+msgid "Reiniciar [F5]"
 msgstr ""
 
-#: gameview/menu.py:276
-msgid "Avançar"
+#: gameview/menu.py:429
+msgid "Avançar [F6]"
 msgstr ""
 

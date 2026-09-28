@@ -26,6 +26,11 @@ class GameSettings:
     SCREEN_WIDTH = 800
     SCREEN_HEIGHT = 600
 
+    # ====================== Resolução de referência (design original) =
+    BASE_WIDTH = 800
+    BASE_HEIGHT = 600
+    UI_SCALE = 1.0
+
     FPS = 60
     DRAW_FPS = False
 
@@ -212,6 +217,53 @@ class GameSettings:
         cls.div1_pista = cls.SCREEN_WIDTH // 3
         cls.div2_pista = 2 * (cls.SCREEN_WIDTH // 3)
         cls.div3_pista = cls.SCREEN_WIDTH
+
+        # ====================== Fatores de escala ======================
+        width_scale = cls.SCREEN_WIDTH / cls.BASE_WIDTH
+        height_scale = cls.SCREEN_HEIGHT / cls.BASE_HEIGHT
+        # p/ UI, sem distorcer
+        cls.UI_SCALE = min(width_scale, height_scale)
+
+        # ====================== Mapeamento câmera -> tela (CORREÇÃO CRÍTICA) ======================
+        # Sem isso, o carro não consegue percorrer toda a largura da tela
+        # em resoluções diferentes de 800x600 (fica preso em ~800px).
+        cls.largura_projetor = cls.SCREEN_WIDTH
+        cls.altura_projetor = cls.SCREEN_HEIGHT
+        cls.relacao_largura = cls.largura_projetor / cls.largura_tela_controle
+        cls.relacao_altura = cls.altura_projetor / cls.altura_tela_controle
+        cls.tela_de_calibracao = np.zeros(
+            (cls.altura_projetor, cls.largura_projetor, 3), np.uint8
+        )
+
+        # ====================== Tamanhos de UI (menus, botões, fontes) ======================
+        cls.BUTTONS_SIZES = (
+            int(150 * cls.UI_SCALE),
+            int(45 * cls.UI_SCALE),
+        )
+        cls.FONTS = {
+            "small": pygame.font.Font(None, max(1, int(10 * cls.UI_SCALE))),
+            "medium": pygame.font.Font(None, max(1, int(25 * cls.UI_SCALE))),
+            "big": pygame.font.Font(None, max(1, int(50 * cls.UI_SCALE))),
+        }
+
+        # ====================== Tamanhos e posições dos objetos do jogo ======================
+        cls.CAR_SIZE = int(cls.SCREEN_WIDTH / 5)
+        cls.CAR_HITBOX_SIZE = (
+            cls.CAR_SIZE + int(50 * cls.UI_SCALE),
+            cls.CAR_SIZE + int(50 * cls.UI_SCALE),
+        )
+
+        # cls.TARGETS_SIZES = (
+        #    int(100 * width_scale),
+        #    int(100 * height_scale),
+        # )
+        cls.TARGETS_SIZES = (100, 100)
+        cls.OBSTACLE_SIZES = cls.TARGETS_SIZES
+
+        cls.OBJ_POS = [
+            (int(x * width_scale), int(y * height_scale))
+            for (x, y) in [(368, 80), (393, 80), (419, 80)]
+        ]
 
         # ====================== Game Settings ======================
         if not player_config or player_config.phase.id is None:
