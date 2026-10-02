@@ -77,6 +77,9 @@ def run_game(project: Path, manifest: dict, *, simulation: bool = False,
                                  root=Path(config["session_root"]) if config.get("session_root") else None)
         context = GameContext(surface, pipeline.process(Observation(profile, 0.0, {}, present=False)),
                               0.0, 0.0, (), project, config, storage)
+        if manifest["id"] == "kartea" and int(config.get("player_id") or 0) > 0:
+            from .kartea_records import KarteaRecords
+            context.records = KarteaRecords(int(config["player_id"]), int(config.get("professional_id", 0)))
         if threading.current_thread() is threading.main_thread():
             previous_sigterm = signal.signal(signal.SIGTERM, lambda signum, frame: context.request_stop())
             resources.callback(signal.signal, signal.SIGTERM, previous_sigterm)

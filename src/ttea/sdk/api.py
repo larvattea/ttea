@@ -8,7 +8,7 @@ import uuid
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Protocol
 
 from platformdirs import user_data_dir
 
@@ -57,6 +57,30 @@ class SessionStorage:
         return self.root / (name + ".json")
 
 
+class RegisteredGameRecords(Protocol):
+    """Platform-owned registered-player records; values are JSON-compatible.
+
+    The platform binds identity and game. Consumers never receive patient
+    models, filesystem locations, DAOs, or arbitrary-player access.
+    """
+
+    def configuration(self, defaults: dict) -> dict:
+        """Read saved configuration, creating it from defaults if absent."""
+        ...
+
+    def update_configuration(self, values: dict) -> None:
+        ...
+
+    def start_session(self, values: dict) -> int:
+        ...
+
+    def update_session(self, session_id: int, values: dict) -> None:
+        ...
+
+    def record_event(self, session_id: int, values: dict) -> None:
+        ...
+
+
 @dataclass
 class GameContext:
     surface: pygame.Surface
@@ -71,6 +95,7 @@ class GameContext:
     pause_reason: str | None = None
     stop_requested: bool = False
     result: dict | None = field(default=None, repr=False)
+    records: RegisteredGameRecords | None = field(default=None, repr=False)
 
     def request_stop(self, result: dict | None = None) -> None:
         self.stop_requested = True
