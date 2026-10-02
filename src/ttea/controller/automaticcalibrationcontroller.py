@@ -1,4 +1,5 @@
 import time
+import threading
 from typing import TYPE_CHECKING, Dict, Optional
 
 import cv2
@@ -40,6 +41,7 @@ class AutomaticCalibrationController(QObject):
         self.monitor_index = monitor_index
         self.camera_index = camera_index
         self.camera = None
+        self.stop_requested = threading.Event()
         self.modo_preview = False
         self.monitor_screen: str = QCoreApplication.translate(
             "AutomaticCalibrationController", "Tela de Monitoramento"
@@ -310,7 +312,7 @@ class AutomaticCalibrationController(QObject):
             # -------------------------------------------------
             # LOOP PRINCIPAL
             # -------------------------------------------------
-            while True:
+            while not self.stop_requested.is_set():
                 if not self.modo_preview:
                     if not cap.isOpened():
                         self.msg_critical_signal.emit(

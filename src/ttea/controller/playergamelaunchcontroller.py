@@ -13,6 +13,7 @@ except ImportError:
     PSUTIL_AVAILABLE = False
 
 from PySide6.QtCore import QObject, Qt, QTimer
+from PySide6.QtWidgets import QApplication
 from packaging.version import Version
 
 from ttea.model import AppModel, Calibration, CalibrationPoint
@@ -245,6 +246,7 @@ class PlayerGameLaunchController(QObject):
         self.view.repaint()
 
         try:
+            self.release_camera_owners()
             config = self.runtime_configuration()
             config.update({
                 "language": language_app,
@@ -339,6 +341,27 @@ class PlayerGameLaunchController(QObject):
             "width": hardware.content_width,
             "height": hardware.content_height,
         }
+
+    def release_camera_owners(self):
+        from ttea.controller.calibrationcontroller import CalibrationController
+        from ttea.controller.manualcalibrationcontroller import ManualCalibrationController
+        from ttea.controller.automaticcalibrationcontroller import AutomaticCalibrationController
+
+        for widget in QApplication.allWidgets():
+            controller = getattr(widget, "controller", None)
+            if isinstance(controller, CalibrationController):
+                controller.stop_camera_stream()
+            elif isinstance(controller, AutomaticCalibrationController):
+                widget.stop_capture()
+            elif isinstance(controller, ManualCalibrationController):
+                timer = getattr(controller, "camera_timer", None)
+                if timer is not None:
+                    timer.stop()
+                if controller.camera is not None:
+                    controller.camera.release()
+                    controller.camera = None
+                import cv2
+                cv2.destroyAllWindows()
 
     def install_game(self):
         game = self.view.cbx_game.currentData()

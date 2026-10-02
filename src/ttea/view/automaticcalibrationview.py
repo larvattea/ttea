@@ -1,7 +1,6 @@
 import threading
 from typing import Optional
 
-import cv2
 from PySide6.QtGui import QCloseEvent, QPainter, QPaintEvent, QShowEvent
 from PySide6.QtWidgets import QDialog
 
@@ -43,6 +42,7 @@ class AutomaticCalibrationView(
         )
 
         self.is_finished = False
+        self.calib_thread = None
 
         # Initialize controller
         self.controller = AutomaticCalibrationController(
@@ -130,11 +130,19 @@ class AutomaticCalibrationView(
         """
         super().showEvent(event)
 
-        # Executa o loop do OpenCV em uma Thread separada para a janela do PySide6 continuar respondendo
-        calib_thread = threading.Thread(
+        if self.calib_thread is not None and self.calib_thread.is_alive():
+            return
+        self.controller.stop_requested.clear()
+        self.calib_thread = threading.Thread(
             target=self.controller.run_auto_calibration, daemon=True
         )
-        calib_thread.start()
+        self.calib_thread.start()
+
+    def stop_capture(self):
+        self.controller.stop_requested.set()
+        if self.calib_thread is not None:
+            self.calib_thread.join()
+            self.calib_thread = None
 
     def closeEvent(self, event: QCloseEvent) -> None:
         """Override close event to confirm exit.
@@ -147,18 +155,14 @@ class AutomaticCalibrationView(
             The close event to accept or ignore.
         """
         if self.is_finished:
-            if self.controller.camera is not None:
-                self.controller.camera.release()
-                cv2.destroyAllWindows()
+            self.stop_capture()
             event.accept()
             return
 
         if self.msg.question(
             self.tr("Deseja sair da calibração automática?"), None, True
         ):
-            if self.controller.camera is not None:
-                self.controller.camera.release()
-                cv2.destroyAllWindows()
+            self.stop_capture()
             event.accept()
         else:
             event.ignore()
