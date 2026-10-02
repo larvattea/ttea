@@ -123,6 +123,27 @@ pip instala las versiones fijadas en `pyproject.toml`. Las dependencias indirect
 
 En el primer uso, permita el acceso a la cámara en la configuración de privacidad del sistema.
 
+### Instalar, actualizar y recuperar juegos TSDK
+
+KarTEA es un cartucho independiente, desarrollado en `../kartea`; no se incluye en TTEA.
+El catálogo todavía no ofrece versiones publicadas. La instalación pública aún no está disponible.
+
+| Operación | Procedimiento |
+| --- | --- |
+| Instalar | Seleccione un juego compatible y pulse **Instalar**. Use solo publicadores revisados. |
+| Actualizar | Termine la sesión, pulse **Atualizar** y confirme la versión ofrecida. |
+| Actualización fallida | Conserve los datos y la instalación anterior. Registre el error; no modifique recibos ni resúmenes SHA-256. |
+| Jugar sin conexión | Inicie un cartucho instalado. No se necesita otra descarga. |
+| Desinstalar | Termine la sesión y pulse **Desinstalar**. Los resultados permanecen en el directorio de datos. |
+
+Haga una copia de los datos antes de migrar una instalación antigua.
+Siga la [migración sin sobrescritura](docs/sdk-platform-plan.md#existing-data-needs-explicit-migration); no combine registros automáticamente.
+Las calibraciones antiguas no registran cómo se capturaron; recalibre (manual o ChArUco) antes del primer juego.
+P pausa/reanuda; Escape termina la sesión. La pérdida de seguimiento pausa el juego hasta su recuperación.
+La simulación no demuestra calibración física, seguridad ni precisión clínica.
+Un checksum comprueba integridad, no licencias ni confianza en el publicador.
+Consulte los [bloqueos de publicación](docs/sdk-platform-gap-report.md) antes de distribuir cartuchos.
+
 <br clear="all">
 
 <h1 align="center">Realización</h1>

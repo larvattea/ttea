@@ -63,7 +63,7 @@
 
 - Python >= 3.10
 - [uv](https://docs.astral.sh/uv/) >= 0.11.32
-- Computer with x86-64 or ARM architecture.
+- Windows x86-64, macOS Apple Silicon, or Linux x86-64. Linux ARM64 is deferred.
 
 ### Installing uv
 
@@ -122,6 +122,39 @@ pip installs the versions pinned in `pyproject.toml`. Indirect dependencies aren
 ### Important
 
 On first use, allow camera access in your system's privacy settings.
+
+### TSDK game development
+
+From a game checkout containing `ttea.toml`, `uv run dev` starts the game and a
+separate body/hands/face simulator panel. No camera, player registration, or
+physical calibration is required. TSDK provides `uv run tsdk check` and
+`uv run tsdk build`; its local repository is `../TSDK`.
+
+See [the TSDK implementation contract](docs/sdk-platform-plan.md#local-implementation-and-operation)
+for runtime callbacks, recording/replay, cartridge installation, and release gates.
+Existing checkout-local data needs explicit migration to the platform user-data
+directory before first launch; the linked guide provides a non-overwriting command.
+
+### Install, update, and recover TSDK games
+
+KarTEA is an independent cartridge developed in `../kartea`, not bundled with TTEA.
+The catalog has no published releases yet. Public installation is not available at this stage.
+
+| Operation | Procedure |
+| --- | --- |
+| Install | Select a game with a compatible release and choose **Instalar**. Use reviewed publishers only. |
+| Update | End the session, choose **Atualizar**, and confirm the offered version. |
+| Failed update | Keep existing data and the previous installation. Record the error; do not edit receipts or SHA-256 digests. |
+| Offline play | Launch an installed cartridge. No new download is required. |
+| Uninstall | End the session and choose **Desinstalar**. Results remain in the data directory. |
+
+Back up the data directory before migrating an older installation.
+Use the [non-overwriting migration procedure](docs/sdk-platform-plan.md#existing-data-needs-explicit-migration); do not merge participant records automatically.
+Older calibrations do not record how they were captured; recalibrate (manual or ChArUco) before the first game.
+P pauses/resumes; Escape ends the session. Tracking loss pauses play until recovery.
+Simulation does not establish physical calibration, safety, or clinical accuracy.
+A checksum proves integrity, not licensing or publisher trust.
+Check the [release gates](docs/sdk-platform-gap-report.md) before distributing cartridges.
 
 <br clear="all">
 

@@ -111,6 +111,12 @@ uv run dev
 
 Esse comando baixa a versão correta do Python, cria o `.venv`, sincroniza as dependências e inicia o T-TEA.
 
+Em um jogo com `ttea.toml`, `uv run dev` abre o jogo e o simulador de corpo,
+mãos ou rosto, sem câmera ou cadastro. O repositório local `../TSDK`
+fornece `uv run tsdk check` e `uv run tsdk build`.
+Consulte o [contrato TSDK](docs/sdk-platform-plan.md#local-implementation-and-operation)
+para gravação/replay, cartuchos e migração explícita dos dados locais.
+
 ### Executar sem uv (venv manual)
 
 Com o Python 3.10, 3.11 ou 3.12 instalado, na raiz do projeto:
@@ -136,6 +142,27 @@ O pip instala as versões fixadas no `pyproject.toml`. As dependências indireta
 ### Importante
 
 No primeiro uso, permita o acesso à câmera nas configurações de privacidade do sistema.
+
+### Instalar, atualizar e recuperar jogos TSDK
+
+KarTEA é um cartucho independente, desenvolvido em `../kartea`; não acompanha o pacote TTEA.
+O catálogo ainda não oferece versões publicadas. Não há instalação pública disponível nesta etapa.
+
+| Operação | Procedimento |
+| --- | --- |
+| Instalar | Selecione um jogo com versão compatível e clique em **Instalar**. Use apenas publicadores revisados. |
+| Atualizar | Encerre a sessão e clique em **Atualizar**. Confirme a versão oferecida. |
+| Falha na atualização | Preserve os dados e a instalação anterior. Registre o erro; não altere recibos ou resumos SHA-256. |
+| Jogar sem rede | Inicie um cartucho já instalado. A execução não exige novo download. |
+| Desinstalar | Encerre a sessão e clique em **Desinstalar**. Os resultados permanecem no diretório de dados. |
+
+Faça uma cópia do diretório de dados antes de migrar uma instalação antiga.
+Siga a [migração sem sobrescrita](docs/sdk-platform-plan.md#existing-data-needs-explicit-migration); não mescle registros automaticamente.
+Calibrações antigas não registram como foram capturadas; recalibre (manual ou ChArUco) antes do primeiro jogo.
+P pausa/retoma; Escape encerra. A perda de rastreamento pausa o jogo até a recuperação.
+Simulação não comprova calibração, segurança física ou precisão clínica.
+Um checksum verifica integridade, não licença ou confiança no publicador.
+Consulte os [bloqueios de lançamento](docs/sdk-platform-gap-report.md) antes de distribuir cartuchos.
 
 <br clear="all">
 
