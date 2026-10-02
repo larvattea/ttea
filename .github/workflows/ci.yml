@@ -3,37 +3,99 @@ name: CI
 on:
   pull_request:
   push:
-    branches:
-      - main
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      builder_repository:
+        description: Authorized TSDK repository (owner/name); blank skips remote compatibility
+        required: false
+        type: string
+      builder_ref:
+        description: Exact TSDK commit to check
+        required: false
+        type: string
+      game_repository:
+        description: Authorized independent game repository (owner/name)
+        required: false
+        type: string
+      game_ref:
+        description: Exact independent game commit to check
+        required: false
+        type: string
 
 permissions:
   contents: read
 
 jobs:
-  smoke-test:
-    runs-on: ubuntu-latest
+  native-consumers:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-2022, macos-14]
+    runs-on: ${{ matrix.os }}
     env:
       QT_QPA_PLATFORM: offscreen
       SDL_VIDEODRIVER: dummy
-      MPLCONFIGDIR: /tmp/matplotlib
-
+      SDL_AUDIODRIVER: dummy
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v6
-
-      - name: Install Qt runtime dependencies
+      - uses: actions/checkout@v6
+      - name: Install Linux Qt runtime dependencies
+        if: runner.os == 'Linux'
         run: |
           sudo apt-get update
           sudo apt-get install --yes --no-install-recommends libegl1 libpulse0
-
-      - name: Install uv and Python
-        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
         with:
-          python-version: "3.10"
+          python-version: '3.10'
           enable-cache: true
-
-      - name: Install project
-        run: uv sync --locked
-
-      - name: Run smoke test
-        run: uv run --locked python -m unittest discover -s tests -p "test_smoke.py"
+      - name: Install pinned dependencies and test contracts
+        run: |
+          uv sync --locked
+          uv run --locked python -m unittest discover -s tests
+      - name: Check public API types and correctness lint
+        run: |
+          uvx --from mypy==1.15.0 mypy --follow-imports=silent --ignore-missing-imports src/ttea/sdk/api.py src/ttea/sdk/tracking.py
+          uvx --from ruff==0.11.13 ruff check --select E9,F src/ttea/sdk
+      - name: Build installable package
+        run: uv build --wheel
+      - name: Install wheel rather than editable source
+        shell: bash
+        run: uv pip install --python .venv --no-deps --reinstall dist/*.whl
+      - name: Exercise independent cartridge outside checkout
+        shell: bash
+        run: |
+          cp .github/workflows/installed_consumer.py "$RUNNER_TEMP/installed_consumer.py"
+          uv run --no-sync python "$RUNNER_TEMP/installed_consumer.py"
+      - name: Check cross-repository inputs
+        if: inputs.builder_repository != '' || inputs.game_repository != ''
+        shell: bash
+        env:
+          BUILDER_REPOSITORY: ${{ inputs.builder_repository }}
+          GAME_REPOSITORY: ${{ inputs.game_repository }}
+          BUILDER_REF: ${{ inputs.builder_ref }}
+          GAME_REF: ${{ inputs.game_ref }}
+        run: |
+          test -n "$BUILDER_REPOSITORY" && test -n "$GAME_REPOSITORY"
+          test -n "$BUILDER_REF" && test -n "$GAME_REF"
+      - uses: actions/checkout@v6
+        if: inputs.builder_repository != '' && inputs.game_repository != ''
+        with:
+          repository: ${{ inputs.builder_repository }}
+          ref: ${{ inputs.builder_ref }}
+          path: compatibility/builder
+          persist-credentials: false
+      - uses: actions/checkout@v6
+        if: inputs.builder_repository != '' && inputs.game_repository != ''
+        with:
+          repository: ${{ inputs.game_repository }}
+          ref: ${{ inputs.game_ref }}
+          path: compatibility/game
+          persist-credentials: false
+      - name: Build and execute independent repository cartridge
+        if: inputs.builder_repository != '' && inputs.game_repository != ''
+        shell: bash
+        run: |
+          uv pip install --python .venv --no-deps ./compatibility/builder
+          uv run --no-sync tsdk check compatibility/game
+          uv run --no-sync tsdk build compatibility/game --output "$RUNNER_TEMP/consumer.ttea"
+          uv run --no-sync python "$RUNNER_TEMP/installed_consumer.py" "$RUNNER_TEMP/consumer.ttea"
