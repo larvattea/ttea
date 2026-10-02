@@ -1,0 +1,52 @@
+{
+  "format_version": 1,
+  "games": [
+    {
+      "id": "kartea",
+      "game": "KarTEA",
+      "url": "https://github.com/larvattea/ttea",
+      "language": {
+        "en_US": {
+          "name": "KarTEA: Racing Game",
+          "description": "A game to aid in the development of sensory processing"
+        },
+        "es_ES": {
+          "name": "KarTEA: Juego de Carreras",
+          "description": "Un juego para ayudar en el desarrollo del procesamiento sensorial"
+        },
+        "pt_BR": {
+          "name": "KarTEA: Jogo de Corrida",
+          "description": "Um jogo para auxiliar no desenvolvimento do processamento sensorial"
+        }
+      },
+      "authors": [
+        "Gabriel Brunelli Pereira",
+        "Alexandre Altair de Melo"
+      ],
+      "status": "awaiting-compatible-release",
+      "releases": []
+    },
+    {
+      "id": "gingadivina",
+      "game": "Ginga",
+      "url": "https://github.com/marcosoft47/exergamejam2025",
+      "language": {
+        "pt_BR": {
+          "name": "Ginga Jogo de Dança",
+          "description": "Um de dança divido"
+        },
+        "es_ES": {
+          "name": "Ginga: Juego de Danza",
+          "description": "Un juego divido de baile"
+        },
+        "en_US": {
+          "name": "Ginga: Dance Game",
+          "description": "A divided dance game"
+        }
+      },
+      "authors": [],
+      "status": "awaiting-compatible-release",
+      "releases": []
+    }
+  ]
+}

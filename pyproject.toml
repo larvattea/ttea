@@ -13,6 +13,8 @@ dependencies = [
     "psutil==7.2.2",
     "pygame==2.6.1",
     "pyside6==6.11.1",
+    "packaging>=24.2,<26",
+    "tomli>=2.2,<3; python_version < '3.11'",
 ]
 
 [project.scripts]
@@ -29,4 +31,4 @@ namespaces = true
 [tool.setuptools.package-data]
 "ttea.resources" = ["mediapipemodels/*.task"]
 "ttea.games.kartea" = ["resources/locales/*/LC_MESSAGES/*.mo"]
-"ttea.sdk" = ["*.txt"]
+"ttea.sdk" = ["catalog.json", "*.txt"]
