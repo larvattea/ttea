@@ -3,7 +3,7 @@ from typing import Optional
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QCloseEvent, QIcon
-from PySide6.QtWidgets import QDialog
+from PySide6.QtWidgets import QDialog, QHBoxLayout, QLabel, QPushButton
 
 # Local module import
 from ttea.controller import PlayerGameLaunchController
@@ -34,12 +34,22 @@ class PlayerGameLaunchView(QDialog, Ui_PlayerGameLaunchView, WindowConfig):
             parent,  # parent
         )
         self.service = PlayerGameLaunchService()
+        self.lbl_library_status = QLabel(self)
+        self.verticalLayout.insertWidget(3, self.lbl_library_status)
+        library_actions = QHBoxLayout()
+        self.pb_install = QPushButton(self.tr("Instalar"), self)
+        self.pb_uninstall = QPushButton(self.tr("Desinstalar"), self)
+        library_actions.addWidget(self.pb_install)
+        library_actions.addWidget(self.pb_uninstall)
+        self.verticalLayout.insertLayout(4, library_actions)
 
         # Initialize controller
         self.controller = PlayerGameLaunchController(self)
         self.pb_cancel.clicked.connect(self.controller.handle_cancel)
         self.pb_play.clicked.connect(self.controller.launch_game)
         self.pb_game_info.clicked.connect(self.controller.handle_game_info)
+        self.pb_install.clicked.connect(self.controller.install_game)
+        self.pb_uninstall.clicked.connect(self.controller.uninstall_game)
         self.cbx_game.currentIndexChanged.connect(
             self.controller.update_tooltip
         )
@@ -58,7 +68,11 @@ class PlayerGameLaunchView(QDialog, Ui_PlayerGameLaunchView, WindowConfig):
         for h in self.service.get_all_professionals():
             self.cbx_professional.addItem(h.name, h.id)
 
-        # Jogos com metadados e tradução
+        self.populate_games()
+
+    def populate_games(self):
+        selected = (self.cbx_game.currentData() or {}).get("id")
+        self.cbx_game.clear()
         language_app = AppModel.get_instance().current_language
 
         games = self.service.get_games_metadata()
@@ -92,6 +106,11 @@ class PlayerGameLaunchView(QDialog, Ui_PlayerGameLaunchView, WindowConfig):
                 0, Qt.ItemDataRole.ToolTipRole
             )
             self.cbx_game.setToolTip(first_tooltip)
+        for index in range(self.cbx_game.count()):
+            if self.cbx_game.itemData(index)["id"] == selected:
+                self.cbx_game.setCurrentIndex(index)
+                break
+        self.controller.update_library_actions()
 
     def closeEvent(self, event: QCloseEvent) -> None:
         """Override close event to confirm exit.

@@ -1,4 +1,3 @@
-import os
 import subprocess
 import sys
 from datetime import datetime
@@ -14,6 +13,7 @@ except ImportError:
     PSUTIL_AVAILABLE = False
 
 from PySide6.QtCore import QObject, Qt, QTimer
+from packaging.version import Version
 
 from ttea.model import AppModel, Calibration, CalibrationPoint
 from ttea.service import CalibrationService, PlayerGameLaunchService
@@ -59,6 +59,8 @@ class PlayerGameLaunchController(QObject):
 
     def handle_game_info(self) -> None:
         game_data = self.view.cbx_game.currentData()
+        if not game_data:
+            return
 
         if (
             game_data.get("authors") is not None
@@ -207,17 +209,8 @@ class PlayerGameLaunchController(QObject):
             )
             return
 
-        folder = game_data["folder_path"]
-        executable = game_data.get("exec")
-        script_path = os.path.join(folder, executable)
-
-        if not os.path.exists(script_path):
-            self.msg.critical(
-                self.tr(
-                    "Erro: Executável do jogo não encontrado em: {0}.\n"
-                    "Verifique se o arquivo existe e se os metadados de configuração estão corretos."
-                ).format(script_path)
-            )
+        if not game_data.get("installed"):
+            self.msg.warning(self.tr("Instale um cartucho compatível antes de iniciar."))
             return
 
         # Validação da calibração antes de iniciar o jogo
@@ -244,28 +237,6 @@ class PlayerGameLaunchController(QObject):
         if not self._verify_hardware_configuration():
             return
 
-        ext = os.path.splitext(executable.lower())[1] if executable else ""
-        if ext in (".py", ".pyw"):
-            cmd = [
-                sys.executable,
-                script_path,
-                "--lang",
-                language_app,
-                "--player_id",
-                player_id,
-                "--professional_id",
-                professional_id,
-            ]
-        else:
-            cmd = [
-                script_path,
-                "--lang",
-                language_app,
-                "--player_id",
-                player_id,
-                "--professional_id",
-                professional_id,
-            ]
 
         # UX: desabilita botões durante o lançamento
         self.view.pb_play.setEnabled(False)
@@ -273,17 +244,18 @@ class PlayerGameLaunchController(QObject):
         self.view.pb_play.setText(self.tr("Espere"))
         self.view.repaint()
 
-        # Cria um novo grupo de processos (melhora o controle da árvore no Windows)
-        creationflags = (
-            subprocess.CREATE_NEW_PROCESS_GROUP
-            if sys.platform.startswith("win")
-            else 0
-        )
-
-        # Inicia o processo do jogo
-        self.current_process = subprocess.Popen(
-            cmd, cwd=folder, creationflags=creationflags
-        )
+        try:
+            config = self.runtime_configuration()
+            config.update({
+                "language": language_app,
+                "player_id": player_id,
+                "professional_id": professional_id,
+            })
+            self.current_process = self.service.launch_game(game_data, config)
+        except (OSError, ValueError) as error:
+            self._restore_buttons_state()
+            self.msg.critical(str(error))
+            return
 
         # Monitora quando o jogo realmente abre a janela
         self.monitor_timer = QTimer(self)
@@ -350,9 +322,65 @@ class PlayerGameLaunchController(QObject):
     def _restore_buttons_state(self) -> None:
         """Restaura o estado original dos botões da interface."""
         self.view.pb_play.setText(self.tr("Jogar"))
-        self.view.pb_play.setEnabled(True)
+        self.update_library_actions()
         self.view.pb_cancel.setEnabled(True)
 
+
+    def runtime_configuration(self):
+        hardware = self.calibration_service.find_by_id_calibration(Calibration.ID_VALUE)
+        points = self.calibration_service.find_by_id_calibration_point(CalibrationPoint.ID_VALUE)
+        if hardware is None or points is None:
+            raise ValueError(self.tr("Calibração ausente; calibre novamente."))
+        calibration = points.runtime_calibration()
+        return {
+            "hardware": {"camera_index": hardware.camera_position,
+                         "width": points.capture_width, "height": points.capture_height},
+            "calibration": calibration,
+            "width": hardware.content_width,
+            "height": hardware.content_height,
+        }
+
+    def install_game(self):
+        game = self.view.cbx_game.currentData()
+        if not game or self.is_game_running():
+            return
+        if game.get("installed") and not self.msg.question(
+            self.tr("Atualizar este jogo para a versão compatível selecionada?"), None, True
+        ):
+            return
+        try:
+            self.service.install_game(game)
+        except (OSError, ValueError) as error:
+            self.msg.critical(str(error))
+        self.view.populate_games()
+
+    def uninstall_game(self):
+        game = self.view.cbx_game.currentData()
+        if not game or self.is_game_running():
+            return
+        if self.msg.question(self.tr("Desinstalar o jogo? Resultados e saves serão preservados."), None, True):
+            try:
+                self.service.uninstall_game(game)
+            except (OSError, ValueError) as error:
+                self.msg.critical(str(error))
+            self.view.populate_games()
+
+    def update_library_actions(self):
+        game = self.view.cbx_game.currentData() or {}
+        installed = bool(game.get("installed"))
+        release = game.get("release")
+        newer = release is not None and (
+            not installed or Version(release["version"]) > Version(game["version"])
+        )
+        self.view.pb_play.setEnabled(installed)
+        self.view.pb_install.setEnabled(newer)
+        self.view.pb_install.setText(self.tr("Atualizar") if installed else self.tr("Instalar"))
+        self.view.pb_uninstall.setEnabled(installed)
+        self.view.lbl_library_status.setText(
+            self.tr("Instalado: {0}").format(game["version"]) if installed else
+            self.tr("Disponível para instalar") if release else
+            self.tr("Nenhum cartucho compatível publicado")
+        )
     def update_tooltip(self, index):
         """Atualiza o tooltip do combobox quando o jogo selecionado muda."""
         if index >= 0:
@@ -360,6 +388,7 @@ class PlayerGameLaunchController(QObject):
                 index, Qt.ItemDataRole.ToolTipRole
             )
             self.view.cbx_game.setToolTip(novo_hint)
+        self.update_library_actions()
 
     def cleanup(self) -> None:
         """Encerra o jogo e todos os seus processos filhos quando a janela é fechada."""

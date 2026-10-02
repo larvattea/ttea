@@ -1,19 +1,18 @@
-import json
+from ttea.sdk.library import Library, catalog, localized, resolve_release
 from typing import List
 
 # Local module import
 from ttea.model import Player, Professional
-from ttea.util import PathConfig
 
 
 class PlayerGameLaunchService:
-    METADATA_FILENAME = "metadata.json"
 
     def __init__(self):
         from ttea.service import PlayerService, ProfessionalService
 
         self.player_service = PlayerService()
         self.professional_service = ProfessionalService()
+        self.library = Library()
 
     def get_all_players(self) -> List[Player]:
         return sorted(
@@ -28,15 +27,26 @@ class PlayerGameLaunchService:
         )
 
     def get_games_metadata(self) -> List[dict]:
-        games = []
-        exergame_dir = PathConfig.EXERGAME_DIR
+        games = {game["id"]: dict(game) for game in catalog()}
+        for receipt in self.library.installed():
+            manifest = receipt["manifest"]
+            game = games.setdefault(manifest["id"], {"id": manifest["id"], "releases": []})
+            game["installed"] = True
+            game["version"] = manifest["version"]
+            game["game"] = manifest["id"]
+            game["language"] = {
+                locale.replace("-", "_"): {"name": name, "description": localized(manifest.get("description", {}), locale, "")}
+                for locale, name in manifest["name"].items()
+            }
+        for game in games.values():
+            game["release"] = resolve_release(game)
+        return list(games.values())
 
-        for d in exergame_dir.iterdir():
-            if d.is_dir():
-                meta_path = d / PlayerGameLaunchService.METADATA_FILENAME
-                if meta_path.exists():
-                    with open(meta_path, "r", encoding="utf-8") as f:
-                        data = json.load(f)
-                        data["folder_path"] = str(d)  # Guarda o caminho real
-                        games.append(data)
-        return games
+    def install_game(self, game):
+        return self.library.install_release(game, update=bool(game.get("installed")))
+
+    def uninstall_game(self, game):
+        self.library.uninstall(game["id"])
+
+    def launch_game(self, game, config):
+        return self.library.launch(game["id"], config=config)
