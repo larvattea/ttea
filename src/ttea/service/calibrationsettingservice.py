@@ -336,15 +336,6 @@ class CalibrationSettingService:
 
         return int(value)
 
-    def is_automatic_mirror_mode(self) -> bool:
-        value = str(
-            self.settings.value(
-                "automatic/automatic_mirror_mode_automatic", "1"
-            )
-        ).strip()
-
-        return int(value)
-
     def get_automatic_num_columns(self) -> int:
         value = str(
             self.settings.value(

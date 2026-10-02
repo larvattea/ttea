@@ -71,7 +71,6 @@ class CalibrationSetting:
     automatic_window_open_automatic: str
     automatic_open_projector_automatic: int
     automatic_default_calibration_automatic: int
-    automatic_mirror_mode_automatic: int
     automatic_num_columns_automatic: int
     automatic_num_rows_automatic: int
     automatic_multiplier_automatic: float

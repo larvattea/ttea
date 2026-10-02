@@ -859,26 +859,6 @@ class Ui_CalibrationSettingView(object):
 
         self.lay_calibracao_automatica.addWidget(self.grp_window_automatic)
 
-        self.grp_calibration_points_automatic = QGroupBox(self.tab_automatic_calibration)
-        self.grp_calibration_points_automatic.setObjectName(u"grp_calibration_points_automatic")
-        self.frm_pontos_calibracao_automatic = QFormLayout(self.grp_calibration_points_automatic)
-        self.frm_pontos_calibracao_automatic.setObjectName(u"frm_pontos_calibracao_automatic")
-        self.frm_pontos_calibracao_automatic.setLabelAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
-        self.lbl_mirror_mode_automatic = QLabel(self.grp_calibration_points_automatic)
-        self.lbl_mirror_mode_automatic.setObjectName(u"lbl_mirror_mode_automatic")
-
-        self.frm_pontos_calibracao_automatic.setWidget(0, QFormLayout.ItemRole.LabelRole, self.lbl_mirror_mode_automatic)
-
-        self.chk_mirror_mode_automatic = QCheckBox(self.grp_calibration_points_automatic)
-        self.chk_mirror_mode_automatic.setObjectName(u"chk_mirror_mode_automatic")
-        self.chk_mirror_mode_automatic.setChecked(True)
-        self.chk_mirror_mode_automatic.setProperty(u"dataclass_property", u"automatic_mirror_mode_automatic")
-
-        self.frm_pontos_calibracao_automatic.setWidget(0, QFormLayout.ItemRole.FieldRole, self.chk_mirror_mode_automatic)
-
-
-        self.lay_calibracao_automatica.addWidget(self.grp_calibration_points_automatic)
-
         self.grp_automatic_marker = QGroupBox(self.tab_automatic_calibration)
         self.grp_automatic_marker.setObjectName(u"grp_automatic_marker")
         self.frm_marcador_automatic = QFormLayout(self.grp_automatic_marker)
@@ -1392,9 +1372,6 @@ class Ui_CalibrationSettingView(object):
         self.chk_open_projector_automatic.setText("")
         self.lbl_default_calibration_automatic.setText(QCoreApplication.translate("CalibrationSettingView", u"Calibra\u00e7\u00e3o padr\u00e3o?", None))
         self.chk_default_calibration_automatic.setText("")
-        self.grp_calibration_points_automatic.setTitle(QCoreApplication.translate("CalibrationSettingView", u"Leitura Pontos de Calibra\u00e7\u00e3o", None))
-        self.lbl_mirror_mode_automatic.setText(QCoreApplication.translate("CalibrationSettingView", u"Modo espelho?", None))
-        self.chk_mirror_mode_automatic.setText("")
         self.grp_automatic_marker.setTitle(QCoreApplication.translate("CalibrationSettingView", u"Marcador", None))
         self.lbl_num_columns_automatic.setText(QCoreApplication.translate("CalibrationSettingView", u"Quantidade de colunas:", None))
         self.lbl_num_rows_automatic.setText(QCoreApplication.translate("CalibrationSettingView", u"Quantidade de linhas:", None))

@@ -336,9 +336,6 @@ class CalibrationService:
             self.calibration_setting_service.is_automatic_default_calibration()
         )
 
-    def is_automatic_mirror_mode(self) -> bool:
-        return self.calibration_setting_service.is_automatic_mirror_mode()
-
     def get_automatic_num_columns(self) -> int:
         return self.calibration_setting_service.get_automatic_num_columns()
 
