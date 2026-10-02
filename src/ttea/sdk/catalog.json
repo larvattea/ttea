@@ -24,6 +24,14 @@
         "Alexandre Altair de Melo"
       ],
       "status": "awaiting-compatible-release",
+      "view_factory": "ttea.games.kartea.factory.KarteaViewFactory",
+      "menu_actions": {
+        "player_config": {
+          "label": "KarTEA",
+          "method": "create_player_config_list_view",
+          "edit_method": "create_player_config_edit_view"
+        }
+      },
       "releases": []
     },
     {

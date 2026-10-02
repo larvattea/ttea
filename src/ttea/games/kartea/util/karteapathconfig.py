@@ -29,14 +29,6 @@ class _KarteaDirs(type):
         return cls.KARTEA_DIR / "resources"
 
     @property
-    def KARTEA_IMAGES_DIR(cls) -> Path:
-        return cls.KARTEA_RESOURCES_DIR / "images"
-
-    @property
-    def KARTEA_SOUNDS_DIR(cls) -> Path:
-        return cls.KARTEA_RESOURCES_DIR / "sounds"
-
-    @property
     def KARTEA_PHASES_DIR(cls) -> Path:
         return cls.KARTEA_RESOURCES_DIR / "phases"
 
@@ -71,8 +63,6 @@ class KarteaPathConfig(PathConfig, metaclass=_KarteaDirs):
             cls.KARTEA_DIR,
             cls.KARTEA_LOG_DIR,
             cls.KARTEA_RESOURCES_DIR,
-            cls.KARTEA_IMAGES_DIR,
-            cls.KARTEA_SOUNDS_DIR,
             cls.KARTEA_PHASES_DIR,
             cls.KARTEA_PLAYER_DIR,
         ]:
@@ -154,16 +144,6 @@ class KarteaPathConfig(PathConfig, metaclass=_KarteaDirs):
         cls.ensure_kartea_dirs()
         return str(cls.KARTEA_DIR / filename)
 
-    @classmethod
-    def game_image(cls, filename: str) -> str:
-        cls.ensure_kartea_dirs()
-        return str(cls.KARTEA_IMAGES_DIR / filename)
-
-    @classmethod
-    def game_sound(cls, filename: str) -> str:
-        cls.ensure_kartea_dirs()
-        return str(cls.KARTEA_SOUNDS_DIR / filename)
-
     # ===================================================================
     # Configuração INI
     # ===================================================================
@@ -220,29 +200,6 @@ class KarteaPathConfig(PathConfig, metaclass=_KarteaDirs):
 
         with open(cls.KARTEA_CONFIG_FILE, "w", encoding="utf-8") as f:
             config.write(f)
-
-    # ===================================================================
-    # Listagens
-    # ===================================================================
-    @classmethod
-    def list_images(cls) -> List[str]:
-        cls.ensure_kartea_dirs()
-        exts = {".png", ".jpg", ".jpeg", ".gif", ".bmp", ".tiff"}
-        return sorted(
-            f.name
-            for f in cls.KARTEA_IMAGES_DIR.iterdir()
-            if f.is_file() and f.suffix.lower() in exts
-        )
-
-    @classmethod
-    def list_sounds(cls) -> List[str]:
-        cls.ensure_kartea_dirs()
-        exts = {".wav", ".mp3", ".ogg", ".flac", ".aac"}
-        return sorted(
-            f.name
-            for f in cls.KARTEA_SOUNDS_DIR.iterdir()
-            if f.is_file() and f.suffix.lower() in exts
-        )
 
     # ===================================================================
     # Recursos embutidos (Builtin)

@@ -24,8 +24,10 @@ class ViewFactory:
     -------
     get_app_view_factory()
         Return the factory for application views.
-    get_kartea_view_factory()
-        Return the factory for Kartea-related views.
+    discover_games()
+        Register game view factories declared in the game catalog.
+    get_game_view_factory(name)
+        Return the registered factory for a game.
     """
 
     _game_factories = {}
