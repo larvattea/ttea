@@ -25,3 +25,7 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools.packages.find]
 where = ["src"]
 namespaces = true
+
+[tool.setuptools.package-data]
+"ttea.resources" = ["mediapipemodels/*.task"]
+"ttea.games.kartea" = ["resources/locales/*/LC_MESSAGES/*.mo"]

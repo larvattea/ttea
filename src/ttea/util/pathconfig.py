@@ -1,8 +1,8 @@
 """Application path configuration for T-TEA.
 
-Handles data directories in both development and frozen
-(PyInstaller) environments. Also provides Qt resource path helpers
-and user file path constructors.
+Keeps writable user data separate from installed package resources,
+including frozen (PyInstaller) deployments. Also provides Qt resource
+path helpers and user file path constructors.
 """
 
 import sys
@@ -35,7 +35,7 @@ class PathConfig:
     CALIBRATION_POINT_FILENAME : str
         Default file name for calibration point CSV data.
     BASE_DIR : Path
-        Base application data directory in development or frozen mode.
+        Platform-specific writable application data directory.
     EXERGAME_DIR : Path
         Base directory for exergame save data.
     CONFIG_DIR : Path
@@ -132,18 +132,15 @@ class PathConfig:
     # ===================================================================
     # Base directory
     # ===================================================================
+    BASE_DIR: Path = Path(user_data_dir(APP_NAME, APP_AUTHOR))
+    EXERGAME_DIR: Path = BASE_DIR / "exergames"
     if getattr(sys, "frozen", False):
-        BASE_DIR: Path = Path(user_data_dir(APP_NAME, APP_AUTHOR))
-        EXERGAME_DIR: Path = BASE_DIR / "exergames"
         RESOURCES_ROOT: Path = (
             Path(getattr(sys, "_MEIPASS", Path(sys.executable).parent))
             / "resources"
         )
     else:
-        PROJECT_DIR: Path = Path(__file__).resolve().parents[3]
-        EXERGAME_DIR: Path = PROJECT_DIR / "src" / "ttea" / "games"
-        BASE_DIR: Path = PROJECT_DIR / "data"
-        RESOURCES_ROOT: Path = PROJECT_DIR / "resources"
+        RESOURCES_ROOT: Path = Path(__file__).resolve().parents[1] / "resources"
 
     MODELS_DIR: Path = RESOURCES_ROOT / "mediapipemodels"
 
@@ -155,6 +152,17 @@ class PathConfig:
     LOG_DIR: Path = BASE_DIR / "log"
     PLAYERS_DIR: Path = BASE_DIR / "players"
     PROFESSIONAL_DIR: Path = BASE_DIR / "professionals"
+
+    _USER_SUBDIRS = {
+        "EXERGAME_DIR": "exergames",
+        "CONFIG_DIR": "config",
+        "CALIBRATION_DIR": "calibration",
+        "EXPORTS_DIR": "exports",
+        "INSTITUTIONFACILITY_DIR": "institutionfacilities",
+        "LOG_DIR": "log",
+        "PLAYERS_DIR": "players",
+        "PROFESSIONAL_DIR": "professionals",
+    }
 
     # ===================================================================
     # Built-in Resources (Qt)
@@ -331,23 +339,8 @@ class PathConfig:
         return f":/help/{path}".rstrip("/")
 
     # ===================================================================
-    # Automatic Introspection
+    # Writable directories
     # ===================================================================
-    @classmethod
-    def _get_dir_names(cls) -> List[str]:
-        """Return class attribute names that end with ``_DIR``.
-
-        Returns
-        -------
-        list[str]
-            Sorted or unsorted names of directory attributes.
-        """
-        return [
-            name
-            for name in vars(cls)
-            if name.endswith("_DIR") and not name.startswith("_")
-        ]
-
     @classmethod
     def _get_user_dirs(cls) -> List[Path]:
         """Return Path objects for all user directories.
@@ -355,12 +348,10 @@ class PathConfig:
         Returns
         -------
         list[Path]
-            Path objects for each ``_DIR`` class attribute.
+            Application data directories, excluding bundled resources.
         """
-        return [
-            value
-            for name, value in vars(cls).items()
-            if name.endswith("_DIR") and not name.startswith("_")
+        return [cls.BASE_DIR] + [
+            getattr(cls, name) for name in cls._USER_SUBDIRS
         ]
 
     # ===================================================================
@@ -373,7 +364,7 @@ class PathConfig:
         Returns
         -------
         None
-            Ensures all directories defined by the class are present on disk.
+            Ensures writable user directories are present on disk.
         """
         for directory in cls._get_user_dirs():
             directory.mkdir(parents=True, exist_ok=True)
@@ -616,12 +607,7 @@ class PathConfig:
         new_base = Path(path).resolve()
 
         cls.BASE_DIR = new_base
-        cls.EXERGAME_DIR = new_base / "exergames"
-
-        for dir_name in cls._get_dir_names():
-            if dir_name in ("BASE_DIR", "EXERGAME_DIR"):
-                continue
-            subdir = dir_name.replace("_DIR", "").lower()
+        for dir_name, subdir in cls._USER_SUBDIRS.items():
             setattr(cls, dir_name, new_base / subdir)
 
     # ===================================================================
