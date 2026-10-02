@@ -9,29 +9,56 @@ from ttea.games.kartea.resources import resourceskartea_rc
 from ttea.util import PathConfig
 
 
-class KarteaPathConfig(PathConfig):
+class _KarteaDirs(type):
+    """Derive KarTEA user directories from the current PathConfig base.
+
+    Keeps them in sync with ``PathConfig.set_base_dir`` instead of freezing
+    the default user-data location at import time.
+    """
+
+    @property
+    def KARTEA_DIR(cls) -> Path:
+        return cls.EXERGAME_DIR / "kartea"
+
+    @property
+    def KARTEA_LOG_DIR(cls) -> Path:
+        return cls.KARTEA_DIR / "log"
+
+    @property
+    def KARTEA_RESOURCES_DIR(cls) -> Path:
+        return cls.KARTEA_DIR / "resources"
+
+    @property
+    def KARTEA_IMAGES_DIR(cls) -> Path:
+        return cls.KARTEA_RESOURCES_DIR / "images"
+
+    @property
+    def KARTEA_SOUNDS_DIR(cls) -> Path:
+        return cls.KARTEA_RESOURCES_DIR / "sounds"
+
+    @property
+    def KARTEA_PHASES_DIR(cls) -> Path:
+        return cls.KARTEA_RESOURCES_DIR / "phases"
+
+    @property
+    def KARTEA_PLAYER_DIR(cls) -> Path:
+        return cls.KARTEA_DIR / "players"
+
+    @property
+    def KARTEA_CONFIG_FILE(cls) -> Path:
+        return cls.KARTEA_DIR / cls.KARTEA_CONFIG_FILENAME
+
+
+class KarteaPathConfig(PathConfig, metaclass=_KarteaDirs):
     """
     Configuração de caminhos específicos para o jogo KarTEA.
 
-    Herda toda a lógica do PathConfig.
+    Herda toda a lógica do PathConfig. Os diretórios KARTEA_* acompanham
+    ``PathConfig.set_base_dir``.
     """
 
     KARTEA_CONFIG_FILENAME = "kartea.ini"
     KARTEA_LOG_FILENAME = "kartea.log"
-
-    # ===================================================================
-    # Diretórios específicos do KarTEA
-    # ===================================================================
-    KARTEA_DIR = PathConfig.EXERGAME_DIR / "kartea"
-    KARTEA_LOG_DIR = KARTEA_DIR / "log"
-    KARTEA_RESOURCES_DIR = KARTEA_DIR / "resources"
-    KARTEA_IMAGES_DIR = KARTEA_RESOURCES_DIR / "images"
-    KARTEA_SOUNDS_DIR = KARTEA_RESOURCES_DIR / "sounds"
-    KARTEA_PHASES_DIR = KARTEA_RESOURCES_DIR / "phases"
-    KARTEA_PLAYER_DIR = KARTEA_DIR / "players"
-
-    # Arquivo de configuração específico
-    KARTEA_CONFIG_FILE = KARTEA_DIR / KARTEA_CONFIG_FILENAME
 
     # ===================================================================
     # Garantia de estrutura
