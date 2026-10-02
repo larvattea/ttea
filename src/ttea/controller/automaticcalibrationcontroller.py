@@ -490,23 +490,8 @@ class AutomaticCalibrationController(QObject):
                 # --- AÇÃO ESC: SALVA E FECHA ---
                 elif key == 27:
                     if self.modo_preview and last_camera_vertices is not None:
-                        se, sd, ie, id_pt = last_camera_vertices
-
-                        if self.service.is_automatic_mirror_mode():
-                            largura_cam = frozen_frame.shape[1]
-                            self.calibration_points = np.array(
-                                [
-                                    [largura_cam - se[0], se[1]],  # SD
-                                    [largura_cam - sd[0], sd[1]],  # SE
-                                    [largura_cam - ie[0], ie[1]],  # ID
-                                    [largura_cam - id_pt[0], id_pt[1]],  # IE
-                                ],
-                                dtype=np.int64,
-                            )
-                        else:
-                            self.calibration_points = np.array(
-                                [sd, se, id_pt, ie], dtype=np.int64
-                            )
+                        self.calibration_points = np.asarray(last_camera_vertices, dtype=np.int64)
+                        self.capture_height, self.capture_width = frozen_frame.shape[:2]
 
                         self.create_calibration_point()
                     else:
@@ -541,10 +526,14 @@ class AutomaticCalibrationController(QObject):
                 self.tr("Erro ao salvar os pontos da calibração automática.")
             )
 
-    def get_data(self) -> Dict[str, int]:
+    def get_data(self) -> Dict[str, str | int]:
         """Extrai os pontos de calibração utilizando as propriedades definidas no model."""
         flat_points = self.calibration_points.flatten().tolist()
         return {
-            prop: int(val)
-            for prop, val in zip(CalibrationPoint.PROPERTIES, flat_points)
+            **{prop: int(val) for prop, val in zip(CalibrationPoint.PROPERTIES, flat_points)},
+            "capture_method": "charuco",
+            "coordinate_space": "raw",
+            "corner_order": "tl-tr-bl-br",
+            "capture_width": self.capture_width,
+            "capture_height": self.capture_height,
         }

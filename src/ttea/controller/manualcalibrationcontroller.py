@@ -65,6 +65,9 @@ class ManualCalibrationController(QObject):
             (4, 2), dtype=np.int64
         )  # 4 pontos de calibração
         self.click_calibration_count = 0
+        self.capture_width = 0
+        self.capture_height = 0
+        self.capture_mirrored = self.service.is_manual_mirror_mode()
 
         self.language_app = AppModel.get_instance().current_language
         for lang in Language.LANGUAGES:
@@ -109,7 +112,7 @@ class ManualCalibrationController(QObject):
 
     def _mouse_click_callback(self, event, x, y, flags, param):
         """Callback para capturar cliques na janela da câmera"""
-        if event == cv2.EVENT_LBUTTONDOWN:
+        if event == cv2.EVENT_LBUTTONDOWN and self.capture_width and self.capture_height:
             if self.click_calibration_count < 4:
                 self.calibration_points[self.click_calibration_count] = [x, y]
                 self.click_calibration_count += 1
@@ -149,8 +152,12 @@ class ManualCalibrationController(QObject):
 
             ret, frame = self.camera.read()
             if ret:
+                if frame.shape[:2] != (self.capture_height, self.capture_width):
+                    self.click_calibration_count = 0
+                    self.calibration_points.fill(0)
+                self.capture_height, self.capture_width = frame.shape[:2]
                 # 1. Ajustar o frame (espelhar se necessário)
-                if self.service.is_manual_mirror_mode():
+                if self.capture_mirrored:
                     control_screen = cv2.flip(frame, 1)
                 else:
                     control_screen = frame
@@ -271,6 +278,8 @@ class ManualCalibrationController(QObject):
         return self.service.get_available_geometry_of_screen(monitor_index)
 
     def create_calibration_point(self) -> None:
+        if self.click_calibration_count != 4:
+            return
         data = self.get_data()
         if self.service.create_calibration_point(data):
             self.view.msg.info(
@@ -281,7 +290,7 @@ class ManualCalibrationController(QObject):
                 self.tr("Erro ao salvar os pontos da calibração manual.")
             )
 
-    def get_data(self) -> Dict[str, int]:
+    def get_data(self) -> Dict[str, str | int]:
         """Extrai os pontos de calibração
         utilizando as propriedades definidas no model."""
         # Transforma a matriz (4, 2) em uma lista unidimensional
@@ -290,6 +299,10 @@ class ManualCalibrationController(QObject):
 
         # Mapeia dinamicamente cada propriedade de CalibrationPoint.PROPERTIES ao valor capturado
         return {
-            prop: int(val)
-            for prop, val in zip(CalibrationPoint.PROPERTIES, flat_points)
+            **{prop: int(val) for prop, val in zip(CalibrationPoint.PROPERTIES, flat_points)},
+            "capture_method": "manual",
+            "coordinate_space": "mirror-pixel" if self.capture_mirrored else "raw",
+            "corner_order": "tl-tr-bl-br",
+            "capture_width": self.capture_width,
+            "capture_height": self.capture_height,
         }

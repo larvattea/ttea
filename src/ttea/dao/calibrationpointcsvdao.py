@@ -98,9 +98,7 @@ class CalibrationPointCsvDAO(DAO[CalibrationPoint]):
             for prop in CalibrationPoint.PROPERTIES:
                 if prop in row:
                     if prop in self.int_properties:
-                        calibration_point_kwargs[prop] = (
-                            int(row[prop]) if row[prop].isdigit() else 0
-                        )
+                        calibration_point_kwargs[prop] = int(row[prop])
                     else:
                         calibration_point_kwargs[prop] = row[prop]
 

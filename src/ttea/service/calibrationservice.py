@@ -104,22 +104,12 @@ class CalibrationService:
     def create_calibration_point(
         self, data: Dict[str, Any]
     ) -> Optional[CalibrationPoint]:
-        """
-        Create a new calibration point from a dictionary of attributes.
-
-        Parameters
-        ----------
-        data : dict
-            Must contain the key ``id`` (int),  ``name`` (str),
-            ``birth_date`` (date) and optionally ``observation`` (str).
-
-        Returns
-        -------
-        CalibrationPoint or None
-            The created ``CalibrationPoint`` instance if validation and insertion
-            succeed; ``None`` otherwise.
-        """
+        """Persist points only when their capture provenance supports conversion."""
         calibration_point = CalibrationPoint(**data)
+        try:
+            calibration_point.runtime_calibration()
+        except ValueError:
+            return None
 
         new_id = self.dao_calibration_point.insert(calibration_point)
         return (
