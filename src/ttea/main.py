@@ -7,18 +7,13 @@ event loop.
 
 import os
 import sys
+from pathlib import Path
 
 os.environ["QT_LOGGING_RULES"] = "*.debug=false"
 
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication, QDialog, QMainWindow
 
-from ttea.app import AppConfig
-from ttea.factory import ViewFactory
-from ttea.log import Log
-from ttea.service import LanguageService
-from ttea.util import CriticalHooks
-from ttea.view import SplashScreen
 
 
 class App:
@@ -76,6 +71,13 @@ class App:
         >>> app = App()
         >>> app.run()
         """
+        from ttea.app import AppConfig
+        from ttea.factory import ViewFactory
+        from ttea.log import Log
+        from ttea.service import LanguageService
+        from ttea.util import CriticalHooks
+        from ttea.view import SplashScreen
+
         CriticalHooks.setup_exception_hooks()
         Log.get_log().log_info("Application started successfully.")
 
@@ -138,7 +140,13 @@ class App:
 
 
 def main() -> None:
-    """Start the T-TEA application."""
+    """Launch a local TSDK project, or open the T-TEA console."""
+    current = Path.cwd()
+    for project in (current, *current.parents):
+        if (project / "ttea.toml").is_file():
+            from ttea.sdk.developer import run
+
+            sys.exit(run(project))
     application = App()
     application.run()
 
