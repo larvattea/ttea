@@ -1,4 +1,5 @@
 import csv
+import logging
 from pathlib import Path
 from shutil import copytree
 import tempfile
@@ -13,6 +14,20 @@ from ttea.util import PathConfig
 
 
 class CalibrationProvenanceTest(unittest.TestCase):
+    def setUp(self):
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        self.addCleanup(self.close_log_file)
+        self.addCleanup(PathConfig.set_base_dir, PathConfig.BASE_DIR)
+        self.root = Path(temporary.name)
+
+    @staticmethod
+    def close_log_file():
+        logger = logging.getLogger("Log")
+        for handler in logger.handlers[:]:
+            handler.close()
+            logger.removeHandler(handler)
+
     def points(self, mirrored=False):
         xs = (639, -1) if mirrored else (0, 640)
         return CalibrationPoint(xs[0], 0, xs[1], 0, xs[0], 480, xs[1], 480,
@@ -49,50 +64,39 @@ class CalibrationProvenanceTest(unittest.TestCase):
             points.runtime_calibration()
 
     def test_persistence_retains_signed_coordinates_and_capture_provenance(self):
-        original = PathConfig.BASE_DIR
-        try:
-            with tempfile.TemporaryDirectory() as directory:
-                PathConfig.set_base_dir(directory)
-                CalibrationPointCsvDAO().insert(self.points(True))
-                restored = CalibrationPointCsvDAO().select(1)
-                self.assertEqual(restored, self.points(True))
-                np.testing.assert_allclose(restored.runtime_calibration()["homography"], np.eye(3))
-        finally:
-            PathConfig.set_base_dir(original)
+        PathConfig.set_base_dir(self.root)
+        CalibrationPointCsvDAO().insert(self.points(True))
+        restored = CalibrationPointCsvDAO().select(1)
+        self.assertEqual(restored, self.points(True))
+        np.testing.assert_allclose(restored.runtime_calibration()["homography"], np.eye(3))
 
     def test_documented_migration_preserves_legacy_and_refuses_existing_target(self):
-        original = PathConfig.BASE_DIR
-        try:
-            with tempfile.TemporaryDirectory() as directory:
-                root = Path(directory)
-                legacy, target = root / "legacy", root / "target"
-                (legacy / "calibration").mkdir(parents=True)
-                (legacy / "config").mkdir()
-                points_file = legacy / "calibration" / PathConfig.CALIBRATION_POINT_FILENAME
-                with points_file.open("w", newline="") as stream:
-                    writer = csv.writer(stream, delimiter=";")
-                    writer.writerow(CalibrationPoint.PROPERTIES[:8])
-                    writer.writerow([0, 0, 640, 0, 0, 480, 640, 480])
-                config = legacy / "config" / PathConfig.CONFIG_FILENAME
-                config.write_text("[synthetic]\nlanguage=en\n", encoding="utf-8")
-                before = {p.relative_to(legacy): p.read_bytes() for p in legacy.rglob("*") if p.is_file()}
-                copytree(legacy, target)
-                PathConfig.set_base_dir(target)
-                loaded = CalibrationPointCsvDAO().select(1)
-                self.assertEqual(loaded.capture_method, "unknown")
-                with self.assertRaisesRegex(ValueError, "provenance"):
-                    loaded.runtime_calibration()
-                settings = QSettings(str(target / "config" / PathConfig.CONFIG_FILENAME), QSettings.IniFormat)
-                self.assertEqual(settings.value("synthetic/language"), "en")
-                target_config = target / "config" / PathConfig.CONFIG_FILENAME
-                target_config.write_text("[synthetic]\nlanguage=pt\n", encoding="utf-8")
-                with self.assertRaises(FileExistsError):
-                    copytree(legacy, target)
-                self.assertEqual(target_config.read_text(), "[synthetic]\nlanguage=pt\n")
-                self.assertEqual(before, {p.relative_to(legacy): p.read_bytes() for p in legacy.rglob("*") if p.is_file()})
-                self.assertEqual(points_file.read_bytes(), (target / "calibration" / PathConfig.CALIBRATION_POINT_FILENAME).read_bytes())
-        finally:
-            PathConfig.set_base_dir(original)
+        legacy, target = self.root / "legacy", self.root / "target"
+        (legacy / "calibration").mkdir(parents=True)
+        (legacy / "config").mkdir()
+        points_file = legacy / "calibration" / PathConfig.CALIBRATION_POINT_FILENAME
+        with points_file.open("w", newline="") as stream:
+            writer = csv.writer(stream, delimiter=";")
+            writer.writerow(CalibrationPoint.PROPERTIES[:8])
+            writer.writerow([0, 0, 640, 0, 0, 480, 640, 480])
+        config = legacy / "config" / PathConfig.CONFIG_FILENAME
+        config.write_text("[synthetic]\nlanguage=en\n", encoding="utf-8")
+        before = {p.relative_to(legacy): p.read_bytes() for p in legacy.rglob("*") if p.is_file()}
+        copytree(legacy, target)
+        PathConfig.set_base_dir(target)
+        loaded = CalibrationPointCsvDAO().select(1)
+        self.assertEqual(loaded.capture_method, "unknown")
+        with self.assertRaisesRegex(ValueError, "provenance"):
+            loaded.runtime_calibration()
+        settings = QSettings(str(target / "config" / PathConfig.CONFIG_FILENAME), QSettings.IniFormat)
+        self.assertEqual(settings.value("synthetic/language"), "en")
+        target_config = target / "config" / PathConfig.CONFIG_FILENAME
+        target_config.write_text("[synthetic]\nlanguage=pt\n", encoding="utf-8")
+        with self.assertRaises(FileExistsError):
+            copytree(legacy, target)
+        self.assertEqual(target_config.read_text(), "[synthetic]\nlanguage=pt\n")
+        self.assertEqual(before, {p.relative_to(legacy): p.read_bytes() for p in legacy.rglob("*") if p.is_file()})
+        self.assertEqual(points_file.read_bytes(), (target / "calibration" / PathConfig.CALIBRATION_POINT_FILENAME).read_bytes())
 
 
 if __name__ == "__main__":
