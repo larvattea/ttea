@@ -218,7 +218,7 @@ def _inspect(archive: zipfile.ZipFile) -> tuple[dict, list[zipfile.ZipInfo]]:
     total = 0
     for entry in entries:
         if entry.orig_filename != entry.filename:
-            raise ValueError('ZIP filename contains a NUL byte')
+            raise ValueError('ZIP filename contains a NUL byte or backslash')
         if entry.is_dir() and entry.file_size:
             raise ValueError('Directory entries cannot contain data')
         name = _path(entry.filename[:-1] if entry.is_dir() else entry.filename)

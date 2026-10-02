@@ -110,8 +110,12 @@ class CartridgeBoundaryTest(unittest.TestCase):
         ]
         cases += [[(name, "bad")] for name in (
             "CON.txt", "COM¹.txt", "LPT²", "CONIN$", "CONOUT$",
-            "trailing.", "trailing ", "stream:part", "question?.txt", "back\\slash",
+            "trailing.", "trailing ", "stream:part", "question?.txt",
         )]
+        # zipfile rewrites "\\" to "/" on Windows unless the name is set after ZipInfo creation.
+        backslash = zipfile.ZipInfo("placeholder")
+        backslash.filename = "back\\slash"
+        cases.append([(backslash, "bad")])
         for entries in cases:
             with self.subTest(entries=entries), self.assertRaises(ValueError):
                 inspect_cartridge(self.archive(entries))
