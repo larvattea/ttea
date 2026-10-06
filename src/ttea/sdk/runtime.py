@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import importlib
 import json
+import os
 import signal
 import sys
 import threading
@@ -46,11 +47,22 @@ def run_game(project: Path, manifest: dict, *, simulation: bool = False,
         raise ValueError("max_frames must not be negative")
     profile = manifest["tracking_profile"]
     with ExitStack() as resources:
+        if config.get("frame_buffer"):
+            # Developer mode shows the frames in its own window.
+            os.environ["SDL_VIDEODRIVER"] = "dummy"
         pygame.init()
         resources.callback(pygame.quit)
         default_width, default_height = manifest.get("resolution", DEFAULT_RESOLUTION)
         size = (int(config.get("width", default_width)), int(config.get("height", default_height)))
         surface = pygame.display.set_mode(size)
+        frames_out = inputs = None
+        if config.get("frame_buffer"):
+            from .embedding import FrameWriter
+            frames_out = FrameWriter(Path(config["frame_buffer"]), size)
+            resources.callback(frames_out.close)
+        if config.get("input") == "stdin":
+            from .embedding import InputReader
+            inputs = InputReader(sys.stdin)
         language = config.get("language", config.get("lang", "en"))
         pygame.display.set_caption(localized(manifest.get("name", {}), language, manifest["id"]))
         if replay is not None:
@@ -116,6 +128,8 @@ def run_game(project: Path, manifest: dict, *, simulation: bool = False,
             while not context.stop_requested and (max_frames is None or frames < max_frames):
                 context.dt = clock.tick(int(config.get("fps", 60))) / 1000.0
                 context.elapsed += context.dt
+                if inputs is not None and not inputs.post(pygame):
+                    context.request_stop()
                 context.events = tuple(pygame.event.get())
                 for event in context.events:
                     if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
@@ -148,6 +162,8 @@ def run_game(project: Path, manifest: dict, *, simulation: bool = False,
                     game.update(context)
                 game.draw(context)
                 pygame.display.flip()
+                if frames_out is not None:
+                    frames_out.write(pygame.image.tobytes(surface, "RGBX"))
                 frames += 1
         finally:
             result = game.stop(context)

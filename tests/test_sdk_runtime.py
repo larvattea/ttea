@@ -3,10 +3,12 @@ import os
 from pathlib import Path
 import tempfile
 import unittest
+from unittest import mock
 
 os.environ.setdefault("SDL_VIDEODRIVER", "dummy")
 os.environ.setdefault("SDL_AUDIODRIVER", "dummy")
 
+from ttea.sdk.embedding import FrameReader
 from ttea.sdk.runtime import run_game
 from ttea.sdk.simulator import SimulatorProvider
 from ttea.sdk.tracking import Observation, Recording
@@ -86,6 +88,47 @@ class RuntimeLifecycleTest(unittest.TestCase):
             self.assertEqual(result["events"], ["start", "update", "draw", "pause", "draw",
                                                 "resume", "update", "draw", "stop"])
             self.assertEqual(result["draws"], [None, "user", None])
+
+    def test_embedded_runtime_takes_stdin_input_and_publishes_frames(self):
+        game = '''from ttea.sdk.api import Game
+import pygame
+
+class Embedded(Game):
+    def start(self, context):
+        self.seen = []
+    def update(self, context):
+        for event in context.events:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                self.seen.append(["mouse", list(event.pos), event.button])
+            elif event.type == pygame.KEYDOWN:
+                self.seen.append(["key", event.key, event.mod & pygame.KMOD_SHIFT != 0, event.unicode])
+                context.request_stop()
+    def draw(self, context):
+        context.surface.fill((12, 34, 56))
+    def stop(self, context):
+        return {"seen": self.seen}
+'''
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "embedded.py").write_text(game, encoding="utf-8")
+            manifest = {"id": "test.embedded", "tracking_profile": "body", "entrypoint": "embedded:Embedded"}
+            read_end, write_end = os.pipe()
+            with os.fdopen(read_end) as stdin, os.fdopen(write_end, "w") as messages, \
+                    mock.patch("sys.stdin", stdin):
+                messages.write(json.dumps({"type": "mouse_down", "pos": [3, 4], "button": 1}) + "\n")
+                messages.write(json.dumps({"type": "key_down", "key": "a", "text": "A", "mods": ["shift"]}) + "\n")
+                messages.flush()
+                result = run_game(root, manifest, simulation=True, max_frames=100000,
+                                  config={"fps": 0, "width": 32, "height": 24, "input": "stdin",
+                                          "frame_buffer": str(root / "frame.bin"),
+                                          "session_root": str(root / "sessions")})
+            self.assertEqual(result["seen"], [["mouse", [3, 4], 1], ["key", ord("a"), True, "A"]])
+            frames = FrameReader(root / "frame.bin")
+            width, height, pixels = frames.read()
+            frames.close()
+            self.assertEqual((width, height), (32, 24))
+            self.assertEqual(pixels[:4], bytes((12, 34, 56, 255)))
+            self.assertEqual(len(set(pixels[i:i + 4] for i in range(0, len(pixels), 4))), 1)
 
 
 if __name__ == "__main__":
