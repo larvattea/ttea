@@ -229,7 +229,11 @@ updates, retains drawing, and resumes after recovery unless the user paused.
 The developer panel edits all body/hand/face landmarks, presets, translation,
 rotation, disappearance, stale timestamps, and recordings. Face sliders and mesh
 geometry are synthetic, not validated physiological fixtures. Developer sessions
-use temporary storage and do not register participants or open cameras.
+use temporary storage and do not register participants. Synthetic is the default
+tracking source; selecting Camera opens the chosen device by name (system default
+first), runs the runtime's detector, previews the frame with the detected skeleton
+(low-visibility joints faded), and feeds those observations to the game. Frames
+are previewed only; recordings still contain observations, never video.
 
 ### Tracking and installation contracts
 

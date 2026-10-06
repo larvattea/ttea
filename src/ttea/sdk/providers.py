@@ -20,6 +20,7 @@ class HardwareProvider:
         self._cv2 = cv2
         self._mp = mp
         self._camera = None
+        self.frame = None
         self._detector = None
         self._last_timestamp_ms = -1
         filenames = {"body": "pose_landmarker_full.task", "hands": "hand_landmarker.task",
@@ -64,9 +65,10 @@ class HardwareProvider:
         ok, frame = self._camera.read()
         timestamp = time.monotonic()
         if not ok:
+            self.frame = None
             return Observation(self.profile, timestamp, present=False)
-        image = self._mp.Image(image_format=self._mp.ImageFormat.SRGB,
-                               data=self._cv2.cvtColor(frame, self._cv2.COLOR_BGR2RGB))
+        self.frame = self._cv2.cvtColor(frame, self._cv2.COLOR_BGR2RGB)
+        image = self._mp.Image(image_format=self._mp.ImageFormat.SRGB, data=self.frame)
         timestamp_ms = max(int(timestamp * 1000), self._last_timestamp_ms + 1)
         self._last_timestamp_ms = timestamp_ms
         result = self._detector.detect_for_video(image, timestamp_ms)

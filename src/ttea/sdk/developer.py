@@ -7,14 +7,68 @@ from pathlib import Path
 import subprocess
 import sys
 import tempfile
+import threading
+import time
 
-from PySide6.QtCore import QPointF, Qt, QTimer
-from PySide6.QtGui import QColor, QPainter, QPen
+from PySide6.QtCore import QPointF, QRectF, Qt, QTimer
+from PySide6.QtGui import QColor, QImage, QPainter, QPen
+from PySide6.QtMultimedia import QMediaDevices
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDoubleSpinBox, QFileDialog, QFormLayout, QHBoxLayout, QLabel, QMainWindow, QMessageBox, QPushButton, QSlider, QVBoxLayout, QWidget)
 
 from .cartridge import read_project
 from .simulator import BODY_EDGES, BODY_NAMES, EXPRESSIONS, HAND_EDGES, HAND_NAMES, SimulatorProvider, write_state
-from .tracking import Recording, ReplayProvider
+from .tracking import Observation, Recording, ReplayProvider
+
+LOW_VISIBILITY = .5
+
+
+def camera_devices():
+    """(name, OpenCV index, is system default) for each video input, in system order.
+
+    OpenCV's AVFoundation backend numbers macOS devices by sorted unique ID (so an iPhone
+    Continuity Camera can be index 0); other backends follow system enumeration order.
+    """
+    devices = list(QMediaDevices.videoInputs())
+    numbered = sorted(devices, key=lambda device: bytes(device.id()).decode()) if sys.platform == 'darwin' else devices
+    return [(device.description(), numbered.index(device), device.isDefault()) for device in devices]
+
+
+class CameraSource:
+    """Live camera detection on a worker thread; read() returns the latest observation without blocking.
+
+    Frames are only previewed in the panel; recordings still store observations, never video.
+    """
+    stale = False
+
+    def __init__(self, profile, camera_index):
+        from .providers import HardwareProvider
+        self.profile = profile
+        self.frame = None
+        self.error = None
+        self._provider = HardwareProvider(profile, camera_index=camera_index)
+        self._observation = Observation(profile, time.monotonic(), present=False, confidence_source='measured')
+        self._lock = threading.Lock()
+        self._running = True
+        self._thread = threading.Thread(target=self._run, name='tsdk-camera', daemon=True)
+        self._thread.start()
+
+    def _run(self):
+        try:
+            while self._running:
+                observation = self._provider.read()
+                with self._lock:
+                    self._observation, self.frame = observation, self._provider.frame
+        except Exception as exc:
+            self.error = exc
+
+    def read(self):
+        with self._lock:
+            return self._observation
+
+    def close(self):
+        self._running = False
+        self._thread.join()
+        self._provider.close()
 
 
 class LandmarkCanvas(QWidget):
@@ -25,26 +79,50 @@ class LandmarkCanvas(QWidget):
         self.setMinimumSize(540, 540)
         self.setToolTip('Drag any joint. Coordinates outside the border remain out of area.')
 
+    def area(self):
+        """Camera-normalized unit square on screen; with a camera frame, its aspect-fitted image."""
+        rect = QRectF(40, 40, self.width()-80, self.height()-80)
+        frame = self.panel.camera.frame if self.panel.camera else None
+        if frame is None:
+            return rect
+        height, width = frame.shape[:2]
+        scale = min(rect.width()/width, rect.height()/height)
+        fitted = QRectF(0, 0, width*scale, height*scale)
+        fitted.moveCenter(rect.center())
+        return fitted
+
     def point(self, landmark):
-        return QPointF(40 + landmark.x * (self.width()-80), 40 + landmark.y * (self.height()-80))
+        area = self.area()
+        return QPointF(area.x() + landmark.x * area.width(), area.y() + landmark.y * area.height())
 
     def paintEvent(self, event):
         painter = QPainter(self)
         painter.fillRect(self.rect(), QColor('#18202b'))
+        area = self.area()
+        camera = self.panel.camera
+        frame = camera.frame if camera else None
+        if frame is not None:
+            height, width = frame.shape[:2]
+            painter.drawImage(area, QImage(frame.data, width, height, 3*width, QImage.Format.Format_RGB888))
         painter.setPen(QPen(QColor('#64748b'),1))
-        painter.drawRect(40,40,self.width()-80,self.height()-80)
-        model = self.panel.provider
-        for group,points in model.observation.landmarks.items():
-            color = QColor('#5eead4' if group != 'right' else '#fbbf24')
-            if group in model.hidden or not model.observation.present:
-                color.setAlpha(65)
-            painter.setPen(QPen(color,1))
+        painter.drawRect(area)
+        observation = self.panel.observation()
+        for group,points in observation.landmarks.items():
+            base = QColor('#5eead4' if group != 'right' else '#fbbf24')
+            faded = (group in self.panel.provider.hidden and not camera) or not observation.present
             edges = BODY_EDGES if group == 'body' else (HAND_EDGES if group != 'face' else [])
+            def color(*indices):
+                result = QColor(base)
+                if faded or any(points[i].visibility is not None and points[i].visibility < LOW_VISIBILITY for i in indices):
+                    result.setAlpha(65)
+                return result
             for a,b in edges:
+                painter.setPen(QPen(color(a, b), 2 if camera else 1))
                 painter.drawLine(self.point(points[a]),self.point(points[b]))
+            painter.setPen(Qt.PenStyle.NoPen)
             for index,point in enumerate(points):
                 selected = group == self.panel.group.currentText() and index == self.panel.joint.currentIndex()
-                painter.setBrush(QColor('#f87171') if selected else color)
+                painter.setBrush(QColor('#f87171') if selected else color(index))
                 radius = 5 if selected else (2 if group == 'face' else 4)
                 painter.drawEllipse(self.point(point),radius,radius)
 
@@ -52,17 +130,21 @@ class LandmarkCanvas(QWidget):
         if event.button() != Qt.MouseButton.LeftButton:
             return
         group = self.panel.group.currentText()
-        points = self.panel.provider.observation.landmarks[group]
+        points = self.panel.observation().landmarks.get(group)
+        if not points:
+            return
         index = min(range(len(points)), key=lambda i:(self.point(points[i])-event.position()).manhattanLength())
         if (self.point(points[index])-event.position()).manhattanLength() < 25:
             self.panel.joint.setCurrentIndex(index)
-            self.dragging = True
-            self.mouseMoveEvent(event)
+            if not self.panel.camera:
+                self.dragging = True
+                self.mouseMoveEvent(event)
 
     def mouseMoveEvent(self, event):
         if self.dragging:
-            self.panel.coordinates[0].setValue((event.position().x()-40)/(self.width()-80))
-            self.panel.coordinates[1].setValue((event.position().y()-40)/(self.height()-80))
+            area = self.area()
+            self.panel.coordinates[0].setValue((event.position().x()-area.x())/area.width())
+            self.panel.coordinates[1].setValue((event.position().y()-area.y())/area.height())
 
     def mouseReleaseEvent(self, event):
         self.dragging = False
@@ -75,10 +157,13 @@ class DeveloperPanel(QMainWindow):
         self.state_path = state_path
         self.process = process
         self.project = project
+        self.manifest = manifest
+        self.camera = None
         self.recorder = None
+        self.recorded = None
         self.replaying = False
         self.loading = False
-        self.setWindowTitle(f"TSDK developer — {manifest['id']} — synthetic session")
+        self.synthetic_controls = []
         root = QWidget()
         self.setCentralWidget(root)
         layout = QHBoxLayout(root)
@@ -86,9 +171,20 @@ class DeveloperPanel(QMainWindow):
         layout.addWidget(self.canvas,1)
         controls = QVBoxLayout()
         layout.addLayout(controls)
-        controls.addWidget(QLabel('Synthetic data only · no camera\nDrag joints or edit exact coordinates.'))
+        self.info = QLabel()
+        controls.addWidget(self.info)
         form = QFormLayout()
         controls.addLayout(form)
+        self.source = QComboBox()
+        self.source.addItems(['Synthetic', 'Camera'])
+        self.source.setToolTip('Camera runs live detection and feeds it to the game; nothing is recorded unless you record observations.')
+        form.addRow('Tracking source', self.source)
+        self.camera_device = QComboBox()
+        for name, camera_index, default in camera_devices():
+            self.camera_device.addItem(name, camera_index)
+            if default:
+                self.camera_device.setCurrentIndex(self.camera_device.count()-1)
+        form.addRow('Camera', self.camera_device)
         self.group = QComboBox()
         self.group.addItems(list(self.provider.observation.landmarks))
         form.addRow('Subject', self.group)
@@ -104,6 +200,7 @@ class DeveloperPanel(QMainWindow):
             spin.setSingleStep(.01)
             spin.valueChanged.connect(self.edit_joint)
             self.coordinates.append(spin)
+            self.synthetic_controls.append(spin)
             form.addRow(label,spin)
         self.preset = QComboBox()
         self.preset.addItems({'body':['standing','arms_up','squat'],'hands':['open','fist','pinch'],'face':['neutral','smile','surprise','blink']}[self.provider.profile])
@@ -111,6 +208,7 @@ class DeveloperPanel(QMainWindow):
         button = QPushButton('Apply preset to selected subject')
         button.clicked.connect(self.apply_preset)
         controls.addWidget(button)
+        self.synthetic_controls += [self.preset, button]
         for axis,label in enumerate(('Move X','Move Y','Move Z')):
             row = QHBoxLayout()
             row.addWidget(QLabel(label))
@@ -118,6 +216,7 @@ class DeveloperPanel(QMainWindow):
                 button = QPushButton('−' if sign < 0 else '+')
                 button.clicked.connect(lambda checked=False,a=axis,s=sign:self.move_subject(a,s*.025))
                 row.addWidget(button)
+                self.synthetic_controls.append(button)
             controls.addLayout(row)
         for axis,label in enumerate(('Pitch','Yaw','Roll')):
             row = QHBoxLayout()
@@ -126,6 +225,7 @@ class DeveloperPanel(QMainWindow):
                 button = QPushButton('−5°' if sign < 0 else '+5°')
                 button.clicked.connect(lambda checked=False,a=axis,s=sign:self.rotate_subject(a,s*5))
                 row.addWidget(button)
+                self.synthetic_controls.append(button)
             controls.addLayout(row)
         self.present = QCheckBox('Participant present')
         self.present.setChecked(True)
@@ -138,6 +238,7 @@ class DeveloperPanel(QMainWindow):
         self.stale = QCheckBox('Freeze timestamp (stale input)')
         self.stale.toggled.connect(self.set_stale)
         controls.addWidget(self.stale)
+        self.synthetic_controls += [self.present, self.subject_present, self.stale]
         if self.provider.profile == 'face':
             self.expression = QComboBox()
             self.expression.addItems(EXPRESSIONS)
@@ -147,6 +248,7 @@ class DeveloperPanel(QMainWindow):
             form.addRow('Expression 0–1',self.expression_value)
             self.expression.currentTextChanged.connect(self.load_expression)
             self.expression_value.valueChanged.connect(self.set_expression)
+            self.synthetic_controls += [self.expression, self.expression_value]
         self.record_button = QPushButton('Record observations…')
         self.record_button.clicked.connect(self.toggle_record)
         controls.addWidget(self.record_button)
@@ -163,6 +265,9 @@ class DeveloperPanel(QMainWindow):
         self.group.currentTextChanged.connect(self.load_group)
         self.joint.currentIndexChanged.connect(self.load_joint)
         self.load_group()
+        self.source.currentIndexChanged.connect(self.set_source)
+        self.camera_device.currentIndexChanged.connect(self.change_camera)
+        self.show_source()
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.tick)
         self.timer.start(16)
@@ -179,11 +284,47 @@ class DeveloperPanel(QMainWindow):
         self.subject_present.blockSignals(False)
         self.load_joint()
 
+    def observation(self):
+        return self.camera.read() if self.camera else self.provider.observation
+
+    def change_camera(self):
+        if self.camera:
+            self.set_source(1)
+
+    def set_source(self, index):
+        if self.camera:
+            self.camera.close()
+            self.camera = None
+        if index == 1:
+            try:
+                camera_index = self.camera_device.currentData()
+                if camera_index is None:
+                    raise RuntimeError('No camera found')
+                self.camera = CameraSource(self.provider.profile, camera_index)
+            except Exception as exc:
+                QMessageBox.warning(self, 'Cannot open camera', str(exc))
+                self.source.blockSignals(True)
+                self.source.setCurrentIndex(0)
+                self.source.blockSignals(False)
+        self.show_source()
+        self.load_joint()
+
+    def show_source(self):
+        camera = self.camera is not None
+        self.setWindowTitle(f"TSDK developer — {self.manifest['id']} — {'camera' if camera else 'synthetic'} session")
+        self.info.setText('Live camera detection · click a joint to inspect it.' if camera else
+                          'Synthetic data only · no camera\nDrag joints or edit exact coordinates.')
+        for control in self.synthetic_controls:
+            control.setEnabled(not camera)
+        self.canvas.update()
+
     def load_joint(self):
         index = self.joint.currentIndex()
-        if index < 0:
+        points = self.observation().landmarks.get(self.group.currentText(), [])
+        if not 0 <= index < len(points):
+            self.canvas.update()
             return
-        point = self.provider.observation.landmarks[self.group.currentText()][index]
+        point = points[index]
         self.loading = True
         for spin,value in zip(self.coordinates,(point.x,point.y,point.z or 0.,point.visibility if point.visibility is not None else -1.)):
             spin.setValue(value)
@@ -243,13 +384,13 @@ class DeveloperPanel(QMainWindow):
             self.recorder = None
             self.record_button.setText('Record observations…')
             return
-        filename,_ = QFileDialog.getSaveFileName(self,'Record synthetic observations','','JSON Lines (*.jsonl)')
+        filename,_ = QFileDialog.getSaveFileName(self,'Record observations','','JSON Lines (*.jsonl)')
         if filename:
             self.recorder = Recording(Path(filename),self.provider.profile,calibration=None,config={})
             self.record_button.setText('Stop recording')
 
     def start_replay(self):
-        filename,_ = QFileDialog.getOpenFileName(self,'Replay synthetic observations','','JSON Lines (*.jsonl)')
+        filename,_ = QFileDialog.getOpenFileName(self,'Replay observations','','JSON Lines (*.jsonl)')
         if not filename:
             return
         try:
@@ -272,7 +413,7 @@ class DeveloperPanel(QMainWindow):
 
     def stop_replay(self):
         if self.replaying or self.process.poll() is not None:
-            write_state(self.state_path, self.provider)
+            write_state(self.state_path, self.camera or self.provider)
             self.restart_game()
         self.replaying = False
         self.record_button.setEnabled(True)
@@ -316,14 +457,23 @@ class DeveloperPanel(QMainWindow):
                 self.record_button.setText('Record observations…')
             return
         if not self.replaying:
-            observation = write_state(self.state_path,self.provider)
-            if self.recorder:
+            observation = write_state(self.state_path, self.camera or self.provider)
+            # The camera source repeats its latest observation until a new frame is detected.
+            if self.recorder and observation is not self.recorded:
                 self.recorder.write(observation)
+                self.recorded = observation
+        if self.camera:
+            if self.camera.error is not None:
+                self.status.setText(f'Camera failed: {self.camera.error}')
+            self.load_joint()
 
     def closeEvent(self, event):
         self.timer.stop()
         if self.recorder:
             self.recorder.close()
+        if self.camera:
+            self.camera.close()
+            self.camera = None
         self.stop_process()
         event.accept()
 
@@ -349,6 +499,8 @@ def run(project: Path) -> int:
             if panel is not None:
                 if panel.recorder:
                     panel.recorder.close()
+                if panel.camera:
+                    panel.camera.close()
                 panel.stop_process()
             elif process.poll() is None:
                 process.terminate()
