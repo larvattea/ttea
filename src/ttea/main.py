@@ -7,7 +7,6 @@ event loop.
 
 import os
 import sys
-from pathlib import Path
 
 os.environ["QT_LOGGING_RULES"] = "*.debug=false"
 
@@ -140,13 +139,7 @@ class App:
 
 
 def main() -> None:
-    """Launch a local TSDK project, or open the T-TEA console."""
-    current = Path.cwd()
-    for project in (current, *current.parents):
-        if (project / "ttea.toml").is_file():
-            from ttea.sdk.developer import run
-
-            sys.exit(run(project))
+    """Open the T-TEA console."""
     application = App()
     application.run()
 
