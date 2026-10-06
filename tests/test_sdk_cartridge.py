@@ -85,6 +85,15 @@ class CartridgeBoundaryTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             inspect_cartridge(self.archive([]))
 
+    def test_resolution_is_two_positive_pixel_sizes(self):
+        self.manifest["resolution"] = [800, 600]
+        self.assertEqual(inspect_cartridge(self.archive([]))["resolution"], [800, 600])
+        for resolution in ([800], [800, 0], [800.0, 600], [True, 600], "800x600", [800, 600, 1]):
+            with self.subTest(resolution=resolution):
+                self.manifest["resolution"] = resolution
+                with self.assertRaises(ValueError):
+                    inspect_cartridge(self.archive([]))
+
     def test_archive_resource_limits(self):
         cases = [
             ("MAX_FILES", 2, []),

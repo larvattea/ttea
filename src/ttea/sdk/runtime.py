@@ -14,6 +14,8 @@ from pathlib import Path
 from .api import GameContext, SessionStorage
 from .library import localized
 
+DEFAULT_RESOLUTION = (1280, 720)  # surface size when neither config nor ttea.toml sets one
+
 
 def load_manifest(project: Path) -> dict:
     from .cartridge import read_project, validate_manifest
@@ -46,7 +48,8 @@ def run_game(project: Path, manifest: dict, *, simulation: bool = False,
     with ExitStack() as resources:
         pygame.init()
         resources.callback(pygame.quit)
-        size = (int(config.get("width", 1280)), int(config.get("height", 720)))
+        default_width, default_height = manifest.get("resolution", DEFAULT_RESOLUTION)
+        size = (int(config.get("width", default_width)), int(config.get("height", default_height)))
         surface = pygame.display.set_mode(size)
         language = config.get("language", config.get("lang", "en"))
         pygame.display.set_caption(localized(manifest.get("name", {}), language, manifest["id"]))

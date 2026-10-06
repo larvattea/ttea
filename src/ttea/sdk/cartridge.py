@@ -85,7 +85,7 @@ def validate_manifest(manifest: dict, built: bool = False) -> dict:
         raise ValueError('Manifest must be an object')
     required = {'id', 'version', 'entrypoint', 'tracking_profile', 'game_api',
                 'requires_ttea', 'name', 'assets', 'licenses'}
-    allowed = required | {'description'}
+    allowed = required | {'description', 'resolution'}
     if built:
         required |= {'format_version', 'builder', 'build'}
         allowed |= {'format_version', 'builder', 'build'}
@@ -125,6 +125,12 @@ def validate_manifest(manifest: dict, built: bool = False) -> dict:
     result['name'] = _localized(result['name'], 'name')
     if 'description' in result:
         result['description'] = _localized(result['description'], 'description')
+    if 'resolution' in result:
+        resolution = result['resolution']
+        if (not isinstance(resolution, list) or len(resolution) != 2
+                or any(type(side) is not int or not 1 <= side <= 16384 for side in resolution)):
+            raise ValueError('resolution must be [width, height] in pixels')
+        result['resolution'] = list(resolution)
     for field in ('assets', 'licenses'):
         values = result[field]
         if not isinstance(values, list) or (field == 'licenses' and not values):

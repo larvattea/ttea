@@ -214,7 +214,9 @@ uv run tsdk build --release
 ```
 
 Author metadata in `ttea.toml` under `[game]`: `id`, `version`, `entrypoint`,
-`tracking_profile`, `game_api = 1`, `requires_ttea`, `assets`, and `licenses`.
+`tracking_profile`, `game_api = 1`, `requires_ttea`, `assets`, and `licenses`, plus
+optional `resolution = [width, height]`: the runtime surface size when the session
+config sets none (default 1280×720), and the suggested developer camera region.
 Localized strings live in `[game.name]` and optional `[game.description]`.
 The builder generates `manifest.json` with `format_version = 1`, exact installed
 `builder.version`, and `build.source_commit`/`build.dirty`. Local non-Git builds
