@@ -1,7 +1,7 @@
 # TSDK platform: remaining work and release gates
 
 Date: 2026-10-02  
-Scope: TTEA plus local `../gingadivina`, `../TSDK`, and `../kartea`.
+Scope: TTEA plus local `../gingadivina`, `../tsdk`, and `../kartea`.
 
 **TL;DR:** The local implementation gaps from the previous report are closed and pass synthetic checks in all four repositories.
 The release is still not accepted. The remaining gates are real-camera tracking, physical calibration, native CI, rights clearance, and publication permission.

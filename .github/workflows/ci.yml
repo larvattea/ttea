@@ -7,11 +7,11 @@ on:
   workflow_dispatch:
     inputs:
       builder_repository:
-        description: Authorized TSDK repository (owner/name); blank skips remote compatibility
+        description: Authorized tsdk repository (owner/name); blank skips remote compatibility
         required: false
         type: string
       builder_ref:
-        description: Exact TSDK commit to check
+        description: Exact tsdk commit to check
         required: false
         type: string
       game_repository:

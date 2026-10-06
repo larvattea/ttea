@@ -125,7 +125,7 @@ On first use, allow camera access in your system's privacy settings.
 
 ### TSDK game development
 
-`uv run dev` opens the console only. TSDK game developer mode lives in the local `../TSDK`
+`uv run dev` opens the console only. TSDK game developer mode lives in the local `../tsdk`
 repository: from a game checkout containing `ttea.toml`, run `uv run tsdk dev`, alongside
 `uv run tsdk check` and `uv run tsdk build`.
 

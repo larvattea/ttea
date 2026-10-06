@@ -9,7 +9,7 @@ No remote repository creation, pushes, or publication are authorized. Obtain exp
 
 | Decision | Contract |
 | --- | --- |
-| Repository layout | Four independent local repositories: TTEA, `../gingadivina`, `../TSDK`, and `../kartea`; remote creation/publication remains separate |
+| Repository layout | Four independent local repositories: TTEA, `../gingadivina`, `../tsdk`, and `../kartea`; remote creation/publication remains separate |
 | Flagship | GingaDivina is the reference consumer of TTEA and TSDK |
 | Cartridge | `.ttea` is a built ZIP container with portable Python source, assets, manifest, and license notices |
 | Dependencies | Games use platform-provided runtime libraries only; no game-specific runtime dependency installation |
@@ -17,7 +17,7 @@ No remote repository creation, pushes, or publication are authorized. Obtain exp
 | Participants | One participant per session: one body, two hands, or one face; one tracking profile active at a time |
 | Initial platforms | Windows x86-64, macOS Apple Silicon, and Linux x86-64 |
 | Deferred platforms | Linux ARM64/Raspberry Pi; hardware and OS selection do not block initial implementation |
-| Version provenance | Every cartridge records the exact TSDK version automatically, similar to Unity build metadata |
+| Version provenance | Every cartridge records the exact TSDK SDK version automatically, similar to Unity build metadata |
 
 ## Source repository and history preservation
 
@@ -44,11 +44,11 @@ Establish a runnable behavioral baseline before migration.
 | TTEA | Console UI, public game API, cartridge schema/loader, runtime (including simulation, replay, and embedded frame/input streaming), hardware, tracking, calibration, installation, session storage | Individual game mechanics, developer mode |
 | GingaDivina | Gameplay, assets, game configuration, scoring, contract-conforming lifecycle callbacks | Camera/model initialization, calibration, platform lifecycle, dependency installation |
 | KarTEA | Driving-game mechanics, assets, cartridge configuration, and lifecycle callbacks | Platform internals, camera ownership, registered-participant CSV implementation |
-| TSDK | Project template, packaging CLI, contract validation, reusable CI workflow, developer mode (`tsdk dev`) | A second runtime or duplicate tracking implementation |
+| TSDK (`tsdk`) | Project template, packaging CLI, contract validation, reusable CI workflow, developer mode (`tsdk dev`) | A second runtime or duplicate tracking implementation |
 
 The runtime API and cartridge schema remain authoritative in TTEA.
 TSDK consumes them; TTEA does not depend on its build tools.
-Games depend on the `t-tea` distribution. TSDK is a development dependency.
+Games depend on the `t-tea` distribution. `tsdk` is a development dependency.
 Separate releases remain compatible through versioned contracts and cross-repository CI, not matching release numbers.
 
 ## Runtime ownership and injection
@@ -97,7 +97,7 @@ Simulator success does not establish ChArUco detection, physical projection alig
 
 ## Developer workflow
 
-Implemented commands from a game checkout with sibling TTEA/TSDK development dependencies:
+Implemented commands from a game checkout with sibling TTEA/tsdk development dependencies:
 
 ```text
 uv run tsdk dev     # TSDK developer mode, browsing from this game's checkout
@@ -123,7 +123,7 @@ Use one authored metadata source and generate release metadata rather than maint
 
 | Field | Meaning |
 | --- | --- |
-| `builder.version` | Exact installed TSDK version used for the build |
+| `builder.version` | Exact installed `tsdk` version used for the build |
 | `build.source_commit` | Source revision; distinguish dirty local builds |
 | `format_version` | Cartridge container format version |
 | `game_api` | Version of the game/runtime contract |
@@ -179,7 +179,7 @@ Current TTEA launches scripts/executables with player, professional, and languag
 Its metadata loader scans local game folders; it does not download games.
 KarTEA constructs its own camera/detector. Ginga metadata points to a missing `Gingada.Divina.exe`.
 Source-layout assumptions in resource/data paths need attention before normal wheel-based consumption.
-Public PyPI JSON requests for `t-tea` and `tsdk` returned 404 during planning; publication/naming must be established before registry-based usage.
+Public PyPI JSON requests for `t-tea` and `tsdk` return 404; publication/naming must be established before registry-based usage.
 
 Local catalog and homography smoke probes ran successfully without exercising physical hardware.
 The homography probe mapped camera points to `(0,0)`, `(400,300)`, and `(800,600)`.
@@ -197,7 +197,7 @@ The initial release need not adopt the candidate MediaPipe/Python upgrade merely
 
 ## Local implementation and operation
 
-The independent local repositories are `../gingadivina`, `../TSDK`, and `../kartea`.
+The independent local repositories are `../gingadivina`, `../tsdk`, and `../kartea`.
 GingaDivina retains upstream history; migration changes are separate working-tree changes.
 No remote repository was created, pushed, or published.
 

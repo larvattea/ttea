@@ -11,7 +11,7 @@ All work is committed locally; nothing is pushed.
 | Repository | Role | State |
 | --- | --- | --- |
 | `ttea` | Console, runtime, tracking, calibration, cartridge library | 38 tests pass, also from an installed wheel |
-| `../TSDK` | `tsdk check`, `tsdk build`, reusable game CI | 5 release tests pass |
+| `../tsdk` | `tsdk check`, `tsdk build`, reusable game CI | 5 release tests pass |
 | `../gingadivina` | Flagship dance game; upstream history preserved | 3 mechanics tests pass |
 | `../kartea` | Driving game extracted from TTEA | 6 gameplay tests pass |
 
@@ -30,7 +30,7 @@ All work is committed locally; nothing is pushed.
 
 ```text
 ttea          38 tests OK (source and installed wheel)
-TSDK    5 tests OK; clean release stamps exact Git HEAD
+TSDK      5 tests OK; clean release stamps exact Git HEAD
 gingadivina    3 tests OK; mypy + ruff clean; cartridge runs installed
 kartea         6 tests OK; mypy + ruff clean; 2 registered sessions -> 2 CSV records
 panels         body/hands/face: edit -> game, record -> replay, clean exit
