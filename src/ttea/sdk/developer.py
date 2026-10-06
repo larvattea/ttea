@@ -1,4 +1,4 @@
-"""Launch a source game immediately beside a synthetic tracking editor."""
+"""Full-screen developer window: the game on the left two thirds, tracking tools on the right third."""
 from __future__ import annotations
 
 from dataclasses import replace
@@ -11,15 +11,47 @@ import threading
 import time
 
 from PySide6.QtCore import QPointF, QRectF, Qt, QTimer
-from PySide6.QtGui import QColor, QImage, QPainter, QPen
+from PySide6.QtGui import QColor, QImage, QKeySequence, QPainter, QPen, QShortcut
 from PySide6.QtMultimedia import QMediaDevices
-from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDoubleSpinBox, QFileDialog, QFormLayout, QHBoxLayout, QLabel, QMainWindow, QMessageBox, QPushButton, QSlider, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDoubleSpinBox, QFileDialog, QFormLayout, QFrame,
+                               QHBoxLayout, QLabel, QMainWindow, QMenu, QMessageBox, QPushButton, QScrollArea,
+                               QSizePolicy, QSlider, QSpinBox, QVBoxLayout, QWidget)
 
-from .cartridge import read_project
-from .simulator import BODY_EDGES, BODY_NAMES, EXPRESSIONS, HAND_EDGES, HAND_NAMES, SimulatorProvider, write_state
-from .tracking import Observation, Recording, ReplayProvider
+from .cartridge import extract_cartridge
+from .embedding import FrameReader
+from .runtime import DEFAULT_RESOLUTION, load_manifest
+from .simulator import (BODY_EDGES, BODY_NAMES, EXPRESSIONS, HAND_EDGES, HAND_NAMES, PALM, SimulatorProvider,
+                        palm_centre, pointing_down_fingertip, write_state)
+from .tracking import Landmark, Observation, Recording, ReplayProvider
 
 LOW_VISIBILITY = .5
+PROFILES = {'body': 'Body', 'face': 'Face', 'hands': 'Hands'}
+NOSE_TIP = 1  # MediaPipe face mesh vertex
+# Camera controls that can drive a body game: label, MediaPipe model, and the landmarks
+# drawn enlarged in the preview because they move the feet.
+CONTROLS = {'body': ('Body', 'body', ()), 'fingers': ('Hands (index fingers down)', 'hands', (8,)),
+            'palms': ('Whole hands', 'hands', PALM), 'face': ('Face (nose)', 'face', (NOSE_TIP,))}
+# Centre of the camera region that spans the whole game at sensitivity 1; its size is the
+# editable Camera region (camera pixels), suggested from the game resolution. Fingers pointing
+# down hang below the fists, so their region sits low; a palm centre has fingers above, wrist below.
+REGION_CENTRE = {'fingers': (.5, .675), 'palms': (.5, .55), 'face': (.5, .5)}
+# Default gain around the region centre per control; a nose moves far less than a hand.
+SENSITIVITY = {'fingers': 1., 'palms': 1., 'face': 2.5}
+SYNTHETIC, PUPPET, CAMERA = range(3)
+PUPPET_KEYS = {Qt.Key.Key_A: 'left', Qt.Key.Key_D: 'right'}
+PRESETS = {'body': ['standing', 'arms_up', 'squat'], 'hands': ['open', 'fist', 'pinch'],
+           'face': ['neutral', 'smile', 'surprise', 'blink']}
+MOUSE_BUTTONS = {Qt.MouseButton.LeftButton: 1, Qt.MouseButton.MiddleButton: 2, Qt.MouseButton.RightButton: 3}
+MODIFIERS = {Qt.KeyboardModifier.ShiftModifier: 'shift', Qt.KeyboardModifier.ControlModifier: 'ctrl',
+             Qt.KeyboardModifier.AltModifier: 'alt', Qt.KeyboardModifier.MetaModifier: 'meta'}
+# Qt keys outside printable ASCII, by pygame key name.
+KEYS = {Qt.Key.Key_Escape: 'escape', Qt.Key.Key_Return: 'return', Qt.Key.Key_Enter: 'return',
+        Qt.Key.Key_Space: 'space', Qt.Key.Key_Tab: 'tab', Qt.Key.Key_Backspace: 'backspace',
+        Qt.Key.Key_Delete: 'delete', Qt.Key.Key_Insert: 'insert', Qt.Key.Key_Home: 'home', Qt.Key.Key_End: 'end',
+        Qt.Key.Key_PageUp: 'page up', Qt.Key.Key_PageDown: 'page down', Qt.Key.Key_Left: 'left',
+        Qt.Key.Key_Right: 'right', Qt.Key.Key_Up: 'up', Qt.Key.Key_Down: 'down', Qt.Key.Key_Shift: 'left shift',
+        Qt.Key.Key_Control: 'left ctrl', Qt.Key.Key_Alt: 'left alt', Qt.Key.Key_Meta: 'left meta',
+        **{getattr(Qt.Key, f'Key_F{n}'): f'f{n}' for n in range(1, 13)}}
 
 
 def camera_devices():
@@ -31,6 +63,56 @@ def camera_devices():
     devices = list(QMediaDevices.videoInputs())
     numbered = sorted(devices, key=lambda device: bytes(device.id()).decode()) if sys.platform == 'darwin' else devices
     return [(device.description(), numbered.index(device), device.isDefault()) for device in devices]
+
+
+def key_name(event):
+    if event.key() in KEYS:
+        return KEYS[event.key()]
+    if 0x20 < event.key() <= 0x7e:
+        return chr(event.key()).lower()
+    return None
+
+
+def mirrored(observation):
+    """Selfie view of camera landmarks: x flipped, so the user's right is the image's right."""
+    return replace(observation, landmarks={group: [Landmark(1-p.x, p.y, p.z, p.visibility) for p in points]
+                                           for group, points in observation.landmarks.items()})
+
+
+def to_screen(x, y, region, sensitivity=1.):
+    """Camera-normalized point -> game-normalized point, scaled about the region centre and clamped.
+
+    At sensitivity 1 the region spans the whole game.
+    """
+    left, top, right, bottom = region
+    return tuple(min(max(.5+((value-low)/(high-low)-.5)*sensitivity, 0.), 1.)
+                 for value, low, high in ((x, left, right), (y, top, bottom)))
+
+
+class GameSpace:
+    """The camera-driven body as the game receives it.
+
+    The panel poses the body in camera coordinates (feet under the fingertips or nose); the
+    game gets the same pose translated so its feet centre maps through the camera region.
+    """
+
+    def __init__(self, panel):
+        self.panel = panel
+
+    @property
+    def stale(self):
+        return self.panel.provider.stale
+
+    def read(self):
+        provider = self.panel.provider
+        control = self.panel.control.currentData()
+        (lx, ly), (rx, ry) = provider.foot('left'), provider.foot('right')
+        cx, cy = (lx+rx)/2, (ly+ry)/2
+        x, y = to_screen(cx, cy, self.panel.camera_region(), self.panel.sensitivity[control])
+        observation = provider.read()
+        landmarks = {group: [Landmark(p.x+x-cx, p.y+y-cy, p.z, p.visibility) for p in points]
+                     for group, points in observation.landmarks.items()}
+        return replace(observation, landmarks=landmarks)
 
 
 class CameraSource:
@@ -71,20 +153,98 @@ class CameraSource:
         self._provider.close()
 
 
+class GameView(QWidget):
+    """Shows the runtime's frames, aspect-fitted, and forwards mouse and keyboard input to it."""
+
+    def __init__(self, panel):
+        super().__init__()
+        self.panel = panel
+        self.image = None
+        self.pixels = None
+        self.message = ''
+        self.last = (0, 0)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
+        self.setMouseTracking(True)
+        self.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Ignored)
+
+    def show_frame(self, width, height, pixels):
+        self.pixels = pixels
+        self.image = QImage(pixels, width, height, 4*width, QImage.Format.Format_RGBX8888)
+        self.update()
+
+    def clear(self, message):
+        self.image = self.pixels = None
+        self.message = message
+        self.update()
+
+    def target(self):
+        size = self.image.size().scaled(self.size(), Qt.AspectRatioMode.KeepAspectRatio)
+        rect = QRectF(0, 0, size.width(), size.height())
+        rect.moveCenter(QRectF(self.rect()).center())
+        return rect
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.fillRect(self.rect(), QColor('#000000'))
+        if self.image is None:
+            painter.setPen(QColor('#94a3b8'))
+            painter.drawText(self.rect(), Qt.AlignmentFlag.AlignCenter, self.message)
+            return
+        painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform)
+        painter.drawImage(self.target(), self.image)
+
+    def game_position(self, event):
+        rect = self.target()
+        x = (event.position().x()-rect.x())*self.image.width()/rect.width()
+        y = (event.position().y()-rect.y())*self.image.height()/rect.height()
+        return (min(max(int(x), 0), self.image.width()-1), min(max(int(y), 0), self.image.height()-1))
+
+    def mouseMoveEvent(self, event):
+        if self.image is None:
+            return
+        position = self.game_position(event)
+        buttons = [int(bool(event.buttons() & button)) for button in MOUSE_BUTTONS]
+        self.panel.send({'type': 'mouse_motion', 'pos': position,
+                         'rel': (position[0]-self.last[0], position[1]-self.last[1]), 'buttons': buttons})
+        self.last = position
+
+    def mousePressEvent(self, event):
+        self.setFocus()
+        self.send_button(event, 'mouse_down')
+
+    def mouseReleaseEvent(self, event):
+        self.send_button(event, 'mouse_up')
+
+    def send_button(self, event, kind):
+        if self.image is not None and event.button() in MOUSE_BUTTONS:
+            self.last = self.game_position(event)
+            self.panel.send({'type': kind, 'pos': self.last, 'button': MOUSE_BUTTONS[event.button()]})
+
+    def keyPressEvent(self, event):
+        self.panel.forward_key(event, 'key_down')
+
+    def keyReleaseEvent(self, event):
+        self.panel.forward_key(event, 'key_up')
+
+
 class LandmarkCanvas(QWidget):
     def __init__(self, panel):
         super().__init__()
         self.panel = panel
         self.dragging = False
-        self.setMinimumSize(540, 540)
-        self.setToolTip('Drag any joint. Coordinates outside the border remain out of area.')
+        self.setMinimumSize(200, 200)
+        self.setMouseTracking(True)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
 
     def area(self):
         """Camera-normalized unit square on screen; with a camera frame, its aspect-fitted image."""
-        rect = QRectF(40, 40, self.width()-80, self.height()-80)
+        rect = QRectF(16, 16, self.width()-32, self.height()-32)
         frame = self.panel.camera.frame if self.panel.camera else None
         if frame is None:
-            return rect
+            side = min(rect.width(), rect.height())
+            square = QRectF(0, 0, side, side)
+            square.moveCenter(rect.center())
+            return square
         height, width = frame.shape[:2]
         scale = min(rect.width()/width, rect.height()/height)
         fitted = QRectF(0, 0, width*scale, height*scale)
@@ -103,28 +263,41 @@ class LandmarkCanvas(QWidget):
         frame = camera.frame if camera else None
         if frame is not None:
             height, width = frame.shape[:2]
-            painter.drawImage(area, QImage(frame.data, width, height, 3*width, QImage.Format.Format_RGB888))
+            image = QImage(frame.data, width, height, 3*width, QImage.Format.Format_RGB888)
+            # Driving controls use a selfie view so moving right moves the body right.
+            painter.drawImage(area, image.flipped(Qt.Orientation.Horizontal) if self.panel.driving else image)
         painter.setPen(QPen(QColor('#64748b'),1))
         painter.drawRect(area)
-        observation = self.panel.observation()
-        for group,points in observation.landmarks.items():
-            base = QColor('#5eead4' if group != 'right' else '#fbbf24')
-            faded = (group in self.panel.provider.hidden and not camera) or not observation.present
-            edges = BODY_EDGES if group == 'body' else (HAND_EDGES if group != 'face' else [])
-            def color(*indices):
-                result = QColor(base)
-                if faded or any(points[i].visibility is not None and points[i].visibility < LOW_VISIBILITY for i in indices):
-                    result.setAlpha(65)
-                return result
-            for a,b in edges:
-                painter.setPen(QPen(color(a, b), 2 if camera else 1))
-                painter.drawLine(self.point(points[a]),self.point(points[b]))
-            painter.setPen(Qt.PenStyle.NoPen)
-            for index,point in enumerate(points):
-                selected = group == self.panel.group.currentText() and index == self.panel.joint.currentIndex()
-                painter.setBrush(QColor('#f87171') if selected else color(index))
-                radius = 5 if selected else (2 if group == 'face' else 4)
-                painter.drawEllipse(self.point(point),radius,radius)
+        if self.panel.driving:
+            left, top, right, bottom = self.panel.camera_region()
+            painter.setPen(QPen(QColor('#c4b5fd'), 1, Qt.PenStyle.DashLine))
+            painter.drawRect(QRectF(area.x()+left*area.width(), area.y()+top*area.height(),
+                                    (right-left)*area.width(), (bottom-top)*area.height()))
+        driving = self.panel.driving
+        # When hands or a face drive the body, draw the detection (violet, control points enlarged) under it.
+        layers = [(mirrored(camera.read()), True)] if driving else []
+        layers.append((self.panel.observation(), False))
+        detected = camera is not None and not driving
+        for observation, driver in layers:
+            for group,points in observation.landmarks.items():
+                base = QColor('#c4b5fd' if driver else ('#5eead4' if group != 'right' else '#fbbf24'))
+                faded = (group in self.panel.provider.hidden and not driver and not detected) or not observation.present
+                edges = BODY_EDGES if group == 'body' else (HAND_EDGES if group != 'face' else [])
+                def color(*indices):
+                    result = QColor(base)
+                    if faded or any(points[i].visibility is not None and points[i].visibility < LOW_VISIBILITY for i in indices):
+                        result.setAlpha(65)
+                    return result
+                for a,b in edges:
+                    painter.setPen(QPen(color(a, b), 2 if camera else 1))
+                    painter.drawLine(self.point(points[a]),self.point(points[b]))
+                painter.setPen(Qt.PenStyle.NoPen)
+                for index,point in enumerate(points):
+                    selected = not driver and group == self.panel.group.currentText() and index == self.panel.joint.currentIndex()
+                    painter.setBrush(QColor('#f87171') if selected else color(index))
+                    control = driver and index in CONTROLS[self.panel.control.currentData()][2]
+                    radius = 5 if selected or control else (2 if group == 'face' else 4)
+                    painter.drawEllipse(self.point(point),radius,radius)
 
     def mousePressEvent(self, event):
         if event.button() != Qt.MouseButton.LeftButton:
@@ -136,48 +309,113 @@ class LandmarkCanvas(QWidget):
         index = min(range(len(points)), key=lambda i:(self.point(points[i])-event.position()).manhattanLength())
         if (self.point(points[index])-event.position()).manhattanLength() < 25:
             self.panel.joint.setCurrentIndex(index)
-            if not self.panel.camera:
+            if self.panel.source.currentIndex() == SYNTHETIC:
                 self.dragging = True
                 self.mouseMoveEvent(event)
 
     def mouseMoveEvent(self, event):
+        area = self.area()
+        x, y = (event.position().x()-area.x())/area.width(), (event.position().y()-area.y())/area.height()
         if self.dragging:
-            area = self.area()
-            self.panel.coordinates[0].setValue((event.position().x()-area.x())/area.width())
-            self.panel.coordinates[1].setValue((event.position().y()-area.y())/area.height())
+            self.panel.coordinates[0].setValue(x)
+            self.panel.coordinates[1].setValue(y)
+        elif self.panel.puppet:
+            self.panel.puppet_to(x, y)
 
     def mouseReleaseEvent(self, event):
         self.dragging = False
 
+    def enterEvent(self, event):
+        # Hovering the skeleton takes A/D; leaving hands the keyboard back to the game.
+        if self.panel.puppet:
+            self.setFocus()
+
+    def leaveEvent(self, event):
+        if self.panel.puppet and self.hasFocus():
+            self.panel.game_view.setFocus()
+
+    def keyPressEvent(self, event):
+        if not self.puppet_key(event, True):
+            self.panel.forward_key(event, 'key_down')
+
+    def keyReleaseEvent(self, event):
+        if not self.puppet_key(event, False):
+            self.panel.forward_key(event, 'key_up')
+
+    def puppet_key(self, event, down):
+        """In mouse + keyboard mode A/D hold the left/right foot (or hand); the game never sees them."""
+        side = PUPPET_KEYS.get(event.key())
+        if not self.panel.puppet or side is None:
+            return False
+        if event.isAutoRepeat():
+            return True
+        if down:
+            self.panel.held.add(side)
+        else:
+            self.panel.held.discard(side)
+        return True
+
+    def focusOutEvent(self, event):
+        self.panel.held.clear()
+        super().focusOutEvent(event)
+
 
 class DeveloperPanel(QMainWindow):
-    def __init__(self, project, manifest, state_path, process):
+    def __init__(self, workdir, project):
         super().__init__()
-        self.provider = SimulatorProvider(manifest['tracking_profile'])
-        self.state_path = state_path
-        self.process = process
-        self.project = project
-        self.manifest = manifest
+        self.workdir = workdir
+        self.state_path = workdir/'simulation.json'
+        self.project = project.resolve()  # Load game starts browsing here; nothing loads at startup.
+        self.manifest = None
+        self.process = None
+        self.frames = None
+        self.launches = 0
+        self.cartridges = 0
+        self.replay = None
+        self.profile = 'body'
+        self.providers = {}
         self.camera = None
+        self.driven = None
+        self.sensitivity = dict(SENSITIVITY)
+        self.game_space = GameSpace(self)
+        self.puppet = True
+        self.held = set()
         self.recorder = None
         self.recorded = None
-        self.replaying = False
         self.loading = False
         self.synthetic_controls = []
         root = QWidget()
         self.setCentralWidget(root)
         layout = QHBoxLayout(root)
-        self.canvas = LandmarkCanvas(self)
-        layout.addWidget(self.canvas,1)
-        controls = QVBoxLayout()
-        layout.addLayout(controls)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.setSpacing(0)
+        self.game_view = GameView(self)
+        layout.addWidget(self.game_view, 2)
+        side = QWidget()
+        side.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Preferred)
+        layout.addWidget(side, 1)
+        column = QVBoxLayout(side)
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setFrameShape(QFrame.Shape.NoFrame)
+        scroll.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        column.addWidget(scroll, 1)
+        content = QWidget()
+        scroll.setWidget(content)
+        controls = QVBoxLayout(content)
+        self.title = QLabel()
+        self.title.setWordWrap(True)
+        controls.addWidget(self.title)
         self.info = QLabel()
+        self.info.setWordWrap(True)
         controls.addWidget(self.info)
-        form = QFormLayout()
+        self.form = form = QFormLayout()
         controls.addLayout(form)
         self.source = QComboBox()
-        self.source.addItems(['Synthetic', 'Camera'])
-        self.source.setToolTip('Camera runs live detection and feeds it to the game; nothing is recorded unless you record observations.')
+        self.source.addItems(['Synthetic', 'Mouse + keyboard', 'Camera'])
+        self.source.setCurrentIndex(PUPPET)
+        self.source.setToolTip('Synthetic: edit joints directly. Mouse + keyboard: the mouse over the skeleton preview moves the body, A/D hold a foot. '
+                               'Camera: live detection. Nothing is recorded unless you record observations.')
         form.addRow('Tracking source', self.source)
         self.camera_device = QComboBox()
         for name, camera_index, default in camera_devices():
@@ -185,8 +423,38 @@ class DeveloperPanel(QMainWindow):
             if default:
                 self.camera_device.setCurrentIndex(self.camera_device.count()-1)
         form.addRow('Camera', self.camera_device)
+        self.control = QComboBox()
+        for control, (label, _, _) in CONTROLS.items():
+            self.control.addItem(label, control)
+        self.control.setToolTip('What the camera watches to move the body skeleton: your body, both index fingers '
+                                'pointing down or both whole hands (one per foot), or your nose (the centre of both feet).')
+        form.addRow('Camera control', self.control)
+        self.sensitivity_box = QDoubleSpinBox()
+        self.sensitivity_box.setRange(.5, 6.)
+        self.sensitivity_box.setSingleStep(.1)
+        self.sensitivity_box.setDecimals(1)
+        self.sensitivity_box.setToolTip('Gain around the centre of the dashed camera region. At 1 the region spans '
+                                        'the whole game; raise it when the hand or nose cannot reach the game edges.')
+        self.sensitivity_box.valueChanged.connect(self.set_sensitivity)
+        form.addRow('Camera sensitivity', self.sensitivity_box)
+        self.frame_size = DEFAULT_RESOLUTION  # camera pixels, updated from live frames
+        self.region = QWidget()
+        row = QHBoxLayout(self.region)
+        row.setContentsMargins(0, 0, 0, 0)
+        self.region_width, self.region_height = QSpinBox(), QSpinBox()
+        for spin, size in ((self.region_width, self.frame_size[0]), (self.region_height, self.frame_size[1])):
+            spin.setRange(16, size)
+            spin.setSuffix(' px')
+        row.addWidget(self.region_width)
+        row.addWidget(QLabel('×'))
+        row.addWidget(self.region_height)
+        self.region.setToolTip('Size of the dashed camera region (camera pixels) that spans the whole game at '
+                               'sensitivity 1. Suggested from the game resolution, scaled down to fit the camera.')
+        form.addRow('Camera region', self.region)
+        self.suggest_region()
+        for spin in (self.region_width, self.region_height):
+            spin.valueChanged.connect(lambda value: self.canvas.update())
         self.group = QComboBox()
-        self.group.addItems(list(self.provider.observation.landmarks))
         form.addRow('Subject', self.group)
         self.joint = QComboBox()
         form.addRow('Joint / mesh vertex',self.joint)
@@ -203,12 +471,19 @@ class DeveloperPanel(QMainWindow):
             self.synthetic_controls.append(spin)
             form.addRow(label,spin)
         self.preset = QComboBox()
-        self.preset.addItems({'body':['standing','arms_up','squat'],'hands':['open','fist','pinch'],'face':['neutral','smile','surprise','blink']}[self.provider.profile])
         form.addRow('Preset',self.preset)
+        self.expression = QComboBox()
+        self.expression.addItems(EXPRESSIONS)
+        form.addRow('Expression coefficient',self.expression)
+        self.expression_value = QSlider(Qt.Orientation.Horizontal)
+        self.expression_value.setRange(0,100)
+        form.addRow('Expression 0–1',self.expression_value)
+        self.expression.currentTextChanged.connect(self.load_expression)
+        self.expression_value.valueChanged.connect(self.set_expression)
         button = QPushButton('Apply preset to selected subject')
         button.clicked.connect(self.apply_preset)
         controls.addWidget(button)
-        self.synthetic_controls += [self.preset, button]
+        self.synthetic_controls += [self.preset, button, self.expression, self.expression_value]
         for axis,label in enumerate(('Move X','Move Y','Move Z')):
             row = QHBoxLayout()
             row.addWidget(QLabel(label))
@@ -239,16 +514,6 @@ class DeveloperPanel(QMainWindow):
         self.stale.toggled.connect(self.set_stale)
         controls.addWidget(self.stale)
         self.synthetic_controls += [self.present, self.subject_present, self.stale]
-        if self.provider.profile == 'face':
-            self.expression = QComboBox()
-            self.expression.addItems(EXPRESSIONS)
-            form.addRow('Expression coefficient',self.expression)
-            self.expression_value = QSlider(Qt.Orientation.Horizontal)
-            self.expression_value.setRange(0,100)
-            form.addRow('Expression 0–1',self.expression_value)
-            self.expression.currentTextChanged.connect(self.load_expression)
-            self.expression_value.valueChanged.connect(self.set_expression)
-            self.synthetic_controls += [self.expression, self.expression_value]
         self.record_button = QPushButton('Record observations…')
         self.record_button.clicked.connect(self.toggle_record)
         controls.addWidget(self.record_button)
@@ -258,19 +523,107 @@ class DeveloperPanel(QMainWindow):
         button = QPushButton('Return to live simulation')
         button.clicked.connect(self.stop_replay)
         controls.addWidget(button)
-        self.status = QLabel('Live simulation')
-        self.status.setWordWrap(True)
-        controls.addWidget(self.status)
         controls.addStretch()
+        self.canvas = LandmarkCanvas(self)
+        column.addWidget(self.canvas, 1)
+        self.status = QLabel()
+        self.status.setWordWrap(True)
+        column.addWidget(self.status)
+        buttons = QHBoxLayout()
+        column.addLayout(buttons)
+        load = QPushButton('Load game')
+        menu = QMenu(load)
+        menu.addAction('Project folder…', self.load_folder)
+        menu.addAction('Cartridge (.ttea)…', self.load_cartridge)
+        load.setMenu(menu)
+        buttons.addWidget(load)
+        self.restart_button = QPushButton('Restart game')
+        self.restart_button.clicked.connect(self.restart_game)
+        buttons.addWidget(self.restart_button)
+        self.stop_button = QPushButton('Stop game')
+        self.stop_button.clicked.connect(self.stop_game)
+        buttons.addWidget(self.stop_button)
+        self.exit_button = QPushButton('Exit')
+        self.exit_button.clicked.connect(self.close)
+        buttons.addWidget(self.exit_button)
+        QShortcut(QKeySequence(QKeySequence.StandardKey.Quit), self, self.close)
         self.group.currentTextChanged.connect(self.load_group)
         self.joint.currentIndexChanged.connect(self.load_joint)
-        self.load_group()
         self.source.currentIndexChanged.connect(self.set_source)
         self.camera_device.currentIndexChanged.connect(self.change_camera)
-        self.show_source()
+        self.control.currentIndexChanged.connect(self.change_control)
+        self.set_profile('body')
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.tick)
         self.timer.start(16)
+        self.game_view.clear('No game loaded · use Load game')
+
+    @property
+    def provider(self):
+        if self.profile not in self.providers:
+            self.providers[self.profile] = SimulatorProvider(self.profile)
+        return self.providers[self.profile]
+
+    def observation(self):
+        """What the game receives."""
+        return self.camera.read() if self.camera and not self.driving else self.provider.observation
+
+    @property
+    def driving(self):
+        """The camera detects hands or a face that drive the body skeleton."""
+        return self.camera is not None and self.camera.profile != self.profile
+
+    def tracker(self):
+        """What write_state sends to the game."""
+        if self.driving:
+            return self.game_space
+        return self.camera if self.camera else self.provider
+
+    def set_profile(self, profile):
+        self.profile = profile
+        self.form.setRowVisible(self.control, profile == 'body')
+        self.show_camera_tuning()
+        for widget in (self.expression, self.expression_value):
+            self.form.setRowVisible(widget, self.profile == 'face')
+        self.preset.clear()
+        self.preset.addItems(PRESETS[self.profile])
+        self.group.blockSignals(True)
+        self.group.clear()
+        self.group.addItems(list(self.provider.observation.landmarks))
+        self.group.blockSignals(False)
+        self.present.blockSignals(True)
+        self.present.setChecked(self.provider.observation.present)
+        self.present.blockSignals(False)
+        self.stale.blockSignals(True)
+        self.stale.setChecked(self.provider.stale)
+        self.stale.blockSignals(False)
+        if self.profile == 'face':
+            self.load_expression()
+        if self.camera:
+            self.set_source(CAMERA)
+        self.load_group()
+        self.show_source()
+
+    def drive(self, observation):
+        """Move the body skeleton from both hands or the nose; other observations hold the pose."""
+        observation = mirrored(observation)
+        control = self.control.currentData()
+        if control in ('fingers', 'palms'):
+            locate = pointing_down_fingertip if control == 'fingers' else palm_centre
+            tips = [tip for tip in (locate(observation.landmarks.get(side)) for side in ('left', 'right'))
+                    if tip is not None]
+            if len(tips) == 2:
+                a, b = sorted(tips, key=lambda point: point.x)
+                self.provider.set_feet((a.x, a.y), (b.x, b.y))
+            elif tips:
+                # One hand moves the foot nearest to it; the other stays planted.
+                tip = tips[0]
+                side = min(('left', 'right'), key=lambda name: abs(self.provider.foot(name)[0]-tip.x))
+                self.provider.place_foot(side, tip.x, tip.y)
+        elif observation.landmarks.get('face'):
+            nose = observation.landmarks['face'][NOSE_TIP]
+            (lx, ly), (rx, ry) = self.provider.foot('left'), self.provider.foot('right')
+            self.provider.move('body', nose.x-(lx+rx)/2, nose.y-(ly+ry)/2)
 
     def load_group(self):
         self.joint.blockSignals(True)
@@ -284,38 +637,130 @@ class DeveloperPanel(QMainWindow):
         self.subject_present.blockSignals(False)
         self.load_joint()
 
-    def observation(self):
-        return self.camera.read() if self.camera else self.provider.observation
-
     def change_camera(self):
         if self.camera:
-            self.set_source(1)
+            self.set_source(CAMERA)
+
+    def change_control(self):
+        self.show_camera_tuning()
+        self.change_camera()
+
+    def show_camera_tuning(self):
+        control = self.control.currentData()
+        tuned = self.profile == 'body' and control in self.sensitivity
+        self.form.setRowVisible(self.sensitivity_box, tuned)
+        self.form.setRowVisible(self.region, tuned)
+        if control in self.sensitivity:
+            self.sensitivity_box.blockSignals(True)
+            self.sensitivity_box.setValue(self.sensitivity[control])
+            self.sensitivity_box.blockSignals(False)
+
+    def camera_region(self):
+        """Dashed region as (left, top, right, bottom) frame fractions around the control's centre, kept in frame."""
+        width = min(self.region_width.value()/self.frame_size[0], 1.)
+        height = min(self.region_height.value()/self.frame_size[1], 1.)
+        cx, cy = REGION_CENTRE[self.control.currentData()]
+        cx, cy = min(max(cx, width/2), 1-width/2), min(max(cy, height/2), 1-height/2)
+        return cx-width/2, cy-height/2, cx+width/2, cy+height/2
+
+    def suggest_region(self):
+        """Game resolution as the region size, scaled down to fit the camera frame."""
+        width, height = (self.manifest or {}).get('resolution', DEFAULT_RESOLUTION)
+        scale = min(1., self.frame_size[0]/width, self.frame_size[1]/height)
+        self.region_width.setValue(round(width*scale))
+        self.region_height.setValue(round(height*scale))
+
+    def set_sensitivity(self, value):
+        self.sensitivity[self.control.currentData()] = value
 
     def set_source(self, index):
         if self.camera:
             self.camera.close()
             self.camera = None
-        if index == 1:
+        self.held.clear()
+        if index == CAMERA:
             try:
                 camera_index = self.camera_device.currentData()
                 if camera_index is None:
                     raise RuntimeError('No camera found')
-                self.camera = CameraSource(self.provider.profile, camera_index)
+                profile = CONTROLS[self.control.currentData()][1] if self.profile == 'body' else self.profile
+                self.camera = CameraSource(profile, camera_index)
             except Exception as exc:
                 QMessageBox.warning(self, 'Cannot open camera', str(exc))
                 self.source.blockSignals(True)
-                self.source.setCurrentIndex(0)
+                self.source.setCurrentIndex(SYNTHETIC)
                 self.source.blockSignals(False)
+        self.puppet = self.source.currentIndex() == PUPPET
         self.show_source()
         self.load_joint()
 
     def show_source(self):
-        camera = self.camera is not None
-        self.setWindowTitle(f"TSDK developer — {self.manifest['id']} — {'camera' if camera else 'synthetic'} session")
-        self.info.setText('Live camera detection · click a joint to inspect it.' if camera else
-                          'Synthetic data only · no camera\nDrag joints or edit exact coordinates.')
+        source = self.source.currentIndex()
+        control = self.control.currentData()
+        if source == CAMERA and self.driving and control == 'fingers':
+            text = tip = ('Camera · point both index fingers down, other fingers folded: each fingertip places a foot. '
+                          'One finger moves the nearer foot; any other hand shape holds the pose.')
+        elif source == CAMERA and self.driving and control == 'palms':
+            text = tip = ('Camera · each hand places a foot at its palm centre, in any shape. '
+                          'With one hand visible it moves the nearer foot.')
+        elif source == CAMERA and self.driving:
+            text = tip = 'Camera · your nose moves the centre of both feet.'
+        elif source == CAMERA:
+            text = tip = 'Live camera detection · click a joint to inspect it.'
+        elif source == SYNTHETIC:
+            text = 'Synthetic · no camera. Drag joints in the preview or type exact coordinates.'
+            tip = 'Drag any joint. Coordinates outside the border remain out of area.'
+        elif self.profile == 'body':
+            text = tip = ('Mouse + keyboard · the mouse over the skeleton preview moves the body. Hold A to place the left foot, '
+                          'D the right foot; feet stay between hip width and one stride apart.')
+        elif self.profile == 'hands':
+            text = tip = ('Mouse + keyboard · the mouse over the skeleton preview moves both hands; '
+                          'hold A or D to move only the left or right hand.')
+        else:
+            text = tip = 'Mouse + keyboard · the mouse over the skeleton preview moves the face.'
+        self.info.setText(text)
+        self.canvas.setToolTip(tip)
         for control in self.synthetic_controls:
-            control.setEnabled(not camera)
+            control.setEnabled(source == SYNTHETIC)
+        self.show_state()
+
+    def puppet_to(self, x, y):
+        """Move the held side's foot or hand, or the whole subject, to a normalized game position."""
+        provider = self.provider
+        side = next(iter(self.held)) if len(self.held) == 1 else None
+        if self.profile == 'body':
+            if side is not None:
+                provider.place_foot(side, x, y)
+            else:
+                (lx, ly), (rx, ry) = provider.foot('left'), provider.foot('right')
+                provider.move('body', x-(lx+rx)/2, y-(ly+ry)/2)
+        else:
+            landmarks = provider.observation.landmarks
+            groups = [side] if side in landmarks else list(landmarks)
+            points = [point for group in groups for point in landmarks[group]]
+            dx, dy = x-sum(p.x for p in points)/len(points), y-sum(p.y for p in points)/len(points)
+            for group in groups:
+                provider.move(group, dx, dy)
+        self.load_joint()
+
+    def show_state(self):
+        if self.manifest is None:
+            self.title.setText('No game loaded')
+        else:
+            expected = self.manifest['tracking_profile']
+            self.setWindowTitle(f"TSDK developer — {self.manifest['id']}")
+            self.title.setText(f"<b>{self.manifest['id']}</b> {self.manifest['version']} · uses {PROFILES[expected].lower()} tracking")
+        running = self.process is not None
+        self.restart_button.setVisible(running)
+        self.stop_button.setVisible(running)
+        self.exit_button.setVisible(not running)
+        if not running:
+            self.status.setText('Game not running')
+        elif self.replay is not None:
+            self.status.setText(f'Replaying {self.replay.name} with its recorded calibration and timing.')
+        else:
+            mode = {SYNTHETIC: 'Synthetic', PUPPET: 'Mouse + keyboard', CAMERA: 'Live camera'}[self.source.currentIndex()]
+            self.status.setText(f"{mode} tracking · Escape ends the game, P pauses it · Ctrl/⌘+Q quits")
         self.canvas.update()
 
     def load_joint(self):
@@ -341,7 +786,7 @@ class DeveloperPanel(QMainWindow):
     def apply_preset(self):
         self.provider.preset(self.group.currentText(),self.preset.currentText())
         self.load_joint()
-        if self.provider.profile == 'face':
+        if self.profile == 'face':
             self.load_expression()
 
     def move_subject(self, axis, amount):
@@ -386,17 +831,19 @@ class DeveloperPanel(QMainWindow):
             return
         filename,_ = QFileDialog.getSaveFileName(self,'Record observations','','JSON Lines (*.jsonl)')
         if filename:
-            self.recorder = Recording(Path(filename),self.provider.profile,calibration=None,config={})
+            self.recorder = Recording(Path(filename),self.profile,calibration=None,config={})
             self.record_button.setText('Stop recording')
 
     def start_replay(self):
+        if self.manifest is None:
+            return
         filename,_ = QFileDialog.getOpenFileName(self,'Replay observations','','JSON Lines (*.jsonl)')
         if not filename:
             return
         try:
             replay = ReplayProvider(Path(filename))
             try:
-                if replay.profile != self.provider.profile:
+                if replay.profile != self.manifest['tracking_profile']:
                     raise ValueError('Recording profile does not match this game')
                 replay.read()
             finally:
@@ -406,37 +853,79 @@ class DeveloperPanel(QMainWindow):
             return
         if self.recorder:
             self.toggle_record()
-        self.restart_game(Path(filename))
-        self.replaying = True
-        self.record_button.setEnabled(False)
-        self.status.setText('Replay runs in game window using recorded calibration and processing times.')
+        self.start_game(Path(filename))
 
     def stop_replay(self):
-        if self.replaying or self.process.poll() is not None:
-            write_state(self.state_path, self.camera or self.provider)
-            self.restart_game()
-        self.replaying = False
-        self.record_button.setEnabled(True)
-        self.status.setText('Live simulation')
+        if self.manifest is not None and (self.replay is not None or self.process is None):
+            self.start_game()
 
-    def restart_game(self, replay=None):
-        self.stop_process()
-        stop_file = self.state_path.with_suffix('.stop')
+    def load_folder(self):
+        directory = QFileDialog.getExistingDirectory(self, 'Load game project', str(self.project or Path.cwd()))
+        if directory:
+            self.load_project(Path(directory))
+
+    def load_cartridge(self):
+        filename,_ = QFileDialog.getOpenFileName(self, 'Load game cartridge', '', 'TSDK cartridges (*.ttea)')
+        if not filename:
+            return
+        self.cartridges += 1
+        destination = self.workdir/'cartridges'/str(self.cartridges)
+        destination.parent.mkdir(exist_ok=True)
+        try:
+            extract_cartridge(filename, destination)
+        except (OSError, ValueError) as exc:
+            QMessageBox.warning(self, 'Cannot load cartridge', str(exc))
+            return
+        self.load_project(destination)
+
+    def load_project(self, project):
+        try:
+            manifest = load_manifest(project.resolve())
+        except (OSError, ValueError) as exc:
+            QMessageBox.warning(self, 'Cannot load game', f'{project}: {exc}')
+            return
+        self.project, self.manifest = project.resolve(), manifest
+        self.suggest_region()
+        self.set_profile(manifest['tracking_profile'])
+        self.start_game()
+
+    def game_size(self):
+        geometry = self.screen().geometry()
+        return geometry.width()*2//3, geometry.height()
+
+    def start_game(self, replay=None):
+        self.stop_game()
+        self.launches += 1
+        frame_buffer = self.workdir/f'frame-{self.launches}.bin'
+        stop_file = self.workdir/'game.stop'
         stop_file.unlink(missing_ok=True)
-        config = {'session_root': str(self.state_path.parent/'sessions'), 'synthetic': True, 'stop_file': str(stop_file)}
+        width, height = self.game_size()
+        config = {'session_root': str(self.workdir/'sessions'), 'synthetic': True, 'stop_file': str(stop_file),
+                  'frame_buffer': str(frame_buffer), 'input': 'stdin', 'width': width, 'height': height}
+        command = [sys.executable, '-m', 'ttea.sdk.runtime', str(self.project)]
         if replay is None:
+            write_state(self.state_path, self.tracker())
             config['simulation_state'] = str(self.state_path)
-        command = [sys.executable, '-m', 'ttea.sdk.runtime', str(self.project), '--config', json.dumps(config)]
-        if replay is None:
             command.append('--simulation')
         else:
             command.extend(['--replay', str(replay)])
-        self.process = subprocess.Popen(command)
-        self.timer.start(16)
+        command.extend(['--config', json.dumps(config)])
+        self.process = subprocess.Popen(command, stdin=subprocess.PIPE, text=True, bufsize=1)
+        self.frames = FrameReader(frame_buffer)
+        self.replay = replay
+        self.record_button.setEnabled(replay is None)
+        self.game_view.clear('Starting…')
+        self.game_view.setFocus()
+        self.show_state()
 
-    def stop_process(self):
+    def restart_game(self):
+        self.start_game(self.replay)
+
+    def stop_game(self):
+        if self.process is None:
+            return
         if self.process.poll() is None:
-            self.state_path.with_suffix('.stop').touch()
+            self.workdir.joinpath('game.stop').touch()
             try:
                 self.process.wait(timeout=3)
             except subprocess.TimeoutExpired:
@@ -446,66 +935,85 @@ class DeveloperPanel(QMainWindow):
                 except subprocess.TimeoutExpired:
                     self.process.kill()
                     self.process.wait()
+        self.release_game('Game stopped')
+
+    def release_game(self, message):
+        try:
+            self.process.stdin.close()
+        except OSError:
+            pass
+        self.process = None
+        self.frames.close()
+        self.frames = None
+        self.replay = None
+        self.record_button.setEnabled(True)
+        self.game_view.clear(message)
+        self.show_state()
+
+    def send(self, message):
+        if self.process is not None:
+            try:
+                self.process.stdin.write(json.dumps(message) + '\n')
+            except OSError:
+                pass
+
+    def forward_key(self, event, kind):
+        name = key_name(event)
+        if event.isAutoRepeat() or name is None:
+            return
+        mods = [label for modifier, label in MODIFIERS.items() if event.modifiers() & modifier]
+        self.send({'type': kind, 'key': name, 'text': event.text(), 'mods': mods})
 
     def tick(self):
-        if self.process.poll() is not None:
-            self.status.setText(f'Game exited with status {self.process.returncode}')
-            self.timer.stop()
-            if self.recorder:
-                self.recorder.close()
-                self.recorder = None
-                self.record_button.setText('Record observations…')
-            return
-        if not self.replaying:
-            observation = write_state(self.state_path, self.camera or self.provider)
+        if self.process is not None and self.process.poll() is not None:
+            self.release_game(f'Game exited with status {self.process.returncode}')
+        if self.driving:
+            observation = self.camera.read()
+            if observation is not self.driven:
+                self.drive(observation)
+                self.driven = observation
+        if self.replay is None:
+            observation = write_state(self.state_path, self.tracker())
             # The camera source repeats its latest observation until a new frame is detected.
             if self.recorder and observation is not self.recorded:
                 self.recorder.write(observation)
                 self.recorded = observation
+        if self.frames is not None:
+            frame = self.frames.read()
+            if frame is not None:
+                self.game_view.show_frame(*frame)
         if self.camera:
+            frame = self.camera.frame
+            if frame is not None and (frame.shape[1], frame.shape[0]) != self.frame_size:
+                self.frame_size = frame.shape[1], frame.shape[0]
+                self.region_width.setMaximum(self.frame_size[0])
+                self.region_height.setMaximum(self.frame_size[1])
+                self.suggest_region()
             if self.camera.error is not None:
                 self.status.setText(f'Camera failed: {self.camera.error}')
             self.load_joint()
 
-    def closeEvent(self, event):
+    def shutdown(self):
         self.timer.stop()
         if self.recorder:
             self.recorder.close()
+            self.recorder = None
         if self.camera:
             self.camera.close()
             self.camera = None
-        self.stop_process()
+        self.stop_game()
+
+    def closeEvent(self, event):
+        self.shutdown()
         event.accept()
 
 
 def run(project: Path) -> int:
-    project = project.resolve()
-    manifest = read_project(project)
     app = QApplication.instance() or QApplication([sys.argv[0]])
-    with tempfile.TemporaryDirectory(prefix='tsdk-synthetic-') as directory:
-        root = Path(directory)
-        state = root/'simulation.json'
-        write_state(state,SimulatorProvider(manifest['tracking_profile']))
-        config = {'simulation_state':str(state),'session_root':str(root/'sessions'),'synthetic':True, 'stop_file':str(state.with_suffix('.stop'))}
-        command = [sys.executable,'-m','ttea.sdk.runtime',str(project),'--simulation','--config',json.dumps(config)]
-        process = subprocess.Popen(command)
-        panel = None
+    with tempfile.TemporaryDirectory(prefix='tsdk-developer-') as directory:
+        panel = DeveloperPanel(Path(directory), project)
         try:
-            panel = DeveloperPanel(project,manifest,state,process)
-            panel.resize(1040,820)
-            panel.show()
+            panel.showFullScreen()
             return app.exec()
         finally:
-            if panel is not None:
-                if panel.recorder:
-                    panel.recorder.close()
-                if panel.camera:
-                    panel.camera.close()
-                panel.stop_process()
-            elif process.poll() is None:
-                process.terminate()
-                try:
-                    process.wait(timeout=3)
-                except subprocess.TimeoutExpired:
-                    process.kill()
-                    process.wait()
+            panel.shutdown()

@@ -105,7 +105,7 @@ uv run tsdk check   # Validate the game contract
 uv run tsdk build   # Build the release cartridge
 ```
 
-Default development UX: immediately launch the game with a separate developer panel and synthetic session data.
+Default development UX: a full-screen window opens with no game loaded; Load game (browsing from the current checkout) runs it in the left two thirds with synthetic session data; the right third holds the developer panel.
 Simulation requires neither player registration nor physical calibration.
 TTEA already exports `dev`; adapt it to recognize the game project instead of installing competing `dev` entrypoints.
 Commit `uv.lock`; use supported version ranges with deliberate upgrades, not unbounded automatic latest-version updates.
@@ -228,14 +228,47 @@ project root. `context.request_stop(result)` terminates cleanly; `stop` may retu
 a result dictionary. P toggles pause; Escape terminates. Tracking loss pauses
 updates, retains drawing, and resumes after recovery unless the user paused.
 
-The developer panel edits all body/hand/face landmarks, presets, translation,
-rotation, disappearance, stale timestamps, and recordings. Face sliders and mesh
-geometry are synthetic, not validated physiological fixtures. Developer sessions
-use temporary storage and do not register participants. Synthetic is the default
-tracking source; selecting Camera opens the chosen device by name (system default
-first), runs the runtime's detector, previews the frame with the detected skeleton
-(low-visibility joints faded), and feeds those observations to the game. Frames
-are previewed only; recordings still contain observations, never video.
+The developer window renders the game in its left two thirds: the runtime draws
+with SDL's dummy video driver, publishes RGBX frames through a shared file, and
+receives mouse and keyboard input as JSON lines on stdin, so games must read
+input from `context.events`. The right third holds the tracking controls, the
+camera/skeleton preview below them, and, at the bottom, Load game (project
+folder or `.ttea` cartridge, extracted to temporary storage), Restart game, and
+Stop game while a game runs, or Exit once it stops. Synthetic edits all
+body/hand/face landmarks, presets, translation, rotation, disappearance, stale
+timestamps, and recordings. Face sliders and mesh geometry are synthetic, not
+validated physiological fixtures. Developer sessions use temporary storage and
+do not register participants. Mouse + keyboard is the default tracking source:
+the cursor over the skeleton preview is a position in game-normalized
+coordinates. With no key held it moves the whole subject (body feet midpoint,
+hand pair, or face); holding A or D plants the left or right foot (or moves
+that hand) at the cursor. A planted foot stays between `MIN_STANCE` and
+`MAX_STRIDE` from the other one, the torso follows the feet midpoint, and the
+knees stay between hip and ankle. Hovering the preview gives it the keyboard;
+keys other than A/D still reach the game, and leaving the preview returns the
+keyboard to the game. The game area always receives its own mouse and keys.
+Selecting Camera opens the chosen device by name (system default first). For a
+hands or face game, it runs that profile's detector, previews the frame with the
+detected skeleton (low-visibility joints faded), and feeds those observations to
+the game. For a body game, Camera control picks the MediaPipe model (body, hand,
+and face are separate models) that drives the body skeleton: Body feeds the
+detected body directly; Hands (index fingers down) plants the left and right
+feet at the two index fingertips when each hand points its index
+finger down with the other fingers folded (one such hand moves the nearer foot;
+other hand shapes hold the pose); Whole hands does the same with each palm centre
+(wrist and knuckle mean) in any hand shape; Face (nose) moves the
+midpoint of both feet to the nose tip. Hands and Face use a mirrored (selfie)
+camera view, so moving right moves the body right. The preview poses the body in camera
+coordinates, so the feet sit under the fingertips or nose. The game receives the
+same pose translated so the feet midpoint maps from the dashed camera region to
+the whole game, clamped. Camera region sets that region's width × height in
+camera pixels; it is suggested from the game `resolution` (scaled down to fit the
+camera frame) and centred per control: frame centre for the nose, 67.5% down for
+fingertips (keeping the fists above them), 55% down for palm centres, shifted to
+stay inside the frame. Camera sensitivity scales the
+mapping about the region centre per control (defaults: hands 1, nose 2.5). The preview draws the detected hand or
+face in violet under the driven body. Frames are previewed only; recordings
+still contain observations, never video.
 
 ### Tracking and installation contracts
 

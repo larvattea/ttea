@@ -111,8 +111,12 @@ uv run dev
 
 Esse comando baixa a versão correta do Python, cria o `.venv`, sincroniza as dependências e inicia o T-TEA.
 
-Em um jogo com `ttea.toml`, `uv run dev` abre o jogo e o simulador de corpo,
-mãos ou rosto, sem câmera ou cadastro. O repositório local `../TSDK`
+Em um jogo com `ttea.toml`, `uv run dev` abre em tela cheia, sem jogo carregado; Carregar jogo o executa (dois terços
+à esquerda) e, no terço direito, o rastreamento sintético, por mouse e teclado
+(mouse sobre o esqueleto; A/D posicionam um pé) ou por câmera (corpo, os dois indicadores
+apontando para baixo ou as duas mãos inteiras posicionam os pés, ou o nariz como centro dos pés), a prévia do esqueleto e os botões
+Carregar/Reiniciar/Parar jogo (Sair quando o jogo para), sem exigir câmera ou
+cadastro. O repositório local `../TSDK`
 fornece `uv run tsdk check` e `uv run tsdk build`.
 Consulte o [contrato TSDK](docs/sdk-platform-plan.md#local-implementation-and-operation)
 para gravação/replay, cartuchos e migração explícita dos dados locais.
