@@ -97,6 +97,9 @@ uv run dev
 
 Este comando descarga la versión correcta de Python, crea el `.venv`, sincroniza las dependencias e inicia T-TEA.
 
+`uv run dev` abre solo la consola. El modo desarrollador de juegos TSDK está en el repositorio local `../TSDK`:
+en un juego con `ttea.toml`, use `uv run tsdk dev`, además de `uv run tsdk check` y `uv run tsdk build`.
+
 ### Ejecutar sin uv (venv manual)
 
 Con Python 3.10, 3.11 o 3.12 instalado, en la raíz del proyecto:

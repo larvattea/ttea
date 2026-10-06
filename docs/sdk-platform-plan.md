@@ -1,4 +1,4 @@
-# TTEA developer mode and TSDK platform plan
+# TSDK platform and developer mode plan
 
 Status: local implementation available; redistribution, native CI, and physical acceptance remain release gates.
 
@@ -41,10 +41,10 @@ Establish a runnable behavioral baseline before migration.
 
 | Repository | Owns | Does not own |
 | --- | --- | --- |
-| TTEA | Console UI, public game API, cartridge schema/loader, runtime, hardware, tracking, calibration, developer tools, installation, session storage | Individual game mechanics |
+| TTEA | Console UI, public game API, cartridge schema/loader, runtime (including simulation, replay, and embedded frame/input streaming), hardware, tracking, calibration, installation, session storage | Individual game mechanics, developer mode |
 | GingaDivina | Gameplay, assets, game configuration, scoring, contract-conforming lifecycle callbacks | Camera/model initialization, calibration, platform lifecycle, dependency installation |
 | KarTEA | Driving-game mechanics, assets, cartridge configuration, and lifecycle callbacks | Platform internals, camera ownership, registered-participant CSV implementation |
-| TSDK | Project template, packaging CLI, contract validation, reusable CI workflow, development tooling | A second runtime or duplicate tracking implementation |
+| TSDK | Project template, packaging CLI, contract validation, reusable CI workflow, developer mode (`tsdk dev`) | A second runtime or duplicate tracking implementation |
 
 The runtime API and cartridge schema remain authoritative in TTEA.
 TSDK consumes them; TTEA does not depend on its build tools.
@@ -100,14 +100,15 @@ Simulator success does not establish ChArUco detection, physical projection alig
 Implemented commands from a game checkout with sibling TTEA/TSDK development dependencies:
 
 ```text
-uv run dev          # TTEA developer mode loads this game's checkout
+uv run tsdk dev     # TSDK developer mode, browsing from this game's checkout
 uv run tsdk check   # Validate the game contract
 uv run tsdk build   # Build the release cartridge
 ```
 
 Default development UX: a full-screen window opens with no game loaded; Load game (browsing from the current checkout) runs it in the left two thirds with synthetic session data; the right third holds the developer panel.
 Simulation requires neither player registration nor physical calibration.
-TTEA already exports `dev`; adapt it to recognize the game project instead of installing competing `dev` entrypoints.
+Developer mode belongs to TSDK (`tsdk dev`); TTEA's `dev` script only opens the console.
+The developer window runs games through `python -m ttea.sdk.runtime`, so they use the same loop, tracking, and providers as the console.
 Commit `uv.lock`; use supported version ranges with deliberate upgrades, not unbounded automatic latest-version updates.
 Test TTEA as an installed package outside its source checkout. Resource paths must not assume the repository layout.
 
@@ -201,12 +202,14 @@ GingaDivina retains upstream history; migration changes are separate working-tre
 No remote repository was created, pushed, or published.
 
 TTEA owns `ttea.sdk.api`, `runtime`, `tracking`, `providers`, `simulator`,
-`developer`, `cartridge`, and `library`. TSDK imports the authoritative
-TTEA schema rather than maintaining a second runtime.
+`embedding`, `cartridge`, and `library`. TSDK owns the developer window
+(`tsdk.developer`) and its foot placement and hand gestures
+(`tsdk.simulator`); it imports the authoritative TTEA schema and runtime
+rather than maintaining a second runtime.
 
 ```sh
 # From ../gingadivina:
-uv run dev
+uv run tsdk dev
 uv run tsdk check
 uv run tsdk build
 # A clean, committed source tree is required for release builds:
@@ -228,7 +231,7 @@ project root. `context.request_stop(result)` terminates cleanly; `stop` may retu
 a result dictionary. P toggles pause; Escape terminates. Tracking loss pauses
 updates, retains drawing, and resumes after recovery unless the user paused.
 
-The developer window renders the game in its left two thirds: the runtime draws
+TSDK's developer window renders the game in its left two thirds: the runtime draws
 with SDL's dummy video driver, publishes RGBX frames through a shared file, and
 receives mouse and keyboard input as JSON lines on stdin, so games must read
 input from `context.events`. The right third holds the tracking controls, the

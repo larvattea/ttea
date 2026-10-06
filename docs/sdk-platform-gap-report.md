@@ -48,7 +48,6 @@ All runs used SDL/Qt dummy drivers, temporary data roots, and no camera or parti
 | Medium | Records binding is keyed on the manifest id `kartea` | Before a second records consumer appears, generalize the binding to a manifest capability. |
 | Medium | Real legacy KarTEA data | Only synthetic legacy data was tested. Test with a de-identified copy of real records, then decide whether guided migration is needed. |
 | Low | Library housekeeping | Superseded version directories stay on disk with receipt history. Launch does not take the operation lock. A hard kill can leave staging directories behind. |
-| Low | Developer mode triggers on any working directory under a `ttea.toml` | Consider an explicit `dev` subcommand. |
 
 ## 4. External release gates
 

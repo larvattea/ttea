@@ -125,14 +125,9 @@ On first use, allow camera access in your system's privacy settings.
 
 ### TSDK game development
 
-From a game checkout containing `ttea.toml`, `uv run dev` opens a full-screen
-developer window with no game loaded: Load game runs it on the left two thirds, and on the right third the
-synthetic, mouse + keyboard (move the mouse over the skeleton; A/D plant a foot), or camera tracking
-(body, both index fingers pointing down or both whole hands to place the feet, or the nose as the centre of the feet),
-the skeleton preview, and Load/Restart/Stop game (Exit once the game stops) buttons.
-No camera, player registration, or physical calibration is required.
-TSDK provides `uv run tsdk check` and `uv run tsdk build`; its local
-repository is `../TSDK`.
+`uv run dev` opens the console only. TSDK game developer mode lives in the local `../TSDK`
+repository: from a game checkout containing `ttea.toml`, run `uv run tsdk dev`, alongside
+`uv run tsdk check` and `uv run tsdk build`.
 
 See [the TSDK implementation contract](docs/sdk-platform-plan.md#local-implementation-and-operation)
 for runtime callbacks, recording/replay, cartridge installation, and release gates.
