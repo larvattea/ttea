@@ -1,0 +1,114 @@
+import pygame
+
+MODO_INPUT = 'mediapipe'  # 'teclado', 'script' ou 'mediapipe'
+
+
+class GameView:
+    """Responsável pela renderização da interface do jogo e dos elementos visuais.
+
+    A classe gerencia a janela principal, os recursos gráficos, a exibição do
+    menu, da contagem, do jogo em andamento e da tela de game over.
+    """
+
+    fonte_padrao = 'fontes/8BIT.TTF'
+
+    def __init__(self, largura, altura):
+        """Inicializa a janela do jogo e todos os recursos visuais necessários.
+
+        Args:
+            largura (int): Largura da janela em pixels.
+            altura (int): Altura da janela em pixels.
+        """
+        # Inicializa a tela e fontes
+        self.tela = pygame.display.set_mode((largura, altura))
+        pygame.display.set_caption("HerPULEs")
+        self.largura = largura
+        self.altura = altura
+
+        # Fontes
+        self.fonte_jogo = pygame.font.Font(self.fonte_padrao, 30)
+        self.fonte_contagem = pygame.font.Font(self.fonte_padrao, 100)
+        self.fonte_gameover = pygame.font.Font(self.fonte_padrao, 80)
+
+        # Imagens
+        self.fundo = pygame.image.load('Imagens/fundonovo.png').convert()
+        self.fundo = pygame.transform.scale(self.fundo, (largura, altura))
+        self.fundo.set_alpha(150)
+
+        self.imagem_menu = pygame.image.load('Imagens/herpules.png').convert_alpha()
+        self.imagem_menu = pygame.transform.scale(self.imagem_menu, (largura//2, altura//2))
+
+        self.botao_iniciar = pygame.image.load("Imagens/iniciar.png").convert_alpha()
+        self.botao_iniciar = pygame.transform.scale(self.botao_iniciar, (200, 100))
+        self.rect_botao_iniciar = self.botao_iniciar.get_rect(center=(largura // 2, altura - 70))
+
+        self.botao_reiniciar = pygame.image.load("Imagens/reiniciar.png").convert_alpha()
+        self.botao_reiniciar = pygame.transform.scale(self.botao_reiniciar, (200, 100))
+        self.rect_botao_reiniciar = self.botao_reiniciar.get_rect(
+            center=(largura // 2, altura - 70))
+
+        self.retangulo_tela = pygame.Rect(0, 400, largura, altura/3)
+
+    def desenhar(self, model):
+        """Desenha a cena atual do jogo na tela com base no estado do modelo.
+
+        Args:
+            model: Instância do modelo do jogo contendo o estado, elementos
+                visuais e dados do cenário atual.
+        """
+        self.tela.blit(self.fundo, (0, 0))
+        model.ceu.draw(self.tela)
+
+        pygame.draw.rect(self.tela, (86, 50, 168), self.retangulo_tela)
+        model.chao.draw(self.tela)
+
+        if model.estado == 'menu':
+            rect_menu = self.imagem_menu.get_rect(center=(self.largura / 2, self.altura / 3))
+            self.tela.blit(self.imagem_menu, rect_menu)
+
+            if MODO_INPUT == "mediapipe":
+                texto = self.fonte_jogo.render('Pule para iniciar', True, (255, 255, 255))
+                rect = texto.get_rect(center=(self.largura / 2, self.altura - 70))
+                self.tela.blit(texto, rect)
+            else:
+                self.tela.blit(self.botao_iniciar, self.rect_botao_iniciar)
+
+            model.grupo_jogador.draw(self.tela)
+
+        elif model.estado == 'calibracao':
+            texto = self.fonte_jogo.render("Calibrando...", True, 'black')
+            rect = texto.get_rect(center=(self.largura/2, self.altura/2))
+            self.tela.blit(texto, rect)
+
+        elif model.estado == 'contagem':
+            model.grupo_jogador.draw(self.tela)
+            model.grupo_obstaculos.draw(self.tela)
+
+            texto = self.fonte_contagem.render(str(model.contagem_numero), True, 'black')
+            rect = texto.get_rect(center=(self.largura/2, self.altura/3))
+            self.tela.blit(texto, rect)
+
+        elif model.estado == 'jogando':
+            model.grupo_jogador.draw(self.tela)
+            model.grupo_obstaculos.draw(self.tela)
+
+            texto_score = self.fonte_jogo.render(f"{model.score:05d}", True, (255, 128, 0))
+            self.tela.blit(texto_score, (self.largura - texto_score.get_width() - 20, 20))
+
+        elif model.estado == "game_over": 
+            model.hercules.image = model.hercules.imagem_morto
+            model.grupo_jogador.draw(self.tela)
+            model.grupo_obstaculos.draw(self.tela)
+  
+            texto_go = self.fonte_gameover.render('GAME OVER', True, (0, 0, 0))
+            rect_go = texto_go.get_rect(center=(self.largura//2, self.altura//4))
+            self.tela.blit(texto_go, rect_go)
+
+            if MODO_INPUT == "mediapipe":
+                texto = self.fonte_jogo.render('Pule para reiniciar', True, (255, 255, 255))
+                rect = texto.get_rect(center=(self.largura / 2, self.altura - 70))
+                self.tela.blit(texto, rect)
+            else:
+                self.tela.blit(self.botao_reiniciar, self.rect_botao_reiniciar)
+
+        pygame.display.flip()
