@@ -83,7 +83,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Gravar operação corrente</string>
+        <string>Salvar operação atual</string>
        </property>
        <property name="text">
         <string>OK</string>

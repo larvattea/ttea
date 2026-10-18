@@ -133,7 +133,7 @@
       <string notr="true">background-color: black; color: white; font-size: 18px; border: 1px solid #444;</string>
      </property>
      <property name="text">
-      <string>Vídeo aparecerá aqui</string>
+      <string>O vídeo aparecerá aqui</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -204,7 +204,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Calibração Semi-Automática - F7</string>
+        <string>Calibração Semiautomática - F7</string>
        </property>
        <property name="shortcut">
         <string>F7</string>
@@ -259,7 +259,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Gravar operação corrente</string>
+        <string>Salvar operação atual</string>
        </property>
        <property name="text">
         <string>OK</string>
@@ -279,7 +279,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Cancelar operação corrente</string>
+        <string>Cancelar operação atual</string>
        </property>
        <property name="text">
         <string>Cancelar</string>

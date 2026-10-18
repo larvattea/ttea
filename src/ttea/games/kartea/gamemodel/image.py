@@ -1,5 +1,7 @@
+"""Loading, scaling and drawing of game images (pygame)."""
+
 import io
-from typing import Literal, Tuple, Union
+from typing import Literal
 
 import pygame
 from PySide6.QtCore import QFile, QIODevice
@@ -9,9 +11,25 @@ from ttea.games.kartea.util import KarteaPathConfig
 
 
 class Image:
-    """
-    Classe utilitária para carregamento, escala e desenho de imagens.
-    Suporta caminhos físicos e recursos Qt (.qrc).
+    """Utility class for loading, scaling and drawing images.
+
+    Supports physical paths and Qt resources (.qrc).
+
+    Attributes
+    ----------
+    IMAGE_SIZE_DEFAULT_NAME : str, class attribute
+        ``size`` value that keeps the original size ("default").
+    IMAGE_CONVERT_ALPHA, IMAGE_CONVERT_BASE : str, class attribute
+        Pixel format conversion: ``convert_alpha()`` ("alpha") or
+        ``convert()`` ("base").
+    IMAGE_POS_TOP_LEFT, IMAGE_POS_CENTER : str, class attribute
+        Anchor modes of ``draw`` ("top_left", "center").
+    IMAGE_POS_BOTTOM_CENTER : str, class attribute
+        Anchor mode of ``draw`` ("bottom_center").
+    _cache : dict, class attribute
+        Decoded and converted images (before scaling), by (path,
+        conversion, flip). Avoids rereading the file/QRC every frame in
+        Target.move and kill().
     """
 
     IMAGE_SIZE_DEFAULT_NAME = "default"
@@ -22,16 +40,41 @@ class Image:
     IMAGE_POS_CENTER = "center"
     IMAGE_POS_BOTTOM_CENTER = "bottom_center"
 
+    _cache: dict = {}
+
     @staticmethod
     def load(
         img_name: str,
-        size: Union[
-            Literal["default"], Tuple[int, int]
-        ] = IMAGE_SIZE_DEFAULT_NAME,
+        size: Literal["default"] | tuple[int, int] = IMAGE_SIZE_DEFAULT_NAME,
         convert: str = IMAGE_CONVERT_ALPHA,
         flip: bool = False,
     ) -> pygame.Surface:
-        """Carrega imagem (física ou Qt), aplica conversão, flip e scale."""
+        """Load an image (file or Qt), converted and scaled.
+
+        Parameters
+        ----------
+        img_name : str
+            QRC alias, ``:/...`` path or file path.
+        size : "default" | tuple[int, int], optional
+            Target size; "default" keeps the original size.
+        convert : str, optional
+            IMAGE_CONVERT_ALPHA (default) or IMAGE_CONVERT_BASE; any
+            other value converts with alpha.
+        flip : bool, optional
+            Mirror horizontally.
+
+        Returns
+        -------
+        pygame.Surface
+            A new surface (a copy, so callers may change it without
+            affecting the cache); a magenta 32x32 surface if the image
+            cannot be loaded.
+
+        Notes
+        -----
+        Requires an initialized pygame display (``convert``). Errors are
+        printed to the console, not raised.
+        """
         full_path = KarteaPathConfig.game_builtin_image(img_name)
 
         if (img_name) and (not full_path):
@@ -41,37 +84,51 @@ class Image:
             return Image._fallback_surface()
 
         try:
-            # Verificação: Se o caminho for um recurso do Qt
-            if full_path.startswith(":/"):
-                img = Image._load_from_qt_resource(full_path)
-            else:
-                # Caminho físico normal
-                img = pygame.image.load(full_path)
+            cache_key = (full_path, convert, flip)
+            base = Image._cache.get(cache_key)
 
-            # Conversão de pixel format
-            if convert == Image.IMAGE_CONVERT_ALPHA:
-                img = img.convert_alpha()
-            elif convert == Image.IMAGE_CONVERT_BASE:
-                img = img.convert()
-            else:
-                img = img.convert_alpha()
+            if base is None:
+                if full_path.startswith(":/"):
+                    base = Image._load_from_qt_resource(full_path)
+                else:
+                    base = pygame.image.load(full_path)
 
-            # Transformações
-            if flip:
-                img = pygame.transform.flip(img, True, False)
+                # Pixel format conversion
+                if convert == Image.IMAGE_CONVERT_BASE:
+                    base = base.convert()
+                else:
+                    base = base.convert_alpha()
 
-            if size != Image.IMAGE_SIZE_DEFAULT_NAME:
-                if isinstance(size, (tuple, list)) and len(size) == 2:
-                    img = Image.scale(img, size)
+                # Transformations
+                if flip:
+                    base = pygame.transform.flip(base, True, False)
 
-            return img
+                Image._cache[cache_key] = base
+
+            if (
+                size != Image.IMAGE_SIZE_DEFAULT_NAME
+                and isinstance(size, (tuple, list))
+                and len(size) == 2
+            ):
+                # Image.scale already returns a new Surface
+                return Image.scale(base, size)
+
+            # Copy: callers may change the Surface (alpha etc.) without
+            # affecting the cache.
+            return base.copy()
         except Exception as e:
             print(f"[Image.load] Erro ao carregar '{img_name}': {e}.")
             return Image._fallback_surface()
 
     @staticmethod
     def _load_from_qt_resource(resource_path: str) -> pygame.Surface:
-        """Carrega recurso Qt via QFile."""
+        """Load a Qt resource via QFile.
+
+        Raises
+        ------
+        FileNotFoundError
+            If the resource cannot be opened.
+        """
         file = QFile(resource_path)
         if not file.open(QIODevice.ReadOnly):
             raise FileNotFoundError(
@@ -83,8 +140,21 @@ class Image:
         return pygame.image.load(io.BytesIO(img_data))
 
     @staticmethod
-    def scale(img: pygame.Surface, size: Tuple[int, int]) -> pygame.Surface:
-        """Redimensiona com smoothscale e tamanho mínimo seguro."""
+    def scale(img: pygame.Surface, size: tuple[int, int]) -> pygame.Surface:
+        """Resize with smoothscale and a safe minimum size.
+
+        Parameters
+        ----------
+        img : pygame.Surface
+            Image to resize.
+        size : tuple[int, int]
+            Target size; each side is at least 1 px.
+
+        Returns
+        -------
+        pygame.Surface
+            A new resized surface.
+        """
         width = max(1, int(size[0]))
         height = max(1, int(size[1]))
         return pygame.transform.smoothscale(img, (width, height))
@@ -93,10 +163,28 @@ class Image:
     def draw(
         surface: pygame.Surface,
         img: pygame.Surface,
-        pos: Tuple[int, int],
+        pos: tuple[int, int],
         pos_mode: str = IMAGE_POS_TOP_LEFT,
     ):
-        """Desenha a imagem com diferentes modos de ancoragem."""
+        """Draw the image with different anchor modes.
+
+        Parameters
+        ----------
+        surface : pygame.Surface
+            Surface drawn on.
+        img : pygame.Surface
+            Image to draw.
+        pos : tuple[int, int]
+            Anchor position (x, y).
+        pos_mode : str, optional
+            IMAGE_POS_TOP_LEFT (default), IMAGE_POS_CENTER or
+            IMAGE_POS_BOTTOM_CENTER (case-insensitive).
+
+        Raises
+        ------
+        ValueError
+            If ``pos`` is not a tuple/list with exactly 2 values.
+        """
         if not isinstance(pos, (tuple, list)) or len(pos) != 2:
             raise ValueError(
                 "POS deve ser uma tupla/lista com exatamente 2 valores (x, y)."
@@ -108,7 +196,7 @@ class Image:
         if mode == Image.IMAGE_POS_CENTER:
             render_pos[0] -= img.get_width() // 2
             render_pos[1] -= img.get_height() // 2
-        elif mode == Image.IMAGE_POS_BOTTOM_CENTER:  # new position mode
+        elif mode == Image.IMAGE_POS_BOTTOM_CENTER:
             render_pos[0] -= img.get_width() // 2
             render_pos[1] -= img.get_height()
 
@@ -116,7 +204,7 @@ class Image:
 
     @staticmethod
     def _fallback_surface() -> pygame.Surface:
-        """Superfície magenta 32x32 para facilitar identificação de imagens faltantes."""
+        """Return a magenta 32x32 surface marking a missing image."""
         surf = pygame.Surface((32, 32))
         surf.fill((255, 0, 255))
         return surf

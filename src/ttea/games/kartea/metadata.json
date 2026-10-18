@@ -1,35 +1,133 @@
 {
-    "authors": [
-        "Gabriel Brunelli Pereira",
-        "Alexandre Altair de Melo"
-    ],
-    "contact_email": "",
-    "exec": "main.py",
-    "game": "KarTEA",
-    "icon": "resources/icons/kartea4.ico",
-    "language":{
-        "en_US":{
-             "name": "KarTEA: Racing Game",
-             "description": "A game to aid in the development of sensory processing"
-        },
-        "es_ES": {
-            "name": "KarTEA: Juego de Carreras",
-            "description": "Un juego para ayudar en el desarrollo del procesamiento sensorial"
-        },
-        "pt_BR": {
-            "name": "KarTEA: Jogo de Corrida",
-            "description": "Um jogo para auxiliar no desenvolvimento do processamento sensorial"
-        }
-    },
+  "schema_version": "1.0",
+  "id": "br.udesc.larva.kartea",
+  "version": "2.0.0",
+
+  "runtime": {
+    "entrypoint": "main.py",
+    "view_factory": "ttea.games.kartea.factory.KarteaViewFactory",
     "menu_actions": {
-        "player_config": {
-            "label": "KarTEA",
-            "method": "create_player_config_list_view",
-            "edit_method": "create_player_config_edit_view"
-        }
+      "player_config": {
+        "label": "KarTEA",
+        "method": "create_player_config_list_view",
+        "edit_method": "create_player_config_edit_view"
+      }
     },
-    "since": "2023",
+    "min_platform_version": null,
+    "python": null,
+    "dependencies": [],
+    "required_peripherals": ["webcam", "projector"],
+    "permissions": ["camera"]
+  },
+
+  "store": {
+    "type": "game",
+    "is_free": true,
+    "license": null,
+    "required_age": 0,
     "website": "https://udescmove2learn.wordpress.com/",
-    "version": "2.0.0",
-    "view_factory": "ttea.games.kartea.factory.KarteaViewFactory"
+    "support_info": {
+      "url": null,
+      "email": null
+    },
+    "release_date": {
+      "coming_soon": false,
+      "date": "2023"
+    },
+    "developers": [
+      { "name": "Alexandre Altair de Melo", "email": null, "website": null },
+      { "name": "Gabriel Brunelli Pereira", "email": null, "website": null }
+    ],
+    "publishers": [
+      {
+        "name": "LARVA - UDESC - CCT - Joinville",
+        "email": null,
+        "website": "https://udescmove2learn.wordpress.com/"
+      }
+    ],
+    "platforms": {
+      "windows": true,
+      "linux": false,
+      "mac": false
+    },
+    "genres": ["racing", "educational", "casual"],
+    "categories": ["single_player"],
+    "tags": ["accessibility", "sensory_processing"],
+    "controller_support": "full",
+    "audience": {
+      "min_age": null,
+      "max_age": null,
+      "conditions": ["tea"],
+      "skills": ["sensory_processing", "focus", "coordination"]
+    },
+    "accessibility": [],
+    "privacy": {
+      "camera": true,
+      "stores_video": null,
+      "data_collected": [],
+      "data_leaves_device": null,
+      "policy_url": null
+    },
+    "requirements": {
+      "windows": {
+        "minimum": {
+          "os": "Windows 10 64-bit",
+          "cpu": "Intel Core i3",
+          "gpu": "Intel HD Graphics 4000",
+          "ram_mb": 4096,
+          "storage_mb": 500
+        },
+        "recommended": {
+          "os": "Windows 10/11 64-bit",
+          "cpu": "Intel Core i5",
+          "gpu": "NVIDIA GeForce GTX 1050",
+          "ram_mb": 8192,
+          "storage_mb": 1024
+        }
+      }
+    },
+    "tech": {
+      "engine": "pygame",
+      "language": "python"
+    },
+    "assets": {
+      "icon": "resources/icons/kartea4.ico",
+      "logo": null,
+      "header": null,
+      "background": null,
+      "screenshots": [],
+      "videos": []
+    },
+    "references": [],
+    "changelog_url": null,
+
+    "localization": {
+      "default": "en_US",
+      "supported": ["en_US", "es_ES", "pt_BR"],
+      "en_US": {
+        "name": "KarTEA: Racing Game",
+        "short_description": "A game to aid in the development of sensory processing.",
+        "about_the_game": "Developed to help children and individuals with sensory processing challenges through engaging gameplay.",
+        "detailed_description": "KarTEA is an educational racing game designed to support the development of sensory processing skills. Players engage in fun, accessible kart-style racing while improving focus, coordination, and sensory integration in a supportive environment.",
+        "content_notes": "Educational game focused on the development of sensory processing. Suitable for all ages, including children with special needs.",
+        "requirements_notes": "Requires a webcam and a projector for sensory interaction."
+      },
+      "es_ES": {
+        "name": "KarTEA: Juego de Carreras",
+        "short_description": "Un juego para ayudar en el desarrollo del procesamiento sensorial.",
+        "about_the_game": "Desarrollado para ayudar a niños y personas con desafíos en el procesamiento sensorial a través de una jugabilidad atractiva.",
+        "detailed_description": "KarTEA es un juego de carreras educativo diseñado para apoyar el desarrollo de habilidades de procesamiento sensorial. Los jugadores participan en divertidas carreras estilo kart accesibles mientras mejoran la concentración, la coordinación y la integración sensorial en un entorno de apoyo.",
+        "content_notes": "Juego educativo centrado en el desarrollo del procesamiento sensorial. Apto para todas las edades, incluidos niños con necesidades especiales.",
+        "requirements_notes": "Requiere una cámara web y un proyector para la interacción sensorial."
+      },
+      "pt_BR": {
+        "name": "KarTEA: Jogo de Corrida",
+        "short_description": "Um jogo para auxiliar no desenvolvimento do processamento sensorial.",
+        "about_the_game": "Desenvolvido para ajudar crianças e pessoas com desafios no processamento sensorial por meio de uma jogabilidade envolvente.",
+        "detailed_description": "KarTEA é um jogo de corrida educacional projetado para apoiar o desenvolvimento de habilidades de processamento sensorial. Os jogadores participam de corridas divertidas e acessíveis no estilo kart, melhorando o foco, a coordenação e a integração sensorial em um ambiente acolhedor.",
+        "content_notes": "Jogo educacional focado no desenvolvimento do processamento sensorial. Indicado para todas as idades, incluindo crianças com necessidades especiais.",
+        "requirements_notes": "Requer uma webcam e um projetor para a interação sensorial."
+      }
+    }
+  }
 }

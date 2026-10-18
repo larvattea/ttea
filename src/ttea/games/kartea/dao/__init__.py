@@ -1,10 +1,7 @@
-"""
-dao
+"""Data access objects (DAOs) of the Kartea game.
 
-A Python package for data access objects (DAOs) in Kartea Game.
-
-This package provides the DAO classes for config, phases and
-session game configuration.
+This package provides the DAO classes for the player configuration,
+the game phases and levels, and the game sessions and their events.
 
 Attributes
 ----------
@@ -19,9 +16,17 @@ __license__ : str
 
 See Also
 --------
+BaseCsvDAO
+    Generic CRUD of a model stored in one CSV file per player.
+ReadOnlyDAO
+    Base of the read-only DAOs.
 PlayerKarteaConfigCsvDAO
     Data Access Object for managing player kartea configuration data
     in CSV format.
+PlayerKarteaSessionCsvDAO, PlayerKarteaSessionDetailCsvDAO
+    Game sessions and their events, in CSV format.
+KarteaPhaseCsvDAO, KarteaPhaseLevelCsvDAO
+    Read-only access to the phase CSV files and their levels.
 
 Notes
 -----
@@ -30,13 +35,14 @@ development. Contributions and bug reports are welcome at:
 https://github.com/larva-udesc/udesc_ttea_view
 """
 
-# Define the __all__ variable
 __all__ = [
+    "BaseCsvDAO",
     "KarteaPhaseCsvDAO",
     "KarteaPhaseLevelCsvDAO",
     "PlayerKarteaConfigCsvDAO",
     "PlayerKarteaSessionCsvDAO",
     "PlayerKarteaSessionDetailCsvDAO",
+    "ReadOnlyDAO",
 ]
 
 __version__ = "1.0.0"
@@ -44,9 +50,10 @@ __date__ = "2025-12-25"
 __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
-# Import the submodules
+from .basecsvdao import BaseCsvDAO
 from .karteaphasecsvdao import KarteaPhaseCsvDAO
 from .karteaphaselevelcsvdao import KarteaPhaseLevelCsvDAO
 from .playerkarteaconfigcsvdao import PlayerKarteaConfigCsvDAO
 from .playerkarteasessioncsvdao import PlayerKarteaSessionCsvDAO
 from .playerkarteasessiondetailcsvdao import PlayerKarteaSessionDetailCsvDAO
+from .readonlydao import ReadOnlyDAO

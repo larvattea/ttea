@@ -1,38 +1,17 @@
-from dataclasses import dataclass, fields
-from typing import TYPE_CHECKING, ClassVar, Dict, List
+"""Model of a Kartea game phase."""
+
+from dataclasses import dataclass
+from typing import TYPE_CHECKING, ClassVar
+
+from .reflexivemodel import ReflexiveModel, initialize_reflexive
 
 if TYPE_CHECKING:
     from ttea.games.kartea.model.karteaphaselevel import KarteaPhaseLevel
 
 
-def initialize_reflexive(cls):
-    """Decorator to initialize class reflection data statically.
-
-    Parameters
-    ----------
-    cls : type
-        The class to be decorated.
-
-    Returns
-    -------
-    type
-        The decorated class with initialized PROPERTIES and DATA_PROPERTIES.
-
-    Notes
-    -----
-    - Adds field names to `PROPERTIES`.
-    - Adds default values of initializable fields to `DATA_PROPERTIES`.
-    """
-    cls.PROPERTIES = [field.name for field in fields(cls)]
-    cls.DATA_PROPERTIES = [
-        field.default for field in fields(cls) if field.init
-    ]
-    return cls
-
-
 @initialize_reflexive
 @dataclass
-class KarteaPhase:
+class KarteaPhase(ReflexiveModel):
     """Summary model for Kartea game phase data.
 
     Attributes
@@ -40,23 +19,32 @@ class KarteaPhase:
     id : int
         Unique identifier for the phase.
     level_list : list[KarteaPhaseLevel]
-        List of KarteaPhaseLevel objects for the phase.
-    PROPERTIES : ClassVar[list[str]]
-        Static list of field names of the class.
-    DATA_PROPERTIES : ClassVar[list]
-        Static list of default values for initializable fields.
+        Levels of the phase, in the order of the phase CSV file.
+    PROPERTIES : ClassVar[list[str]], class attribute
+        Field names of the class, filled by ``initialize_reflexive``.
+    DATA_PROPERTIES : ClassVar[list], class attribute
+        Default value of each init field (``dataclasses.MISSING`` when
+        the field has none), filled by ``initialize_reflexive``.
 
     Methods
     -------
     set_data(data)
-        Updates phase data from a dictionary.
+        Update phase data from a dictionary.
     get_data()
-        Returns phase data as a list of dictionaries.
+        Return phase data as a list with one dictionary.
+
+    See Also
+    --------
+    KarteaPhaseLevel : Level of a phase.
+    ReflexiveModel : Provides ``set_data`` and ``get_data``.
+
+    Notes
+    -----
+    ``KarteaPhaseCsvDAO`` creates the phase with an empty
+    ``level_list`` and appends one ``KarteaPhaseLevel`` per CSV row.
 
     Examples
     --------
-    >>> from ttea.games.kartea.model.karteaphaselevel import \
-    ...     KarteaPhaseLevel
     >>> phase = KarteaPhase(id=1, level_list=[])
     >>> phase.get_data()
     [{'id': 1, 'level_list': []}]
@@ -66,44 +54,3 @@ class KarteaPhase:
     level_list: list["KarteaPhaseLevel"]
     PROPERTIES: ClassVar[list[str]] = []
     DATA_PROPERTIES: ClassVar[list] = []
-
-    def set_data(self, data: Dict) -> None:
-        """Update phase data from a dictionary.
-
-        Parameters
-        ----------
-        data : Dict
-            Dictionary with phase data. Expected keys:
-            - 'id': int
-            - 'level_list': list[KarteaPhaseLevel]
-
-        Returns
-        -------
-        None
-
-        Notes
-        -----
-        - Updates attributes using PROPERTIES for dynamic assignment.
-        - No validation is performed on the input data.
-        """
-        for prop in self.PROPERTIES:
-            if prop in data:
-                setattr(self, prop, data[prop])
-
-    def get_data(self) -> List[Dict]:
-        """Return phase data as a list of dictionaries.
-
-        Returns
-        -------
-        List[Dict]
-            List with a dictionary containing phase data:
-            - 'id': int
-            - 'level_list': list[KarteaPhaseLevel]
-
-        Notes
-        -----
-        - Uses PROPERTIES to dynamically build the data dictionary.
-        - Returns a list for consistency with potential multi-record returns.
-        """
-        info = {prop: getattr(self, prop) for prop in self.PROPERTIES}
-        return [info]

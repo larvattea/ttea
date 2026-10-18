@@ -60,7 +60,7 @@ class CalibrationSettingController(QObject):
 
         if calibration:
             self.view.msg.info(
-                self.tr("Configuração de calibração cadastrada com sucesso!")
+                self.tr("Configuração de calibração salva com sucesso!")
             )
             self.view.accept()
         else:

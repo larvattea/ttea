@@ -1,9 +1,7 @@
-"""
-view
+"""Views (Qt dialogs) of the Kartea game register screens.
 
-A Python package for view in Kartea Game.
-
-This package provides the view classes for displaying game information and managing user interactions.
+This package provides the view classes of the player configuration
+list and edit screens.
 
 Attributes
 ----------
@@ -18,16 +16,10 @@ __license__ : str
 
 See Also
 --------
-AboutView
-    Displays metadata and project information.
-LanguageView
-    Manages internationalization and locale formatting.
-PlayerEditView
-    Supports creation and editing of player profiles.
-PlayerListView
-    Lists player data in a structured format.
-SplashScreen
-    Displays a splash screen during application startup.
+PlayerKarteaConfigListView
+    Lists the player configurations, with search and CRUD actions.
+PlayerKarteaConfigEditView
+    Dialog to create or edit a player configuration.
 
 Notes
 -----
@@ -36,7 +28,6 @@ development. Contributions and bug reports are welcome at:
 https://github.com/larva-udesc/udesc_ttea_view
 """
 
-# Define the __all__ variable
 __all__ = [
     "PlayerKarteaConfigEditView",
     "PlayerKarteaConfigListView",
@@ -47,6 +38,5 @@ __date__ = "2025-12-25"
 __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
-# Import the submodules
 from .playerkarteaconfigeditview import PlayerKarteaConfigEditView
 from .playerkarteaconfiglistview import PlayerKarteaConfigListView

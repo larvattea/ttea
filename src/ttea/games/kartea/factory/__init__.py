@@ -1,11 +1,8 @@
-"""
-factory
+"""View factory of the Kartea game.
 
-A Python package for creating and managing views in the Kartea game.
-Developed by the Larva UDESC team.
-
-This package provides tools for handling view layouts,
-and appearance settings.
+This package builds the KarTEA register screens (views), wiring each
+view to its controller and services. Developed by the Larva UDESC
+team.
 
 Attributes
 ----------
@@ -20,8 +17,8 @@ __license__ : str
 
 See Also
 --------
-ViewFactory
-    Creates view instances for the application.
+KarteaViewFactory
+    Creates the KarTEA configuration list and edit screens.
 
 Notes
 -----
@@ -30,7 +27,6 @@ development. Contributions and bug reports are welcome at:
 https://github.com/larva-udesc/udesc_ttea_view
 """
 
-# Define the __all__ variable
 __all__ = [
     "KarteaViewFactory",
 ]
@@ -40,5 +36,4 @@ __date__ = "2025-12-25"
 __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
-# Import the submodules
 from .karteaviewfactory import KarteaViewFactory

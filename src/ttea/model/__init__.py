@@ -34,6 +34,7 @@ __all__ = [
     "Calibration",
     "CalibrationPoint",
     "CalibrationSetting",
+    "GameMetadata",
     "Professional",
     "InstitutionFacility",
     "Language",
@@ -50,6 +51,7 @@ from .appmodel import AppModel
 from .calibration import Calibration
 from .calibrationpoint import CalibrationPoint
 from .calibrationsetting import CalibrationSetting
+from .gamemetadata import GameMetadata
 from .institutionfacility import InstitutionFacility
 from .language import Language
 from .player import Player

@@ -102,7 +102,7 @@ class MainController(QObject):
 
     def open_help(self) -> None:
         self.view.update_status_message(
-            self.tr("Funcionalidade do help em desenvolvimento...")
+            self.tr("Funcionalidade da ajuda em desenvolvimento...")
         )
         """try:
             # open_help()

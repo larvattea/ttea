@@ -114,7 +114,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Gravar operação corrente</string>
+        <string>Salvar operação atual</string>
        </property>
        <property name="locale">
         <locale language="Portuguese" country="Brazil"/>
@@ -140,7 +140,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Cancelar operação corrente</string>
+        <string>Cancelar operação atual</string>
        </property>
        <property name="text">
         <string>Cancelar</string>

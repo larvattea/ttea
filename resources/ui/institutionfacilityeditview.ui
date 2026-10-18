@@ -92,7 +92,7 @@
        <item row="3" column="1">
         <widget class="QLineEdit" name="led_phone">
          <property name="toolTip">
-          <string>Digite o número com código do país (ex: +55 para Brasil)</string>
+          <string>Digite o número com o código do país (ex: +55 para Brasil)</string>
          </property>
          <property name="placeholderText">
           <string>+99 99 99999-9999</string>
@@ -122,7 +122,7 @@
        <item row="5" column="0">
         <widget class="QLabel" name="lbl_website">
          <property name="text">
-          <string>Site / Website:</string>
+          <string>Site:</string>
          </property>
         </widget>
        </item>
@@ -181,7 +181,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Gravar operação corrente</string>
+        <string>Salvar operação atual</string>
        </property>
        <property name="locale">
         <locale language="Portuguese" country="Brazil"/>
@@ -207,7 +207,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Cancelar operação corrente</string>
+        <string>Cancelar operação atual</string>
        </property>
        <property name="text">
         <string>Cancelar</string>

@@ -9,18 +9,16 @@
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                            QMetaObject, QObject, QPoint, QRect, QSize, Qt,
-                            QTime, QUrl)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
-                           QFontDatabase, QGradient, QIcon, QImage,
-                           QKeySequence, QLinearGradient, QPainter, QPalette,
-                           QPixmap, QRadialGradient, QTransform)
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QDialog, QLabel, QPushButton,
-                               QSizePolicy, QSpacerItem, QTextBrowser,
-                               QVBoxLayout, QWidget)
-
+    QSizePolicy, QSpacerItem, QTextBrowser, QVBoxLayout,
+    QWidget)
 import ttea.resources.resources_rc
-
 
 class Ui_AboutView(object):
     def setupUi(self, AboutView):
@@ -121,7 +119,7 @@ class Ui_AboutView(object):
         AboutView.setWindowTitle(QCoreApplication.translate("AboutView", u"Plataforma T-TEA - Sobre", None))
         self.lbl_project.setText(QCoreApplication.translate("AboutView", u"<html><head/><body><p><span style=\" font-weight:700;\">T-TEA</span> \u00e9 um console para exergames de Ch\u00e3o Interativo voltados ao p\u00fablico com Transtorno do Espectro Autista (TEA), mas n\u00e3o exclusivamente. Desenvolvido pela UDESC Joinville - Larva.</p></body></html>", None))
 #if QT_CONFIG(tooltip)
-        self.teb_link.setToolTip(QCoreApplication.translate("AboutView", u"Link plataforma T-TEA", None))
+        self.teb_link.setToolTip(QCoreApplication.translate("AboutView", u"Link da plataforma T-TEA", None))
 #endif // QT_CONFIG(tooltip)
         self.teb_link.setHtml(QCoreApplication.translate("AboutView", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"

@@ -1,7 +1,8 @@
-"""
-A Python package for KarTEA Game core. Developed by the Larva UDESC team.
+"""Core input of the KarTEA game: camera, pose tracking and lanes.
 
-This package provides core functionality for KarTEA game.
+This package captures the camera image, tracks the player's feet with
+MediaPipe and turns the feet position into a lane. Developed by the
+Larva UDESC team.
 
 Attributes
 ----------
@@ -16,8 +17,12 @@ __license__ : str
 
 See Also
 --------
-GameSettings
-    GameSettings.
+Camera
+    Video capture (OpenCV) with the calibration area drawn.
+PoseTracking
+    Feet detection (MediaPipe) mapped to screen coordinates.
+LaneDetector, OUT_OF_AREA
+    Lane of the player from the feet x position.
 
 Notes
 -----
@@ -26,9 +31,10 @@ development. Contributions and bug reports are welcome at:
 https://github.com/larva-udesc/udesc_ttea_view
 """
 
-# Define the __all__ variable
 __all__ = [
+    "OUT_OF_AREA",
     "Camera",
+    "LaneDetector",
     "PoseTracking",
 ]
 
@@ -37,6 +43,6 @@ __date__ = "2025-12-25"
 __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
-# Import the submodules
 from .camera import Camera
+from .lanedetector import OUT_OF_AREA, LaneDetector
 from .posetracking import PoseTracking

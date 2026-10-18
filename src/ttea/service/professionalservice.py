@@ -96,7 +96,7 @@ class ProfessionalService(QObject):
 
         if not data.get("institutionfacility"):
             errors.append(
-                self.tr("Instituição/Estabelecimento é obrigatório!\n")
+                self.tr("Instituição/Estabelecimento é obrigatória!\n")
             )
 
         return errors

@@ -11,7 +11,7 @@ from PySide6.QtGui import QImage, QPixmap
 
 from ttea.model import CalibrationPoint
 from ttea.service import CalibrationService
-from ttea.util import PathConfig
+from ttea.util import CvText, PathConfig
 
 if TYPE_CHECKING:
     from ttea.view import AutomaticCalibrationView
@@ -44,6 +44,9 @@ class AutomaticCalibrationController(QObject):
         self.monitor_screen: str = QCoreApplication.translate(
             "AutomaticCalibrationController", "Tela de Monitoramento"
         )
+        # ASCII key of the OpenCV window; the translated title (with
+        # accents) is shown with CvText.set_window_title.
+        self.monitor_window: str = CvText.window_name(self.monitor_screen)
 
         # ==================== MediaPipe Tasks (Pose Landmarker) =============
         if self.service.is_raspberry_pi():
@@ -201,7 +204,9 @@ class AutomaticCalibrationController(QObject):
                 return np.round(projected.reshape(4, 2)).astype(int)
 
         except Exception as e_charuco:
-            mensagem = f"{self.tr('Aviso detecção Charuco.')}\nDetalhes: {str(e_charuco)}"
+            mensagem = self.tr(
+                "Aviso de detecção ChArUco.\nDetalhes: {0}"
+            ).format(e_charuco)
             self.msg_warning_signal.emit(mensagem)
 
         return None
@@ -302,7 +307,8 @@ class AutomaticCalibrationController(QObject):
                 return
 
             detector = aruco.ArucoDetector(dictionary)
-            cv2.namedWindow(self.monitor_screen, cv2.WINDOW_AUTOSIZE)
+            cv2.namedWindow(self.monitor_window, cv2.WINDOW_AUTOSIZE)
+            CvText.set_window_title(self.monitor_window, self.monitor_screen)
 
             last_camera_vertices = None
             frozen_frame = None
@@ -322,7 +328,7 @@ class AutomaticCalibrationController(QObject):
                     if not ret:
                         self.msg_critical_signal.emit(
                             self.tr(
-                                "Erro ao capturar imagem da câmera. Dispositivo desconectado.\nVerifique a conexão cabo e ou instalação da câmera.\nFeche a janela e tente novamente."
+                                "Erro ao capturar imagem da câmera. Dispositivo desconectado.\nVerifique a conexão do cabo e/ou a instalação da câmera.\nFeche a janela e tente novamente."
                             )
                         )
                         break
@@ -356,66 +362,28 @@ class AutomaticCalibrationController(QObject):
                         ),
                     ]
 
-                    start_x_pos = 20  # Posição horizontal inicial
-                    start_y_pos = 40  # Posição vertical da primeira linha
-                    space_line = 30  # Distância vertical entre linhas
-
-                    for i, line in enumerate(hud_lines):
-                        y = start_y_pos + (i * space_line)
-                        cv2.putText(
-                            display_frame,
-                            line,
-                            (start_x_pos, y),
-                            cv2.FONT_HERSHEY_SIMPLEX,
-                            0.6,
-                            (0, 0, 0),
-                            3,
-                            cv2.LINE_AA,
-                        )
-                        cv2.putText(
-                            display_frame,
-                            line,
-                            (start_x_pos, y),
-                            cv2.FONT_HERSHEY_SIMPLEX,
-                            0.6,
-                            (0, 255, 255),
-                            1,
-                            cv2.LINE_AA,
-                        )
+                    # Pillow instead of cv2.putText: accents (é, ó, ñ)
+                    # and wrapping of lines wider than the frame.
+                    display_frame = CvText.draw_lines(
+                        display_frame, hud_lines, origin=(20, 24)
+                    )
                 else:
                     display_frame = frozen_frame.copy()
                     msg_hud = self.tr(
                         "Amostra: Tecle [ESC] para salvar | Tecle [R] para repetir."
                     )
-                    cv2.putText(
-                        display_frame,
-                        msg_hud,
-                        (22, 42),
-                        cv2.FONT_HERSHEY_SIMPLEX,
-                        0.55,
-                        (0, 0, 0),
-                        3,
-                        cv2.LINE_AA,
-                    )
-                    cv2.putText(
-                        display_frame,
-                        msg_hud,
-                        (20, 40),
-                        cv2.FONT_HERSHEY_SIMPLEX,
-                        0.55,
-                        (0, 255, 255),
-                        1,
-                        cv2.LINE_AA,
+                    display_frame = CvText.draw_lines(
+                        display_frame, [msg_hud], origin=(20, 24)
                     )
 
-                cv2.imshow(self.monitor_screen, display_frame)
+                cv2.imshow(self.monitor_window, display_frame)
                 key = cv2.waitKey(1) & 0xFF
 
                 # --- AÇÃO S: FECHAMENTO DA JANELA E CAPTURA LIMPA ---
                 if (
                     key == ord("s") or key == ord("S")
                 ) and not self.modo_preview:
-                    cv2.destroyWindow(self.monitor_screen)
+                    cv2.destroyWindow(self.monitor_window)
                     cv2.waitKey(1)
 
                     time.sleep(1.0)
@@ -430,7 +398,7 @@ class AutomaticCalibrationController(QObject):
                     if not buffer_ok:
                         self.msg_critical_signal.emit(
                             self.tr(
-                                "Erro ao capturar imagem da câmera. Dispositivo desconectado.\nVerifique a conexão cabo e ou instalação da câmera.\nFeche a janela e tente novamente."
+                                "Erro ao capturar imagem da câmera. Dispositivo desconectado.\nVerifique a conexão do cabo e/ou a instalação da câmera.\nFeche a janela e tente novamente."
                             )
                         )
                         break
@@ -464,18 +432,21 @@ class AutomaticCalibrationController(QObject):
                         else:
                             self.msg_warning_signal.emit(
                                 self.tr(
-                                    "O Tabuleiro não pôde ser lido na foto limpa. Retornando..."
+                                    "O tabuleiro não pôde ser lido na foto limpa. Retornando..."
                                 )
                             )
                     else:
                         self.msg_critical_signal.emit(
                             self.tr(
-                                "Erro ao capturar imagem da câmera. Dispositivo desconectado.\nVerifique a conexão cabo e ou instalação da câmera.\nFeche a janela e tente novamente."
+                                "Erro ao capturar imagem da câmera. Dispositivo desconectado.\nVerifique a conexão do cabo e/ou a instalação da câmera.\nFeche a janela e tente novamente."
                             )
                         )
                         break
 
-                    cv2.namedWindow(self.monitor_screen, cv2.WINDOW_AUTOSIZE)
+                    cv2.namedWindow(self.monitor_window, cv2.WINDOW_AUTOSIZE)
+                    CvText.set_window_title(
+                        self.monitor_window, self.monitor_screen
+                    )
 
                 # --- AÇÃO R: VOLTA AO RASTREAMENTO REAL ---
                 elif (
@@ -484,7 +455,7 @@ class AutomaticCalibrationController(QObject):
                     self.modo_preview = False
                     frozen_frame = None
                     self.msg_warning_signal.emit(
-                        self.tr("Captura descartada. Rastreamento reativado.")
+                        self.tr("Captura descartada. Rastreio reativado.")
                     )
 
                 # --- AÇÃO ESC: SALVA E FECHA ---
@@ -516,7 +487,9 @@ class AutomaticCalibrationController(QObject):
                     break
 
         except Exception as e:
-            mensagem = f"{self.tr('Erro crítico na calibração automática.')}\nDetalhes: {str(e)}."
+            mensagem = self.tr(
+                "Erro crítico na calibração automática.\nDetalhes: {0}."
+            ).format(e)
             self.msg_critical_signal.emit(mensagem)
         finally:
             if cap is not None and cap.isOpened():
@@ -534,7 +507,7 @@ class AutomaticCalibrationController(QObject):
         data = self.get_data()
         if self.service.create_calibration_point(data):
             self.msg_info_signal.emit(
-                self.tr("Calibração automática cadastrada com sucesso!")
+                self.tr("Calibração automática salva com sucesso!")
             )
         else:
             self.msg_critical_signal.emit(

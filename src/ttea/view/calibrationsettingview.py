@@ -161,7 +161,7 @@ class CalibrationSettingView(QDialog, Ui_CalibrationSettingView, WindowConfig):
             The close event to accept or ignore.
         """
         if self.msg.question(
-            self.tr("Deseja sair da configuração da calibração?"), None, True
+            self.tr("Deseja sair da configuração de calibração?"), None, True
         ):
             event.accept()
         else:

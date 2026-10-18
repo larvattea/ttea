@@ -9,19 +9,17 @@
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                            QMetaObject, QObject, QPoint, QRect, QSize, Qt,
-                            QTime, QUrl)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
-                           QFontDatabase, QGradient, QIcon, QImage,
-                           QKeySequence, QLinearGradient, QPainter, QPalette,
-                           QPixmap, QRadialGradient, QTransform)
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QFormLayout,
-                               QHBoxLayout, QLabel, QLineEdit, QPushButton,
-                               QSizePolicy, QSpacerItem, QTabWidget,
-                               QVBoxLayout, QWidget)
-
+    QHBoxLayout, QLabel, QLineEdit, QPushButton,
+    QSizePolicy, QSpacerItem, QTabWidget, QVBoxLayout,
+    QWidget)
 import ttea.resources.resources_rc
-
 
 class Ui_InstitutionFacilityEditView(object):
     def setupUi(self, InstitutionFacilityEditView):
@@ -175,22 +173,22 @@ class Ui_InstitutionFacilityEditView(object):
         self.led_address.setPlaceholderText(QCoreApplication.translate("InstitutionFacilityEditView", u"Rua, n\u00famero, bairro, cidade - UF - Pa\u00eds", None))
         self.lbl_phone.setText(QCoreApplication.translate("InstitutionFacilityEditView", u"Telefone:", None))
 #if QT_CONFIG(tooltip)
-        self.led_phone.setToolTip(QCoreApplication.translate("InstitutionFacilityEditView", u"Digite o n\u00famero com c\u00f3digo do pa\u00eds (ex: +55 para Brasil)", None))
+        self.led_phone.setToolTip(QCoreApplication.translate("InstitutionFacilityEditView", u"Digite o n\u00famero com o c\u00f3digo do pa\u00eds (ex: +55 para Brasil)", None))
 #endif // QT_CONFIG(tooltip)
         self.led_phone.setPlaceholderText(QCoreApplication.translate("InstitutionFacilityEditView", u"+99 99 99999-9999", None))
         self.lbl_email.setText(QCoreApplication.translate("InstitutionFacilityEditView", u"E-mail:", None))
         self.led_email.setPlaceholderText(QCoreApplication.translate("InstitutionFacilityEditView", u"email@email.com", None))
-        self.lbl_website.setText(QCoreApplication.translate("InstitutionFacilityEditView", u"Site / Website:", None))
+        self.lbl_website.setText(QCoreApplication.translate("InstitutionFacilityEditView", u"Site:", None))
         self.led_website.setPlaceholderText(QCoreApplication.translate("InstitutionFacilityEditView", u"https://www.exemplo.com", None))
         self.lbl_social_network.setText(QCoreApplication.translate("InstitutionFacilityEditView", u"Rede Social:", None))
         self.led_social_network.setPlaceholderText(QCoreApplication.translate("InstitutionFacilityEditView", u"@instituicao ou link completo", None))
         self.tab_institution.setTabText(self.tab_institution.indexOf(self.tab_data), QCoreApplication.translate("InstitutionFacilityEditView", u"Dados", None))
 #if QT_CONFIG(tooltip)
-        self.pb_ok.setToolTip(QCoreApplication.translate("InstitutionFacilityEditView", u"Gravar opera\u00e7\u00e3o corrente", None))
+        self.pb_ok.setToolTip(QCoreApplication.translate("InstitutionFacilityEditView", u"Salvar opera\u00e7\u00e3o atual", None))
 #endif // QT_CONFIG(tooltip)
         self.pb_ok.setText(QCoreApplication.translate("InstitutionFacilityEditView", u"OK", None))
 #if QT_CONFIG(tooltip)
-        self.pb_cancel.setToolTip(QCoreApplication.translate("InstitutionFacilityEditView", u"Cancelar opera\u00e7\u00e3o corrente", None))
+        self.pb_cancel.setToolTip(QCoreApplication.translate("InstitutionFacilityEditView", u"Cancelar opera\u00e7\u00e3o atual", None))
 #endif // QT_CONFIG(tooltip)
         self.pb_cancel.setText(QCoreApplication.translate("InstitutionFacilityEditView", u"Cancelar", None))
     # retranslateUi

@@ -1,11 +1,9 @@
-"""
-kartea
+"""Utilities of the Kartea game.
 
-A Python package for utility functions in the Kartea game,
-supporting and configuration management. Developed by the
-Larva UDESC team.
-
-This package provides tools for central path management.
+This package provides the central path management and the single
+tables (resource fields, arrival times, kartea.ini defaults and track
+palettes) shared by the configuration screens and the game. Developed
+by the Larva UDESC team.
 
 Attributes
 ----------
@@ -20,10 +18,16 @@ __license__ : str
 
 See Also
 --------
-CSVHandler
-    Handling CSV files with a custom dialect.
-PathConfig
-    Manages file paths and directory structures.
+KarteaPathConfig
+    Manages the KarTEA file paths, directories and Qt resources.
+KarteaResourceFields, ResourceField
+    Resource fields (image/sound) of the player configuration.
+KarteaArrivalTimeFields, ArrivalTimeField
+    Object arrival times by track speed.
+KarteaIniDefaults
+    Default values of kartea.ini.
+KarteaPalettes, Palette
+    Color palettes of the track.
 
 Notes
 -----
@@ -32,9 +36,15 @@ development. Contributions and bug reports are welcome at:
 https://github.com/larva-udesc/udesc_ttea_view
 """
 
-# Define the __all__ variable
 __all__ = [
+    "ArrivalTimeField",
+    "KarteaArrivalTimeFields",
+    "KarteaIniDefaults",
+    "KarteaPalettes",
     "KarteaPathConfig",
+    "KarteaResourceFields",
+    "Palette",
+    "ResourceField",
 ]
 
 __version__ = "1.0.0"
@@ -42,5 +52,8 @@ __date__ = "2025-12-25"
 __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
-# Import the submodules
+from .arrivaltimefields import ArrivalTimeField, KarteaArrivalTimeFields
+from .inidefaults import KarteaIniDefaults
 from .karteapathconfig import KarteaPathConfig
+from .palettes import KarteaPalettes, Palette
+from .resourcefields import KarteaResourceFields, ResourceField

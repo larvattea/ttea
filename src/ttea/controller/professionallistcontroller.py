@@ -150,7 +150,7 @@ class ProfessionalListController(QObject):
         and update if accepted."""
         professional_id = self.view.get_selected_id()
         if not professional_id:
-            self.msg.warning(self.tr("Selecione um professional para editar."))
+            self.msg.warning(self.tr("Selecione um profissional para editar."))
             return
 
         professional = self.service.find_by_id(professional_id)

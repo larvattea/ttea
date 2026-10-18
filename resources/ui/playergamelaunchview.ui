@@ -293,7 +293,7 @@
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Cancelar operação corrente</string>
+        <string>Cancelar operação atual</string>
        </property>
        <property name="text">
         <string>Cancelar</string>

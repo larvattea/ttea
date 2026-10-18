@@ -9,18 +9,16 @@
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                            QMetaObject, QObject, QPoint, QRect, QSize, Qt,
-                            QTime, QUrl)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
-                           QFontDatabase, QGradient, QIcon, QImage,
-                           QKeySequence, QLinearGradient, QPainter, QPalette,
-                           QPixmap, QRadialGradient, QTransform)
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QFormLayout,
-                               QHBoxLayout, QLabel, QPushButton, QSizePolicy,
-                               QSpacerItem, QVBoxLayout, QWidget)
-
+    QHBoxLayout, QLabel, QPushButton, QSizePolicy,
+    QSpacerItem, QVBoxLayout, QWidget)
 import ttea.resources.resources_rc
-
 
 class Ui_PlayerGameLaunchView(object):
     def setupUi(self, PlayerGameLaunchView):
@@ -189,7 +187,7 @@ class Ui_PlayerGameLaunchView(object):
 #endif // QT_CONFIG(tooltip)
         self.pb_play.setText(QCoreApplication.translate("PlayerGameLaunchView", u"Jogar", None))
 #if QT_CONFIG(tooltip)
-        self.pb_cancel.setToolTip(QCoreApplication.translate("PlayerGameLaunchView", u"Cancelar opera\u00e7\u00e3o corrente", None))
+        self.pb_cancel.setToolTip(QCoreApplication.translate("PlayerGameLaunchView", u"Cancelar opera\u00e7\u00e3o atual", None))
 #endif // QT_CONFIG(tooltip)
         self.pb_cancel.setText(QCoreApplication.translate("PlayerGameLaunchView", u"Cancelar", None))
     # retranslateUi

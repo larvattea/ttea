@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Plataforma T-TEA - Calibração da Visualização da Tela do Jogo</string>
+   <string>Plataforma T-TEA - Calibração Manual da Visualização da Tela do Jogo</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../resources.qrc">

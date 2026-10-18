@@ -1,213 +1,31 @@
-import pygame
+"""Obstacle object of the KarTEA road."""
 
-from ttea.games.kartea.gamemodel import Image
-from ttea.games.kartea.gamemodel.target import Target
-from ttea.games.kartea.gameutil import GameSettings
-from ttea.games.kartea.model import PlayerKarteaSessionDetail
+from .target import EventType, Target
 
 
 class Obstacle(Target):
-    """Classe que representa um obstáculo no jogo. Herda de Target."""
+    """Obstacle in the game. Inherits from Target.
 
-    def __init__(self, r: int = None):
-        """
-        Inicializa um obstáculo com base na pista (r).
+    Changes the image, the size and the result:
 
-        Args:
-            r (int): Índice da pista (0, 1 ou 2) onde o obstáculo
-            deve aparecer.
-        """
-        # Chama o construtor da classe Target para
-        super().__init__(r)
-        # Define tamanho
-        size = GameSettings.OBSTACLE_SIZES
+    - avoided (left the screen) -> 10 points, AVOIDED_OBSTACLE;
+    - collided with the car -> 0 points, COLLIDED_OBSTACLE.
 
-        # Define posição inicial de spawn
-        road, start_pos = self.define_spawn_pos(r)
+    Attributes
+    ----------
+    COLLIDED_RESULT : tuple[int, EventType], class attribute
+        ``(0, EventType.COLLIDED_OBSTACLE)``.
+    AVOIDED_RESULT : tuple[int, EventType], class attribute
+        ``(10, EventType.AVOIDED_OBSTACLE)``.
+    """
 
-        # Configurações do obstáculo
-        self.tam = size
-        self.rect = pygame.Rect(start_pos[0], start_pos[1], size[0], size[1])
-        # self.images = [Image.load("Assets/Kartea/Obstaculo.png", size=size)]
-        self.images = [Image.load(GameSettings.OBSTACLE_IMAGE, size=size)]
-        self.current_frame = 0
-        self.current_pos = start_pos
-        self.current_road = road
-        self.animation_timer = 0
+    COLLIDED_RESULT = (0, EventType.COLLIDED_OBSTACLE)
+    AVOIDED_RESULT = (10, EventType.AVOIDED_OBSTACLE)
 
-    def move(self):
-        """Move o obstáculo para baixo com variação lateral dependendo
-        da pista e velocidade."""
-        ve = GameSettings.TARGETS_MOVE_SPEED
-        vel = [0, ve]
+    def _size(self) -> tuple[int, int]:
+        """Return the obstacle size (``OBSTACLE_SIZES``)."""
+        return self.settings.OBSTACLE_SIZES
 
-        if ve == 1:
-            if self.current_pos[1] % 10 == 0:
-                if self.current_road == 0:
-                    vel = [-3, ve]
-                elif self.current_road == 2:
-                    vel = [3, ve]
-            elif self.current_pos[1] % 5 == 0:
-                self.rect.inflate_ip(3, 3)
-                self.tam = (int(self.tam[0] + 3), int(self.tam[1] + 3))
-                # self.images = [
-                #    Image.load("Assets/Kartea/Obstaculo.png", size=self.tam)
-                # ]
-                self.images = [
-                    Image.load(GameSettings.OBSTACLE_IMAGE, size=self.tam)
-                ]
-                if self.current_road == 0:
-                    vel = [-3, ve]
-                elif self.current_road == 2:
-                    vel = [3, ve]
-            else:
-                vel = [0, ve]
-
-        elif ve == 2:
-            if self.current_pos[1] % 8 == 0:
-                if self.current_road == 0:
-                    vel = [-2, ve]
-                elif self.current_road == 2:
-                    vel = [2, ve]
-            elif self.current_pos[1] % 4 == 0:
-                self.rect.inflate_ip(3, 3)
-                self.tam = (int(self.tam[0] + 3), int(self.tam[1] + 3))
-                # self.images = [
-                #    Image.load("Assets/Kartea/Obstaculo.png", size=self.tam)
-                # ]
-                self.images = [
-                    Image.load(GameSettings.OBSTACLE_IMAGE, size=self.tam)
-                ]
-                if self.current_road == 0:
-                    vel = [-2, ve]
-                elif self.current_road == 2:
-                    vel = [2, ve]
-            else:
-                vel = [0, ve]
-
-        elif ve == 3:
-            if self.current_pos[1] % 12 == 0:
-                if self.current_road == 0:
-                    vel = [-1, ve]
-                elif self.current_road == 2:
-                    vel = [1, ve]
-            elif self.current_pos[1] % 6 == 0:
-                self.rect.inflate_ip(3, 3)
-                self.tam = (int(self.tam[0] + 3), int(self.tam[1] + 3))
-                # self.images = [
-                #    Image.load("Assets/Kartea/Obstaculo.png", size=self.tam)
-                # ]
-                self.images = [
-                    Image.load(GameSettings.OBSTACLE_IMAGE, size=self.tam)
-                ]
-                if self.current_road == 0:
-                    vel = [-1, ve]
-                elif self.current_road == 2:
-                    vel = [1, ve]
-            else:
-                vel = [0, ve]
-
-        elif ve == 4:
-            if self.current_pos[1] % 16 == 0:
-                if self.current_road == 0:
-                    vel = [-1, ve]
-                elif self.current_road == 2:
-                    vel = [1, ve]
-            elif self.current_pos[1] % 8 == 0:
-                self.rect.inflate_ip(3, 3)
-                self.tam = (int(self.tam[0] + 3), int(self.tam[1] + 3))
-                # self.images = [
-                #    Image.load("Assets/Kartea/Obstaculo.png", size=self.tam)
-                # ]
-                self.images = [
-                    Image.load(GameSettings.OBSTACLE_IMAGE, size=self.tam)
-                ]
-                if self.current_road == 0:
-                    vel = [-1, ve]
-                elif self.current_road == 2:
-                    vel = [1, ve]
-            else:
-                vel = [0, ve]
-
-        else:  # velocidade padrão
-            if self.current_pos[1] % 10 == 0:
-                if self.current_road == 0:
-                    vel = [-3, ve]
-                elif self.current_road == 2:
-                    vel = [3, ve]
-            else:
-                self.rect.inflate_ip(3, 3)
-                self.tam = (int(self.tam[0] + 3), int(self.tam[1] + 3))
-                # self.images = [
-                #    Image.load("Assets/Kartea/Obstaculo.png", size=self.tam)
-                # ]
-                self.images = [
-                    Image.load(GameSettings.OBSTACLE_IMAGE, size=self.tam)
-                ]
-                if self.current_road == 0:
-                    vel = [-3, ve]
-                elif self.current_road == 2:
-                    vel = [3, ve]
-
-        # Aplica o movimento
-        self.rect.move_ip(vel)
-        self.current_pos = (
-            self.current_pos[0] + vel[0],
-            self.current_pos[1] + vel[1],
-        )
-
-    def kill(
-        self, surface: pygame.Surface, targets: list, sounds: dict
-    ) -> int:
-        """
-        Remove o obstáculo da lista e retorna pontos.
-        - Se saiu da tela por baixo -> Desviou (10 pontos)
-        - Se colidiu com o carro -> Colidiu (0 pontos)
-        """
-        # triste_fig = Image.load("Assets/Kartea/triste.png")
-        # feliz_fig = Image.load("Assets/Kartea/feliz.png")
-        negative_fig = Image.load(GameSettings.NEGATIVE_FEEDBACK_IMAGE)
-        positive_fig = Image.load(GameSettings.POSITIVE_FEEDBACK_IMAGE)
-
-        screen_w = surface.get_width()
-        screen_h = surface.get_height()
-
-        image_pos = (
-            screen_w // 2,
-            # int(GameSettings.SCREEN_HEIGHT * 0.20),
-            int(screen_h * 0.20),
-        )
-
-        if self.current_pos[1] > screen_h:
-            # Desviou do obstáculo
-            targets.remove(self)
-            sounds["slap"].play()
-            # Image.draw(surface, positive_fig, (0, 0))
-            Image.draw(
-                surface,
-                positive_fig,
-                image_pos,
-                pos_mode=Image.IMAGE_POS_CENTER,
-            )
-            self.create_player_kartea_session_detail(
-                PlayerKarteaSessionDetail.EventType.AVOIDED_OBSTACLE
-            )
-            GameSettings.Obst_d += 1
-            return 10
-        else:
-            # Colidiu com o obstáculo
-            targets.remove(self)
-            sounds["screaming"].play()
-            # Image.draw(surface, negative_fig, (0, 0))
-            Image.draw(
-                surface,
-                negative_fig,
-                image_pos,
-                pos_mode=Image.IMAGE_POS_CENTER,
-            )
-
-            self.create_player_kartea_session_detail(
-                PlayerKarteaSessionDetail.EventType.COLLIDED_OBSTACLE
-            )
-            GameSettings.Obst_c += 1
-            return 0
+    def _image_path(self) -> str:
+        """Return the obstacle image (``OBSTACLE_IMAGE``)."""
+        return self.settings.OBSTACLE_IMAGE

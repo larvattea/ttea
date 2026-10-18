@@ -180,7 +180,7 @@ class InstitutionFacilityService(QObject):
         ):
             raise BusinessRuleException(
                 self.tr(
-                    "Exclusão negada: A instituição possui profissional vinculado."
+                    "Exclusão negada: a instituição possui profissional vinculado."
                 )
             )
 

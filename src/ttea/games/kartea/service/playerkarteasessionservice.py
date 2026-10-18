@@ -1,39 +1,31 @@
-from typing import Any, Dict, Optional
+"""Service of the players' Kartea game sessions."""
 
 from ttea.games.kartea.dao import PlayerKarteaSessionCsvDAO
 from ttea.games.kartea.model import PlayerKarteaSession
 
+from .csvcrudservice import CsvCrudService
 
-class PlayerKarteaSessionService:
 
-    def __init__(
-        self,
-        dao: Optional[PlayerKarteaSessionCsvDAO] = None,
-    ):
-        self.dao = dao or PlayerKarteaSessionCsvDAO()
+class PlayerKarteaSessionService(CsvCrudService[PlayerKarteaSession]):
+    """Game sessions (one row per session). See CsvCrudService.
 
-    def create_player_kartea_session(
-        self, data: Dict[str, Any]
-    ) -> Optional[PlayerKarteaSession]:
-        playerkarteasession = PlayerKarteaSession(**data)
+    Attributes
+    ----------
+    model : type, class attribute
+        PlayerKarteaSession.
+    dao_class : type, class attribute
+        PlayerKarteaSessionCsvDAO.
+    create_player_kartea_session : function, class attribute
+        Alias of ``CsvCrudService.create``, the name used by
+        SessionRecorder.
+    update_player_kartea_session : function, class attribute
+        Alias of ``CsvCrudService.update``, the name used by
+        SessionRecorder.
+    """
 
-        new_id = self.dao.insert(playerkarteasession)
-        return self.dao.select(new_id) if new_id > 0 else None
+    model = PlayerKarteaSession
+    dao_class = PlayerKarteaSessionCsvDAO
 
-    def update_player_kartea_session(
-        self, playerkarteasession_id: int, data: Dict[str, Any]
-    ) -> bool:
-        playerkarteasession = self.dao.select(playerkarteasession_id)
-        if not playerkarteasession:
-            return False
-
-        playerkarteasession.set_data(data)
-
-        success = self.dao.update(playerkarteasession)
-
-        return success
-
-    def find_by_id(
-        self, playerkarteasession_id: int
-    ) -> Optional[PlayerKarteaSession]:
-        return self.dao.select(playerkarteasession_id)
+    # Names used by SessionRecorder
+    create_player_kartea_session = CsvCrudService.create
+    update_player_kartea_session = CsvCrudService.update

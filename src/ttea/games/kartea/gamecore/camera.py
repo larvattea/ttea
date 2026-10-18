@@ -1,33 +1,77 @@
+"""Camera capture (OpenCV) of the KarTEA game."""
+
+from typing import TYPE_CHECKING
+
 import cv2
 
-# import settings
-from ttea.games.kartea.gameutil import GameSettings
-from ttea.games.kartea.service import PlayerKarteaConfigService
+from ttea.games.kartea.gameutil import regain_focus
+
+if TYPE_CHECKING:
+    from ttea.games.kartea.gameutil import GameSettings
+    from ttea.games.kartea.model import CameraConfig
 
 
 class Camera:
-    """Classe responsável pelo gerenciamento da câmera (captura de vídeo via OpenCV)."""
+    """Manage the camera (video capture via OpenCV).
 
-    def __init__(self):
-        """Inicializa a captura de vídeo usando a configuração definida em settings."""
-        self.service = PlayerKarteaConfigService()
+    Parameters
+    ----------
+    config : CameraConfig
+        Camera index and backend (KarteaHardwareService).
+    settings : GameSettings
+        Calibration points and colors used to draw the area.
+
+    Attributes
+    ----------
+    config : CameraConfig
+        Camera configuration.
+    settings : GameSettings
+        Game configuration.
+    cap : cv2.VideoCapture
+        Open video capture.
+    ret : bool
+        Whether the last read succeeded.
+    frame : numpy.ndarray | None
+        Last frame read (None after a failed read).
+
+    Notes
+    -----
+    The first frame is read and the "Tela de Captura" window is created
+    on creation, so the window takes the focus once, before the pygame
+    window gets it back (``regain_focus``).
+    """
+
+    def __init__(self, config: "CameraConfig", settings: "GameSettings"):
+        self.config = config
+        self.settings = settings
         self.cap = cv2.VideoCapture(
-            GameSettings.CAMERA_OS_INDEX, self.camera_backend()
+            config.camera_index, config.capture_backend
         )
         self.ret = False
         self.frame = None
+        self._window_shown = False
 
-        # Lê o primeiro frame para inicialização
         self.ret, self.frame = self.cap.read()
 
-    def camera_backend(self) -> int:
-        """Return the native OpenCV camera backend for the current platform."""
-        return self.service.get_opencv_capture_backend()
+        # Created here, not on the first imshow, so it does not steal
+        # the focus from the pygame window later.
+        cv2.namedWindow("Tela de Captura")
 
     def load_camera(self) -> bool:
-        """
-        Lê um novo frame da câmera, aplica flip horizontal e desenha
-        a área de calibração na imagem.
+        """Read a camera frame and show it with the calibration area.
+
+        Returns
+        -------
+        bool
+            True if a frame was read; False otherwise (``frame`` becomes
+            None).
+
+        Notes
+        -----
+        The frame is mirrored horizontally, the 4 sides and 4 points of
+        the calibration area are drawn on it (``CALIBRATION_LINE_COLOR``
+        and ``CALIBRATION_POINT_COLOR``) and it is shown in the "Tela de
+        Captura" window.
         """
         self.ret, self.frame = self.cap.read()
 
@@ -36,79 +80,85 @@ class Camera:
             return False
 
         if self.frame is not None:
-            # Espelha a imagem horizontalmente (efeito mirror)
+            # Mirror the image horizontally
             self.frame = cv2.flip(self.frame, 1)
 
-            # Desenha as linhas da área de calibração
+            # Sides of the calibration area
             cv2.line(
                 self.frame,
-                GameSettings.pontos_calibracao[0],
-                GameSettings.pontos_calibracao[1],
-                GameSettings.verde,
+                self.settings.CALIBRATION_POINTS[0],
+                self.settings.CALIBRATION_POINTS[1],
+                self.settings.CALIBRATION_LINE_COLOR,
                 2,
             )
 
             cv2.line(
                 self.frame,
-                GameSettings.pontos_calibracao[1],
-                GameSettings.pontos_calibracao[3],
-                GameSettings.verde,
+                self.settings.CALIBRATION_POINTS[1],
+                self.settings.CALIBRATION_POINTS[3],
+                self.settings.CALIBRATION_LINE_COLOR,
                 2,
             )
 
             cv2.line(
                 self.frame,
-                GameSettings.pontos_calibracao[2],
-                GameSettings.pontos_calibracao[0],
-                GameSettings.verde,
+                self.settings.CALIBRATION_POINTS[2],
+                self.settings.CALIBRATION_POINTS[0],
+                self.settings.CALIBRATION_LINE_COLOR,
                 2,
             )
 
             cv2.line(
                 self.frame,
-                GameSettings.pontos_calibracao[2],
-                GameSettings.pontos_calibracao[3],
-                GameSettings.verde,
+                self.settings.CALIBRATION_POINTS[2],
+                self.settings.CALIBRATION_POINTS[3],
+                self.settings.CALIBRATION_LINE_COLOR,
                 2,
             )
 
-            # Desenha os pontos de calibração como círculos
+            # Calibration points as circles
             cv2.circle(
                 self.frame,
-                GameSettings.pontos_calibracao[0],
+                self.settings.CALIBRATION_POINTS[0],
                 5,
-                GameSettings.azul,
+                self.settings.CALIBRATION_POINT_COLOR,
                 3,
             )
             cv2.circle(
                 self.frame,
-                GameSettings.pontos_calibracao[1],
+                self.settings.CALIBRATION_POINTS[1],
                 5,
-                GameSettings.azul,
+                self.settings.CALIBRATION_POINT_COLOR,
                 3,
             )
             cv2.circle(
                 self.frame,
-                GameSettings.pontos_calibracao[2],
+                self.settings.CALIBRATION_POINTS[2],
                 5,
-                GameSettings.azul,
+                self.settings.CALIBRATION_POINT_COLOR,
                 3,
             )
             cv2.circle(
                 self.frame,
-                GameSettings.pontos_calibracao[3],
+                self.settings.CALIBRATION_POINTS[3],
                 5,
-                GameSettings.azul,
+                self.settings.CALIBRATION_POINT_COLOR,
                 3,
             )
 
-            # Exibe a janela de captura
+            # Show the capture window
             cv2.imshow("Tela de Captura", self.frame)
+
+            # The first imshow resizes the window, and Windows activates
+            # it: give the focus back to the game window once.
+            if not self._window_shown:
+                self._window_shown = True
+                regain_focus()
 
         return True
 
     def close_camera(self):
-        """Libera a câmera e fecha a janela de captura."""
+        """Release the camera and close the capture window."""
         if self.cap is not None:
             self.cap.release()
         cv2.destroyWindow("Tela de Captura")

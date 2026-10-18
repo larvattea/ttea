@@ -34,7 +34,7 @@ class CalibrationController(QObject):
         if calibration:
             self.view.msg.info(
                 self.tr(
-                    "Dados do hardware do ambiente de calibração cadastrado com sucesso!"
+                    "Dados do hardware do ambiente de calibração cadastrados com sucesso!"
                 )
             )
             self.view.accept()

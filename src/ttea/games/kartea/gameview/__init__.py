@@ -1,7 +1,8 @@
-"""
-A Python package for KarTEA Game views. Developed by the Larva UDESC team.
+"""Game views of the KarTEA game (pygame side).
 
-This package provides views for KarTEA game.
+This package provides what is drawn over the road during and between
+matches: the HUD, the hit/miss feedback and the menus. Developed by
+the Larva UDESC team.
 
 Attributes
 ----------
@@ -16,8 +17,12 @@ __license__ : str
 
 See Also
 --------
-GameSettings
-    GameSettings.
+HudView
+    Score, time, phase and level shown during the game.
+FeedbackView
+    Hit/miss sound and image of a removed object.
+Menu
+    Start, pause and feedback menus.
 
 Notes
 -----
@@ -26,8 +31,9 @@ development. Contributions and bug reports are welcome at:
 https://github.com/larva-udesc/udesc_ttea_view
 """
 
-# Define the __all__ variable
 __all__ = [
+    "FeedbackView",
+    "HudView",
     "Menu",
 ]
 
@@ -36,5 +42,6 @@ __date__ = "2025-12-25"
 __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
-# Import the submodules
+from .feedbackview import FeedbackView
+from .hudview import HudView
 from .menu import Menu

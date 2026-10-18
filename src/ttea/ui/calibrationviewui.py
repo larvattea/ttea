@@ -9,18 +9,16 @@
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                            QMetaObject, QObject, QPoint, QRect, QSize, Qt,
-                            QTime, QUrl)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
-                           QFontDatabase, QGradient, QIcon, QImage,
-                           QKeySequence, QLinearGradient, QPainter, QPalette,
-                           QPixmap, QRadialGradient, QTransform)
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QHBoxLayout,
-                               QLabel, QPushButton, QSizePolicy, QSpacerItem,
-                               QVBoxLayout, QWidget)
-
+    QLabel, QPushButton, QSizePolicy, QSpacerItem,
+    QVBoxLayout, QWidget)
 import ttea.resources.resources_rc
-
 
 class Ui_CalibrationView(object):
     def setupUi(self, CalibrationView):
@@ -178,7 +176,7 @@ class Ui_CalibrationView(object):
         self.lbl_proportion.setText(QCoreApplication.translate("CalibrationView", u"Propor\u00e7\u00e3o:", None))
         self.lbl_monitor.setText(QCoreApplication.translate("CalibrationView", u"Monitor:", None))
         self.lbl_camera.setText(QCoreApplication.translate("CalibrationView", u"C\u00e2mera:", None))
-        self.lbl_video.setText(QCoreApplication.translate("CalibrationView", u"V\u00eddeo aparecer\u00e1 aqui", None))
+        self.lbl_video.setText(QCoreApplication.translate("CalibrationView", u"O v\u00eddeo aparecer\u00e1 aqui", None))
         self.pb_camera.setText(QCoreApplication.translate("CalibrationView", u"Iniciar C\u00e2mera - F5", None))
 #if QT_CONFIG(shortcut)
         self.pb_camera.setShortcut(QCoreApplication.translate("CalibrationView", u"F5", None))
@@ -187,7 +185,7 @@ class Ui_CalibrationView(object):
 #if QT_CONFIG(shortcut)
         self.pb_calibrate_auto.setShortcut(QCoreApplication.translate("CalibrationView", u"F6", None))
 #endif // QT_CONFIG(shortcut)
-        self.pb_calibrate_semi.setText(QCoreApplication.translate("CalibrationView", u"Calibra\u00e7\u00e3o Semi-Autom\u00e1tica - F7", None))
+        self.pb_calibrate_semi.setText(QCoreApplication.translate("CalibrationView", u"Calibra\u00e7\u00e3o Semiautom\u00e1tica - F7", None))
 #if QT_CONFIG(shortcut)
         self.pb_calibrate_semi.setShortcut(QCoreApplication.translate("CalibrationView", u"F7", None))
 #endif // QT_CONFIG(shortcut)
@@ -196,11 +194,11 @@ class Ui_CalibrationView(object):
         self.pb_calibrate_manual.setShortcut(QCoreApplication.translate("CalibrationView", u"F8", None))
 #endif // QT_CONFIG(shortcut)
 #if QT_CONFIG(tooltip)
-        self.pb_ok.setToolTip(QCoreApplication.translate("CalibrationView", u"Gravar opera\u00e7\u00e3o corrente", None))
+        self.pb_ok.setToolTip(QCoreApplication.translate("CalibrationView", u"Salvar opera\u00e7\u00e3o atual", None))
 #endif // QT_CONFIG(tooltip)
         self.pb_ok.setText(QCoreApplication.translate("CalibrationView", u"OK", None))
 #if QT_CONFIG(tooltip)
-        self.pb_cancel.setToolTip(QCoreApplication.translate("CalibrationView", u"Cancelar opera\u00e7\u00e3o corrente", None))
+        self.pb_cancel.setToolTip(QCoreApplication.translate("CalibrationView", u"Cancelar opera\u00e7\u00e3o atual", None))
 #endif // QT_CONFIG(tooltip)
         self.pb_cancel.setText(QCoreApplication.translate("CalibrationView", u"Cancelar", None))
     # retranslateUi

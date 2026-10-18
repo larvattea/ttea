@@ -1,0 +1,54 @@
+Recursos personalizados de KarTEA
+=================================
+
+Coloque aquí imágenes y sonidos para que aparezcan en la pantalla de
+configuración del jugador, junto con los que ya trae el juego. Cada
+archivo va en la carpeta del recurso que reemplaza:
+
+  images/vehicle/              vehículo
+  images/environment/          entorno (izquierda y derecha)
+  images/target/               objetivo
+  images/obstacle/             obstáculo
+  images/feedback/positive/    retroalimentación visual positiva
+  images/feedback/neutral/     retroalimentación visual neutra
+  images/feedback/negative/    retroalimentación visual negativa
+  sounds/feedback/positive/    sonido de acierto
+  sounds/feedback/neutral/     sonido neutro
+  sounds/feedback/negative/    sonido de error
+
+Formatos aceptados:
+  imágenes: .png (recomendado, con fondo transparente), .jpg, .jpeg,
+            .bmp
+  sonidos:  .wav
+
+Recomendaciones
+---------------
+
+  Vehículo     512x512 píxeles (mínimo 384x384 en pantallas Full HD).
+               Imagen cuadrada, coche visto desde atrás, fondo
+               transparente. En pantalla, el coche ocupa un cuadrado de
+               1/5 del ancho: una imagen más pequeña se ve borrosa, y
+               una imagen rectangular queda achatada.
+  Objetivo y   256x256 píxeles (mínimo 100x100). Imagen cuadrada, fondo
+  obstáculo    transparente. El juego reduce la imagen a 100x100 antes
+               de aplicar la perspectiva de la pista: los archivos más
+               grandes no mejoran la calidad.
+  Entorno      tamaño cercano a 500x520 píxeles (como los árboles
+               originales). El tamaño en pantalla sigue el tamaño del
+               archivo: una imagen muy grande se convierte en un objeto
+               gigante, y una muy pequeña, en un objeto diminuto. La de
+               la izquierda y la de la derecha deben mirar hacia el
+               lado correcto.
+  Retroali-    tamaño cercano a 800x200 píxeles. Se muestra en su
+  mentación    tamaño original, sin redimensionar: una foto grande
+  visual       cubre la pantalla.
+  Sonidos      .wav PCM de 16 bits, cortos y con un volumen parecido al
+               de los sonidos originales. Los WAV comprimidos (ADPCM) o
+               de 32 bits pueden no sonar.
+
+La retroalimentación neutra (imagen y sonido) se puede seleccionar,
+pero no se usa durante la partida.
+
+Después de copiar un archivo, cierre y vuelva a abrir la pantalla de
+configuración para que aparezca en la lista. Si se borra un archivo
+seleccionado, el juego vuelve a usar el recurso predeterminado.

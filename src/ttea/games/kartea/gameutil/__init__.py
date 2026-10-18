@@ -1,7 +1,7 @@
-"""
-A Python package for KarTEA Game utilities. Developed by the Larva UDESC team.
+"""Utilities of the KarTEA game (pygame side).
 
-This package provides utilities for KarTEA game.
+This package provides the immutable game settings, the mutable state
+of a match and window helpers. Developed by the Larva UDESC team.
 
 Attributes
 ----------
@@ -17,7 +17,11 @@ __license__ : str
 See Also
 --------
 GameSettings
-    GameSettings.
+    Immutable game configuration: screen, sizes, colors and resources.
+GameState, LevelStats, SessionStats
+    Mutable state of a match and its level/session counters.
+regain_focus
+    Brings the pygame window back to the foreground.
 
 Notes
 -----
@@ -26,9 +30,12 @@ development. Contributions and bug reports are welcome at:
 https://github.com/larva-udesc/udesc_ttea_view
 """
 
-# Define the __all__ variable
 __all__ = [
     "GameSettings",
+    "GameState",
+    "LevelStats",
+    "SessionStats",
+    "regain_focus",
 ]
 
 __version__ = "1.0.0"
@@ -36,5 +43,6 @@ __date__ = "2025-12-25"
 __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
-# Import the submodules
 from .gamesettings import GameSettings
+from .gamestate import GameState, LevelStats, SessionStats
+from .window import regain_focus

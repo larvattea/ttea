@@ -16,6 +16,8 @@ SOURCES += ../../src/ttea/app/*.py \
             ../../src/ttea/core/*.py \
            ../../src/ttea/games/kartea/controller/*.py \
            ../../src/ttea/games/kartea/view/*.py \
+           ../../src/ttea/games/kartea/util/palettes.py \
+           ../../src/ttea/games/kartea/util/resourcefields.py \
            ../../src/ttea/model/*.py \
            ../../src/ttea/service/*.py \
            ../../src/ttea/util/*.py \

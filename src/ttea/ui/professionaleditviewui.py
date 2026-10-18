@@ -9,19 +9,17 @@
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                            QMetaObject, QObject, QPoint, QRect, QSize, Qt,
-                            QTime, QUrl)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
-                           QFontDatabase, QGradient, QIcon, QImage,
-                           QKeySequence, QLinearGradient, QPainter, QPalette,
-                           QPixmap, QRadialGradient, QTransform)
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QFormLayout,
-                               QHBoxLayout, QLabel, QLineEdit, QPushButton,
-                               QSizePolicy, QSpacerItem, QTabWidget,
-                               QVBoxLayout, QWidget)
-
+    QHBoxLayout, QLabel, QLineEdit, QPushButton,
+    QSizePolicy, QSpacerItem, QTabWidget, QVBoxLayout,
+    QWidget)
 import ttea.resources.resources_rc
-
 
 class Ui_ProfessionalEditView(object):
     def setupUi(self, ProfessionalEditView):
@@ -133,11 +131,11 @@ class Ui_ProfessionalEditView(object):
         self.lbl_institution.setText(QCoreApplication.translate("ProfessionalEditView", u"Institui\u00e7\u00e3o/Estabelecimento:", None))
         self.tab_professional.setTabText(self.tab_professional.indexOf(self.tab_data), QCoreApplication.translate("ProfessionalEditView", u"Dados", None))
 #if QT_CONFIG(tooltip)
-        self.pb_ok.setToolTip(QCoreApplication.translate("ProfessionalEditView", u"Gravar opera\u00e7\u00e3o corrente", None))
+        self.pb_ok.setToolTip(QCoreApplication.translate("ProfessionalEditView", u"Salvar opera\u00e7\u00e3o atual", None))
 #endif // QT_CONFIG(tooltip)
         self.pb_ok.setText(QCoreApplication.translate("ProfessionalEditView", u"OK", None))
 #if QT_CONFIG(tooltip)
-        self.pb_cancel.setToolTip(QCoreApplication.translate("ProfessionalEditView", u"Cancelar opera\u00e7\u00e3o corrente", None))
+        self.pb_cancel.setToolTip(QCoreApplication.translate("ProfessionalEditView", u"Cancelar opera\u00e7\u00e3o atual", None))
 #endif // QT_CONFIG(tooltip)
         self.pb_cancel.setText(QCoreApplication.translate("ProfessionalEditView", u"Cancelar", None))
     # retranslateUi

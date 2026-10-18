@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Plataforma T-TEA - Configurações Kartea</string>
+   <string>Plataforma T-TEA - Configurações KarTEA</string>
   </property>
   <property name="windowIcon">
    <iconset resource="../../../../resources/resources.qrc">

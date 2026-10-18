@@ -10,7 +10,7 @@ from PySide6.QtGui import QKeyEvent, QPixmap
 
 from ttea.model import AppModel, CalibrationPoint, Language
 from ttea.service import CalibrationService
-from ttea.util import PathConfig
+from ttea.util import CvText, PathConfig
 
 if TYPE_CHECKING:
     from ttea.view import ManualCalibrationView
@@ -37,6 +37,9 @@ class ManualCalibrationController(QObject):
         self.monitor_screen: str = QCoreApplication.translate(
             "ManualCalibrationController", "Tela de Monitoramento"
         )
+        # ASCII key of the OpenCV window; the translated title (with
+        # accents) is shown with CvText.set_window_title.
+        self.monitor_window: str = CvText.window_name(self.monitor_screen)
 
         # ==================== MediaPipe Tasks (Pose Landmarker) =============
         if self.service.is_raspberry_pi():
@@ -78,8 +81,9 @@ class ManualCalibrationController(QObject):
 
     def _setup_calibration_window(self):
         """Cria/restaura a janela do OpenCV e (re)vincula o callback do mouse."""
-        cv2.namedWindow(self.monitor_screen, cv2.WINDOW_NORMAL)
-        cv2.setMouseCallback(self.monitor_screen, self._mouse_click_callback)
+        cv2.namedWindow(self.monitor_window, cv2.WINDOW_NORMAL)
+        CvText.set_window_title(self.monitor_window, self.monitor_screen)
+        cv2.setMouseCallback(self.monitor_window, self._mouse_click_callback)
 
     def keyPressEvent(self, event: QKeyEvent):
         if event.key() == Qt.Key_C:
@@ -141,7 +145,7 @@ class ManualCalibrationController(QObject):
         if self.camera is not None and self.camera.isOpened():
             if (
                 cv2.getWindowProperty(
-                    self.monitor_screen, cv2.WND_PROP_VISIBLE
+                    self.monitor_window, cv2.WND_PROP_VISIBLE
                 )
                 < 1
             ):
@@ -256,7 +260,7 @@ class ManualCalibrationController(QObject):
                     )
 
                 # Exibe o frame com esqueleto e pontos na janela
-                cv2.imshow(self.monitor_screen, control_screen)
+                cv2.imshow(self.monitor_window, control_screen)
 
             else:
                 self.view.msg.critical(
@@ -274,7 +278,7 @@ class ManualCalibrationController(QObject):
         data = self.get_data()
         if self.service.create_calibration_point(data):
             self.view.msg.info(
-                self.tr("Calibração manual cadastrada com sucesso!")
+                self.tr("Calibração manual salva com sucesso!")
             )
         else:
             self.view.msg.critical(

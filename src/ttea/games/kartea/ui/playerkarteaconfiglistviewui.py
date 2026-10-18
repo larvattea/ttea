@@ -9,20 +9,17 @@
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                            QMetaObject, QObject, QPoint, QRect, QSize, Qt,
-                            QTime, QUrl)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
-                           QFontDatabase, QGradient, QIcon, QImage,
-                           QKeySequence, QLinearGradient, QPainter, QPalette,
-                           QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QAbstractItemView, QApplication, QDialog,
-                               QGridLayout, QHBoxLayout, QHeaderView, QLabel,
-                               QLineEdit, QPushButton, QSizePolicy,
-                               QSpacerItem, QTableWidget, QTableWidgetItem,
-                               QTabWidget, QVBoxLayout, QWidget)
-
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QAbstractItemView, QApplication, QDialog, QGridLayout,
+    QHBoxLayout, QHeaderView, QLabel, QLineEdit,
+    QPushButton, QSizePolicy, QSpacerItem, QTabWidget,
+    QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget)
 import ttea.resources.resources_rc
-
 
 class Ui_PlayerKarteaConfigListView(object):
     def setupUi(self, PlayerKarteaConfigListView):
@@ -186,7 +183,7 @@ class Ui_PlayerKarteaConfigListView(object):
     # setupUi
 
     def retranslateUi(self, PlayerKarteaConfigListView):
-        PlayerKarteaConfigListView.setWindowTitle(QCoreApplication.translate("PlayerKarteaConfigListView", u"Plataforma T-TEA - Configura\u00e7\u00f5es Kartea", None))
+        PlayerKarteaConfigListView.setWindowTitle(QCoreApplication.translate("PlayerKarteaConfigListView", u"Plataforma T-TEA - Configura\u00e7\u00f5es KarTEA", None))
         self.lbl_search.setText(QCoreApplication.translate("PlayerKarteaConfigListView", u"Pesquisar:", None))
         self.led_search.setPlaceholderText(QCoreApplication.translate("PlayerKarteaConfigListView", u"Digite o nome ou ID do jogador", None))
         ___qtablewidgetitem = self.tbl_config.horizontalHeaderItem(0)

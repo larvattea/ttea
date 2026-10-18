@@ -201,7 +201,7 @@
          <item row="2" column="0">
           <widget class="QLabel" name="lbl_embedded_processing">
            <property name="text">
-            <string>Embarcado Processamento:</string>
+            <string>Processamento Embarcado:</string>
            </property>
           </widget>
          </item>
@@ -253,7 +253,7 @@
          <item row="3" column="0">
           <widget class="QLabel" name="lbl_linux_processing">
            <property name="text">
-            <string>Linux Processamento:</string>
+            <string>Processamento no Linux:</string>
            </property>
           </widget>
          </item>
@@ -305,7 +305,7 @@
          <item row="4" column="0">
           <widget class="QLabel" name="lbl_mac_processing">
            <property name="text">
-            <string>Mac Processamento:</string>
+            <string>Processamento no Mac:</string>
            </property>
           </widget>
          </item>
@@ -357,7 +357,7 @@
          <item row="5" column="0">
           <widget class="QLabel" name="lbl_windows_processing">
            <property name="text">
-            <string>Windows Processamento:</string>
+            <string>Processamento no Windows:</string>
            </property>
           </widget>
          </item>
@@ -474,7 +474,7 @@
          <item row="8" column="0">
           <widget class="QLabel" name="lbl_detection_position">
            <property name="text">
-            <string>Detecção de Posição (0–1):</string>
+            <string>Confiança de Detecção (0–1):</string>
            </property>
           </widget>
          </item>
@@ -503,7 +503,7 @@
          <item row="9" column="0">
           <widget class="QLabel" name="lbl_detection_presence">
            <property name="text">
-            <string>Detecção de Presença (0–1):</string>
+            <string>Confiança de Presença (0–1):</string>
            </property>
           </widget>
          </item>
@@ -532,7 +532,7 @@
          <item row="10" column="0">
           <widget class="QLabel" name="lbl_detection_tracking">
            <property name="text">
-            <string>Detecção de Rastreio (0–1):</string>
+            <string>Confiança de Rastreio (0–1):</string>
            </property>
           </widget>
          </item>
@@ -561,7 +561,7 @@
          <item row="11" column="0">
           <widget class="QLabel" name="lbl_num_position">
            <property name="text">
-            <string>Número de posições:</string>
+            <string>Número de poses:</string>
            </property>
           </widget>
          </item>
@@ -629,7 +629,7 @@
          <item row="0" column="0">
           <widget class="QLabel" name="lbl_embedded_capture">
            <property name="text">
-            <string>Embarcado Captura de Vídeo:</string>
+            <string>Captura de Vídeo Embarcada:</string>
            </property>
           </widget>
          </item>
@@ -681,7 +681,7 @@
          <item row="1" column="0">
           <widget class="QLabel" name="lbl_linux_capture">
            <property name="text">
-            <string>Linux Captura de Vídeo:</string>
+            <string>Captura de Vídeo no Linux:</string>
            </property>
           </widget>
          </item>
@@ -733,7 +733,7 @@
          <item row="2" column="0">
           <widget class="QLabel" name="lbl_mac_capture">
            <property name="text">
-            <string>Mac Captura de Vídeo:</string>
+            <string>Captura de Vídeo no Mac:</string>
            </property>
           </widget>
          </item>
@@ -785,7 +785,7 @@
          <item row="3" column="0">
           <widget class="QLabel" name="lbl_windows_capture">
            <property name="text">
-            <string>Windows Captura de Vídeo:</string>
+            <string>Captura de Vídeo no Windows:</string>
            </property>
           </widget>
          </item>
@@ -863,7 +863,7 @@
          <item row="5" column="0">
           <widget class="QLabel" name="lbl_custom_camera">
            <property name="text">
-            <string>Customizar Informações Câmera?</string>
+            <string>Personalizar Informações da Câmera?</string>
            </property>
           </widget>
          </item>
@@ -1101,7 +1101,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="lbl_average_smooth_frames">
             <property name="text">
-             <string>Média Móvel Smooth Frames:</string>
+             <string>Média Móvel (Quadros de Suavização):</string>
             </property>
            </widget>
           </item>
@@ -1127,7 +1127,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="lbl_clahe_clip">
             <property name="text">
-             <string>Filtro Clahe Limite Clip:</string>
+             <string>Filtro CLAHE Limite de Clip:</string>
             </property>
            </widget>
           </item>
@@ -1153,7 +1153,7 @@
           <item row="2" column="0">
            <widget class="QLabel" name="lbl_clahe_grid">
             <property name="text">
-             <string>Filtro Clahe Tamanho Grid:</string>
+             <string>Filtro CLAHE Tamanho do Grid:</string>
             </property>
            </widget>
           </item>
@@ -1190,7 +1190,7 @@
           <item row="3" column="0">
            <widget class="QLabel" name="lbl_clahe_lum_below">
             <property name="text">
-             <string>Filtro Clahe Aplicar Quando Valor de Luminosidade Abaixo de:</string>
+             <string>Filtro CLAHE Aplicar Quando Valor de Luminosidade Abaixo de:</string>
             </property>
            </widget>
           </item>
@@ -1216,7 +1216,7 @@
           <item row="4" column="0">
            <widget class="QLabel" name="lbl_gamma_factor">
             <property name="text">
-             <string>Filtro Gamma Fator de Divisão:</string>
+             <string>Filtro Gama Fator de Divisão:</string>
             </property>
            </widget>
           </item>
@@ -1245,7 +1245,7 @@
           <item row="5" column="0">
            <widget class="QLabel" name="lbl_gamma_lum_above">
             <property name="text">
-             <string>Filtro Gamma Aplicar Quando Valor de Luminosidade Acima de:</string>
+             <string>Filtro Gama Aplicar Quando Valor de Luminosidade Acima de:</string>
             </property>
            </widget>
           </item>
@@ -1271,7 +1271,7 @@
           <item row="6" column="0">
            <widget class="QLabel" name="lbl_landmark_limit">
             <property name="text">
-             <string>Filtro Landmark Limite de Movimento:</string>
+             <string>Filtro de Landmarks — Limite de Movimento:</string>
             </property>
            </widget>
           </item>
@@ -1328,7 +1328,7 @@
          <item row="0" column="0">
           <widget class="QLabel" name="lbl_enable_telemetry_panel">
            <property name="text">
-            <string>Habilitar painel telemetria?</string>
+            <string>Habilitar painel de telemetria?</string>
            </property>
           </widget>
          </item>
@@ -1379,7 +1379,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="lbl_window_position_automatic">
             <property name="text">
-             <string>Posição da abertura:</string>
+             <string>Posição da janela:</string>
             </property>
            </widget>
           </item>
@@ -1392,7 +1392,7 @@
              <item>
               <widget class="QRadioButton" name="rb_top_left_automatic">
                <property name="text">
-                <string>Topo-Esquerda</string>
+                <string>Superior Esquerdo</string>
                </property>
                <property name="checked">
                 <bool>true</bool>
@@ -1466,7 +1466,7 @@
              <item>
               <widget class="QRadioButton" name="rb_window_maximized_screen_util_automatic">
                <property name="text">
-                <string>Modo Janela (Maximizada Área Útil)</string>
+                <string>Modo Janela (Maximizada na Área Útil)</string>
                </property>
                <property name="dataclass_property" stdset="0">
                 <string notr="true">automatic_window_open_automatic</string>
@@ -1538,7 +1538,7 @@
        <item>
         <widget class="QGroupBox" name="grp_calibration_points_automatic">
          <property name="title">
-          <string>Leitura Pontos de Calibração</string>
+          <string>Leitura dos Pontos de Calibração</string>
          </property>
          <layout class="QFormLayout" name="frm_pontos_calibracao_automatic">
           <property name="labelAlignment">
@@ -1852,7 +1852,7 @@
      </widget>
      <widget class="QWidget" name="tab_semiautomatic_calibration">
       <attribute name="title">
-       <string>Calibração Semi-Automática</string>
+       <string>Calibração Semiautomática</string>
       </attribute>
       <layout class="QVBoxLayout" name="lay_calibracao_semi_automatica">
        <item>
@@ -1867,7 +1867,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="lbl_window_position_semiautomatic">
             <property name="text">
-             <string>Posição da abertura:</string>
+             <string>Posição da janela:</string>
             </property>
            </widget>
           </item>
@@ -1880,7 +1880,7 @@
              <item>
               <widget class="QRadioButton" name="rb_top_left_semiautomatic">
                <property name="text">
-                <string>Topo-Esquerda</string>
+                <string>Superior Esquerdo</string>
                </property>
                <property name="checked">
                 <bool>true</bool>
@@ -1954,7 +1954,7 @@
              <item>
               <widget class="QRadioButton" name="rb_window_maximized_screen_util_semiautomatic">
                <property name="text">
-                <string>Modo Janela (Maximizada Área Útil)</string>
+                <string>Modo Janela (Maximizada na Área Útil)</string>
                </property>
                <property name="dataclass_property" stdset="0">
                 <string notr="true">semiautomatic_window_open_semiautomatic</string>
@@ -2026,7 +2026,7 @@
        <item>
         <widget class="QGroupBox" name="grp_calibration_points_semiautomatic">
          <property name="title">
-          <string>Leitura Pontos de Calibração</string>
+          <string>Leitura dos Pontos de Calibração</string>
          </property>
          <layout class="QFormLayout" name="frm_pontos_calibracao_semiautomatic">
           <property name="labelAlignment">
@@ -2087,7 +2087,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="lbl_window_position_manual">
             <property name="text">
-             <string>Posição da abertura:</string>
+             <string>Posição da janela:</string>
             </property>
            </widget>
           </item>
@@ -2100,7 +2100,7 @@
              <item>
               <widget class="QRadioButton" name="rb_top_left_manual">
                <property name="text">
-                <string>Topo-Esquerda</string>
+                <string>Superior Esquerdo</string>
                </property>
                <property name="checked">
                 <bool>true</bool>
@@ -2174,7 +2174,7 @@
              <item>
               <widget class="QRadioButton" name="rb_window_maximized_screen_util_manual">
                <property name="text">
-                <string>Modo Janela (Maximizada Área Útil)</string>
+                <string>Modo Janela (Maximizada na Área Útil)</string>
                </property>
                <property name="dataclass_property" stdset="0">
                 <string notr="true">manual_window_open_manual</string>
@@ -2246,7 +2246,7 @@
        <item>
         <widget class="QGroupBox" name="grp_calibration_points_manual">
          <property name="title">
-          <string>Leitura Pontos de Calibração</string>
+          <string>Leitura dos Pontos de Calibração</string>
          </property>
          <layout class="QFormLayout" name="frm_pontos_calibracao_manual">
           <property name="labelAlignment">
@@ -2310,7 +2310,7 @@
      <item>
       <widget class="QPushButton" name="pb_ok">
        <property name="toolTip">
-        <string>Gravar operação corrente</string>
+        <string>Salvar operação atual</string>
        </property>
        <property name="text">
         <string>OK</string>
@@ -2327,7 +2327,7 @@
      <item>
       <widget class="QPushButton" name="pb_cancel">
        <property name="toolTip">
-        <string>Cancelar operação corrente</string>
+        <string>Cancelar operação atual</string>
        </property>
        <property name="text">
         <string>Cancelar</string>

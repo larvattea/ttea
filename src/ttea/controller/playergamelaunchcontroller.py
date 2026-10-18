@@ -17,6 +17,7 @@ from PySide6.QtCore import QObject, Qt, QTimer
 
 from ttea.model import AppModel, Calibration, CalibrationPoint
 from ttea.service import CalibrationService, PlayerGameLaunchService
+
 # Local module imports
 from ttea.util import MessageService
 
@@ -46,7 +47,7 @@ class PlayerGameLaunchController(QObject):
         if self.is_game_running():
             if self.msg.question(
                 self.tr(
-                    "Existe um jogo em execução, ele será finalizado. Deseja sair da tela de sessão de jogo?"
+                    "Há um jogo em execução e ele será encerrado. Deseja sair da tela de sessão de jogo?"
                 ),
                 None,
                 True,
@@ -60,20 +61,16 @@ class PlayerGameLaunchController(QObject):
     def handle_game_info(self) -> None:
         game_data = self.view.cbx_game.currentData()
 
-        if (
-            game_data.get("authors") is not None
-            and game_data.get("version") is not None
-            and game_data.get("since") is not None
-        ):
+        if game_data and game_data.developers and game_data.version:
             self.msg.info(
                 self.tr(
                     "Este jogo foi desenvolvido por:\n\n{0}\n\n"
                     "Versão: {1}\n"
                     "Desde: {2} - {3}"
                 ).format(
-                    "\n".join(game_data.get("authors", [])),
-                    game_data.get("version", "N/A"),
-                    game_data.get("since", "N/A"),
+                    "\n".join(game_data.developers),
+                    game_data.version,
+                    game_data.release_year or "N/A",
                     datetime.now().strftime("%Y"),
                 )
             )
@@ -162,8 +159,8 @@ class PlayerGameLaunchController(QObject):
             msg_text = self.tr(
                 "Foram detectadas divergências nos equipamentos configurados:\n\n"
                 "{0}\n\n"
-                "Recomenda-se verificar a instalação física, gravar os dados do hardware\n"
-                "atualizados na tela de calibração e ou realizar a calibração novamente.\n\n"
+                "Recomenda-se verificar a instalação física, salvar os dados do hardware\n"
+                "atualizados na tela de calibração e/ou realizar a calibração novamente.\n\n"
                 "Deseja iniciar o jogo mesmo assim?"
             ).format(details)
 
@@ -188,7 +185,7 @@ class PlayerGameLaunchController(QObject):
 
         if professional_id is None:
             self.msg.warning(
-                self.tr("Selecione um professional antes de iniciar.")
+                self.tr("Selecione um profissional antes de iniciar.")
             )
             return
         else:
@@ -207,9 +204,9 @@ class PlayerGameLaunchController(QObject):
             )
             return
 
-        folder = game_data["folder_path"]
-        executable = game_data.get("exec")
-        script_path = os.path.join(folder, executable)
+        folder = str(game_data.folder_path)
+        executable = game_data.entrypoint
+        script_path = str(game_data.entrypoint_path)
 
         if not os.path.exists(script_path):
             self.msg.critical(
@@ -270,7 +267,7 @@ class PlayerGameLaunchController(QObject):
         # UX: desabilita botões durante o lançamento
         self.view.pb_play.setEnabled(False)
         self.view.pb_cancel.setEnabled(False)
-        self.view.pb_play.setText(self.tr("Espere"))
+        self.view.pb_play.setText(self.tr("Aguarde..."))
         self.view.repaint()
 
         # Cria um novo grupo de processos (melhora o controle da árvore no Windows)

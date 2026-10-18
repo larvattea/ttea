@@ -9,18 +9,16 @@
 ################################################################################
 
 from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-                            QMetaObject, QObject, QPoint, QRect, QSize, Qt,
-                            QTime, QUrl)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor, QFont,
-                           QFontDatabase, QGradient, QIcon, QImage,
-                           QKeySequence, QLinearGradient, QPainter, QPalette,
-                           QPixmap, QRadialGradient, QTransform)
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QHBoxLayout,
-                               QLabel, QPushButton, QSizePolicy, QSpacerItem,
-                               QVBoxLayout, QWidget)
-
+    QLabel, QPushButton, QSizePolicy, QSpacerItem,
+    QVBoxLayout, QWidget)
 import ttea.resources.resources_rc
-
 
 class Ui_LanguageView(object):
     def setupUi(self, LanguageView):
@@ -88,7 +86,7 @@ class Ui_LanguageView(object):
         LanguageView.setWindowTitle(QCoreApplication.translate("LanguageView", u"Plataforma T-TEA", None))
         self.lbl_instruction.setText(QCoreApplication.translate("LanguageView", u"Selecione o idioma da aplica\u00e7\u00e3o:", None))
 #if QT_CONFIG(tooltip)
-        self.pb_ok.setToolTip(QCoreApplication.translate("LanguageView", u"Gravar opera\u00e7\u00e3o corrente", None))
+        self.pb_ok.setToolTip(QCoreApplication.translate("LanguageView", u"Salvar opera\u00e7\u00e3o atual", None))
 #endif // QT_CONFIG(tooltip)
         self.pb_ok.setText(QCoreApplication.translate("LanguageView", u"OK", None))
     # retranslateUi

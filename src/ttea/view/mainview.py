@@ -1,5 +1,4 @@
 # mainview.py
-import os
 from datetime import date, datetime
 from typing import Optional
 
@@ -53,16 +52,9 @@ class MainView(QMainWindow, Ui_MainView, WindowConfig):
 
         ViewFactory.discover_games()
         for game_name, metadata in ViewFactory._game_metadata.items():
-            for action_info in metadata.get("menu_actions", {}).values():
+            for action_info in metadata.menu_actions.values():
                 act = QAction(action_info["label"], self)
-                act.setIcon(
-                    QIcon(
-                        os.path.join(
-                            metadata.get("folder_path", ""),
-                            metadata.get("icon", ""),
-                        )
-                    )
-                )
+                act.setIcon(QIcon(metadata.icon_path))
 
                 act.triggered.connect(
                     lambda _, g=game_name, m=action_info[

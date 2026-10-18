@@ -16,6 +16,8 @@ See Also
 --------
 CSVHandler
     Handling CSV files with a custom dialect.
+CvText
+    Unicode text and window titles for OpenCV windows.
 PathConfig
     Manage file paths and directory structures.
 
@@ -32,6 +34,7 @@ https://github.com/larvattea/ttea
 __all__ = [
     "CriticalHooks",
     "CSVHandler",
+    "CvText",
     "Image",
     "MessageService",
     "QtDateFormat",
@@ -46,6 +49,7 @@ __license__ = "MIT License"
 # Import the submodules
 from .criticalhooks import CriticalHooks
 from .cvshandler import CSVHandler
+from .cvtext import CvText
 from .image import Image
 from .messageservice import MessageService
 from .pathconfig import PathConfig

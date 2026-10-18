@@ -1,9 +1,7 @@
-"""
-controller
+"""Controllers of the Kartea game register screens.
 
-A Python package for controllers in Kartea Game.
-
-This package provides the controller classes for managing game logic and user interactions.
+This package provides the controller classes (MVCS) that handle the
+user interactions of the player configuration list and edit screens.
 
 Attributes
 ----------
@@ -18,8 +16,10 @@ __license__ : str
 
 See Also
 --------
-PlayerKarteaConfigCsvDAO
-    Data Access Object for managing player kartea configuration data in CSV format.
+PlayerKarteaConfigListController
+    Controller of the player configuration list screen.
+PlayerKarteaConfigEditController
+    Controller of the player configuration create/edit dialog.
 
 Notes
 -----
@@ -28,7 +28,6 @@ development. Contributions and bug reports are welcome at:
 https://github.com/larva-udesc/udesc_ttea_view
 """
 
-# Define the __all__ variable
 __all__ = [
     "PlayerKarteaConfigEditController",
     "PlayerKarteaConfigListController",
@@ -39,6 +38,5 @@ __date__ = "2025-12-25"
 __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
-# Import the submodules
 from .playerkarteaconfigeditcontroller import PlayerKarteaConfigEditController
 from .playerkarteaconfiglistcontroller import PlayerKarteaConfigListController

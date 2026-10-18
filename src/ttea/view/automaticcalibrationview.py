@@ -108,7 +108,7 @@ class AutomaticCalibrationView(
         if not self.isVisible():
             return
 
-        msg_sucesso = self.tr("Calibração automática cadastrada com sucesso!")
+        msg_sucesso = self.tr("Calibração automática salva com sucesso!")
         msg_sem_salvar = self.tr("Fechando sem salvar.")
 
         if message in (msg_sucesso, msg_sem_salvar):

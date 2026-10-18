@@ -171,7 +171,7 @@ class PlayerService(QObject):
         if karteaconfig.find_config_by_player_id(player_id):
             raise BusinessRuleException(
                 self.tr(
-                    "Exclusão negada: O jogador possui uma configuração do KarTEA ativa."
+                    "Exclusão negada: o jogador possui uma configuração do KarTEA ativa."
                 )
             )
 

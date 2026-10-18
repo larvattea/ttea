@@ -1,12 +1,9 @@
-"""
-service
+"""Service classes (MVCS) of the Kartea game.
 
-A Python package for service classes from the Kartea game,
-supporting service logic.
-Developed by the Larva UDESC team.
-
-This package provides the service classes for controllers,
-for the T-TEA platform.
+This package provides the business rules used by the controllers and by
+the game: player configuration, phases and levels, hardware values and
+game sessions, for the T-TEA platform. Developed by the Larva UDESC
+team.
 
 Attributes
 ----------
@@ -21,8 +18,16 @@ __license__ : str
 
 See Also
 --------
-PlayerService
-    Manages the service logic and data operations related to player entities.
+PlayerKarteaConfigService
+    Business rules of the player configuration.
+KarteaPhaseService
+    Phases, levels, progression and level rules.
+KarteaHardwareService
+    Screen, camera, calibration and MediaPipe values.
+PlayerKarteaSessionService, PlayerKarteaSessionDetailService
+    Game sessions and their events.
+CsvCrudService
+    Generic create/update/find service over a DAO.
 
 Notes
 -----
@@ -31,8 +36,10 @@ development. Contributions and bug reports are welcome at:
 https://github.com/larva-udesc/udesc_ttea_view
 """
 
-# Define the __all__ variable
 __all__ = [
+    "CsvCrudService",
+    "KarteaHardwareService",
+    "KarteaPhaseService",
     "PlayerKarteaConfigService",
     "PlayerKarteaSessionDetailService",
     "PlayerKarteaSessionService",
@@ -43,7 +50,9 @@ __date__ = "2025-12-25"
 __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
-# Import the submodules
+from .csvcrudservice import CsvCrudService
+from .karteahardwareservice import KarteaHardwareService
+from .karteaphaseservice import KarteaPhaseService
 from .playerkarteaconfigservice import PlayerKarteaConfigService
 from .playerkarteasessiondetailservice import PlayerKarteaSessionDetailService
 from .playerkarteasessionservice import PlayerKarteaSessionService

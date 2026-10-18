@@ -110,7 +110,7 @@
       </size>
      </property>
      <property name="toolTip">
-      <string>Link plataforma T-TEA</string>
+      <string>Link da plataforma T-TEA</string>
      </property>
      <property name="styleSheet">
       <string notr="true">QTextBrowser {

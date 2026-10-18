@@ -41,7 +41,8 @@ class SmokeTest(unittest.TestCase):
 
         cam = Camera()
 
-        # Mapeamento simulando o retorno que o INI/QSettings entregaria para cada chave
+        # Mapeamento simulando o retorno que o INI/QSettings
+        # entregaria para cada chave
         configured_backends = {
             "opencv/opencv_windows_capture": "CAP_DSHOW",
             "opencv/opencv_mac_capture": "CAP_AVFOUNDATION",

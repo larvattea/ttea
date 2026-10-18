@@ -8,6 +8,7 @@ instances.
 from typing import List
 
 from ttea.factory import AppViewFactory
+from ttea.model import GameMetadata
 from ttea.service import PlayerGameLaunchService
 
 
@@ -45,20 +46,19 @@ class ViewFactory:
         return AppViewFactory()
 
     @staticmethod
-    def get_games_metadata() -> List[dict]:
+    def get_games_metadata() -> List[GameMetadata]:
         return PlayerGameLaunchService().get_games_metadata()
 
     @staticmethod
     def discover_games():
         """Carrega fábricas dinamicamente a partir dos metadados."""
         for metadata in ViewFactory.get_games_metadata():
-            factory_path = metadata.get("view_factory")
-            if factory_path:
-                module_name, class_name = factory_path.rsplit(".", 1)
+            if metadata.view_factory:
+                module_name, class_name = metadata.view_factory.rsplit(".", 1)
                 module = __import__(module_name, fromlist=[class_name])
                 factory_cls = getattr(module, class_name)
-                ViewFactory._game_factories[metadata["game"]] = factory_cls()
-                ViewFactory._game_metadata[metadata["game"]] = metadata
+                ViewFactory._game_factories[metadata.id] = factory_cls()
+                ViewFactory._game_metadata[metadata.id] = metadata
 
     @staticmethod
     def get_game_view_factory(name: str):

@@ -1,7 +1,8 @@
-"""
-A Python package for KarTEA Game controllers. Developed by the Larva UDESC team.
+"""Game controllers of the KarTEA game (pygame side).
 
-This package provides controllers for KarTEA game.
+This package provides the match controller (rules and frame flow) and
+the session recorder (persistence of the session, its events and the
+player's configuration). Developed by the Larva UDESC team.
 
 Attributes
 ----------
@@ -16,8 +17,10 @@ __license__ : str
 
 See Also
 --------
-GameSettings
-    GameSettings.
+GameController
+    Match rules and frame flow.
+SessionRecorder
+    Records the session row, its events and the config phase/level.
 
 Notes
 -----
@@ -26,9 +29,9 @@ development. Contributions and bug reports are welcome at:
 https://github.com/larva-udesc/udesc_ttea_view
 """
 
-# Define the __all__ variable
 __all__ = [
     "GameController",
+    "SessionRecorder",
 ]
 
 __version__ = "1.0.0"
@@ -36,5 +39,5 @@ __date__ = "2025-12-25"
 __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
-# Import the submodules
 from .gamecontroller import GameController
+from .sessionrecorder import SessionRecorder

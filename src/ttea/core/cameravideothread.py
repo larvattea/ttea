@@ -139,7 +139,7 @@ class CameraVideoThread(QThread, QObject):
 
                             if self.service.is_telemetry_enable_panel():
                                 text = self.tr(
-                                    "Rastreio Pés (%): {:.2f}"
+                                    "Rastreio dos Pés (%): {:.2f}"
                                 ).format((conf_esq + conf_dir) / 2)
                                 frame = self.put_text_unicode(
                                     frame,
@@ -184,7 +184,7 @@ class CameraVideoThread(QThread, QObject):
             else:
                 self.error_signal.emit(
                     self.tr(
-                        "Erro ao capturar imagem da câmera. Dispositivo desconectado.\nVerifique a conexão cabo e ou instalação da câmera.\nFeche a janela e tente novamente."
+                        "Erro ao capturar imagem da câmera. Dispositivo desconectado.\nVerifique a conexão do cabo e/ou a instalação da câmera.\nFeche a janela e tente novamente."
                     )
                 )
                 break

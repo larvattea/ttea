@@ -1,7 +1,9 @@
-"""
-A Python package for KarTEA Game uis. Developed by the Larva UDESC team.
+"""UI helpers of the KarTEA game (pygame side).
 
-This package provides uis for KarTEA game.
+This package provides the drawing primitives shared by the game views:
+text with an optional shadow, buttons that can be triggered by the
+mouse or by the player's feet, and the feet marker. Developed by the
+Larva UDESC team.
 
 Attributes
 ----------
@@ -16,8 +18,8 @@ __license__ : str
 
 See Also
 --------
-GameSettings
-    GameSettings.
+UI
+    Draws text, buttons and the feet marker on a pygame surface.
 
 Notes
 -----
@@ -26,7 +28,6 @@ development. Contributions and bug reports are welcome at:
 https://github.com/larva-udesc/udesc_ttea_view
 """
 
-# Define the __all__ variable
 __all__ = [
     "UI",
 ]
@@ -36,5 +37,4 @@ __date__ = "2025-12-25"
 __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
-# Import the submodules
 from .ui import UI

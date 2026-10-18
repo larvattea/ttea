@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="es_ES">
+<TS version="2.1" language="es_ES" sourcelanguage="pt_BR">
 <context>
     <name>AboutView</name>
     <message>
@@ -15,8 +15,8 @@
     </message>
     <message>
         <location filename="../ui/aboutview.ui" line="113"/>
-        <source>Link plataforma T-TEA</source>
-        <translation>Enlace a la plataforma T-TEA</translation>
+        <source>Link da plataforma T-TEA</source>
+        <translation>Enlace de la plataforma T-TEA</translation>
     </message>
     <message>
         <location filename="../ui/aboutview.ui" line="125"/>
@@ -35,7 +35,7 @@ hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Segoe UI&apos;; font-size:14px; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://udescmove2learn.wordpress.com/2023/06/26/t-tea/&quot;&gt;&lt;span style=&quot; font-size:9pt; text-decoration: underline; color:#003e92;&quot;&gt;¡Saber más sobre la Plataforma!&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://udescmove2learn.wordpress.com/2023/06/26/t-tea/&quot;&gt;&lt;span style=&quot; font-size:9pt; text-decoration: underline; color:#003e92;&quot;&gt;¡Más información sobre la Plataforma!&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../ui/aboutview.ui" line="167"/>
@@ -55,7 +55,7 @@ hr { height: 1px; border-width: 0; }
 li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Segoe UI&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Desenvolvido por:&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Desarrollado por:&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;1. Marcelo da Silva Hounsell&lt;br /&gt;2. André Bonetto Trindade&lt;br /&gt;3. Gabriel Brunelli Pereira&lt;br /&gt;4. Marlow Rodrigo Becker Dickel&lt;br /&gt;5. Luis Eduardo Bet&lt;br /&gt;6. Maria Julia Sales&lt;br /&gt;7. Alexandre Altair de Melo&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
@@ -74,74 +74,88 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <message>
         <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="44"/>
         <source>Tela de Monitoramento</source>
-        <translation>Ventana de Monitoreo</translation>
+        <translation>Pantalla de monitorización</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="300"/>
-        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="317"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="208"/>
+        <source>Aviso de detecção ChArUco.
+Detalhes: {0}</source>
+        <translation>Aviso de detección ChArUco.
+Detalles: {0}</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="305"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="323"/>
         <source>Não foi possível abrir a câmera.</source>
-        <translation>No fue posible abrir la cámara.</translation>
+        <translation>No se pudo abrir la cámara.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="349"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="331"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="401"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="441"/>
+        <source>Erro ao capturar imagem da câmera. Dispositivo desconectado.
+Verifique a conexão do cabo e/ou a instalação da câmera.
+Feche a janela e tente novamente.</source>
+        <translation>Error al capturar la imagen de la cámara. Dispositivo desconectado.
+Compruebe la conexión del cable y/o la instalación de la cámara.
+Cierre la ventana e inténtelo de nuevo.</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="355"/>
         <source>Tecle [S] para ocultar a tela e capturar a imagem.</source>
-        <translation>Presiona [S] para ocultar la ventana y capturar la imagen.</translation>
+        <translation>Presione [S] para ocultar la pantalla y capturar la imagen.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="388"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="373"/>
         <source>Amostra: Tecle [ESC] para salvar | Tecle [R] para repetir.</source>
         <translation>Muestra: Presione [ESC] para guardar | Presione [R] para repetir.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="461"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="429"/>
         <source>Sucesso! Captura realizada sem obstruções.</source>
         <translation>¡Éxito! Captura realizada sin obstrucciones.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="467"/>
-        <source>O Tabuleiro não pôde ser lido na foto limpa. Retornando...</source>
-        <translation>No se pudo leer el tablero en la foto limpia. Regresando...</translation>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="435"/>
+        <source>O tabuleiro não pôde ser lido na foto limpa. Retornando...</source>
+        <translation>No se pudo leer el tablero en la foto limpia. Volviendo...</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="487"/>
-        <source>Captura descartada. Rastreamento reativado.</source>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="458"/>
+        <source>Captura descartada. Rastreio reativado.</source>
         <translation>Captura descartada. Seguimiento reactivado.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="514"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="485"/>
         <source>Fechando sem salvar.</source>
         <translation>Cerrando sin guardar.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="537"/>
-        <source>Calibração automática cadastrada com sucesso!</source>
-        <translation>¡Calibración automática registrada con éxito!</translation>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="491"/>
+        <source>Erro crítico na calibração automática.
+Detalhes: {0}.</source>
+        <translation>Error crítico en la calibración automática.
+Detalles: {0}.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="541"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="510"/>
+        <source>Calibração automática salva com sucesso!</source>
+        <translation>¡Calibración automática guardada con éxito!</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="514"/>
         <source>Erro ao salvar os pontos da calibração automática.</source>
         <translation>Error al guardar los puntos de la calibración automática.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="325"/>
-        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="433"/>
-        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="473"/>
-        <source>Erro ao capturar imagem da câmera. Dispositivo desconectado.
-Verifique a conexão cabo e ou instalação da câmera.
-Feche a janela e tente novamente.</source>
-        <translation>Error al capturar la imagen de la cámara. Dispositivo desconectado.
-Verifique la conexión del cable y/o la instalación de la cámara.
-Cierre la ventana e intente nuevamente.</translation>
-    </message>
-    <message>
-        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="352"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="358"/>
         <source>Tecle [ESC] para sair da tela de monitoramento.</source>
-        <translation>Presione [ESC] para salir de la ventana de monitoreo.</translation>
+        <translation>Presione [ESC] para salir de la pantalla de monitorización.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="355"/>
+        <location filename="../../src/ttea/controller/automaticcalibrationcontroller.py" line="361"/>
         <source>Tecle [ALT+F4 ou CMD+W] para fechar a tela das figuras.</source>
-        <translation>Presione [ALT+F4 o CMD+W] para cerrar la ventana de las figs.</translation>
+        <translation>Presione [ALT+F4 o CMD+W] para cerrar la ventana de las figuras.</translation>
     </message>
 </context>
 <context>
@@ -149,12 +163,12 @@ Cierre la ventana e intente nuevamente.</translation>
     <message>
         <location filename="../ui/automaticcalibrationview.ui" line="14"/>
         <source>Plataforma T-TEA - Calibração Automática da Visualização da Tela do Jogo</source>
-        <translation>Plataforma T-TEA - Calibración Automática de la Visualización de la Ventana del Juego</translation>
+        <translation>Plataforma T-TEA - Calibración automática de la visualización de la pantalla del juego</translation>
     </message>
     <message>
         <location filename="../../src/ttea/view/automaticcalibrationview.py" line="111"/>
-        <source>Calibração automática cadastrada com sucesso!</source>
-        <translation>¡Calibración automática registrada con éxito!</translation>
+        <source>Calibração automática salva com sucesso!</source>
+        <translation>¡Calibración automática guardada con éxito!</translation>
     </message>
     <message>
         <location filename="../../src/ttea/view/automaticcalibrationview.py" line="112"/>
@@ -171,8 +185,8 @@ Cierre la ventana e intente nuevamente.</translation>
     <name>CalibrationController</name>
     <message>
         <location filename="../../src/ttea/controller/calibrationcontroller.py" line="37"/>
-        <source>Dados do hardware do ambiente de calibração cadastrado com sucesso!</source>
-        <translation>¡Datos del hardware del entorno de calibración registrados con éxito!</translation>
+        <source>Dados do hardware do ambiente de calibração cadastrados com sucesso!</source>
+        <translation>¡Datos del hardware del entorno de calibración guardados con éxito!</translation>
     </message>
     <message>
         <location filename="../../src/ttea/controller/calibrationcontroller.py" line="47"/>
@@ -187,7 +201,7 @@ Cierre la ventana e intente nuevamente.</translation>
     <message>
         <location filename="../../src/ttea/controller/calibrationcontroller.py" line="149"/>
         <source>Parar Câmera - F5</source>
-        <translation>Detener Cámara - F5</translation>
+        <translation>Detener cámara - F5</translation>
     </message>
     <message>
         <location filename="../../src/ttea/controller/calibrationcontroller.py" line="150"/>
@@ -198,20 +212,20 @@ Cierre la ventana e intente nuevamente.</translation>
     <message>
         <location filename="../../src/ttea/controller/calibrationcontroller.py" line="160"/>
         <source>Iniciar Câmera - F5</source>
-        <translation>Iniciar Cámara - F5</translation>
+        <translation>Iniciar cámara - F5</translation>
     </message>
     <message>
         <location filename="../../src/ttea/controller/calibrationcontroller.py" line="163"/>
         <source>Câmera Parada</source>
-        <translation>Cámara Detenida</translation>
+        <translation>Cámara detenida</translation>
     </message>
 </context>
 <context>
     <name>CalibrationSettingController</name>
     <message>
         <location filename="../../src/ttea/controller/calibrationsettingcontroller.py" line="63"/>
-        <source>Configuração de calibração cadastrada com sucesso!</source>
-        <translation>¡Configuración de calibración registrada con éxito!</translation>
+        <source>Configuração de calibração salva com sucesso!</source>
+        <translation>¡Configuración de calibración guardada con éxito!</translation>
     </message>
     <message>
         <location filename="../../src/ttea/controller/calibrationsettingcontroller.py" line="68"/>
@@ -224,7 +238,7 @@ Cierre la ventana e intente nuevamente.</translation>
     <message>
         <location filename="../ui/calibrationsettingview.ui" line="14"/>
         <source>Configuração de Calibração</source>
-        <translation>Configuración de Calibración</translation>
+        <translation>Configuración de calibración</translation>
     </message>
     <message>
         <location filename="../ui/calibrationsettingview.ui" line="27"/>
@@ -257,12 +271,7 @@ Cierre la ventana e intente nuevamente.</translation>
     <message>
         <location filename="../ui/calibrationsettingview.ui" line="130"/>
         <source>Modelo MediaPipe Embarcado:</source>
-        <translation>Modelo MediaPipe Integrado:</translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationsettingview.ui" line="204"/>
-        <source>Embarcado Processamento:</source>
-        <translation>Procesamiento Integrado:</translation>
+        <translation>Modelo MediaPipe integrado:</translation>
     </message>
     <message>
         <location filename="../ui/calibrationsettingview.ui" line="217"/>
@@ -281,24 +290,9 @@ Cierre la ventana e intente nuevamente.</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationsettingview.ui" line="256"/>
-        <source>Linux Processamento:</source>
-        <translation>Procesamiento en Linux:</translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationsettingview.ui" line="308"/>
-        <source>Mac Processamento:</source>
-        <translation>Procesamiento en Mac:</translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationsettingview.ui" line="360"/>
-        <source>Windows Processamento:</source>
-        <translation>Procesamiento en Windows:</translation>
-    </message>
-    <message>
         <location filename="../ui/calibrationsettingview.ui" line="412"/>
         <source>Modo de Execução:</source>
-        <translation>Modo de Ejecución:</translation>
+        <translation>Modo de ejecución:</translation>
     </message>
     <message>
         <location filename="../ui/calibrationsettingview.ui" line="425"/>
@@ -306,34 +300,9 @@ Cierre la ventana e intente nuevamente.</translation>
         <translation>Vídeo</translation>
     </message>
     <message>
-        <location filename="../ui/calibrationsettingview.ui" line="477"/>
-        <source>Detecção de Posição (0–1):</source>
-        <translation>Detección de Posición (0–1):</translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationsettingview.ui" line="506"/>
-        <source>Detecção de Presença (0–1):</source>
-        <translation>Detección de Presencia (0–1):</translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationsettingview.ui" line="535"/>
-        <source>Detecção de Rastreio (0–1):</source>
-        <translation>Detección de Rastreo (0–1):</translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationsettingview.ui" line="564"/>
-        <source>Número de posições:</source>
-        <translation>Número de posiciones:</translation>
-    </message>
-    <message>
         <location filename="../ui/calibrationsettingview.ui" line="606"/>
         <source>OpenCV</source>
         <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationsettingview.ui" line="632"/>
-        <source>Embarcado Captura de Vídeo:</source>
-        <translation>Captura de Vídeo Integrada:</translation>
     </message>
     <message>
         <location filename="../ui/calibrationsettingview.ui" line="645"/>
@@ -348,16 +317,6 @@ Cierre la ventana e intente nuevamente.</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationsettingview.ui" line="684"/>
-        <source>Linux Captura de Vídeo:</source>
-        <translation>Captura de Vídeo en Linux:</translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationsettingview.ui" line="736"/>
-        <source>Mac Captura de Vídeo:</source>
-        <translation>Captura de Vídeo en Mac:</translation>
-    </message>
-    <message>
         <location filename="../ui/calibrationsettingview.ui" line="749"/>
         <source>CAP_AVFOUNDATION</source>
         <translation></translation>
@@ -366,11 +325,6 @@ Cierre la ventana e intente nuevamente.</translation>
         <location filename="../ui/calibrationsettingview.ui" line="762"/>
         <source>CAP_ANY</source>
         <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationsettingview.ui" line="788"/>
-        <source>Windows Captura de Vídeo:</source>
-        <translation>Captura de Vídeo en Windows:</translation>
     </message>
     <message>
         <location filename="../ui/calibrationsettingview.ui" line="801"/>
@@ -385,17 +339,12 @@ Cierre la ventana e intente nuevamente.</translation>
     <message>
         <location filename="../ui/calibrationsettingview.ui" line="840"/>
         <source>Tamanho do Buffer:</source>
-        <translation>Tamaño del Búfer:</translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationsettingview.ui" line="866"/>
-        <source>Customizar Informações Câmera?</source>
-        <translation>¿Desea personalizar la información de la cámara?</translation>
+        <translation>Tamaño del búfer:</translation>
     </message>
     <message>
         <location filename="../ui/calibrationsettingview.ui" line="888"/>
         <source>Informações da Câmera</source>
-        <translation>Información de la Cámara</translation>
+        <translation>Información de la cámara</translation>
     </message>
     <message>
         <location filename="../ui/calibrationsettingview.ui" line="900"/>
@@ -410,7 +359,7 @@ Cierre la ventana e intente nuevamente.</translation>
     <message>
         <location filename="../ui/calibrationsettingview.ui" line="949"/>
         <source>Altura:</source>
-        <translation>Altura:</translation>
+        <translation>Alto:</translation>
     </message>
     <message>
         <location filename="../ui/calibrationsettingview.ui" line="975"/>
@@ -435,27 +384,12 @@ Cierre la ventana e intente nuevamente.</translation>
     <message>
         <location filename="../ui/calibrationsettingview.ui" line="1073"/>
         <source>Usar Filtros?</source>
-        <translation>¿Activar Filtros?</translation>
+        <translation>¿Activar filtros?</translation>
     </message>
     <message>
         <location filename="../ui/calibrationsettingview.ui" line="1095"/>
         <source>Configurações de Filtros</source>
-        <translation>Configuración de Filtros</translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationsettingview.ui" line="1104"/>
-        <source>Média Móvel Smooth Frames:</source>
-        <translation>Media Móvil de Suavizado de Fotogramas:</translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationsettingview.ui" line="1130"/>
-        <source>Filtro Clahe Limite Clip:</source>
-        <translation>Límite de Contraste CLAHE (Clip Limit):</translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationsettingview.ui" line="1156"/>
-        <source>Filtro Clahe Tamanho Grid:</source>
-        <translation>Tamaño de Rejilla (CLAHE):</translation>
+        <translation>Configuración de filtros</translation>
     </message>
     <message>
         <location filename="../ui/calibrationsettingview.ui" line="1170"/>
@@ -478,34 +412,9 @@ Cierre la ventana e intente nuevamente.</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/calibrationsettingview.ui" line="1193"/>
-        <source>Filtro Clahe Aplicar Quando Valor de Luminosidade Abaixo de:</source>
-        <translation>Aplicar Filtro CLAHE Si la Luminosidad es Inferior a:</translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationsettingview.ui" line="1219"/>
-        <source>Filtro Gamma Fator de Divisão:</source>
-        <translation>Factor de División de Gama:</translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationsettingview.ui" line="1248"/>
-        <source>Filtro Gamma Aplicar Quando Valor de Luminosidade Acima de:</source>
-        <translation>Aplicar Filtro de Gama Si la Luminosidad es Superior a:</translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationsettingview.ui" line="1274"/>
-        <source>Filtro Landmark Limite de Movimento:</source>
-        <translation>Límite de Movimiento (Landmarks):</translation>
-    </message>
-    <message>
         <location filename="../ui/calibrationsettingview.ui" line="1320"/>
         <source>Telemetria</source>
         <translation>Telemetría</translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationsettingview.ui" line="1331"/>
-        <source>Habilitar painel telemetria?</source>
-        <translation>¿Habilitar panel de telemetría?</translation>
     </message>
     <message>
         <location filename="../ui/calibrationsettingview.ui" line="1367"/>
@@ -517,21 +426,7 @@ Cierre la ventana e intente nuevamente.</translation>
         <location filename="../ui/calibrationsettingview.ui" line="1861"/>
         <location filename="../ui/calibrationsettingview.ui" line="2081"/>
         <source>Janela de Calibração</source>
-        <translation>Ventana de Calibración</translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationsettingview.ui" line="1382"/>
-        <location filename="../ui/calibrationsettingview.ui" line="1870"/>
-        <location filename="../ui/calibrationsettingview.ui" line="2090"/>
-        <source>Posição da abertura:</source>
-        <translation>Posición de la apertura:</translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationsettingview.ui" line="1395"/>
-        <location filename="../ui/calibrationsettingview.ui" line="1883"/>
-        <location filename="../ui/calibrationsettingview.ui" line="2103"/>
-        <source>Topo-Esquerda</source>
-        <translation>Arriba a la izquierda</translation>
+        <translation>Ventana de calibración</translation>
     </message>
     <message>
         <location filename="../ui/calibrationsettingview.ui" line="1427"/>
@@ -545,21 +440,14 @@ Cierre la ventana e intente nuevamente.</translation>
         <location filename="../ui/calibrationsettingview.ui" line="1928"/>
         <location filename="../ui/calibrationsettingview.ui" line="2148"/>
         <source>Tela Cheia</source>
-        <translation>Ventana completa</translation>
+        <translation>Pantalla completa</translation>
     </message>
     <message>
         <location filename="../ui/calibrationsettingview.ui" line="1456"/>
         <location filename="../ui/calibrationsettingview.ui" line="1944"/>
         <location filename="../ui/calibrationsettingview.ui" line="2164"/>
         <source>Modo Janela (Maximizada)</source>
-        <translation>Modo Ventana (Maximizada)</translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationsettingview.ui" line="1469"/>
-        <location filename="../ui/calibrationsettingview.ui" line="1957"/>
-        <location filename="../ui/calibrationsettingview.ui" line="2177"/>
-        <source>Modo Janela (Maximizada Área Útil)</source>
-        <translation>Modo Ventana (Área Útil Maximizada)</translation>
+        <translation>Modo ventana (maximizada)</translation>
     </message>
     <message>
         <location filename="../ui/calibrationsettingview.ui" line="1498"/>
@@ -573,14 +461,140 @@ Cierre la ventana e intente nuevamente.</translation>
         <location filename="../ui/calibrationsettingview.ui" line="2006"/>
         <location filename="../ui/calibrationsettingview.ui" line="2226"/>
         <source>Calibração padrão?</source>
-        <translation>¿Calibración por Defecto?</translation>
+        <translation>¿Calibración predeterminada?</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="204"/>
+        <source>Processamento Embarcado:</source>
+        <translation>Procesamiento integrado:</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="256"/>
+        <source>Processamento no Linux:</source>
+        <translation>Procesamiento en Linux:</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="308"/>
+        <source>Processamento no Mac:</source>
+        <translation>Procesamiento en Mac:</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="360"/>
+        <source>Processamento no Windows:</source>
+        <translation>Procesamiento en Windows:</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="477"/>
+        <source>Confiança de Detecção (0–1):</source>
+        <translation>Confianza de detección (0–1):</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="506"/>
+        <source>Confiança de Presença (0–1):</source>
+        <translation>Confianza de presencia (0–1):</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="535"/>
+        <source>Confiança de Rastreio (0–1):</source>
+        <translation>Confianza de seguimiento (0–1):</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="564"/>
+        <source>Número de poses:</source>
+        <translation>Número de poses:</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="632"/>
+        <source>Captura de Vídeo Embarcada:</source>
+        <translation>Captura de vídeo integrada:</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="684"/>
+        <source>Captura de Vídeo no Linux:</source>
+        <translation>Captura de vídeo en Linux:</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="736"/>
+        <source>Captura de Vídeo no Mac:</source>
+        <translation>Captura de vídeo en Mac:</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="788"/>
+        <source>Captura de Vídeo no Windows:</source>
+        <translation>Captura de vídeo en Windows:</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="866"/>
+        <source>Personalizar Informações da Câmera?</source>
+        <translation>¿Personalizar información de la cámara?</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1104"/>
+        <source>Média Móvel (Quadros de Suavização):</source>
+        <translation>Media móvil (fotogramas de suavizado):</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1130"/>
+        <source>Filtro CLAHE Limite de Clip:</source>
+        <translation>Límite de recorte del filtro CLAHE:</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1156"/>
+        <source>Filtro CLAHE Tamanho do Grid:</source>
+        <translation>Tamaño de cuadrícula del filtro CLAHE:</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1193"/>
+        <source>Filtro CLAHE Aplicar Quando Valor de Luminosidade Abaixo de:</source>
+        <translation>Aplicar filtro CLAHE si la luminosidad es inferior a:</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1219"/>
+        <source>Filtro Gama Fator de Divisão:</source>
+        <translation>Factor de división del filtro gamma:</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1248"/>
+        <source>Filtro Gama Aplicar Quando Valor de Luminosidade Acima de:</source>
+        <translation>Aplicar filtro gamma si la luminosidad es superior a:</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1274"/>
+        <source>Filtro de Landmarks — Limite de Movimento:</source>
+        <translation>Filtro de puntos de referencia — límite de movimiento:</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1331"/>
+        <source>Habilitar painel de telemetria?</source>
+        <translation>¿Habilitar panel de telemetría?</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1382"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1870"/>
+        <location filename="../ui/calibrationsettingview.ui" line="2090"/>
+        <source>Posição da janela:</source>
+        <translation>Posición de la ventana:</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1395"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1883"/>
+        <location filename="../ui/calibrationsettingview.ui" line="2103"/>
+        <source>Superior Esquerdo</source>
+        <translation>Superior izquierda</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="1469"/>
+        <location filename="../ui/calibrationsettingview.ui" line="1957"/>
+        <location filename="../ui/calibrationsettingview.ui" line="2177"/>
+        <source>Modo Janela (Maximizada na Área Útil)</source>
+        <translation>Modo ventana (maximizada en el área útil)</translation>
     </message>
     <message>
         <location filename="../ui/calibrationsettingview.ui" line="1541"/>
         <location filename="../ui/calibrationsettingview.ui" line="2029"/>
         <location filename="../ui/calibrationsettingview.ui" line="2249"/>
-        <source>Leitura Pontos de Calibração</source>
-        <translation>Lectura de Puntos de Calibración</translation>
+        <source>Leitura dos Pontos de Calibração</source>
+        <translation>Lectura de los puntos de calibración</translation>
     </message>
     <message>
         <location filename="../ui/calibrationsettingview.ui" line="1550"/>
@@ -710,19 +724,19 @@ Cierre la ventana e intente nuevamente.</translation>
         <translation>Tamaño del margen en píxeles:</translation>
     </message>
     <message>
-        <location filename="../ui/calibrationsettingview.ui" line="1855"/>
-        <source>Calibração Semi-Automática</source>
-        <translation>Calibración Semiautomática</translation>
-    </message>
-    <message>
         <location filename="../ui/calibrationsettingview.ui" line="2075"/>
         <source>Calibração Manual</source>
-        <translation>Calibración Manual</translation>
+        <translation>Calibración manual</translation>
     </message>
     <message>
         <location filename="../ui/calibrationsettingview.ui" line="2313"/>
-        <source>Gravar operação corrente</source>
-        <translation>Grabar operación actual</translation>
+        <source>Salvar operação atual</source>
+        <translation>Guardar operación actual</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationsettingview.ui" line="2330"/>
+        <source>Cancelar operação atual</source>
+        <translation>Cancelar operación actual</translation>
     </message>
     <message>
         <location filename="../ui/calibrationsettingview.ui" line="2316"/>
@@ -730,9 +744,9 @@ Cierre la ventana e intente nuevamente.</translation>
         <translation>Aceptar</translation>
     </message>
     <message>
-        <location filename="../ui/calibrationsettingview.ui" line="2330"/>
-        <source>Cancelar operação corrente</source>
-        <translation>Cancelar operación actual</translation>
+        <location filename="../ui/calibrationsettingview.ui" line="1855"/>
+        <source>Calibração Semiautomática</source>
+        <translation>Calibración semiautomática</translation>
     </message>
     <message>
         <location filename="../ui/calibrationsettingview.ui" line="2333"/>
@@ -746,7 +760,7 @@ Cierre la ventana e intente nuevamente.</translation>
     </message>
     <message>
         <location filename="../../src/ttea/view/calibrationsettingview.py" line="164"/>
-        <source>Deseja sair da configuração da calibração?</source>
+        <source>Deseja sair da configuração de calibração?</source>
         <translation>¿Desea salir de la configuración de calibración?</translation>
     </message>
 </context>
@@ -773,14 +787,9 @@ Cierre la ventana e intente nuevamente.</translation>
         <translation>Cámara:</translation>
     </message>
     <message>
-        <location filename="../ui/calibrationview.ui" line="136"/>
-        <source>Vídeo aparecerá aqui</source>
-        <translation>El vídeo aparecerá aquí</translation>
-    </message>
-    <message>
         <location filename="../ui/calibrationview.ui" line="158"/>
         <source>Iniciar Câmera - F5</source>
-        <translation>Iniciar Cámara - F5</translation>
+        <translation>Iniciar cámara - F5</translation>
     </message>
     <message>
         <location filename="../ui/calibrationview.ui" line="161"/>
@@ -790,17 +799,12 @@ Cierre la ventana e intente nuevamente.</translation>
     <message>
         <location filename="../ui/calibrationview.ui" line="185"/>
         <source>Calibração Automática - F6</source>
-        <translation>Calibración Automática - F6</translation>
+        <translation>Calibración automática - F6</translation>
     </message>
     <message>
         <location filename="../ui/calibrationview.ui" line="188"/>
         <source>F6</source>
         <translation></translation>
-    </message>
-    <message>
-        <location filename="../ui/calibrationview.ui" line="207"/>
-        <source>Calibração Semi-Automática - F7</source>
-        <translation>Calibración Semiautomática - F7</translation>
     </message>
     <message>
         <location filename="../ui/calibrationview.ui" line="210"/>
@@ -810,7 +814,7 @@ Cierre la ventana e intente nuevamente.</translation>
     <message>
         <location filename="../ui/calibrationview.ui" line="229"/>
         <source>Calibração Manual - F8</source>
-        <translation>Calibración Manual - F8</translation>
+        <translation>Calibración manual - F8</translation>
     </message>
     <message>
         <location filename="../ui/calibrationview.ui" line="232"/>
@@ -819,8 +823,13 @@ Cierre la ventana e intente nuevamente.</translation>
     </message>
     <message>
         <location filename="../ui/calibrationview.ui" line="262"/>
-        <source>Gravar operação corrente</source>
-        <translation>Grabar operación actual</translation>
+        <source>Salvar operação atual</source>
+        <translation>Guardar operación actual</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationview.ui" line="282"/>
+        <source>Cancelar operação atual</source>
+        <translation>Cancelar operación actual</translation>
     </message>
     <message>
         <location filename="../ui/calibrationview.ui" line="265"/>
@@ -828,9 +837,14 @@ Cierre la ventana e intente nuevamente.</translation>
         <translation>Aceptar</translation>
     </message>
     <message>
-        <location filename="../ui/calibrationview.ui" line="282"/>
-        <source>Cancelar operação corrente</source>
-        <translation>Cancelar operación actual</translation>
+        <location filename="../ui/calibrationview.ui" line="136"/>
+        <source>O vídeo aparecerá aqui</source>
+        <translation>El vídeo aparecerá aquí</translation>
+    </message>
+    <message>
+        <location filename="../ui/calibrationview.ui" line="207"/>
+        <source>Calibração Semiautomática - F7</source>
+        <translation>Calibración semiautomática - F7</translation>
     </message>
     <message>
         <location filename="../ui/calibrationview.ui" line="285"/>
@@ -848,7 +862,7 @@ Cierre la ventana e intente nuevamente.</translation>
     <message>
         <location filename="../../src/ttea/core/cameravideo.py" line="35"/>
         <source>Não foi possível abrir a câmera.</source>
-        <translation>No fue posible abrir la cámara.</translation>
+        <translation>No se pudo abrir la cámara.</translation>
     </message>
 </context>
 <context>
@@ -856,12 +870,12 @@ Cierre la ventana e intente nuevamente.</translation>
     <message>
         <location filename="../../src/ttea/core/cameravideothread.py" line="56"/>
         <source>Não foi possível abrir a câmera.</source>
-        <translation>No fue posible abrir la cámara.</translation>
+        <translation>No se pudo abrir la cámara.</translation>
     </message>
     <message>
         <location filename="../../src/ttea/core/cameravideothread.py" line="142"/>
-        <source>Rastreio Pés (%): {:.2f}</source>
-        <translation>Rastreo de Pies (%): {:.2f}</translation>
+        <source>Rastreio dos Pés (%): {:.2f}</source>
+        <translation>Seguimiento de los pies (%): {:.2f}</translation>
     </message>
     <message>
         <location filename="../../src/ttea/core/cameravideothread.py" line="160"/>
@@ -871,16 +885,16 @@ Cierre la ventana e intente nuevamente.</translation>
     <message>
         <location filename="../../src/ttea/core/cameravideothread.py" line="169"/>
         <source>Brilho: {}</source>
-        <translation>Brilho: {}</translation>
+        <translation>Brillo: {}</translation>
     </message>
     <message>
         <location filename="../../src/ttea/core/cameravideothread.py" line="187"/>
         <source>Erro ao capturar imagem da câmera. Dispositivo desconectado.
-Verifique a conexão cabo e ou instalação da câmera.
+Verifique a conexão do cabo e/ou a instalação da câmera.
 Feche a janela e tente novamente.</source>
         <translation>Error al capturar la imagen de la cámara. Dispositivo desconectado.
-Verifique la conexión del cable y/o la instalación de la cámara.
-Cierre la ventana e intente nuevamente.</translation>
+Compruebe la conexión del cable y/o la instalación de la cámara.
+Cierre la ventana e inténtelo de nuevo.</translation>
     </message>
 </context>
 <context>
@@ -890,8 +904,8 @@ Cierre la ventana e intente nuevamente.</translation>
         <source>Ocorreu um erro inesperado e o aplicativo será encerrado.
 Por favor, entre em contato com o suporte e envie o arquivo de log.
 Detalhes do erro: {0}</source>
-        <translation>Se ha producido un error inesperado y la aplicación se cerrará. 
-Por favor, póngase en contacto con el soporte técnico y envíe el archivo de registro. 
+        <translation>Se ha producido un error inesperado y la aplicación se cerrará.
+Por favor, póngase en contacto con el soporte técnico y envíe el archivo de registro.
 Detalles del error: {0}</translation>
     </message>
 </context>
@@ -915,12 +929,12 @@ Detalles del error: {0}</translation>
     <message>
         <location filename="../../src/ttea/model/institutionfacility.py" line="98"/>
         <source>Instituição Comunitária</source>
-        <translation>Entidad Social</translation>
+        <translation>Entidad social</translation>
     </message>
     <message>
         <location filename="../../src/ttea/model/institutionfacility.py" line="99"/>
         <source>Instituição de Ensino</source>
-        <translation>Centro Educativo</translation>
+        <translation>Centro educativo</translation>
     </message>
     <message>
         <location filename="../../src/ttea/model/institutionfacility.py" line="100"/>
@@ -930,7 +944,7 @@ Detalles del error: {0}</translation>
     <message>
         <location filename="../../src/ttea/model/institutionfacility.py" line="101"/>
         <source>Posto de Saúde</source>
-        <translation>Centro de Atención Primaria</translation>
+        <translation>Centro de atención primaria</translation>
     </message>
 </context>
 <context>
@@ -948,7 +962,7 @@ Detalles del error: {0}</translation>
     <message>
         <location filename="../ui/institutionfacilityeditview.ui" line="14"/>
         <source>Plataforma T-TEA - Instituição / Estabelecimento</source>
-        <translation>Plataforma T-TEA - Institución / Centro</translation>
+        <translation>Plataforma T-TEA - Institución / Establecimiento</translation>
     </message>
     <message>
         <location filename="../ui/institutionfacilityeditview.ui" line="31"/>
@@ -986,11 +1000,6 @@ Detalles del error: {0}</translation>
         <translation>Teléfono:</translation>
     </message>
     <message>
-        <location filename="../ui/institutionfacilityeditview.ui" line="95"/>
-        <source>Digite o número com código do país (ex: +55 para Brasil)</source>
-        <translation>Introduzca o número con el código de país (ej: +34 para España)</translation>
-    </message>
-    <message>
         <location filename="../ui/institutionfacilityeditview.ui" line="98"/>
         <source>+99 99 99999-9999</source>
         <translation></translation>
@@ -1006,14 +1015,9 @@ Detalles del error: {0}</translation>
         <translation>email@email.com</translation>
     </message>
     <message>
-        <location filename="../ui/institutionfacilityeditview.ui" line="125"/>
-        <source>Site / Website:</source>
-        <translation>Sitio web:</translation>
-    </message>
-    <message>
         <location filename="../ui/institutionfacilityeditview.ui" line="132"/>
         <source>https://www.exemplo.com</source>
-        <translation>https://www.exemplo.com</translation>
+        <translation>https://www.ejemplo.com</translation>
     </message>
     <message>
         <location filename="../ui/institutionfacilityeditview.ui" line="142"/>
@@ -1027,8 +1031,13 @@ Detalles del error: {0}</translation>
     </message>
     <message>
         <location filename="../ui/institutionfacilityeditview.ui" line="184"/>
-        <source>Gravar operação corrente</source>
-        <translation>Grabar operación actual</translation>
+        <source>Salvar operação atual</source>
+        <translation>Guardar operación actual</translation>
+    </message>
+    <message>
+        <location filename="../ui/institutionfacilityeditview.ui" line="210"/>
+        <source>Cancelar operação atual</source>
+        <translation>Cancelar operación actual</translation>
     </message>
     <message>
         <location filename="../ui/institutionfacilityeditview.ui" line="190"/>
@@ -1036,9 +1045,14 @@ Detalles del error: {0}</translation>
         <translation>Aceptar</translation>
     </message>
     <message>
-        <location filename="../ui/institutionfacilityeditview.ui" line="210"/>
-        <source>Cancelar operação corrente</source>
-        <translation>Cancelar operación actual</translation>
+        <location filename="../ui/institutionfacilityeditview.ui" line="95"/>
+        <source>Digite o número com o código do país (ex: +55 para Brasil)</source>
+        <translation>Introduzca el número con el prefijo del país (p. ej., +34 para España)</translation>
+    </message>
+    <message>
+        <location filename="../ui/institutionfacilityeditview.ui" line="125"/>
+        <source>Site:</source>
+        <translation>Sitio web:</translation>
     </message>
     <message>
         <location filename="../ui/institutionfacilityeditview.ui" line="213"/>
@@ -1059,54 +1073,54 @@ Detalles del error: {0}</translation>
 <context>
     <name>InstitutionFacilityListController</name>
     <message>
-        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="154"/>
+        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="156"/>
         <source>Instituição/Estabelecimento cadastrada com sucesso!</source>
         <translation>¡Institución/Establecimiento registrado con éxito!</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="159"/>
-        <source>Erro ao salvar instuição/estabelecimento.</source>
+        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="161"/>
+        <source>Erro ao salvar instituição/estabelecimento.</source>
         <translation>Error al guardar la institución/establecimiento.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="169"/>
+        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="171"/>
         <source>Selecione uma instituição/estabelecimento para editar.</source>
         <translation>Seleccione una institución/establecimiento para editar.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="177"/>
+        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="179"/>
         <source>Instituição/Estabelecimento não encontrada.</source>
         <translation>Institución/Establecimiento no encontrado.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="191"/>
+        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="193"/>
         <source>Instituição/Estabelecimento atualizada com sucesso.</source>
         <translation>Institución/Establecimiento actualizado con éxito.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="196"/>
+        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="198"/>
         <source>Erro ao atualizar instituição/estabelecimento.</source>
         <translation>Error al actualizar la institución/establecimiento.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="205"/>
+        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="207"/>
         <source>Selecione uma instituição/estabelecimento para excluir.</source>
         <translation>Seleccione una institución/establecimiento para eliminar.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="215"/>
+        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="217"/>
         <source>Deseja excluir?
 {0}</source>
-        <translation>¿Desea eliminar a?
+        <translation>¿Desea eliminar el registro?
 {0}</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="224"/>
+        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="226"/>
         <source>Instituição/Estabelecimento excluída com sucesso.</source>
         <translation>Institución/Establecimiento eliminado con éxito.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="229"/>
+        <location filename="../../src/ttea/controller/institutionfacilitylistcontroller.py" line="231"/>
         <source>Erro ao excluir instituição/estabelecimento.</source>
         <translation>Error al eliminar la institución/establecimiento.</translation>
     </message>
@@ -1116,7 +1130,7 @@ Detalles del error: {0}</translation>
     <message>
         <location filename="../ui/institutionfacilitylistview.ui" line="14"/>
         <source>Plataforma T-TEA - Instituição / Estabelecimento</source>
-        <translation>Plataforma T-TEA - Institución / Centro</translation>
+        <translation>Plataforma T-TEA - Institución / Establecimiento</translation>
     </message>
     <message>
         <location filename="../ui/institutionfacilitylistview.ui" line="31"/>
@@ -1126,7 +1140,7 @@ Detalles del error: {0}</translation>
     <message>
         <location filename="../ui/institutionfacilitylistview.ui" line="38"/>
         <source>Digite o nome ou ID</source>
-        <translation>Escribe el nombre o la ID</translation>
+        <translation>Escriba el nombre o el ID</translation>
     </message>
     <message>
         <location filename="../ui/institutionfacilitylistview.ui" line="69"/>
@@ -1220,7 +1234,7 @@ Detalles del error: {0}</translation>
         <location filename="../../src/ttea/service/institutionfacilityservice.py" line="85"/>
         <source>ID deve ser do tipo inteiro!
 </source>
-        <translation>!El ID debe ser un número entero!
+        <translation>¡El ID debe ser un número entero!
 </translation>
     </message>
     <message>
@@ -1239,8 +1253,8 @@ Detalles del error: {0}</translation>
     </message>
     <message>
         <location filename="../../src/ttea/service/institutionfacilityservice.py" line="183"/>
-        <source>Exclusão negada: A instituição possui profissional vinculado.</source>
-        <translation>Eliminación denegada: La institución tiene profesionales vinculados.</translation>
+        <source>Exclusão negada: a instituição possui profissional vinculado.</source>
+        <translation>Eliminación denegada: la institución tiene un profesional vinculado.</translation>
     </message>
 </context>
 <context>
@@ -1261,12 +1275,12 @@ Detalles del error: {0}</translation>
     <message>
         <location filename="../ui/languageview.ui" line="33"/>
         <source>Selecione o idioma da aplicação:</source>
-        <translation>Selecciona el idioma de la aplicación:</translation>
+        <translation>Seleccione el idioma de la aplicación:</translation>
     </message>
     <message>
         <location filename="../ui/languageview.ui" line="86"/>
-        <source>Gravar operação corrente</source>
-        <translation>Grabar operación actual</translation>
+        <source>Salvar operação atual</source>
+        <translation>Guardar operación actual</translation>
     </message>
     <message>
         <location filename="../ui/languageview.ui" line="89"/>
@@ -1276,15 +1290,15 @@ Detalles del error: {0}</translation>
     <message>
         <location filename="../../src/ttea/view/languageview.py" line="66"/>
         <source>Por favor, selecione um idioma.</source>
-        <translation>Por favor, selecciona un idioma.</translation>
+        <translation>Por favor, seleccione un idioma.</translation>
     </message>
 </context>
 <context>
     <name>MainController</name>
     <message>
-        <location filename="../../src/ttea/controller/maincontroller.py" line="97"/>
-        <source>Funcionalidade do help em desenvolvimento...</source>
-        <translation>Funcionalidad de ayuda en desarrollo...</translation>
+        <location filename="../../src/ttea/controller/maincontroller.py" line="105"/>
+        <source>Funcionalidade da ajuda em desenvolvimento...</source>
+        <translation>Función de ayuda en desarrollo...</translation>
     </message>
 </context>
 <context>
@@ -1329,114 +1343,114 @@ Detalles del error: {0}</translation>
         <translation>Exergames</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="86"/>
+        <location filename="../ui/mainview.ui" line="85"/>
         <source>S&amp;istema</source>
         <translation>S&amp;istema</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="94"/>
-        <location filename="../ui/mainview.ui" line="202"/>
+        <location filename="../ui/mainview.ui" line="93"/>
+        <location filename="../ui/mainview.ui" line="201"/>
         <source>&amp;Ajuda</source>
         <translation>&amp;Ayuda</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="112"/>
+        <location filename="../ui/mainview.ui" line="111"/>
         <source>&amp;Sair</source>
         <translation>&amp;Salir</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="115"/>
+        <location filename="../ui/mainview.ui" line="114"/>
         <source>Ctrl+Q</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="124"/>
+        <location filename="../ui/mainview.ui" line="123"/>
         <source>Instituição/Estabelecimento</source>
         <translation>Institución/Establecimiento</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="127"/>
+        <location filename="../ui/mainview.ui" line="126"/>
         <source>Ctrl+I</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="136"/>
+        <location filename="../ui/mainview.ui" line="135"/>
         <source>Profissional</source>
         <translation>Profesional</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="139"/>
+        <location filename="../ui/mainview.ui" line="138"/>
         <source>Ctrl+H</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="148"/>
+        <location filename="../ui/mainview.ui" line="147"/>
         <source>Jogador</source>
         <translation>Jugador</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="151"/>
+        <location filename="../ui/mainview.ui" line="150"/>
         <source>Ctrl+J</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="160"/>
+        <location filename="../ui/mainview.ui" line="159"/>
         <source>KarTEA</source>
         <translation>KarTEA</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="169"/>
+        <location filename="../ui/mainview.ui" line="168"/>
         <source>&amp;Calibração</source>
         <translation>&amp;Calibración</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="172"/>
+        <location filename="../ui/mainview.ui" line="171"/>
         <source>F4</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="181"/>
+        <location filename="../ui/mainview.ui" line="180"/>
         <source>&amp;Configuração de Calibração</source>
-        <translation>&amp;Configuración de Calibración</translation>
+        <translation>&amp;Configuración de calibración</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="184"/>
+        <location filename="../ui/mainview.ui" line="183"/>
         <source>F5</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="193"/>
+        <location filename="../ui/mainview.ui" line="192"/>
         <source>&amp;Idioma</source>
         <translation>&amp;Idioma</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="205"/>
+        <location filename="../ui/mainview.ui" line="204"/>
         <source>F1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="214"/>
+        <location filename="../ui/mainview.ui" line="213"/>
         <source>&amp;Sobre...</source>
         <translatorcomment>Mudou-se a tecla de atabalho pois o menu principal Ajuda já usa a letra A com &amp;.</translatorcomment>
         <translation>A&amp;cerca de...</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="223"/>
+        <location filename="../ui/mainview.ui" line="222"/>
         <source>Sessão de Jogo</source>
-        <translation>Sesión de Juego</translation>
+        <translation>Sesión de juego</translation>
     </message>
     <message>
-        <location filename="../ui/mainview.ui" line="226"/>
+        <location filename="../ui/mainview.ui" line="225"/>
         <source>Ctrl+P</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/ttea/view/mainview.py" line="83"/>
+        <location filename="../../src/ttea/view/mainview.py" line="102"/>
         <source>Versão da plataforma: {0}</source>
         <translation>Versión de la plataforma: {0}</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/view/mainview.py" line="89"/>
+        <location filename="../../src/ttea/view/mainview.py" line="108"/>
         <source>Data atual: {0}</source>
         <translation>Fecha actual: {0}</translation>
     </message>
@@ -1446,30 +1460,30 @@ Detalles del error: {0}</translation>
     <message>
         <location filename="../../src/ttea/controller/manualcalibrationcontroller.py" line="37"/>
         <source>Tela de Monitoramento</source>
-        <translation>Ventana de Monitoreo</translation>
+        <translation>Pantalla de monitorización</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/manualcalibrationcontroller.py" line="103"/>
+        <location filename="../../src/ttea/controller/manualcalibrationcontroller.py" line="107"/>
         <source>Não foi possível abrir a câmera.</source>
-        <translation>No fue posible abrir la cámara.</translation>
+        <translation>No se pudo abrir la cámara.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/manualcalibrationcontroller.py" line="125"/>
+        <location filename="../../src/ttea/controller/manualcalibrationcontroller.py" line="129"/>
         <source>Calibração concluída com sucesso!</source>
         <translation>¡Calibración completada con éxito!</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/manualcalibrationcontroller.py" line="263"/>
+        <location filename="../../src/ttea/controller/manualcalibrationcontroller.py" line="267"/>
         <source>Falha ao capturar imagem da câmera.</source>
         <translation>Error al capturar la imagen de la cámara.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/manualcalibrationcontroller.py" line="277"/>
-        <source>Calibração manual cadastrada com sucesso!</source>
-        <translation>¡Calibración manual registrada con éxito!</translation>
+        <location filename="../../src/ttea/controller/manualcalibrationcontroller.py" line="281"/>
+        <source>Calibração manual salva com sucesso!</source>
+        <translation>¡Calibración manual guardada con éxito!</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/manualcalibrationcontroller.py" line="281"/>
+        <location filename="../../src/ttea/controller/manualcalibrationcontroller.py" line="285"/>
         <source>Erro ao salvar os pontos da calibração manual.</source>
         <translation>Error al guardar los puntos de la calibración manual.</translation>
     </message>
@@ -1477,14 +1491,14 @@ Detalles del error: {0}</translation>
 <context>
     <name>ManualCalibrationView</name>
     <message>
-        <location filename="../ui/manualcalibrationview.ui" line="14"/>
-        <source>Plataforma T-TEA - Calibração da Visualização da Tela do Jogo</source>
-        <translation>Plataforma T-TEA - Calibración de la Visualización de la Ventana del Juego</translation>
-    </message>
-    <message>
         <location filename="../../src/ttea/view/manualcalibrationview.py" line="103"/>
         <source>Deseja sair da calibração manual?</source>
         <translation>¿Desea salir de la calibración manual?</translation>
+    </message>
+    <message>
+        <location filename="../ui/manualcalibrationview.ui" line="14"/>
+        <source>Plataforma T-TEA - Calibração Manual da Visualização da Tela do Jogo</source>
+        <translation>Plataforma T-TEA - Calibración manual de la visualización de la pantalla del juego</translation>
     </message>
 </context>
 <context>
@@ -1535,7 +1549,7 @@ Detalles del error: {0}</translation>
     <message>
         <location filename="../ui/playereditview.ui" line="54"/>
         <source>Data de Nascimento:</source>
-        <translation>Fecha de Nacimiento:</translation>
+        <translation>Fecha de nacimiento:</translation>
     </message>
     <message>
         <location filename="../ui/playereditview.ui" line="61"/>
@@ -1553,24 +1567,24 @@ Detalles del error: {0}</translation>
         <translation>Observación</translation>
     </message>
     <message>
+        <location filename="../ui/playereditview.ui" line="117"/>
+        <source>Salvar operação atual</source>
+        <translation>Guardar operación actual</translation>
+    </message>
+    <message>
         <location filename="../ui/playereditview.ui" line="123"/>
         <source>OK</source>
         <translation>Aceptar</translation>
     </message>
     <message>
-        <location filename="../ui/playereditview.ui" line="117"/>
-        <source>Gravar operação corrente</source>
-        <translation>Guardar operación actual</translation>
+        <location filename="../ui/playereditview.ui" line="143"/>
+        <source>Cancelar operação atual</source>
+        <translation>Cancelar operación actual</translation>
     </message>
     <message>
         <location filename="../ui/playereditview.ui" line="146"/>
         <source>Cancelar</source>
         <translation>Cancelar</translation>
-    </message>
-    <message>
-        <location filename="../ui/playereditview.ui" line="143"/>
-        <source>Cancelar operação corrente</source>
-        <translation>Cancelar operación actual</translation>
     </message>
     <message>
         <location filename="../../src/ttea/view/playereditview.py" line="66"/>
@@ -1586,12 +1600,7 @@ Detalles del error: {0}</translation>
 <context>
     <name>PlayerGameLaunchController</name>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="49"/>
-        <source>Existe um jogo em execução, ele será finalizado. Deseja sair da tela de sessão de jogo?</source>
-        <translation>Hay un juego en ejecución que se cerrará. ¿Quieres salir de la sesión de juego?</translation>
-    </message>
-    <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="70"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="67"/>
         <source>Este jogo foi desenvolvido por:
 
 {0}
@@ -1606,95 +1615,101 @@ Versión: {1}
 Desde: {2} hasta {3}</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="83"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="80"/>
         <source>Informações de autoria do jogo não estão disponíveis.
 Verifique se os metadados de configuração estão corretos.</source>
-        <translation>No está disponible la información de autoría del juego. 
-Comprueba que los metadatos de configuración sean correctos.</translation>
+        <translation>No está disponible la información de autoría del juego.
+Compruebe que los metadatos de configuración sean correctos.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="118"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="115"/>
         <source>Desconhecida</source>
         <translation>Desconocida</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="122"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="119"/>
         <source>- Câmera: O dispositivo &apos;{0}&apos; não foi detectado ou foi desconectado.</source>
         <translation>- Cámara: El dispositivo &apos;{0}&apos; no fue detectado o fue desconectado.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="155"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="152"/>
         <source>- Monitor: A tela configurada (&apos;{0}&apos; - {1}x{2}) não corresponde à disposição atual do sistema.</source>
         <translation>- Monitor: La pantalla configurada (&apos;{0}&apos; - {1}x{2}) no coincide con la disposición actual del sistema.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="163"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="181"/>
+        <source>Selecione um jogador antes de iniciar.</source>
+        <translation>Seleccione un jugador antes de comenzar.</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="50"/>
+        <source>Há um jogo em execução e ele será encerrado. Deseja sair da tela de sessão de jogo?</source>
+        <translation>Hay un juego en ejecución y se cerrará. ¿Desea salir de la pantalla de sesión de juego?</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="160"/>
         <source>Foram detectadas divergências nos equipamentos configurados:
 
 {0}
 
-Recomenda-se verificar a instalação física, gravar os dados do hardware
-atualizados na tela de calibração e ou realizar a calibração novamente.
+Recomenda-se verificar a instalação física, salvar os dados do hardware
+atualizados na tela de calibração e/ou realizar a calibração novamente.
 
 Deseja iniciar o jogo mesmo assim?</source>
         <translation>Se han detectado discrepancias en los equipos configurados:
 
 {0}
 
-Se recomienda verificar la instalación física, guardar los datos actualizados del hardware en la pantalla de calibración y/o realizar la calibración nuevamente.
+Se recomienda verificar la instalación física, guardar los datos del hardware
+actualizados en la pantalla de calibración y/o realizar la calibración de nuevo.
 
 ¿Desea iniciar el juego de todos modos?</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="184"/>
-        <source>Selecione um jogador antes de iniciar.</source>
-        <translation>Seleccione un jugador antes de comenzar.</translation>
-    </message>
-    <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="191"/>
-        <source>Selecione um professional antes de iniciar.</source>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="188"/>
+        <source>Selecione um profissional antes de iniciar.</source>
         <translation>Seleccione un profesional antes de comenzar.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="198"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="195"/>
         <source>Selecione um jogo antes de iniciar.</source>
         <translation>Seleccione un juego antes de comenzar.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="204"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="201"/>
         <source>Já existe um jogo em execução.
 Feche o jogo atual antes de iniciar outro.</source>
-        <translation>Ya hay un juego en ejecución. 
-Cierra el juego actual antes de iniciar otro.</translation>
+        <translation>Ya hay un juego en ejecución.
+Cierre el juego actual antes de iniciar otro.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="217"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="214"/>
         <source>Erro: Executável do jogo não encontrado em: {0}.
 Verifique se o arquivo existe e se os metadados de configuração estão corretos.</source>
-        <translation>Error: No se ha encontrado el ejecutable del juego en: {0}. 
-Comprueba que el archivo exista y que los metadatos de configuración sean correctos.</translation>
+        <translation>Error: No se ha encontrado el ejecutable del juego en: {0}.
+Compruebe que el archivo exista y que los metadatos de configuración sean correctos.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="227"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="224"/>
         <source>O arquivo de calibração não foi encontrado.
 Por favor, execute a calibração antes de iniciar o jogo.</source>
         <translation>No se encontró el archivo de calibración.
 Por favor, realice la calibración antes de iniciar el juego.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="237"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="234"/>
         <source>O arquivo de configuração do hardware não foi encontrado.
 Por favor, salve a configuração do hardware antes de iniciar o jogo.</source>
         <translation>No se encontró el archivo de configuración del hardware.
 Por favor, guarde la configuración del hardware antes de iniciar el juego.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="273"/>
-        <source>Espere</source>
-        <translation>Esperar</translation>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="270"/>
+        <source>Aguarde...</source>
+        <translation>Espere...</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="352"/>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="349"/>
         <source>Jogar</source>
         <translation>Jugar</translation>
     </message>
@@ -1704,12 +1719,12 @@ Por favor, guarde la configuración del hardware antes de iniciar el juego.</tra
     <message>
         <location filename="../ui/playergamelaunchview.ui" line="20"/>
         <source>Plataforma T-TEA - Iniciar Sessão de Jogo</source>
-        <translation>Plataforma T-TEA - Iniciar Sesión de Juego</translation>
+        <translation>Plataforma T-TEA - Comenzar sesión de juego</translation>
     </message>
     <message>
         <location filename="../ui/playergamelaunchview.ui" line="54"/>
         <source>Iniciar Sessão de Jogo</source>
-        <translation>Comenzar Sesión de Juego</translation>
+        <translation>Comenzar sesión de juego</translation>
     </message>
     <message>
         <location filename="../ui/playergamelaunchview.ui" line="149"/>
@@ -1744,7 +1759,7 @@ Por favor, guarde la configuración del hardware antes de iniciar el juego.</tra
     </message>
     <message>
         <location filename="../ui/playergamelaunchview.ui" line="296"/>
-        <source>Cancelar operação corrente</source>
+        <source>Cancelar operação atual</source>
         <translation>Cancelar operación actual</translation>
     </message>
     <message>
@@ -1753,82 +1768,116 @@ Por favor, guarde la configuración del hardware antes de iniciar el juego.</tra
         <translation>Cancelar</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/view/playergamelaunchview.py" line="109"/>
-        <source>Existe um jogo em execução, ele será finalizado. Deseja sair da tela de sessão de jogo?</source>
-        <translation>Hay un juego en ejecución que se cerrará. ¿Quieres salir de la sesión de juego?</translation>
+        <location filename="../../src/ttea/view/playergamelaunchview.py" line="99"/>
+        <source>Há um jogo em execução e ele será encerrado. Deseja sair da tela de sessão de jogo?</source>
+        <translation>Hay un juego en ejecución y se cerrará. ¿Desea salir de la pantalla de sesión de juego?</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/view/playergamelaunchview.py" line="119"/>
+        <location filename="../../src/ttea/view/playergamelaunchview.py" line="109"/>
         <source>Deseja sair da tela de sessão de jogo?</source>
-        <translation>¿Quieres salir de la sesión de juego?</translation>
+        <translation>¿Desea salir de la pantalla de sesión de juego?</translation>
     </message>
 </context>
 <context>
     <name>PlayerKarteaConfigEditController</name>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="257"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="174"/>
         <source>Jogador é obrigatório!
 </source>
-        <translation>¡El jugador é obligatorio!
+        <translation>¡El jugador es obligatorio!
 </translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="259"/>
-        <source>Imagem do veículo é obrigatória!
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="176"/>
+        <source>Fase e nível são obrigatórios!
 </source>
-        <translation>¡La imagen del vehículo es obligatoria!
+        <translation>¡La fase y el nivel son obligatorios!
 </translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="264"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="191"/>
+        <source>Por favor, corrija os dados inválidos:
+</source>
+        <translation>Por favor, corrija los datos no válidos:
+</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/resourcefields.py" line="206"/>
         <source>Imagem do ambiente é obrigatória!
 </source>
         <translation>¡La imagen del entorno es obligatoria!
 </translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="266"/>
-        <source>Imagem do alvo é obrigatória!
+        <location filename="../../src/ttea/games/kartea/util/resourcefields.py" line="222"/>
+        <source>Imagem do veículo é obrigatória!
 </source>
-        <translation>¡La imagen del blanco es obligatoria!
+        <translation>¡La imagen del vehículo es obligatoria!
 </translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="268"/>
+        <location filename="../../src/ttea/games/kartea/util/resourcefields.py" line="216"/>
+        <source>Imagem do horizonte é obrigatória!
+</source>
+        <translation>¡La imagen del horizonte es obligatoria!
+</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/resourcefields.py" line="236"/>
+        <source>Imagem do alvo é obrigatória!
+</source>
+        <translation>¡La imagen del objetivo es obligatoria!
+</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/resourcefields.py" line="242"/>
         <source>Imagem do obstáculo é obrigatória!
 </source>
         <translation>¡La imagen del obstáculo es obligatoria!
-</translation>
-    </message>
-    <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfigeditcontroller.py" line="272"/>
-        <source>Por favor, corrija os dados inválidos:
-</source>
-        <translation>Por favor, corrija los datos no válidos:
 </translation>
     </message>
 </context>
 <context>
     <name>PlayerKarteaConfigEditView</name>
     <message>
-        <location filename="../../src/ttea/games/kartea/view/playerkarteaconfigeditview.py" line="59"/>
+        <location filename="../../src/ttea/games/kartea/view/playerkarteaconfigeditview.py" line="145"/>
         <source>Novo</source>
         <translation>Nuevo</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/view/playerkarteaconfigeditview.py" line="62"/>
+        <location filename="../../src/ttea/games/kartea/view/playerkarteaconfigeditview.py" line="145"/>
         <source>Editar</source>
         <translation>Editar</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="14"/>
-        <source>Plataforma T-TEA - Configuração Kartea</source>
-        <translation>Plataforma T-TEA - Configuración Kartea</translation>
+        <location filename="../../src/ttea/games/kartea/view/playerkarteaconfigeditview.py" line="284"/>
+        <source>Desconhecido</source>
+        <translation>Desconocido</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/view/playerkarteaconfigeditview.py" line="309"/>
+        <source>Visualizando: {}</source>
+        <translation>Visualizando: {}</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/view/playerkarteaconfigeditview.py" line="328"/>
+        <source>Feedback {} – Pré-visualização</source>
+        <translation>Retroalimentación {} – Vista previa</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/view/playerkarteaconfigeditview.py" line="343"/>
+        <source>Nenhuma imagem selecionada</source>
+        <translation>Ninguna imagen seleccionada</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/view/playerkarteaconfigeditview.py" line="353"/>
+        <source>Imagem não encontrada</source>
+        <translation>Imagen no encontrada</translation>
     </message>
     <message>
         <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="31"/>
         <source>Configuração de Jogo</source>
-        <translation>Configuración del Juego</translation>
+        <translation>Configuración del juego</translation>
     </message>
     <message>
         <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="42"/>
@@ -1843,197 +1892,448 @@ Por favor, guarde la configuración del hardware antes de iniciar el juego.</tra
     <message>
         <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="73"/>
         <source>Fase Atual:</source>
-        <translation>Fase Actual:</translation>
+        <translation>Fase actual:</translation>
     </message>
     <message>
         <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="87"/>
         <source>Nível Atual:</source>
-        <translation>Nivel Actual:</translation>
+        <translation>Nivel actual:</translation>
     </message>
     <message>
         <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="101"/>
-        <source>Tempo de Nível:</source>
-        <translation>Tiempo del Nivel:</translation>
+        <source>Tempo do Nível:</source>
+        <translation>Tiempo del nivel:</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="134"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="125"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="154"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="183"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="643"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="957"/>
+        <source> s</source>
+        <translation> s</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="176"/>
+        <source>Tempo de Chegada (Níveis 5 a 7):</source>
+        <translation>Tiempo de llegada (niveles 5 a 7):</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="221"/>
         <source>Recurso Visual</source>
-        <translation>Recurso Visual</translation>
+        <translation>Recurso visual</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="173"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="260"/>
+        <location filename="../../src/ttea/games/kartea/view/playerkarteaconfigeditview.py" line="216"/>
         <source>Selecione um recurso visual para visualizar</source>
         <translation>Seleccione un recurso visual para visualizar</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="244"/>
-        <source>Imagem do Veículo:</source>
-        <translation>Imagen del Vehículo:</translation>
-    </message>
-    <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="261"/>
-        <source>Imagem do Ambiente Direita:</source>
-        <translation>Imagen del Entorno Derecha:</translation>
-    </message>
-    <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="278"/>
-        <source>Imagem do Ambiente Esquerda:</source>
-        <translation>Imagen del Entorno Izquierda:</translation>
-    </message>
-    <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="295"/>
-        <source>Imagem do Alvo:</source>
-        <translation>Imagen del Blanco:</translation>
-    </message>
-    <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="312"/>
-        <source>Imagem do Obstáculo:</source>
-        <translation>Imagen del Obstáculo:</translation>
-    </message>
-    <message>
         <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="348"/>
-        <source>Feedback Visual</source>
-        <translation>Retroalimentación Visual</translation>
+        <source>Imagem do Veículo:</source>
+        <translation>Imagen del vehículo:</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="372"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="331"/>
+        <source>Imagem do Horizonte:</source>
+        <translation>Imagen del horizonte:</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="399"/>
+        <source>Imagem do Alvo:</source>
+        <translation>Imagen del objetivo:</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="416"/>
+        <source>Imagem do Obstáculo:</source>
+        <translation>Imagen del obstáculo:</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="437"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="669"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="827"/>
+        <source>Abre a pasta onde podem ser colocadas imagens e sons personalizados. Reabra esta tela para vê-los na lista.</source>
+        <translation>Abre la carpeta donde se pueden colocar imágenes y sonidos personalizados. Vuelva a abrir esta pantalla para verlos en la lista.</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="440"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="672"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="830"/>
+        <source>Abrir pasta de recursos</source>
+        <translation>Abrir carpeta de recursos</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="451"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="683"/>
+        <source>Formatos aceitos: .png (recomendado), .jpg, .jpeg, .bmp</source>
+        <translation>Formatos aceptados: .png (recomendado), .jpg, .jpeg, .bmp</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="490"/>
+        <source>Feedback Visual</source>
+        <translation>Retroalimentación visual</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="514"/>
         <source>Selecione uma imagem de feedback para visualizar</source>
         <translation>Seleccione una imagen de retroalimentación para visualizar</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="443"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="585"/>
         <source>Imagem de Feedback Positivo:</source>
-        <translation>Imagen de Retroalimentación Positiva:</translation>
+        <translation>Imagen de retroalimentación positiva:</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="460"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="602"/>
         <source>Imagem de Feedback Neutro:</source>
-        <translation>Imagen de Retroalimentación Neutra:</translation>
+        <translation>Imagen de retroalimentación neutra:</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="477"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="619"/>
         <source>Imagem de Feedback Negativo:</source>
-        <translation>Imagen de Retroalimentación Negativa:</translation>
+        <translation>Imagen de retroalimentación negativa:</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="510"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="636"/>
+        <source>Tempo de Exibição do Feedback:</source>
+        <translation>Tiempo de visualización de la retroalimentación:</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="719"/>
         <source>Feedback Sonoro</source>
-        <translation>Retroalimentación Sonora</translation>
+        <translation>Retroalimentación sonora</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="518"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="727"/>
         <source>Som de Feedback Positivo:</source>
-        <translation>Sonido del Retroalimentación Positiva:</translation>
+        <translation>Sonido de retroalimentación positiva:</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="537"/>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="569"/>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="601"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="746"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="778"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="810"/>
         <source>Play</source>
         <translation>Reproducir</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="550"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="759"/>
         <source>Som de Feedback Neutro:</source>
-        <translation>Sonido de Retroalimentación Neutra:</translation>
+        <translation>Sonido de retroalimentación neutra:</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="582"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="791"/>
         <source>Som de Feedback Negativo:</source>
-        <translation>Sonido de Retroalimentación Negativa:</translation>
+        <translation>Sonido de retroalimentación negativa:</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="630"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="841"/>
+        <source>Formato aceito: .wav</source>
+        <translation>Formato aceptado: .wav</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="877"/>
         <source>Configuração de Interface</source>
-        <translation>Configuración de Interfaz</translation>
+        <translation>Configuración de interfaz</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="638"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="885"/>
         <source>Paleta:</source>
         <translation>Paleta:</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="655"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="892"/>
+        <source>Cores da pista durante o jogo</source>
+        <translation>Colores de la pista durante el juego</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="899"/>
         <source>HUD:</source>
         <translation>HUD:</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="665"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="909"/>
         <source>Som:</source>
         <translation>Sonido:</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="709"/>
-        <source>Gravar operação corrente</source>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="919"/>
+        <source>Marcador dos Pés:</source>
+        <translation>Marcador de los pies:</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="926"/>
+        <source>Mostra uma bolinha na posição real dos pés do jogador durante o jogo</source>
+        <translation>Muestra un punto en la posición real de los pies del jugador durante el juego</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="933"/>
+        <source>Clique com os Pés:</source>
+        <translation>Clic con los pies:</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="940"/>
+        <source>Permite selecionar os botões dos menus ficando parado em cima deles</source>
+        <translation>Permite seleccionar los botones de los menús quedándose quieto sobre ellos</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="947"/>
+        <source>Tempo de Seleção com os Pés:</source>
+        <translation>Tiempo de selección con los pies:</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="954"/>
+        <source>Tempo parado em cima do botão para selecioná-lo</source>
+        <translation>Tiempo quieto sobre el botón para seleccionarlo</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="1013"/>
+        <source>Salvar operação atual</source>
         <translation>Guardar operación actual</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="712"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="1027"/>
+        <source>Cancelar operação atual</source>
+        <translation>Cancelar operación actual</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="1016"/>
         <source>OK</source>
         <translation>Aceptar</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="723"/>
-        <source>Cancelar operação corrente</source>
-        <translation>Cancelar operación actual</translation>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="14"/>
+        <source>Plataforma T-TEA - Configuração KarTEA</source>
+        <translation>Plataforma T-TEA - Configuración de KarTEA</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="726"/>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="118"/>
+        <source>Tempo de Chegada (Níveis 1 e 2):</source>
+        <translation>Tiempo de llegada (niveles 1 y 2):</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="147"/>
+        <source>Tempo de Chegada (Níveis 3 e 4):</source>
+        <translation>Tiempo de llegada (niveles 3 y 4):</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="365"/>
+        <source>Imagem do Ambiente à Direita:</source>
+        <translation>Imagen del entorno a la derecha:</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="382"/>
+        <source>Imagem do Ambiente à Esquerda:</source>
+        <translation>Imagen del entorno a la izquierda:</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfigeditview.ui" line="1030"/>
         <source>Cancelar</source>
         <translation>Cancelar</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/palettes.py" line="111"/>
+        <source>Padrão</source>
+        <translation>Predeterminada</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/palettes.py" line="112"/>
+        <source>Cores originais do jogo</source>
+        <translation>Colores originales del juego</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/palettes.py" line="121"/>
+        <source>Suave</source>
+        <translation>Suave</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/palettes.py" line="122"/>
+        <source>Baixo estímulo sensorial: cores dessaturadas e pouca diferença entre as faixas</source>
+        <translation>Baja estimulación sensorial: colores desaturados y poca diferencia entre las franjas</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/palettes.py" line="133"/>
+        <source>Alto contraste</source>
+        <translation>Alto contraste</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/palettes.py" line="136"/>
+        <source>Baixa visão: pista escura com borda amarela e preta</source>
+        <translation>Baja visión: pista oscura con borde amarillo y negro</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/palettes.py" line="146"/>
+        <source>Daltonismo</source>
+        <translation>Daltonismo</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/palettes.py" line="147"/>
+        <source>Protanopia e deuteranopia: azul e laranja no lugar de vermelho e verde</source>
+        <translation>Protanopía y deuteranopía: azul y naranja en lugar de rojo y verde</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/palettes.py" line="158"/>
+        <source>Noturno</source>
+        <translation>Nocturna</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/palettes.py" line="159"/>
+        <source>Pouco brilho, para ambientes escuros ou sensibilidade à luz</source>
+        <translation>Poco brillo, para entornos oscuros o sensibilidad a la luz</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/palettes.py" line="169"/>
+        <source>Deserto</source>
+        <translation>Desierto</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/palettes.py" line="170"/>
+        <source>Temática: areia e tons terrosos</source>
+        <translation>Temática: arena y tonos terrosos</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/palettes.py" line="179"/>
+        <source>Neve</source>
+        <translation>Nieve</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/palettes.py" line="180"/>
+        <source>Temática: neve e tons frios</source>
+        <translation>Temática: nieve y tonos fríos</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/palettes.py" line="189"/>
+        <source>Outono</source>
+        <translation>Otoño</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/palettes.py" line="190"/>
+        <source>Temática: tons quentes de outono</source>
+        <translation>Temática: tonos cálidos de otoño</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/palettes.py" line="200"/>
+        <source>Tritanopia</source>
+        <translation>Tritanopía</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/palettes.py" line="201"/>
+        <source>Tritanopia (confusão entre azul e amarelo): vermelho e ciano</source>
+        <translation>Tritanopía (confusión entre azul y amarillo): rojo y cian</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/palettes.py" line="212"/>
+        <source>Monocromático</source>
+        <translation>Monocromática</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/palettes.py" line="215"/>
+        <source>Somente tons de cinza, sem estímulo de cor</source>
+        <translation>Solo tonos de gris, sin estímulo de color</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/palettes.py" line="225"/>
+        <source>Pastel</source>
+        <translation>Pastel</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/palettes.py" line="226"/>
+        <source>Cores claras e suaves, entre a Suave e a Padrão</source>
+        <translation>Colores claros y suaves, entre la Suave y la Predeterminada</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/resourcefields.py" line="221"/>
+        <source>Veículo</source>
+        <translation>Vehículo</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/resourcefields.py" line="215"/>
+        <source>Horizonte</source>
+        <translation>Horizonte</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/resourcefields.py" line="227"/>
+        <location filename="../../src/ttea/games/kartea/util/resourcefields.py" line="231"/>
+        <source>Ambiente</source>
+        <translation>Entorno</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/resourcefields.py" line="235"/>
+        <source>Alvo</source>
+        <translation>Objetivo</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/resourcefields.py" line="241"/>
+        <source>Obstáculo</source>
+        <translation>Obstáculo</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/resourcefields.py" line="248"/>
+        <source>Positivo</source>
+        <translation>Positiva</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/resourcefields.py" line="252"/>
+        <source>Neutro</source>
+        <translation>Neutra</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/games/kartea/util/resourcefields.py" line="257"/>
+        <source>Negativo</source>
+        <translation>Negativa</translation>
     </message>
 </context>
 <context>
     <name>PlayerKarteaConfigListController</name>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="130"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="160"/>
         <source>Configuração cadastrada com sucesso!</source>
         <translation>¡Configuración registrada con éxito!</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="132"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="162"/>
         <source>Erro ao salvar configuração.</source>
         <translation>Error al guardar la configuración.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="140"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="176"/>
         <source>Selecione uma configuração para editar.</source>
         <translation>Seleccione una configuración para editar.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="146"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="182"/>
         <source>Configuração não encontrada.</source>
         <translation>Configuración no encontrada.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="157"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="193"/>
         <source>Configuração atualizada com sucesso.</source>
         <translation>Configuración actualizada con éxito.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="159"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="195"/>
         <source>Erro ao atualizar configuração.</source>
         <translation>Error al actualizar la configuración.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="166"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="209"/>
         <source>Selecione uma configuração para excluir.</source>
         <translation>Seleccione una configuración para eliminar.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="176"/>
-        <source>Tem certeza que seja excluir a configuração do jogador?
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="219"/>
+        <source>Tem certeza que deseja excluir a configuração do jogador?
 {0}</source>
         <translation>¿Está seguro de que desea eliminar la configuración del jugador?
 {0}</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="182"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="225"/>
         <source>Configuração excluída com sucesso.</source>
         <translation>Configuración eliminada con éxito.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="184"/>
+        <location filename="../../src/ttea/games/kartea/controller/playerkarteaconfiglistcontroller.py" line="227"/>
         <source>Erro ao excluir configuração.</source>
         <translation>Error al eliminar la configuración.</translation>
     </message>
@@ -2041,14 +2341,14 @@ Por favor, guarde la configuración del hardware antes de iniciar el juego.</tra
 <context>
     <name>PlayerKarteaConfigListView</name>
     <message>
-        <location filename="../../src/ttea/games/kartea/view/playerkarteaconfiglistview.py" line="192"/>
+        <location filename="../../src/ttea/games/kartea/view/playerkarteaconfiglistview.py" line="246"/>
         <source>Deseja sair do cadastro?</source>
         <translation>¿Desea salir del registro?</translation>
     </message>
     <message>
         <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="14"/>
-        <source>Plataforma T-TEA - Configurações Kartea</source>
-        <translation>Plataforma T-TEA - Configuración de Kartea</translation>
+        <source>Plataforma T-TEA - Configurações KarTEA</source>
+        <translation>Plataforma T-TEA - Configuraciones de KarTEA</translation>
     </message>
     <message>
         <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="31"/>
@@ -2058,7 +2358,7 @@ Por favor, guarde la configuración del hardware antes de iniciar el juego.</tra
     <message>
         <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="38"/>
         <source>Digite o nome ou ID do jogador</source>
-        <translation>Escribe el nombre o la ID del jugador</translation>
+        <translation>Escriba el nombre o el ID del jugador</translation>
     </message>
     <message>
         <location filename="../../src/ttea/games/kartea/resources/ui/playerkarteaconfiglistview.ui" line="69"/>
@@ -2197,7 +2497,7 @@ Por favor, guarde la configuración del hardware antes de iniciar el juego.</tra
         <location filename="../../src/ttea/controller/playerlistcontroller.py" line="123"/>
         <source>Deseja excluir?
 {0}</source>
-        <translation>¿Desea eliminar a?
+        <translation>¿Desea eliminar el registro?
 {0}</translation>
     </message>
     <message>
@@ -2226,7 +2526,7 @@ Por favor, guarde la configuración del hardware antes de iniciar el juego.</tra
     <message>
         <location filename="../ui/playerlistview.ui" line="38"/>
         <source>Digite o nome ou ID</source>
-        <translation>Escribe el nombre o la ID</translation>
+        <translation>Escriba el nombre o el ID</translation>
     </message>
     <message>
         <location filename="../ui/playerlistview.ui" line="69"/>
@@ -2266,12 +2566,12 @@ Por favor, guarde la configuración del hardware antes de iniciar el juego.</tra
     <message>
         <location filename="../ui/playerlistview.ui" line="138"/>
         <source>Data de Nascimento:</source>
-        <translation>Fecha de Nacimiento:</translation>
+        <translation>Fecha de nacimiento:</translation>
     </message>
     <message>
         <location filename="../ui/playerlistview.ui" line="148"/>
         <source>Data de Nascimento: </source>
-        <translation>Fecha de Nacimiento: </translation>
+        <translation>Fecha de nacimiento: </translation>
     </message>
     <message>
         <location filename="../ui/playerlistview.ui" line="158"/>
@@ -2332,7 +2632,7 @@ Por favor, guarde la configuración del hardware antes de iniciar el juego.</tra
         <location filename="../../src/ttea/service/playerservice.py" line="82"/>
         <source>ID deve ser do tipo inteiro!
 </source>
-        <translation>!El ID debe ser un número entero!
+        <translation>¡El ID debe ser un número entero!
 </translation>
     </message>
     <message>
@@ -2351,8 +2651,8 @@ Por favor, guarde la configuración del hardware antes de iniciar el juego.</tra
     </message>
     <message>
         <location filename="../../src/ttea/service/playerservice.py" line="174"/>
-        <source>Exclusão negada: O jogador possui uma configuração do KarTEA ativa.</source>
-        <translation>Eliminación denegada: El jugador tiene una configuración de KarTEA activa.</translation>
+        <source>Exclusão negada: o jogador possui uma configuração do KarTEA ativa.</source>
+        <translation>Eliminación denegada: el jugador tiene una configuración de KarTEA activa.</translation>
     </message>
 </context>
 <context>
@@ -2365,17 +2665,17 @@ Por favor, guarde la configuración del hardware antes de iniciar el juego.</tra
     <message>
         <location filename="../../src/ttea/model/professional.py" line="81"/>
         <source>Assistente Social</source>
-        <translation>Trabajador Social</translation>
+        <translation>Trabajador social</translation>
     </message>
     <message>
         <location filename="../../src/ttea/model/professional.py" line="82"/>
         <source>Cuidador Especializado</source>
-        <translation>Cuidador Especializado</translation>
+        <translation>Cuidador especializado</translation>
     </message>
     <message>
         <location filename="../../src/ttea/model/professional.py" line="83"/>
         <source>Educador Físico</source>
-        <translation>Educador Físico</translation>
+        <translation>Educador físico</translation>
     </message>
     <message>
         <location filename="../../src/ttea/model/professional.py" line="84"/>
@@ -2400,7 +2700,7 @@ Por favor, guarde la configuración del hardware antes de iniciar el juego.</tra
     <message>
         <location filename="../../src/ttea/model/professional.py" line="88"/>
         <source>Mediador Escolar</source>
-        <translation>Mediador Escolar</translation>
+        <translation>Mediador escolar</translation>
     </message>
     <message>
         <location filename="../../src/ttea/model/professional.py" line="89"/>
@@ -2429,31 +2729,31 @@ Por favor, guarde la configuración del hardware antes de iniciar el juego.</tra
     </message>
     <message>
         <location filename="../../src/ttea/model/professional.py" line="94"/>
-        <source>Professor Educação Especial</source>
-        <translation>Maestro de Educación Especial</translation>
+        <source>Professor de Educação Especial</source>
+        <translation>Profesor de educación especial</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="95"/>
+        <location filename="../../src/ttea/model/professional.py" line="97"/>
         <source>Psicopedagogo</source>
         <translation>Psicopedagogo</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="96"/>
+        <location filename="../../src/ttea/model/professional.py" line="98"/>
         <source>Psicólogo</source>
         <translation>Psicólogo</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="97"/>
+        <location filename="../../src/ttea/model/professional.py" line="99"/>
         <source>Psiquiatra</source>
         <translation>Psiquiatra</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="98"/>
+        <location filename="../../src/ttea/model/professional.py" line="100"/>
         <source>Terapeuta Ocupacional</source>
-        <translation>Terapeuta Ocupacional</translation>
+        <translation>Terapeuta ocupacional</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/model/professional.py" line="99"/>
+        <location filename="../../src/ttea/model/professional.py" line="101"/>
         <source>Voluntário</source>
         <translation>Voluntario</translation>
     </message>
@@ -2498,22 +2798,22 @@ Por favor, guarde la configuración del hardware antes de iniciar el juego.</tra
     <message>
         <location filename="../ui/professionaleditview.ui" line="71"/>
         <source>Instituição/Estabelecimento:</source>
-        <translation>Centro / Establecimiento:</translation>
+        <translation>Institución/Establecimiento:</translation>
     </message>
     <message>
         <location filename="../ui/professionaleditview.ui" line="119"/>
-        <source>Gravar operação corrente</source>
-        <translation>Grabar operación actual</translation>
+        <source>Salvar operação atual</source>
+        <translation>Guardar operación actual</translation>
+    </message>
+    <message>
+        <location filename="../ui/professionaleditview.ui" line="145"/>
+        <source>Cancelar operação atual</source>
+        <translation>Cancelar operación actual</translation>
     </message>
     <message>
         <location filename="../ui/professionaleditview.ui" line="125"/>
         <source>OK</source>
         <translation>Aceptar</translation>
-    </message>
-    <message>
-        <location filename="../ui/professionaleditview.ui" line="145"/>
-        <source>Cancelar operação corrente</source>
-        <translation>Cancelar operación actual</translation>
     </message>
     <message>
         <location filename="../ui/professionaleditview.ui" line="148"/>
@@ -2545,8 +2845,8 @@ Por favor, guarde la configuración del hardware antes de iniciar el juego.</tra
     </message>
     <message>
         <location filename="../../src/ttea/controller/professionallistcontroller.py" line="153"/>
-        <source>Selecione um professional para editar.</source>
-        <translation>Selecciona un profesional para editar.</translation>
+        <source>Selecione um profissional para editar.</source>
+        <translation>Seleccione un profesional para editar.</translation>
     </message>
     <message>
         <location filename="../../src/ttea/controller/professionallistcontroller.py" line="158"/>
@@ -2572,7 +2872,7 @@ Por favor, guarde la configuración del hardware antes de iniciar el juego.</tra
         <location filename="../../src/ttea/controller/professionallistcontroller.py" line="184"/>
         <source>Deseja excluir?
 {0}</source>
-        <translation>¿Desea eliminar a?
+        <translation>¿Desea eliminar el registro?
 {0}</translation>
     </message>
     <message>
@@ -2601,7 +2901,7 @@ Por favor, guarde la configuración del hardware antes de iniciar el juego.</tra
     <message>
         <location filename="../ui/professionallistview.ui" line="38"/>
         <source>Digite o nome ou ID</source>
-        <translation>Escribe el nombre o la ID</translation>
+        <translation>Escriba el nombre o el ID</translation>
     </message>
     <message>
         <location filename="../ui/professionallistview.ui" line="69"/>
@@ -2689,7 +2989,7 @@ Por favor, guarde la configuración del hardware antes de iniciar el juego.</tra
         <location filename="../../src/ttea/service/professionalservice.py" line="89"/>
         <source>ID deve ser do tipo inteiro!
 </source>
-        <translation>!El ID debe ser un número entero!
+        <translation>¡El ID debe ser un número entero!
 </translation>
     </message>
     <message>
@@ -2708,9 +3008,10 @@ Por favor, guarde la configuración del hardware antes de iniciar el juego.</tra
     </message>
     <message>
         <location filename="../../src/ttea/service/professionalservice.py" line="99"/>
-        <source>Instituição/Estabelecimento é obrigatório!
+        <source>Instituição/Estabelecimento é obrigatória!
 </source>
-        <translation>¡Institución/Establecimiento es obligatorio! </translation>
+        <translation>¡La institución/establecimiento es obligatoria!
+</translation>
     </message>
 </context>
 <context>
@@ -2744,7 +3045,7 @@ Por favor, guarde la configuración del hardware antes de iniciar el juego.</tra
     <message>
         <location filename="../../src/ttea/view/splashscreen.py" line="204"/>
         <source>Concluído!</source>
-        <translation>¡Completado!</translation>
+        <translation>¡Listo!</translation>
     </message>
 </context>
 <context>

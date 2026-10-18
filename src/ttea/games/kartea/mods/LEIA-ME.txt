@@ -1,0 +1,52 @@
+Recursos personalizados do KarTEA
+=================================
+
+Coloque aqui imagens e sons para aparecerem na tela de configuração do
+jogador, junto com os que já vêm no jogo. Cada arquivo vai na pasta do
+recurso que ele substitui:
+
+  images/vehicle/              veículo
+  images/environment/          ambiente (esquerda e direita)
+  images/target/               alvo
+  images/obstacle/             obstáculo
+  images/feedback/positive/    feedback visual positivo
+  images/feedback/neutral/     feedback visual neutro
+  images/feedback/negative/    feedback visual negativo
+  sounds/feedback/positive/    som de acerto
+  sounds/feedback/neutral/     som neutro
+  sounds/feedback/negative/    som de erro
+
+Formatos aceitos:
+  imagens: .png (recomendado, com fundo transparente), .jpg, .jpeg, .bmp
+  sons:    .wav
+
+Recomendações
+-------------
+
+  Veículo      512x512 pixels (mínimo 384x384 em telas Full HD).
+               Imagem quadrada, carro visto de trás, fundo
+               transparente. Na tela, o carro ocupa um quadrado de 1/5
+               da largura: imagem menor fica borrada, e imagem
+               retangular sai achatada.
+  Alvo e       256x256 pixels (mínimo 100x100). Imagem quadrada, fundo
+  obstáculo    transparente. O jogo reduz a imagem para 100x100 antes
+               da perspectiva da pista: arquivos maiores não melhoram
+               a qualidade.
+  Ambiente     tamanho próximo de 500x520 pixels (como as árvores
+               originais). O tamanho na tela segue o tamanho do
+               arquivo: imagem muito grande vira um objeto gigante, e
+               muito pequena, um objeto minúsculo. A da esquerda e a da
+               direita devem estar viradas para o lado certo.
+  Feedback     tamanho próximo de 800x200 pixels. É mostrada no tamanho
+  visual       original, sem redimensionar: uma foto grande cobre a
+               tela.
+  Sons         .wav PCM de 16 bits, curtos e com volume parecido com o
+               dos sons originais. WAV compactado (ADPCM) ou de 32 bits
+               pode não tocar.
+
+O feedback neutro (imagem e som) pode ser escolhido, mas não é usado
+durante a partida.
+
+Depois de copiar um arquivo, feche e abra de novo a tela de
+configuração para ele aparecer na lista. Se um arquivo escolhido for
+apagado, o jogo volta a usar o recurso padrão.

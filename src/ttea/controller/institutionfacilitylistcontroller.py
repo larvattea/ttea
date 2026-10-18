@@ -8,8 +8,10 @@ from ttea.service import InstitutionFacilityService
 from ttea.util import MessageService
 
 if TYPE_CHECKING:
-    from ttea.view import (InstitutionFacilityEditView,
-                           InstitutionFacilityListView)
+    from ttea.view import (
+        InstitutionFacilityEditView,
+        InstitutionFacilityListView,
+    )
 
 
 class InstitutionFacilityListController(QObject):
@@ -156,7 +158,7 @@ class InstitutionFacilityListController(QObject):
                 )
             else:
                 self.msg.critical(
-                    self.tr("Erro ao salvar instuição/estabelecimento.")
+                    self.tr("Erro ao salvar instituição/estabelecimento.")
                 )
 
     def update_institutionfacility(self) -> None:
