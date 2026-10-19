@@ -15,6 +15,11 @@ class ReadOnlyDAO(DAO):
     def insert(self, obj: object) -> Any | None:
         """Not supported: the data are read-only.
 
+        Parameters
+        ----------
+        obj : object
+            Object that would be inserted (ignored).
+
         Raises
         ------
         NotImplementedError
@@ -25,6 +30,11 @@ class ReadOnlyDAO(DAO):
     def update(self, obj: object) -> Any | None:
         """Not supported: the data are read-only.
 
+        Parameters
+        ----------
+        obj : object
+            Object that would be updated (ignored).
+
         Raises
         ------
         NotImplementedError
@@ -34,6 +44,11 @@ class ReadOnlyDAO(DAO):
 
     def delete(self, obj_id: int) -> Any | None:
         """Not supported: the data are read-only.
+
+        Parameters
+        ----------
+        obj_id : int
+            Id of the object that would be deleted (ignored).
 
         Raises
         ------

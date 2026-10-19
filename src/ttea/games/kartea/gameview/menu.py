@@ -261,8 +261,11 @@ class Menu:
 
         Notes
         -----
-        "play" only starts the next level: it was already set at the end
-        of the level (GameController).
+        - The player's first name is drawn under the trophy
+          (``draw_player_name``), followed by the level statistics
+          (``draw_feedback``).
+        - "play" only starts the next level: it was already set at the
+          end of the level (GameController).
         """
         image_path = {
             "Feedback_1": self.settings.MENU_FEEDBACK_25,
