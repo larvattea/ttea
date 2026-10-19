@@ -1,0 +1,75 @@
+import random
+import pygame
+
+
+class Obstaculo(pygame.sprite.Sprite):
+    """Representa um obstáculo que se move em direção ao jogador.
+
+    Cada instância escolhe uma imagem aleatória, determina sua escala e o
+    posiciona na tela para criar variação no cenário do jogo.
+    """
+
+    def __init__(self, vel, largura_tela, altura_chao):
+        """Inicializa um obstáculo com imagem, velocidade e posição aleatórias.
+
+        Args:
+            vel (int): Velocidade de deslocamento do obstáculo.
+            largura_tela (int): Largura da tela para posicionar o objeto à direita.
+            altura_chao (int): Altura do chão usado como referência para a base do obstáculo.
+        """
+        super().__init__()
+
+        tipos_de_obstaculos = [
+            'Imagens/PeA-juntos.png',
+            'Imagens/agonia.png',
+            'Imagens/panico.png',
+            'Imagens/Sprite-coluna-inteira.png',
+            'Imagens/Sprite-coluna-quebrada.png',
+            'Imagens/colunas-juntas.png',
+            'Imagens/Sprite-vaso.png',
+            'Imagens/hades1.png',
+            'Imagens/fogo1.gif',
+            'Imagens/fogão.png'
+        ]
+
+        imagem_escolhida = random.choice(tipos_de_obstaculos)
+        if imagem_escolhida in ['Imagens/PeA-juntos.png',
+                                'Imagens/agonia.png',
+                                'Imagens/panico.png']:
+            scale_factor = random.uniform(1.5, 2.2)
+        elif imagem_escolhida == 'Imagens/Sprite-coluna-quebrada.png':
+            scale_factor = random.uniform(2, 2.7)
+        else:
+            scale_factor = random.uniform(2, 2.5)
+
+        original_image = pygame.image.load(imagem_escolhida).convert_alpha()
+
+        new_width = int(original_image.get_width() * scale_factor)
+        new_height = int(original_image.get_height() * scale_factor)
+        self.image = pygame.transform.scale(original_image, (new_width, new_height))
+
+        alturas_possiveis = [altura_chao, altura_chao - 85,
+                              altura_chao - 90, altura_chao - 95]
+        altura_escolhida = random.choice(alturas_possiveis)
+
+        if imagem_escolhida in ['Imagens/hades1.png',
+                                'Imagens/fogo1.png',
+                                'Imagens/fogão.png']:
+            self.rect = self.image.get_rect(
+                bottomleft=(largura_tela + random.randint(200, 300), altura_escolhida))
+        else:
+            self.rect = self.image.get_rect(
+                bottomleft=(largura_tela + random.randint(200, 300), altura_chao))
+
+        self.mask = pygame.mask.from_surface(self.image)
+       
+        self.vel = vel
+
+        self.ja_pontuou = False
+
+    def update(self):
+        """Move o obstáculo para a esquerda e remove-o ao sair da tela."""
+        self.rect.x -= self.vel
+
+        if self.rect.right < 0:
+            self.kill()

@@ -1,0 +1,19 @@
+{
+    "game": "Herpules 1.0",
+    "exec": "HerPules.exe",
+    "icon": "herpules.ico",
+    "language":{
+        "pt_BR": {
+            "name": "Herpules 1.0",
+            "description": "Um jogo para estimular a movimentação corporal."
+        },
+        "es_ES": {
+            "name": "Herpules 1.0",
+            "description": "Un juego para estimular el movimiento corporal."
+        },
+        "en_US":{
+             "name": "Herpules 1.0",
+             "description": "A game to to stimulate body movement."
+        }
+    }
+}

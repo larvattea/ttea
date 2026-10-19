@@ -17,6 +17,7 @@ dependencies = [
 
 [project.scripts]
 dev = "ttea.main:main"
+tests = "ttea.testrunner:main"
 
 [build-system]
 requires = ["setuptools>=80"]
