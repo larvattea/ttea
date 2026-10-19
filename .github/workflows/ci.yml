@@ -35,5 +35,5 @@ jobs:
       - name: Install project
         run: uv sync --locked
 
-      - name: Run smoke test
-        run: uv run --locked python -m unittest discover -s tests -p "test_smoke.py"
+      - name: Run tests
+        run: uv run --locked tests

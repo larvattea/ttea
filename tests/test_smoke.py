@@ -9,9 +9,9 @@ import pygame
 from PySide6.QtCore import QFile
 from PySide6.QtWidgets import QApplication, QMainWindow
 
-from ttea.games.kartea.gamecore.camera import Camera
 from ttea.games.kartea.gameutil.alphablit import alpha_blit_flags
 from ttea.main import App
+from ttea.service import CalibrationSettingService
 from ttea.ui import Ui_MainView
 from ttea.util import PathConfig
 
@@ -34,12 +34,8 @@ class SmokeTest(unittest.TestCase):
 
         window.close()
 
-    @patch("cv2.VideoCapture")
-    def test_camera_uses_native_backends(self, mock_videocapture):
-        mock_instance = mock_videocapture.return_value
-        mock_instance.read.return_value = (False, None)
-
-        cam = Camera()
+    def test_capture_uses_native_backends(self):
+        service = CalibrationSettingService()
 
         # Mapeamento simulando o retorno que o INI/QSettings
         # entregaria para cada chave
@@ -52,25 +48,33 @@ class SmokeTest(unittest.TestCase):
         def fake_settings_value(key, default="CAP_ANY"):
             return configured_backends.get(key, default)
 
-        target_service = (
-            cam.service.calibration_service.calibration_setting_service
-        )
-
-        with patch.object(
-            target_service.settings, "value", side_effect=fake_settings_value
+        with (
+            patch.object(
+                service.settings, "value", side_effect=fake_settings_value
+            ),
+            patch.object(service, "is_raspberry_pi", return_value=False),
         ):
             with patch("sys.platform", "win32"):
-                self.assertEqual(cam.camera_backend(), cv2.CAP_DSHOW)
+                self.assertEqual(
+                    service.get_opencv_capture_backend(), cv2.CAP_DSHOW
+                )
 
             with patch("sys.platform", "darwin"):
-                self.assertEqual(cam.camera_backend(), cv2.CAP_AVFOUNDATION)
+                self.assertEqual(
+                    service.get_opencv_capture_backend(),
+                    cv2.CAP_AVFOUNDATION,
+                )
 
             with patch("sys.platform", "linux"):
-                self.assertEqual(cam.camera_backend(), cv2.CAP_V4L2)
+                self.assertEqual(
+                    service.get_opencv_capture_backend(), cv2.CAP_V4L2
+                )
 
             with patch("sys.platform", "freebsd14"):
                 # Como freebsd cai no 'else', ele usará opencv_linux_capture
-                self.assertEqual(cam.camera_backend(), cv2.CAP_V4L2)
+                self.assertEqual(
+                    service.get_opencv_capture_backend(), cv2.CAP_V4L2
+                )
 
     def test_macos_uses_sdl2_alpha_blitter(self):
         with patch(

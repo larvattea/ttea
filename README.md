@@ -111,6 +111,12 @@ uv run dev
 
 Esse comando baixa a versão correta do Python, cria o `.venv`, sincroniza as dependências e inicia o T-TEA.
 
+### Testes
+
+```bash
+uv run tests
+```
+
 ### Executar sem uv (venv manual)
 
 Com o Python 3.10, 3.11 ou 3.12 instalado, na raiz do projeto:
