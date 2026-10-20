@@ -1,0 +1,19 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Plataforma T-TEA\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "configuração do KarTEA"
+msgstr "configuración del KarTEA"
+
+msgid "Configuração do jogador"
+msgstr "Configuración del jugador"
+
+msgid "Configurações do KarTEA para cada jogador: fases, níveis, imagens e sons."
+msgstr "Configuración del KarTEA para cada jugador: fases, niveles, imágenes y sonidos."
+
+msgid "Página em construção."
+msgstr "Página en construcción."

@@ -1,0 +1,19 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Plataforma T-TEA\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "calibração automática"
+msgstr "calibración automática"
+
+msgid "Calibração automática"
+msgstr "Calibración automática"
+
+msgid "Como fazer a calibração automática da área de projeção."
+msgstr "Cómo calibrar automáticamente el área de proyección."
+
+msgid "Página em construção."
+msgstr "Página en construcción."

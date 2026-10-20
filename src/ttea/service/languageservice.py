@@ -1,4 +1,4 @@
-from PySide6.QtCore import QLocale, QSettings, QTranslator
+from PySide6.QtCore import QLibraryInfo, QLocale, QSettings, QTranslator
 from PySide6.QtWidgets import QApplication
 
 from ttea.app import AppConfig
@@ -81,10 +81,23 @@ class LanguageService:
             f"{code}{AppConfig.TRANSLATION_EXTENSION}"
         )
 
-        if translator.load(path):
-            app.installTranslator(translator)
-            return True
-        return False
+        if not translator.load(path):
+            return False
+
+        # Qt's own texts of the help widgets (search, index). Optional:
+        # without it they stay in English.
+        qt_help = QTranslator(app)
+        if qt_help.load(
+            QLocale(code),
+            "qt_help",
+            "_",
+            QLibraryInfo.path(QLibraryInfo.LibraryPath.TranslationsPath),
+        ):
+            app.installTranslator(qt_help)
+
+        # Installed last, so the application translations win.
+        app.installTranslator(translator)
+        return True
 
     def preview_language(self, code: str) -> bool:
         """Carrega o idioma apenas para preview (sem salvar nem alterar máscara de data)."""

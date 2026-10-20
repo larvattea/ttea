@@ -1,0 +1,25 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Plataforma T-TEA\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "alvos"
+msgstr "objetivos"
+
+msgid "obstáculos"
+msgstr "obstáculos"
+
+msgid "Como jogar"
+msgstr "Cómo jugar"
+
+msgid "Elementos da tela, alvos, obstáculos e feedback durante o jogo."
+msgstr "Elementos de la pantalla, objetivos, obstáculos y retroalimentación durante el juego."
+
+msgid "Tela de jogo do KarTEA."
+msgstr "Pantalla de juego del KarTEA."
+
+msgid "Página em construção."
+msgstr "Página en construcción."

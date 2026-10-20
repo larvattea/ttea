@@ -910,6 +910,67 @@ Detalles del error: {0}</translation>
     </message>
 </context>
 <context>
+    <name>HelpController</name>
+    <message>
+        <location filename="../../src/ttea/controller/helpcontroller.py" line="85"/>
+        <source>Não foi possível abrir a ajuda. Verifique se os arquivos de ajuda estão instalados.</source>
+        <translation>No fue posible abrir la ayuda. Verifique que los archivos de ayuda estén instalados.</translation>
+    </message>
+</context>
+<context>
+    <name>HelpView</name>
+    <message>
+        <location filename="../../src/ttea/view/helpview.py" line="94"/>
+        <source>Ajuda - Plataforma T-TEA</source>
+        <translation>Ayuda - Plataforma T-TEA</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/view/helpview.py" line="101"/>
+        <source>Sumário</source>
+        <translation>Contenido</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/view/helpview.py" line="102"/>
+        <source>Índice</source>
+        <translation>Índice</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/view/helpview.py" line="103"/>
+        <source>Pesquisar</source>
+        <translation>Buscar</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/view/helpview.py" line="150"/>
+        <source>Digite a palavra-chave</source>
+        <translation>Escriba la palabra clave</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/view/helpview.py" line="179"/>
+        <source>Preparando a pesquisa...</source>
+        <translation>Preparando la búsqueda...</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/view/helpview.py" line="197"/>
+        <source>Navegação</source>
+        <translation>Navegación</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/view/helpview.py" line="200"/>
+        <source>Voltar</source>
+        <translation>Atrás</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/view/helpview.py" line="204"/>
+        <source>Avançar</source>
+        <translation>Adelante</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/view/helpview.py" line="208"/>
+        <source>Início</source>
+        <translation>Inicio</translation>
+    </message>
+</context>
+<context>
     <name>InstitutionFacility</name>
     <message>
         <location filename="../../src/ttea/model/institutionfacility.py" line="95"/>
@@ -1291,14 +1352,6 @@ Detalles del error: {0}</translation>
         <location filename="../../src/ttea/view/languageview.py" line="66"/>
         <source>Por favor, selecione um idioma.</source>
         <translation>Por favor, seleccione un idioma.</translation>
-    </message>
-</context>
-<context>
-    <name>MainController</name>
-    <message>
-        <location filename="../../src/ttea/controller/maincontroller.py" line="105"/>
-        <source>Funcionalidade da ajuda em desenvolvimento...</source>
-        <translation>Función de ayuda en desarrollo...</translation>
     </message>
 </context>
 <context>

@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Optional
 
 from PySide6.QtCore import QObject
 
+from ttea.controller.helpcontroller import HelpController
 from ttea.service import MainService
 
 if TYPE_CHECKING:
@@ -101,16 +102,8 @@ class MainController(QObject):
         dialog.exec()
 
     def open_help(self) -> None:
-        self.view.update_status_message(
-            self.tr("Funcionalidade da ajuda em desenvolvimento...")
-        )
-        """try:
-            # open_help()
-            pass
-        except Exception as e:
-            self.view.show_critical_error(
-                self.tr("Erro ao abrir ajuda."), str(e)
-            )"""
+        """Open the help at the topic of the active screen."""
+        HelpController.instance().show_help()
 
     def open_language(self) -> None:
         dialog = self.app_factory.create_language_view(parent=self.view)

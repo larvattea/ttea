@@ -1,0 +1,38 @@
+/* Estilo das páginas da ajuda da Plataforma T-TEA. */
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 11pt;
+    line-height: 1.5;
+    max-width: 60em;
+    margin: 0 auto;
+    padding: 0 1.5em 2em;
+}
+
+/* Screenshots shrink to the window width instead of scrolling. */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+div.figure,
+figure {
+    margin: 1.5em 0;
+    text-align: center;
+}
+
+figcaption,
+p.caption {
+    font-size: 0.95em;
+    color: #555;
+}
+
+h1, h2, h3 {
+    color: #1b5e20;
+}
+
+div.admonition.note {
+    background: #fff8e1;
+    border-left: 4px solid #f9a825;
+    padding: 0.5em 1em;
+}

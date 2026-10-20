@@ -13,6 +13,7 @@ env/
 data/calibration/
 data/config/
 data/exports/
+data/helpcache/
 data/institutionfacilities/
 data/log/
 data/players/
@@ -28,6 +29,7 @@ htmlcov/
 # Build output
 build/
 dist/
+resources/help/_build/
 
 # Local system and IDE files
 .DS_Store

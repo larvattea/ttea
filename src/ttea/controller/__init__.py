@@ -17,6 +17,8 @@ __license__ : str
 
 See Also
 --------
+HelpController
+    Opens the help window on the topic of the active screen.
 LanguageController
     Manages language-related operations and data.
 PlayerEditController
@@ -36,6 +38,7 @@ __all__ = [
     "AutomaticCalibrationController",
     "CalibrationController",
     "CalibrationSettingController",
+    "HelpController",
     "InstitutionFacilityEditController",
     "InstitutionFacilityListController",
     "LanguageController",
@@ -57,6 +60,7 @@ __license__ = "MIT License"
 from .automaticcalibrationcontroller import AutomaticCalibrationController
 from .calibrationcontroller import CalibrationController
 from .calibrationsettingcontroller import CalibrationSettingController
+from .helpcontroller import HelpController
 from .institutionfacilityeditcontroller import \
     InstitutionFacilityEditController
 from .institutionfacilitylistcontroller import \

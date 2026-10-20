@@ -14,10 +14,11 @@ from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QApplication, QDialog, QMainWindow
 
 from ttea.app import AppConfig
+from ttea.controller import HelpController
 from ttea.factory import ViewFactory
 from ttea.log import Log
 from ttea.service import LanguageService
-from ttea.util import CriticalHooks
+from ttea.util import CriticalHooks, HelpKeyFilter
 from ttea.view import SplashScreen
 
 
@@ -34,6 +35,8 @@ class App:
         The language selection view instance.
     main_view : QMainWindow | None
         The main application window.
+    help_key_filter : HelpKeyFilter | None
+        Application-wide F1 handler, active in every window.
 
     Methods
     -------
@@ -53,6 +56,7 @@ class App:
         self.splash: SplashScreen | None = None
         self.language_view: QDialog | None = None
         self.main_view: QMainWindow | None = None
+        self.help_key_filter: HelpKeyFilter | None = None
 
     def run(self) -> None:
         """Run the main application and start the Qt event loop.
@@ -79,11 +83,21 @@ class App:
         CriticalHooks.setup_exception_hooks()
         Log.get_log().log_info("Application started successfully.")
 
+        # Qt WebEngine (help window) must be set up before the
+        # QApplication exists.
+        self._register_help_scheme()
+
         # Creation of the QApplication
         self.app = QApplication(sys.argv)
         self.app.setApplicationName(AppConfig.get_title())
         self.app.setApplicationVersion(AppConfig.VERSION)
         self.app.setWindowIcon(QIcon(AppConfig.ICON_APP))
+
+        # F1 opens the help of the active screen, also in modal dialogs
+        self.help_key_filter = HelpKeyFilter(
+            HelpController.instance().show_help, self.app
+        )
+        self.app.installEventFilter(self.help_key_filter)
 
         # === Detects initial language and applies it ===
         language_service = LanguageService()
@@ -135,6 +149,15 @@ class App:
         exit_code = self.app.exec()
         Log.get_log().log_info(f"Application exited with code: {exit_code}.")
         sys.exit(exit_code)
+
+    @staticmethod
+    def _register_help_scheme() -> None:
+        """Register the ``qthelp`` URL scheme of the help window."""
+        # Imported here so the help module is the only one that loads
+        # Qt WebEngine; importing App (e.g. in tests) stays light.
+        from ttea.util import helpschemehandler  # noqa: PLC0415
+
+        helpschemehandler.HelpSchemeHandler.register_scheme()
 
 
 def main() -> None:

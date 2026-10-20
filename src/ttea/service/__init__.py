@@ -32,6 +32,8 @@ https://github.com/larvattea/ttea
 __all__ = [
     "CalibrationService",
     "CalibrationSettingService",
+    "HelpService",
+    "HelpUnavailableError",
     "ProfessionalService",
     "InstitutionFacilityService",
     "LanguageService",
@@ -48,6 +50,7 @@ __license__ = "MIT License"
 # Import the submodules
 from .calibrationservice import CalibrationService
 from .calibrationsettingservice import CalibrationSettingService
+from .helpservice import HelpService, HelpUnavailableError
 from .institutionfacilityservice import InstitutionFacilityService
 from .languageservice import LanguageService
 from .mainservice import MainService

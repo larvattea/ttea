@@ -1,19 +1,124 @@
 {
-    "game": "Herpules 1.0",
-    "exec": "HerPules.exe",
-    "icon": "herpules.ico",
-    "language":{
-        "pt_BR": {
-            "name": "Herpules 1.0",
-            "description": "Um jogo para estimular a movimentação corporal."
+  "schema_version": "1.0",
+  "id": "br.udesc.larva.herpules1",
+  "version": "1.0.0",
+
+  "runtime": {
+    "entrypoint": "HerPules.exe",
+    "view_factory": null,
+    "menu_actions": {},
+    "min_platform_version": null,
+    "python": null,
+    "dependencies": [],
+    "required_peripherals": ["webcam"],
+    "permissions": ["camera"]
+  },
+
+  "store": {
+    "type": "game",
+    "is_free": true,
+    "license": null,
+    "required_age": 0,
+    "website": "https://udescmove2learn.wordpress.com/",
+    "support_info": {
+      "url": null,
+      "email": null
+    },
+    "release_date": {
+      "coming_soon": false,
+      "date": null
+    },
+    "developers": [],
+    "publishers": [
+      {
+        "name": "LARVA - UDESC - CCT - Joinville",
+        "email": null,
+        "website": "https://udescmove2learn.wordpress.com/"
+      }
+    ],
+    "platforms": {
+      "windows": true,
+      "linux": false,
+      "mac": false
+    },
+    "genres": ["action", "educational", "casual"],
+    "categories": ["single_player"],
+    "tags": ["exergame", "motion_control", "accessibility"],
+    "controller_support": null,
+    "audience": {
+      "min_age": null,
+      "max_age": null,
+      "conditions": ["tea"],
+      "skills": ["physical_activity", "coordination", "focus"]
+    },
+    "accessibility": [],
+    "privacy": {
+      "camera": true,
+      "stores_video": null,
+      "data_collected": [],
+      "data_leaves_device": null,
+      "policy_url": null
+    },
+    "requirements": {
+      "windows": {
+        "minimum": {
+          "os": "Windows 10 64-bit",
+          "cpu": "Intel Core i3",
+          "gpu": "Intel HD Graphics 4000",
+          "ram_mb": 4096,
+          "storage_mb": 500
         },
-        "es_ES": {
-            "name": "Herpules 1.0",
-            "description": "Un juego para estimular el movimiento corporal."
-        },
-        "en_US":{
-             "name": "Herpules 1.0",
-             "description": "A game to to stimulate body movement."
+        "recommended": {
+          "os": "Windows 10/11 64-bit",
+          "cpu": "Intel Core i5",
+          "gpu": "NVIDIA GeForce GTX 1050",
+          "ram_mb": 8192,
+          "storage_mb": 1024
         }
+      }
+    },
+    "tech": {
+      "engine": null,
+      "language": "python"
+    },
+    "assets": {
+      "icon": "herpules.ico",
+      "logo": null,
+      "header": null,
+      "background": null,
+      "screenshots": [],
+      "videos": []
+    },
+    "references": [],
+    "changelog_url": null,
+
+    "localization": {
+      "default": "en_US",
+      "supported": ["en_US", "es_ES", "pt_BR"],
+      "en_US": {
+        "name": "Herpules 1.0",
+        "short_description": "A game to stimulate body movement.",
+        "about_the_game": "The first version of Herpules, an exergame in which the player's body movements control the hero as he dodges obstacles.",
+        "detailed_description": "Herpules 1.0 is the first version of Herpules, an exergame created by LARVA at UDESC to encourage physical activity in a playful way. Using a webcam, the game turns the player's body movements into the actions of Herpules, who must dodge the obstacles in his path, encouraging physical activity, coordination and focus.",
+        "content_notes": "Educational exergame focused on stimulating body movement. Suitable for all ages, including children with special needs. Requires free space in front of the camera to move.",
+        "requirements_notes": "Requires a webcam positioned so the player's full body is visible."
+      },
+      "es_ES": {
+        "name": "Herpules 1.0",
+        "short_description": "Un juego para estimular el movimiento corporal.",
+        "about_the_game": "La primera versión de Herpules, un exergame en el que los movimientos del cuerpo del jugador controlan al héroe mientras esquiva obstáculos.",
+        "detailed_description": "Herpules 1.0 es la primera versión de Herpules, un exergame creado por el LARVA de la UDESC para fomentar la actividad física de forma lúdica. Mediante una cámara web, el juego convierte los movimientos del cuerpo del jugador en las acciones de Herpules, que debe esquivar los obstáculos de su camino, fomentando la actividad física, la coordinación y la concentración.",
+        "content_notes": "Exergame educativo centrado en estimular el movimiento corporal. Apto para todas las edades, incluidos niños con necesidades especiales. Requiere espacio libre frente a la cámara para moverse.",
+        "requirements_notes": "Requiere una cámara web colocada de modo que el cuerpo completo del jugador sea visible."
+      },
+      "pt_BR": {
+        "name": "Herpules 1.0",
+        "short_description": "Um jogo para estimular a movimentação corporal.",
+        "about_the_game": "A primeira versão do Herpules, um exergame em que os movimentos do corpo do jogador controlam o herói enquanto ele desvia dos obstáculos.",
+        "detailed_description": "Herpules 1.0 é a primeira versão do Herpules, um exergame criado pelo LARVA da UDESC para estimular a atividade física de forma lúdica. Por meio de uma webcam, o jogo transforma os movimentos do corpo do jogador nas ações do Herpules, que precisa desviar dos obstáculos em seu caminho, estimulando a atividade física, a coordenação e o foco.",
+        "content_notes": "Exergame educacional focado em estimular a movimentação corporal. Indicado para todas as idades, incluindo crianças com necessidades especiais. Requer espaço livre em frente à câmera para se movimentar.",
+        "requirements_notes": "Requer uma webcam posicionada de forma que o corpo inteiro do jogador fique visível."
+      }
     }
+  }
 }

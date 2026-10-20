@@ -1,0 +1,19 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Plataforma T-TEA\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "teclas"
+msgstr "teclas"
+
+msgid "Painel de controle"
+msgstr "Panel de control"
+
+msgid "Teclas que o profissional pode usar durante a partida."
+msgstr "Teclas que el profesional puede usar durante la partida."
+
+msgid "Página em construção."
+msgstr "Página en construcción."

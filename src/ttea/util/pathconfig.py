@@ -34,6 +34,8 @@ class PathConfig:
         Default file name for calibration settings.
     CALIBRATION_POINT_FILENAME : str
         Default file name for calibration point CSV data.
+    HELP_BASENAME : str
+        Base name of the compiled help files (``ttea_<language>.qch``).
     BASE_DIR : Path
         Base application data directory in development or frozen mode.
     EXERGAME_DIR : Path
@@ -50,6 +52,11 @@ class PathConfig:
         Directory for log files.
     MODELS_DIR : Path
         Directory containing the bundled MediaPipe models.
+    HELP_ROOT : Path
+        Directory containing the compiled help files (.qch), one per
+        language. Read-only in installed builds.
+    HELP_CACHE_DIR : Path
+        Writable directory for the help collections and search index.
     PLAYERS_DIR : Path
         Directory for player files.
     PROFESSIONAL_DIR : Path
@@ -75,8 +82,6 @@ class PathConfig:
         Return a Qt translation resource path.
     sounds(name)
         Return a Qt sound resource path.
-    help(path='')
-        Return a Qt help resource path.
     ensure_dirs()
         Create all user directories.
     config(filename=CONFIG_FILENAME)
@@ -99,6 +104,10 @@ class PathConfig:
         Return export file path.
     log(filename)
         Return log file path.
+    help_file(language)
+        Return the compiled help file of a language.
+    help_collection(language)
+        Return the help collection file of a language.
     game_save(game_name, filename)
         Return game save file path.
     set_base_dir(path)
@@ -107,8 +116,6 @@ class PathConfig:
         Check if configuration file exists.
     calibration_file_exists(filename=CALIBRATION_HARDWARE_FILENAME)
         Check if calibration file exists.
-    path_help_pt(filename)
-        Return Portuguese help resource path.
     find_resource_built_in(base_path, name)
         Find an embedded Qt resource from a base path.
 
@@ -128,6 +135,7 @@ class PathConfig:
     CALIBRATION_HARDWARE_FILENAME = "calibration_hardware.ini"
     CALIBRATION_SETTING_FILENAME = "calibration_setting.ini"
     CALIBRATION_POINT_FILENAME = "calibration_point.csv"
+    HELP_BASENAME = "ttea"
 
     # ===================================================================
     # Base directory
@@ -146,11 +154,15 @@ class PathConfig:
         RESOURCES_ROOT: Path = PROJECT_DIR / "resources"
 
     MODELS_DIR: Path = RESOURCES_ROOT / "mediapipemodels"
+    # Not named *_DIR: it is part of the installed resources, not a
+    # user folder created by ensure_dirs().
+    HELP_ROOT: Path = RESOURCES_ROOT / "help"
 
     # Subdirectories — add new folders here
     CONFIG_DIR: Path = BASE_DIR / "config"
     CALIBRATION_DIR: Path = BASE_DIR / "calibration"
     EXPORTS_DIR: Path = BASE_DIR / "exports"
+    HELP_CACHE_DIR: Path = BASE_DIR / "helpcache"
     INSTITUTIONFACILITY_DIR: Path = BASE_DIR / "institutionfacilities"
     LOG_DIR: Path = BASE_DIR / "log"
     PLAYERS_DIR: Path = BASE_DIR / "players"
@@ -313,22 +325,6 @@ class PathConfig:
             Qt path for the sound resource.
         """
         return f":/sounds/{name}"
-
-    @staticmethod
-    def help(path: str = "") -> str:
-        """Return a Qt resource path for help content.
-
-        Parameters
-        ----------
-        path : str, optional
-            Help content file or folder name. Default is empty string.
-
-        Returns
-        -------
-        str
-            Qt path for the help resource.
-        """
-        return f":/help/{path}".rstrip("/")
 
     # ===================================================================
     # Automatic Introspection
@@ -570,6 +566,48 @@ class PathConfig:
         return cls._user_file(cls.LOG_DIR, filename)
 
     @classmethod
+    def help_file(cls, language: str) -> Path:
+        """Return the compiled help file of a language.
+
+        Parameters
+        ----------
+        language : str
+            Language code, e.g. ``"pt_BR"``.
+
+        Returns
+        -------
+        Path
+            Path of ``ttea_<language>.qch``. The file may not exist.
+
+        Examples
+        --------
+        >>> PathConfig.help_file('en_US')
+        PosixPath('.../resources/help/ttea_en_US.qch')
+        """
+        return cls.HELP_ROOT / f"{cls.HELP_BASENAME}_{language}.qch"
+
+    @classmethod
+    def help_collection(cls, language: str) -> str:
+        """Return the help collection file of a language.
+
+        The collection and the search index are created on first use,
+        in a writable user folder.
+
+        Parameters
+        ----------
+        language : str
+            Language code, e.g. ``"pt_BR"``.
+
+        Returns
+        -------
+        str
+            Full path of ``ttea_<language>.qhc``.
+        """
+        return cls._user_file(
+            cls.HELP_CACHE_DIR, f"{cls.HELP_BASENAME}_{language}.qhc"
+        )
+
+    @classmethod
     def game_save(cls, game_name: str, filename: str) -> str:
         """Return the game save file path.
 
@@ -665,22 +703,6 @@ class PathConfig:
     # Utilities
     # ===================================================================
     @classmethod
-    def path_help_pt(cls, filename: str) -> str:
-        """Return the Portuguese help resource path.
-
-        Parameters
-        ----------
-        filename : str
-            Help file name relative to the Portuguese help folder.
-
-        Returns
-        -------
-        str
-            Qt resource path for the Portuguese help file.
-        """
-        return cls.help(f"pt/{filename}")
-
-    @classmethod
     def find_resource_built_in(cls, base_path: str, name: str) -> str:
         """Find an embedded Qt resource from a base path.
 
@@ -698,8 +720,8 @@ class PathConfig:
 
         Examples
         --------
-        >>> PathConfig.find_resource_built_in(':/help', 'index.html')
-        ':/help/pt/index.html'
+        >>> PathConfig.find_resource_built_in(':/images', 'ttealogo')
+        ':/images/ttealogo'
         """
         it = QDirIterator(
             base_path, [name], QDir.Files, QDirIterator.Subdirectories

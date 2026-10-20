@@ -1,19 +1,124 @@
 {
-    "game": "Herpules 2.0",
-    "exec": "main.py",
-    "icon": "herpules.ico",
-    "language":{
-        "pt_BR": {
-            "name": "Herpules 2.0",
-            "description": "Um jogo para estimular a movimentação corporal."
+  "schema_version": "1.0",
+  "id": "br.udesc.larva.herpules2",
+  "version": "2.0.0",
+
+  "runtime": {
+    "entrypoint": "main.py",
+    "view_factory": null,
+    "menu_actions": {},
+    "min_platform_version": null,
+    "python": null,
+    "dependencies": ["opencv-python", "mediapipe", "pygame"],
+    "required_peripherals": ["webcam"],
+    "permissions": ["camera"]
+  },
+
+  "store": {
+    "type": "game",
+    "is_free": true,
+    "license": null,
+    "required_age": 0,
+    "website": "https://udescmove2learn.wordpress.com/",
+    "support_info": {
+      "url": null,
+      "email": null
+    },
+    "release_date": {
+      "coming_soon": false,
+      "date": null
+    },
+    "developers": [],
+    "publishers": [
+      {
+        "name": "LARVA - UDESC - CCT - Joinville",
+        "email": null,
+        "website": "https://udescmove2learn.wordpress.com/"
+      }
+    ],
+    "platforms": {
+      "windows": true,
+      "linux": false,
+      "mac": false
+    },
+    "genres": ["action", "educational", "casual"],
+    "categories": ["single_player"],
+    "tags": ["exergame", "motion_control", "accessibility"],
+    "controller_support": null,
+    "audience": {
+      "min_age": null,
+      "max_age": null,
+      "conditions": ["tea"],
+      "skills": ["physical_activity", "coordination", "focus"]
+    },
+    "accessibility": [],
+    "privacy": {
+      "camera": true,
+      "stores_video": false,
+      "data_collected": [],
+      "data_leaves_device": false,
+      "policy_url": null
+    },
+    "requirements": {
+      "windows": {
+        "minimum": {
+          "os": "Windows 10 64-bit",
+          "cpu": "Intel Core i3",
+          "gpu": "Intel HD Graphics 4000",
+          "ram_mb": 4096,
+          "storage_mb": 500
         },
-        "es_ES": {
-            "name": "Herpules 2.0",
-            "description": "Un juego para estimular el movimiento corporal."
-        },
-        "en_US":{
-             "name": "Herpules 2.0",
-             "description": "A game to to stimulate body movement."
+        "recommended": {
+          "os": "Windows 10/11 64-bit",
+          "cpu": "Intel Core i5",
+          "gpu": "NVIDIA GeForce GTX 1050",
+          "ram_mb": 8192,
+          "storage_mb": 1024
         }
+      }
+    },
+    "tech": {
+      "engine": "pygame",
+      "language": "python"
+    },
+    "assets": {
+      "icon": "herpules.ico",
+      "logo": "Imagens/herpules.png",
+      "header": null,
+      "background": "Imagens/fundonovo.png",
+      "screenshots": [],
+      "videos": ["Imagens/jogo.gif"]
+    },
+    "references": [],
+    "changelog_url": null,
+
+    "localization": {
+      "default": "en_US",
+      "supported": ["en_US", "es_ES", "pt_BR"],
+      "en_US": {
+        "name": "Herpules 2.0",
+        "short_description": "A game to stimulate body movement.",
+        "about_the_game": "An exergame where the player's own body controls Herpules: jump and crouch in front of the camera to dodge obstacles.",
+        "detailed_description": "Herpules 2.0 is an endless-runner exergame developed during LARVA's 2nd Exergame Jam, where it won 1st place in the Popular Vote category and 2nd place overall and in Design. A webcam tracks the player's body: jumping makes Herpules leap over columns and vases, and crouching makes him duck under flying obstacles. A short calibration before each match adapts the game to the player's posture, encouraging physical activity, coordination and focus in a playful way.",
+        "content_notes": "Educational exergame focused on stimulating body movement. Suitable for all ages, including children with special needs. Requires free space in front of the camera for jumping and crouching.",
+        "requirements_notes": "Requires a webcam positioned so the player's full body (hips and ankles) is visible."
+      },
+      "es_ES": {
+        "name": "Herpules 2.0",
+        "short_description": "Un juego para estimular el movimiento corporal.",
+        "about_the_game": "Un exergame en el que el propio cuerpo del jugador controla a Herpules: salta y agáchate frente a la cámara para esquivar obstáculos.",
+        "detailed_description": "Herpules 2.0 es un exergame de tipo endless runner desarrollado durante la 2.ª Exergame Jam del LARVA, donde obtuvo el 1.er lugar en la categoría Voto Popular y el 2.º lugar en la clasificación general y en Diseño. Una cámara web sigue el cuerpo del jugador: al saltar, Herpules pasa por encima de columnas y jarrones, y al agacharse esquiva los obstáculos voladores. Una breve calibración antes de cada partida adapta el juego a la postura del jugador, fomentando la actividad física, la coordinación y la concentración de forma lúdica.",
+        "content_notes": "Exergame educativo centrado en estimular el movimiento corporal. Apto para todas las edades, incluidos niños con necesidades especiales. Requiere espacio libre frente a la cámara para saltar y agacharse.",
+        "requirements_notes": "Requiere una cámara web colocada de modo que el cuerpo completo del jugador (caderas y tobillos) sea visible."
+      },
+      "pt_BR": {
+        "name": "Herpules 2.0",
+        "short_description": "Um jogo para estimular a movimentação corporal.",
+        "about_the_game": "Um exergame em que o próprio corpo do jogador controla o Herpules: pule e agache em frente à câmera para desviar dos obstáculos.",
+        "detailed_description": "Herpules 2.0 é um exergame do tipo endless runner desenvolvido durante a 2ª Exergame Jam do LARVA, onde conquistou o 1º lugar na categoria Voto Popular e o 2º lugar na classificação geral e na categoria Design. Uma webcam acompanha o corpo do jogador: ao pular, o Herpules salta sobre colunas e vasos, e ao agachar ele se abaixa para escapar dos obstáculos voadores. Uma rápida calibração antes de cada partida adapta o jogo à postura do jogador, estimulando a atividade física, a coordenação e o foco de forma lúdica.",
+        "content_notes": "Exergame educacional focado em estimular a movimentação corporal. Indicado para todas as idades, incluindo crianças com necessidades especiais. Requer espaço livre em frente à câmera para pular e agachar.",
+        "requirements_notes": "Requer uma webcam posicionada de forma que o corpo inteiro do jogador (quadris e tornozelos) fique visível."
+      }
     }
+  }
 }

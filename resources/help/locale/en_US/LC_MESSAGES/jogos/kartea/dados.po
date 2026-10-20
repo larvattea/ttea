@@ -1,0 +1,22 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Plataforma T-TEA\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "dados"
+msgstr "data"
+
+msgid "CSV"
+msgstr "CSV"
+
+msgid "Dados da sessão"
+msgstr "Session data"
+
+msgid "Arquivos gerados a cada sessão e o significado de cada coluna."
+msgstr "Files created in each session and the meaning of each column."
+
+msgid "Página em construção."
+msgstr "Page under construction."

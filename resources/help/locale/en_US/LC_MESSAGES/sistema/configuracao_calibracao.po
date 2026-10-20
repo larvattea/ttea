@@ -1,0 +1,22 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Plataforma T-TEA\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "câmera"
+msgstr "camera"
+
+msgid "configuração de calibração"
+msgstr "calibration settings"
+
+msgid "Configuração de calibração"
+msgstr "Calibration settings"
+
+msgid "Parâmetros da câmera e da detecção de movimento usados na calibração e nos jogos."
+msgstr "Camera and motion detection parameters used in calibration and in the games."
+
+msgid "Página em construção."
+msgstr "Page under construction."

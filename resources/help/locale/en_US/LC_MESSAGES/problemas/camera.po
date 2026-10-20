@@ -1,0 +1,19 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Plataforma T-TEA\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "câmera sem imagem"
+msgstr "camera without image"
+
+msgid "Câmera"
+msgstr "Camera"
+
+msgid "A câmera não exibe imagem ou o jogo usa a câmera errada."
+msgstr "The camera shows no image or the game uses the wrong camera."
+
+msgid "Página em construção."
+msgstr "Page under construction."

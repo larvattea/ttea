@@ -1,0 +1,19 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Plataforma T-TEA\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "idioma"
+msgstr "idioma"
+
+msgid "Idioma"
+msgstr "Idioma"
+
+msgid "Como trocar o idioma da plataforma. A ajuda passa a ser exibida no mesmo idioma."
+msgstr "Cómo cambiar el idioma de la plataforma. La ayuda pasa a mostrarse en el mismo idioma."
+
+msgid "Página em construção."
+msgstr "Página en construcción."

@@ -19,6 +19,15 @@ dependencies = [
 dev = "ttea.main:main"
 tests = "ttea.testrunner:main"
 
+[dependency-groups]
+# Ferramentas para gerar a ajuda (resources/help); não vão para o
+# usuário final. Instalar com: uv sync --group docs
+docs = [
+    "sphinx>=7.4",
+    "sphinxcontrib-qthelp>=2.0",
+    "sphinx-intl>=2.2",
+]
+
 [build-system]
 requires = ["setuptools>=80"]
 build-backend = "setuptools.build_meta"
@@ -90,9 +99,11 @@ max-complexity = 10
 # Métodos sobrescritos do Qt e a macro de tradução reconhecida pelo
 # pyside6-lupdate mantêm o nome original.
 extend-ignore-names = [
+    "acceptNavigationRequest",
     "closeEvent",
     "eventFilter",
     "keyPressEvent",
+    "requestStarted",
     "resizeEvent",
     "showEvent",
     "setupUi",

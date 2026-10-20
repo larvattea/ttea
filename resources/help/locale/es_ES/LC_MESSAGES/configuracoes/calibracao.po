@@ -1,0 +1,22 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Plataforma T-TEA\n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "calibração"
+msgstr "calibración"
+
+msgid "Calibração"
+msgstr "Calibración"
+
+msgid "Por que e quando calibrar a câmera com a área projetada no chão. A calibração deve ser feita a cada nova montagem do console."
+msgstr "Por qué y cuándo calibrar la cámara con el área proyectada en el suelo. La calibración debe hacerse cada vez que se monta la consola."
+
+msgid "Mapa de calibração projetado no chão."
+msgstr "Mapa de calibración proyectado en el suelo."
+
+msgid "Página em construção."
+msgstr "Página en construcción."

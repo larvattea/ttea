@@ -18,6 +18,8 @@ CSVHandler
     Handling CSV files with a custom dialect.
 CvText
     Unicode text and window titles for OpenCV windows.
+HelpKeyFilter
+    Application-wide F1 key handling for the help.
 PathConfig
     Manage file paths and directory structures.
 
@@ -35,6 +37,7 @@ __all__ = [
     "CriticalHooks",
     "CSVHandler",
     "CvText",
+    "HelpKeyFilter",
     "Image",
     "MessageService",
     "QtDateFormat",
@@ -50,6 +53,7 @@ __license__ = "MIT License"
 from .criticalhooks import CriticalHooks
 from .cvshandler import CSVHandler
 from .cvtext import CvText
+from .helpkeyfilter import HelpKeyFilter
 from .image import Image
 from .messageservice import MessageService
 from .pathconfig import PathConfig
