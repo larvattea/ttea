@@ -1,8 +1,8 @@
 """Conversion helpers for Python date formats and Qt date widgets.
 
-This module converts Python ``strftime`` masks to Qt date-format strings
-and provides helpers for creating ``QDate`` objects from Python date
-values.
+This module converts Python ``strftime`` masks to Qt date-format
+strings and provides helpers for creating ``QDate`` objects from
+Python date values.
 """
 
 from datetime import date, datetime
@@ -12,8 +12,7 @@ from PySide6.QtCore import QDate
 
 
 class QtDateFormat:
-    """
-    Utility for converting Python strftime date formats to Qt-compatible formats.
+    """Convert Python strftime date formats to Qt formats.
 
     Provides a clean separation between application configuration
     (strftime masks) and Qt presentation logic.
@@ -21,7 +20,7 @@ class QtDateFormat:
     Methods
     -------
     from_config() -> str
-        Return the Qt date format based on the current application setting.
+        Return the Qt date format of the current application setting.
     strftime_to_qt(strftime_mask) -> str
         Convert an arbitrary strftime mask to Qt syntax.
     format_python_date(python_date) -> str
@@ -31,18 +30,13 @@ class QtDateFormat:
 
     Examples
     --------
-    >>> QtDateFormat.from_config()
-    'dd/MM/yyyy'
-
     >>> QtDateFormat.strftime_to_qt('%d de %B de %Y')
     'dd de MMMM de yyyy'
     """
 
     @staticmethod
     def from_config() -> str:
-        """
-        Return the Qt date-format mask defined in the application
-        configuration.
+        """Return the Qt date format of the application configuration.
 
         The configured mask uses Python ``strftime`` syntax
         (e.g. ``"%d/%m/%Y"``). This method returns the equivalent
@@ -52,21 +46,17 @@ class QtDateFormat:
         -------
         str
             Format string suitable for ``QDateEdit.setDisplayFormat()``,
-            ``QDateTimeEdit.setDisplayFormat()`` or ``QDate.toString()``.
-
-        Notes
-        -----
-        The returned format is derived from the application config mask
-        after converting Python ``strftime`` directives to Qt syntax.
-
-        Examples
-        --------
-        >>> QtDateFormat.from_config()
-        'dd/MM/yyyy'
+            ``QDateTimeEdit.setDisplayFormat()`` or
+            ``QDate.toString()``.
 
         See Also
         --------
-        strftime_to_qt : low-level conversion function.
+        strftime_to_qt : Low-level conversion function.
+
+        Notes
+        -----
+        The mask is read from ``AppConfig.get_geral_date_mask()`` on
+        every call.
         """
         from ttea.app import AppConfig
 
@@ -75,8 +65,7 @@ class QtDateFormat:
 
     @staticmethod
     def strftime_to_qt(strftime_mask: str) -> str:
-        """
-        Convert a Python ``strftime`` format string to Qt format syntax.
+        """Convert a Python ``strftime`` mask to Qt format syntax.
 
         Parameters
         ----------
@@ -106,8 +95,12 @@ class QtDateFormat:
         %a           ddd      Abbreviated weekday name
         ===========  =======  ==================================
 
-        All literal characters (slashes, dashes, spaces, words like "de",
-        commas, etc.) are preserved unchanged.
+        Any other text, including other ``%`` directives, is kept
+        unchanged and is not quoted. Qt reads unquoted letters such as
+        ``d``, ``M`` and ``y`` as format characters, so the literal
+        "de" in ``"%d de %B de %Y"`` is shown by Qt as the day number
+        followed by "e". TODO(doc): should literal text be quoted
+        (``'de'``) in the Qt mask?
 
         Examples
         --------
@@ -146,22 +139,19 @@ class QtDateFormat:
 
         Parameters
         ----------
-        python_date : date or datetime
+        python_date : date | datetime | None
             Python date or datetime object to format.
 
         Returns
         -------
         str
-            Formatted date string according to the Qt display mask.
-            Returns an empty string when ``python_date`` is ``None``.
+            Formatted date string according to ``from_config()``, or an
+            empty string when ``python_date`` is None.
 
-        Examples
-        --------
-        >>> from datetime import date
-        >>> QtDateFormat.format_python_date(date(2024, 1, 5))
-        '05/01/2024'
-        >>> QtDateFormat.format_python_date(None)
-        ''
+        Notes
+        -----
+        Only the date part is used; the time of a ``datetime`` is
+        ignored.
         """
         if python_date is None:
             return ""
@@ -176,22 +166,23 @@ class QtDateFormat:
 
         Parameters
         ----------
-        python_date : date or datetime or None
+        python_date : date | datetime | None
             Python date or datetime object to convert.
 
         Returns
         -------
         QDate
-            Corresponding Qt date. Returns the current date when
-            ``python_date`` is ``None`` or falsy.
+            Corresponding Qt date, or the current date when
+            ``python_date`` is None or falsy.
 
         Examples
         --------
         >>> from datetime import date
-        >>> QtDateFormat.to_qdate(date(2024, 1, 5))
-        QDate(2024, 1, 5)
-        >>> QtDateFormat.to_qdate(None)
-        QDate.currentDate()
+        >>> qdate = QtDateFormat.to_qdate(date(2024, 1, 5))
+        >>> qdate.toString("yyyy-MM-dd")
+        '2024-01-05'
+        >>> QtDateFormat.to_qdate(None) == QDate.currentDate()
+        True
         """
         if not python_date:
             return QDate.currentDate()

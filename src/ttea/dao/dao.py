@@ -1,3 +1,5 @@
+"""Generic DAO interface for the persistence classes."""
+
 from abc import ABC, abstractmethod
 from typing import Generic, List, Optional, TypeVar
 
@@ -7,31 +9,26 @@ T = TypeVar("T")
 class DAO(ABC, Generic[T]):
     """Generic interface for CRUD operations on persistent entities.
 
-    This abstract base class defines the standard data access object (DAO)
+    This abstract base class defines the data access object (DAO)
     pattern with type-safe operations for any entity type ``T``.
-
-    Attributes
-    ----------
-    None
-        This is an interface; concrete implementations may define attributes.
 
     Methods
     -------
     insert(obj)
-        Inserts a new object and returns its generated identifier.
+        Insert a new object and return its identifier.
     update(obj)
-        Updates an existing object in the persistent storage.
+        Update an existing object in the persistent storage.
     delete(obj_id)
-        Deletes the object identified by the given identifier.
+        Delete the object with the given identifier.
     select(obj_id)
-        Retrieves an object by its identifier.
+        Retrieve an object by its identifier.
     list()
-        Retrieves all objects of type ``T``.
+        Retrieve all objects of type ``T``.
     """
 
     @abstractmethod
     def insert(self, obj: T) -> int:
-        """Insere a new object and returns its generated ID.
+        """Insert a new object and return its identifier.
 
         Parameters
         ----------
@@ -41,29 +38,30 @@ class DAO(ABC, Generic[T]):
         Returns
         -------
         int
-            The identifier (usually primary key) assigned to the new object.
+            The identifier assigned to the new object. Most
+            implementations return 0 on failure.
         """
 
     @abstractmethod
     def update(self, obj: T) -> bool:
-        """Updates an existing object in the persistent storage.
+        """Update an existing object in the persistent storage.
 
         Parameters
         ----------
         obj : T
-            The object with updated values. Its identifier must correspond
-            to an existing record.
+            The object with updated values. Its identifier must match an
+            existing record.
 
         Returns
         -------
         bool
-            True if the object was successfully updated, False otherwise
-            (e.g., if the object does not exist).
+            True if the object was updated, False otherwise (e.g. if the
+            object does not exist).
         """
 
     @abstractmethod
     def delete(self, obj_id: int) -> bool:
-        """Removes the object identified by the given ID.
+        """Remove the object with the given identifier.
 
         Parameters
         ----------
@@ -73,14 +71,14 @@ class DAO(ABC, Generic[T]):
         Returns
         -------
         bool
-            True if the object was successfully deleted, False otherwise
-            (e.g., if no object with the given ID exists).
+            True if the object was deleted, False otherwise (e.g. if no
+            object has the given ID).
         """
         pass
 
     @abstractmethod
     def select(self, obj_id: int) -> Optional[T]:
-        """Retrieves an object by its identifier.
+        """Retrieve an object by its identifier.
 
         Parameters
         ----------
@@ -89,16 +87,16 @@ class DAO(ABC, Generic[T]):
 
         Returns
         -------
-        Optional[T]
+        T | None
             The object if found, or None if no object matches the ID.
         """
 
     @abstractmethod
     def list(self) -> List[T]:
-        """Returns all persisted objects of type T.
+        """Return all persisted objects of type ``T``.
 
         Returns
         -------
-        List[T]
-            A list containing all objects currently stored.
+        list[T]
+            All objects currently stored.
         """

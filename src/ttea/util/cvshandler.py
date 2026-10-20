@@ -1,7 +1,7 @@
 """CSV file handling utilities for the T-TEA platform.
 
-This module provides a CSVHandler class for reading and writing CSV files
-with a custom dialect and robust error handling.
+This module provides the ``CSVHandler`` class for reading and
+writing CSV files with a custom dialect and robust error handling.
 """
 
 import csv
@@ -13,30 +13,36 @@ from typing import Dict, List, Optional, TextIO, Union
 
 
 class CSVHandler:
-    """
-    A class for handling CSV files with a custom dialect.
+    r"""Read and write CSV files with a custom dialect.
 
-    Fully integrated with the application's singleton logger. Works with file
-    paths or already-opened file-like objects (e.g., locked via portalocker).
-    Handles common real-world issues: file locked by Excel, wrong
-    encoding, corrupted files, missing directories, permission errors, etc.
+    Fully integrated with the application's singleton logger. Works
+    with file paths or already-opened file-like objects (e.g. locked
+    via portalocker). Handles common real-world issues: file locked by
+    Excel, wrong encoding, corrupted files, missing directories,
+    permission errors, etc.
 
     Parameters
     ----------
-    dialect : str, default "custom_ttea"
-        Name of the CSV dialect to register and use.
-    delimiter : str, default ";"
-        Field delimiter character.
-    quotechar : str, default '"'
-        Character used to quote fields containing special characters.
-    doublequote : bool, default True
-        Controls how quotechar instances inside fields are handled.
-    skipinitialspace : bool, default True
-        When True, whitespace immediately following the delimiter is ignored.
-    lineterminator : str, default "\n"
+    dialect : str, optional
+        Name of the CSV dialect to register and use. Default is
+        ``"custom_ttea"``.
+    delimiter : str, optional
+        Field delimiter character. Default is ``";"``.
+    quotechar : str, optional
+        Character used to quote fields containing special
+        characters. Default is ``'"'``.
+    doublequote : bool, optional
+        Whether a ``quotechar`` inside a field is doubled. Default is
+        True.
+    skipinitialspace : bool, optional
+        When True, whitespace immediately following the delimiter is
+        ignored. Default is True.
+    lineterminator : str, optional
         String used to terminate lines produced by the writer.
-    quoting : int, default csv.QUOTE_MINIMAL
-        Controls quoting behavior (one of csv.QUOTE_* constants).
+        Default is a newline (``"\n"``).
+    quoting : int, optional
+        Quoting policy (one of the ``csv.QUOTE_*`` constants).
+        Default is ``csv.QUOTE_MINIMAL``.
 
     Attributes
     ----------
@@ -47,17 +53,21 @@ class CSVHandler:
 
     Methods
     -------
-    __init__(...)
-        Initialise the handler and register the custom CSV dialect.
     write_csv(file_or_path, data, headers=None)
         Write data to a CSV file or an already-opened file object.
-    read_csv(filename, as_dict=False)
-        Read a CSV file safely, returning an empty list on any error.
+    read_csv(filename=None, as_dict=False, content=None)
+        Read CSV data safely, returning an empty list on any error.
+
+    Notes
+    -----
+    The dialect is registered with ``csv.register_dialect`` on every
+    instantiation, replacing any dialect with the same name.
 
     Examples
     --------
-    >>> handler = CSVHandler()
-    >>> handler.write_csv("test.csv", [["a", "b"], ["1", "2"]])
+    >>> handler = CSVHandler()  # doctest: +SKIP
+    >>> handler.read_csv(content="a;b\n1;2")  # doctest: +SKIP
+    [['a', 'b'], ['1', '2']]
     """
 
     def __init__(
@@ -70,27 +80,6 @@ class CSVHandler:
         lineterminator: str = "\n",
         quoting: int = csv.QUOTE_MINIMAL,
     ) -> None:
-        """
-        Register a custom CSV dialect and prepare the handler.
-
-        Parameters
-        ----------
-        dialect : str, default "custom_ttea"
-            Name of the dialect to register.
-        delimiter : str, default ";"
-            Character separating fields.
-        quotechar : str, default '"'
-            Character for quoting fields.
-        doublequote : bool, default True
-            Handling of quotechar inside fields.
-        skipinitialspace : bool, default True
-            Ignore whitespace after delimiter.
-        lineterminator : str, default "\n"
-            Line terminator for writing.
-        quoting : int, default csv.QUOTE_MINIMAL
-            Quoting policy (csv.QUOTE_* constants).
-        """
-        # Singleton logger for the application
         from ttea.log import Log
 
         csv.register_dialect(
@@ -103,7 +92,6 @@ class CSVHandler:
             quoting=quoting,
         )
         self.dialect = dialect
-        # Same logger used throughout the application
         self.log = Log.get_log()
 
     def write_csv(
@@ -112,30 +100,32 @@ class CSVHandler:
         data: List[Union[Dict, List]],
         headers: Optional[List[str]] = None,
     ) -> None:
-        """
-        Write a list of rows or dictionaries to CSV.
+        """Write a list of rows or dictionaries to CSV.
 
-        Creates parent directories if needed. Works with a file path or an
-        already-opened file-like object (e.g., locked with portalocker).
+        Works with a file path or an already-opened file-like object
+        (e.g. locked with portalocker).
 
         Parameters
         ----------
-        file_or_path : str, PathLike or file-like
+        file_or_path : str | os.PathLike | TextIO
             Destination file path or an open file object.
-        data : list of dict or list of list
+        data : list[dict | list]
             Rows to write. Dictionaries require ``headers``.
-        headers : list of str, optional
+        headers : list[str] | None, optional
             Field names when writing dictionaries. If provided, a header
-            row is written first.
+            row is written first. Default is None.
 
-        Returns
-        -------
-        None
-            The CSV file is written to disk or the open file object.
+        Raises
+        ------
+        Exception
+            Any error while opening or writing is logged and re-raised.
 
         Notes
         -----
-        Logs success or raises logged exceptions on failure.
+        With a path, parent directories are created if needed and the
+        file is written in UTF-8 with BOM (``utf-8-sig``), so Excel
+        detects the encoding. With an open file object, the caller is
+        responsible for its mode, encoding and ``newline=""``.
         """
         if isinstance(file_or_path, (str, os.PathLike)):
             path = Path(file_or_path)
@@ -151,7 +141,7 @@ class CSVHandler:
             # File already open (e.g., portalocker.Lock)
             try:
                 self._write_to_file(file_or_path, data, headers)
-                # Does not log file name here because we don't have the path
+                # The file name is unknown here, so it is not logged.
             except Exception as e:
                 self.log.log_error(f"Failed to write to locked CSV file: {e}")
                 raise
@@ -162,25 +152,20 @@ class CSVHandler:
         data: List[Union[Dict, List]],
         headers: Optional[List[str]],
     ) -> None:
-        """Write rows to an already-opened file object using the registered
-        dialect.
+        """Write rows to an open file with the registered dialect.
 
-        This is an internal helper called by :meth:`write_csv`. It assumes the
-        file is open in text mode with proper encoding and newline=''.
+        Internal helper of ``write_csv``. It assumes the file is open in
+        text mode with the proper encoding and ``newline=""``.
 
         Parameters
         ----------
         file : TextIO
             Open file object ready for writing.
-        data : list of dict or list of list
+        data : list[dict | list]
             Data rows to write.
-        headers : list of str or None
-            Field names for DictWriter, or None to write plain rows.
-
-        Returns
-        -------
-        None
-            Writes rows to the open file object.
+        headers : list[str] | None
+            Field names for ``csv.DictWriter`` (a header row is
+            written), or None to write plain rows with ``csv.writer``.
         """
         if headers:
             writer = csv.DictWriter(
@@ -198,37 +183,46 @@ class CSVHandler:
         as_dict: bool = False,
         content: Optional[str] = None,
     ) -> List[Union[Dict, List]]:
-        """
-        Read a CSV file with comprehensive error handling.
+        r"""Read CSV data with comprehensive error handling.
 
-        Returns an empty list instead of raising exceptions for any problem
-        (file missing, locked by Excel, wrong encoding, corrupted, etc.).
-        This guarantees the application never crashes due to CSV issues.
+        Returns an empty list instead of raising exceptions for any
+        problem (file missing, locked by Excel, wrong encoding,
+        corrupted, etc.), so CSV issues never crash the application.
 
         Parameters
         ----------
-        filename : str or PathLike, optional
-            Path to the CSV file.
-        as_dict : bool, default False
-            If True, returns a list of dictionaries (using first row as keys).
-        content : str, optional
-            CSV content provided directly as a string.
+        filename : str | os.PathLike | None, optional
+            Path to the CSV file. Default is None.
+        as_dict : bool, optional
+            If True, return a list of dictionaries using the first row
+            as keys. Default is False.
+        content : str | None, optional
+            CSV content provided directly as a string. Default is None.
 
         Returns
         -------
-        list
-            List of rows (dicts if ``as_dict=True``, otherwise lists).
-            Empty list on any read error.
+        list[dict] | list[list[str]]
+            Rows as dictionaries if ``as_dict`` is True, otherwise as
+            lists. Empty list on any read error.
 
         Notes
         -----
-        If ``content`` is provided, the ``filename`` parameter is ignored.
+        If ``content`` is provided, ``filename`` is ignored; otherwise
+        ``filename`` must be given.
+
+        A missing file is logged at INFO level (normal on the first
+        run). Encodings are tried in order: ``utf-8-sig``, the system's
+        preferred encoding (if not already listed), ``cp1252``,
+        ``utf-8`` and ``latin1``. A ``PermissionError`` (file locked,
+        e.g. open in Excel) is logged as a warning; other read errors
+        and a file that no encoding can decode are logged as errors.
 
         Examples
         --------
-        >>> handler = CSVHandler()
-        >>> handler.read_csv(content='a;b\n1;2', as_dict=False)
-        [['a', 'b'], ['1', '2']]
+        >>> h = CSVHandler()  # doctest: +SKIP
+        >>> rows = "a;b\n1;2"
+        >>> h.read_csv(content=rows, as_dict=True)  # doctest: +SKIP
+        [{'a': '1', 'b': '2'}]
         """
         if content is not None:
             try:
@@ -250,12 +244,11 @@ class CSVHandler:
             )
             return []
 
-        # List optimized and tested for PT-BR/PT-PT, Spanish, and English
-        # on Windows, Linux, and Mac
+        # Order tested with pt-BR/pt-PT, Spanish and English files on
+        # Windows, Linux and macOS.
         system_enc = locale.getpreferredencoding(False)
         encodings_to_try = ["utf-8-sig", "cp1252", "utf-8", "latin1"]
 
-        # Avoids duplicates if system_enc is already in the list
         if system_enc.lower() not in [e.lower() for e in encodings_to_try]:
             encodings_to_try.insert(1, system_enc)
 

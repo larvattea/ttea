@@ -15,62 +15,59 @@ class AppConfig:
 
     Attributes
     ----------
-    ICON_APP : str
-        Path to the application icon file resolved by PathConfig.
-    LOGO_APP : str
-        Path to the application logo file resolved by PathConfig.
-    PLATAFORM_SUFIX : str
-        Suffix identifier for the platform.
-    PLATAFORM_MANUAL : str
-        Identifier for the platform manual.
-    VERSION : str
-        Current application version string.
-    DEFAULT_DATE_FORMAT : str
-        Default date format string used when language is not en_US.
-    DEFAULT_HOUR_FORMAT : str
-        Default hour format string used when language is not en_US.
-    DEFAULT_HOUR_MINUTE_FORMAT : str
-        Default hour-minute format string used when language is not en_US.
-    SETTINGS_GERAL : str
-        Base key for general settings.
-    SETTINGS_GERAL_DATE_MASK : str
-        Settings key for the date format mask.
-    SETTINGS_GERAL_HOUR_MASK : str
-        Settings key for the hour format mask.
-    SETTINGS_GERAL_HOUR_MINUTE_MASK : str
-        Settings key for the hour-minute format mask.
-    SETTINGS_GERAL_LANGUAGE : str
-        Settings key for the language preference.
-    SETTINGS_GERAL_VERSION : str
-        Settings key for the application version.
-    USA_DATE_FORMAT : str
-        Alternative date format string used for English locale.
-    USA_HOUR_FORMAT : str
-        Alternative hour format string used for English locale.
-    USA_HOUR_MINUTE_FORMAT : str
-        Alternative hour-minute format string used for English locale.
-    TRANSLATION_EXTENSION : str
-        File extension for Qt translation files.
+    ICON_APP : str, class attribute
+        Qt resource path of the application icon.
+    LOGO_APP : str, class attribute
+        Qt resource path of the application logo.
+    PLATAFORM_SUFFIX : str, class attribute
+        Suffix identifier of the platform (``"TEA"``).
+    PLATAFORM_MANUAL : str, class attribute
+        Identifier of the platform manual (``"Manual"``).
+    VERSION : str, class attribute
+        Application version shown in the status bar.
+    DEFAULT_DATE_FORMAT : str, class attribute
+        Date mask used when the language is not ``en_US``
+        (``"%d/%m/%Y"``).
+    DEFAULT_HOUR_FORMAT : str, class attribute
+        Hour mask used when the language is not ``en_US``
+        (``"%H:%M:%S"``).
+    DEFAULT_HOUR_MINUTE_FORMAT : str, class attribute
+        Hour-minute mask used when the language is not ``en_US``
+        (``"%H:%M"``).
+    SETTINGS_GERAL : str, class attribute
+        Section of the general settings in the configuration file
+        (``"geral"``).
+    SETTINGS_GERAL_DATE_MASK : str, class attribute
+        Settings key of the date mask.
+    SETTINGS_GERAL_HOUR_MASK : str, class attribute
+        Settings key of the hour mask.
+    SETTINGS_GERAL_HOUR_MINUTE_MASK : str, class attribute
+        Settings key of the hour-minute mask.
+    SETTINGS_GERAL_LANGUAGE : str, class attribute
+        Settings key of the language.
+    SETTINGS_GERAL_VERSION : str, class attribute
+        Settings key of the application version.
+    USA_DATE_FORMAT : str, class attribute
+        Date mask used for ``en_US`` (``"%m/%d/%Y"``).
+    USA_HOUR_FORMAT : str, class attribute
+        Hour mask used for ``en_US`` (``"%I:%M:%S %p"``).
+    USA_HOUR_MINUTE_FORMAT : str, class attribute
+        Hour-minute mask used for ``en_US`` (``"%I:%M %p"``).
+    TRANSLATION_EXTENSION : str, class attribute
+        Extension of the compiled Qt translation files (``".qm"``).
 
     Methods
     -------
     get_title()
         Return the translated application title.
     get_geral_date_mask()
-        Return the configured general date format mask.
+        Return the date mask from the settings or by language.
     get_geral_hour_mask()
-        Return the configured general hour format mask.
+        Return the hour mask from the settings or by language.
     get_geral_hour_minute_mask()
-        Return the configured general hour-minute format mask.
-    config_file_exists(filename)
+        Return the hour-minute mask from the settings or by language.
+    config_file_exists(filename=PathConfig.CONFIG_FILENAME)
         Check whether the configuration file exists.
-
-    Examples
-    --------
-    >>> AppConfig.get_title()
-    'Plataforma T-TEA'
-    >>> AppConfig.config_file_exists()
-    True
     """
 
     ICON_APP: str = PathConfig.icon_system("appicon")
@@ -100,39 +97,32 @@ class AppConfig:
         Returns
         -------
         str
-            The translated title of the T-TEA platform.
+            The title, from the pt_BR source text "Plataforma T-TEA".
 
         Notes
         -----
-        Uses QCoreApplication.translate to ensure the title is translated
-        according to the current language settings.
-
-        Examples
-        --------
-        >>> AppConfig.get_title()
-        'Plataforma T-TEA'
+        Translated at runtime with ``QCoreApplication.translate`` in the
+        ``"TTeaApp"`` context, so it follows the installed translator.
         """
         return QCoreApplication.translate("TTeaApp", "Plataforma T-TEA")
 
     @staticmethod
     def get_geral_date_mask() -> str:
-        """Return the general date mask from settings or a fallback.
+        """Return the date mask from the settings or by language.
 
         Returns
         -------
         str
-            The date format mask to use for general display.
+            ``strftime`` mask for date display.
 
         Notes
         -----
-        If a general date mask setting exists, it is returned. Otherwise,
-        the method returns USA_DATE_FORMAT for English and
-        DEFAULT_DATE_FORMAT for other languages.
-
-        Examples
-        --------
-        >>> AppConfig.get_geral_date_mask()
-        '%d/%m/%Y'
+        The value saved under ``geral/date_mask`` in the configuration
+        file (``PathConfig.config()``) wins when it is not empty; it is
+        set by ``LanguageService.apply_language``. Otherwise the mask is
+        ``USA_DATE_FORMAT`` (``"%m/%d/%Y"``) when the current language
+        is ``en_US`` and ``DEFAULT_DATE_FORMAT`` (``"%d/%m/%Y"``)
+        otherwise.
         """
         from ttea.model import AppModel
 
@@ -152,23 +142,20 @@ class AppConfig:
 
     @staticmethod
     def get_geral_hour_mask() -> str:
-        """Return the general hour mask from settings or a fallback.
+        """Return the hour mask from the settings or by language.
 
         Returns
         -------
         str
-            The hour format mask to use for general display.
+            ``strftime`` mask for hour display.
 
         Notes
         -----
-        If a general hour mask setting exists, it is returned. Otherwise,
-        the method returns USA_HOUR_FORMAT for English and
-        DEFAULT_HOUR_FORMAT for other languages.
-
-        Examples
-        --------
-        >>> AppConfig.get_geral_hour_mask()
-        '%H:%M:%S'
+        The value saved under ``geral/hour_mask`` in the configuration
+        file (``PathConfig.config()``) wins when it is not empty.
+        Otherwise the mask is ``USA_HOUR_FORMAT`` (``"%I:%M:%S %p"``)
+        when the current language is ``en_US`` and
+        ``DEFAULT_HOUR_FORMAT`` (``"%H:%M:%S"``) otherwise.
         """
         from ttea.model import AppModel
 
@@ -188,23 +175,21 @@ class AppConfig:
 
     @staticmethod
     def get_geral_hour_minute_mask() -> str:
-        """Return the general hour-minute mask from settings or a fallback.
+        """Return the hour-minute mask from the settings or by language.
 
         Returns
         -------
         str
-            The hour-minute format mask to use for general display.
+            ``strftime`` mask for hour-minute display.
 
         Notes
         -----
-        If a general hour-minute mask setting exists, it is returned. Otherwise,
-        the method returns USA_HOUR_MINUTE_FORMAT for English and
-        DEFAULT_HOUR_MINUTE_FORMAT for other languages.
-
-        Examples
-        --------
-        >>> AppConfig.get_geral_hour_minute_mask()
-        '%I:%M %p'
+        The value saved under ``geral/hour_minute_mask`` in the
+        configuration file (``PathConfig.config()``) wins when it is not
+        empty; it is set by ``LanguageService.apply_language``.
+        Otherwise the mask is ``USA_HOUR_MINUTE_FORMAT`` (``"%I:%M
+        %p"``) when the current language is ``en_US`` and
+        ``DEFAULT_HOUR_MINUTE_FORMAT`` (``"%H:%M"``) otherwise.
         """
         from ttea.model import AppModel
 
@@ -228,17 +213,18 @@ class AppConfig:
 
         Parameters
         ----------
-        filename : str
-            Name of the configuration file to check.
+        filename : str, optional
+            Name of the configuration file. Default is
+            ``PathConfig.CONFIG_FILENAME``.
 
         Returns
         -------
         bool
-            True if the configuration file exists, False otherwise.
+            True if the file exists, False otherwise.
 
-        Examples
-        --------
-        >>> AppConfig.config_file_exists()
-        True
+        Notes
+        -----
+        Delegates to ``PathConfig.config_file_exists``, which also
+        creates the user directories if needed.
         """
         return PathConfig.config_file_exists(filename)

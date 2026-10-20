@@ -1,12 +1,13 @@
+"""Controller of the professional edit/create dialog."""
+
 from typing import TYPE_CHECKING, Any, Dict, Optional, Union
 
 from PySide6.QtCore import QObject
 
-# Local module import
 from ttea.service import ProfessionalService
 from ttea.util import MessageService
 
-# Type checking to prevent circular import on run time
+# Type-checking-only imports, to avoid circular imports at run time
 if TYPE_CHECKING:
     from ttea.model import Professional
     from ttea.view import ProfessionalEditView
@@ -15,33 +16,51 @@ if TYPE_CHECKING:
 class ProfessionalEditController(QObject):
     """Controller for the professional edit/create dialog.
 
-    Manages the interaction between PlayerEditView and the Player model,
-    including field population, input validation, and data extraction.
+    Fills the form of ``ProfessionalEditView``, validates the input
+    through the service and returns the entered data to the list
+    controller.
+
+    Parameters
+    ----------
+    view : ProfessionalEditView
+        The dialog view.
+    professional : Professional | None, optional
+        Professional to edit; None creates a new one. Default is None.
+    message_service : MessageService | None, optional
+        Service used to show messages. Default is None, which creates
+        ``MessageService(view)``.
 
     Attributes
     ----------
-    view : PlayerEditView
-        The dialog view containing the input widgets.
-    professional : Optional[InstitutionFacility]
-        Player instance being edited, or None when creating
-        a new professional.
+    view : ProfessionalEditView
+        The dialog view.
+    service : ProfessionalService
+        Service used to validate the data.
+    professional : Professional | None
+        Professional being edited, or None when creating one.
     ok_clicked : bool
-        True if the dialog was accepted with valid data.
+        True after the dialog was accepted with valid data.
     msg : MessageService
-        Service used to display validation/error messages.
+        Service used to show messages.
 
     Methods
     -------
-    __init__(view, professional=None, message_service=None)
-        Initialize controller and populate fields if editing.
     handle_ok()
-        Validate inputs and accept dialog if valid.
+        Validate the input and accept the dialog if valid.
     handle_cancel()
-        Reject dialog without saving changes.
-    is_input_valid()
-        Check required fields and show errors if needed.
+        Reject the dialog without saving.
     get_data()
-        Extract entered data as a dictionary.
+        Return the entered data as a dictionary.
+    list_types()
+        Fill the type combo box.
+    list_institutions()
+        Fill the institution combo box.
+
+    Notes
+    -----
+    The OK and Cancel buttons are connected to ``handle_ok`` and
+    ``handle_cancel``. Saving is done by the list controller, which
+    reads ``get_data()`` after the dialog is accepted.
     """
 
     def __init__(
@@ -50,22 +69,6 @@ class ProfessionalEditController(QObject):
         professional: Optional["Professional"] = None,
         message_service: Optional[MessageService] = None,
     ) -> None:
-        """Initialize the controller and prepare the dialog.
-
-        Stores references, sets the ok_clicked flag, and pre-fills the
-        form when editing an existing professional.
-        Sets current date as default for new professionals.
-
-        Parameters
-        ----------
-        view : ProfessionalEditView
-            The associated dialog view.
-        professional : Optional[Professional], optional
-            Professional object to edit;
-            None creates a new professional.
-        message_service : Optional[MessageService], optional
-            Custom message service; defaults to MessageService(view).
-        """
         self.view = view
         self.service = ProfessionalService()
         self.professional = professional
@@ -73,17 +76,18 @@ class ProfessionalEditController(QObject):
         self.msg = message_service or MessageService(view)
         self._initialize_view()
 
-        # ------------------------------------------------------------------
-        # Connect buttons to controller (validation + accept/reject handling)
-        # ------------------------------------------------------------------
         self.view.pb_ok.clicked.connect(self.handle_ok)
         self.view.pb_cancel.clicked.connect(self.handle_cancel)
 
     def _initialize_view(self):
+        """Fill the form, with the edited professional if any.
+
+        The type and institution combo boxes are filled first; for a new
+        professional, their first item is selected.
+        """
         self.list_types()
         self.list_institutions()
 
-        # Populate fields if editing
         if self.professional:
             self.view.led_name.setText(self.professional.name)
 
@@ -99,6 +103,7 @@ class ProfessionalEditController(QObject):
             self.view.cbx_institution.setCurrentIndex(0)
 
     def list_types(self) -> None:
+        """Fill the type combo box with the translated types."""
         self.view.cbx_type.clear()
 
         types = self.service.get_professional_types()
@@ -106,6 +111,7 @@ class ProfessionalEditController(QObject):
             self.view.cbx_type.addItem(type_name, type_id)
 
     def list_institutions(self) -> None:
+        """Fill the institution combo box, sorted by name."""
         self.view.cbx_institution.clear()
 
         institutions = self.service.get_all_institutionfacilities()
@@ -113,10 +119,14 @@ class ProfessionalEditController(QObject):
             self.view.cbx_institution.addItem(institution.name, institution.id)
 
     def handle_ok(self) -> None:
-        """Validate input and close dialog with acceptance.
+        """Validate the input and accept the dialog if it is valid.
 
-        If validation passes, sets ok_clicked to True and accepts the
-        dialog. Otherwise shows a critical message with errors.
+        Notes
+        -----
+        The data is checked by ``service.validate_data``. On errors, a
+        critical message lists them and the dialog stays open; otherwise
+        ``ok_clicked`` becomes True and the dialog is accepted. The
+        message header is translated with ``self.tr()``.
         """
         data = self.get_data()
         errors = self.service.validate_data(data)
@@ -132,20 +142,19 @@ class ProfessionalEditController(QObject):
         self.view.accept()
 
     def handle_cancel(self) -> None:
-        """Close the dialog without saving changes.
-
-        Rejects the dialog, discarding any entered data.
-        """
+        """Reject the dialog, discarding the entered data."""
         self.view.reject()
 
     def get_data(self) -> Dict[str, Union[str, Any]]:
-        """Extract current form values into a dictionary.
+        """Return the form values as a dictionary.
 
         Returns
         -------
-        dict
-            Mapping with keys:
-            - "name": str from name input
+        dict[str, Any]
+            Keys ``"id"`` (the edited professional's ID, or 0 for a new
+            one), ``"name"``, ``"type"`` (type code) and
+            ``"institutionfacility"`` (the selected
+            ``InstitutionFacility``, or None).
         """
         institution_id = self.view.cbx_institution.currentData()
         institution = self.service.get_institutionfacility_by_id(

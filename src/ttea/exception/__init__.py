@@ -32,7 +32,6 @@ Contributions and bug reports are welcome at:
 https://github.com/larvattea/ttea
 """
 
-# Define the __all__ variable
 __all__ = [
     "BusinessRuleException",
 ]
@@ -42,5 +41,4 @@ __date__ = "2025-12-25"
 __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
-# Import the submodules
 from .businessruleexception import BusinessRuleException

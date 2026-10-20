@@ -1,4 +1,4 @@
-"""Data model for professionals associated with an institution facility."""
+"""Data model for professionals linked to an institution facility."""
 
 from dataclasses import dataclass, fields
 from typing import TYPE_CHECKING, ClassVar, Dict, List
@@ -10,21 +10,26 @@ if TYPE_CHECKING:
 
 
 def initialize_reflexive(cls):
-    """
-    Initialize class with reflexive properties metadata.
-
-    Populates PROPERTIES with all field names and DATA_PROPERTIES with
-    default values of initializable fields.
+    """Fill the reflection lists of a dataclass (class decorator).
 
     Parameters
     ----------
     cls : type
-        Class to decorate with reflexive properties.
+        Dataclass to decorate; it must already be a dataclass.
 
     Returns
     -------
     type
-        The decorated class with PROPERTIES and DATA_PROPERTIES attributes.
+        The same class, with ``PROPERTIES`` and ``DATA_PROPERTIES``
+        set.
+
+    Notes
+    -----
+    ``PROPERTIES`` receives the names of the dataclass fields, in
+    declaration order (``ClassVar`` names are not fields).
+    ``DATA_PROPERTIES`` receives the default value of each ``init``
+    field; a field without a default contributes
+    ``dataclasses.MISSING``.
     """
     cls.PROPERTIES = [field.name for field in fields(cls)]
     cls.DATA_PROPERTIES = [
@@ -36,8 +41,7 @@ def initialize_reflexive(cls):
 @initialize_reflexive
 @dataclass
 class Professional:
-    """
-    Represent a professional associated with an institution or facility.
+    """Represent a professional linked to an institution or facility.
 
     Attributes
     ----------
@@ -46,25 +50,29 @@ class Professional:
     name : str
         Full name of the professional.
     type : int
-        Professional type code defined in ``TYPE_MAP``.
+        Professional type code, a key of ``TYPE_MAP``.
     institutionfacility : InstitutionFacility
-        Institution or facility where the professional works. It may be
-        ``None`` when validating or serializing an incomplete association.
-    TYPE_MAP : ClassVar[dict[int, str]]
-        Class-level mapping from professional type codes to translated
-        labels. The values are registered with Qt for localized
-        internationalization (i18n).
-    PROPERTIES : ClassVar[list[str]]
-        Class-level list of property names used for serialization.
-    DATA_PROPERTIES : ClassVar[list]
-        Class-level list of default values for initializable properties.
+        Institution or facility where the professional works. It may
+        be None in an incomplete association, but then ``is_valid``
+        returns False.
+    TYPE_MAP : dict[int, str], class attribute
+        Professional type codes (0 to 20) to pt_BR profession names;
+        0 is the empty "no type" entry.
+    PROPERTIES : list[str], class attribute
+        Field names, filled by ``initialize_reflexive``.
+    DATA_PROPERTIES : list, class attribute
+        Field defaults, filled by ``initialize_reflexive``.
 
     Notes
     -----
-    Type codes range from 0 to 20 and represent different professions.
-    Validation requires an integer identifier, a non-empty name, a known
-    type code, and non-``None`` values for non-core properties. Serialization
-    stores the associated facility by its identifier.
+    The ``TYPE_MAP`` names are marked with ``QT_TRANSLATE_NOOP`` in
+    the ``"Professional"`` context: this only registers the pt_BR
+    source texts for pyside6-lupdate. They are translated at display
+    time with ``QCoreApplication.translate`` in that context, so a
+    language change takes effect immediately.
+
+    Serialization (``get_data``) stores the associated facility by
+    its identifier.
     """
 
     id: int
@@ -72,9 +80,6 @@ class Professional:
     type: int
     institutionfacility: "InstitutionFacility"
 
-    # Mapping type with translation support using QT_TRANSLATE_NOOP
-    # for deferred translation. The translation will be applied when
-    # the type is accessed in the UI, allowing for dynamic language changes.
     TYPE_MAP: ClassVar[dict[int, str]] = {
         0: "",
         1: QT_TRANSLATE_NOOP("Professional", "Arteterapeuta"),
@@ -105,30 +110,31 @@ class Professional:
     DATA_PROPERTIES: ClassVar[list] = []
 
     def is_valid(self) -> bool:
-        """
-        Validate the professional object.
-
-        Checks that id is a valid integer, name is non-empty, type is a valid
-        integer mapped in TYPE_MAP, and all non-strong properties are not None.
+        """Validate the professional object.
 
         Returns
         -------
         bool
             True if the professional object is valid, False otherwise.
 
+        Notes
+        -----
+        ``id`` must be an int, ``name`` must not be blank and ``type``
+        must be an int key of ``TYPE_MAP``. ``institutionfacility``
+        must not be None.
+
         Examples
         --------
-        >>> hp = Professional(id=1, name="Dr. Smith",
-        ...     type=5, institutionfacility=None)
+        >>> from types import SimpleNamespace
+        >>> facility = SimpleNamespace(id=3)
+        >>> hp = Professional(1, "Dr. Smith", 5, facility)
         >>> hp.is_valid()
         True
-
-        >>> hp_invalid = Professional(id=None, name="",
-        ...     type=99, institutionfacility=None)
-        >>> hp_invalid.is_valid()
+        >>> Professional(1, "Dr. Smith", 5, None).is_valid()
+        False
+        >>> Professional(None, "", 99, facility).is_valid()
         False
         """
-
         if self.id is None or not isinstance(self.id, int):
             return False
 
@@ -149,43 +155,40 @@ class Professional:
         return True
 
     def set_data(self, data: Dict) -> None:
-        """
-        Set object attributes from a dictionary.
-        Iterates through defined properties and assigns corresponding
-        values from the input dictionary to the object instance.
+        """Update the fields from a dictionary.
 
         Parameters
         ----------
-        data : Dict
-            Dictionary containing property names as keys and their
-            respective values to be assigned to the object.
+        data : dict
+            Values keyed by field name. Keys that are not fields are
+            ignored, and fields missing from ``data`` keep their value.
+
+        Notes
+        -----
+        No validation or type conversion is done.
         """
         for prop in self.PROPERTIES:
             if prop in data:
                 setattr(self, prop, data[prop])
 
     def get_data(self) -> List[Dict]:
-        """
-        Retrieve professional data as a list containing a dictionary.
-
-        Extracts all properties except 'institutionfacility', which is
-        converted to its ID if present, otherwise None.
+        """Return the professional data as a one-item list.
 
         Returns
         -------
-        List[Dict]
-            A list containing a single dictionary with professional
-            attributes and facility ID.
+        list[dict]
+            A list with one dictionary of the field values, where
+            ``institutionfacility`` is replaced by the facility ``id``
+            (None when there is no facility).
 
         Examples
         --------
-        >>> hp = Professional(id=1, name="Dr. Smith",
-        ...     type=5, institutionfacility=None)
-        >>> data = hp.get_data()
-        >>> data[0]['id']
-        1
-        >>> data[0]['name']
-        'Dr. Smith'
+        >>> from types import SimpleNamespace
+        >>> hp = Professional(1, "Dr. Smith", 5, SimpleNamespace(id=3))
+        >>> hp.get_data()[0]["institutionfacility"]
+        3
+        >>> Professional(1, "A", 5, None).get_data()[0]["name"]
+        'A'
         """
         info = {
             prop: getattr(self, prop)

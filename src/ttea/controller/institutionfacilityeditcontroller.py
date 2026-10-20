@@ -1,47 +1,65 @@
+"""Controller of the institution facility edit/create dialog."""
+
 from typing import TYPE_CHECKING, Any, Dict, Optional, Union
 
 from PySide6.QtCore import QObject
 
-# Local module import
 from ttea.service import InstitutionFacilityService
 from ttea.util import MessageService
 
-# Type checking to prevent circular import on run time
+# Type-checking-only imports, to avoid circular imports at run time
 if TYPE_CHECKING:
     from ttea.model import InstitutionFacility
     from ttea.view import InstitutionFacilityEditView
 
 
 class InstitutionFacilityEditController(QObject):
-    """Controller for the institutionfacility edit/create dialog.
+    """Controller for the institution facility edit/create dialog.
 
-    Manages the interaction between PlayerEditView and the Player model,
-    including field population, input validation, and data extraction.
+    Fills the form of ``InstitutionFacilityEditView``, validates the
+    input through the service and returns the entered data to the list
+    controller.
+
+    Parameters
+    ----------
+    view : InstitutionFacilityEditView
+        The dialog view.
+    institutionfacility : InstitutionFacility | None, optional
+        Institution facility to edit; None creates a new one. Default is
+        None.
+    message_service : MessageService | None, optional
+        Service used to show messages. Default is None, which creates
+        ``MessageService(view)``.
 
     Attributes
     ----------
-    view : PlayerEditView
-        The dialog view containing the input widgets.
-    institutionfacility : Optional[InstitutionFacility]
-        Player instance being edited, or None when creating
-        a new institutionfacility.
+    view : InstitutionFacilityEditView
+        The dialog view.
+    service : InstitutionFacilityService
+        Service used to validate the data.
+    institutionfacility : InstitutionFacility | None
+        Institution facility being edited, or None when creating one.
     ok_clicked : bool
-        True if the dialog was accepted with valid data.
+        True after the dialog was accepted with valid data.
     msg : MessageService
-        Service used to display validation/error messages.
+        Service used to show messages.
 
     Methods
     -------
-    __init__(view, institutionfacility=None, message_service=None)
-        Initialize controller and populate fields if editing.
     handle_ok()
-        Validate inputs and accept dialog if valid.
+        Validate the input and accept the dialog if valid.
     handle_cancel()
-        Reject dialog without saving changes.
-    is_input_valid()
-        Check required fields and show errors if needed.
+        Reject the dialog without saving.
     get_data()
-        Extract entered data as a dictionary.
+        Return the entered data as a dictionary.
+    list_types()
+        Fill the type combo box.
+
+    Notes
+    -----
+    The OK and Cancel buttons are connected to ``handle_ok`` and
+    ``handle_cancel``. Saving is done by the list controller, which
+    reads ``get_data()`` after the dialog is accepted.
     """
 
     def __init__(
@@ -50,21 +68,6 @@ class InstitutionFacilityEditController(QObject):
         institutionfacility: Optional["InstitutionFacility"] = None,
         message_service: Optional[MessageService] = None,
     ) -> None:
-        """Initialize the controller and prepare the dialog.
-
-        Stores references, sets the ok_clicked flag, and pre-fills the
-        form when editing an existing institutionfacility. Sets current date as default
-        for new institutionfacilities.
-
-        Parameters
-        ----------
-        view : InstitutionFacilityEditView
-            The associated dialog view.
-        institutionfacility : Optional[Player], optional
-            Player object to edit; None creates a new institutionfacility.
-        message_service : Optional[MessageService], optional
-            Custom message service; defaults to MessageService(view).
-        """
         self.view = view
         self.service = InstitutionFacilityService()
         self.institutionfacility = institutionfacility
@@ -72,16 +75,17 @@ class InstitutionFacilityEditController(QObject):
         self.msg = message_service or MessageService(view)
         self._initialize_view()
 
-        # ------------------------------------------------------------------
-        # Connect buttons to controller (validation + accept/reject handling)
-        # ------------------------------------------------------------------
         self.view.pb_ok.clicked.connect(self.handle_ok)
         self.view.pb_cancel.clicked.connect(self.handle_cancel)
 
     def _initialize_view(self):
+        """Fill the form, with the edited institution facility if any.
+
+        The type combo box is filled first; for a new facility, its
+        first item is selected.
+        """
         self.list_types()
 
-        # Populate fields if editing
         if self.institutionfacility:
             self.view.led_name.setText(self.institutionfacility.name)
 
@@ -99,6 +103,7 @@ class InstitutionFacilityEditController(QObject):
             self.view.cbx_type.setCurrentIndex(0)
 
     def list_types(self) -> None:
+        """Fill the type combo box with the translated types."""
         self.view.cbx_type.clear()
 
         types = self.service.get_institutionfacility_types()
@@ -106,10 +111,14 @@ class InstitutionFacilityEditController(QObject):
             self.view.cbx_type.addItem(type_name, type_id)
 
     def handle_ok(self) -> None:
-        """Validate input and close dialog with acceptance.
+        """Validate the input and accept the dialog if it is valid.
 
-        If validation passes, sets ok_clicked to True and accepts the
-        dialog. Otherwise shows a critical message with errors.
+        Notes
+        -----
+        The data is checked by ``service.validate_data``. On errors, a
+        critical message lists them and the dialog stays open; otherwise
+        ``ok_clicked`` becomes True and the dialog is accepted. The
+        message header is translated with ``self.tr()``.
         """
         data = self.get_data()
         errors = self.service.validate_data(data)
@@ -125,20 +134,19 @@ class InstitutionFacilityEditController(QObject):
         self.view.accept()
 
     def handle_cancel(self) -> None:
-        """Close the dialog without saving changes.
-
-        Rejects the dialog, discarding any entered data.
-        """
+        """Reject the dialog, discarding the entered data."""
         self.view.reject()
 
     def get_data(self) -> Dict[str, Union[str, Any]]:
-        """Extract current form values into a dictionary.
+        """Return the form values as a dictionary.
 
         Returns
         -------
-        dict
-            Mapping with keys:
-            - "name": str from name input
+        dict[str, Any]
+            Keys ``"id"`` (the edited facility's ID, or 0 for a new
+            one), ``"name"``, ``"type"`` (type code), ``"address"``,
+            ``"phone"``, ``"email"``, ``"website"`` and
+            ``"social_network"``.
         """
         return {
             "id": (

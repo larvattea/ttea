@@ -9,10 +9,14 @@ TESTS_DIR = Path(__file__).resolve().parents[2] / "tests"
 
 
 def main() -> None:
-    """Discover and run every ``test_*.py`` under ``tests/``.
+    """Discover and run every test module under ``tests/``.
 
-    Extra command-line arguments go to ``unittest`` (e.g. ``-v``).
-    Qt and SDL use headless drivers, so no window or display is needed.
+    Notes
+    -----
+    Uses ``unittest`` discovery with its default pattern
+    (``test*.py``). Extra command-line arguments go to ``unittest``
+    (e.g. ``-v``). Qt and SDL use headless drivers (``offscreen`` and
+    ``dummy``) unless already set, so no window or display is needed.
     """
     os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
     os.environ.setdefault("SDL_VIDEODRIVER", "dummy")

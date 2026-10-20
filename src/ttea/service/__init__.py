@@ -1,9 +1,9 @@
-"""A Python package for service classes from the T-TEA platform,
-supporting service logic.
+"""Service classes of the T-TEA platform.
+
 Developed by the Larva UDESC team.
 
-This package provides the service classes for controllers,
-for the T-TEA platform.
+This package provides the service layer (business rules) used by the
+controllers of the T-TEA platform.
 
 Attributes
 ----------
@@ -18,8 +18,26 @@ __license__ : str
 
 See Also
 --------
+CalibrationService
+    Screens, cameras and calibration data.
+CalibrationSettingService
+    Calibration settings (MediaPipe, OpenCV, filters...).
+HelpService
+    Compiled help files, languages and topics.
+HelpUnavailableError
+    Raised when the help cannot be opened.
+InstitutionFacilityService
+    Business rules of institutions/facilities.
+LanguageService
+    Language detection, persistence and translators.
+MainService
+    Global actions of the main window.
+PlayerGameLaunchService
+    Data of the game launch screen.
 PlayerService
-    Manages the service logic and data operations related to player entities.
+    Business rules of players.
+ProfessionalService
+    Business rules of professionals.
 
 Notes
 -----
@@ -28,7 +46,6 @@ development. Contributions and bug reports are welcome at:
 https://github.com/larvattea/ttea
 """
 
-# Define the __all__ variable
 __all__ = [
     "CalibrationService",
     "CalibrationSettingService",
@@ -47,7 +64,6 @@ __date__ = "2025-12-25"
 __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
-# Import the submodules
 from .calibrationservice import CalibrationService
 from .calibrationsettingservice import CalibrationSettingService
 from .helpservice import HelpService, HelpUnavailableError

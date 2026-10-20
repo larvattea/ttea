@@ -1,12 +1,16 @@
-class InputState:
-    """Representa o estado da entrada do jogador para uma iteração do jogo.
+"""Player input of one frame of Herpules 2."""
 
-    Atributos:
-        pular (bool): Indica se o jogador solicitou um pulo.
-        abaixar (bool): Indica se o jogador está agachado ou solicitou agachar.
+class InputState:
+    """Player input of one game frame.
+
+    Attributes
+    ----------
+    pular : bool
+        Whether the player asked to jump. Default is False.
+    abaixar : bool
+        Whether the player is crouching. Default is False.
     """
 
     def __init__(self):
-        """Inicializa o estado de entrada com ações vazias por padrão."""
         self.pular = False
         self.abaixar = False

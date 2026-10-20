@@ -1,8 +1,9 @@
-"""A Python package for controller classes from the T-TEA platform,
-supporting controller logic and data management from views.
+"""Controller classes of the T-TEA platform.
+
 Developed by the Larva UDESC team.
 
-This package provides the controller classes for views, for the T-TEA platform.
+This package provides the controllers that connect the views to the
+services of the T-TEA platform.
 
 Attributes
 ----------
@@ -17,14 +18,34 @@ __license__ : str
 
 See Also
 --------
+AutomaticCalibrationController
+    Automatic calibration with a ChArUco board.
+CalibrationController
+    Hardware data and camera preview of the calibration.
+CalibrationSettingController
+    Calibration settings window.
 HelpController
     Opens the help window on the topic of the active screen.
+InstitutionFacilityEditController
+    Edit/create dialog of institutions/facilities.
+InstitutionFacilityListController
+    List window of institutions/facilities.
 LanguageController
-    Manages language-related operations and data.
+    Language selection window.
+MainController
+    Main window: menus, dialogs and exit.
+ManualCalibrationController
+    Manual calibration by clicking the corners.
 PlayerEditController
-    Supports creation and editing of player profiles.
+    Edit/create dialog of players.
+PlayerGameLaunchController
+    Game launch window and game process.
 PlayerListController
-    Manages the display and organization of player data.
+    List window of players.
+ProfessionalEditController
+    Edit/create dialog of professionals.
+ProfessionalListController
+    List window of professionals.
 
 Notes
 -----
@@ -33,7 +54,6 @@ development. Contributions and bug reports are welcome at:
 https://github.com/larvattea/ttea
 """
 
-# Define the __all__ variable
 __all__ = [
     "AutomaticCalibrationController",
     "CalibrationController",
@@ -56,7 +76,6 @@ __date__ = "2025-12-25"
 __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
-# Import the submodules
 from .automaticcalibrationcontroller import AutomaticCalibrationController
 from .calibrationcontroller import CalibrationController
 from .calibrationsettingcontroller import CalibrationSettingController

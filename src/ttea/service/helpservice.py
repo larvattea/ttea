@@ -25,23 +25,24 @@ class HelpService:
 
     Attributes
     ----------
-    HOME_TOPIC : str
-        Topic opened when no other topic applies.
-    TOPICS : dict[str, str]
-        Topic id to page path inside the help, the same in every
-        language.
-    VIEW_TOPICS : dict[str, str]
-        Screen class name to topic id. Used by F1 to find the topic of
-        the active screen without changing the screens.
-    HELP_ID_PROPERTY : str
+    HOME_TOPIC : str, class attribute
+        Topic opened when no other topic applies (``"inicio"``).
+    HELP_ID_PROPERTY : str, class attribute
         Qt property that overrides the topic of a widget and its
         children, e.g. ``widget.setProperty("help_id", "calibracao")``.
+    VIRTUAL_FOLDER : str, class attribute
+        Virtual folder of the pages inside the help (``"doc"``).
+    TOPICS : dict[str, str], class attribute
+        Topic id to page path inside the help, the same in every
+        language.
+    VIEW_TOPICS : dict[str, str], class attribute
+        Screen class name to topic id. Used by F1 to find the topic of
+        the active screen without changing the screens.
 
-    Examples
-    --------
-    >>> service = HelpService()
-    >>> engine = service.create_engine("en_US")
-    >>> service.topic_url(engine, "cadastro_jogador")
+    Notes
+    -----
+    Typical use: ``engine = service.create_engine("en_US")`` and then
+    ``service.topic_url(engine, "cadastro_jogador")``.
     """
 
     HOME_TOPIC = "inicio"
@@ -133,8 +134,7 @@ class HelpService:
         Raises
         ------
         HelpUnavailableError
-            If the help file is missing or the collection cannot be
-            created.
+            If no help file exists or the collection cannot be set up.
         """
         code = self.help_language(language)
         collection = PathConfig.help_collection(code)
@@ -150,9 +150,15 @@ class HelpService:
     def _register(collection: str, qch: Path) -> None:
         """Register ``qch`` in ``collection``, refreshing it if changed.
 
-        The collection copies the table of contents and the index when
-        a file is registered, so the file is registered again whenever
-        it changes (new version) or moves (new install folder).
+        The collection copies the table of contents and the index when a
+        file is registered, so the file is registered again whenever it
+        changes (new version) or moves (new install folder).
+
+        Raises
+        ------
+        HelpUnavailableError
+            If the collection cannot be set up, the file is not a valid
+            help file or its registration fails.
         """
         core = QHelpEngineCore(collection)
         core.setReadOnly(False)
@@ -186,7 +192,7 @@ class HelpService:
 
         Parameters
         ----------
-        widget : QWidget or None
+        widget : QWidget | None
             Widget with focus, or the active window.
 
         Returns
@@ -210,7 +216,7 @@ class HelpService:
         Parameters
         ----------
         engine : QHelpEngineCore
-            Engine returned by :meth:`create_engine`.
+            Engine returned by ``create_engine``.
         topic : str
             Topic id from ``TOPICS``. Unknown topics and missing pages
             fall back to the home page.
@@ -218,7 +224,13 @@ class HelpService:
         Returns
         -------
         QUrl
-            ``qthelp://<namespace>/doc/<page>`` URL.
+            ``qthelp://<namespace>/doc/<page>`` URL of the first
+            registered documentation.
+
+        Raises
+        ------
+        HelpUnavailableError
+            If the engine has no registered documentation.
         """
         namespaces = engine.registeredDocumentations()
         if not namespaces:

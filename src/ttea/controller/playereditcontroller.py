@@ -1,15 +1,15 @@
+"""Controller of the player edit/create dialog."""
+
 from datetime import date
 from typing import TYPE_CHECKING, Dict, Optional, Union
 
 from PySide6.QtCore import QDate, QObject
 
-# Local module import
 from ttea.service import PlayerService
 from ttea.util import MessageService, QtDateFormat
 
-# Type checking to prevent circular import on run time
+# Type-checking-only imports, to avoid circular imports at run time
 if TYPE_CHECKING:
-    # Local module import
     from ttea.model import Player
     from ttea.view import PlayerEditView
 
@@ -17,32 +17,46 @@ if TYPE_CHECKING:
 class PlayerEditController(QObject):
     """Controller for the player edit/create dialog.
 
-    Manages the interaction between PlayerEditView and the Player model,
-    including field population, input validation, and data extraction.
+    Fills the form of ``PlayerEditView``, validates the input through
+    the service and returns the entered data to the list controller.
+
+    Parameters
+    ----------
+    view : PlayerEditView
+        The dialog view.
+    player : Player | None, optional
+        Player to edit; None creates a new one. Default is None.
+    message_service : MessageService | None, optional
+        Service used to show messages. Default is None, which creates
+        ``MessageService(view)``.
 
     Attributes
     ----------
     view : PlayerEditView
-        The dialog view containing the input widgets.
-    player : Optional[Player]
-        Player instance being edited, or None when creating a new player.
+        The dialog view.
+    service : PlayerService
+        Service used to validate the data.
+    player : Player | None
+        Player being edited, or None when creating one.
     ok_clicked : bool
-        True if the dialog was accepted with valid data.
+        True after the dialog was accepted with valid data.
     msg : MessageService
-        Service used to display validation/error messages.
+        Service used to show messages.
 
     Methods
     -------
-    __init__(view, player=None, message_service=None)
-        Initialize controller and populate fields if editing.
     handle_ok()
-        Validate inputs and accept dialog if valid.
+        Validate the input and accept the dialog if valid.
     handle_cancel()
-        Reject dialog without saving changes.
-    is_input_valid()
-        Check required fields and show errors if needed.
+        Reject the dialog without saving.
     get_data()
-        Extract entered data as a dictionary.
+        Return the entered data as a dictionary.
+
+    Notes
+    -----
+    The OK and Cancel buttons are connected to ``handle_ok`` and
+    ``handle_cancel``. Saving is done by the list controller, which
+    reads ``get_data()`` after the dialog is accepted.
     """
 
     def __init__(
@@ -51,21 +65,6 @@ class PlayerEditController(QObject):
         player: Optional["Player"] = None,
         message_service: Optional[MessageService] = None,
     ) -> None:
-        """Initialize the controller and prepare the dialog.
-
-        Stores references, sets the ok_clicked flag, and pre-fills the
-        form when editing an existing player. Sets current date as default
-        for new players.
-
-        Parameters
-        ----------
-        view : PlayerEditView
-            The associated dialog view.
-        player : Optional[Player], optional
-            Player object to edit; None creates a new player.
-        message_service : Optional[MessageService], optional
-            Custom message service; defaults to MessageService(view).
-        """
         self.view = view
         self.service = PlayerService()
         self.player = player
@@ -73,14 +72,15 @@ class PlayerEditController(QObject):
         self.msg = message_service or MessageService(view)
         self._initialize_view()
 
-        # ------------------------------------------------------------------
-        # Connect buttons to controller (validation + accept/reject handling)
-        # ------------------------------------------------------------------
         self.view.pb_ok.clicked.connect(self.handle_ok)
         self.view.pb_cancel.clicked.connect(self.handle_cancel)
 
     def _initialize_view(self):
-        # Populate fields if editing
+        """Fill the form, with the edited player if any.
+
+        The birth date defaults to today for a new player, and the date
+        format comes from ``QtDateFormat.from_config()``.
+        """
         if self.player:
             self.view.led_name.setText(self.player.name)
             self.view.ded_birth_date.setDate(
@@ -93,10 +93,14 @@ class PlayerEditController(QObject):
         self.view.ded_birth_date.setDisplayFormat(QtDateFormat.from_config())
 
     def handle_ok(self) -> None:
-        """Validate input and close dialog with acceptance.
+        """Validate the input and accept the dialog if it is valid.
 
-        If validation passes, sets ok_clicked to True and accepts the
-        dialog. Otherwise shows a critical message with errors.
+        Notes
+        -----
+        The data is checked by ``service.validate_data``. On errors, a
+        critical message lists them and the dialog stays open; otherwise
+        ``ok_clicked`` becomes True and the dialog is accepted. The
+        message header is translated with ``self.tr()``.
         """
         data = self.get_data()
         errors = self.service.validate_data(data)
@@ -112,23 +116,18 @@ class PlayerEditController(QObject):
         self.view.accept()
 
     def handle_cancel(self) -> None:
-        """Close the dialog without saving changes.
-
-        Rejects the dialog, discarding any entered data.
-        """
+        """Reject the dialog, discarding the entered data."""
         self.view.reject()
 
     def get_data(self) -> Dict[str, Union[str, date]]:
-        """Extract current form values into a dictionary.
+        """Return the form values as a dictionary.
 
         Returns
         -------
-        dict
-            Mapping with keys:
-            - "id": int from model or init with zero
-            - "name": str from name input
-            - "birth_date": date from date editor
-            - "observation": str from observation text area
+        dict[str, Any]
+            Keys ``"id"`` (the edited player's ID, or 0 for a new one),
+            ``"name"``, ``"birth_date"`` (``datetime.date``) and
+            ``"observation"``.
         """
         return {
             "id": (

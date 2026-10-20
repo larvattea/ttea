@@ -1,20 +1,73 @@
+"""Game loop of Herpules 2: input, events, model update and drawing.
+
+Attributes
+----------
+MODO_INPUT : str
+    Input mode: ``"teclado"`` (keyboard), ``"script"`` (fixed test
+    sequence) or ``"mediapipe"`` (body movement seen by the camera).
+
+Notes
+-----
+``MODO_INPUT`` (``"teclado"``, ``"script"`` or ``"mediapipe"``) is
+defined both here and in ``view.py`` and must have the same value in
+both.
+"""
+
 import pygame
 from model import GameModel
 from view import GameView
 from input_providers import KeyboardInputProvider, ScriptedInputProvider, MediapipeInputProvider
 
-MODO_INPUT = 'mediapipe'  # 'teclado', 'script' ou 'mediapipe'
+MODO_INPUT = 'mediapipe'  # 'teclado', 'script' or 'mediapipe'
 
 
 class GameController:
-    """Controla a lógica principal do jogo, os eventos e a interação entre modelo e visão.
+    """Main game controller: events, input, model, view and sounds.
 
-    A classe coordena a entrada do usuário, o processamento dos eventos do
-    pygame, a atualização do modelo e a renderização da interface.
+    Creates the 800x600 window, the input provider of ``MODO_INPUT``,
+    the model and the timers, and starts the background music.
+
+    Attributes
+    ----------
+    largura, altura : int
+        Window size in pixels (800 x 600).
+    fps : int
+        Frame rate limit (60).
+    clock : pygame.time.Clock
+        Clock that limits the frame rate.
+    running : bool
+        False ends the main loop.
+    pode_iniciar : bool
+        Whether a jump can start the game from the menu (mediapipe
+        mode), so one jump starts it only once.
+    view : GameView
+        Drawing of the screens.
+    input_provider : object
+        Source of the jump and crouch input: a
+        ``KeyboardInputProvider``, ``ScriptedInputProvider`` or
+        ``MediapipeInputProvider``.
+    pulo_solicitado, aga_solicitado : bool
+        Jump and crouch requested by a key press in this frame.
+    evento_obstaculo, evento_contagem, evento_calibracao : int
+        pygame user events of the obstacle, countdown and calibration
+        timers.
+    tempo_spawn_obstaculo : int
+        Interval between obstacle attempts, in ms (2000).
+    velocidade_obstaculo : int
+        Obstacle speed passed to the model: 3 in mediapipe mode, 5
+        otherwise.
+    model : GameModel
+        Game state.
+    som_pulo, som_colisao : pygame.mixer.Sound
+        Jump and collision sounds.
+
+    Notes
+    -----
+    Music and sounds are read from ``sons/``, relative to the current
+    directory. The music loops at 40% volume.
     """
 
     def __init__(self):
-        """Inicializa a aplicação, a janela, os providers de entrada e os sons do jogo."""
         pygame.init()
         pygame.mixer.init()
 
@@ -62,10 +115,15 @@ class GameController:
         self.som_colisao = pygame.mixer.Sound("sons/morte.wav")
 
     def processar_eventos(self):
-        """Processa os eventos disparados pelo pygame e ativa ações do jogo.
+        """Handle the pygame events of the frame.
 
-        Inclui fechamentos de janela, teclas pressionadas, cliques do mouse,
-        timers de obstáculo, contagem e calibração.
+        Notes
+        -----
+        Closing the window ends the loop. The obstacle timer adds an
+        obstacle while playing; the countdown timer advances the
+        countdown. The calibration timer (2 s after the start)
+        calibrates the input provider, if it can, and starts the
+        countdown.
         """
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -93,10 +151,12 @@ class GameController:
                     pygame.time.set_timer(self.evento_contagem, 1000)
 
     def processar_keydown(self, event):
-        """Registra ações do teclado quando o jogador pressiona as teclas de pulo e agachar.
+        """Register a jump (Up) or crouch (Down) key while playing.
 
-        Args:
-            event: Evento de teclado capturado pelo pygame.
+        Parameters
+        ----------
+        event : pygame.event.Event
+            ``KEYDOWN`` event.
         """
         if self.model.estado == "jogando":
             if event.key == pygame.K_UP:
@@ -105,10 +165,18 @@ class GameController:
                 self.aga_solicitado = True
 
     def processar_mouse(self, event):
-        """Processa cliques do mouse em botões do menu e do fim de partida.
+        """Handle clicks on the start and restart buttons.
 
-        Args:
-            event: Evento de mouse recebido pelo pygame.
+        Parameters
+        ----------
+        event : pygame.event.Event
+            ``MOUSEBUTTONDOWN`` event.
+
+        Notes
+        -----
+        Ignored in mediapipe mode, where jumps start and restart the
+        game (so the mediapipe branch inside is never reached). Start
+        begins the countdown; restart resets the game to the menu.
         """
         if MODO_INPUT == "mediapipe":
             return
@@ -131,7 +199,7 @@ class GameController:
                 self.aga_solicitado = False
 
     def processar_contagem(self):
-        """Atualiza a contagem regressiva antes do início da partida."""
+        """Count down one second and start playing at zero."""
         if self.model.estado == "contagem":
             self.model.contagem_numero -= 1
 
@@ -140,11 +208,15 @@ class GameController:
                 pygame.time.set_timer(self.evento_contagem, 0)
 
     def atualizar(self):
-        """Atualiza a lógica do jogo com a entrada atual e o estado do modelo.
+        """Update the game for one frame with the current input.
 
-        Essa função combina as ações recebidas da entrada, trata acionamentos de
-        pulo e regressão da fase, chama a atualização do modelo e aplica efeitos
-        sonoros de colisão.
+        Notes
+        -----
+        Key presses of the frame are added to the provider input, and
+        the jump sound plays when a jump starts on the ground. In
+        mediapipe mode, a jump in the menu starts the calibration (once
+        per menu visit) and a jump on the game over screen resets the
+        game. A collision plays the death sound and ends the game.
         """
         input_atual = self.input_provider.get_input()
 
@@ -183,7 +255,12 @@ class GameController:
         self.aga_solicitado = False
 
     def run(self):
-        """Executa o loop principal do jogo até que a aplicação seja encerrada."""
+        """Run the main loop until the window is closed.
+
+        Each frame handles events, updates the game and draws it, at
+        most ``fps`` times per second. At the end the input provider is
+        released, if it can be, and pygame is closed.
+        """
         while self.running:
             self.processar_eventos()
             self.atualizar()

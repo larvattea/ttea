@@ -1,9 +1,7 @@
-"""
-games
+"""Games of the T-TEA console.
 
-A Python package for games in T-TEA console.
-
-This package provides games for the T-TEA console.
+Each game lives in its own subpackage, with a ``metadata.json`` that
+the platform reads to list, configure and launch it.
 
 Attributes
 ----------
@@ -18,8 +16,12 @@ __license__ : str
 
 See Also
 --------
-PlayerKarteaConfigCsvDAO
-    Data Access Object for managing player kartea configuration data in CSV format.
+ttea.games.gametheme
+    Base class of the game themes.
+ttea.games.herpules2
+    The Herpules 2 game.
+ttea.games.kartea
+    The KarTEA game.
 
 Notes
 -----

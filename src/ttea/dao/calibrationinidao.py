@@ -1,3 +1,5 @@
+"""INI persistence of the ``Calibration`` record (QSettings)."""
+
 from typing import List, Optional
 
 from PySide6.QtCore import QSettings
@@ -5,11 +7,25 @@ from PySide6.QtCore import QSettings
 from ttea.model import Calibration
 from ttea.util import PathConfig
 
-# Direct import de DAO to avoid circular import
+# Import DAO directly to avoid a circular import
 from .dao import DAO
 
 
 class CalibrationIniDAO(DAO[Calibration]):
+    """DAO for the single ``Calibration`` record in an INI file.
+
+    Attributes
+    ----------
+    settings : QSettings
+        INI file opened at ``PathConfig.calibration_hardware()``.
+
+    Notes
+    -----
+    There is only one record, with ID ``Calibration.ID_VALUE``. Each
+    field is stored in the section given by
+    ``Calibration.get_section_for_property``. ``update``, ``delete`` and
+    ``list`` are not implemented and raise ``NotImplementedError``.
+    """
 
     def __init__(self) -> None:
         self.settings = QSettings(
@@ -17,6 +33,24 @@ class CalibrationIniDAO(DAO[Calibration]):
         )
 
     def insert(self, obj: Calibration) -> int:
+        """Write all fields of the record to the INI file.
+
+        Parameters
+        ----------
+        obj : Calibration
+            The record to save.
+
+        Returns
+        -------
+        int
+            ``Calibration.ID_VALUE`` on success, or 0 if ``obj`` is not
+            valid (nothing is written).
+
+        Notes
+        -----
+        Existing values are overwritten, so this also works as an
+        update. The file is synced to disk at the end.
+        """
         if not obj.is_valid():
             return 0
 
@@ -35,19 +69,61 @@ class CalibrationIniDAO(DAO[Calibration]):
         return Calibration.ID_VALUE
 
     def update(self, obj: Calibration) -> bool:
+        """Not implemented.
+
+        Raises
+        ------
+        NotImplementedError
+            Always.
+        """
         raise NotImplementedError
 
     def delete(self, obj_id: int) -> bool:
+        """Not implemented.
+
+        Raises
+        ------
+        NotImplementedError
+            Always.
+        """
         raise NotImplementedError
 
     def select(self, obj_id: int) -> Optional[Calibration]:
+        """Read the record from the INI file.
+
+        Parameters
+        ----------
+        obj_id : int
+            Ignored: there is only one record.
+
+        Returns
+        -------
+        Calibration | None
+            The record read from the file, or None if ``camera_id`` is
+            missing or empty.
+
+        Raises
+        ------
+        TypeError
+            If ``camera_id`` exists but other fields are missing, since
+            ``Calibration`` has no defaults.
+        ValueError
+            If an ``int`` or ``float`` field holds text that cannot be
+            converted.
+
+        Notes
+        -----
+        Values are converted to ``int`` or ``float`` according to the
+        ``Calibration`` type hints; other fields keep the type returned
+        by ``QSettings``.
+        """
         import typing
 
         data = {}
         type_hints = typing.get_type_hints(Calibration)
 
-        # Create a temporary instance to access the section helper
-        # or access it via a class if it's static
+        # Instance without __init__ (every field is required), used only
+        # to call the section helper.
         temp_obj = Calibration.__new__(Calibration)
 
         for prop in Calibration.PROPERTIES:
@@ -72,4 +148,11 @@ class CalibrationIniDAO(DAO[Calibration]):
         return Calibration(**data)
 
     def list(self) -> List[Calibration]:
+        """Not implemented.
+
+        Raises
+        ------
+        NotImplementedError
+            Always.
+        """
         raise NotImplementedError

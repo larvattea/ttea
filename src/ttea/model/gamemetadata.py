@@ -1,8 +1,8 @@
 """Model for game metadata read from each game's metadata.json.
 
-This module provides the GameMetadata class, which loads and validates the
-metadata file (schema 1.x) of a game and exposes the data needed by the
-platform to list, configure and launch the game.
+This module provides the ``GameMetadata`` class, which loads and
+validates the metadata file (schema 1.x) of a game and exposes the
+data needed by the platform to list, configure and launch the game.
 """
 
 import json
@@ -13,36 +13,42 @@ from typing import Any, ClassVar, Dict, List, Optional
 
 @dataclass
 class GameMetadata:
-    """Metadados de um jogo lidos do metadata.json (schema 1.x).
+    """Game metadata read from ``metadata.json`` (schema 1.x).
 
     Attributes
     ----------
     id : str
-        Identificador único do jogo (ex.: "br.udesc.larva.kartea").
+        Unique game identifier (e.g. ``"br.udesc.larva.kartea"``).
     version : str
-        Versão do jogo.
+        Game version.
     folder_path : Path
-        Pasta onde o jogo está instalado.
+        Folder where the game is installed.
     entrypoint : str
-        Arquivo executado para iniciar o jogo, relativo à pasta do jogo.
-    view_factory : Optional[str]
-        Caminho completo da classe de fábrica de views do jogo.
-    menu_actions : Dict[str, dict]
-        Ações que o jogo adiciona ao menu de configurações da plataforma.
-    icon : Optional[str]
-        Caminho do ícone, relativo à pasta do jogo.
-    developers : List[str]
-        Nomes dos desenvolvedores.
-    release_date : Optional[str]
-        Data de lançamento (ISO ou apenas o ano).
-    required_peripherals : List[str]
-        Periféricos necessários (ex.: "webcam", "projector").
-    localization : Dict[str, Dict[str, str]]
-        Textos por idioma (name, short_description, about_the_game...).
+        File run to start the game, relative to the game folder.
+    view_factory : str | None
+        Full path of the game's view factory class.
+    menu_actions : dict[str, dict]
+        Actions the game adds to the platform settings menu.
+    icon : str | None
+        Icon path, relative to the game folder.
+    developers : list[str]
+        Developer names.
+    release_date : str | None
+        Release date (ISO date or just the year).
+    required_peripherals : list[str]
+        Required peripherals (e.g. ``"webcam"``, ``"projector"``).
+    localization : dict[str, dict[str, str]]
+        Texts per language code (``name``, ``short_description``,
+        ``about_the_game``...).
     default_language : str
-        Idioma usado quando o idioma da plataforma não estiver disponível.
-    raw : Dict[str, Any]
-        Conteúdo completo do JSON, para campos ainda não mapeados.
+        Language used when the platform language is not available.
+    raw : dict[str, Any]
+        Full JSON content, for fields not mapped yet. Default is an
+        empty dictionary; it is left out of ``repr``.
+    SUPPORTED_SCHEMA_MAJOR : str, class attribute
+        Supported major schema version (``"1"``).
+    FILENAME : str, class attribute
+        Metadata file name (``"metadata.json"``).
     """
 
     SUPPORTED_SCHEMA_MAJOR: ClassVar[str] = "1"
@@ -62,26 +68,30 @@ class GameMetadata:
     default_language: str
     raw: Dict[str, Any] = field(repr=False, default_factory=dict)
 
-    # ---------- leitura ----------
+    # ---------- loading ----------
     @classmethod
     def load(cls, path: Path) -> "GameMetadata":
-        """Lê o metadata.json e devolve um GameMetadata.
+        """Read a ``metadata.json`` file and return its metadata.
 
         Parameters
         ----------
         path : Path
-            Caminho do arquivo metadata.json.
+            Path of the ``metadata.json`` file; a ``str`` is also
+            accepted.
 
         Returns
         -------
         GameMetadata
-            Metadados do jogo.
+            The game metadata; ``folder_path`` is the folder of the
+            file.
 
         Raises
         ------
         ValueError
-            Se o JSON for inválido, o schema não for suportado ou faltar
-            um campo obrigatório.
+            If the JSON is invalid, the major ``schema_version`` is not
+            ``SUPPORTED_SCHEMA_MAJOR`` or a required field is missing.
+        OSError
+            If the file cannot be opened.
         """
         path = Path(path)
         with open(path, "r", encoding="utf-8") as f:
@@ -103,6 +113,35 @@ class GameMetadata:
 
     @classmethod
     def _parse(cls, d: dict, folder: Path) -> "GameMetadata":
+        """Build a GameMetadata from the parsed JSON.
+
+        Parameters
+        ----------
+        d : dict
+            Parsed ``metadata.json`` content.
+        folder : Path
+            Game folder.
+
+        Returns
+        -------
+        GameMetadata
+            The game metadata.
+
+        Raises
+        ------
+        KeyError
+            If ``id``, ``version``, ``runtime``, ``runtime.entrypoint``
+            or the ``name`` of a developer is missing.
+
+        Notes
+        -----
+        Optional fields default to empty values: no ``view_factory``,
+        ``icon`` or ``release_date`` gives None; no ``menu_actions``,
+        ``developers`` or ``required_peripherals`` gives an empty
+        collection. ``localization`` keeps only the entries of
+        ``store.localization`` that are dictionaries; its ``default``
+        entry (``"en_US"`` if absent) becomes ``default_language``.
+        """
         runtime = d["runtime"]
         store = d.get("store", {})
         loc = store.get("localization", {})
@@ -127,9 +166,38 @@ class GameMetadata:
             raw=d,
         )
 
-    # ---------- acesso ----------
+    # ---------- access ----------
     def text(self, lang: str, key: str, default: str = "") -> str:
-        """Texto no idioma pedido, com fallback para o idioma padrão do jogo."""
+        """Return a text in a language, falling back to the default.
+
+        Parameters
+        ----------
+        lang : str
+            Language code, e.g. ``"pt_BR"``.
+        key : str
+            Text key, e.g. ``"name"``.
+        default : str, optional
+            Value returned when neither language has a non-empty text.
+            Default is ``""``.
+
+        Returns
+        -------
+        str
+            The text in ``lang``, else in ``default_language``, else
+            ``default``.
+
+        Examples
+        --------
+        >>> loc = {"en_US": {"name": "Game"}}
+        >>> data = {"id": "g", "version": "1",
+        ...         "runtime": {"entrypoint": "m.py"},
+        ...         "store": {"localization": loc}}
+        >>> meta = GameMetadata._parse(data, Path("games/g"))
+        >>> meta.text("pt_BR", "name")
+        'Game'
+        >>> meta.name("es_ES")
+        'Game'
+        """
         for code in (lang, self.default_language):
             value = self.localization.get(code, {}).get(key)
             if value:
@@ -137,20 +205,32 @@ class GameMetadata:
         return default
 
     def name(self, lang: str) -> str:
-        """Nome de exibição do jogo no idioma pedido."""
+        """Return the display name of the game in a language.
+
+        Parameters
+        ----------
+        lang : str
+            Language code.
+
+        Returns
+        -------
+        str
+            The localized ``name`` text, or the game ``id`` if there is
+            none.
+        """
         return self.text(lang, "name", self.id)
 
     @property
     def icon_path(self) -> str:
-        """Caminho absoluto do ícone, ou string vazia."""
+        """Absolute icon path, or an empty string without an icon."""
         return str(self.folder_path / self.icon) if self.icon else ""
 
     @property
     def entrypoint_path(self) -> Path:
-        """Caminho absoluto do arquivo que inicia o jogo."""
+        """Absolute path of the file that starts the game."""
         return self.folder_path / self.entrypoint
 
     @property
     def release_year(self) -> str:
-        """Ano de lançamento (primeiros 4 caracteres da data)."""
+        """Release year: the first 4 characters of the release date."""
         return (self.release_date or "")[:4]

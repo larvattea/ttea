@@ -1,10 +1,11 @@
+"""Dialog of the manual calibration."""
+
 from typing import Optional
 
 import cv2
 from PySide6.QtGui import QCloseEvent, QKeyEvent
 from PySide6.QtWidgets import QDialog
 
-# Local module import
 from ttea.controller import ManualCalibrationController
 from ttea.model import CalibrationSetting
 from ttea.ui import Ui_ManualCalibrationView
@@ -13,6 +14,36 @@ from ttea.window import WindowConfig
 
 
 class ManualCalibrationView(QDialog, Ui_ManualCalibrationView, WindowConfig):
+    """Dialog of the manual calibration on the projection screen.
+
+    Shows the instruction images while the user clicks the corners in
+    the OpenCV camera window. The logic is in
+    ``ManualCalibrationController``.
+
+    Parameters
+    ----------
+    parent : QDialog | None, optional
+        The calibration dialog; its camera and screen selections are
+        used (index 0 without a parent). Default is None.
+
+    Attributes
+    ----------
+    msg : MessageService
+        Service used to show dialogs.
+    controller : ManualCalibrationController
+        Controller of the dialog.
+
+    Notes
+    -----
+    The window is placed on the projection screen when
+    ``is_manual_open_projector()`` is set, otherwise on screen 0. Its
+    position is the point returned by the ``QRect`` method named by
+    ``get_manual_window_position()`` (e.g. ``"topLeft"``, ``"center"``)
+    on the available screen geometry, with ``topLeft`` as fallback.
+    ``get_manual_window_open_mode()`` then shows it full screen
+    (``FULLSCREEN``) or maximized with the size fixed to the available
+    screen area (``MAXIMIZED`` and ``MAXIMIZED_UTIL``).
+    """
 
     def __init__(
         self,
@@ -39,7 +70,6 @@ class ManualCalibrationView(QDialog, Ui_ManualCalibrationView, WindowConfig):
             self.parent().cbx_monitor.currentIndex() if self.parent() else 0
         )
 
-        # Initialize controller
         self.controller = ManualCalibrationController(
             self, camera_index=camera_idx, monitor_index=monitor_idx
         )
@@ -86,18 +116,28 @@ class ManualCalibrationView(QDialog, Ui_ManualCalibrationView, WindowConfig):
             )
 
     def keyPressEvent(self, event: QKeyEvent) -> None:
-        """Encaminha o evento de teclado para o controller"""
+        """Forward key presses to the controller (C starts, Q closes).
+
+        Parameters
+        ----------
+        event : QKeyEvent
+            Key event.
+        """
         self.controller.keyPressEvent(event)
 
     def closeEvent(self, event: QCloseEvent) -> None:
-        """Override close event to confirm exit.
-
-        Shows a confirmation dialog before allowing the window to close.
+        """Ask for confirmation and save the points before closing.
 
         Parameters
         ----------
         event : QCloseEvent
-            The close event to accept or ignore.
+            Close event; accepted only if the user confirms.
+
+        Notes
+        -----
+        If the camera was opened, it is released, the OpenCV windows are
+        closed, the timer is stopped and the clicked points are saved
+        (even if fewer than four were clicked).
         """
         if self.msg.question(
             self.tr("Deseja sair da calibração manual?"), None, True

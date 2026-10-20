@@ -1,7 +1,10 @@
-"""A Python package for Data Access Objects (DAOs) from the T-TEA platform,
-supporting data management and persistence. Developed by the Larva UDESC team.
+"""Core camera and calibration package of the T-TEA platform.
 
-This package provides the DAO classes for the T-TEA platform.
+Developed by the Larva UDESC team.
+
+This package provides the camera capture thread, MediaPipe pose
+detection and filtering, and the geometry used to calibrate the
+projection.
 
 Attributes
 ----------
@@ -16,10 +19,14 @@ __license__ : str
 
 See Also
 --------
-DAO
-    Data Access Object for managing data persistence and retrieval.
-PlayerCsvDAO
-    Data Access Object for managing player data in CSV format.
+CalibrationMath
+    Geometry helpers for projection (keystone) calibration.
+CameraVideoThread
+    Camera thread with pose detection and telemetry overlay.
+MediaPipeFilter
+    Image enhancement and landmark smoothing.
+MediaPipeManager
+    MediaPipe pose landmarker setup and detection.
 
 Notes
 -----

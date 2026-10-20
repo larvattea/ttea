@@ -1,7 +1,9 @@
-"""A Python package for model in the T-TEA platform,
-supporting data model description. Developed by the Larva UDESC team.
+"""Data models of the T-TEA platform.
 
-This package provides models for data representation and manipulation.
+Developed by the Larva UDESC team.
+
+This package provides models for data representation and
+manipulation.
 
 Attributes
 ----------
@@ -16,10 +18,24 @@ __license__ : str
 
 See Also
 --------
+AppModel
+    Global application state (current language).
+Calibration
+    Camera, screen and projection area calibration.
+CalibrationPoint
+    Corner points of the calibrated projection.
+CalibrationSetting
+    MediaPipe, OpenCV, filter and window settings.
+GameMetadata
+    Game metadata read from ``metadata.json``.
+InstitutionFacility
+    Institution or facility where the platform is used.
 Language
-    Model for managing language data.
+    Supported languages.
 Player
-    Model for managing player data.
+    Player data.
+Professional
+    Professional linked to an institution or facility.
 
 Notes
 -----
@@ -28,7 +44,6 @@ development. Contributions and bug reports are welcome at:
 https://github.com/larvattea/ttea
 """
 
-# Define the __all__ variable
 __all__ = [
     "AppModel",
     "Calibration",
@@ -46,7 +61,6 @@ __date__ = "2025-12-25"
 __author__ = "Larva UDESC"
 __license__ = "MIT License"
 
-# Import the submodules
 from .appmodel import AppModel
 from .calibration import Calibration
 from .calibrationpoint import CalibrationPoint

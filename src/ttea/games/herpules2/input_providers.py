@@ -1,3 +1,9 @@
+"""Input providers of Herpules 2: keyboard, script and MediaPipe.
+
+Each provider has ``get_input()``, returning an ``InputState`` per
+frame, and ``calibrar()``.
+"""
+
 import pygame
 import mediapipe as mp
 from input_state import InputState
@@ -6,13 +12,19 @@ from pose_detector import PoseDetector
 
 
 class KeyboardInputProvider:
-    """Fornece entradas de teclado como comando para o jogo."""
+    """Keyboard input: holding Down crouches.
+
+    Jumps come from the Up key press handled by ``GameController``.
+    """
 
     def get_input(self):
-        """Retorna o estado de entrada baseado no teclado.
+        """Return the input of the held keys.
 
-        Returns:
-            InputState: Estado atual da entrada com flags de pulo e agachar.
+        Returns
+        -------
+        InputState
+            ``abaixar`` is True while Down is held; ``pular`` is always
+            False.
         """
         estado = InputState()
         keys = pygame.key.get_pressed()
@@ -20,22 +32,31 @@ class KeyboardInputProvider:
         return estado
 
     def calibrar(self):
-        """Método de compatibilidade sem comportamento específico para teclado."""
+        """Do nothing; the keyboard needs no calibration."""
         pass
 
 
 class ScriptedInputProvider:
-    """Gera uma sequência pré-definida de entradas para testes automatizados."""
+    """Fixed input sequence for automated tests.
+
+    Jumps at frame 60 and crouches from frame 180 to 240.
+
+    Attributes
+    ----------
+    frame : int
+        Number of frames already returned.
+    """
 
     def __init__(self):
-        """Inicializa o contador de frames da sequência scriptada."""
         self.frame = 0
 
     def get_input(self):
-        """Retorna um estado de entrada com base em um frame programado.
+        """Return the input of the current frame and advance one frame.
 
-        Returns:
-            InputState: Estado do frame atual da sequência.
+        Returns
+        -------
+        InputState
+            The scripted input of this frame.
         """
         estado = InputState()
 
@@ -49,19 +70,40 @@ class ScriptedInputProvider:
         return estado
 
     def calibrar(self):
-        """Método de compatibilidade sem comportamento específico para o modo scriptado."""
+        """Do nothing; the script needs no calibration."""
         pass
 
 
 class MediapipeInputProvider:
-    """Converte a pose detectada em comandos de pulo e agachar do jogo.
+    """Body movement input: jumping and crouching seen by the camera.
 
-    Esse provedor usa a detecção de landmarks do corpo para interpretar o
-    movimento do jogador e gerar ações de entrada em tempo real.
+    Compares the height of the hips and ankles (normalized image
+    coordinates, y grows downward) with a baseline measured by
+    ``calibrar``.
+
+    Attributes
+    ----------
+    detector : PoseDetector
+        Camera and pose detector.
+    baseline_hip_y, baseline_foot_y : float | None
+        Reference height of the hips and of the ankles.
+    cooldown_pulo : int
+        Frames left before another jump can be detected.
+    pose_landmark : type
+        MediaPipe ``PoseLandmark`` enum.
+    hip_y_anterior : float | None
+        Hip height in the previous frame.
+    frames_sem_pose : int
+        Consecutive frames without a pose.
+    limiar_pulo : float
+        Hip rise above the baseline needed for a jump (0.03).
+    limiar_subida : float
+        Hip rise between two frames needed for a jump (0.008).
+    limiar_agachar : float
+        Hip drop below the baseline that means crouching (0.05).
     """
 
     def __init__(self):
-        """Inicializa o detector de pose e os parâmetros de calibração e detecção."""
         self.detector = PoseDetector()
         self.baseline_hip_y = None
         self.baseline_foot_y = None
@@ -74,14 +116,18 @@ class MediapipeInputProvider:
         self.limiar_agachar = 0.05
 
     def release(self):
-        """Libera os recursos do detector de pose."""
+        """Release the camera and the pose detector."""
         self.detector.release()
 
     def calibrar(self):
-        """Calcula as linhas base de quadril e tornozelo para interpretar movimento humano.
+        """Measure the baseline height of the hips and ankles.
 
-        Coleta vários frames da câmera e calcula a média da posição do quadril e
-        dos tornozelos para servir de referência durante o jogo.
+        Notes
+        -----
+        Averages the mean of both hips and of both ankles over 30 camera
+        reads; reads without a pose are skipped. Because the detector
+        processes every other frame, half of the reads repeat the last
+        landmarks.
         """
         valores_hip = []
         valores_foot = []
@@ -108,10 +154,21 @@ class MediapipeInputProvider:
             self.baseline_foot_y = sum(valores_foot) / len(valores_foot)
 
     def get_input(self):
-        """Interpreta a pose atual e retorna um estado de entrada do jogador.
+        """Turn the current pose into jump and crouch input.
 
-        Returns:
-            InputState: Estado com pulo e/ou agachar conforme a pose detectada.
+        Returns
+        -------
+        InputState
+            Empty when there is no pose or a baseline is still missing
+            (it is then taken from the current pose).
+
+        Notes
+        -----
+        A jump needs the hips above the baseline by ``limiar_pulo``, the
+        ankles above theirs by 0.02, the hips rising by more than
+        ``limiar_subida`` since the last frame and no cooldown; it then
+        starts a 15-frame cooldown. Crouching is reported while the hips
+        are below the baseline by more than ``limiar_agachar``.
         """
         estado = InputState()
         landmarks = self.detector.read_pose()

@@ -1,33 +1,52 @@
+"""Camera and MediaPipe pose detection for Herpules 2."""
+
 import cv2
 import mediapipe as mp
 
 
 class PoseDetector:
-    """Detecta landmarks de pose humana usando MediaPipe e expõe os dados para o jogo.
+    """Read the camera and detect the body pose with MediaPipe.
 
-    A classe captura frames da câmera, processa pose, opcionalmente desenha os
-    landmarks na imagem e retorna os pontos detectados para a lógica de input.
+    Parameters
+    ----------
+    camera_index : int, optional
+        OpenCV camera index. Default is 0.
+    mostrar_camera : bool, optional
+        Show the camera image in a "Camera" window. Default is True.
+    mostrar_landmarks : bool, optional
+        Draw the landmarks on that image. Default is True.
+
+    Attributes
+    ----------
+    cap : cv2.VideoCapture
+        Camera, set to 640x480.
+    mp_pose, mp_drawing : module
+        MediaPipe pose solution and drawing utilities.
+    pose : mediapipe.solutions.pose.Pose
+        Pose detector (model complexity 1, confidences 0.5).
+    mostrar_camera, mostrar_landmarks : bool
+        Display options.
+    frame_skip : int
+        Frames read so far, used to process every other frame.
+    last_landmarks : list | None
+        Last landmarks found.
+
+    Notes
+    -----
+    If the camera cannot be opened, a message is printed and
+    ``read_pose`` returns None.
     """
 
     def __init__(self, camera_index=0, mostrar_camera=True, mostrar_landmarks=True):
-        """Inicializa a câmera e a pipeline de detecção de pose.
-
-        Args:
-            camera_index (int, optional): Índice da câmera a ser usada. Padrão é 0.
-            mostrar_camera (bool, optional): Se True, exibe a janela da câmera.
-            mostrar_landmarks (bool, optional): Se True, desenha os landmarks na imagem.
-        """
-        # configuração da câmera
         self.cap = cv2.VideoCapture(camera_index)
 
         if not self.cap.isOpened():
             print("Erro: não foi possível abrir a câmera.")
 
-        # resolução menor = melhor desempenho
+        # Lower resolution = better performance
         self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
         self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
-        # configurações do mediapipe
         self.mp_pose = mp.solutions.pose
         self.mp_drawing = mp.solutions.drawing_utils
 
@@ -40,7 +59,6 @@ class PoseDetector:
             min_tracking_confidence=0.5
         )
 
-        # flags visuais
         self.mostrar_camera = mostrar_camera
         self.mostrar_landmarks = mostrar_landmarks
 
@@ -48,11 +66,19 @@ class PoseDetector:
         self.last_landmarks = None
 
     def read_pose(self):
-        """Lê um frame da câmera, processa pose e retorna os landmarks detectados.
+        """Read a camera frame and return the body landmarks.
 
-        Returns:
-            list | None: Lista de landmarks detectados ou o último valor válido
-                caso a pose não seja encontrada no frame atual.
+        Returns
+        -------
+        list | None
+            The 33 pose landmarks (normalized coordinates), or None if
+            the camera cannot be read.
+
+        Notes
+        -----
+        The image is mirrored. Only every other frame is processed; the
+        others, and frames without a pose, return the last landmarks
+        found, which may be stale (None before the first detection).
         """
         if self.cap is None or not self.cap.isOpened():
             return None
@@ -63,17 +89,15 @@ class PoseDetector:
             print("Erro: não foi possível ler frame da câmera.")
             return None
 
-        # espelha imagem
         frame = cv2.flip(frame, 1)
 
-        # FRAME SKIP - processa pose só a cada 2 frames para melhorar desempenho
+        # Process the pose only every other frame, for performance
 
         self.frame_skip += 1
 
         if self.frame_skip % 2 != 0:
             return self.last_landmarks
 
-        # PROCESSAMENTO MEDIAPIPE
 
         rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
@@ -83,7 +107,6 @@ class PoseDetector:
 
         rgb.flags.writeable = True
 
-        # desenha landmarks
         if (
             self.mostrar_landmarks
             and resultado.pose_landmarks
@@ -94,22 +117,19 @@ class PoseDetector:
                 self.mp_pose.POSE_CONNECTIONS
             )
 
-        # mostra câmera
         if self.mostrar_camera:
             cv2.imshow("Camera", frame)
             cv2.waitKey(1)
 
-        # sem pose detectada
         if not resultado.pose_landmarks:
             return self.last_landmarks
 
-        # salva landmarks
         self.last_landmarks = resultado.pose_landmarks.landmark
 
         return self.last_landmarks
 
     def release(self):
-        """Libera a câmera e encerra os recursos do MediaPipe e da janela OpenCV."""
+        """Release the camera, the detector and the OpenCV windows."""
         if self.cap is not None:
             self.cap.release()
 

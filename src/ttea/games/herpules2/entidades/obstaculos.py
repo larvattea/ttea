@@ -1,22 +1,48 @@
+"""Obstacles of Herpules 2."""
+
 import random
 import pygame
 
 
 class Obstaculo(pygame.sprite.Sprite):
-    """Representa um obstáculo que se move em direção ao jogador.
+    """Obstacle that moves toward the player.
 
-    Cada instância escolhe uma imagem aleatória, determina sua escala e o
-    posiciona na tela para criar variação no cenário do jogo.
+    Each obstacle picks a random image and scale and starts 200 to 300
+    px beyond the right edge of the screen.
+
+    Parameters
+    ----------
+    vel : int
+        Speed in pixels per frame.
+    largura_tela : int
+        Screen width in pixels.
+    altura_chao : int
+        Ground level used as the bottom of the obstacle, in pixels.
+
+    Attributes
+    ----------
+    image : pygame.Surface
+        Scaled obstacle image.
+    rect : pygame.Rect
+        Obstacle position.
+    mask : pygame.mask.Mask
+        Collision mask.
+    vel : int
+        Speed in pixels per frame.
+    ja_pontuou : bool
+        Whether the player already scored for passing this obstacle.
+
+    Notes
+    -----
+    Three images are scaled 1.5-2.2 times, the broken column 2-2.7 times
+    and the others 2-2.5 times. ``hades1.png``, ``fogo1.png`` and
+    ``fogão.png`` may float 85 to 95 px above the ground (to be passed
+    by crouching); the others stand on the ground. The list of images
+    has ``fogo1.gif``, not ``fogo1.png``, so the fire never floats.
+    TODO(doc): should the check use ``fogo1.gif``?
     """
 
     def __init__(self, vel, largura_tela, altura_chao):
-        """Inicializa um obstáculo com imagem, velocidade e posição aleatórias.
-
-        Args:
-            vel (int): Velocidade de deslocamento do obstáculo.
-            largura_tela (int): Largura da tela para posicionar o objeto à direita.
-            altura_chao (int): Altura do chão usado como referência para a base do obstáculo.
-        """
         super().__init__()
 
         tipos_de_obstaculos = [
@@ -68,7 +94,7 @@ class Obstaculo(pygame.sprite.Sprite):
         self.ja_pontuou = False
 
     def update(self):
-        """Move o obstáculo para a esquerda e remove-o ao sair da tela."""
+        """Move the obstacle left; remove it once off screen."""
         self.rect.x -= self.vel
 
         if self.rect.right < 0:

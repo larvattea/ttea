@@ -19,13 +19,15 @@ class HelpKeyFilter(QObject):
     callback : Callable[[], None]
         Function called when F1 is pressed. It decides which help topic
         to open.
-    parent : QObject or None, optional
-        Owner of the filter, usually the QApplication.
+    parent : QObject | None, optional
+        Owner of the filter, usually the QApplication. Default is
+        None.
 
-    Examples
-    --------
-    >>> key_filter = HelpKeyFilter(controller.show_help, app)
-    >>> app.installEventFilter(key_filter)
+    Notes
+    -----
+    Install it with ``app.installEventFilter(key_filter)``. Only a
+    plain F1 press triggers the callback: presses with modifiers
+    (Shift, Ctrl...) and auto-repeated presses are ignored.
     """
 
     def __init__(
@@ -47,7 +49,8 @@ class HelpKeyFilter(QObject):
         Returns
         -------
         bool
-            True when the event was handled and must not propagate.
+            True when the event was a plain F1 press and must not
+            propagate; otherwise the result of the base implementation.
         """
         if (
             event.type() == QEvent.Type.KeyPress

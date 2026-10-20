@@ -1,4 +1,5 @@
-# /service/player_service.py
+"""Player service: business rules and persistence of players."""
+
 from typing import Any, Dict, List, Optional
 
 from PySide6.QtCore import QObject, Signal
@@ -9,71 +10,99 @@ from ttea.model import Player
 
 
 class PlayerService(QObject):
-    """
-    Service layer (MVCS) handling all business rules related to players.
+    """Business rules (service layer) of players.
+
+    A single instance is shared by the whole application.
+
+    Parameters
+    ----------
+    dao : PlayerCsvDAO | None, optional
+        DAO used for persistence. Default is None, which creates a new
+        ``PlayerCsvDAO``.
 
     Attributes
     ----------
+    player_change : Signal(int)
+        Emitted after a change: with the ID of the created or updated
+        player, or with 0 after a deletion.
     dao : PlayerCsvDAO
-        Data access object responsible for persistence operations.
-        Defaults to a new ``PlayerCsvDAO`` instance if not provided.
+        DAO used for persistence.
 
     Methods
     -------
-    __init__(dao=None)
-        Initializes the service with a DAO instance.
     get_all_players()
-        Returns all registered players.
+        Return all registered players.
+    validate_data(data)
+        Return the validation errors of the form data.
     create_player(data)
-        Creates a new player from the provided data dictionary.
+        Create a player from a data dictionary.
     update_player(player_id, data)
-        Updates an existing player with the given data.
+        Update an existing player.
     delete_player(player_id)
-        Deletes a player by its ID.
+        Delete a player by its ID.
     find_by_id(player_id)
-        Retrieves a player by its ID.
+        Return a player by its ID.
     search_players(query="")
-        Searches players by name or ID (case-insensitive).
+        Search players by name or ID (case-insensitive).
+
+    Notes
+    -----
+    ``__new__`` always returns the same instance, and ``__init__`` sets
+    it up only once: a ``dao`` passed in later calls is ignored.
     """
 
     _instance = None
-    # Sinal que avisa: "Os dados do jagador mudaram"
     player_change = Signal(int)
 
     def __new__(cls, *args, **kwargs):
+        """Return the shared instance, creating it on the first call.
+
+        Returns
+        -------
+        PlayerService
+            The single instance of the service.
+        """
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
 
     def __init__(self, dao: Optional[PlayerCsvDAO] = None):
-        """
-        Initialize the service with a data access object.
-
-        Parameters
-        ----------
-        dao : PlayerCsvDAO, optional
-            Instance used for persistence. If ``None``, a default
-            ``PlayerCsvDAO`` is created.
-        """
         if not hasattr(self, "_initialized"):
             super().__init__()
             self.dao = dao or PlayerCsvDAO()
             self._initialized = True
 
     def get_all_players(self) -> List[Player]:
-        """Return a list of all registered players.
+        """Return all registered players.
 
         Returns
         -------
-        List[Player]
-            Complete list of ``Player`` instances stored in the DAO.
+        list[Player]
+            The players cached by the DAO.
         """
         return self.dao.list()
 
     def validate_data(self, data: Dict[str, Any]) -> List[str]:
-        """
-        Valida as regras de negócio para os dados de um jogador.
-        Retorna uma lista de mensagens de erro (vazia se estiver tudo ok).
+        """Validate the form data of a player.
+
+        Parameters
+        ----------
+        data : dict[str, Any]
+            Form data.
+
+        Returns
+        -------
+        list[str]
+            Translated error messages, each ending with a newline; empty
+            when the data is valid.
+
+        Notes
+        -----
+        The ``id`` is required and must be an ``int``; ``name`` must not
+        be blank; ``birth_date`` is required.
+
+        The messages (pt_BR source texts) are translated at runtime with
+        ``self.tr()``.
         """
         errors = []
         if data.get("id") is None:
@@ -90,20 +119,28 @@ class PlayerService(QObject):
         return errors
 
     def create_player(self, data: Dict[str, Any]) -> Optional[Player]:
-        """
-        Create a new player from a dictionary of attributes.
+        """Create a player from a dictionary.
 
         Parameters
         ----------
-        data : dict
-            Must contain the key ``id`` (int),  ``name`` (str),
-            ``birth_date`` (date) and optionally ``observation`` (str).
+        data : dict[str, Any]
+            Values for every ``Player`` field. An ``id`` of 0 or less
+            gets the next free ID.
 
         Returns
         -------
-        Player or None
-            The created ``Player`` instance if validation and insertion
-            succeed; ``None`` otherwise.
+        Player | None
+            The created player, or None if it is not valid or its ID
+            already exists.
+
+        Raises
+        ------
+        TypeError
+            If ``data`` misses a field or has an unknown key.
+
+        Notes
+        -----
+        ``player_change`` is emitted with the new ID on success.
         """
         player = Player(**data)
 
@@ -112,27 +149,30 @@ class PlayerService(QObject):
 
         new_id = self.dao.insert(player)
         if new_id:
-            self.player_change.emit(new_id)  # Notifica observadores
+            self.player_change.emit(new_id)
         return self.dao.select(new_id) if new_id > 0 else None
 
     def update_player(self, player_id: int, data: Dict[str, Any]) -> bool:
-        """
-        Update an existing player with new values.
+        """Update an existing player with new values.
 
         Parameters
         ----------
         player_id : int
-            Identifier of the player to update.
-        data : dict
-            Dictionary containing updated fields (``name``,
-            ``birth_date``, ``observation``). Missing keys keep the
-            current value.
+            ID of the player to update.
+        data : dict[str, Any]
+            Updated fields; missing keys keep the current value.
 
         Returns
         -------
         bool
-            ``True`` if the player was found, validated, and updated
-            successfully; ``False`` otherwise.
+            True if the player was found, is valid and was saved; False
+            otherwise.
+
+        Notes
+        -----
+        The cached object is changed in place before validation, so an
+        invalid update still changes it in memory. ``player_change`` is
+        emitted with the ID on success.
         """
         player = self.dao.select(player_id)
         if not player:
@@ -151,22 +191,32 @@ class PlayerService(QObject):
         return success
 
     def delete_player(self, player_id: int) -> bool:
-        """Delete a player by its identifier.
+        """Delete a player by its ID.
 
         Parameters
         ----------
         player_id : int
-            Identifier of the player to be removed.
+            ID of the player to delete.
 
         Returns
         -------
         bool
-            ``True`` if the player was successfully deleted,
-            ``False`` otherwise (e.g., player not found).
+            True if deleted, False if the player was not found.
+
+        Raises
+        ------
+        BusinessRuleException
+            If the player has a KarTEA configuration
+            (``PlayerKarteaConfigService``); the message is translated
+            with ``self.tr()``.
+
+        Notes
+        -----
+        ``player_change`` is emitted with 0 on success.
         """
         from ttea.games.kartea.service import PlayerKarteaConfigService
 
-        # Validação de integridade referencial (Negócio)
+        # Referential integrity (business rule)
         karteaconfig = PlayerKarteaConfigService()
         if karteaconfig.find_config_by_player_id(player_id):
             raise BusinessRuleException(
@@ -183,34 +233,32 @@ class PlayerService(QObject):
         return success
 
     def find_by_id(self, player_id: int) -> Optional[Player]:
-        """Retrieve a player by its unique identifier.
+        """Return a player by its ID.
 
         Parameters
         ----------
         player_id : int
-            The player's ID.
+            ID of the player.
 
         Returns
         -------
-        Player or None
-            The matching ``Player`` instance or ``None`` if not found.
+        Player | None
+            The player, or None if not found.
         """
         return self.dao.select(player_id)
 
     def search_players(self, query: str = "") -> List[Player]:
-        """
-        Search players by name or ID (case-insensitive).
+        """Search players by name or ID, ignoring case.
 
         Parameters
         ----------
         query : str, optional
-            Search term. If empty or whitespace-only, returns all
-            players.
+            Search term. If empty or blank, all players are returned.
+            Default is ``""``.
 
         Returns
         -------
-        List[Player]
-            List of players whose ID (as string) or name contain the
-            query term.
+        list[Player]
+            The players whose ID (as text) or name contains the term.
         """
         return self.dao.search_players(query)

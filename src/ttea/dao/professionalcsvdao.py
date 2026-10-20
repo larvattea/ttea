@@ -1,3 +1,5 @@
+"""CSV persistence of professionals, one file per professional."""
+
 import os
 import re
 from dataclasses import fields
@@ -5,7 +7,6 @@ from typing import TYPE_CHECKING, Dict, List, Optional
 
 import portalocker
 
-# Local module import
 from ttea.dao import DAO
 from ttea.model import Professional
 from ttea.util import CSVHandler, PathConfig
@@ -15,15 +16,48 @@ if TYPE_CHECKING:
 
 
 class ProfessionalCsvDAO(DAO[Professional]):
-    """Specialized DAO for professional entities using CSV files
-    with in-memory cache.
+    """DAO for Professional entities, one CSV file per record.
+
+    Persists each professional in its own CSV file named after its ID
+    and sanitized name, and keeps all professionals in an in-memory
+    cache loaded when the DAO is created.
+
+    Parameters
+    ----------
+    institution_dao : InstitutionFacilityCsvDAO | None, optional
+        DAO used to resolve the institution of each professional.
+        Default is None, which creates a new
+        ``InstitutionFacilityCsvDAO`` (with its own cache).
+
+    Attributes
+    ----------
+    csv_handler : CSVHandler
+        Utility for reading and writing CSV data.
+    professionals : dict[int, Professional]
+        In-memory cache by ID.
+    file_map : dict[int, str]
+        CSV file path by ID.
+    int_properties : list[str]
+        Names of the ``Professional`` fields typed ``int``.
+    bool_properties : list[str]
+        Names of the ``Professional`` fields typed ``bool``.
+    institution_dao : InstitutionFacilityCsvDAO
+        DAO used to resolve institutions.
+
+    Notes
+    -----
+    Files are named ``<id>_<sanitized name>_professional.csv`` and
+    stored in the professional directory of ``PathConfig``.
+
+    The ``institutionfacility`` column holds the facility ID. When
+    loading, it is resolved with ``institution_dao.select``; an empty,
+    non-numeric or unknown ID gives None, and such a professional is not
+    valid until a facility is set.
     """
 
     def __init__(
         self, institution_dao: Optional["InstitutionFacilityCsvDAO"] = None
     ) -> None:
-        """Initialize the DAO and load all professionals
-        from CSV files."""
         from ttea.dao import InstitutionFacilityCsvDAO
 
         self.csv_handler = CSVHandler()
@@ -39,12 +73,12 @@ class ProfessionalCsvDAO(DAO[Professional]):
         self.load_all_professionals()
 
     def generate_next_id(self) -> int:
-        """Generate the next available InstitutionFacility ID.
+        """Return the next available professional ID.
 
         Returns
         -------
         int
-            The next unused ID (1 if no InstitutionFacility exist).
+            The highest cached ID plus 1, or 1 if the cache is empty.
         """
         if not self.professionals:
             return 1
@@ -53,39 +87,52 @@ class ProfessionalCsvDAO(DAO[Professional]):
     def write_with_lock(
         self, filepath: str, data: List[Dict], headers: List[str]
     ):
-        """Write data to a CSV file with exclusive file locking.
+        """Write rows to a CSV file while holding an exclusive lock.
 
         Parameters
         ----------
         filepath : str
             Full path to the target CSV file.
-        data : List[Dict]
-            List of dictionaries representing rows to write.
-        headers : List[str]
-            Ordered list of column names.
+        data : list[dict]
+            Rows to write, one dictionary per row.
+        headers : list[str]
+            Ordered column names; a header row is written first.
+
+        Raises
+        ------
+        portalocker.exceptions.LockException
+            If the lock cannot be acquired within 10 seconds.
+
+        Notes
+        -----
+        The user directories are created if needed. The file is opened
+        by ``portalocker.Lock`` in mode ``"w"`` with Python's defaults,
+        so it uses the platform's default encoding and newline
+        translation, unlike ``CSVHandler.write_csv`` with a path (UTF-8
+        with BOM).
         """
         PathConfig.ensure_dirs()
         with portalocker.Lock(filepath, mode="w", timeout=10) as f:
             self.csv_handler.write_csv(f, data, headers)
 
     def insert(self, obj: Professional) -> int:
-        """Insert a new professional into persistent storage.
+        """Insert a new professional and write its CSV file.
 
         Parameters
         ----------
-        obj : InstitutionFacility
-            The InstitutionFacility instance to persist.
+        obj : Professional
+            The professional to persist. An ``id`` of 0 or less is
+            replaced in place by ``generate_next_id()``.
 
         Returns
         -------
         int
-            The assigned professional ID on success,
-            0 on failure (invalid professional or ID already exists).
+            The professional ID on success, or 0 if ``obj`` is not valid
+            or its ID already exists.
         """
         if not obj.is_valid():
             return 0
 
-        # Generate ID if not set
         if obj.id <= 0:
             obj.id = self.generate_next_id()
 
@@ -99,9 +146,7 @@ class ProfessionalCsvDAO(DAO[Professional]):
         return obj.id
 
     def update(self, obj: Professional) -> bool:
-        """Update an existing professional in persistent storage.
-
-        Renames the file if the professional's name changed.
+        """Update an existing professional and rewrite its file.
 
         Parameters
         ----------
@@ -111,7 +156,13 @@ class ProfessionalCsvDAO(DAO[Professional]):
         Returns
         -------
         bool
-            True if updated successfully, False otherwise.
+            True if updated, False if ``obj`` is not valid or its ID is
+            not cached.
+
+        Notes
+        -----
+        If the file name changes (the name changed), the old file is
+        renamed before being rewritten.
         """
         if not obj.is_valid() or obj.id not in self.professionals:
             return False
@@ -140,7 +191,7 @@ class ProfessionalCsvDAO(DAO[Professional]):
         Returns
         -------
         bool
-            True if deleted, False if the professional was not found.
+            True if deleted, False if the ID is not cached.
         """
         if obj_id not in self.professionals:
             return False
@@ -153,7 +204,7 @@ class ProfessionalCsvDAO(DAO[Professional]):
         return True
 
     def select(self, obj_id: int) -> Optional[Professional]:
-        """Retrieve a professional by ID from the in-memory cache.
+        """Return a professional from the in-memory cache.
 
         Parameters
         ----------
@@ -162,60 +213,71 @@ class ProfessionalCsvDAO(DAO[Professional]):
 
         Returns
         -------
-        Optional[Professional]
-            The Professional instance if found, None otherwise.
+        Professional | None
+            The professional, or None if the ID is not cached.
         """
         return self.professionals.get(obj_id)
 
     def list(self) -> List[Professional]:
-        """Return all loaded professionals.
+        """Return all cached professionals.
 
         Returns
         -------
-        List[InstitutionFacility]
-            A list of all InstitutionFacility instances currently in memory.
+        list[Professional]
+            The cached professionals, in cache order.
         """
         return list(self.professionals.values())
 
     def sanitize_filename(self, name: str) -> str:
-        """Sanitize a professional name for safe use in filenames.
+        """Make a professional name safe for file names.
 
         Parameters
         ----------
         name : str
-            Original professional name.
+            Original name.
 
         Returns
         -------
         str
-            Sanitized name (lowercase, non-alphanumeric replaced by '_').
+            The name stripped and lowercased, with every character that
+            is not a word character or ``-`` replaced by ``_``.
+
+        Examples
+        --------
+        >>> dao = object.__new__(ProfessionalCsvDAO)
+        >>> dao.sanitize_filename(" Ana Maria! ")
+        'ana_maria_'
         """
         return re.sub(r"[^\w\-]", "_", name.lower().strip())
 
     def get_filename(self, professional: Professional) -> str:
-        """Generate the full path for a professional's CSV file.
+        """Return the full path of a professional's CSV file.
 
         Parameters
         ----------
         professional : Professional
-            The professional object.
+            The professional.
 
         Returns
         -------
         str
-            Complete file path using pattern:
-            <id>_<sanitized_name>_professional.csv
+            Path of ``<id>_<sanitized name>_professional.csv`` in the
+            professional directory.
         """
         sanitized_name = self.sanitize_filename(professional.name)
         filename = f"{professional.id}_{sanitized_name}_professional.csv"
         return PathConfig.professional(filename)
 
     def load_all_professionals(self) -> None:
-        """Load every professional CSV file from disk into memory.
+        """Load every professional CSV file into the cache.
 
-        Scans the professionals directory, parses each
-        matching CSV file, converts data types appropriately,
-        and populates the cache.
+        Notes
+        -----
+        Reads each ``*_professional.csv`` file of the professional
+        directory; empty or unreadable files are skipped. Only the first
+        row is used. Integer fields that are not plain digits (including
+        negative numbers) become 0, and boolean fields are True only for
+        ``"true"`` (any case).
         """
         PathConfig.ensure_dirs()
         for file_path in PathConfig.PROFESSIONAL_DIR.glob(
@@ -228,17 +290,14 @@ class ProfessionalCsvDAO(DAO[Professional]):
                 continue
 
             row = professional_data[0]
-            # Build professional kwargs with type conversions
             professional_kwargs = {}
             for prop in Professional.PROPERTIES:
                 if prop in row:
-                    # Special handling for institutionfacility to load the full object
                     if prop == "institutionfacility":
                         institution_id = (
                             int(row[prop]) if row[prop].isdigit() else None
                         )
                         if self.institution_dao and institution_id:
-                            # Busca o objeto completo da instituição pelo ID
                             professional_kwargs[prop] = (
                                 self.institution_dao.select(institution_id)
                             )
@@ -258,7 +317,19 @@ class ProfessionalCsvDAO(DAO[Professional]):
             self.file_map[professional.id] = str(file_path)
 
     def search_professionals(self, query: str = "") -> List[Professional]:
-        """Retorna a lista de instituições, opcionalmente filtrada."""
+        """Return cached professionals, optionally filtered.
+
+        Parameters
+        ----------
+        query : str, optional
+            Text searched, case-insensitively, in the ID and the name. A
+            blank query returns every professional. Default is ``""``.
+
+        Returns
+        -------
+        list[Professional]
+            The matching professionals.
+        """
         all_professionals = list(self.professionals.values())
 
         if not query.strip():

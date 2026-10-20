@@ -1,7 +1,8 @@
 """About dialog view for the T-TEA application.
 
 This module defines the ``AboutView`` dialog, which displays project
-information, developer credits, and the current year in a Qt modal window.
+information, developer credits and the current year in a Qt modal
+window.
 """
 
 from datetime import datetime
@@ -16,38 +17,25 @@ from ttea.window import WindowConfig
 class AboutView(QDialog, Ui_AboutView, WindowConfig):
     """Modal dialog showing information about the T-TEA project.
 
-    This dialog displays the T-TEA project description, logo, platform link,
-    developer credits, and a close button. It inherits from ``QDialog`` and
-    uses ``WindowConfig`` for window sizing and positioning.
+    Displays the project description, logo, platform link, developer
+    credits and a close button.
 
-    Attributes
+    Parameters
     ----------
-    lbl_developer : QLabel
-        Label widget that displays the developer credits and current year.
+    parent : QDialog | None, optional
+        Parent widget. Default is None.
 
-    Methods
-    -------
-    __init__(parent=None)
-        Initialize the AboutView dialog.
+    Notes
+    -----
+    The window is fixed at 25% narrower than the parent. A line "Desde:
+    2021 - <current year>" (translated with ``self.tr()``) is appended
+    to the HTML of ``lbl_developer``.
     """
 
     def __init__(
         self,
         parent: Optional[QDialog] = None,
     ) -> None:
-        """Initialize the AboutView dialog.
-
-        Parameters
-        ----------
-        parent : QDialog, optional
-            Parent widget for the dialog. Defaults to None.
-
-        Notes
-        -----
-        Sets up the dialog UI, configures window dimensions, and updates the
-        developer label with the current year.
-        """
-
         super().__init__(parent)
         self.setupUi(self)
 
@@ -60,10 +48,9 @@ class AboutView(QDialog, Ui_AboutView, WindowConfig):
             parent,  # parent
         )
 
-        # === Dynamic part: year and translation ===
+        # Dynamic part: current year, translated
         current_year = datetime.now().strftime("%Y")
 
-        # Translatable text
         year_text = self.tr("Desde: 2021 - {}").format(current_year)
 
         # HTML for the year line only

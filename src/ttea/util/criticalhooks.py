@@ -17,13 +17,13 @@ class CriticalHooks:
     """Encapsulate global exception hooks for the application.
 
     This class registers handlers for uncaught exceptions in the main
-    thread and worker threads, and displays a translated error dialog when
-    Qt is available.
+    thread and worker threads, and displays a translated error dialog
+    when Qt is available.
 
     Methods
     -------
     show_critical_error(exception)
-        Display a translated critical error dialog for the given exception.
+        Display a translated critical error dialog for an exception.
     global_exception_hook(exctype, value, traceback_obj)
         Handle uncaught exceptions on the main thread.
     threading_exception_hook(args)
@@ -33,12 +33,8 @@ class CriticalHooks:
 
     Notes
     -----
-    The class uses QCoreApplication.translate for translated error text.
-    This mapping is intended for localized internationalization.
-
-    Examples
-    --------
-    >>> CriticalHooks.setup_exception_hooks()
+    The dialog text is translated at runtime with
+    ``QCoreApplication.translate`` in the ``"CriticalHooks"`` context.
     """
 
     @staticmethod
@@ -48,16 +44,16 @@ class CriticalHooks:
         Parameters
         ----------
         exception : BaseException
-            The exception that caused the failure.
-
-        Returns
-        -------
-        None
+            The exception that caused the failure; its text is appended
+            to the message.
 
         Notes
         -----
-        If the Qt message dialog cannot be displayed, falls back to printing
-        the error to standard output.
+        The message (pt_BR source text) is translated at runtime with
+        ``QCoreApplication.translate`` in the ``"CriticalHooks"``
+        context and shown with ``MessageService.critical_global``. If
+        the dialog cannot be displayed (e.g. Qt is not ready yet), the
+        error is printed to standard output instead.
         """
         from ttea.util import MessageService
 
@@ -82,6 +78,8 @@ class CriticalHooks:
     ) -> None:
         """Handle uncaught exceptions on the main thread.
 
+        Installed as ``sys.excepthook``.
+
         Parameters
         ----------
         exctype : type[BaseException]
@@ -91,21 +89,20 @@ class CriticalHooks:
         traceback_obj : TracebackType | None
             The traceback object, if available.
 
-        Returns
-        -------
-        None
-
         Notes
         -----
-        The hook logs the exception and shows a dialog only if a
-        QApplication instance exists. The application exits with status 1.
+        The exception is written to the application log with its stack
+        trace. The dialog is shown only if a QApplication instance
+        exists; otherwise a message is printed. The default
+        ``sys.__excepthook__`` then prints the traceback and the
+        application exits with status 1.
         """
         from ttea.log import Log
 
         Log.get_log().log_error("Untreated global exception")
         Log.get_log().log_error_with_stack(value, traceback_obj=traceback_obj)
 
-        # Only attempt to show the interface if the QApplication already exists
+        # Qt widgets can only be created once a QApplication exists.
         if QApplication.instance() is not None:
             try:
                 CriticalHooks.show_critical_error(value)
@@ -121,19 +118,18 @@ class CriticalHooks:
     def threading_exception_hook(args: threading.ExceptHookArgs) -> None:
         """Handle uncaught exceptions in worker threads.
 
+        Installed as ``threading.excepthook``.
+
         Parameters
         ----------
         args : threading.ExceptHookArgs
             Thread exception hook arguments.
 
-        Returns
-        -------
-        None
-
         Notes
         -----
-        This hook only logs the exception and does not show a dialog to
-        avoid thread safety issues with Qt widgets.
+        This hook only logs the exception with its stack trace. It shows
+        no dialog, to avoid thread safety issues with Qt widgets, and
+        does not end the application.
         """
         from ttea.log import Log
 
@@ -144,11 +140,10 @@ class CriticalHooks:
 
     @staticmethod
     def setup_exception_hooks() -> None:
-        """Register global exception hooks for the application.
+        """Register the global exception hooks for the application.
 
-        Returns
-        -------
-        None
+        Sets ``sys.excepthook`` to ``global_exception_hook`` and
+        ``threading.excepthook`` to ``threading_exception_hook``.
         """
         sys.excepthook = CriticalHooks.global_exception_hook
         threading.excepthook = CriticalHooks.threading_exception_hook

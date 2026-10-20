@@ -1,10 +1,11 @@
+"""Calibration settings dialog."""
+
 from typing import TYPE_CHECKING, Any, Dict, Optional, Union
 
 from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import (QCheckBox, QComboBox, QDialog, QDoubleSpinBox,
                                QRadioButton, QSpinBox)
 
-# Local module import
 from ttea.controller import CalibrationSettingController
 from ttea.ui import Ui_CalibrationSettingView
 from ttea.util import MessageService
@@ -15,18 +16,30 @@ if TYPE_CHECKING:
 
 
 class CalibrationSettingView(QDialog, Ui_CalibrationSettingView, WindowConfig):
-    """
-    A modal dialog window calibration T-TEA project.
+    """Modal dialog with the calibration settings.
 
-    This class creates a modal dialog that provides calibration the T-TEA
-    project.
-    It inherits from `QDialog` for dialog functionality and `WindowConfig`
-    for window configuration.
+    Each settings widget has the Qt property ``dataclass_property`` with
+    the name of its ``CalibrationSetting`` field; ``get_data`` and
+    ``set_data`` use it to read and fill the form. The logic is in
+    ``CalibrationSettingController``.
 
-    Methods
-    -------
-    __init__(parent=None)
-        Initializes the AboutView dialog with the specified parent.
+    Parameters
+    ----------
+    parent : QDialog | None, optional
+        Parent widget. Default is None.
+
+    Attributes
+    ----------
+    msg : MessageService
+        Service used to show dialogs.
+    controller : CalibrationSettingController
+        Controller of the dialog.
+
+    Notes
+    -----
+    The window is fixed at 5% wider and 75% taller than the parent. The
+    camera groups are enabled by the custom camera check box and the
+    filter group by the filter check box.
     """
 
     def __init__(
@@ -46,7 +59,6 @@ class CalibrationSettingView(QDialog, Ui_CalibrationSettingView, WindowConfig):
             75,  # height
             parent,  # parent
         )
-        # Initialize controller
         self.controller = CalibrationSettingController(self)
 
         self.pb_ok.clicked.connect(self.controller.handle_ok)
@@ -62,7 +74,20 @@ class CalibrationSettingView(QDialog, Ui_CalibrationSettingView, WindowConfig):
         self.grp_filter.setEnabled(self.chk_enable_filter.isChecked())
 
     def get_data(self) -> Dict[str, Any]:
-        # Busca todos os widgets genéricos da árvore
+        """Read the settings from the widgets.
+
+        Returns
+        -------
+        dict[str, Any]
+            Values by ``dataclass_property`` name.
+
+        Notes
+        -----
+        Check boxes give 1 or 0, spin boxes their value and combo boxes
+        their current text. For radio buttons, only the checked one sets
+        the value: its ``dataclass_property_value`` property, or its
+        text.
+        """
         from PySide6.QtWidgets import QWidget
 
         data: Dict[str, Any] = {}
@@ -71,12 +96,11 @@ class CalibrationSettingView(QDialog, Ui_CalibrationSettingView, WindowConfig):
 
         for widget in widgets_to_scan:  # self.findChildren(widgets_to_scan):
 
-            # Alinhado com o nome configurado no Qt Designer
+            # Name set as a dynamic property in Qt Designer
             prop_name = widget.property("dataclass_property")
             if not prop_name:
-                continue  # Ignora componentes sem o mapeamento configurado
+                continue
 
-            # Trata os widgets padrão
             if isinstance(widget, QCheckBox):
                 data[prop_name] = 1 if widget.isChecked() else 0
             elif isinstance(widget, (QSpinBox, QDoubleSpinBox)):
@@ -84,7 +108,6 @@ class CalibrationSettingView(QDialog, Ui_CalibrationSettingView, WindowConfig):
             elif isinstance(widget, QComboBox):
                 data[prop_name] = widget.currentText()
             elif isinstance(widget, QRadioButton):
-                # Atribui o valor apenas se o Radio Button específico estiver selecionado
                 if widget.isChecked():
                     prop_value = widget.property("dataclass_property_value")
 
@@ -97,9 +120,22 @@ class CalibrationSettingView(QDialog, Ui_CalibrationSettingView, WindowConfig):
     def set_data(
         self, data: Union[Dict[str, Any], "CalibrationSetting"]
     ) -> None:
+        """Fill the widgets with saved settings.
+
+        Parameters
+        ----------
+        data : dict[str, Any] | CalibrationSetting
+            Settings by field name, or a ``CalibrationSetting`` (read
+            with ``get_data``). Other types are ignored.
+
+        Notes
+        -----
+        Empty or None values are skipped. Combo boxes select the item
+        with the same text, and a radio button is checked when its
+        ``dataclass_property_value`` (or text) equals the value.
+        """
         from PySide6.QtWidgets import QWidget
 
-        # Converte para dicionário caso receba a instância de CalibrationSetting
         if hasattr(data, "get_data"):
             data_dict = data.get_data()[0]
         elif isinstance(data, dict):
@@ -107,7 +143,6 @@ class CalibrationSettingView(QDialog, Ui_CalibrationSettingView, WindowConfig):
         else:
             return
 
-        # Varrer todos os widgets procurando a propriedade 'dataclass_property'
         for widget in self.findChildren(QWidget):
             prop_name = widget.property("dataclass_property")
             if not prop_name or prop_name not in data_dict:
@@ -115,12 +150,11 @@ class CalibrationSettingView(QDialog, Ui_CalibrationSettingView, WindowConfig):
 
             value = data_dict[prop_name]
 
-            # Ignora valores nulos ou em branco
             if value is None or str(value).strip() == "":
                 continue
 
             if isinstance(widget, QCheckBox):
-                # Converte 1/0 ou bool para o checkbox
+                # Accepts 1/0 or a bool
                 widget.setChecked(bool(int(value)))
 
             elif isinstance(widget, (QSpinBox, QDoubleSpinBox)):
@@ -131,7 +165,6 @@ class CalibrationSettingView(QDialog, Ui_CalibrationSettingView, WindowConfig):
                 )
 
             elif isinstance(widget, QComboBox):
-                # Busca e seleciona a opção correspondente pelo texto do ComboBox
                 index = widget.findText(str(value))
                 if index >= 0:
                     widget.setCurrentIndex(index)
@@ -139,26 +172,22 @@ class CalibrationSettingView(QDialog, Ui_CalibrationSettingView, WindowConfig):
             elif isinstance(widget, QRadioButton):
                 prop_value = widget.property("dataclass_property_value")
 
-                # Se prop_value existir, compara com ele; caso contrário, compara com widget.text()
                 target_value = (
                     str(prop_value)
                     if prop_value is not None
                     else widget.text()
                 )
-                # Marca o RadioButton cujo texto coincida com o valor carregado
                 # if widget.text() == str(value):
                 if target_value == str(value):
                     widget.setChecked(True)
 
     def closeEvent(self, event: QCloseEvent) -> None:
-        """Override close event to confirm exit.
-
-        Shows a confirmation dialog before allowing the window to close.
+        """Ask for confirmation before closing.
 
         Parameters
         ----------
         event : QCloseEvent
-            The close event to accept or ignore.
+            Close event; accepted only if the user confirms.
         """
         if self.msg.question(
             self.tr("Deseja sair da configuração de calibração?"), None, True

@@ -1,3 +1,10 @@
+"""Camera thread with pose detection and telemetry overlay.
+
+Captures frames from an OpenCV camera, optionally enhances them,
+runs MediaPipe pose detection, draws the skeleton and a telemetry
+panel, and emits the result to the Qt interface.
+"""
+
 import time
 
 import cv2
@@ -14,6 +21,49 @@ from ttea.service import CalibrationService
 
 
 class CameraVideoThread(QThread, QObject):
+    """Capture, analyze and annotate camera frames in a thread.
+
+    Parameters
+    ----------
+    camera_index : int
+        OpenCV index of the camera.
+    use_low_resolution : bool, optional
+        If True, set the width and height configured in
+        ``CalibrationService`` on the camera. Default is False.
+
+    Attributes
+    ----------
+    change_pixmap_signal : Signal(QImage)
+        Emitted for each processed frame with an RGB888 copy of the
+        annotated image.
+    error_signal : Signal(str)
+        Emitted with a translated message when the camera cannot be
+        opened or a frame cannot be read.
+    camera_index : int
+        OpenCV index of the camera.
+    running : bool
+        Loop flag; True on creation, set to False by ``stop``.
+    mp_manager : MediaPipeManager
+        Pose detector.
+    use_low_resolution : bool
+        Whether the configured resolution is applied.
+    filter : MediaPipeFilter
+        Frame enhancement and landmark smoothing.
+    service : CalibrationService
+        Source of the camera, filter, pose and telemetry settings.
+    last_timestamp_ms : int
+        Timestamp of the last frame sent to MediaPipe.
+
+    Notes
+    -----
+    The configured resolution is applied only when
+    ``use_low_resolution`` is True, the opposite of ``CameraVideo``.
+    TODO(doc): is this inversion intended?
+
+    User-facing texts (error messages and telemetry labels) use
+    ``self.tr()`` (runtime Qt translation).
+    """
+
     change_pixmap_signal = Signal(QImage)
     error_signal = Signal(str)
 
@@ -30,7 +80,11 @@ class CameraVideoThread(QThread, QObject):
         self.last_timestamp_ms = 0
 
     def _convert_to_proto(self, landmarks):
-        """Converte landmarks da Task API para o formato esperado pelo draw_landmarks."""
+        """Convert Task API landmarks to a ``NormalizedLandmarkList``.
+
+        ``mp_drawing.draw_landmarks`` expects the protobuf format;
+        missing ``visibility`` or ``presence`` values default to 0.0.
+        """
         landmark_subset = landmark_pb2.NormalizedLandmarkList()
         for l in landmarks:
             landmark_subset.landmark.add(
@@ -43,6 +97,31 @@ class CameraVideoThread(QThread, QObject):
         return landmark_subset
 
     def run(self):
+        """Capture and process frames until stopped or the camera fails.
+
+        Runs in the thread when ``start()`` is called.
+
+        Notes
+        -----
+        For each frame:
+
+        1. The mean brightness (V channel in HSV) is measured.
+        2. ``MediaPipeFilter.apply_enhancements`` runs if
+           ``is_filter_enable_filter()``.
+        3. If ``is_enable_mediapipe_pose()``, the pose is detected and
+           smoothed, and the skeleton is drawn (green landmarks, red
+           connections). Timestamps are forced to increase by at least
+           1 ms, as MediaPipe VIDEO mode requires.
+        4. If ``is_telemetry_enable_panel()``, the panel shows FPS
+           (green at 15 or more, red below), brightness and the feet
+           tracking confidence: the mean ``visibility`` of landmarks 31
+           and 32, green above 0.5, red otherwise. The confidence is
+           shown as a 0-1 value although the label says "%".
+        5. The frame is emitted through ``change_pixmap_signal``.
+
+        When a frame cannot be read, ``error_signal`` is emitted and the
+        loop ends. The camera is released on exit.
+        """
         if self.service.is_windows():
             cap = cv2.VideoCapture(
                 self.camera_index, self.service.get_opencv_capture_backend()
@@ -72,15 +151,13 @@ class CameraVideoThread(QThread, QObject):
             ret, frame = cap.read()
 
             if ret:
-                # 1. CÁLCULO DE BRILHO (Para debug de Luz Plena)
+                # Brightness is measured to debug full-light scenes.
                 hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
                 avg_brightness = np.mean(hsv[:, :, 2])
 
-                # 2. PRÉ-PROCESSAMENTO: Filtros Automáticos
                 if self.service.is_filter_enable_filter():
                     frame = self.filter.apply_enhancements(frame)
 
-                # Cálculo de FPS
                 curr_time = time.time()
                 fps = (
                     1 / (curr_time - prev_time)
@@ -90,7 +167,6 @@ class CameraVideoThread(QThread, QObject):
                 prev_time = curr_time
 
                 if self.service.is_enable_mediapipe_pose():
-                    # Preparação para MediaPipe
                     timestamp_ms = int(time.time() * 1000)
                     if timestamp_ms <= self.last_timestamp_ms:
                         timestamp_ms = self.last_timestamp_ms + 1
@@ -101,19 +177,16 @@ class CameraVideoThread(QThread, QObject):
                         image_format=mp.ImageFormat.SRGB, data=rgb_frame
                     )
 
-                    # Processamento MediaPipe
                     result = self.mp_manager.detect_for_video(
                         mp_image, timestamp_ms
                     )
 
                     if result.pose_landmarks:
-                        # Suavização (agora aplicada a todos os pontos se desejar)
                         result.pose_landmarks = self.filter.smooth_landmarks(
                             result.pose_landmarks
                         )
 
                         for landmarks in result.pose_landmarks:
-                            # Desenha Esqueleto Completo
                             mp_drawing.draw_landmarks(
                                 frame,
                                 self._convert_to_proto(landmarks),
@@ -128,7 +201,7 @@ class CameraVideoThread(QThread, QObject):
                                 ),
                             )
 
-                            # Exibe Confiança dos Pés (Índices 31 e 32)
+                            # 31 and 32: left and right foot tips.
                             conf_esq = landmarks[31].visibility
                             conf_dir = landmarks[32].visibility
                             c_color = (
@@ -147,12 +220,11 @@ class CameraVideoThread(QThread, QObject):
                                     position=(
                                         15,
                                         50,
-                                    ),  # Y um pouco menor porque o PIL usa o topo do texto
+                                    ),  # Y is lower: PIL uses text top
                                     font_size=22,
                                     color=c_color,
                                 )
 
-                # UI de Telemetria
                 if self.service.is_telemetry_enable_panel():
                     fps_color = (0, 255, 0) if fps >= 15 else (0, 0, 255)
                     cv2.putText(
@@ -174,7 +246,6 @@ class CameraVideoThread(QThread, QObject):
                         2,
                     )
 
-                # Conversão para PySide
                 display_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 h, w, ch = display_rgb.shape
                 qt_img = QImage(
@@ -192,6 +263,7 @@ class CameraVideoThread(QThread, QObject):
         cap.release()
 
     def stop(self):
+        """Stop the capture loop and wait for the thread to finish."""
         self.running = False
         self.wait()
 
@@ -204,14 +276,37 @@ class CameraVideoThread(QThread, QObject):
         color=(255, 255, 255),
         font_path=None,
     ):
-        """Desenha texto com acentos no OpenCV usando PIL."""
-        # Converte BGR (OpenCV) → RGB (PIL)
+        """Draw Unicode text on an OpenCV image using PIL.
+
+        OpenCV's ``putText`` cannot render accented characters, so the
+        image is converted to PIL, drawn and converted back.
+
+        Parameters
+        ----------
+        img : numpy.ndarray
+            BGR image from OpenCV.
+        text : str
+            Text to draw.
+        position : tuple[int, int]
+            ``(x, y)`` of the top-left corner of the text.
+        font_size : int, optional
+            Font size in points. Default is 20.
+        color : tuple[int, int, int], optional
+            Text color in BGR. Default is white.
+        font_path : str | None, optional
+            TrueType font file. Default is None, which tries
+            ``DejaVuSans.ttf`` (Linux), then ``arial.ttf`` (Windows),
+            then PIL's default font.
+
+        Returns
+        -------
+        numpy.ndarray
+            New BGR image with the text drawn.
+        """
         img_pil = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
         draw = ImageDraw.Draw(img_pil)
 
-        # Fonte (pode ser uma TrueType do sistema)
         if font_path is None:
-            # Exemplos de fontes comuns no Linux/Windows
             try:
                 font = ImageFont.truetype("DejaVuSans.ttf", font_size)  # Linux
             except Exception:
@@ -226,5 +321,4 @@ class CameraVideoThread(QThread, QObject):
 
         draw.text(position, text, font=font, fill=color[::-1])  # BGR → RGB
 
-        # Converte de volta para OpenCV
         return cv2.cvtColor(np.array(img_pil), cv2.COLOR_RGB2BGR)

@@ -35,13 +35,16 @@ class HelpSchemeHandler(QWebEngineUrlSchemeHandler):
 
     Parameters
     ----------
-    parent : QObject or None, optional
-        Owner of the handler. It must live as long as the web profile.
+    parent : QObject | None, optional
+        Owner of the handler. It must live as long as the web
+        profile. Default is None.
 
     Attributes
     ----------
-    SCHEME : bytes
-        URL scheme served by this handler.
+    SCHEME : bytes, class attribute
+        URL scheme served by this handler (``b"qthelp"``).
+    _instance : HelpSchemeHandler | None, class attribute
+        Handler shared by every ``install`` call.
 
     Methods
     -------
@@ -69,6 +72,12 @@ class HelpSchemeHandler(QWebEngineUrlSchemeHandler):
 
         Qt requires both calls to happen before the QApplication is
         created.
+
+        Notes
+        -----
+        Also sets ``Qt.AA_ShareOpenGLContexts``. The scheme uses the
+        host syntax and is flagged secure, local and allowed to access
+        local content.
         """
         QCoreApplication.setAttribute(
             Qt.ApplicationAttribute.AA_ShareOpenGLContexts
@@ -116,6 +125,11 @@ class HelpSchemeHandler(QWebEngineUrlSchemeHandler):
         ----------
         job : QWebEngineUrlRequestJob
             Request made by the web view.
+
+        Notes
+        -----
+        The request fails with ``UrlNotFound`` when the engine has no
+        data for the URL (or no engine is installed yet).
         """
         data = self._file_data(job.requestUrl())
         if data.isEmpty():
@@ -137,7 +151,11 @@ class HelpSchemeHandler(QWebEngineUrlSchemeHandler):
         return self._engine.fileData(url)
 
     def _mime_type(self, url: QUrl) -> bytes:
-        """Return the MIME type for ``url`` based on its extension."""
+        """Return the MIME type for ``url`` based on its extension.
+
+        HTML, CSS and JavaScript are fixed; other types come from
+        ``QMimeDatabase``.
+        """
         path = url.path().lower()
         if path.endswith((".html", ".htm")):
             return b"text/html"

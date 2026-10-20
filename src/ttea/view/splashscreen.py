@@ -1,10 +1,10 @@
-"""
-Splash screen module for application startup display.
+"""Splash screen module for application startup display.
 
 This module provides a splash screen widget that displays an animated
 progress bar and rotating status messages during application
-initialization. It includes resource pre-loading for audio system
-warm-up to tests sounds on personal games configuration.
+initialization. It also creates a sound effect object once, to warm up
+the audio system before the sounds of the game configuration screens are
+tested.
 """
 
 from PySide6.QtCore import QPropertyAnimation, Qt, QTimer
@@ -16,12 +16,11 @@ from ttea.util import PathConfig
 
 
 class SplashScreen(QSplashScreen):
-    """
-    Splash screen widget for application startup with animated progress.
+    """Splash screen with animated progress for the application startup.
 
     Displays a splash screen during application initialization with a
-    status label and animated progress bar. Shows rotating status messages
-    every 1.2 seconds and includes sound effect initialization.
+    status label and animated progress bar. Shows rotating status
+    messages every 1.2 seconds and includes sound effect initialization.
 
     Attributes
     ----------
@@ -33,19 +32,15 @@ class SplashScreen(QSplashScreen):
     animation : QPropertyAnimation
         Animation object controlling the progress bar's value with
         infinite loop.
-    messages : list of str
+    messages : list[str]
         List of rotating status messages to display during loading.
     msg_index : int
-        Current index in the messages list, used by the timer
-        callback.
+        Current index in the messages list, used by the timer callback.
     timer : QTimer
         Timer object that triggers message updates every 1.2 seconds.
 
     Methods
     -------
-    __init__()
-        Initialize the splash screen with animated progress and
-        messages.
     _update_geometry()
         Update positions and sizes of child widgets based on splash
         size.
@@ -63,19 +58,11 @@ class SplashScreen(QSplashScreen):
     The progress bar operates in "indeterminate" mode (infinite
     animation) during startup. When finish() is called, it switches to
     determinate mode and shows 100% completion. The class supports
-    localization through QCoreApplication.translate() calls
-    (self.tr()).
+    localization: the messages are translated at runtime with
+    ``self.tr()``.
     """
 
     def __init__(self) -> None:
-        """
-        Initialize the splash screen with animated progress and
-        messages.
-
-        Sets up the splash screen widget with TTea logo, status label,
-        animated progress bar, and a timer for rotating status messages
-        every 1.2 seconds.
-        """
         pixmap = QPixmap(PathConfig.image("ttealogo"))
         if pixmap.isNull():
             # Fill with a black pixmap if the image fails to load
@@ -88,7 +75,7 @@ class SplashScreen(QSplashScreen):
         )
         self.setAttribute(Qt.WA_TranslucentBackground)
 
-        # Label de status
+        # Status label
         self.status_label = QLabel(self.tr("Iniciando aplicação..."), self)
         self.status_label.setAlignment(Qt.AlignCenter)
         self.status_label.setStyleSheet("""
@@ -144,17 +131,11 @@ class SplashScreen(QSplashScreen):
         self.timer.start(1200)
 
     def _update_geometry(self) -> None:
-        """
-        Update positions and sizes of child widgets based on splash
-        size.
+        """Fit the child widgets to the splash size.
 
         Repositions the progress bar and status label relative to the
         current splash screen dimensions to maintain proper layout when
         the window is resized.
-
-        Returns
-        -------
-        None
         """
         w = self.width()
         h = self.height()
@@ -163,23 +144,17 @@ class SplashScreen(QSplashScreen):
         self.status_label.setGeometry(0, h - 110, w, 40)
 
     def _next_message(self) -> None:
-        """
-        Rotate to the next status message in the message list.
+        """Rotate to the next status message in the message list.
 
         Updates the status label with the next message in the rotation
         and increments the message index. Called by the internal timer
         every 1.2 seconds.
-
-        Returns
-        -------
-        None
         """
         self.status_label.setText(self.messages[self.msg_index])
         self.msg_index = (self.msg_index + 1) % len(self.messages)
 
     def finish(self, main_window: QWidget) -> None:
-        """
-        Complete the splash screen animation and close the widget.
+        """Complete the splash screen animation and close the widget.
 
         Stops timers and animations, sets the progress bar to 100%
         completion, displays the final "Concluído!" message, and calls
@@ -190,12 +165,7 @@ class SplashScreen(QSplashScreen):
         ----------
         main_window : QWidget
             The main application window to display after splash closes.
-
-        Returns
-        -------
-        None
         """
-
         self.load_resource()
         self.timer.stop()
         self.animation.stop()
@@ -207,23 +177,17 @@ class SplashScreen(QSplashScreen):
         super().finish(main_window)
 
     def load_resource(self) -> None:
-        """
-        Initialize sound effect resources for warm-up.
+        """Initialize sound effect resources for warm-up.
 
         Instantiates a QSoundEffect object to ensure audio system
         initialization before the main application starts. This prevents
         audio-related delays during gameplay.
-
-        Returns
-        -------
-        None
         """
         # Warm up instance of sound libraries
         _ = QSoundEffect(self)
 
     def resizeEvent(self, event: QResizeEvent) -> None:
-        """
-        Handle resize events by updating widget geometry.
+        """Handle resize events by updating widget geometry.
 
         Calls the parent resize event handler and updates the positions
         of child widgets (progress bar and status label) to maintain
@@ -233,10 +197,6 @@ class SplashScreen(QSplashScreen):
         ----------
         event : QResizeEvent
             The resize event object containing size information.
-
-        Returns
-        -------
-        None
         """
         super().resizeEvent(event)
         self._update_geometry()

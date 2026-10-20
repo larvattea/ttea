@@ -1,3 +1,5 @@
+"""Institution/facility model: places where the platform is used."""
+
 from dataclasses import dataclass, fields
 from typing import ClassVar, Dict, List
 
@@ -5,21 +7,26 @@ from PySide6.QtCore import QT_TRANSLATE_NOOP
 
 
 def initialize_reflexive(cls):
-    """
-    Initialize class with reflexive properties metadata.
-
-    Populates PROPERTIES with all field names and DATA_PROPERTIES with
-    default values of initializable fields.
+    """Fill the reflection lists of a dataclass (class decorator).
 
     Parameters
     ----------
     cls : type
-        Class to decorate with reflexive properties.
+        Dataclass to decorate; it must already be a dataclass.
 
     Returns
     -------
     type
-        The decorated class with PROPERTIES and DATA_PROPERTIES attributes.
+        The same class, with ``PROPERTIES`` and ``DATA_PROPERTIES``
+        set.
+
+    Notes
+    -----
+    ``PROPERTIES`` receives the names of the dataclass fields, in
+    declaration order (``ClassVar`` names are not fields).
+    ``DATA_PROPERTIES`` receives the default value of each ``init``
+    field; a field without a default contributes
+    ``dataclasses.MISSING``.
     """
     cls.PROPERTIES = [field.name for field in fields(cls)]
     cls.DATA_PROPERTIES = [
@@ -52,30 +59,31 @@ class InstitutionFacility:
     social_network : str
         Social network or messaging endpoint.
     type : int
-        Integer key into TYPE_MAP describing facility type.
-
-    CLASS VARIABLES
-    ---------------
-    TYPE_MAP : ClassVar[dict[int, str]]
-        Mapping of facility type codes to translated names.
-        Used for internationalization via QCoreApplication.
-    PROPERTIES : ClassVar[list[str]]
-        List of property names for serialization.
-    DATA_PROPERTIES : ClassVar[list]
-        List of data property defaults for serialization.
+        Facility type code, a key of ``TYPE_MAP``.
+    TYPE_MAP : dict[int, str], class attribute
+        Facility type codes (0 to 7) to pt_BR type names; 0 is the
+        empty "no type" entry.
+    PROPERTIES : list[str], class attribute
+        Field names, filled by ``initialize_reflexive``.
+    DATA_PROPERTIES : list, class attribute
+        Field defaults, filled by ``initialize_reflexive``.
 
     Methods
     -------
     is_valid() -> bool
         Validate required fields.
-    set_data(data: Dict) -> None
-        Populate properties from a dict.
-    get_data() -> List[Dict]
-        Export properties as a list containing one dict.
+    set_data(data: dict) -> None
+        Populate fields from a dict.
+    get_data() -> list[dict]
+        Export fields as a list containing one dict.
 
     Notes
     -----
-    TYPE_MAP is used for localization via QCoreApplication.translate.
+    The ``TYPE_MAP`` names are marked with ``QT_TRANSLATE_NOOP`` in
+    the ``"InstitutionFacility"`` context: this only registers the
+    pt_BR source texts for pyside6-lupdate. They are translated at
+    display time with ``QCoreApplication.translate`` in that
+    context, so a language change takes effect immediately.
     """
 
     id: int
@@ -87,9 +95,6 @@ class InstitutionFacility:
     social_network: str
     type: int
 
-    # Mapping type with translation support using QT_TRANSLATE_NOOP
-    # for deferred translation. The translation will be applied when
-    # the type is accessed in the UI, allowing for dynamic language changes.
     TYPE_MAP: ClassVar[dict[int, str]] = {
         0: "",
         1: QT_TRANSLATE_NOOP("InstitutionFacility", "Clínica"),
@@ -107,13 +112,16 @@ class InstitutionFacility:
     def is_valid(self) -> bool:
         """Validate the facility object.
 
-        Ensures required fields are present and non-empty, and all other
-        fields are not None.
-
         Returns
         -------
         bool
             True if the object is valid, False otherwise.
+
+        Notes
+        -----
+        ``id`` must be an int, ``name`` must not be blank and ``type``
+        must be an int key of ``TYPE_MAP``; the other fields may be
+        empty but not None.
 
         Examples
         --------
@@ -124,7 +132,6 @@ class InstitutionFacility:
         >>> inst.is_valid()
         False
         """
-
         if self.id is None or not isinstance(self.id, int):
             return False
 
@@ -145,30 +152,37 @@ class InstitutionFacility:
         return True
 
     def set_data(self, data: Dict) -> None:
-        """Set object attributes from a dictionary.
+        """Update the fields from a dictionary.
 
         Parameters
         ----------
-        data : Dict
-            Dictionary mapping property names to their values.
+        data : dict
+            Values keyed by field name. Keys that are not fields are
+            ignored, and fields missing from ``data`` keep their value.
+
+        Notes
+        -----
+        No validation or type conversion is done.
 
         Examples
         --------
         >>> inst = InstitutionFacility(1, 'A', '', '', '', '', '', 0)
         >>> inst.set_data({'name': 'B', 'type': 1})
+        >>> inst.name
+        'B'
         """
-
         for prop in self.PROPERTIES:
             if prop in data:
                 setattr(self, prop, data[prop])
 
     def get_data(self) -> List[Dict]:
-        """Retrieve facility data as a list containing a dict.
+        """Return the field values as a one-item list.
 
         Returns
         -------
-        List[Dict]
-            List with a single dict containing all property values.
+        list[dict]
+            A list with one dictionary that maps each name of
+            ``PROPERTIES`` to its current value.
 
         Examples
         --------
@@ -176,6 +190,5 @@ class InstitutionFacility:
         >>> inst.get_data()[0]['name']
         'A'
         """
-
         info = {prop: getattr(self, prop) for prop in self.PROPERTIES}
         return [info]

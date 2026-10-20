@@ -1,10 +1,19 @@
+"""Controller of the game launch window: checks and game process.
+
+Attributes
+----------
+PSUTIL_AVAILABLE : bool
+    Whether ``psutil`` could be imported; without it, the game process
+    tree is not monitored or terminated as a whole.
+"""
+
 import os
 import subprocess
 import sys
 from datetime import datetime
 from typing import TYPE_CHECKING, Optional
 
-# Import opcional do psutil (não quebra o programa se não estiver instalado)
+# psutil is optional; the app still runs without it
 try:
     import psutil
 
@@ -18,7 +27,6 @@ from PySide6.QtCore import QObject, Qt, QTimer
 from ttea.model import AppModel, Calibration, CalibrationPoint
 from ttea.service import CalibrationService, PlayerGameLaunchService
 
-# Local module imports
 from ttea.util import MessageService
 
 if TYPE_CHECKING:
@@ -26,6 +34,42 @@ if TYPE_CHECKING:
 
 
 class PlayerGameLaunchController(QObject):
+    """Controller of the game launch window.
+
+    Validates the selection and the calibration, starts the chosen game
+    as a separate process and stops it when the window closes.
+
+    Parameters
+    ----------
+    view : PlayerGameLaunchView
+        The game launch dialog.
+    message_service : MessageService | None, optional
+        Service used to show messages. Default is None, which creates
+        ``MessageService(view)``.
+    service : PlayerGameLaunchService | None, optional
+        Launch service. Default is None, which creates a new one.
+    calibration_service : CalibrationService | None, optional
+        Calibration service. Default is None, which creates a new one.
+
+    Attributes
+    ----------
+    view : PlayerGameLaunchView
+        The game launch dialog.
+    msg : MessageService
+        Service used to show messages.
+    service : PlayerGameLaunchService
+        Launch service.
+    calibration_service : CalibrationService
+        Calibration service.
+    current_process : subprocess.Popen | None
+        Process of the running game, if any.
+    monitor_timer : QTimer | None
+        Timer that checks whether the game has started.
+
+    Notes
+    -----
+    All messages are translated with ``self.tr()``.
+    """
 
     def __init__(
         self,
@@ -43,7 +87,13 @@ class PlayerGameLaunchController(QObject):
         self.monitor_timer: Optional[QTimer] = None
 
     def handle_cancel(self) -> None:
-        """Trata o clique no botão Cancelar baseado no estado do jogo."""
+        """Close the window, asking first if a game is running.
+
+        Notes
+        -----
+        "No" is the default answer. The game itself is stopped by
+        ``cleanup`` when the window closes.
+        """
         if self.is_game_running():
             if self.msg.question(
                 self.tr(
@@ -59,6 +109,11 @@ class PlayerGameLaunchController(QObject):
             self.view.reject()
 
     def handle_game_info(self) -> None:
+        """Show the developers, version and years of the selected game.
+
+        A warning is shown when the metadata has no developers or
+        version.
+        """
         game_data = self.view.cbx_game.currentData()
 
         if game_data and game_data.developers and game_data.version:
@@ -83,21 +138,35 @@ class PlayerGameLaunchController(QObject):
             )
 
     def _find_by_id_calibration_point(self, calibration_point_id: int) -> bool:
+        """Return the saved calibration points, if any."""
         return self.calibration_service.find_by_id_calibration_point(
             calibration_point_id
         )
 
     def _find_by_id_calibration(self, calibration_id: int) -> bool:
+        """Return the saved hardware calibration, if any."""
         return self.calibration_service.find_by_id_calibration(calibration_id)
 
     def _verify_hardware_configuration(self) -> bool:
-        """
-        Verifica se os dispositivos físicos atuais coincidem com os dados
-        salvos no arquivo de calibração do hardware.
+        """Check that the saved camera and screen are still connected.
+
+        Returns
+        -------
+        bool
+            True if everything matches or the user chooses to start the
+            game anyway; False otherwise.
+
+        Notes
+        -----
+        The camera matches when a current camera has the saved ID or
+        description. The screen matches when the screen at the saved
+        index has the saved width and height and, if a model was saved,
+        the same model. Mismatches are listed in a question whose
+        default answer is "No".
         """
         mismatches = []
 
-        # Validação da Câmera
+        # Camera
         cam_info = self.calibration_service.get_camera_info()
         if cam_info:
             saved_cam_id = cam_info.get("camera_id")
@@ -120,7 +189,7 @@ class PlayerGameLaunchController(QObject):
                     ).format(cam_name)
                 )
 
-        # Validação do Monitor/Tela
+        # Screen
         screen_info = self.calibration_service.get_screen_info()
         if screen_info:
             saved_screen_pos = screen_info.get("screen_position", -1)
@@ -135,7 +204,6 @@ class PlayerGameLaunchController(QObject):
                 target_screen = current_screens[saved_screen_pos]
                 geo = target_screen.geometry()
 
-                # Valida compatibilidade de dimensões e modelo
                 if geo.width() == saved_width and geo.height() == saved_height:
                     if (
                         not saved_screen_model
@@ -153,7 +221,6 @@ class PlayerGameLaunchController(QObject):
                     ).format(screen_name, saved_width, saved_height)
                 )
 
-        # Exibição de Alerta ao Usuário
         if mismatches:
             details = "\n".join(mismatches)
             msg_text = self.tr(
@@ -164,13 +231,27 @@ class PlayerGameLaunchController(QObject):
                 "Deseja iniciar o jogo mesmo assim?"
             ).format(details)
 
-            # default_no=True para focar no 'Não' por segurança
+            # "No" is the default answer, to be safe
             return self.msg.question(msg_text, None, True)
 
         return True
 
     def launch_game(self):
-        """Valida e inicia o processo do jogo selecionado."""
+        """Validate the selection and start the selected game.
+
+        Notes
+        -----
+        A player, a professional and a game must be selected, no game
+        may be running, the game entry point must exist and both the
+        calibration points and the hardware calibration must be saved;
+        then ``_verify_hardware_configuration`` is checked.
+
+        The game runs in its folder with the arguments ``--lang``,
+        ``--player_id`` and ``--professional_id``; ``.py`` and ``.pyw``
+        entry points run with the current Python interpreter. On Windows
+        it starts in a new process group. The buttons stay disabled
+        until the game is up (checked every 500 ms) or for at most 7 s.
+        """
         game_data = self.view.cbx_game.currentData()
         player_id = self.view.cbx_player.currentData()
         professional_id = self.view.cbx_professional.currentData()
@@ -217,7 +298,6 @@ class PlayerGameLaunchController(QObject):
             )
             return
 
-        # Validação da calibração antes de iniciar o jogo
         if not self._find_by_id_calibration_point(CalibrationPoint.ID_VALUE):
             self.msg.warning(
                 self.tr(
@@ -227,7 +307,6 @@ class PlayerGameLaunchController(QObject):
             )
             return
 
-        # Validação do ambiente de hardware antes de iniciar o jogo
         if not self._find_by_id_calibration(Calibration.ID_VALUE):
             self.msg.warning(
                 self.tr(
@@ -237,7 +316,6 @@ class PlayerGameLaunchController(QObject):
             )
             return
 
-        # Validação do hardware antes de iniciar o jogo
         if not self._verify_hardware_configuration():
             return
 
@@ -264,46 +342,61 @@ class PlayerGameLaunchController(QObject):
                 professional_id,
             ]
 
-        # UX: desabilita botões durante o lançamento
+        # UX: disable the buttons while the game starts
         self.view.pb_play.setEnabled(False)
         self.view.pb_cancel.setEnabled(False)
         self.view.pb_play.setText(self.tr("Aguarde..."))
         self.view.repaint()
 
-        # Cria um novo grupo de processos (melhora o controle da árvore no Windows)
+        # A new process group gives better control of the process
+        # tree on Windows
         creationflags = (
             subprocess.CREATE_NEW_PROCESS_GROUP
             if sys.platform.startswith("win")
             else 0
         )
 
-        # Inicia o processo do jogo
         self.current_process = subprocess.Popen(
             cmd, cwd=folder, creationflags=creationflags
         )
 
-        # Monitora quando o jogo realmente abre a janela
+        # Poll until the game window is really open
         self.monitor_timer = QTimer(self)
         self.monitor_timer.timeout.connect(self._check_if_game_is_visible)
         self.monitor_timer.start(500)
 
-        # Proteção contra falha no lançamento
+        # Fallback in case the launch fails
         QTimer.singleShot(7000, self._restore_buttons_after_timeout)
 
     def _restore_buttons_after_timeout(self) -> None:
-        """Garante que a interface seja liberada após o tempo limite."""
+        """Re-enable the buttons if the game is still starting."""
         if self.monitor_timer and self.monitor_timer.isActive():
             self.monitor_timer.stop()
             self._restore_buttons_state()
 
     def is_game_running(self) -> bool:
-        """Retorna True se existe um jogo realmente em execução."""
+        """Check whether the game process is still running.
+
+        Returns
+        -------
+        bool
+            True if a game process exists and has not exited.
+        """
         return bool(
             self.current_process and self.current_process.poll() is None
         )
 
     def _check_if_game_is_visible(self) -> None:
-        """Verifica se o processo do jogo já abriu uma janela gráfica."""
+        """Check whether the game is up and re-enable the buttons.
+
+        Notes
+        -----
+        Called by ``monitor_timer``. If the process has exited, the
+        buttons are restored. Without ``psutil`` the game is considered
+        ready at once. Otherwise, on Windows a process of the tree must
+        be running with more than one thread; on other systems it must
+        be running or sleeping. Errors are ignored.
+        """
         if not self.current_process or self.current_process.poll() is not None:
             if self.monitor_timer and self.monitor_timer.isActive():
                 self.monitor_timer.stop()
@@ -311,8 +404,8 @@ class PlayerGameLaunchController(QObject):
             return
 
         if not PSUTIL_AVAILABLE:
-            # Sem psutil, liberamos os botões imediatamente para o usuário
-            # já que não temos como monitorar o estado das threads.
+            # Without psutil the threads cannot be checked, so the
+            # buttons are released at once.
             self._game_ready()
             return
 
@@ -339,19 +432,25 @@ class PlayerGameLaunchController(QObject):
             pass
 
     def _game_ready(self) -> None:
-        """Chamado quando o jogo está pronto (janela visível)."""
+        """Stop the monitor timer and re-enable the buttons."""
         if self.monitor_timer and self.monitor_timer.isActive():
             self.monitor_timer.stop()
         self._restore_buttons_state()
 
     def _restore_buttons_state(self) -> None:
-        """Restaura o estado original dos botões da interface."""
+        """Restore the text and state of the Play and Cancel buttons."""
         self.view.pb_play.setText(self.tr("Jogar"))
         self.view.pb_play.setEnabled(True)
         self.view.pb_cancel.setEnabled(True)
 
     def update_tooltip(self, index):
-        """Atualiza o tooltip do combobox quando o jogo selecionado muda."""
+        """Show the tooltip of the selected game on the game combo box.
+
+        Parameters
+        ----------
+        index : int
+            Index of the selected game; negative values are ignored.
+        """
         if index >= 0:
             novo_hint = self.view.cbx_game.itemData(
                 index, Qt.ItemDataRole.ToolTipRole
@@ -359,9 +458,18 @@ class PlayerGameLaunchController(QObject):
             self.view.cbx_game.setToolTip(novo_hint)
 
     def cleanup(self) -> None:
-        """Encerra o jogo e todos os seus processos filhos quando a janela é fechada."""
+        """Stop the game and all its child processes.
+
+        Notes
+        -----
+        Called when the window closes. With ``psutil``, the children and
+        the game are terminated, and those still alive after 2 s are
+        killed; without it, only the game process is terminated (and
+        killed on error). The monitor timer is stopped and the buttons
+        are restored in every case.
+        """
         if not self.is_game_running():
-            # Limpeza final mesmo sem processo rodando
+            # Clean up even when no game is running
             if self.monitor_timer and self.monitor_timer.isActive():
                 self.monitor_timer.stop()
             self.current_process = None
@@ -373,19 +481,18 @@ class PlayerGameLaunchController(QObject):
                 parent = psutil.Process(self.current_process.pid)
                 children = parent.children(recursive=True)
 
-                # Tenta encerramento gracioso
+                # Try a graceful shutdown first
                 for child in children:
                     child.terminate()
                 parent.terminate()
 
-                # Aguarda
                 _, alive = psutil.wait_procs(children + [parent], timeout=2.0)
 
-                # Força kill no que sobrar
+                # Kill whatever is still alive
                 for survivor in alive:
                     survivor.kill()
             else:
-                # Fallback sem psutil
+                # Fallback without psutil
                 self.current_process.terminate()
                 self.current_process.wait(timeout=2.0)
 

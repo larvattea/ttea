@@ -1,3 +1,9 @@
+"""MediaPipe pose landmarker setup for the camera pipeline.
+
+Builds a MediaPipe Tasks ``PoseLandmarker`` from the calibration
+settings and exposes per-frame pose detection.
+"""
+
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
 
@@ -6,6 +12,30 @@ from ttea.util import PathConfig
 
 
 class MediaPipeManager:
+    """Create and hold the MediaPipe pose landmarker.
+
+    The model file and detector options come from
+    ``CalibrationService``.
+
+    Attributes
+    ----------
+    service : CalibrationService
+        Source of the MediaPipe settings.
+    detector : mediapipe.tasks.python.vision.PoseLandmarker
+        The configured pose landmarker.
+
+    Notes
+    -----
+    On a Raspberry Pi the embedded model is loaded
+    (``get_mediapipe_model_embedded``); on other systems the desktop
+    model (``get_mediapipe_model_desktop``). Both are resolved with
+    ``PathConfig.model``.
+
+    The running mode, number of poses and the minimum detection,
+    presence and tracking confidences are also read from the
+    service when the object is created.
+    """
+
     def __init__(self):
         self.service = CalibrationService()
 
@@ -31,5 +61,25 @@ class MediaPipeManager:
         self.detector = vision.PoseLandmarker.create_from_options(options)
 
     def detect_for_video(self, mp_image, timestamp_ms):
-        """Executa a detecção de pose para um frame de vídeo."""
+        """Run pose detection on one video frame.
+
+        Parameters
+        ----------
+        mp_image : mediapipe.Image
+            Frame to analyze, in SRGB format.
+        timestamp_ms : int
+            Frame timestamp in milliseconds.
+
+        Returns
+        -------
+        mediapipe.tasks.python.vision.PoseLandmarkerResult
+            Detection result, with ``pose_landmarks`` holding one
+            landmark list per detected pose.
+
+        Notes
+        -----
+        Only valid when the landmarker runs in VIDEO mode. MediaPipe
+        requires ``timestamp_ms`` to increase monotonically between
+        calls; ``CameraVideoThread.run`` takes care of that.
+        """
         return self.detector.detect_for_video(mp_image, timestamp_ms)

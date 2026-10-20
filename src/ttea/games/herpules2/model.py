@@ -1,3 +1,5 @@
+"""Game state of Herpules 2: hero, obstacles, scenery and score."""
+
 import pygame
 from entidades.hercules import Hercules
 from entidades.obstaculos import Obstaculo
@@ -6,27 +8,48 @@ from entidades.chao import Chao
 
 
 class GameModel:
-    """Gerencia o estado lógico, física e regras do jogo.
+    """Game state, physics and rules.
 
-    Essa classe mantém os dados principais do jogo, como pontuação, estado da
-    partida, jogador, obstáculos, chão e céu, além de controlar a atualização
-    das entidades durante a execução.
+    Parameters
+    ----------
+    largura : int
+        Screen width in pixels.
+    altura : int
+        Screen height in pixels.
+    velocidade_obstaculo : int, optional
+        Obstacle speed. Default is 5.
+
+    Attributes
+    ----------
+    largura, altura : int
+        Screen size in pixels.
+    velocidade_obstaculo : int
+        Obstacle speed given to the model.
+    score : int
+        Obstacles passed in the current game.
+    estado : str
+        Game state: ``"menu"``, ``"calibracao"``, ``"contagem"``,
+        ``"jogando"`` or ``"game_over"``.
+    contagem_numero : int
+        Current countdown number (starts at 3).
+    grupo_jogador : pygame.sprite.GroupSingle
+        Group with the hero.
+    hercules : Hercules
+        The hero, standing at (70, 400).
+    grupo_obstaculos : pygame.sprite.Group
+        Obstacles on screen.
+    chao : Chao
+        Ground at y = 400 px, speed 3.
+    ceu : Ceu
+        Sky, speed 1.
     """
 
     def __init__(self, largura, altura, velocidade_obstaculo=5):
-        """Inicializa o modelo do jogo com as dimensões e os elementos centrais.
-
-        Args:
-            largura (int): Largura da tela em pixels.
-            altura (int): Altura da tela em pixels.
-            velocidade_obstaculo (int, optional): Velocidade base usada para
-                movimentação dos obstáculos. Padrão é 5.
-        """
         self.largura = largura
         self.altura = altura
         self.velocidade_obstaculo = velocidade_obstaculo
         self.score = 0
-        self.estado = 'menu'  # menu, calibracao ,contagem, jogando, game_over
+        self.estado = 'menu'
         self.contagem_numero = 3
 
         self.grupo_jogador = pygame.sprite.GroupSingle()
@@ -38,20 +61,16 @@ class GameModel:
         self.ceu = Ceu(vel=1, largura_tela=largura)
 
     def iniciar_jogo(self):
-        """Prepara a partida para começar a contagem inicial do jogo."""
+        """Start the countdown (from 3) before the game."""
         self.estado = 'contagem'
         self.contagem_numero = 3
 
     def iniciar_calibracao(self):
-        """Coloca o jogo no estado de calibração antes de iniciar a partida."""
+        """Enter the calibration state."""
         self.estado = 'calibracao'
 
     def resetar_jogo(self):
-        """Reinicia o estado do jogo para o início da tela inicial.
-
-        Reseta a pontuação, os obstáculos, a posição e animação do herói e
-        retorna o jogo ao menu principal.
-        """
+        """Reset score, obstacles and hero, and go back to the menu."""
         self.score = 0
         self.grupo_obstaculos.empty()
         self.hercules.rect.midbottom = (70, 400)
@@ -65,10 +84,13 @@ class GameModel:
         self.contagem_numero = 3
 
     def adicionar_obstaculo(self):
-        """Cria um novo obstáculo quando a distância mínima for respeitada.
+        """Add an obstacle if the last one is far enough.
 
-        Evita que obstáculos sejam gerados muito próximos uns dos outros,
-        mantendo o cenário mais consistente e jogável.
+        Notes
+        -----
+        Nothing is added while the rightmost obstacle is within 300 px
+        of the right edge. New obstacles always move at speed 5:
+        ``velocidade_obstaculo`` is not used. TODO(doc): should it be?
         """
         distancia_minima = 300
 
@@ -82,15 +104,26 @@ class GameModel:
         self.grupo_obstaculos.add(obs)
 
     def update(self, input_state):
-        """Atualiza a lógica do jogo conforme o estado atual e a entrada do usuário.
+        """Update the game for one frame.
 
-        Args:
-            input_state: Objeto contendo as entradas do jogador, como pulo,
-                agachar e demais flags relevantes.
+        Parameters
+        ----------
+        input_state : InputState
+            Input of the frame.
 
-        Returns:
-            str | None: Retorna "colisao" quando ocorre uma colisão; caso
-                contrário, retorna None.
+        Returns
+        -------
+        str | None
+            ``"colisao"`` when the hero hits an obstacle (pixel-perfect,
+            by mask); otherwise None.
+
+        Notes
+        -----
+        While playing, the hero jumps and crouches, the obstacles move
+        and each obstacle that passes the hero adds one point. In the
+        menu, calibration and countdown only the hero animates. The sky
+        and ground scroll while the hero moves. Nothing changes on the
+        game over screen.
         """
         if self.estado == "jogando":
             if input_state.pular:
@@ -126,7 +159,7 @@ class GameModel:
                 self.chao.update()
 
         elif self.estado == "game_over":
-            # não atualiza nada para tudo ficar parado
+            # Nothing is updated, so the scene stays frozen.
             pass
 
         return None

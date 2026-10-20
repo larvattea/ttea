@@ -1,7 +1,7 @@
 """Package for window management utilities in the T-TEA platform.
 
 This package provides tools for window layout, icon, title, and size
-management in the exergame application.
+management in the application windows.
 
 Attributes
 ----------
@@ -17,7 +17,7 @@ __license__ : str
 See Also
 --------
 WindowConfig
-    Manages window layout and appearance settings.
+    Mixin that sets the title, icon, size and position of a window.
 
 Notes
 -----

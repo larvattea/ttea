@@ -1,8 +1,9 @@
+"""Controller of the institution facility list window."""
+
 from typing import TYPE_CHECKING, Callable, Dict
 
 from PySide6.QtCore import QObject
 
-# Local module import
 from ttea.exception import BusinessRuleException
 from ttea.service import InstitutionFacilityService
 from ttea.util import MessageService
@@ -15,73 +16,52 @@ if TYPE_CHECKING:
 
 
 class InstitutionFacilityListController(QObject):
-    """
-    Lightweight controller that orchestrates InstitutionFacilityListView
-    and InstitutionFacilityService.
+    """Controller of the institution facility list window (MVCS).
 
-    Follows MVCS pattern: mediates between view and service layer,
-    handling user interactions and updating the UI accordingly.
+    Mediates between ``InstitutionFacilityListView`` and
+    ``InstitutionFacilityService``: loads and filters the table, shows
+    the details of the selected institution facility and opens the edit
+    dialog to create or update institution facilities.
+
+    Parameters
+    ----------
+    view : InstitutionFacilityListView
+        The list view.
+    factory : Callable
+        Creates the edit dialog: ``factory(parent,
+        institutionfacility=None)`` returns
+        ``InstitutionFacilityEditView``.
 
     Attributes
     ----------
     view : InstitutionFacilityListView
-        Main view displaying the list and details of institutionfacilities.
+        The list view.
     factory : Callable
-        Factory function that creates a ``InstitutionFacilityEditView`` dialog,
-        receiving the parent view and an optional institutionfacility to edit.
+        Factory of the edit dialog.
     service : InstitutionFacilityService
-        Business logic layer for institutionfacility CRUD operations.
+        Shared service of institution facilities.
     msg : MessageService
-        Helper for showing info, warning, and error messages.
+        Service used to show messages.
 
-    Methods
-    -------
-    __init__(view, institutionfacility_edit_view_factory)
-        Initializes the controller with view and edit dialog factory.
-    load_institutionfacilities(query="")
-        Loads and displays institutionfacilities, optionally filtered
-        by search term.
-    filter_institutionfacilities(text)
-        Filters the institutionfacility list based on the search input text.
-    on_table_selection()
-        Updates details panel when a table row is selected.
-    select_and_show_institutionfacility(institutionfacility_id)
-        Selects a institutionfacility row and shows its details.
-    handle_new_institutionfacility()
-        Opens dialog to create a new institutionfacility.
-    handle_edit_institutionfacility()
-        Opens dialog to edit the selected institutionfacility.
-    delete_institutionfacility()
-        Deletes the selected institutionfacility after confirmation.
+    Notes
+    -----
+    The table is reloaded automatically when the service emits
+    ``institutionfacility_change`` (observer pattern), keeping the
+    current search text. The buttons, search field and table selection
+    are connected when the controller is created, and the table is
+    loaded right away. Messages are translated with ``self.tr()``.
     """
 
     def __init__(
         self, view: "InstitutionFacilityListView", factory: Callable
     ) -> None:
-        """
-        Initialize the controller.
-
-        Parameters
-        ----------
-        view : InstitutionFacilityListView
-            The main list view instance to control.
-        institutionfacility_edit_view_factory : Callable
-            Function that returns a ``InstitutionFacilityEditView`` dialog.
-            Signature: (parent_view, institutionfacility)
-            -> InstitutionFacilityEditView.
-        """
         self.view = view
         self.factory = factory
         self.service = InstitutionFacilityService()
         self.msg = MessageService(self.view)
 
-        # ------------------------------------------------------------------
-        # OBSERVER PATTERN: Conexão reativa
-        # ------------------------------------------------------------------
-        # Sempre que o serviço emitir que os dados mudaram, a lista recarrega.
         self.service.institutionfacility_change.connect(self.reload_data)
 
-        # Events signals and slots
         self.view.pb_new.clicked.connect(self.create_institutionfacility)
         self.view.pb_edit.clicked.connect(self.update_institutionfacility)
         self.view.pb_delete.clicked.connect(self.delete_institutionfacility)
@@ -92,13 +72,19 @@ class InstitutionFacilityListController(QObject):
             self.on_table_selection
         )
 
-        # Carga inicial
         self.load_institutionfacilities()
 
     def reload_data(self, target_id: int = 0) -> None:
-        """
-        Slot que reage ao sinal do Service.
-        Mantém o filtro atual ao recarregar.
+        """Reload the table after a change in the service.
+
+        Slot of
+        ``InstitutionFacilityService.institutionfacility_change``.
+
+        Parameters
+        ----------
+        target_id : int, optional
+            ID to select after reloading. With 0 (default), the
+            currently selected row is kept.
         """
         if target_id == 0:
             target_id = self.view.get_selected_id() or 0
@@ -110,15 +96,17 @@ class InstitutionFacilityListController(QObject):
             self.view.select_row_by_id(target_id)
 
     def load_institutionfacilities(self, query: str = "") -> None:
-        """
-        Load load_institutionfacilities from service
-        and populate the table view.
+        """Load the institution facilities matching ``query``.
 
         Parameters
         ----------
         query : str, optional
-            Search term to filter institutionfacilities
-            (default is empty string).
+            Search term; empty lists all institution facilities. Default
+            is ``""``.
+
+        Notes
+        -----
+        The details panel is cleared.
         """
         institutionfacilities = self.service.search_institutionfacilities(
             query
@@ -127,12 +115,17 @@ class InstitutionFacilityListController(QObject):
         self.view.clear_details()
 
     def filter_institutionfacilities(self, text: str) -> None:
-        """Filter institutionfacility list based on search input text."""
+        """Filter the table with the search text.
+
+        Parameters
+        ----------
+        text : str
+            Text typed in the search field; it is stripped.
+        """
         self.load_institutionfacilities(text.strip())
 
     def on_table_selection(self) -> None:
-        """Update details pane when a institutionfacility
-        is selected in the table."""
+        """Show the details of the selected institution facility."""
         institutionfacility_id = self.view.get_selected_id()
         if institutionfacility_id:
             institutionfacility = self.service.find_by_id(
@@ -145,8 +138,7 @@ class InstitutionFacilityListController(QObject):
             self.view.clear_details()
 
     def create_institutionfacility(self) -> None:
-        """Open dialog to create a new institutionfacility
-        and save if accepted."""
+        """Create an institution facility through the edit dialog."""
         dialog: "InstitutionFacilityEditView" = self.factory(self.view, None)
         if dialog.exec():
             data = dialog.controller.get_data()
@@ -162,8 +154,12 @@ class InstitutionFacilityListController(QObject):
                 )
 
     def update_institutionfacility(self) -> None:
-        """Open dialog to edit the selected institutionfacility
-        and update if accepted."""
+        """Edit the selected institution facility in the edit dialog.
+
+        Notes
+        -----
+        A warning is shown when no row is selected.
+        """
         institutionfacility_id = self.view.get_selected_id()
         if not institutionfacility_id:
             self.msg.warning(
@@ -199,7 +195,14 @@ class InstitutionFacilityListController(QObject):
                 )
 
     def delete_institutionfacility(self) -> None:
-        """Delete the selected institutionfacility after user confirmation."""
+        """Delete the selected institution facility after confirmation.
+
+        Notes
+        -----
+        A warning is shown when no row is selected.
+        ``BusinessRuleException`` from the service (e.g. a linked
+        record) is shown as a warning.
+        """
         institutionfacility_id = self.view.get_selected_id()
         if not institutionfacility_id:
             self.msg.warning(
@@ -234,4 +237,11 @@ class InstitutionFacilityListController(QObject):
                 self.msg.warning(str(e))
 
     def get_institutionfacility_types(self) -> Dict[int, str]:
+        """Return the institution facility types with translated names.
+
+        Returns
+        -------
+        dict[int, str]
+            Type code to translated name, from the service.
+        """
         return self.service.get_institutionfacility_types()

@@ -28,7 +28,7 @@ Notes
 -----
 This package is maintained by the Larva UDESC team and is under active
 development. Contributions and bug reports are welcome at:
-https://github.com/larva-udesc/udesc_ttea_view
+https://github.com/larvattea/ttea
 """
 
 __all__ = [

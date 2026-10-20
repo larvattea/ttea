@@ -1,3 +1,5 @@
+"""Controller of the automatic calibration with a ChArUco board."""
+
 import time
 from typing import TYPE_CHECKING, Dict, Optional
 
@@ -21,6 +23,64 @@ mp_pose = mp.solutions.pose
 
 
 class AutomaticCalibrationController(QObject):
+    """Controller of the automatic calibration.
+
+    The view shows a ChArUco board on the projection screen; this
+    controller reads the camera, detects the board, estimates where the
+    screen corners are in the camera image and saves them as
+    ``CalibrationPoint``.
+
+    Parameters
+    ----------
+    view : AutomaticCalibrationView
+        The automatic calibration dialog.
+    camera_index : int
+        OpenCV index of the camera.
+    monitor_index : int
+        Index of the projection screen.
+    service : CalibrationService | None, optional
+        Calibration service. Default is None, which creates a new
+        ``CalibrationService``.
+
+    Attributes
+    ----------
+    msg_info_signal : Signal(str)
+        Emitted with a translated information message.
+    msg_warning_signal : Signal(str)
+        Emitted with a translated warning message.
+    msg_critical_signal : Signal(str)
+        Emitted with a translated error message.
+    close_view_signal : Signal()
+        Declared for the view; not emitted by this class.
+    view : AutomaticCalibrationView
+        The automatic calibration dialog.
+    service : CalibrationService
+        Calibration service (settings and saving).
+    monitor_index : int
+        Index of the projection screen.
+    camera_index : int
+        OpenCV index of the camera.
+    camera : None
+        Not used: ``run_auto_calibration`` opens its own capture.
+    modo_preview : bool
+        True while a captured sample is shown for confirmation.
+    monitor_screen : str
+        Translated title of the OpenCV window.
+    monitor_window : str
+        ASCII name of the OpenCV window (``CvText.window_name``).
+    pose_detector : vision.PoseLandmarker
+        MediaPipe pose landmarker, configured from the settings.
+    calibration_points : numpy.ndarray
+        ``(4, 2)`` int64 array with the corners to save.
+
+    Notes
+    -----
+    Messages are sent through the signals so the view shows them. The
+    window title is translated with ``QCoreApplication.translate`` in
+    the ``"AutomaticCalibrationController"`` context, and messages with
+    ``self.tr()``.
+    """
+
     msg_info_signal = Signal(str)
     msg_warning_signal = Signal(str)
     msg_critical_signal = Signal(str)
@@ -48,7 +108,7 @@ class AutomaticCalibrationController(QObject):
         # accents) is shown with CvText.set_window_title.
         self.monitor_window: str = CvText.window_name(self.monitor_screen)
 
-        # ==================== MediaPipe Tasks (Pose Landmarker) =============
+        # MediaPipe Tasks (Pose Landmarker)
         if self.service.is_raspberry_pi():
             model_path = PathConfig.model(
                 self.service.get_mediapipe_model_embedded()
@@ -68,12 +128,22 @@ class AutomaticCalibrationController(QObject):
             min_tracking_confidence=self.service.get_mediapipe_detection_tracking(),
         )
         self.pose_detector = vision.PoseLandmarker.create_from_options(options)
-        # ========================================================================
 
         self.calibration_points = np.zeros((4, 2), dtype=np.int64)
 
     def numpy_to_pixmap(self, img: np.ndarray) -> QPixmap:
-        """Converte um ndarray do OpenCV (Grayscale ou BGR) para QPixmap do PySide6."""
+        """Convert an OpenCV image to a ``QPixmap``.
+
+        Parameters
+        ----------
+        img : numpy.ndarray
+            Grayscale (2-D) or BGR (3-D) ``uint8`` image.
+
+        Returns
+        -------
+        QPixmap
+            The image as a pixmap.
+        """
         if len(img.shape) == 2:  # Grayscale
             height, width = img.shape
             bytes_per_line = width
@@ -98,9 +168,22 @@ class AutomaticCalibrationController(QObject):
         return QPixmap.fromImage(q_img)
 
     def generate_board_pixmap(self) -> QPixmap:
-        """
-        Gera a imagem do tabuleiro ChArUco ajustada às dimensões do monitor/projetor
-        e a converte para QPixmap para ser exibida na tela do PySide6.
+        """Create the ChArUco board image for the screen.
+
+        Returns
+        -------
+        QPixmap
+            Board with ``get_automatic_num_columns()`` by
+            ``get_automatic_num_rows()`` squares, stretched to the
+            available screen size.
+
+        Notes
+        -----
+        The square size is the mean of the screen width per column and
+        the screen height per row; the marker size is that value times
+        ``get_automatic_multiplier()``. The board is drawn at 100 px per
+        square with ``get_automatic_margin()`` and resized with nearest
+        neighbor interpolation.
         """
         screen_geometry = self.get_available_geometry_of_screen(
             self.monitor_index
@@ -152,9 +235,23 @@ class AutomaticCalibrationController(QObject):
         screen_width: int,
         screen_height: int,
     ) -> Optional[np.ndarray]:
-        """
-        Método auxiliar privado que processa um frame da câmera, detecta os marcadores
-        ChArUco, estima a homografia e retorna os 4 vértices projetados da tela.
+        """Return the screen corners found in a camera frame.
+
+        Detects the ArUco markers, interpolates the ChArUco corners,
+        estimates the homography from board to camera (RANSAC, 5 px) and
+        projects the screen corners with it.
+
+        Returns
+        -------
+        numpy.ndarray | None
+            ``(4, 2)`` int array with the camera positions of the screen
+            corners top-left, top-right, bottom-left, bottom-right; None
+            if fewer than 4 ChArUco corners are found or the homography
+            fails.
+
+        Notes
+        -----
+        ChArUco errors are reported through ``msg_warning_signal``.
         """
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         corners, ids, _ = detector.detectMarkers(gray)
@@ -214,7 +311,11 @@ class AutomaticCalibrationController(QObject):
     def _draw_quadrilateral(
         self, img: np.ndarray, vertices: np.ndarray, with_labels: bool = False
     ) -> None:
-        """Desenha o polígono e os pontos identificadores no frame."""
+        """Draw the detected screen outline and corners on a frame.
+
+        With ``with_labels``, the corners are labeled SE, SD, IE, ID
+        (Portuguese for top-left, top-right, bottom-left, bottom-right).
+        """
         render_pts = np.array(
             [vertices[0], vertices[1], vertices[3], vertices[2]],
             dtype=np.int32,
@@ -255,24 +356,40 @@ class AutomaticCalibrationController(QObject):
                 )
 
     def run_auto_calibration(self) -> None:
-        """
-        Lógica de leitura da câmera, detecção do ChArUco e cálculo da calibração.
-        A exibição do tabuleiro é gerenciada pela View do PySide6.
+        """Detect the board in the camera and save the corners.
+
+        Notes
+        -----
+        Keys in the OpenCV window:
+
+        - S: close the window, wait 1 s, discard 5 buffered frames and
+          detect the board on a clean frame; on success, show it as a
+          sample (preview mode).
+        - R: discard the sample and resume tracking.
+        - ESC: save the sample corners (if any) and finish; without a
+          sample, finish without saving.
+
+        The corners are saved as the screen's top-right, top-left,
+        bottom-right, bottom-left corners in the camera image. With
+        ``is_automatic_mirror_mode()``, the x coordinates become ``frame
+        width - x``, so the saved order is the same in the mirrored
+        image. TODO(doc): the manual calibration saves the clicks as
+        top-left, top-right, bottom-left, bottom-right; is the different
+        order intended?
+
+        Errors are reported through ``msg_critical_signal``; the camera
+        is released and all OpenCV windows are closed at the end.
         """
         cap = None
         try:
-            # -------------------------------------------------
-            # DETECÇÃO E MÉTRICAS DA TELA
-            # -------------------------------------------------
+            # --- Screen metrics ---
             screen_geometry = self.get_available_geometry_of_screen(
                 self.monitor_index
             )
             screen_width = screen_geometry.width()
             screen_height = screen_geometry.height()
 
-            # -------------------------------------------------
-            # CONFIGURAÇÃO DO CHARUCO
-            # -------------------------------------------------
+            # --- ChArUco board ---
             aruco_cols = self.service.get_automatic_num_columns()
             aruco_rows = self.service.get_automatic_num_rows()
 
@@ -294,9 +411,7 @@ class AutomaticCalibrationController(QObject):
                 dictionary,
             )
 
-            # -------------------------------------------------
-            # CONFIGURAÇÃO DA CÂMERA
-            # -------------------------------------------------
+            # --- Camera ---
             cap = cv2.VideoCapture(
                 self.camera_index, self.service.get_opencv_capture_backend()
             )
@@ -313,9 +428,7 @@ class AutomaticCalibrationController(QObject):
             last_camera_vertices = None
             frozen_frame = None
 
-            # -------------------------------------------------
-            # LOOP PRINCIPAL
-            # -------------------------------------------------
+            # --- Main loop ---
             while True:
                 if not self.modo_preview:
                     if not cap.isOpened():
@@ -333,7 +446,6 @@ class AutomaticCalibrationController(QObject):
                         )
                         break
 
-                    # Processamento da geometria utilizando o método modularizado
                     vertices = self._process_frame_geometry(
                         frame,
                         detector,
@@ -379,7 +491,7 @@ class AutomaticCalibrationController(QObject):
                 cv2.imshow(self.monitor_window, display_frame)
                 key = cv2.waitKey(1) & 0xFF
 
-                # --- AÇÃO S: FECHAMENTO DA JANELA E CAPTURA LIMPA ---
+                # --- S: hide the window and take a clean capture ---
                 if (
                     key == ord("s") or key == ord("S")
                 ) and not self.modo_preview:
@@ -388,7 +500,8 @@ class AutomaticCalibrationController(QObject):
 
                     time.sleep(1.0)
 
-                    # Descarte seguro de buffer com verificação de cabo puxado
+                    # Drop buffered frames; a failed grab means the
+                    # camera was disconnected.
                     buffer_ok = True
                     for _ in range(5):
                         if not cap.grab():
@@ -448,7 +561,7 @@ class AutomaticCalibrationController(QObject):
                         self.monitor_window, self.monitor_screen
                     )
 
-                # --- AÇÃO R: VOLTA AO RASTREAMENTO REAL ---
+                # --- R: back to live tracking ---
                 elif (
                     key == ord("r") or key == ord("R")
                 ) and self.modo_preview:
@@ -458,7 +571,7 @@ class AutomaticCalibrationController(QObject):
                         self.tr("Captura descartada. Rastreio reativado.")
                     )
 
-                # --- AÇÃO ESC: SALVA E FECHA ---
+                # --- ESC: save and close ---
                 elif key == 27:
                     if self.modo_preview and last_camera_vertices is not None:
                         se, sd, ie, id_pt = last_camera_vertices
@@ -467,10 +580,10 @@ class AutomaticCalibrationController(QObject):
                             largura_cam = frozen_frame.shape[1]
                             self.calibration_points = np.array(
                                 [
-                                    [largura_cam - se[0], se[1]],  # SD
-                                    [largura_cam - sd[0], sd[1]],  # SE
-                                    [largura_cam - ie[0], ie[1]],  # ID
-                                    [largura_cam - id_pt[0], id_pt[1]],  # IE
+                                    [largura_cam - se[0], se[1]],  # TR
+                                    [largura_cam - sd[0], sd[1]],  # TL
+                                    [largura_cam - ie[0], ie[1]],  # BR
+                                    [largura_cam - id_pt[0], id_pt[1]],  # BL
                                 ],
                                 dtype=np.int64,
                             )
@@ -499,11 +612,25 @@ class AutomaticCalibrationController(QObject):
     def get_available_geometry_of_screen(
         self, monitor_index: Optional[int] = None
     ) -> Optional[QRect]:
+        """Return the available geometry of a screen.
+
+        Parameters
+        ----------
+        monitor_index : int | None, optional
+            Screen index. Default is None, which uses ``monitor_index``.
+
+        Returns
+        -------
+        QRect | None
+            The available geometry, or None if the index is out of
+            range.
+        """
         if monitor_index is None:
             monitor_index = self.monitor_index
         return self.service.get_available_geometry_of_screen(monitor_index)
 
     def create_calibration_point(self) -> None:
+        """Save the corners and report the result."""
         data = self.get_data()
         if self.service.create_calibration_point(data):
             self.msg_info_signal.emit(
@@ -515,7 +642,14 @@ class AutomaticCalibrationController(QObject):
             )
 
     def get_data(self) -> Dict[str, int]:
-        """Extrai os pontos de calibração utilizando as propriedades definidas no model."""
+        """Return the corners as ``CalibrationPoint`` field values.
+
+        Returns
+        -------
+        dict[str, int]
+            ``pointx1``, ``pointy1``... ``pointy4`` from
+            ``calibration_points``.
+        """
         flat_points = self.calibration_points.flatten().tolist()
         return {
             prop: int(val)

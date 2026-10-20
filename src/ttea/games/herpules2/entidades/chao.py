@@ -1,16 +1,31 @@
+"""Ground of Herpules 2, made of tiles that scroll in a loop."""
+
 import pygame
 
 
 class Chao(pygame.sprite.Sprite):
-    """Representa o chão do cenário, com movimento contínuo em loop."""
+    """Ground made of repeated tiles that scroll to the left.
+
+    Parameters
+    ----------
+    y_pos : int
+        Top of the ground on the screen, in pixels.
+    vel : int
+        Scroll speed in pixels per frame.
+
+    Attributes
+    ----------
+    image : pygame.Surface
+        Ground tile (``Imagens/chao.png`` scaled to 64x64 px).
+    rect : pygame.Rect
+        Rect of the first tile.
+    copias : list[pygame.Rect]
+        Rects of the 14 tiles drawn side by side.
+    vel : int
+        Scroll speed in pixels per frame.
+    """
 
     def __init__(self, y_pos, vel):
-        """Inicializa o chão e suas cópias para criar o efeito de deslocamento.
-
-        Args:
-            y_pos (int): Posição vertical do chão na tela.
-            vel (int): Velocidade de deslocamento do chão.
-        """
         super().__init__()
 
         self.image = pygame.transform.scale(
@@ -27,7 +42,7 @@ class Chao(pygame.sprite.Sprite):
         self.vel = vel
 
     def update(self):
-        """Move o chão para a esquerda e reinicia as peças ao saírem da tela."""
+        """Move the tiles left, recycling those off screen."""
         for rect in self.copias:
             rect.x -= self.vel
 
@@ -37,6 +52,12 @@ class Chao(pygame.sprite.Sprite):
                 rect.x = max_right
 
     def draw(self, tela):
-        """Desenha todas as cópias do chão na superfície."""
+        """Draw all ground tiles.
+
+        Parameters
+        ----------
+        tela : pygame.Surface
+            Target surface.
+        """
         for rect in self.copias:
             tela.blit(self.image, rect)

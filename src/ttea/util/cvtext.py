@@ -131,9 +131,16 @@ class CvText:
 
         Returns
         -------
-        list of str
+        list[str]
             Lines of text. A single word wider than ``max_width`` is
             kept on its own line.
+
+        Examples
+        --------
+        >>> from types import SimpleNamespace
+        >>> font = SimpleNamespace(getlength=len)  # 1 px per character
+        >>> CvText.wrap("aa bb cc", font, 5)
+        ['aa bb', 'cc']
         """
         lines = []
         for paragraph in text.split("\n"):
@@ -166,22 +173,31 @@ class CvText:
         ----------
         img : numpy.ndarray
             BGR frame (``H x W x 3``, ``uint8``). It is not modified.
-        lines : iterable of str
+        lines : Iterable[str]
             Lines to draw, top to bottom.
-        origin : tuple of int, default (20, 20)
+        origin : tuple[int, int], optional
             Top-left corner ``(x, y)`` of the first line, in pixels.
-        font_size : int, default 20
-            Font size in pixels.
-        color : tuple of int, default (0, 255, 255)
-            Text color in BGR (yellow by default).
-        outline_color : tuple of int, default (0, 0, 0)
+            Default is ``(20, 20)``.
+        font_size : int, optional
+            Font size in pixels. Default is 20.
+        color : tuple[int, int, int], optional
+            Text color in BGR. Default is ``(0, 255, 255)`` (yellow).
+        outline_color : tuple[int, int, int], optional
             Outline color in BGR, drawn around each letter for contrast.
-        outline_width : int, default 2
-            Outline width in pixels; 0 draws no outline.
-        line_spacing : int, default 8
-            Extra space between lines, in pixels.
-        margin : int, default 20
-            Right margin kept free when wrapping, in pixels.
+            Default is ``(0, 0, 0)``.
+        outline_width : int, optional
+            Outline width in pixels; 0 draws no outline. Default is 2.
+        line_spacing : int, optional
+            Extra space between lines, in pixels. Default is 8.
+        margin : int, optional
+            Right margin kept free when wrapping, in pixels. Default is
+            20.
+
+        Notes
+        -----
+        Lines are wrapped to the frame width minus ``origin[0]`` and
+        ``margin``, but never to less than ``font_size`` pixels. Each
+        line advances ``font_size + line_spacing`` pixels.
 
         Returns
         -------

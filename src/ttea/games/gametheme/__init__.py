@@ -1,10 +1,6 @@
-"""
-games
+"""Base theme of the games of the T-TEA platform.
 
-A Python package for games. Developed by the Larva UDESC team.
-
-This package provides themes for application
-management for the T-TEA platform.
+Developed by the Larva UDESC team.
 
 Attributes
 ----------
@@ -19,10 +15,8 @@ __license__ : str
 
 See Also
 --------
-AppConfig
-    Manages application configuration settings.
-TTeaApp
-    Main application class for the T-TEA platform.
+BaseTheme
+    Base class of the game themes.
 
 Notes
 -----

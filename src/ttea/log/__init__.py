@@ -1,4 +1,4 @@
-"""Package that provides application logging support for the T-TEA platform.
+"""Application logging support for the T-TEA platform.
 
 Attributes
 ----------

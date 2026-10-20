@@ -1,8 +1,9 @@
-"""Main entry point for the T-TEA Qt application.
+"""Main entry point of the T-TEA Qt application.
 
-This module initializes global exception hooks, imports application
-components, and defines the App class responsible for starting the Qt
-event loop.
+This module sets the Qt logging rules (debug messages off) when it is
+imported and defines the ``App`` class, which starts the application and
+its Qt event loop, and the ``main`` function used by the ``dev`` script
+of ``pyproject.toml``.
 """
 
 import os
@@ -32,7 +33,8 @@ class App:
     splash : SplashScreen | None
         The splash screen displayed while the application starts.
     language_view : QDialog | None
-        The language selection view instance.
+        The language selection view instance (not set by ``run``, which
+        uses a local variable).
     main_view : QMainWindow | None
         The main application window.
     help_key_filter : HelpKeyFilter | None
@@ -41,17 +43,11 @@ class App:
     Methods
     -------
     run()
-        Create the Qt application, initialize language, show the splash
-        screen and main window, and execute the event loop.
-
-    Examples
-    --------
-    >>> app = App()
-    >>> app.run()
+        Create the Qt application, initialize the language, show the
+        splash screen and the main window, and run the event loop.
     """
 
     def __init__(self) -> None:
-        """Initialize application state before Qt startup."""
         self.app: QApplication | None = None
         self.splash: SplashScreen | None = None
         self.language_view: QDialog | None = None
@@ -59,26 +55,25 @@ class App:
         self.help_key_filter: HelpKeyFilter | None = None
 
     def run(self) -> None:
-        """Run the main application and start the Qt event loop.
-
-        This method creates the QApplication, applies the initial language,
-        shows the splash screen, optionally prompts the user for language
-        selection, and then shows the main window.
+        """Start the application and run the Qt event loop.
 
         Notes
         -----
-        The method handles both first-run language setup and normal startup
-        flow. If the language selection dialog is rejected, the application
-        exits with status 0.
+        Steps:
 
-        Returns
-        -------
-        None
+        1. Install the global exception hooks and log the start.
+        2. Register the ``qthelp`` URL scheme (before the QApplication).
+        3. Create the QApplication (name, version, icon) and install the
+           F1 help filter.
+        4. Detect the initial language (``get_initial_language``) and
+           install it as a preview.
+        5. Show the splash screen. On the first run (no configuration
+           file), the language dialog is shown; rejecting it exits with
+           status 0, and a different choice is applied and saved.
+        6. Show the main window and run the event loop.
 
-        Examples
-        --------
-        >>> app = App()
-        >>> app.run()
+        This method does not return: it ends with ``sys.exit`` and the
+        exit code of the event loop, which is logged.
         """
         CriticalHooks.setup_exception_hooks()
         Log.get_log().log_info("Application started successfully.")

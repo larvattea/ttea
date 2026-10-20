@@ -1,61 +1,83 @@
-# /service/professionalservice.py
+"""Professional service: business rules and persistence."""
+
 from typing import Any, Dict, List, Optional
 
 from PySide6.QtCore import QCoreApplication, QObject, Signal
 
-# Local module import
 from ttea.dao import ProfessionalCsvDAO
 from ttea.model import InstitutionFacility, Professional
 
 
 class ProfessionalService(QObject):
-    """
-    Service layer (MVCS) handling all business rules related to insti.
+    """Business rules (service layer) of professionals.
+
+    A single instance is shared by the whole application.
+
+    Parameters
+    ----------
+    dao : ProfessionalCsvDAO | None, optional
+        DAO used for persistence. Default is None, which creates a new
+        ``ProfessionalCsvDAO``.
 
     Attributes
     ----------
-    dao : InstitutionFacilityCsvDAO
-        Data access object responsible for persistence operations.
-        Defaults to a new ``InstitutionFacilityCsvDAO``
-        instance if not provided.
+    professional_change : Signal(int)
+        Emitted after a change: with the ID of the created or updated
+        professional, or with 0 after a deletion.
+    dao : ProfessionalCsvDAO
+        DAO used for persistence.
+    institution_service : InstitutionFacilityService
+        Facility service; its DAO is shared with the professional DAO.
 
     Methods
     -------
-    __init__(dao=None)
-        Initializes the service with a DAO instance.
     get_all_professionals()
-        Returns all registered professionals.
+        Return all registered professionals.
+    validate_data(data)
+        Return the validation errors of the form data.
     create_professional(data)
-        Creates a new professional from the provided data dictionary.
+        Create a professional from a data dictionary.
     update_professional(professional_id, data)
-        Updates an existing professional with the given data.
+        Update an existing professional.
     delete_professional(professional_id)
-        Deletes a professional by its ID.
+        Delete a professional by its ID.
     find_by_id(professional_id)
-        Retrieves a professional by its ID.
+        Return a professional by its ID.
     search_professionals(query="")
-        Searches professionals by name or ID (case-insensitive).
+        Search professionals by name or ID (case-insensitive).
+    get_professional_types()
+        Return the translated professional types.
+    get_all_institutionfacilities()
+        Return all facilities sorted by name.
+    get_institutionfacility_by_id(institution_id)
+        Return a facility by its ID.
+
+    Notes
+    -----
+    ``__new__`` always returns the same instance, and ``__init__`` sets
+    it up only once: a ``dao`` passed in later calls is ignored.
+
+    When no ``dao`` is given, the professional DAO is created with the
+    DAO of ``InstitutionFacilityService``, so facilities are resolved
+    from the same cache.
     """
 
     _instance = None
-    # Sinal que avisa: "Se os dados mudaram"
     professional_change = Signal(int)
 
     def __new__(cls, *args, **kwargs):
+        """Return the shared instance, creating it on the first call.
+
+        Returns
+        -------
+        ProfessionalService
+            The single instance of the service.
+        """
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
 
     def __init__(self, dao: Optional[ProfessionalCsvDAO] = None):
-        """
-        Initialize the service with a data access object.
-
-        Parameters
-        ----------
-        dao : InstitutionFacilityCsvDAO, optional
-            Instance used for persistence. If ``None``, a default
-            ``InstitutionFacilityCsvDAO`` is created.
-        """
         from ttea.service import InstitutionFacilityService
 
         if not hasattr(self, "_initialized"):
@@ -67,20 +89,37 @@ class ProfessionalService(QObject):
             self._initialized = True
 
     def get_all_professionals(self) -> List[Professional]:
-        """Return a list of all registered professionals.
+        """Return all registered professionals.
 
         Returns
         -------
-        List[InstitutionFacility]
-            Complete list of ``InstitutionFacility`` instances stored
-            in the DAO.
+        list[Professional]
+            The professionals cached by the DAO.
         """
         return self.dao.list()
 
     def validate_data(self, data: Dict[str, Any]) -> List[str]:
-        """
-        Valida as regras de negócio para os dados de uma instituição.
-        Retorna uma lista de mensagens de erro (vazia se estiver tudo ok).
+        """Validate the form data of a professional.
+
+        Parameters
+        ----------
+        data : dict[str, Any]
+            Form data.
+
+        Returns
+        -------
+        list[str]
+            Translated error messages, each ending with a newline; empty
+            when the data is valid.
+
+        Notes
+        -----
+        The ``id`` is required and must be an ``int``; ``name`` must not
+        be blank; ``type`` must not be 0; ``institutionfacility`` is
+        required.
+
+        The messages (pt_BR source texts) are translated at runtime with
+        ``self.tr()``.
         """
         errors = []
         if data.get("id") is None:
@@ -104,19 +143,28 @@ class ProfessionalService(QObject):
     def create_professional(
         self, data: Dict[str, Any]
     ) -> Optional[Professional]:
-        """
-        Create a new InstitutionFacility from a dictionary of attributes.
+        """Create a professional from a dictionary.
 
         Parameters
         ----------
-        data : dict
-            Must contain the keys the attributes.
+        data : dict[str, Any]
+            Values for every ``Professional`` field. An ``id`` of 0 or
+            less gets the next free ID.
 
         Returns
         -------
-        InstitutionFacility or None
-            The created ``InstitutionFacility`` instance if validation
-            and insertion succeed; ``None`` otherwise.
+        Professional | None
+            The created professional, or None if it is not valid or its
+            ID already exists.
+
+        Raises
+        ------
+        TypeError
+            If ``data`` misses a field or has an unknown key.
+
+        Notes
+        -----
+        ``professional_change`` is emitted with the new ID on success.
         """
         professional = Professional(**data)
 
@@ -131,22 +179,26 @@ class ProfessionalService(QObject):
     def update_professional(
         self, professional_id: int, data: Dict[str, Any]
     ) -> bool:
-        """
-        Update an existing professional with new values.
+        """Update an existing professional with new values.
 
         Parameters
         ----------
         professional_id : int
-            Identifier of the professional to update.
-        data : dict
-            Dictionary containing updated fields. Missing keys keep the
-            current value.
+            ID of the professional to update.
+        data : dict[str, Any]
+            Updated fields; missing keys keep the current value.
 
         Returns
         -------
         bool
-            ``True`` if the professional was found, validated,
-            and updated successfully; ``False`` otherwise.
+            True if the professional was found, is valid and was saved;
+            False otherwise.
+
+        Notes
+        -----
+        The cached object is changed in place before validation, so an
+        invalid update still changes it in memory.
+        ``professional_change`` is emitted with the ID on success.
         """
         professional = self.dao.select(professional_id)
         if not professional:
@@ -165,18 +217,21 @@ class ProfessionalService(QObject):
         return success
 
     def delete_professional(self, professional_id: int) -> bool:
-        """Delete a professional by its identifier.
+        """Delete a professional by its ID.
 
         Parameters
         ----------
         professional_id : int
-            Identifier of the professional to be removed.
+            ID of the professional to delete.
 
         Returns
         -------
         bool
-            ``True`` if the professional was successfully deleted,
-            ``False`` otherwise (e.g., professional not found).
+            True if deleted, False if the professional was not found.
+
+        Notes
+        -----
+        ``professional_change`` is emitted with 0 on success.
         """
         success = self.dao.delete(professional_id)
 
@@ -186,36 +241,34 @@ class ProfessionalService(QObject):
         return success
 
     def find_by_id(self, professional_id: int) -> Optional[Professional]:
-        """Retrieve a professional by its unique identifier.
+        """Return a professional by its ID.
 
         Parameters
         ----------
         professional_id : int
-            The professional's ID.
+            ID of the professional.
 
         Returns
         -------
-        Professional or None
-            The matching ``Professional`` instance
-            or ``None`` if not found.
+        Professional | None
+            The professional, or None if not found.
         """
         return self.dao.select(professional_id)
 
     def search_professionals(self, query: str = "") -> List[Professional]:
-        """
-        Search professionals by name or ID (case-insensitive).
+        """Search professionals by name or ID, ignoring case.
 
         Parameters
         ----------
         query : str, optional
-            Search term. If empty or whitespace-only, returns all
-            professionals.
+            Search term. If empty or blank, all professionals are
+            returned. Default is ``""``.
 
         Returns
         -------
-        List[InstitutionFacility]
-            List of professionals whose ID (as string)
-            or name contain the query term.
+        list[Professional]
+            The professionals whose ID (as text) or name contains the
+            term.
         """
         all_professionals = self.get_all_professionals()
         if not query.strip():
@@ -229,12 +282,28 @@ class ProfessionalService(QObject):
         ]
 
     def get_professional_types(self) -> Dict[int, str]:
+        """Return the professional types with translated names.
+
+        Returns
+        -------
+        dict[int, str]
+            ``Professional.TYPE_MAP`` with each name translated at
+            runtime by ``QCoreApplication.translate`` in the
+            ``"Professional"`` context.
+        """
         return {
             key: QCoreApplication.translate("Professional", value)
             for key, value in Professional.TYPE_MAP.items()
         }
 
     def get_all_institutionfacilities(self) -> List[InstitutionFacility]:
+        """Return all institutions/facilities sorted by name.
+
+        Returns
+        -------
+        list[InstitutionFacility]
+            Facilities sorted by ``name`` (case-sensitive).
+        """
         return sorted(
             self.institution_service.get_all_institutionfacilities(),
             key=lambda p: p.name,
@@ -243,4 +312,16 @@ class ProfessionalService(QObject):
     def get_institutionfacility_by_id(
         self, institution_id: int
     ) -> Optional[InstitutionFacility]:
+        """Return an institution/facility by its ID.
+
+        Parameters
+        ----------
+        institution_id : int
+            Facility ID.
+
+        Returns
+        -------
+        InstitutionFacility | None
+            The facility, or None if not found.
+        """
         return self.institution_service.find_by_id(institution_id)

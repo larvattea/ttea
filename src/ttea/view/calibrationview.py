@@ -1,9 +1,10 @@
+"""Calibration dialog: hardware data, camera preview and modes."""
+
 from typing import Optional
 
 from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import QDialog
 
-# Local module import
 from ttea.controller import CalibrationController
 from ttea.ui import Ui_CalibrationView
 from ttea.util import MessageService
@@ -11,18 +12,28 @@ from ttea.window import WindowConfig
 
 
 class CalibrationView(QDialog, Ui_CalibrationView, WindowConfig):
-    """
-    A modal dialog window calibration T-TEA project.
+    """Modal dialog of the calibration environment.
 
-    This class creates a modal dialog that provides calibration the T-TEA
-    project.
-    It inherits from `QDialog` for dialog functionality and `WindowConfig`
-    for window configuration.
+    Lets the user choose the camera, screen and proportion, preview the
+    camera and open the automatic or manual calibration. The logic is in
+    ``CalibrationController``.
 
-    Methods
-    -------
-    __init__(parent=None)
-        Initializes the AboutView dialog with the specified parent.
+    Parameters
+    ----------
+    parent : QDialog | None, optional
+        Parent widget. Default is None.
+
+    Attributes
+    ----------
+    msg : MessageService
+        Service used to show dialogs.
+    controller : CalibrationController
+        Controller of the dialog.
+
+    Notes
+    -----
+    The window is fixed at 5% wider and 75% taller than the parent. The
+    semiautomatic calibration button is hidden.
     """
 
     def __init__(
@@ -42,7 +53,6 @@ class CalibrationView(QDialog, Ui_CalibrationView, WindowConfig):
             75,  # height
             parent,  # parent
         )
-        # Initialize controller
         self.controller = CalibrationController(self)
         self.pb_camera.clicked.connect(self.controller.control_camera)
 
@@ -62,14 +72,13 @@ class CalibrationView(QDialog, Ui_CalibrationView, WindowConfig):
         self.pb_cancel.clicked.connect(self.controller.handle_cancel)
 
     def closeEvent(self, event: QCloseEvent) -> None:
-        """Override close event to confirm exit.
-
-        Shows a confirmation dialog before allowing the window to close.
+        """Ask for confirmation and stop the camera before closing.
 
         Parameters
         ----------
         event : QCloseEvent
-            The close event to accept or ignore.
+            Close event; accepted only if the user confirms (translated
+            question, "No" by default).
         """
         if self.msg.question(
             self.tr("Deseja sair da calibração?"), None, True

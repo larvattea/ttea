@@ -16,8 +16,12 @@ __license__ : str
 
 See Also
 --------
+AppViewFactory
+    Creates the application views.
+GameViewFactoryProtocol
+    Interface of the view factory of each game.
 ViewFactory
-    Creates view instances for the application.
+    Gives access to the application and game view factories.
 
 Notes
 -----

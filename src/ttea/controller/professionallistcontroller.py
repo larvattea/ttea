@@ -1,8 +1,9 @@
+"""Controller of the professional list window."""
+
 from typing import TYPE_CHECKING, Callable, Dict
 
 from PySide6.QtCore import QObject
 
-# Local module import
 from ttea.service import ProfessionalService
 from ttea.util import MessageService
 
@@ -11,73 +12,51 @@ if TYPE_CHECKING:
 
 
 class ProfessionalListController(QObject):
-    """
-    Lightweight controller that orchestrates InstitutionFacilityListView
-    and InstitutionFacilityService.
+    """Controller of the professional list window (MVCS).
 
-    Follows MVCS pattern: mediates between view and service layer,
-    handling user interactions and updating the UI accordingly.
+    Mediates between ``ProfessionalListView`` and
+    ``ProfessionalService``: loads and filters the table, shows the
+    details of the selected professional and opens the edit dialog to
+    create or update professionals.
+
+    Parameters
+    ----------
+    view : ProfessionalListView
+        The list view.
+    factory : Callable
+        Creates the edit dialog: ``factory(parent, professional=None)``
+        returns ``ProfessionalEditView``.
 
     Attributes
     ----------
-    view : InstitutionFacilityListView
-        Main view displaying the list and details of professionals.
+    view : ProfessionalListView
+        The list view.
     factory : Callable
-        Factory function that creates a ``InstitutionFacilityEditView`` dialog,
-        receiving the parent view and an optional professional to edit.
-    service : InstitutionFacilityService
-        Business logic layer for professional CRUD operations.
+        Factory of the edit dialog.
+    service : ProfessionalService
+        Shared service of professionals.
     msg : MessageService
-        Helper for showing info, warning, and error messages.
+        Service used to show messages.
 
-    Methods
-    -------
-    __init__(view, professional_edit_view_factory)
-        Initializes the controller with view and edit dialog factory.
-    load_professionals(query="")
-        Loads and displays professionals, optionally filtered
-        by search term.
-    filter_professionals(text)
-        Filters the professional list based on the search input text.
-    on_table_selection()
-        Updates details panel when a table row is selected.
-    select_and_show_professional(professional_id)
-        Selects a professional row and shows its details.
-    handle_new_professional()
-        Opens dialog to create a new professional.
-    handle_edit_professional()
-        Opens dialog to edit the selected professional.
-    delete_professional()
-        Deletes the selected professional after confirmation.
+    Notes
+    -----
+    The table is reloaded automatically when the service emits
+    ``professional_change`` (observer pattern), keeping the current
+    search text. The buttons, search field and table selection are
+    connected when the controller is created, and the table is loaded
+    right away. Messages are translated with ``self.tr()``.
     """
 
     def __init__(
         self, view: "ProfessionalListView", factory: Callable
     ) -> None:
-        """
-        Initialize the controller.
-
-        Parameters
-        ----------
-        view : ProfessionalListView
-            The main list view instance to control.
-        professional_edit_view_factory : Callable
-            Function that returns a ``ProfessionalEditView`` dialog.
-            Signature: (parent_view, professional)
-            -> ProfessionalEditView.
-        """
         self.view = view
         self.factory = factory
         self.service = ProfessionalService()
         self.msg = MessageService(self.view)
 
-        # ------------------------------------------------------------------
-        # OBSERVER PATTERN: Conexão reativa
-        # ------------------------------------------------------------------
-        # Sempre que o serviço emitir que os dados mudaram, a lista recarrega.
         self.service.professional_change.connect(self.reload_data)
 
-        # Events signals and slots
         self.view.pb_new.clicked.connect(self.create_professional)
         self.view.pb_edit.clicked.connect(self.update_professional)
         self.view.pb_delete.clicked.connect(self.delete_professional)
@@ -86,13 +65,18 @@ class ProfessionalListController(QObject):
             self.on_table_selection
         )
 
-        # Carga inicial
         self.load_professionals()
 
     def reload_data(self, target_id: int = 0) -> None:
-        """
-        Slot que reage ao sinal do Service.
-        Mantém o filtro atual ao recarregar.
+        """Reload the table after a change in the service.
+
+        Slot of ``ProfessionalService.professional_change``.
+
+        Parameters
+        ----------
+        target_id : int, optional
+            ID to select after reloading. With 0 (default), the
+            currently selected row is kept.
         """
         if target_id == 0:
             target_id = self.view.get_selected_id() or 0
@@ -104,27 +88,34 @@ class ProfessionalListController(QObject):
             self.view.select_row_by_id(target_id)
 
     def load_professionals(self, query: str = "") -> None:
-        """
-        Load load_professionals from service
-        and populate the table view.
+        """Load the professionals matching ``query``.
 
         Parameters
         ----------
         query : str, optional
-            Search term to filter professionals
-            (default is empty string).
+            Search term; empty lists all professionals. Default is
+            ``""``.
+
+        Notes
+        -----
+        The details panel is cleared.
         """
         load_professionals = self.service.search_professionals(query)
         self.view.populate_table(load_professionals)
         self.view.clear_details()
 
     def filter_professionals(self, text: str) -> None:
-        """Filter professional list based on search input text."""
+        """Filter the table with the search text.
+
+        Parameters
+        ----------
+        text : str
+            Text typed in the search field; it is stripped.
+        """
         self.load_professionals(text.strip())
 
     def on_table_selection(self) -> None:
-        """Update details pane when a professional
-        is selected in the table."""
+        """Show the details of the selected professional."""
         professional_id = self.view.get_selected_id()
         if professional_id:
             professional = self.service.find_by_id(professional_id)
@@ -135,8 +126,7 @@ class ProfessionalListController(QObject):
             self.view.clear_details()
 
     def create_professional(self) -> None:
-        """Open dialog to create a new professional
-        and save if accepted."""
+        """Create a professional through the edit dialog."""
         dialog: "ProfessionalEditView" = self.factory(self.view, None)
         if dialog.exec():
             data = dialog.controller.get_data()
@@ -146,8 +136,12 @@ class ProfessionalListController(QObject):
                 self.msg.critical(self.tr("Erro ao salvar profissional."))
 
     def update_professional(self) -> None:
-        """Open dialog to edit the selected professional
-        and update if accepted."""
+        """Edit the selected professional through the edit dialog.
+
+        Notes
+        -----
+        A warning is shown when no row is selected.
+        """
         professional_id = self.view.get_selected_id()
         if not professional_id:
             self.msg.warning(self.tr("Selecione um profissional para editar."))
@@ -167,8 +161,12 @@ class ProfessionalListController(QObject):
                 self.msg.critical(self.tr("Erro ao atualizar profissional."))
 
     def delete_professional(self) -> None:
-        """Delete the selected professional after user confirmation."""
+        """Delete the selected professional after confirmation.
 
+        Notes
+        -----
+        A warning is shown when no row is selected.
+        """
         professional_id = self.view.get_selected_id()
         if not professional_id:
             self.msg.warning(
@@ -190,4 +188,11 @@ class ProfessionalListController(QObject):
                 self.msg.critical(self.tr("Erro ao excluir profissional."))
 
     def get_professional_types(self) -> Dict[int, str]:
+        """Return the professional types with translated names.
+
+        Returns
+        -------
+        dict[int, str]
+            Type code to translated name, from the service.
+        """
         return self.service.get_professional_types()

@@ -21,45 +21,55 @@ class PathConfig:
 
     Attributes
     ----------
-    APP_NAME : str
+    APP_NAME : str, class attribute
         Application name used for platform-specific data directories.
-    APP_AUTHOR : str
+    APP_AUTHOR : str, class attribute
         Application author name used for platform-specific data
         directories.
-    CONFIG_FILENAME : str
+    CONFIG_FILENAME : str, class attribute
         Default file name for configuration files.
-    CALIBRATION_HARDWARE_FILENAME : str
+    CALIBRATION_HARDWARE_FILENAME : str, class attribute
         Default file name for calibration hardware settings.
-    CALIBRATION_SETTING_FILENAME : str
+    CALIBRATION_SETTING_FILENAME : str, class attribute
         Default file name for calibration settings.
-    CALIBRATION_POINT_FILENAME : str
+    CALIBRATION_POINT_FILENAME : str, class attribute
         Default file name for calibration point CSV data.
-    HELP_BASENAME : str
-        Base name of the compiled help files (``ttea_<language>.qch``).
-    BASE_DIR : Path
-        Base application data directory in development or frozen mode.
-    EXERGAME_DIR : Path
-        Base directory for exergame save data.
-    CONFIG_DIR : Path
+    HELP_BASENAME : str, class attribute
+        Base name of the compiled help files
+        (``ttea_<language>.qch``).
+    PROJECT_DIR : Path, class attribute
+        Repository root. Defined only in development mode.
+    BASE_DIR : Path, class attribute
+        Base application data directory: ``<project>/data`` in
+        development, the platform user data folder when frozen.
+    EXERGAME_DIR : Path, class attribute
+        Base directory for exergame save data:
+        ``<project>/src/ttea/games`` in development,
+        ``BASE_DIR / "exergames"`` when frozen.
+    RESOURCES_ROOT : Path, class attribute
+        Installed resources: ``<project>/resources`` in development,
+        ``resources`` inside the PyInstaller bundle when frozen.
+    CONFIG_DIR : Path, class attribute
         Directory for configuration files.
-    CALIBRATION_DIR : Path
+    CALIBRATION_DIR : Path, class attribute
         Directory for calibration files.
-    EXPORTS_DIR : Path
+    EXPORTS_DIR : Path, class attribute
         Directory for exported files.
-    INSTITUTIONFACILITY_DIR : Path
+    INSTITUTIONFACILITY_DIR : Path, class attribute
         Directory for institution facility data.
-    LOG_DIR : Path
+    LOG_DIR : Path, class attribute
         Directory for log files.
-    MODELS_DIR : Path
+    MODELS_DIR : Path, class attribute
         Directory containing the bundled MediaPipe models.
-    HELP_ROOT : Path
+    HELP_ROOT : Path, class attribute
         Directory containing the compiled help files (.qch), one per
         language. Read-only in installed builds.
-    HELP_CACHE_DIR : Path
-        Writable directory for the help collections and search index.
-    PLAYERS_DIR : Path
+    HELP_CACHE_DIR : Path, class attribute
+        Writable directory for the help collections and search
+        index.
+    PLAYERS_DIR : Path, class attribute
         Directory for player files.
-    PROFESSIONAL_DIR : Path
+    PROFESSIONAL_DIR : Path, class attribute
         Directory for professional files.
 
     Methods
@@ -119,13 +129,20 @@ class PathConfig:
     find_resource_built_in(base_path, name)
         Find an embedded Qt resource from a base path.
 
+    Notes
+    -----
+    Every class attribute whose name ends in ``_DIR`` is treated as a
+    user directory: ``ensure_dirs`` creates it and ``set_base_dir``
+    moves it. That includes ``MODELS_DIR`` and, in development,
+    ``PROJECT_DIR``; ``HELP_ROOT`` and ``RESOURCES_ROOT`` are
+    deliberately named otherwise.
+
     Examples
     --------
-    >>> PathConfig.ensure_dirs()
-    >>> PathConfig.config()
-    '.../data/config/config.ini'
     >>> PathConfig.resource('images/logo.png')
-    ': /images/logo.png'
+    ':/images/logo.png'
+    >>> PathConfig.help_file('en_US').name
+    'ttea_en_US.qch'
     """
 
     APP_NAME = "ttea"
@@ -137,9 +154,9 @@ class PathConfig:
     CALIBRATION_POINT_FILENAME = "calibration_point.csv"
     HELP_BASENAME = "ttea"
 
-    # ===================================================================
+    # ==================================================================
     # Base directory
-    # ===================================================================
+    # ==================================================================
     if getattr(sys, "frozen", False):
         BASE_DIR: Path = Path(user_data_dir(APP_NAME, APP_AUTHOR))
         EXERGAME_DIR: Path = BASE_DIR / "exergames"
@@ -168,9 +185,9 @@ class PathConfig:
     PLAYERS_DIR: Path = BASE_DIR / "players"
     PROFESSIONAL_DIR: Path = BASE_DIR / "professionals"
 
-    # ===================================================================
+    # ==================================================================
     # Built-in Resources (Qt)
-    # ===================================================================
+    # ==================================================================
     @staticmethod
     def resource(path: str = "") -> str:
         """Return a Qt resource path.
@@ -187,14 +204,15 @@ class PathConfig:
 
         Notes
         -----
-        Trailing slashes are removed from the generated resource path.
+        Trailing slashes are removed from the generated resource path,
+        so an empty ``path`` gives ``":"``.
 
         Examples
         --------
         >>> PathConfig.resource('images/logo.png')
         ':/images/logo.png'
         >>> PathConfig.resource()
-        ':/'
+        ':'
         """
         return f":/{path}".rstrip("/")
 
@@ -326,9 +344,9 @@ class PathConfig:
         """
         return f":/sounds/{name}"
 
-    # ===================================================================
+    # ==================================================================
     # Automatic Introspection
-    # ===================================================================
+    # ==================================================================
     @classmethod
     def _get_dir_names(cls) -> List[str]:
         """Return class attribute names that end with ``_DIR``.
@@ -336,7 +354,8 @@ class PathConfig:
         Returns
         -------
         list[str]
-            Sorted or unsorted names of directory attributes.
+            Names of the public ``*_DIR`` class attributes, in
+            definition order.
         """
         return [
             name
@@ -359,17 +378,16 @@ class PathConfig:
             if name.endswith("_DIR") and not name.startswith("_")
         ]
 
-    # ===================================================================
+    # ==================================================================
     # User data methods
-    # ===================================================================
+    # ==================================================================
     @classmethod
     def ensure_dirs(cls) -> None:
         """Create all configured directories if they do not exist.
 
-        Returns
-        -------
-        None
-            Ensures all directories defined by the class are present on disk.
+        Notes
+        -----
+        Creates every directory of ``_get_user_dirs`` with its parents.
         """
         for directory in cls._get_user_dirs():
             directory.mkdir(parents=True, exist_ok=True)
@@ -377,6 +395,8 @@ class PathConfig:
     @classmethod
     def _user_file(cls, directory: Path, filename: str) -> str:
         """Return the full file path for a given user directory.
+
+        Calls ``ensure_dirs`` first, so all user directories exist.
 
         Parameters
         ----------
@@ -400,17 +420,17 @@ class PathConfig:
         Parameters
         ----------
         filename : str, optional
-            Name of the configuration file. Defaults to the class constant.
+            Name of the configuration file. Default is
+            ``CONFIG_FILENAME``.
 
         Returns
         -------
         str
             Full path to the configuration file.
 
-        Examples
-        --------
-        >>> PathConfig.config()
-        '.../data/config/config.ini'
+        Notes
+        -----
+        Creates the user directories if needed (see ``_user_file``).
         """
         return cls._user_file(cls.CONFIG_DIR, filename)
 
@@ -423,7 +443,8 @@ class PathConfig:
         Parameters
         ----------
         filename : str, optional
-            Name of the calibration hardware file. Defaults to the class constant.
+            Name of the calibration hardware file. Default is
+            ``CALIBRATION_HARDWARE_FILENAME``.
 
         Returns
         -------
@@ -441,7 +462,8 @@ class PathConfig:
         Parameters
         ----------
         filename : str, optional
-            Name of the calibration setting file. Defaults to the class constant.
+            Name of the calibration setting file. Default is
+            ``CALIBRATION_SETTING_FILENAME``.
 
         Returns
         -------
@@ -459,8 +481,8 @@ class PathConfig:
         Parameters
         ----------
         filename : str, optional
-            Name of the calibration point CSV file. Defaults to the class
-            constant.
+            Name of the calibration point CSV file. Default is
+            ``CALIBRATION_POINT_FILENAME``.
 
         Returns
         -------
@@ -519,7 +541,7 @@ class PathConfig:
 
     @classmethod
     def model(cls, filename: str) -> str:
-        """Return the Mediapipe model file path.
+        """Return the MediaPipe model file path.
 
         Parameters
         ----------
@@ -581,8 +603,8 @@ class PathConfig:
 
         Examples
         --------
-        >>> PathConfig.help_file('en_US')
-        PosixPath('.../resources/help/ttea_en_US.qch')
+        >>> PathConfig.help_file('en_US').name
+        'ttea_en_US.qch'
         """
         return cls.HELP_ROOT / f"{cls.HELP_BASENAME}_{language}.qch"
 
@@ -622,34 +644,44 @@ class PathConfig:
         -------
         str
             Full path to the game save file.
+
+        Notes
+        -----
+        Creates the user directories and ``EXERGAME_DIR / game_name``
+        if needed.
         """
         cls.ensure_dirs()
         game_dir = cls.EXERGAME_DIR / game_name
         game_dir.mkdir(exist_ok=True)
         return str(game_dir / filename)
 
-    # ===================================================================
+    # ==================================================================
     # Test support
-    # ===================================================================
+    # ==================================================================
     @classmethod
     def set_base_dir(cls, path: str | Path) -> None:
         """Set a different base directory, primarily for tests.
 
         Parameters
         ----------
-        path : str or Path
-            New base directory path.
+        path : str | Path
+            New base directory path; it is resolved to an absolute path.
 
-        Returns
-        -------
-        None
-            Updates class directory attributes to point at the new base.
+        Notes
+        -----
+        ``BASE_DIR`` becomes the new base and ``EXERGAME_DIR`` its
+        ``exergames`` subfolder. Every other ``*_DIR`` attribute becomes
+        ``<base>/<name>``, where ``name`` is the attribute name without
+        ``_DIR`` in lower case. These names do not always match the
+        defaults (``help_cache``, ``institutionfacility``,
+        ``professional``), and ``MODELS_DIR`` and ``PROJECT_DIR`` are
+        moved too. Directories are not created here.
 
         Examples
         --------
-        >>> PathConfig.set_base_dir('/tmp/ttestate')
-        >>> PathConfig.CONFIG_DIR
-        PosixPath('/tmp/ttestate/config')
+        >>> PathConfig.set_base_dir('tests_data')
+        >>> PathConfig.HELP_CACHE_DIR.name
+        'help_cache'
         """
         new_base = Path(path).resolve()
 
@@ -662,9 +694,9 @@ class PathConfig:
             subdir = dir_name.replace("_DIR", "").lower()
             setattr(cls, dir_name, new_base / subdir)
 
-    # ===================================================================
+    # ==================================================================
     # Checks
-    # ===================================================================
+    # ==================================================================
     @classmethod
     def config_file_exists(cls, filename: str = CONFIG_FILENAME) -> bool:
         """Return whether the configuration file exists.
@@ -672,12 +704,17 @@ class PathConfig:
         Parameters
         ----------
         filename : str, optional
-            Name of the configuration file. Defaults to the class constant.
+            Name of the configuration file. Default is
+            ``CONFIG_FILENAME``.
 
         Returns
         -------
         bool
             True if the configuration file exists, otherwise False.
+
+        Notes
+        -----
+        Creates the user directories if needed (see ``config``).
         """
         return Path(cls.config(filename)).exists()
 
@@ -690,18 +727,24 @@ class PathConfig:
         Parameters
         ----------
         filename : str, optional
-            Name of the calibration file. Defaults to the class constant.
+            Name of the calibration file. Default is
+            ``CALIBRATION_HARDWARE_FILENAME``.
 
         Returns
         -------
         bool
             True if the calibration file exists, otherwise False.
+
+        Notes
+        -----
+        Looks in ``CALIBRATION_DIR`` and creates the user directories if
+        needed.
         """
         return Path(cls.calibration_hardware(filename)).exists()
 
-    # ===================================================================
+    # ==================================================================
     # Utilities
-    # ===================================================================
+    # ==================================================================
     @classmethod
     def find_resource_built_in(cls, base_path: str, name: str) -> str:
         """Find an embedded Qt resource from a base path.
@@ -716,12 +759,14 @@ class PathConfig:
         Returns
         -------
         str
-            Full resource path if found, otherwise an empty string.
+            Full resource path of the first match, otherwise an empty
+            string.
 
-        Examples
-        --------
-        >>> PathConfig.find_resource_built_in(':/images', 'ttealogo')
-        ':/images/ttealogo'
+        Notes
+        -----
+        Searches ``base_path`` and its subdirectories for a file whose
+        name matches ``name`` (a ``QDir`` name filter, so wildcards
+        work).
         """
         it = QDirIterator(
             base_path, [name], QDir.Files, QDirIterator.Subdirectories

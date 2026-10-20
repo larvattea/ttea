@@ -1,36 +1,71 @@
+"""Drawing of the Herpules 2 screens.
+
+Attributes
+----------
+MODO_INPUT : str
+    Input mode, used to choose between buttons and "jump" hints.
+
+Notes
+-----
+``MODO_INPUT`` (``"teclado"``, ``"script"`` or ``"mediapipe"``) is
+defined both here and in ``view.py`` and must have the same value in
+both.
+"""
+
 import pygame
 
-MODO_INPUT = 'mediapipe'  # 'teclado', 'script' ou 'mediapipe'
+MODO_INPUT = 'mediapipe'  # 'teclado', 'script' or 'mediapipe'
 
 
 class GameView:
-    """Responsável pela renderização da interface do jogo e dos elementos visuais.
+    """Draw the menu, calibration, countdown, game and end screens.
 
-    A classe gerencia a janela principal, os recursos gráficos, a exibição do
-    menu, da contagem, do jogo em andamento e da tela de game over.
+    Parameters
+    ----------
+    largura : int
+        Window width in pixels.
+    altura : int
+        Window height in pixels.
+
+    Attributes
+    ----------
+    fonte_padrao : str, class attribute
+        Font file of the texts (``fontes/8BIT.TTF``).
+    tela : pygame.Surface
+        The game window ("HerPULEs").
+    largura, altura : int
+        Window size in pixels.
+    fonte_jogo, fonte_contagem, fonte_gameover : pygame.font.Font
+        Fonts of 30, 100 and 80 points.
+    fundo : pygame.Surface
+        Background, stretched to the window, 150/255 opaque.
+    imagem_menu : pygame.Surface
+        Game title image, half the window size.
+    botao_iniciar, botao_reiniciar : pygame.Surface
+        Start and restart button images (200x100).
+    rect_botao_iniciar, rect_botao_reiniciar : pygame.Rect
+        Button areas, centered 70 px above the bottom.
+    retangulo_tela : pygame.Rect
+        Purple area under the ground (from y = 400).
+
+    Notes
+    -----
+    Images and fonts are read relative to the current directory. The
+    texts are fixed in Portuguese (no translation).
     """
 
     fonte_padrao = 'fontes/8BIT.TTF'
 
     def __init__(self, largura, altura):
-        """Inicializa a janela do jogo e todos os recursos visuais necessários.
-
-        Args:
-            largura (int): Largura da janela em pixels.
-            altura (int): Altura da janela em pixels.
-        """
-        # Inicializa a tela e fontes
         self.tela = pygame.display.set_mode((largura, altura))
         pygame.display.set_caption("HerPULEs")
         self.largura = largura
         self.altura = altura
 
-        # Fontes
         self.fonte_jogo = pygame.font.Font(self.fonte_padrao, 30)
         self.fonte_contagem = pygame.font.Font(self.fonte_padrao, 100)
         self.fonte_gameover = pygame.font.Font(self.fonte_padrao, 80)
 
-        # Imagens
         self.fundo = pygame.image.load('Imagens/fundonovo.png').convert()
         self.fundo = pygame.transform.scale(self.fundo, (largura, altura))
         self.fundo.set_alpha(150)
@@ -50,11 +85,18 @@ class GameView:
         self.retangulo_tela = pygame.Rect(0, 400, largura, altura/3)
 
     def desenhar(self, model):
-        """Desenha a cena atual do jogo na tela com base no estado do modelo.
+        """Draw the current screen of the game.
 
-        Args:
-            model: Instância do modelo do jogo contendo o estado, elementos
-                visuais e dados do cenário atual.
+        Parameters
+        ----------
+        model : GameModel
+            Game state to draw.
+
+        Notes
+        -----
+        In mediapipe mode, the menu and game over screens show "Pule
+        para iniciar" / "Pule para reiniciar" instead of the buttons. On
+        the game over screen the hero's image is set to the dead frame.
         """
         self.tela.blit(self.fundo, (0, 0))
         model.ceu.draw(self.tela)

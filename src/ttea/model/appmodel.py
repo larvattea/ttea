@@ -1,3 +1,5 @@
+"""Global application state shared by the controllers."""
+
 from PySide6.QtCore import QSettings
 
 from ttea.app import AppConfig
@@ -5,31 +7,53 @@ from ttea.util import PathConfig
 
 
 class AppModel:
-    """Estado global da aplicação (sessão ativa) - Implementação Singleton."""
+    """Global state of the application session (singleton).
+
+    Attributes
+    ----------
+    language_model : Language
+        Supported languages; used by ``LanguageController``.
+    _instance : AppModel | None, class attribute
+        The single instance.
+    _initialized : bool, class attribute
+        Whether the instance was already initialized.
+
+    Notes
+    -----
+    ``AppModel()`` always returns the same object, and its state is
+    set up only on the first call. At that time the language saved
+    in the configuration file (``PathConfig.config()``, key
+    ``AppConfig.SETTINGS_GERAL_LANGUAGE``, read with ``QSettings``)
+    becomes the current language if it is supported; otherwise
+    ``Language.DEFAULT_LANGUAGE`` is used.
+    """
 
     _instance = None
     _initialized = False
 
     def __new__(cls):
-        """Garante que apenas uma instância seja criada."""
+        """Return the single instance, creating it on the first call.
+
+        Returns
+        -------
+        AppModel
+            The singleton instance.
+        """
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
 
     def __init__(self):
-        """Inicializa a instância apenas na primeira criação."""
         if AppModel._initialized:
-            return  # Já foi inicializado anteriormente
+            return
 
         from ttea.model import Language
 
-        self.language_model = Language()  # usado apenas no LanguageController
+        self.language_model = Language()  # only LanguageController
 
-        # === Carrega o idioma atual salvo nas configurações ===
         settings = QSettings(PathConfig.config(), QSettings.IniFormat)
         saved_lang = settings.value(AppConfig.SETTINGS_GERAL_LANGUAGE)
 
-        # Valida se o idioma salvo é um dos suportados
         available_codes = [
             lang["code"] for lang in self.language_model.get_languages()
         ]
@@ -42,16 +66,22 @@ class AppModel:
         AppModel._initialized = True
 
     # ------------------------------------------------------------------
-    # Property para acesso seguro ao idioma atual
+    # Current language (validated on assignment)
     # ------------------------------------------------------------------
     @property
     def current_language(self) -> str:
-        """Retorna o código do idioma atualmente em uso."""
+        """Code of the language currently in use, e.g. ``"pt_BR"``.
+
+        Notes
+        -----
+        Setting an unsupported code selects
+        ``Language.DEFAULT_LANGUAGE`` instead. The setter does not save
+        the language to the configuration file.
+        """
         return self._current_language
 
     @current_language.setter
     def current_language(self, value: str) -> None:
-        """Define o idioma atual, garantindo que seja válido."""
         from ttea.model import Language
 
         available_codes = [
@@ -60,19 +90,30 @@ class AppModel:
         if value in available_codes:
             self._current_language = value
         else:
-            # Fallback seguro para o idioma padrão
             self._current_language = Language.DEFAULT_LANGUAGE
 
     # ------------------------------------------------------------------
-    # Método auxiliar opcional
+    # Optional helper
     # ------------------------------------------------------------------
     def is_english(self) -> bool:
-        """Conveniência para verificar se o idioma atual é inglês."""
+        """Check whether the current language is English.
+
+        Returns
+        -------
+        bool
+            True if ``current_language`` is ``"en_US"``.
+        """
         return self.current_language == "en_US"
 
     @classmethod
     def get_instance(cls) -> "AppModel":
-        """Retorna a única instância da classe (útil para chamadas explícitas)."""
+        """Return the single instance of the class.
+
+        Returns
+        -------
+        AppModel
+            The singleton instance, created if needed.
+        """
         if cls._instance is None:
-            cls._instance = cls()  # Isso chamará __new__ e __init__
+            cls._instance = cls()  # runs __new__ and __init__
         return cls._instance

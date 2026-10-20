@@ -1,7 +1,7 @@
-"""Window configuration helpers for exergame windows.
+"""Window configuration helpers for the application windows.
 
-This module provides the WindowConfig class, which centralizes common
-window setup logic such as title, icon, sizing, and centering.
+This module provides the ``WindowConfig`` mixin, which centralizes
+common window setup logic such as title, icon, sizing and centering.
 """
 
 from typing import Optional, Tuple
@@ -11,36 +11,32 @@ from PySide6.QtWidgets import QApplication, QWidget
 
 
 class WindowConfig:
-    """Class for fixed window configurations of the exergame application.
+    """Mixin that configures title, icon, size and position of a window.
 
-    This class provides methods to configure and manage window properties,
-    such as title, icon, size, and positioning, with options to adjust size
-    based on percentage increments or decrements relative to a parent window
-    or screen.
+    Used together with a Qt window class (e.g. ``class MainView(
+    QMainWindow, Ui_MainView, WindowConfig)``): the size can be changed
+    by a percentage relative to the parent window or the screen, and the
+    window is centered and gets a fixed size.
 
     Attributes
     ----------
-    STAY_SIZE : int
-        Constant indicating that the window size should remain unchanged
-        (value: 0).
-    INCREMENT_SIZE_PERCENT : int
-        Constant indicating that the window size should be increased by a
-        percentage (value: 1).
-    DECREMENT_SIZE_PERCENT : int
-        Constant indicating that the window size should be decreased by a
-        percentage (value: 2).
+    STAY_SIZE : int, class attribute
+        Keep the base size (0).
+    INCREMENT_SIZE_PERCENT : int, class attribute
+        Increase the base size by a percentage (1).
+    DECREMENT_SIZE_PERCENT : int, class attribute
+        Decrease the base size by a percentage (2).
 
     Methods
     -------
-    setup_window(title, icon, status=STAY_SIZE, width=0, height=0, parent=None)
-        Configures the window properties such as title, icon, size,
-        and position.
+    setup_window(title=None, icon=None, status=STAY_SIZE, ...)
+        Configure title, icon, size and position.
     get_base_size(parent)
-        Returns the base size based on the parent window or the screen.
+        Return the base size from the parent window or the screen.
     adjust_size(base, percent, status)
-        Adjusts the base size according to the status and percentage provided.
+        Adjust a size by a percentage according to ``status``.
     center_window(parent=None, width=None, height=None)
-        Centers the window relative to the parent window or the screen.
+        Center the window on the parent window or the screen.
     """
 
     STAY_SIZE = 0
@@ -56,44 +52,32 @@ class WindowConfig:
         height: float = 0.0,
         parent: Optional[QWidget] = None,
     ) -> None:
-        """Configure window properties including title, icon, size,
-        and position.
-
-        This method sets the window's title and icon, calculates the base size
-        based on the parent or screen, adjusts the size according
-        to the provided status and percentage, and centers the window.
+        """Configure title, icon, size and position of the window.
 
         Parameters
         ----------
-        title : str
-            The title to be set for the window.
-        icon : str
-            The file path to the icon to be set for the window.
+        title : str | None, optional
+            Window title; None keeps the current one. Default is None.
+        icon : str | QIcon | None, optional
+            Icon file path (or icon); None keeps the current one.
+            Default is None.
         status : int, optional
-            The size adjustment status. Must be one of `STAY_SIZE`,
-            `INCREMENT_SIZE_PERCENT`, or `DECREMENT_SIZE_PERCENT`.
-            Default is `STAY_SIZE` (0).
+            ``STAY_SIZE``, ``INCREMENT_SIZE_PERCENT`` or
+            ``DECREMENT_SIZE_PERCENT``. Default is ``STAY_SIZE``.
         width : float, optional
-            Percentage adjustment for the window width. Ignored if `status` is
-            `STAY_SIZE`. Default is 0.
+            Width change in percent (e.g. 10 means 10%). Default is 0.
         height : float, optional
-            Percentage adjustment for the window height. Ignored if `status` is
-            `STAY_SIZE`. Default is 0.
-        parent : QWidget, optional
-            The parent window used for size and centering reference.
-            If None, the screen geometry is used. Default is None.
-
-        Returns
-        -------
-        None
+            Height change in percent. Default is 0.
+        parent : QWidget | None, optional
+            Reference window for size and centering; None uses the
+            screen. Default is None.
 
         Notes
         -----
-        - The window is set to a fixed size after configuration to prevent
-        resizing.
-        - The `width` and `height` parameters represent percentage adjustments
-          (e.g., 10 means 10%) and are applied only if `status` is
-          `INCREMENT_SIZE_PERCENT` or `DECREMENT_SIZE_PERCENT`.
+        The base size comes from ``get_base_size``, each dimension is
+        changed by ``adjust_size``, the window is centered with
+        ``center_window`` and its size is then fixed (it cannot be
+        resized).
         """
         if title is not None:
             self.setWindowTitle(title)
@@ -115,28 +99,19 @@ class WindowConfig:
     def get_base_size(
         self, parent: Optional[QWidget] = None
     ) -> Tuple[int, int]:
-        """Retrieve the base size based on the parent window or screen.
-
-        If a parent window is provided, its geometry is used to determine the
-        base size. Otherwise, the base size is derived from half the screen's
-        width and height.
+        """Return the base size from the parent window or the screen.
 
         Parameters
         ----------
-        parent : QWidget, optional
-            The parent window for size reference. If None, the screen geometry
-            is used. Default is None.
+        parent : QWidget | None, optional
+            Reference window. Default is None.
 
         Returns
         -------
-        tuple of int
-            A tuple containing the base width and height (in pixels).
-
-        Notes
-        -----
-        - If the parent is provided but lacks a `geometry` attribute,
-        the screen geometry is used as a fallback.
-        - The screen size is obtained from the primary screen via QApplication.
+        tuple[int, int]
+            The parent's width and height, or half the width and height
+            of the primary screen when there is no parent (or it has no
+            ``geometry``).
         """
         if parent is not None and hasattr(parent, "geometry"):
             parent_geo = parent.geometry()
@@ -145,35 +120,34 @@ class WindowConfig:
         return screen.width() // 2, screen.height() // 2
 
     def adjust_size(self, base: float, percent: float, status: int) -> float:
-        """Adjust the base size based on the provided status and percentage.
-
-        The base size is adjusted by the given percentage if the status
-        indicates an increment or decrement. If the percentage is zero
-        or negative, or if the status is `STAY_SIZE`,
-        the base size is returned unchanged.
+        """Adjust a size by a percentage according to ``status``.
 
         Parameters
         ----------
         base : float
-            The base size (width or height) to be adjusted, in pixels.
+            Base size (width or height) in pixels.
         percent : float
-            The percentage adjustment to apply (e.g., 10 for 10%).
+            Percentage to add or remove (e.g. 10 for 10%).
         status : int
-            The adjustment status. Must be one of `STAY_SIZE`,
-            `INCREMENT_SIZE_PERCENT`, or `DECREMENT_SIZE_PERCENT`.
+            ``STAY_SIZE``, ``INCREMENT_SIZE_PERCENT`` or
+            ``DECREMENT_SIZE_PERCENT``.
 
         Returns
         -------
         float
-            The adjusted size in pixels.
+            The adjusted size; ``base`` unchanged when ``percent`` is 0
+            or negative or ``status`` is ``STAY_SIZE`` (or unknown).
 
-        Notes
-        -----
-        - If `percent` is less than or equal to 0, no adjustment is made,
-        and the base size is returned.
-        - The adjustment is calculated as a percentage of the base size.
+        Examples
+        --------
+        >>> cfg = WindowConfig()
+        >>> cfg.adjust_size(800, 10, cfg.DECREMENT_SIZE_PERCENT)
+        720.0
+        >>> cfg.adjust_size(800, 25, cfg.INCREMENT_SIZE_PERCENT)
+        1000.0
+        >>> cfg.adjust_size(800, 10, cfg.STAY_SIZE)
+        800
         """
-
         if percent <= 0:
             return base
         if status == self.INCREMENT_SIZE_PERCENT:
@@ -188,37 +162,25 @@ class WindowConfig:
         width: Optional[float] = None,
         height: Optional[float] = None,
     ) -> None:
-        """Center the window relative to the parent window or screen.
-
-        The window is positioned at the center of the parent window if
-        provided, or the screen if no parent is specified.
-        The window's width and height are used unless explicitly provided.
+        """Center the window on the parent window or the screen.
 
         Parameters
         ----------
-        parent : QWidget, optional
-            The parent window for centering reference. If None, the screen is
-            used.
+        parent : QWidget | None, optional
+            Reference window; None (or no ``geometry``) uses the primary
+            screen. Default is None.
+        width : float | None, optional
+            Window width in pixels; None uses the current width. Default
+            is None.
+        height : float | None, optional
+            Window height in pixels; None uses the current height.
             Default is None.
-        width : float, optional
-            The window width in pixels. If None, the current window width is
-            used.
-            Default is None.
-        height : float, optional
-            The window height in pixels. If None, the current window height is
-            used.
-            Default is None.
-
-        Returns
-        -------
-        None
 
         Notes
         -----
-        - The window's position is calculated to center it based on the
-        provided or current width and height.
-        - If the parent lacks a `geometry` attribute, the screen geometry is
-        used.
+        The position and size are set with ``setGeometry``. On the
+        screen, the position is computed from the screen size only, so
+        the screen is assumed to start at (0, 0).
         """
         if width is None:
             width = self.width()

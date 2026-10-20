@@ -28,7 +28,13 @@ from ttea.util.helpschemehandler import HelpSchemeHandler
 
 
 class _HelpPage(QWebEnginePage):
-    """Web page that opens external links in the system browser."""
+    """Web page that opens external links in the system browser.
+
+    Attributes
+    ----------
+    EXTERNAL_SCHEMES : tuple[str, ...], class attribute
+        URL schemes opened outside the help (http, https, mailto).
+    """
 
     EXTERNAL_SCHEMES = ("http", "https", "mailto")
 
@@ -58,7 +64,7 @@ class HelpView(QMainWindow):
         Language code of the help shown.
     home_url : QUrl
         URL of the home page.
-    parent : QWidget or None, optional
+    parent : QWidget | None, optional
         Owner window. While a modal dialog is open, the help must be a
         child of it, otherwise Qt blocks the help window.
 
@@ -67,8 +73,22 @@ class HelpView(QMainWindow):
     language : str
         Language code of the help shown. A new window is needed when the
         application language changes.
-    closed : Signal
+    closed : Signal()
         Emitted when the user closes the window.
+    engine : QHelpEngine
+        Help engine; its parent is set to this window.
+    web : QWebEngineView
+        View of the help pages.
+    tabs : QTabWidget
+        Contents, index and search tabs.
+    DEFAULT_SIZE : tuple[int, int], class attribute
+        Initial window size in pixels.
+    SIDEBAR_WIDTH : int, class attribute
+        Initial width of the sidebar in pixels.
+
+    Notes
+    -----
+    The window title and tab names are translated with ``self.tr()``.
     """
 
     closed = Signal()

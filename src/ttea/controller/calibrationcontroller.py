@@ -1,3 +1,5 @@
+"""Controller of the calibration window (hardware data and camera)."""
+
 from datetime import date, datetime
 from typing import TYPE_CHECKING, Any, Dict, Optional
 
@@ -13,6 +15,35 @@ if TYPE_CHECKING:
 
 
 class CalibrationController(QObject):
+    """Controller of the calibration window.
+
+    Lists cameras, screens and aspect ratios, previews the camera, opens
+    the automatic and manual calibrations and saves the hardware data
+    (``Calibration``) of the chosen camera and screen.
+
+    Parameters
+    ----------
+    view : CalibrationView
+        The calibration dialog.
+    service : CalibrationService | None, optional
+        Calibration service. Default is None, which creates a new
+        ``CalibrationService``.
+
+    Attributes
+    ----------
+    view : CalibrationView
+        The calibration dialog.
+    service : CalibrationService
+        Calibration service.
+    thread : CameraVideoThread | None
+        Camera preview thread, or None when the camera is stopped.
+
+    Notes
+    -----
+    The combo boxes are filled and the saved camera, screen and
+    proportion are selected when the controller is created. User
+    messages and button texts are translated with ``self.tr()``.
+    """
 
     def __init__(
         self,
@@ -22,13 +53,20 @@ class CalibrationController(QObject):
         self.view = view
         self.service = service or CalibrationService()
         self._initialize_view()
-        # Inicialização da Thread
         self.thread = None
 
     def handle_ok(self) -> None:
+        """Save the hardware data and close the dialog.
+
+        Notes
+        -----
+        The data from ``get_data`` is saved through
+        ``create_calibration_hardware``. On success, an information
+        message is shown, the dialog is accepted and the camera preview
+        is stopped; otherwise an error message is shown.
+        """
         data = self.get_data()
 
-        # O Service cria o objeto, valida e salva via DAO
         calibration = self.service.create_calibration_hardware(data)
 
         if calibration:
@@ -49,11 +87,13 @@ class CalibrationController(QObject):
             )
 
     def handle_cancel(self) -> None:
+        """Stop the camera preview and reject the dialog."""
         if self.thread:
             self.thread.stop()
         self.view.reject()
 
     def handle_calibrate_auto(self) -> None:
+        """Open the automatic calibration dialog."""
         from ttea.factory import ViewFactory
 
         dialog = ViewFactory.get_app_view_factory().create_automaticcalibration_view(
@@ -62,9 +102,11 @@ class CalibrationController(QObject):
         dialog.exec()
 
     def handle_calibrate_semi(self) -> None:
+        """Show that semiautomatic calibration is not ready."""
         self.view.msg.info(self.tr("Em construção!"))
 
     def handle_calibrate_manual(self) -> None:
+        """Open the manual calibration dialog."""
         from ttea.factory import ViewFactory
 
         dialog = (
@@ -75,16 +117,21 @@ class CalibrationController(QObject):
         dialog.exec()
 
     def _initialize_view(self):
+        """Fill the combo boxes and select the saved values."""
         self.list_proportions()
         self.list_monitors()
         self.list_cameras()
         self._load_saved_settings()
 
     def _load_saved_settings(self):
+        """Select the saved camera, screen and proportion, if any.
+
+        The camera and screen are found by their saved index and the
+        proportion by its text; values not found are left unselected.
+        """
         calibration = self.service.dao.select(0)
 
         if calibration:
-            # 1. Posiciona a Câmera pela posição salva
             if calibration.camera_position is not None:
                 index = self.view.cbx_camera.findData(
                     calibration.camera_position
@@ -93,7 +140,6 @@ class CalibrationController(QObject):
                 if index >= 0:
                     self.view.cbx_camera.setCurrentIndex(index)
 
-            # 2. Posiciona o Monitor pela posição salva
             if calibration.screen_position is not None:
                 index = self.view.cbx_monitor.findData(
                     calibration.screen_position
@@ -101,7 +147,6 @@ class CalibrationController(QObject):
                 if index >= 0:
                     self.view.cbx_monitor.setCurrentIndex(index)
 
-            # 3. Posiciona a Proporção pelo conteúdo salvo
             if calibration.content_proportion:
                 index = self.view.cbx_proportion.findText(
                     calibration.content_proportion
@@ -110,11 +155,16 @@ class CalibrationController(QObject):
                     self.view.cbx_proportion.setCurrentIndex(index)
 
     def list_cameras(self) -> None:
+        """Fill the camera combo box, with the index as data."""
         for i, camera in enumerate(self.service.get_video_inputs()):
-            # Adiciona o nome amigável e guarda o índice como dado extra
             self.view.cbx_camera.addItem(camera.description(), i)
 
     def list_monitors(self) -> None:
+        """Fill the screen combo box (name, with the index as data).
+
+        The name is ``"<manufacturer> - <model>"``, or ``"Monitor <n>
+        (<name>)"`` when both are empty.
+        """
         for i, monitor in enumerate(self.service.get_screens()):
             manufacturer = monitor.manufacturer()
             model = monitor.model()
@@ -124,14 +174,23 @@ class CalibrationController(QObject):
             else:
                 descricao = f"Monitor {i+1} ({monitor.name()})"
 
-            # Adiciona o nome amigável e guarda o índice como dado extra
             self.view.cbx_monitor.addItem(descricao, i)
 
     def list_proportions(self) -> None:
+        """Fill the proportion combo box with the supported ratios."""
         for text, value in self.service.get_proportions():
             self.view.cbx_proportion.addItem(text, value)
 
     def control_camera(self):
+        """Start or stop the camera preview (F5 button).
+
+        Notes
+        -----
+        While the preview runs, the camera, screen and proportion combo
+        boxes are disabled. The ``CameraVideoThread`` is created with
+        ``use_low_resolution`` set to ``is_raspberry_pi()``, so the
+        configured resolution is applied only on a Raspberry Pi.
+        """
         if self.thread and self.thread.isRunning():
             self.stop_camera_stream()
             self.view.cbx_proportion.setEnabled(True)
@@ -153,7 +212,7 @@ class CalibrationController(QObject):
             self.view.cbx_camera.setEnabled(False)
 
     def stop_camera_stream(self):
-        """Limpa o estado da UI e garante a parada da thread."""
+        """Stop the preview and reset the camera button and image."""
         if self.thread:
             self.thread.stop()
             self.thread = None
@@ -164,27 +223,57 @@ class CalibrationController(QObject):
 
     @Slot(str)
     def handle_camera_error(self, message: str):
-        """Exibe mensagem de erro e reseta a UI."""
+        """Stop the preview and show a camera error.
+
+        Slot of ``CameraVideoThread.error_signal``.
+
+        Parameters
+        ----------
+        message : str
+            Translated error message.
+        """
         self.stop_camera_stream()
-        self.view.msg.critical(message)  # Usa o MessageService da View
+        self.view.msg.critical(message)
 
     @Slot(QImage)
     def update_image(self, qt_img):
+        """Show a camera frame, scaled to the video label.
+
+        Slot of ``CameraVideoThread.change_pixmap_signal``.
+
+        Parameters
+        ----------
+        qt_img : QImage
+            Frame to show; the aspect ratio is kept.
+        """
         pixmap = QPixmap.fromImage(qt_img)
 
-        # Redimensionamos dinamicamente com base no tamanho ATUAL do label na UI
+        # Scale to the label's current size (follows window resizes)
         scaled_pixmap = pixmap.scaled(
             self.view.lbl_video.size(),
             Qt.AspectRatioMode.KeepAspectRatio,
             Qt.TransformationMode.SmoothTransformation,
         )
 
-        # Aplicamos ao label
         self.view.lbl_video.setPixmap(scaled_pixmap)
 
     def get_data(self) -> Dict[str, Any]:
-        # 1. Recuperamos os índices selecionados na UI
-        # e busca-se os objetos de hardware via Service
+        """Build the hardware calibration data from the selection.
+
+        Returns
+        -------
+        dict[str, Any]
+            Values for every ``Calibration`` field.
+
+        Notes
+        -----
+        The camera resolution and frame rates come from the first video
+        format of the camera (0 if it has none). The content area is the
+        largest area of the chosen proportion that fits the available
+        screen area (``CalibrationMath.calculate_projection_area``). The
+        date uses ``AppConfig.get_geral_date_mask()`` and the time
+        ``%H:%M:%S``.
+        """
         camera_idx = self.view.cbx_camera.currentIndex()
         monitor_idx = self.view.cbx_monitor.currentIndex()
         proportion_text = self.view.cbx_proportion.currentText()
@@ -196,19 +285,16 @@ class CalibrationController(QObject):
             monitor_idx
         )
 
-        # 2. Resolução e FPS da Câmera
         formats = camera_device.videoFormats()
         best_format = formats[0] if formats else None
 
-        # 3. Cálculo da Área de Projeção (Math)
-        # Extrai os números da string "16:9" por exemplo -> (16, 9)
+        # e.g. "16:9" -> (16, 9)
         ratio_parts = tuple(map(int, proportion_text.split(":")))
 
         c_width, c_height = CalibrationMath.calculate_projection_area(
             available_geo.width(), available_geo.height(), ratio_parts
         )
 
-        # 4. Mapeamento do Dicionário
         date_mask = AppConfig.get_geral_date_mask()
         current_date = date.today().strftime(date_mask)
         current_hour = datetime.now().strftime("%H:%M:%S")

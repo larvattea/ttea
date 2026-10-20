@@ -1,18 +1,26 @@
+"""Language model: the languages supported by the application."""
+
 from typing import Dict, List
 
-# Local module import
 from ttea.util import PathConfig
 
 
 class Language:
-    """Model responsável apenas pelos dados estáticos dos idiomas suportados.
+    """Static data of the languages supported by the application.
 
     Attributes
     ----------
-    LANGUAGES : List[Dict[str, str]]
-        Lista de idiomas disponíveis na aplicação.
-    DEFAULT_LANGUAGE : str
-        Idioma padrão em caso de falha.
+    LANGUAGES : list[dict[str, str]], class attribute
+        Available languages, each with ``"code"`` (e.g. ``"pt_BR"``),
+        ``"description"`` (the language name in that language) and
+        ``"flag"`` (Qt resource path of the flag icon).
+    DEFAULT_LANGUAGE : str, class attribute
+        Language used when no valid language is set (``"pt_BR"``).
+
+    Examples
+    --------
+    >>> [lang["code"] for lang in Language().get_languages()]
+    ['pt_BR', 'es_ES', 'en_US']
     """
 
     LANGUAGES = [
@@ -36,5 +44,11 @@ class Language:
     DEFAULT_LANGUAGE = "pt_BR"
 
     def get_languages(self) -> List[Dict[str, str]]:
-        """Retorna a lista de idiomas disponíveis."""
+        """Return the list of available languages.
+
+        Returns
+        -------
+        list[dict[str, str]]
+            ``LANGUAGES`` itself (not a copy).
+        """
         return self.LANGUAGES

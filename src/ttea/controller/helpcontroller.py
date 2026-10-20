@@ -19,10 +19,17 @@ class HelpController(QObject):
 
     Parameters
     ----------
-    service : HelpService or None, optional
+    service : HelpService | None, optional
         Help service; a new one is created when omitted.
-    parent : QObject or None, optional
+    parent : QObject | None, optional
         Owner of the controller, usually the QApplication.
+
+    Attributes
+    ----------
+    service : HelpService
+        Help service.
+    _instance : HelpController | None, class attribute
+        Controller shared by the application.
 
     Methods
     -------
@@ -31,10 +38,12 @@ class HelpController(QObject):
     show_help(topic=None)
         Show the help at ``topic`` or at the topic of the active screen.
 
-    Examples
-    --------
-    >>> HelpController.instance().show_help()
-    >>> HelpController.instance().show_help("calibracao")
+    Notes
+    -----
+    Typical use: ``HelpController.instance().show_help()`` for the
+    active screen, or ``show_help("calibracao")`` for a topic. The
+    error message shown when the help is missing is translated with
+    ``self.tr()``.
     """
 
     _instance: "HelpController | None" = None
@@ -65,7 +74,7 @@ class HelpController(QObject):
 
         Parameters
         ----------
-        topic : str or None, optional
+        topic : str | None, optional
             Topic id from ``HelpService.TOPICS``. When omitted, the
             topic comes from the widget with focus (F1 behaviour).
         """

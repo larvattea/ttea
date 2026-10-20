@@ -1,7 +1,7 @@
-"""Load and manage images from file paths and Qt resources.
+"""Load images from Qt resources as pygame surfaces.
 
-This module provides utilities for loading images from standard file
-paths or Qt resource URLs, returning a pygame Surface instance.
+Lets the pygame side of the application use images compiled into
+the Qt resource file (``.qrc``).
 """
 
 import io
@@ -11,9 +11,9 @@ from PySide6.QtCore import QFile, QIODevice
 
 
 class Image:
-    """Utility class for loading and working with images.
+    """Utility class for loading images.
 
-    The class supports physical file paths and Qt resource paths (.qrc).
+    Images are read from Qt resource paths (``:/...``).
     """
 
     @staticmethod
@@ -35,11 +35,11 @@ class Image:
         FileNotFoundError
             If the Qt resource cannot be opened.
 
-        Examples
-        --------
-        >>> surface = Image.load_from_qt_resource(':/images/logo.png')
-        >>> isinstance(surface, pygame.Surface)
-        True
+        Notes
+        -----
+        The whole file is read into memory and decoded by
+        ``pygame.image.load``, so the image format is detected from
+        its content.
         """
         file = QFile(resource_path)
         if not file.open(QIODevice.ReadOnly):

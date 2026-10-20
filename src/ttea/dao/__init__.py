@@ -1,7 +1,9 @@
-"""A Python package for Data Access Objects (DAOs) from the T-TEA platform,
-supporting data management and persistence. Developed by the Larva UDESC team.
+"""Data Access Objects (DAOs) of the T-TEA platform.
 
-This package provides the DAO classes for the T-TEA platform.
+Developed by the Larva UDESC team.
+
+This package provides the DAO classes that persist the models in
+CSV and INI files.
 
 Attributes
 ----------
@@ -17,9 +19,19 @@ __license__ : str
 See Also
 --------
 DAO
-    Data Access Object for managing data persistence and retrieval.
+    Generic interface for CRUD operations.
+CalibrationIniDAO
+    Calibration data in an INI file.
+CalibrationPointCsvDAO
+    Calibration corner points in a CSV file.
+CalibrationSettingIniDAO
+    Calibration settings in an INI file.
+InstitutionFacilityCsvDAO
+    Institutions/facilities, one CSV file each.
 PlayerCsvDAO
-    Data Access Object for managing player data in CSV format.
+    Players, one CSV file each.
+ProfessionalCsvDAO
+    Professionals, one CSV file each.
 
 Notes
 -----
@@ -28,7 +40,6 @@ development. Contributions and bug reports are welcome at:
 https://github.com/larvattea/ttea
 """
 
-# Define the __all__ variable
 __all__ = [
     "CalibrationIniDAO",
     "CalibrationPointCsvDAO",

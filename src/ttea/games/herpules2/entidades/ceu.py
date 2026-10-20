@@ -1,21 +1,43 @@
+"""Sky background of Herpules 2 with moving clouds."""
+
 import random
 import pygame
 
 
 class Ceu:
-    """Representa o fundo celeste com nuvens em movimento.
+    """Sky background with clouds that scroll to the left.
 
-    A classe gera várias nuvens aleatórias, desloca-as horizontalmente e as
-    reposiciona para criar o efeito de céu em movimento durante o jogo.
+    Creates seven clouds of random size, spacing and height and moves
+    them left; a cloud that leaves the screen is placed again after the
+    rightmost one, with a new size and height.
+
+    Parameters
+    ----------
+    vel : int
+        Scroll speed in pixels per frame.
+    largura_tela : int
+        Screen width in pixels.
+
+    Attributes
+    ----------
+    nuvens_data : list[dict]
+        Clouds, each with ``"image"`` (scaled surface), ``"rect"`` and
+        ``"alpha"``.
+    vel : int
+        Scroll speed in pixels per frame.
+    largura_tela : int
+        Screen width in pixels.
+
+    Notes
+    -----
+    Clouds are scaled 3 to 6 times, placed at y 0-90 and spaced 150 to
+    400 px apart. Bigger clouds are more transparent: the alpha is ``255
+    - 23 * scale`` when created and ``255 - 15 * scale`` when a cloud is
+    recycled. The image is read from ``Imagens/nuvem.png``, relative to
+    the current directory, and reloaded on every recycle.
     """
 
     def __init__(self, vel, largura_tela):
-        """Inicializa o céu com nuvens aleatórias e velocidade configurável.
-
-        Args:
-            vel (int): Velocidade de deslocamento do céu.
-            largura_tela (int): Largura da tela para cálculo de posicionamento.
-        """
         original_nuvem_image = pygame.image.load("Imagens/nuvem.png").convert_alpha()
         self.nuvens_data = []
         num_nuvens = 7
@@ -44,7 +66,7 @@ class Ceu:
         self.largura_tela = largura_tela
 
     def update(self):
-        """Move as nuvens para a esquerda e reaproveita-as ao sair da tela."""
+        """Move the clouds left and recycle those off screen."""
         for nuvem in self.nuvens_data:
             nuvem['rect'].x -= self.vel
 
@@ -66,6 +88,12 @@ class Ceu:
                 nuvem['rect'].y = random.randint(0, 90)
 
     def draw(self, tela):
-        """Desenha todas as nuvens na superfície da tela."""
+        """Draw all clouds.
+
+        Parameters
+        ----------
+        tela : pygame.Surface
+            Target surface.
+        """
         for nuvem in self.nuvens_data:
             tela.blit(nuvem['image'], nuvem['rect'])

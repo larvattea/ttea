@@ -1,3 +1,5 @@
+"""CSV persistence of players, one file per player."""
+
 import os
 import re
 from dataclasses import fields
@@ -6,51 +8,56 @@ from typing import Dict, List, Optional
 
 import portalocker
 
-# Local module import
 from ttea.dao import DAO
 from ttea.model import Player
 from ttea.util import CSVHandler, PathConfig
 
 
 class PlayerCsvDAO(DAO[Player]):
-    """Specialized DAO for Player entities using CSV files
-    with in-memory cache.
+    """DAO for Player entities, one CSV file per record.
 
-    Persists each Player in an individual CSV file named after its ID and
-    sanitized name. Keeps all players loaded in memory for fast access and
-    uses file locking to prevent concurrent write issues.
+    Persists each player in its own CSV file named after its ID and
+    sanitized name, and keeps all players in an in-memory cache loaded
+    when the DAO is created.
 
     Attributes
     ----------
     csv_handler : CSVHandler
-        Utility for reading/writing CSV data.
-    players : Dict[int, Player]
-        In-memory cache mapping player IDs to Player instances.
-    file_map : Dict[int, str]
-        Maps player IDs to their corresponding CSV file paths.
-    int_properties : List[str]
-        Names of Player fields that are integers.
-    bool_properties : List[str]
-        Names of Player fields that are booleans.
+        Utility for reading and writing CSV data.
+    players : dict[int, Player]
+        In-memory cache by ID.
+    file_map : dict[int, str]
+        CSV file path by ID.
+    int_properties : list[str]
+        Names of the ``Player`` fields typed ``int``.
+    bool_properties : list[str]
+        Names of the ``Player`` fields typed ``bool``.
 
     Methods
     -------
-    __init__()
-        Initializes the DAO and loads all existing players from disk.
     insert(obj)
-        Persists a new player and returns its assigned ID.
+        Persist a new player and return its ID.
     update(obj)
-        Updates an existing player, handling filename changes if needed.
+        Update an existing player, renaming its file if needed.
     delete(obj_id)
-        Removes a player and its associated CSV file.
+        Remove a player and its CSV file.
     select(obj_id)
-        Retrieves a player by ID from the in-memory cache.
+        Return a player by ID from the cache.
     list()
-        Returns all players currently loaded.
+        Return all cached players.
+    search_players(query="")
+        Return the players whose ID or name contains ``query``.
+
+    Notes
+    -----
+    Files are named ``<id>_<sanitized name>_player.csv`` and stored in
+    the player directory of ``PathConfig``.
+
+    ``birth_date`` is read with ``datetime.fromisoformat``; an empty
+    value is kept as an empty string.
     """
 
     def __init__(self) -> None:
-        """Initialize the DAO and load all players from CSV files."""
         self.csv_handler = CSVHandler()
         self.players: Dict[int, Player] = {}
         self.file_map: Dict[int, str] = {}
@@ -61,12 +68,12 @@ class PlayerCsvDAO(DAO[Player]):
         self.load_all_players()
 
     def generate_next_id(self) -> int:
-        """Generate the next available player ID.
+        """Return the next available player ID.
 
         Returns
         -------
         int
-            The next unused ID (1 if no players exist).
+            The highest cached ID plus 1, or 1 if the cache is empty.
         """
         if not self.players:
             return 1
@@ -75,39 +82,52 @@ class PlayerCsvDAO(DAO[Player]):
     def write_with_lock(
         self, filepath: str, data: List[Dict], headers: List[str]
     ):
-        """Write data to a CSV file with exclusive file locking.
+        """Write rows to a CSV file while holding an exclusive lock.
 
         Parameters
         ----------
         filepath : str
             Full path to the target CSV file.
-        data : List[Dict]
-            List of dictionaries representing rows to write.
-        headers : List[str]
-            Ordered list of column names.
+        data : list[dict]
+            Rows to write, one dictionary per row.
+        headers : list[str]
+            Ordered column names; a header row is written first.
+
+        Raises
+        ------
+        portalocker.exceptions.LockException
+            If the lock cannot be acquired within 10 seconds.
+
+        Notes
+        -----
+        The user directories are created if needed. The file is opened
+        by ``portalocker.Lock`` in mode ``"w"`` with Python's defaults,
+        so it uses the platform's default encoding and newline
+        translation, unlike ``CSVHandler.write_csv`` with a path (UTF-8
+        with BOM).
         """
         PathConfig.ensure_dirs()
         with portalocker.Lock(filepath, mode="w", timeout=10) as f:
             self.csv_handler.write_csv(f, data, headers)
 
     def insert(self, obj: Player) -> int:
-        """Insert a new player into persistent storage.
+        """Insert a new player and write its CSV file.
 
         Parameters
         ----------
         obj : Player
-            The player instance to persist.
+            The player to persist. An ``id`` of 0 or less is replaced in
+            place by ``generate_next_id()``.
 
         Returns
         -------
         int
-            The assigned player ID on success, 0 on failure (invalid player
-            or ID already exists).
+            The player ID on success, or 0 if ``obj`` is not valid or
+            its ID already exists.
         """
         if not obj.is_valid():
             return 0
 
-        # Generate ID if not set
         if obj.id <= 0:
             obj.id = self.generate_next_id()
 
@@ -121,9 +141,7 @@ class PlayerCsvDAO(DAO[Player]):
         return obj.id
 
     def update(self, obj: Player) -> bool:
-        """Update an existing player in persistent storage.
-
-        Renames the file if the player's name changed.
+        """Update an existing player and rewrite its file.
 
         Parameters
         ----------
@@ -133,7 +151,13 @@ class PlayerCsvDAO(DAO[Player]):
         Returns
         -------
         bool
-            True if updated successfully, False otherwise.
+            True if updated, False if ``obj`` is not valid or its ID is
+            not cached.
+
+        Notes
+        -----
+        If the file name changes (the name changed), the old file is
+        renamed before being rewritten.
         """
         if not obj.is_valid() or obj.id not in self.players:
             return False
@@ -160,7 +184,7 @@ class PlayerCsvDAO(DAO[Player]):
         Returns
         -------
         bool
-            True if deleted, False if the player was not found.
+            True if deleted, False if the ID is not cached.
         """
         if obj_id not in self.players:
             return False
@@ -173,7 +197,7 @@ class PlayerCsvDAO(DAO[Player]):
         return True
 
     def select(self, obj_id: int) -> Optional[Player]:
-        """Retrieve a player by ID from the in-memory cache.
+        """Return a player from the in-memory cache.
 
         Parameters
         ----------
@@ -182,58 +206,71 @@ class PlayerCsvDAO(DAO[Player]):
 
         Returns
         -------
-        Optional[Player]
-            The Player instance if found, None otherwise.
+        Player | None
+            The player, or None if the ID is not cached.
         """
         return self.players.get(obj_id)
 
     def list(self) -> List[Player]:
-        """Return all loaded players.
+        """Return all cached players.
 
         Returns
         -------
-        List[Player]
-            A list of all Player instances currently in memory.
+        list[Player]
+            The cached players, in cache order.
         """
         return list(self.players.values())
 
     def sanitize_filename(self, name: str) -> str:
-        """Sanitize a player name for safe use in filenames.
+        """Make a player name safe for file names.
 
         Parameters
         ----------
         name : str
-            Original player name.
+            Original name.
 
         Returns
         -------
         str
-            Sanitized name (lowercase, non-alphanumeric replaced by '_').
+            The name stripped and lowercased, with every character that
+            is not a word character or ``-`` replaced by ``_``.
+
+        Examples
+        --------
+        >>> dao = object.__new__(PlayerCsvDAO)
+        >>> dao.sanitize_filename(" Ana Maria! ")
+        'ana_maria_'
         """
         return re.sub(r"[^\w\-]", "_", name.lower().strip())
 
     def get_filename(self, player: Player) -> str:
-        """Generate the full path for a player's CSV file.
+        """Return the full path of a player's CSV file.
 
         Parameters
         ----------
         player : Player
-            The player object.
+            The player.
 
         Returns
         -------
         str
-            Complete file path using pattern: <id>_<sanitized_name>_player.csv
+            Path of ``<id>_<sanitized name>_player.csv`` in the player
+            directory.
         """
         sanitized_name = self.sanitize_filename(player.name)
         filename = f"{player.id}_{sanitized_name}_player.csv"
         return PathConfig.player(filename)
 
     def load_all_players(self) -> None:
-        """Load every player CSV file from disk into memory.
+        """Load every player CSV file into the cache.
 
-        Scans the players directory, parses each matching CSV file,
-        converts data types appropriately, and populates the cache.
+        Notes
+        -----
+        Reads each ``*_player.csv`` file of the player directory; empty
+        or unreadable files are skipped. Only the first row is used.
+        Integer fields that are not plain digits (including negative
+        numbers) become 0, and boolean fields are True only for
+        ``"true"`` (any case).
         """
         PathConfig.ensure_dirs()
         for file_path in PathConfig.PLAYERS_DIR.glob("*_player.csv"):
@@ -244,7 +281,6 @@ class PlayerCsvDAO(DAO[Player]):
                 continue
 
             row = player_data[0]
-            # Build player kwargs with type conversions
             player_kwargs = {}
             for prop in Player.PROPERTIES:
                 if prop in row:
@@ -264,7 +300,19 @@ class PlayerCsvDAO(DAO[Player]):
             self.file_map[player.id] = str(file_path)
 
     def search_players(self, query: str = "") -> List[Player]:
-        """Retorna a lista de jogadores, opcionalmente filtrada."""
+        """Return cached players, optionally filtered.
+
+        Parameters
+        ----------
+        query : str, optional
+            Text searched, case-insensitively, in the ID and the name. A
+            blank query returns every player. Default is ``""``.
+
+        Returns
+        -------
+        list[Player]
+            The matching players.
+        """
         all_players = list(self.players.values())
 
         if not query.strip():

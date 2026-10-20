@@ -1,82 +1,112 @@
-# /service/institutionfacilityservice.py
+"""Institution/facility service: business rules and persistence."""
+
 from typing import Any, Dict, List, Optional
 
 from PySide6.QtCore import QCoreApplication, QObject, Signal
 
-# Local module import
 from ttea.dao import InstitutionFacilityCsvDAO
 from ttea.exception import BusinessRuleException
 from ttea.model import InstitutionFacility
 
 
 class InstitutionFacilityService(QObject):
-    """
-    Service layer (MVCS) handling all business rules related to insti.
+    """Business rules (service layer) of institution facilities.
+
+    A single instance is shared by the whole application.
+
+    Parameters
+    ----------
+    dao : InstitutionFacilityCsvDAO | None, optional
+        DAO used for persistence. Default is None, which creates a new
+        ``InstitutionFacilityCsvDAO``.
 
     Attributes
     ----------
+    institutionfacility_change : Signal(int)
+        Emitted after a change: with the ID of the created or updated
+        institution facility, or with 0 after a deletion.
     dao : InstitutionFacilityCsvDAO
-        Data access object responsible for persistence operations.
-        Defaults to a new ``InstitutionFacilityCsvDAO``
-        instance if not provided.
+        DAO used for persistence.
 
     Methods
     -------
-    __init__(dao=None)
-        Initializes the service with a DAO instance.
     get_all_institutionfacilities()
-        Returns all registered institutionfacilities.
+        Return all registered institution facilities.
+    validate_data(data)
+        Return the validation errors of the form data.
     create_institutionfacility(data)
-        Creates a new institutionfacility from the provided data dictionary.
+        Create an institution facility from a data dictionary.
     update_institutionfacility(institutionfacility_id, data)
-        Updates an existing institutionfacility with the given data.
+        Update an existing institution facility.
     delete_institutionfacility(institutionfacility_id)
-        Deletes a institutionfacility by its ID.
+        Delete an institution facility by its ID.
     find_by_id(institutionfacility_id)
-        Retrieves a institutionfacility by its ID.
+        Return an institution facility by its ID.
     search_institutionfacilities(query="")
-        Searches institutionfacilities by name or ID (case-insensitive).
+        Search institution facilities by name or ID (case-insensitive).
+    get_institutionfacility_types()
+        Return the translated facility types.
+    get_dao()
+        Return the DAO of the service.
+
+    Notes
+    -----
+    ``__new__`` always returns the same instance, and ``__init__`` sets
+    it up only once: a ``dao`` passed in later calls is ignored.
     """
 
     _instance = None
-    # Sinal que avisa: "Se os dados mudaram"
     institutionfacility_change = Signal(int)
 
     def __new__(cls, *args, **kwargs):
+        """Return the shared instance, creating it on the first call.
+
+        Returns
+        -------
+        InstitutionFacilityService
+            The single instance of the service.
+        """
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
 
     def __init__(self, dao: Optional[InstitutionFacilityCsvDAO] = None):
-        """
-        Initialize the service with a data access object.
-
-        Parameters
-        ----------
-        dao : InstitutionFacilityCsvDAO, optional
-            Instance used for persistence. If ``None``, a default
-            ``InstitutionFacilityCsvDAO`` is created.
-        """
         if not hasattr(self, "_initialized"):
             super().__init__()
             self.dao = dao or InstitutionFacilityCsvDAO()
             self._initialized = True
 
     def get_all_institutionfacilities(self) -> List[InstitutionFacility]:
-        """Return a list of all registered institutionfacilities.
+        """Return all registered institution facilities.
 
         Returns
         -------
-        List[InstitutionFacility]
-            Complete list of ``InstitutionFacility`` instances stored
-            in the DAO.
+        list[InstitutionFacility]
+            The institution facilities cached by the DAO.
         """
         return self.dao.list()
 
     def validate_data(self, data: Dict[str, Any]) -> List[str]:
-        """
-        Valida as regras de negócio para os dados de uma instituição.
-        Retorna uma lista de mensagens de erro (vazia se estiver tudo ok).
+        """Validate the form data of an institution facility.
+
+        Parameters
+        ----------
+        data : dict[str, Any]
+            Form data.
+
+        Returns
+        -------
+        list[str]
+            Translated error messages, each ending with a newline; empty
+            when the data is valid.
+
+        Notes
+        -----
+        The ``id`` is required and must be an ``int``; ``name`` must not
+        be blank; ``type`` must not be 0.
+
+        The messages (pt_BR source texts) are translated at runtime with
+        ``self.tr()``.
         """
         errors = []
         if data.get("id") is None:
@@ -95,19 +125,29 @@ class InstitutionFacilityService(QObject):
     def create_institutionfacility(
         self, data: Dict[str, Any]
     ) -> Optional[InstitutionFacility]:
-        """
-        Create a new InstitutionFacility from a dictionary of attributes.
+        """Create an institution facility from a dictionary.
 
         Parameters
         ----------
-        data : dict
-            Must contain the keys the attributes.
+        data : dict[str, Any]
+            Values for every ``InstitutionFacility`` field. An ``id`` of
+            0 or less gets the next free ID.
 
         Returns
         -------
-        InstitutionFacility or None
-            The created ``InstitutionFacility`` instance if validation
-            and insertion succeed; ``None`` otherwise.
+        InstitutionFacility | None
+            The created institution facility, or None if it is not valid
+            or its ID already exists.
+
+        Raises
+        ------
+        TypeError
+            If ``data`` misses a field or has an unknown key.
+
+        Notes
+        -----
+        ``institutionfacility_change`` is emitted with the new ID on
+        success.
         """
         institutionfacility = InstitutionFacility(**data)
 
@@ -122,22 +162,27 @@ class InstitutionFacilityService(QObject):
     def update_institutionfacility(
         self, institutionfacility_id: int, data: Dict[str, Any]
     ) -> bool:
-        """
-        Update an existing institutionfacility with new values.
+        """Update an existing institution facility with new values.
 
         Parameters
         ----------
         institutionfacility_id : int
-            Identifier of the institutionfacility to update.
-        data : dict
-            Dictionary containing updated fields. Missing keys keep the
-            current value.
+            ID of the institution facility to update.
+        data : dict[str, Any]
+            Updated fields; missing keys keep the current value.
 
         Returns
         -------
         bool
-            ``True`` if the institutionfacility was found, validated,
-            and updated successfully; ``False`` otherwise.
+            True if the institution facility was found, is valid and was
+            saved; False otherwise.
+
+        Notes
+        -----
+        The cached object is changed in place before validation, so an
+        invalid update still changes it in memory.
+        ``institutionfacility_change`` is emitted with the ID on
+        success.
         """
         institutionfacility = self.dao.select(institutionfacility_id)
         if not institutionfacility:
@@ -156,22 +201,34 @@ class InstitutionFacilityService(QObject):
         return success
 
     def delete_institutionfacility(self, institutionfacility_id: int) -> bool:
-        """Delete a institutionfacility by its identifier.
+        """Delete an institution facility by its ID.
 
         Parameters
         ----------
         institutionfacility_id : int
-            Identifier of the institutionfacility to be removed.
+            ID of the institution facility to delete.
 
         Returns
         -------
         bool
-            ``True`` if the institutionfacility was successfully deleted,
-            ``False`` otherwise (e.g., institutionfacility not found).
+            True if deleted, False if the institution facility was not
+            found.
+
+        Raises
+        ------
+        BusinessRuleException
+            If a professional is linked to the facility; the message is
+            translated with ``self.tr()``.
+
+        Notes
+        -----
+        ``institutionfacility_change`` is emitted with 0 on success. A
+        professional without a facility (None) makes the check raise
+        ``AttributeError``.
         """
         from ttea.service import ProfessionalService
 
-        # Validação de integridade referencial (Negócio)
+        # Referential integrity (business rule)
         professional_service = ProfessionalService()
         professionals = professional_service.get_all_professionals()
         if any(
@@ -194,42 +251,49 @@ class InstitutionFacilityService(QObject):
     def find_by_id(
         self, institutionfacility_id: int
     ) -> Optional[InstitutionFacility]:
-        """Retrieve a institutionfacility by its unique identifier.
+        """Return an institution facility by its ID.
 
         Parameters
         ----------
         institutionfacility_id : int
-            The institutionfacility's ID.
+            ID of the institution facility.
 
         Returns
         -------
-        InstitutionFacility or None
-            The matching ``InstitutionFacility`` instance
-            or ``None`` if not found.
+        InstitutionFacility | None
+            The institution facility, or None if not found.
         """
         return self.dao.select(institutionfacility_id)
 
     def search_institutionfacilities(
         self, query: str = ""
     ) -> List[InstitutionFacility]:
-        """
-        Search institutionfacilities by name or ID (case-insensitive).
+        """Search institution facilities by name or ID, ignoring case.
 
         Parameters
         ----------
         query : str, optional
-            Search term. If empty or whitespace-only, returns all
-            institutionfacilities.
+            Search term. If empty or blank, all institution facilities
+            are returned. Default is ``""``.
 
         Returns
         -------
-        List[InstitutionFacility]
-            List of institutionfacilities whose ID (as string)
-            or name contain the query term.
+        list[InstitutionFacility]
+            The institution facilities whose ID (as text) or name
+            contains the term.
         """
         return self.dao.search_institutionfacilities(query)
 
     def get_institutionfacility_types(self) -> Dict[int, str]:
+        """Return the facility types with translated names.
+
+        Returns
+        -------
+        dict[int, str]
+            ``InstitutionFacility.TYPE_MAP`` with each name translated
+            at runtime by ``QCoreApplication.translate`` in the
+            ``"InstitutionFacility"`` context.
+        """
         # return InstitutionFacility.TYPE_MAP
         return {
             key: QCoreApplication.translate("InstitutionFacility", value)
@@ -242,6 +306,7 @@ class InstitutionFacilityService(QObject):
         Returns
         -------
         InstitutionFacilityCsvDAO
-            The data access object instance responsible for persistence.
+            The DAO, shared with ``ProfessionalService`` so both use the
+            same facility cache.
         """
         return self.dao

@@ -1,5 +1,7 @@
-"""Package for application configuration and startup support in the
-T-TEA platform.
+"""Application configuration package of the T-TEA platform.
+
+Provides the application constants (icon, version, date and time
+formats, settings keys) and helpers to read them.
 
 Attributes
 ----------
@@ -15,7 +17,7 @@ __license__ : str
 See Also
 --------
 AppConfig
-    Manages application configuration settings.
+    Application constants and configuration helpers.
 
 Notes
 -----

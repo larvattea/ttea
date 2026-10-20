@@ -25,59 +25,59 @@ if TYPE_CHECKING:
 class AppViewFactory:
     """Factory for application view instances.
 
-    This class provides static methods to instantiate views used in the
-    application. It centralizes view construction so callers do not need
-    to import view classes directly.
+    This class provides static methods to instantiate the views used in
+    the application. It centralizes view construction so callers do not
+    need to import view classes directly.
 
     Methods
     -------
     create_player_edit_view(parent=None, player=None)
-        Create an instance of PlayerEditView.
+        Create a new ``PlayerEditView``.
     create_player_list_view(parent=None, player_edit_view=None)
-        Create an instance of PlayerListView.
+        Create a new ``PlayerListView``.
     create_professional_edit_view(parent=None, professional=None)
-        Create an instance of ProfessionalEditView.
-    create_professional_list_view(parent=None, professional_edit_view=None)
-        Create an instance of ProfessionalListView.
-    create_institutionfacility_edit_view(parent=None, institutionfacility=None)
-        Create an instance of InstitutionFacilityEditView.
-    create_institutionfacility_list_view(parent=None, institutionfacility_edit_view=None)
-        Create an instance of InstitutionFacilityListView.
+        Create a new ``ProfessionalEditView``.
+    create_professional_list_view(parent=None, ...)
+        Create a new ``ProfessionalListView``.
+    create_institutionfacility_edit_view(parent=None, ...)
+        Create a new ``InstitutionFacilityEditView``.
+    create_institutionfacility_list_view(parent=None, ...)
+        Create a new ``InstitutionFacilityListView``.
     create_about_view(parent=None)
-        Create an instance of AboutView.
+        Create a new ``AboutView``.
     create_calibration_view(parent=None)
-        Create an instance of CalibrationView.
+        Create a new ``CalibrationView``.
     create_playergamelauch_view(parent=None)
-        Create an instance of PlayerGameLaunchView.
+        Create a new ``PlayerGameLaunchView``.
     create_language_view(parent=None)
-        Create an instance of LanguageView.
+        Create a new ``LanguageView``.
     create_main_view(parent=None)
-        Create an instance of MainView.
+        Create a new ``MainView``.
     create_manualcalibration_view(parent=None)
-        Create an instance of ManualCalibrationView.
+        Create a new ``ManualCalibrationView``.
     create_automaticcalibration_view(parent=None)
-        Create an instance of AutomaticCalibrationView.
+        Create a new ``AutomaticCalibrationView``.
+    create_calibrationsetting_view(parent=None)
+        Create a new ``CalibrationSettingView``.
     """
 
     @staticmethod
     def create_player_edit_view(
         parent: Optional[QDialog] = None, player: Optional["Player"] = None
     ) -> PlayerEditView:
-        """
-        Create an instance of PlayerEditView.
+        """Create a new ``PlayerEditView``.
 
         Parameters
         ----------
-        parent : Optional[QDialog], optional
-            The parent dialog for the PlayerEditView, by default None.
-        player : Optional[Player], optional
-            The player object to be edited, by default None.
+        parent : QDialog | None, optional
+            Parent of the view. Default is None.
+        player : Player | None, optional
+            Player to edit; None creates a new player. Default is None.
 
         Returns
         -------
         PlayerEditView
-            An instance of PlayerEditView configured with the provided
-            parent and player.
+            The new view.
         """
         return PlayerEditView(parent, player)
 
@@ -88,22 +88,20 @@ class AppViewFactory:
             Callable[[Optional[QDialog], Optional["Player"]], PlayerEditView]
         ] = None,
     ) -> PlayerListView:
-        """
-        Create an instance of PlayerListView.
+        """Create a new ``PlayerListView``.
 
         Parameters
         ----------
-        parent : Optional[QObject], optional
-            The parent object for the PlayerListView, by default None.
-        player_edit_view : Optional[Callable], optional
-            A callable to create a PlayerEditView instance, by default
-            None.
+        parent : QObject | None, optional
+            Parent of the view. Default is None.
+        player_edit_view : Callable | None, optional
+            Callable ``(parent, player) -> PlayerEditView`` used to open
+            the edit view. Default is None.
 
         Returns
         -------
         PlayerListView
-            An instance of PlayerListView configured with the provided
-            parent and player_edit_view callable.
+            The new view.
         """
         return PlayerListView(parent, player_edit_view)
 
@@ -112,22 +110,20 @@ class AppViewFactory:
         parent: Optional[QDialog] = None,
         professional: Optional["Professional"] = None,
     ) -> ProfessionalEditView:
-        """
-        Create an instance of ProfessionalEditView.
+        """Create a new ``ProfessionalEditView``.
 
         Parameters
         ----------
-        parent : Optional[QDialog], optional
-            The parent dialog for the ProfessionalEditView,
-            by default None.
-        professional : Optional[Professional], optional
-            The professional object to be edited, by default None.
+        parent : QDialog | None, optional
+            Parent of the view. Default is None.
+        professional : Professional | None, optional
+            Professional to edit; None creates a new one. Default is
+            None.
 
         Returns
         -------
         ProfessionalEditView
-            An instance of ProfessionalEditView configured
-            with the provided parent and professional.
+            The new view.
         """
         return ProfessionalEditView(parent, professional)
 
@@ -141,20 +137,20 @@ class AppViewFactory:
             ]
         ] = None,
     ) -> ProfessionalListView:
-        """Create an instance of ProfessionalListView.
+        """Create a new ``ProfessionalListView``.
 
         Parameters
         ----------
-        parent : Optional[QObject], optional
-            The parent object for the list view, by default None.
-        professional_edit_view : Optional[Callable], optional
-            Callable that creates a ProfessionalEditView instance, by
-            default None.
+        parent : QObject | None, optional
+            Parent of the view. Default is None.
+        professional_edit_view : Callable | None, optional
+            Callable ``(parent, professional) -> ProfessionalEditView``
+            used to open the edit view. Default is None.
 
         Returns
         -------
         ProfessionalListView
-            Configured ProfessionalListView instance.
+            The new view.
         """
         return ProfessionalListView(parent, professional_edit_view)
 
@@ -163,22 +159,19 @@ class AppViewFactory:
         parent: Optional[QDialog] = None,
         institutionfacility: Optional["InstitutionFacility"] = None,
     ) -> InstitutionFacilityEditView:
-        """
-        Create an instance of InstitutionFacilityEditView.
+        """Create a new ``InstitutionFacilityEditView``.
 
         Parameters
         ----------
-        parent : Optional[QDialog], optional
-            The parent dialog for the InstitutionFacilityEditView,
-            by default None.
-        institutionfacility : Optional[InstitutionFacility], optional
-            The institutionfacility object to be edited, by default None.
+        parent : QDialog | None, optional
+            Parent of the view. Default is None.
+        institutionfacility : InstitutionFacility | None, optional
+            Facility to edit; None creates a new one. Default is None.
 
         Returns
         -------
         InstitutionFacilityEditView
-            An instance of InstitutionFacilityEditView configured
-            with the provided parent and institutionfacility.
+            The new view.
         """
         return InstitutionFacilityEditView(parent, institutionfacility)
 
@@ -192,20 +185,20 @@ class AppViewFactory:
             ]
         ] = None,
     ) -> InstitutionFacilityListView:
-        """Create an instance of InstitutionFacilityListView.
+        """Create a new ``InstitutionFacilityListView``.
 
         Parameters
         ----------
-        parent : Optional[QObject], optional
-            The parent object for the list view, by default None.
-        institutionfacility_edit_view : Optional[Callable], optional
-            Callable that creates an InstitutionFacilityEditView instance,
-            by default None.
+        parent : QObject | None, optional
+            Parent of the view. Default is None.
+        institutionfacility_edit_view : Callable | None, optional
+            Callable that creates the edit view from ``(parent,
+            institutionfacility)``. Default is None.
 
         Returns
         -------
         InstitutionFacilityListView
-            Configured InstitutionFacilityListView instance.
+            The new view.
         """
         return InstitutionFacilityListView(
             parent, institutionfacility_edit_view
@@ -213,18 +206,17 @@ class AppViewFactory:
 
     @staticmethod
     def create_about_view(parent: Optional[QDialog] = None) -> AboutView:
-        """
-        Create an instance of AboutView.
+        """Create a new ``AboutView``.
 
         Parameters
         ----------
-        parent : Optional[QObject], optional
-            The parent object for the AboutView, by default None.
+        parent : QDialog | None, optional
+            Parent of the view. Default is None.
 
         Returns
         -------
         AboutView
-            An instance of AboutView configured with the provided parent.
+            The new view.
         """
         return AboutView(parent)
 
@@ -232,18 +224,17 @@ class AppViewFactory:
     def create_calibration_view(
         parent: Optional[QDialog] = None,
     ) -> CalibrationView:
-        """
-        Create an instance of CalibrationView.
+        """Create a new ``CalibrationView``.
 
         Parameters
         ----------
-        parent : Optional[QObject], optional
-            The parent object for the CalibrationView, by default None.
+        parent : QDialog | None, optional
+            Parent of the view. Default is None.
 
         Returns
         -------
         CalibrationView
-            An instance of CalibrationView configured with the provided parent.
+            The new view.
         """
         return CalibrationView(parent)
 
@@ -251,54 +242,49 @@ class AppViewFactory:
     def create_playergamelauch_view(
         parent: Optional[QDialog] = None,
     ) -> PlayerGameLaunchView:
-        """Create an instance of PlayerGameLaunchView.
+        """Create a new ``PlayerGameLaunchView``.
 
         Parameters
         ----------
-        parent : Optional[QObject], optional
-            The parent object for the PlayerGameLaunchView, by default None.
+        parent : QDialog | None, optional
+            Parent of the view. Default is None.
 
         Returns
         -------
         PlayerGameLaunchView
-            Instance of PlayerGameLaunchView configured with the provided
-            parent.
+            The new view.
         """
         return PlayerGameLaunchView(parent)
 
     @staticmethod
     def create_language_view(parent: Optional[QDialog] = None) -> LanguageView:
-        """
-        Create an instance of LanguageView.
+        """Create a new ``LanguageView``.
 
         Parameters
         ----------
-        parent : Optional[QObject], optional
-            The parent object for the LanguageView, by default None.
+        parent : QDialog | None, optional
+            Parent of the view. Default is None.
 
         Returns
         -------
         LanguageView
-            An instance of LanguageView configured with the provided
-            translator and parent.
+            The new view.
         """
         return LanguageView(parent)
 
     @staticmethod
     def create_main_view(parent: Optional[QMainWindow] = None) -> MainView:
-        """
-        Create an instance of MainView.
+        """Create a new ``MainView``.
 
         Parameters
         ----------
-        parent : Optional[QObject], optional
-            The parent object for the MainView, by default None.
+        parent : QMainWindow | None, optional
+            Parent of the view. Default is None.
 
         Returns
         -------
         MainView
-            An instance of MainView configured with the provided
-            translator and parent.
+            The new view.
         """
         return MainView(parent)
 
@@ -306,19 +292,17 @@ class AppViewFactory:
     def create_manualcalibration_view(
         parent: Optional[QDialog] = None,
     ) -> ManualCalibrationView:
-        """Create an instance of ManualCalibrationView.
+        """Create a new ``ManualCalibrationView``.
 
         Parameters
         ----------
-        parent : Optional[QDialog], optional
-            The parent dialog for the manual calibration view, by
-            default None.
+        parent : QDialog | None, optional
+            Parent of the view. Default is None.
 
         Returns
         -------
         ManualCalibrationView
-            An instance of ManualCalibrationView configured with the
-            provided parent.
+            The new view.
         """
         return ManualCalibrationView(parent)
 
@@ -326,19 +310,17 @@ class AppViewFactory:
     def create_automaticcalibration_view(
         parent: Optional[QDialog] = None,
     ) -> AutomaticCalibrationView:
-        """Create an instance of AutomaticCalibrationView.
+        """Create a new ``AutomaticCalibrationView``.
 
         Parameters
         ----------
-        parent : Optional[QDialog], optional
-            The parent dialog for the automatic calibration view, by
-            default None.
+        parent : QDialog | None, optional
+            Parent of the view. Default is None.
 
         Returns
         -------
         AutomaticCalibrationView
-            An instance of AutomaticCalibrationView configured with the
-            provided parent.
+            The new view.
         """
         return AutomaticCalibrationView(parent)
 
@@ -346,18 +328,16 @@ class AppViewFactory:
     def create_calibrationsetting_view(
         parent: Optional[QDialog] = None,
     ) -> CalibrationSettingView:
-        """Create an instance of CalibrationSettingView.
+        """Create a new ``CalibrationSettingView``.
 
         Parameters
         ----------
-        parent : Optional[QDialog], optional
-            The parent dialog for the calibration settings view, by
-            default None.
+        parent : QDialog | None, optional
+            Parent of the view. Default is None.
 
         Returns
         -------
         CalibrationSettingView
-            An instance of CalibrationSettingView configured with the
-            provided parent.
+            The new view.
         """
         return CalibrationSettingView(parent)

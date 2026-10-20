@@ -1,8 +1,8 @@
 """Logging utilities for the T-TEA Qt application.
 
-This module provides a singleton Log class for application diagnostics,
-including rotating file logging, system information capture, and exception
-stack trace reporting.
+This module provides the singleton ``Log`` class for application
+diagnostics: rotating file logging, system and Python environment
+information, and exception stack trace reporting.
 """
 
 import importlib.metadata
@@ -24,25 +24,37 @@ from ttea.util import PathConfig
 class Log:
     """Logging manager for application diagnostics and exceptions.
 
-    This singleton class configures a rotating log file handler and provides
-    methods to record informational events, warnings, and errors. It also
-    collects system and Python environment data for richer diagnostics.
+    This singleton class configures a rotating log file handler and
+    provides methods to record informational events, warnings and
+    errors. It also collects system and Python environment data for
+    richer diagnostics.
+
+    Parameters
+    ----------
+    log_file : str | None, optional
+        Path to the log file. Default is None, which uses
+        ``LOG_FILE_PATH``.
+    log_level : int, optional
+        Logging level of the logger and of the file handler, such as
+        ``logging.DEBUG`` or ``logging.INFO``. Default is
+        ``logging.DEBUG``.
 
     Attributes
     ----------
-    LOG_FILE_NAME : str
-        Default log file name used for logging.
-    LOG_FILE_PATH : str
-        Default resolved path for the log file.
-    _instance : Optional[Log]
+    LOG_FILE_NAME : str, class attribute
+        Default log file name (``"tteaapp.log"``).
+    LOG_FILE_PATH : str, class attribute
+        Default log file path, resolved by ``PathConfig.log`` when the
+        module is imported.
+    _instance : Log | None, class attribute
         Cached singleton instance.
+    log_file : str
+        Path of the log file in use.
+    logger : logging.Logger
+        The ``"Log"`` logger that receives all messages.
 
     Methods
     -------
-    __new__(cls, *args, **kwargs)
-        Create or return the singleton Log instance.
-    __init__(log_file=None, log_level=logging.DEBUG)
-        Initialize the logger and configure file handling.
     get_log()
         Retrieve the singleton Log instance.
     ensure_log_directory_exists()
@@ -62,14 +74,19 @@ class Log:
     log_error(message)
         Write an error message to the log.
 
-    Examples
-    --------
-    >>> log = Log.get_log()
-    >>> log.log_info("Application started")
-    >>> try:
-    ...     x = 1 / 0
-    ... except Exception as e:
-    ...     log.log_error_with_stack(e, variables={"x": 0})
+    Notes
+    -----
+    ``__new__`` always returns the same instance, but Python still runs
+    ``__init__`` on every ``Log(...)`` call: each call reconfigures the
+    shared instance (file, level and handler). Use ``get_log()`` to
+    reuse the instance without reconfiguring it.
+
+    On initialization the log directory is created if missing, existing
+    handlers of the ``"Log"`` logger are removed to avoid duplicate
+    output, and a ``RotatingFileHandler`` is added (10 MiB per file,
+    5 backups, format ``"%(asctime)s - %(levelname)s - %(message)s"``
+    with dates as ``%Y-%m-%d %H:%M:%S``). The message
+    ``"Log instance initialized."`` is then written at INFO level.
     """
 
     LOG_FILE_NAME = "tteaapp.log"
@@ -77,27 +94,21 @@ class Log:
     _instance = None
 
     def __new__(cls, *args: tuple, **kwargs: dict) -> "Log":
-        """Implements the Singleton pattern to ensure a single instance of
-        the Log class.
+        """Return the singleton instance, creating it on the first call.
 
         Parameters
         ----------
-        cls : type
-            The class being instantiated.
         *args : tuple
-            Variable length argument list.
+            Positional arguments; ignored here (Python passes them to
+            ``__init__``).
         **kwargs : dict
-            Arbitrary keyword arguments.
+            Keyword arguments; ignored here (Python passes them to
+            ``__init__``).
 
         Returns
         -------
         Log
             The singleton instance of the Log class.
-
-        Notes
-        -----
-        If no instance exists, a new one is created. Otherwise, the existing
-        instance is returned.
         """
         if cls._instance is None:
             cls._instance = super(Log, cls).__new__(cls)
@@ -106,28 +117,6 @@ class Log:
     def __init__(
         self, log_file: Optional[str] = None, log_level: int = logging.DEBUG
     ) -> None:
-        """Initialize the logger with an optional file and log level.
-
-        Parameters
-        ----------
-        log_file : str, optional
-            Path to the log file. If None, uses `LOG_FILE_PATH`.
-        log_level : int, optional
-            Logging level such as logging.DEBUG or logging.INFO.
-            Defaults to logging.DEBUG.
-
-        Returns
-        -------
-        None
-
-        Notes
-        -----
-        Creates the log directory if it does not exist.
-        Configures a rotating file handler with a maximum size of 10 MiB and
-        up to five backup files.
-        Clears existing handlers to prevent duplicate output.
-        """
-
         # Use default file if none specified
         self.log_file = log_file if log_file else self.LOG_FILE_PATH
         # Ensure log directory exists
@@ -157,11 +146,6 @@ class Log:
     def get_log(cls) -> "Log":
         """Retrieve the singleton instance of the Log class.
 
-        Parameters
-        ----------
-        cls : type
-            The Log class.
-
         Returns
         -------
         Log
@@ -169,42 +153,46 @@ class Log:
 
         Notes
         -----
-        If no instance exists, a new one is created with default parameters.
+        If no instance exists, a new one is created with default
+        parameters. An existing instance is returned as is, without
+        reconfiguration.
         """
         if cls._instance is None:
             cls._instance = Log()
         return cls._instance
 
     def ensure_log_directory_exists(self) -> None:
-        """Ensure the log directory exists, creating it if necessary.
-
-        Returns
-        -------
-        None
+        """Create the log file directory if it does not exist.
 
         Notes
         -----
-        Uses `os.makedirs` to create the directory tree for the log file path
-        if it does not exist.
+        Uses ``os.makedirs`` on the directory of the absolute path of
+        ``log_file``, creating intermediate directories as needed.
         """
         log_dir = os.path.dirname(os.path.abspath(self.log_file))
         if not os.path.exists(log_dir):
             os.makedirs(log_dir)
 
     def get_system_info(self) -> Dict[str, str]:
-        """Retrieve system, hardware, and memory information.
+        """Retrieve system, hardware and memory information.
 
         Returns
         -------
-        Dict[str, str]
-            Dictionary containing system information such as OS, processor,
-            CPU cores, and memory usage.
+        dict[str, str]
+            Information keyed by ``"OS"``, ``"OS Version"``,
+            ``"Machine"``, ``"Processor"``, ``"CPU Cores"``,
+            ``"Memory Total (GB)"``, ``"Memory Used by App (MB)"`` and
+            ``"Timestamp"``.
 
         Notes
         -----
-        - Uses `platform` module for system and hardware details.
-        - Uses `psutil` for CPU and memory information.
-        - Memory values are rounded for readability.
+        Despite the annotation, not every value is a string:
+        ``"CPU Cores"`` is the logical core count from ``psutil``
+        (an int, or None if undetermined) and the memory values are
+        floats rounded to 2 decimals. ``"Memory Total (GB)"`` is the
+        total physical memory divided by 1024**3; ``"Memory Used by App
+        (MB)"`` is the resident set size (RSS) of the current process
+        divided by 1024**2. ``"Timestamp"`` uses ``%Y-%m-%d %H:%M:%S``.
         """
         process = psutil.Process(os.getpid())
         memory_info = process.memory_info()
@@ -223,18 +211,21 @@ class Log:
         return info
 
     def get_python_info(self) -> Dict[str, str]:
-        """Retrieve Python installation and installed package information.
+        """Retrieve Python and installed package information.
 
         Returns
         -------
-        Dict[str, str]
-            Dictionary containing Python version, executable path, and
-            installed packages.
+        dict[str, str]
+            Information keyed by ``"Python Version"`` (``sys.version``),
+            ``"Python Executable"`` (``sys.executable``) and
+            ``"Installed Packages"``.
 
         Notes
         -----
-        - Uses `importlib.metadata` to list installed packages.
-        - Packages are sorted alphabetically and formatted as "name==version".
+        Installed packages come from ``importlib.metadata``,
+        formatted as ``"name==version"``, sorted alphabetically and
+        joined with ``", "``. If none is found the value is
+        ``"No packages found"``.
         """
         # Get installed packages
         packages = sorted(
@@ -252,16 +243,13 @@ class Log:
         return info
 
     def log_system_info(self) -> None:
-        """Log system and Python environment information to the log file.
-
-        Returns
-        -------
-        None
+        """Write system and Python environment information to the log.
 
         Notes
         -----
-        - Calls `get_system_info` and `get_python_info` to gather information.
-        - Logs each key-value pair as an INFO-level message.
+        Writes a header line followed by each key-value pair of
+        ``get_system_info()`` and of ``get_python_info()``, all at INFO
+        level.
         """
         # Log system information
         self.logger.info("System Information:")
@@ -280,26 +268,35 @@ class Log:
         variables: Optional[Dict[str, Any]] = None,
         traceback_obj: Optional[Any] = None,
     ) -> None:
-        """Log an error with stack trace and optional context.
+        """Log an error with stack trace and diagnostic context.
 
         Parameters
         ----------
         exception : Exception
             The exception to log.
-        variables : Dict[str, Any], optional
-            Variables to include in the log output.
-        traceback_obj : Any, optional
-            Traceback object to format. If None, uses the current exception
-            traceback.
-
-        Returns
-        -------
-        None
+        variables : dict[str, Any] | None, optional
+            Variables to include in the log output. Default is None.
+        traceback_obj : Any | None, optional
+            Traceback object to format. If None, the traceback of the
+            exception currently being handled is used. Default is None.
 
         Notes
         -----
-        Logs provided variables and non-builtin local variables from the
-        caller frame. Also logs system and Python environment details.
+        Everything is written at ERROR level, in this order:
+
+        1. ``variables``, if given, each value serialized with
+           ``json.dumps(indent=2, default=str)``;
+        2. the local variables of the caller's frame
+           (``sys._getframe(1)``), skipping names that start with
+           ``__``, serialized the same way;
+        3. ``get_system_info()`` and ``get_python_info()``;
+        4. ``str(exception)`` and the execution stack.
+
+        With ``traceback_obj`` the stack comes from
+        ``traceback.format_tb``; otherwise from
+        ``traceback.format_exc``, so call it inside the ``except``
+        block. Outside it, ``format_exc`` returns ``"NoneType: None"``
+        and that is what gets logged.
         """
         # Log provided variables if any
         if variables:
@@ -346,10 +343,6 @@ class Log:
         ----------
         message : str
             The message to log at the INFO level.
-
-        Returns
-        -------
-        None
         """
         self.logger.info(message)
 
@@ -360,10 +353,6 @@ class Log:
         ----------
         message : str
             The message to log at the WARNING level.
-
-        Returns
-        -------
-        None
         """
         self.logger.warning(message)
 
@@ -374,9 +363,5 @@ class Log:
         ----------
         message : str
             The message to log at the ERROR level.
-
-        Returns
-        -------
-        None
         """
         self.logger.error(message)
