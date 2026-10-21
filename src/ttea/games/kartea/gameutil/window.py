@@ -1,10 +1,12 @@
 """Window utilities of the game (pygame)."""
 
 import ctypes
+import os
 import subprocess
 import sys
 
 import pygame
+from pygame._sdl2.video import Window
 
 from ttea.log import Log
 
@@ -110,15 +112,17 @@ def regain_focus() -> None:
     - Windows: ``_win_force_foreground`` (user32), which works even when
       another process owns the foreground.
     - Linux: requires the ``xdotool`` tool (X11).
-    - macOS: ``osascript`` brings the parent process to the front.
+    - macOS: ``osascript`` brings this process to the front.
 
     Does nothing if pygame has no window id. Any error, or a failure to
     get the focus on Windows, does not interrupt the game: it is logged
     as a warning.
     """
     try:
-        # Let SDL finish showing the window before asking for the focus
-        pygame.event.pump()
+        # Let SDL finish showing the window before asking for the focus.
+        # Not on macOS: pumping here leaves the fullscreen window black.
+        if not sys.platform.startswith("darwin"):
+            pygame.event.pump()
 
         wm_info = pygame.display.get_wm_info()
         window_id = wm_info.get("window")
@@ -140,10 +144,11 @@ def regain_focus() -> None:
                 check=False,
             )
         elif sys.platform.startswith("darwin"):  # macOS
+            # Make this process frontmost, then the game its key window
+            # (the capture window belongs to the same process).
             apple_script = (
                 'tell application "System Events" to set frontmost of '
-                "first process whose unix id is "
-                '(do shell script "echo $PPID") to true'
+                f"first process whose unix id is {os.getpid()} to true"
             )
             subprocess.run(
                 ["osascript", "-e", apple_script],
@@ -151,6 +156,7 @@ def regain_focus() -> None:
                 stderr=subprocess.DEVNULL,
                 check=False,
             )
+            Window.from_display_module().focus()
     except Exception as error:
         # Do not stop the game, but keep the reason in the log.
         Log.get_log().log_warning(

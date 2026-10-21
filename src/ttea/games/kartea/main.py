@@ -118,16 +118,23 @@ class KarTEA:
         )
         self.game_state.player_name = self.get_player_first_name()
 
+        # The operator works on the other screen and the capture window
+        # takes the focus: losing it must not minimize the game.
+        os.environ["SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS"] = "0"
         pygame.init()
         pygame.display.set_caption(self.settings.WINDOW_NAME)
 
         screen_size = (self.settings.SCREEN_WIDTH, self.settings.SCREEN_HEIGHT)
         if self.settings.FULLSCREEN:
+            # macOS keeps borderless windows under its menu bar; only
+            # fullscreen covers the whole projection there.
+            flags = (
+                pygame.FULLSCREEN
+                if sys.platform == "darwin"
+                else pygame.NOFRAME
+            )
             self.screen = pygame.display.set_mode(
-                screen_size,
-                # pygame.FULLSCREEN,
-                pygame.NOFRAME,
-                display=self.settings.SCREEN_OS_INDEX,
+                screen_size, flags, display=self.settings.SCREEN_OS_INDEX
             )
         else:
             self.screen = pygame.display.set_mode(
@@ -272,9 +279,9 @@ class KarTEA:
           recorded before the level changes, so the event carries the
           source phase/level; the level is then reset.
         """
-        feet_pos = None
-        if self.game_state.feet_click:
-            feet_pos = self.game.track_feet_for_menu()
+        feet_pos = self.game.track_feet_for_menu()
+        if not self.game_state.feet_click:
+            feet_pos = None
 
         menu_result = self.menu.update(feet_pos)
         by_feet = self.menu.selected_by_feet
