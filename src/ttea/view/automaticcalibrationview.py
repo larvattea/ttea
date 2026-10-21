@@ -1,7 +1,6 @@
-import threading
 from typing import Optional
 
-import cv2
+from PySide6.QtCore import QTimer
 from PySide6.QtGui import QCloseEvent, QPainter, QPaintEvent, QShowEvent
 from PySide6.QtWidgets import QDialog
 
@@ -43,6 +42,7 @@ class AutomaticCalibrationView(
         )
 
         self.is_finished = False
+        self.calibration_started = False
 
         # Initialize controller
         self.controller = AutomaticCalibrationController(
@@ -77,6 +77,12 @@ class AutomaticCalibrationView(
         mode = self.controller.service.get_automatic_window_open_mode()
 
         if mode == CalibrationSetting.FULLSCREEN:
+            # setup_window fixed the size to the parent's; the board
+            # must cover the whole projected image.
+            full_geometry = self.controller.service.get_geometry_of_screen(
+                monitor_idx
+            )
+            self.setFixedSize(full_geometry.width(), full_geometry.height())
             self.showFullScreen()
         elif mode == CalibrationSetting.MAXIMIZED:
             self.showMaximized()
@@ -124,17 +130,12 @@ class AutomaticCalibrationView(
             painter.drawPixmap(self.rect(), self.board_pixmap)
 
     def showEvent(self, event: QShowEvent) -> None:
-        """
-        Gatilho acionado automaticamente assim que a janela é exibida no projetor.
-        Inicia a thread de captura e calibração para não travar a interface.
-        """
+        """Start the calibration once the board is on screen."""
         super().showEvent(event)
-
-        # Executa o loop do OpenCV em uma Thread separada para a janela do PySide6 continuar respondendo
-        calib_thread = threading.Thread(
-            target=self.controller.run_auto_calibration, daemon=True
-        )
-        calib_thread.start()
+        if not self.calibration_started:
+            self.calibration_started = True
+            # Queued so the board is painted before the camera opens
+            QTimer.singleShot(0, self.controller.start_auto_calibration)
 
     def closeEvent(self, event: QCloseEvent) -> None:
         """Override close event to confirm exit.
@@ -146,19 +147,10 @@ class AutomaticCalibrationView(
         event : QCloseEvent
             The close event to accept or ignore.
         """
-        if self.is_finished:
-            if self.controller.camera is not None:
-                self.controller.camera.release()
-                cv2.destroyAllWindows()
-            event.accept()
-            return
-
-        if self.msg.question(
+        if self.is_finished or self.msg.question(
             self.tr("Deseja sair da calibração automática?"), None, True
         ):
-            if self.controller.camera is not None:
-                self.controller.camera.release()
-                cv2.destroyAllWindows()
+            self.controller.stop_auto_calibration()
             event.accept()
         else:
             event.ignore()

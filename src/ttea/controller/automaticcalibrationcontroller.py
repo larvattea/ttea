@@ -1,4 +1,3 @@
-import time
 from typing import TYPE_CHECKING, Dict, Optional
 
 import cv2
@@ -6,7 +5,7 @@ import mediapipe as mp
 import numpy as np
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
-from PySide6.QtCore import QCoreApplication, QObject, QRect, Signal
+from PySide6.QtCore import QCoreApplication, QObject, QRect, QTimer, Signal
 from PySide6.QtGui import QImage, QPixmap
 
 from ttea.model import CalibrationPoint
@@ -44,6 +43,8 @@ class AutomaticCalibrationController(QObject):
         self.monitor_screen: str = QCoreApplication.translate(
             "AutomaticCalibrationController", "Tela de Monitoramento"
         )
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self._tick)
         # ASCII key of the OpenCV window; the translated title (with
         # accents) is shown with CvText.set_window_title.
         self.monitor_window: str = CvText.window_name(self.monitor_screen)
@@ -254,247 +255,238 @@ class AutomaticCalibrationController(QObject):
                     cv2.LINE_AA,
                 )
 
-    def run_auto_calibration(self) -> None:
+    def start_auto_calibration(self) -> None:
+        """Open the camera and the monitoring window, then poll frames.
+
+        OpenCV windows must live on the GUI thread (Cocoa raises
+        otherwise), so a QTimer drives ``_tick`` like the manual
+        calibration does. The board itself is shown by the View.
         """
-        Lógica de leitura da câmera, detecção do ChArUco e cálculo da calibração.
-        A exibição do tabuleiro é gerenciada pela View do PySide6.
-        """
-        cap = None
         try:
-            # -------------------------------------------------
-            # DETECÇÃO E MÉTRICAS DA TELA
-            # -------------------------------------------------
             screen_geometry = self.get_available_geometry_of_screen(
                 self.monitor_index
             )
-            screen_width = screen_geometry.width()
-            screen_height = screen_geometry.height()
+            self.screen_width = screen_geometry.width()
+            self.screen_height = screen_geometry.height()
 
-            # -------------------------------------------------
-            # CONFIGURAÇÃO DO CHARUCO
-            # -------------------------------------------------
             aruco_cols = self.service.get_automatic_num_columns()
             aruco_rows = self.service.get_automatic_num_rows()
 
-            square_width = screen_width // aruco_cols
-            square_height = screen_height // aruco_rows
-            square_size_average = (square_width + square_height) / 2
+            self.square_width = self.screen_width // aruco_cols
+            self.square_height = self.screen_height // aruco_rows
+            self.square_size_average = (
+                self.square_width + self.square_height
+            ) / 2
             marker_size = int(
-                square_size_average * self.service.get_automatic_multiplier()
+                self.square_size_average
+                * self.service.get_automatic_multiplier()
             )
 
-            aruco = cv2.aruco
-            dictionary = aruco.getPredefinedDictionary(
+            dictionary = cv2.aruco.getPredefinedDictionary(
                 self.service.get_automatic_dictionary()
             )
-            board = aruco.CharucoBoard(
+            self.board = cv2.aruco.CharucoBoard(
                 (aruco_cols, aruco_rows),
-                square_size_average,
+                self.square_size_average,
                 marker_size,
                 dictionary,
             )
+            self.detector = cv2.aruco.ArucoDetector(dictionary)
 
-            # -------------------------------------------------
-            # CONFIGURAÇÃO DA CÂMERA
-            # -------------------------------------------------
-            cap = cv2.VideoCapture(
+            self.camera = cv2.VideoCapture(
                 self.camera_index, self.service.get_opencv_capture_backend()
             )
-            if not cap.isOpened():
+            if not self.camera.isOpened():
                 self.msg_critical_signal.emit(
                     self.tr("Não foi possível abrir a câmera.")
                 )
+                self.stop_auto_calibration()
                 return
 
-            detector = aruco.ArucoDetector(dictionary)
-            cv2.namedWindow(self.monitor_window, cv2.WINDOW_AUTOSIZE)
-            CvText.set_window_title(self.monitor_window, self.monitor_screen)
-
-            last_camera_vertices = None
-            frozen_frame = None
-
-            # -------------------------------------------------
-            # LOOP PRINCIPAL
-            # -------------------------------------------------
-            while True:
-                if not self.modo_preview:
-                    if not cap.isOpened():
-                        self.msg_critical_signal.emit(
-                            self.tr("Não foi possível abrir a câmera.")
-                        )
-                        break
-
-                    ret, frame = cap.read()
-                    if not ret:
-                        self.msg_critical_signal.emit(
-                            self.tr(
-                                "Erro ao capturar imagem da câmera. Dispositivo desconectado.\nVerifique a conexão do cabo e/ou a instalação da câmera.\nFeche a janela e tente novamente."
-                            )
-                        )
-                        break
-
-                    # Processamento da geometria utilizando o método modularizado
-                    vertices = self._process_frame_geometry(
-                        frame,
-                        detector,
-                        board,
-                        square_size_average,
-                        square_width,
-                        square_height,
-                        screen_width,
-                        screen_height,
-                    )
-
-                    if vertices is not None:
-                        last_camera_vertices = vertices
-                        self._draw_quadrilateral(frame, vertices)
-
-                    display_frame = frame.copy()
-                    hud_lines = [
-                        self.tr(
-                            "Tecle [S] para ocultar a tela e capturar a imagem."
-                        ),
-                        self.tr(
-                            "Tecle [ESC] para sair da tela de monitoramento."
-                        ),
-                        self.tr(
-                            "Tecle [ALT+F4 ou CMD+W] para fechar a tela das figuras."
-                        ),
-                    ]
-
-                    # Pillow instead of cv2.putText: accents (é, ó, ñ)
-                    # and wrapping of lines wider than the frame.
-                    display_frame = CvText.draw_lines(
-                        display_frame, hud_lines, origin=(20, 24)
-                    )
-                else:
-                    display_frame = frozen_frame.copy()
-                    msg_hud = self.tr(
-                        "Amostra: Tecle [ESC] para salvar | Tecle [R] para repetir."
-                    )
-                    display_frame = CvText.draw_lines(
-                        display_frame, [msg_hud], origin=(20, 24)
-                    )
-
-                cv2.imshow(self.monitor_window, display_frame)
-                key = cv2.waitKey(1) & 0xFF
-
-                # --- AÇÃO S: FECHAMENTO DA JANELA E CAPTURA LIMPA ---
-                if (
-                    key == ord("s") or key == ord("S")
-                ) and not self.modo_preview:
-                    cv2.destroyWindow(self.monitor_window)
-                    cv2.waitKey(1)
-
-                    time.sleep(1.0)
-
-                    # Descarte seguro de buffer com verificação de cabo puxado
-                    buffer_ok = True
-                    for _ in range(5):
-                        if not cap.grab():
-                            buffer_ok = False
-                            break
-
-                    if not buffer_ok:
-                        self.msg_critical_signal.emit(
-                            self.tr(
-                                "Erro ao capturar imagem da câmera. Dispositivo desconectado.\nVerifique a conexão do cabo e/ou a instalação da câmera.\nFeche a janela e tente novamente."
-                            )
-                        )
-                        break
-
-                    ret, clean_frame = cap.read()
-
-                    if ret:
-                        clean_vertices = self._process_frame_geometry(
-                            clean_frame,
-                            detector,
-                            board,
-                            square_size_average,
-                            square_width,
-                            square_height,
-                            screen_width,
-                            screen_height,
-                        )
-
-                        if clean_vertices is not None:
-                            last_camera_vertices = clean_vertices
-                            self._draw_quadrilateral(
-                                clean_frame, clean_vertices, with_labels=True
-                            )
-                            frozen_frame = clean_frame.copy()
-                            self.modo_preview = True
-                            self.msg_info_signal.emit(
-                                self.tr(
-                                    "Sucesso! Captura realizada sem obstruções."
-                                )
-                            )
-                        else:
-                            self.msg_warning_signal.emit(
-                                self.tr(
-                                    "O tabuleiro não pôde ser lido na foto limpa. Retornando..."
-                                )
-                            )
-                    else:
-                        self.msg_critical_signal.emit(
-                            self.tr(
-                                "Erro ao capturar imagem da câmera. Dispositivo desconectado.\nVerifique a conexão do cabo e/ou a instalação da câmera.\nFeche a janela e tente novamente."
-                            )
-                        )
-                        break
-
-                    cv2.namedWindow(self.monitor_window, cv2.WINDOW_AUTOSIZE)
-                    CvText.set_window_title(
-                        self.monitor_window, self.monitor_screen
-                    )
-
-                # --- AÇÃO R: VOLTA AO RASTREAMENTO REAL ---
-                elif (
-                    key == ord("r") or key == ord("R")
-                ) and self.modo_preview:
-                    self.modo_preview = False
-                    frozen_frame = None
-                    self.msg_warning_signal.emit(
-                        self.tr("Captura descartada. Rastreio reativado.")
-                    )
-
-                # --- AÇÃO ESC: SALVA E FECHA ---
-                elif key == 27:
-                    if self.modo_preview and last_camera_vertices is not None:
-                        se, sd, ie, id_pt = last_camera_vertices
-
-                        if self.service.is_automatic_mirror_mode():
-                            largura_cam = frozen_frame.shape[1]
-                            self.calibration_points = np.array(
-                                [
-                                    [largura_cam - se[0], se[1]],  # SD
-                                    [largura_cam - sd[0], sd[1]],  # SE
-                                    [largura_cam - ie[0], ie[1]],  # ID
-                                    [largura_cam - id_pt[0], id_pt[1]],  # IE
-                                ],
-                                dtype=np.int64,
-                            )
-                        else:
-                            self.calibration_points = np.array(
-                                [sd, se, id_pt, ie], dtype=np.int64
-                            )
-
-                        self.create_calibration_point()
-                    else:
-                        self.msg_info_signal.emit(
-                            self.tr("Fechando sem salvar.")
-                        )
-                    break
-
+            self._open_monitor_window()
         except Exception as e:
-            mensagem = self.tr(
-                "Erro crítico na calibração automática.\nDetalhes: {0}."
-            ).format(e)
-            self.msg_critical_signal.emit(mensagem)
-        finally:
-            if cap is not None and cap.isOpened():
-                cap.release()
-            cv2.destroyAllWindows()
+            self._fail(e)
+            return
+
+        self.last_camera_vertices = None
+        self.frozen_frame = None
+        self.timer.start(30)
+
+    def stop_auto_calibration(self) -> None:
+        """Stop polling and release the camera and the OpenCV window."""
+        self.timer.stop()
+        if self.camera is not None:
+            self.camera.release()
+            self.camera = None
+        cv2.destroyAllWindows()
+
+    def _open_monitor_window(self) -> None:
+        cv2.namedWindow(self.monitor_window, cv2.WINDOW_AUTOSIZE)
+        CvText.set_window_title(self.monitor_window, self.monitor_screen)
+
+    def _fail(self, error: Exception) -> None:
+        self.stop_auto_calibration()
+        mensagem = self.tr(
+            "Erro crítico na calibração automática.\nDetalhes: {0}."
+        ).format(error)
+        self.msg_critical_signal.emit(mensagem)
+
+    def _camera_lost(self) -> None:
+        self.stop_auto_calibration()
+        self.msg_critical_signal.emit(
+            self.tr(
+                "Erro ao capturar imagem da câmera. Dispositivo desconectado.\nVerifique a conexão do cabo e/ou a instalação da câmera.\nFeche a janela e tente novamente."
+            )
+        )
+
+    def _detect(self, frame: np.ndarray) -> Optional[np.ndarray]:
+        return self._process_frame_geometry(
+            frame,
+            self.detector,
+            self.board,
+            self.square_size_average,
+            self.square_width,
+            self.square_height,
+            self.screen_width,
+            self.screen_height,
+        )
+
+    def _tick(self) -> None:
+        """One iteration of the monitoring loop.
+
+        The timer is paused while the iteration runs: message boxes
+        and, on macOS, ``cv2.waitKey`` spin nested event loops that
+        would otherwise re-enter it.
+        """
+        self.timer.stop()
+        try:
+            if self._step():
+                self.timer.start(30)
+        except Exception as e:
+            self._fail(e)
+
+    def _step(self) -> bool:
+        """Show one frame and handle its key; False ends the loop."""
+        if not self.modo_preview:
+            ret, frame = self.camera.read()
+            if not ret:
+                self._camera_lost()
+                return False
+
+            vertices = self._detect(frame)
+            if vertices is not None:
+                self.last_camera_vertices = vertices
+                self._draw_quadrilateral(frame, vertices)
+
+            hud_lines = [
+                self.tr("Tecle [S] para ocultar a tela e capturar a imagem."),
+                self.tr("Tecle [ESC] para sair da tela de monitoramento."),
+                self.tr(
+                    "Tecle [ALT+F4 ou CMD+W] para fechar a tela das figuras."
+                ),
+            ]
+            # Pillow instead of cv2.putText: accents (é, ó, ñ)
+            # and wrapping of lines wider than the frame.
+            display_frame = CvText.draw_lines(
+                frame, hud_lines, origin=(20, 24)
+            )
+        else:
+            msg_hud = self.tr(
+                "Amostra: Tecle [ESC] para salvar | Tecle [R] para repetir."
+            )
+            display_frame = CvText.draw_lines(
+                self.frozen_frame.copy(), [msg_hud], origin=(20, 24)
+            )
+
+        cv2.imshow(self.monitor_window, display_frame)
+        key = cv2.waitKey(1) & 0xFF
+        if self.camera is None:
+            # Closed from an event handled inside waitKey
+            return False
+
+        if key in (ord("s"), ord("S")) and not self.modo_preview:
+            # Hide the monitoring window so it does not cover the
+            # board, then capture once it is gone.
+            cv2.destroyWindow(self.monitor_window)
+            cv2.waitKey(1)
+            QTimer.singleShot(1000, self._capture_clean_frame)
+            return False
+
+        if key in (ord("r"), ord("R")) and self.modo_preview:
+            self.modo_preview = False
+            self.frozen_frame = None
+            self.msg_warning_signal.emit(
+                self.tr("Captura descartada. Rastreio reativado.")
+            )
+        elif key == 27:
+            self.stop_auto_calibration()
+            if self.modo_preview and self.last_camera_vertices is not None:
+                self._save_vertices()
+            else:
+                self.msg_info_signal.emit(self.tr("Fechando sem salvar."))
+            return False
+
+        return True
+
+    def _capture_clean_frame(self) -> None:
+        """Read a frame without the monitoring window over the board."""
+        if self.camera is None:  # Closed during the delay
+            return
+        try:
+            # Drop buffered frames taken while the window was visible
+            for _ in range(5):
+                if not self.camera.grab():
+                    self._camera_lost()
+                    return
+
+            ret, clean_frame = self.camera.read()
+            if not ret:
+                self._camera_lost()
+                return
+
+            clean_vertices = self._detect(clean_frame)
+            self._open_monitor_window()
+            if clean_vertices is not None:
+                self.last_camera_vertices = clean_vertices
+                self._draw_quadrilateral(
+                    clean_frame, clean_vertices, with_labels=True
+                )
+                self.frozen_frame = clean_frame
+                self.modo_preview = True
+                self.msg_info_signal.emit(
+                    self.tr("Sucesso! Captura realizada sem obstruções.")
+                )
+            else:
+                self.msg_warning_signal.emit(
+                    self.tr(
+                        "O tabuleiro não pôde ser lido na foto limpa. Retornando..."
+                    )
+                )
+        except Exception as e:
+            self._fail(e)
+            return
+        self.timer.start(30)
+
+    def _save_vertices(self) -> None:
+        se, sd, ie, id_pt = self.last_camera_vertices
+
+        if self.service.is_automatic_mirror_mode():
+            largura_cam = self.frozen_frame.shape[1]
+            self.calibration_points = np.array(
+                [
+                    [largura_cam - se[0], se[1]],  # SD
+                    [largura_cam - sd[0], sd[1]],  # SE
+                    [largura_cam - ie[0], ie[1]],  # ID
+                    [largura_cam - id_pt[0], id_pt[1]],  # IE
+                ],
+                dtype=np.int64,
+            )
+        else:
+            self.calibration_points = np.array(
+                [sd, se, id_pt, ie], dtype=np.int64
+            )
+
+        self.create_calibration_point()
 
     def get_available_geometry_of_screen(
         self, monitor_index: Optional[int] = None

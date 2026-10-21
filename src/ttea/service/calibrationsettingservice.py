@@ -321,7 +321,7 @@ class CalibrationSettingService:
     def is_automatic_open_projector(self) -> bool:
         value = str(
             self.settings.value(
-                "automatic/automatic_open_projector_automatic", "0"
+                "automatic/automatic_open_projector_automatic", "1"
             )
         ).strip()
 
