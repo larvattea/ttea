@@ -1,0 +1,446 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Target &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.games.kartea.gametheme" href="ttea.games.kartea.gametheme.html" />
+    <link rel="prev" title="KillResult" href="ttea.games.kartea.gamemodel.target.KillResult.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.games.html">ttea.games</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.gametheme.html">ttea.games.gametheme</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.games.kartea.html">ttea.games.kartea</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.controller.html">ttea.games.kartea.controller</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.dao.html">ttea.games.kartea.dao</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.factory.html">ttea.games.kartea.factory</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamecontroller.html">ttea.games.kartea.gamecontroller</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamecore.html">ttea.games.kartea.gamecore</a></li>
+<li class="toctree-l5 current"><a class="reference internal" href="ttea.games.kartea.gamemodel.html">ttea.games.kartea.gamemodel</a><ul class="current">
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gamemodel.html#attributes">Attributes</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gamemodel.html#see-also">See Also</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gamemodel.html#notes">Notes</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gamemodel.background.html">ttea.games.kartea.gamemodel.background</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gamemodel.car.html">ttea.games.kartea.gamemodel.car</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gamemodel.image.html">ttea.games.kartea.gamemodel.image</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gamemodel.line.html">ttea.games.kartea.gamemodel.line</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gamemodel.obstacle.html">ttea.games.kartea.gamemodel.obstacle</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gamemodel.sound.html">ttea.games.kartea.gamemodel.sound</a></li>
+<li class="toctree-l6 current"><a class="reference internal" href="ttea.games.kartea.gamemodel.target.html">ttea.games.kartea.gamemodel.target</a><ul class="current">
+<li class="toctree-l7"><a class="reference internal" href="ttea.games.kartea.gamemodel.target.KillResult.html">KillResult</a></li>
+<li class="toctree-l7 current"><a class="current reference internal" href="#">Target</a><ul>
+<li class="toctree-l8"><a class="reference internal" href="#ttea.games.kartea.gamemodel.target.Target"><code class="docutils literal notranslate"><span class="pre">Target</span></code></a><ul>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamemodel.target.Target.define_spawn_pos"><code class="docutils literal notranslate"><span class="pre">Target.define_spawn_pos()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamemodel.target.Target.define_pos"><code class="docutils literal notranslate"><span class="pre">Target.define_pos()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamemodel.target.Target.move"><code class="docutils literal notranslate"><span class="pre">Target.move()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamemodel.target.Target.move_to"><code class="docutils literal notranslate"><span class="pre">Target.move_to()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamemodel.target.Target.update_current_pos"><code class="docutils literal notranslate"><span class="pre">Target.update_current_pos()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamemodel.target.Target.reached"><code class="docutils literal notranslate"><span class="pre">Target.reached()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamemodel.target.Target.animate"><code class="docutils literal notranslate"><span class="pre">Target.animate()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamemodel.target.Target.draw_hitbox"><code class="docutils literal notranslate"><span class="pre">Target.draw_hitbox()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamemodel.target.Target.draw"><code class="docutils literal notranslate"><span class="pre">Target.draw()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamemodel.target.Target.kill"><code class="docutils literal notranslate"><span class="pre">Target.kill()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gametheme.html">ttea.games.kartea.gametheme</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameui.html">ttea.games.kartea.gameui</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameutil.html">ttea.games.kartea.gameutil</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameview.html">ttea.games.kartea.gameview</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.main.html">ttea.games.kartea.main</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.model.html">ttea.games.kartea.model</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.service.html">ttea.games.kartea.service</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.util.html">ttea.games.kartea.util</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.view.html">ttea.games.kartea.view</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.html">ttea.games</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.html">ttea.games.kartea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.gamemodel.html">ttea.games.kartea.gamemodel</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.gamemodel.target.html">ttea.games.kartea.gamemodel.target</a></li>
+      <li class="breadcrumb-item active">Target</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.games.kartea.gamemodel.target.Target.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="target">
+<h1>Target<a class="headerlink" href="#target" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamemodel.target.Target">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Target</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">move_speed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamemodel/target.html#Target"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamemodel.target.Target" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Target (star) in the game.</p>
+<p>Subclasses change only the image, the size and the <code class="docutils literal notranslate"><span class="pre">kill</span></code> result
+(see Obstacle).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>r</strong><span class="classifier">int | None</span></dt><dd><p>Lane index (0, 1 or 2). If None (or out of range), chosen at
+random.</p>
+</dd>
+<dt><strong>settings</strong><span class="classifier">GameSettings</span></dt><dd><p>Game configuration (injected).</p>
+</dd>
+<dt><strong>move_speed</strong><span class="classifier">int, optional</span></dt><dd><p>Speed used by move() (set by the current level, in
+GameController). Defaults to 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>COLLIDED_RESULT</strong><span class="classifier">tuple[int, EventType], class attribute</span></dt><dd><p>(points, event) when it collides: <code class="docutils literal notranslate"><span class="pre">(10,</span> <span class="pre">COLLIDED_TARGET)</span></code>.</p>
+</dd>
+<dt><strong>AVOIDED_RESULT</strong><span class="classifier">tuple[int, EventType], class attribute</span></dt><dd><p>(points, event) when it is avoided: <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">AVOIDED_TARGET)</span></code>.</p>
+</dd>
+<dt><strong>MOVE_PATTERN</strong><span class="classifier">dict[int, tuple[int, int, int]], class attribute</span></dt><dd><p>By speed: (lateral move step, growth step, lateral offset). Used
+by move().</p>
+</dd>
+<dt><strong>settings</strong><span class="classifier">GameSettings</span></dt><dd><p>Game configuration.</p>
+</dd>
+<dt><strong>move_speed</strong><span class="classifier">int</span></dt><dd><p>Speed used by move().</p>
+</dd>
+<dt><strong>size</strong><span class="classifier">tuple[int, int]</span></dt><dd><p>Current size (grows as the object approaches).</p>
+</dd>
+<dt><strong>rect</strong><span class="classifier">pygame.Rect</span></dt><dd><p>Hitbox/position on screen.</p>
+</dd>
+<dt><strong>images</strong><span class="classifier">list[pygame.Surface]</span></dt><dd><p>Animation frames.</p>
+</dd>
+<dt><strong>current_frame</strong><span class="classifier">int</span></dt><dd><p>Index of the frame being shown.</p>
+</dd>
+<dt><strong>current_pos</strong><span class="classifier">tuple</span></dt><dd><p>Current position.</p>
+</dd>
+<dt><strong>current_road</strong><span class="classifier">int</span></dt><dd><p>Lane of the object (0 left, 1 middle, 2 right).</p>
+</dd>
+<dt><strong>animation_timer</strong><span class="classifier">float</span></dt><dd><p>Time of the next frame change.</p>
+</dd>
+<dt><strong>line</strong><span class="classifier">Line | None</span></dt><dd><p>Road line the object is attached to.</p>
+</dd>
+<dt><strong>prev_pos_y</strong><span class="classifier">float</span></dt><dd><p>Height in the previous frame, set by update_current_pos (used by
+reached).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.gamemodel.target.Target.animate" title="ttea.games.kartea.gamemodel.target.Target.animate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">animate</span></code></a></p></td>
+<td><p>Advance the animation frame when its time has come.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.gamemodel.target.Target.define_pos" title="ttea.games.kartea.gamemodel.target.Target.define_pos"><code class="xref py py-obj docutils literal notranslate"><span class="pre">define_pos</span></code></a></p></td>
+<td><p>Move the object rectangle to the projected coordinates.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.gamemodel.target.Target.define_spawn_pos" title="ttea.games.kartea.gamemodel.target.Target.define_spawn_pos"><code class="xref py py-obj docutils literal notranslate"><span class="pre">define_spawn_pos</span></code></a></p></td>
+<td><p>Define the lane and initial position of the object.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.gamemodel.target.Target.draw" title="ttea.games.kartea.gamemodel.target.Target.draw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">draw</span></code></a></p></td>
+<td><p>Draw the object on screen, animated.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.gamemodel.target.Target.draw_hitbox" title="ttea.games.kartea.gamemodel.target.Target.draw_hitbox"><code class="xref py py-obj docutils literal notranslate"><span class="pre">draw_hitbox</span></code></a></p></td>
+<td><p>Draw the object hitbox (when enabled).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.gamemodel.target.Target.kill" title="ttea.games.kartea.gamemodel.target.Target.kill"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kill</span></code></a></p></td>
+<td><p>Remove the object from the list and return the result.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.gamemodel.target.Target.move" title="ttea.games.kartea.gamemodel.target.Target.move"><code class="xref py py-obj docutils literal notranslate"><span class="pre">move</span></code></a></p></td>
+<td><p>Move the object down with a small lateral drift.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.gamemodel.target.Target.move_to" title="ttea.games.kartea.gamemodel.target.Target.move_to"><code class="xref py py-obj docutils literal notranslate"><span class="pre">move_to</span></code></a></p></td>
+<td><p>Move the object directly to a given position.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.gamemodel.target.Target.reached" title="ttea.games.kartea.gamemodel.target.Target.reached"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reached</span></code></a></p></td>
+<td><p>Check whether the object base crossed <code class="docutils literal notranslate"><span class="pre">line_y</span></code> this frame.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.gamemodel.target.Target.update_current_pos" title="ttea.games.kartea.gamemodel.target.Target.update_current_pos"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_current_pos</span></code></a></p></td>
+<td><p>Update the current position directly (used by Background).</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamemodel.target.Target.define_spawn_pos">
+<span class="sig-name descname"><span class="pre">define_spawn_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamemodel/target.html#Target.define_spawn_pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamemodel.target.Target.define_spawn_pos" title="Link to this definition"></a></dt>
+<dd><p>Define the lane and initial position of the object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>r</strong><span class="classifier">int | None, optional</span></dt><dd><p>Desired lane (0 left, 1 middle, 2 right); random if None or
+out of range.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple</dt><dd><p><code class="docutils literal notranslate"><span class="pre">(road,</span> <span class="pre">start_pos)</span></code>, with <code class="docutils literal notranslate"><span class="pre">start_pos</span></code> from
+<code class="docutils literal notranslate"><span class="pre">GameSettings.OBJ_POS</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamemodel.target.Target.define_pos">
+<span class="sig-name descname"><span class="pre">define_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamemodel/target.html#Target.define_pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamemodel.target.Target.define_pos" title="Link to this definition"></a></dt>
+<dd><p>Move the object rectangle to the projected coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x, y</strong><span class="classifier">float</span></dt><dd><p>Projected position; the current rect size is kept.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamemodel.target.Target.move">
+<span class="sig-name descname"><span class="pre">move</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamemodel/target.html#Target.move"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamemodel.target.Target.move" title="Link to this definition"></a></dt>
+<dd><p>Move the object down with a small lateral drift.</p>
+<p>The drift depends on the lane and on the current speed
+(MOVE_PATTERN); speeds outside the table use a default pattern.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamemodel.target.Target.move_to">
+<span class="sig-name descname"><span class="pre">move_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamemodel/target.html#Target.move_to"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamemodel.target.Target.move_to" title="Link to this definition"></a></dt>
+<dd><p>Move the object directly to a given position.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x, y</strong><span class="classifier">float</span></dt><dd><p>New position; the rect is moved by the same offset.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamemodel.target.Target.update_current_pos">
+<span class="sig-name descname"><span class="pre">update_current_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamemodel/target.html#Target.update_current_pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamemodel.target.Target.update_current_pos" title="Link to this definition"></a></dt>
+<dd><p>Update the current position directly (used by Background).</p>
+<p>Keeps the height of the previous frame to detect the passage in
+front of the car (see reached).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x, y</strong><span class="classifier">float</span></dt><dd><p>New position.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamemodel.target.Target.reached">
+<span class="sig-name descname"><span class="pre">reached</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line_y</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamemodel/target.html#Target.reached"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamemodel.target.Target.reached" title="Link to this definition"></a></dt>
+<dd><p>Check whether the object base crossed <code class="docutils literal notranslate"><span class="pre">line_y</span></code> this frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>line_y</strong><span class="classifier">float</span></dt><dd><p>Screen y to test (front of the car).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if the previous height was above <code class="docutils literal notranslate"><span class="pre">line_y</span></code> and the
+current one is at or below it.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Compares with the previous frame, so the passage is detected
+even when the road advances several segments at once (low FPS).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamemodel.target.Target.animate">
+<span class="sig-name descname"><span class="pre">animate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamemodel/target.html#Target.animate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamemodel.target.Target.animate" title="Link to this definition"></a></dt>
+<dd><p>Advance the animation frame when its time has come.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamemodel.target.Target.draw_hitbox">
+<span class="sig-name descname"><span class="pre">draw_hitbox</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surface</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamemodel/target.html#Target.draw_hitbox"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamemodel.target.Target.draw_hitbox" title="Link to this definition"></a></dt>
+<dd><p>Draw the object hitbox (when enabled).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>surface</strong><span class="classifier">pygame.Surface</span></dt><dd><p>Surface drawn on.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamemodel.target.Target.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surface</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamemodel/target.html#Target.draw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamemodel.target.Target.draw" title="Link to this definition"></a></dt>
+<dd><p>Draw the object on screen, animated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>surface</strong><span class="classifier">pygame.Surface</span></dt><dd><p>Surface drawn on. The hitbox is drawn too when
+<code class="docutils literal notranslate"><span class="pre">DRAW_HITBOX</span></code> is on.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamemodel.target.Target.kill">
+<span class="sig-name descname"><span class="pre">kill</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">targets</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collided</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamemodel/target.html#Target.kill"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamemodel.target.Target.kill" title="Link to this definition"></a></dt>
+<dd><p>Remove the object from the list and return the result.</p>
+<p>Does not play sounds or draw: GameController hands the result to
+FeedbackView.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>targets</strong><span class="classifier">list</span></dt><dd><p>Active objects (the object is removed from it).</p>
+</dd>
+<dt><strong>collided</strong><span class="classifier">bool</span></dt><dd><p>True when it collided with the car; False when it left the
+screen without colliding.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>KillResult</dt><dd><p>Points, event and lane. Target: 10 when collided, 0 when
+avoided.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.games.kartea.gamemodel.target.KillResult.html" class="btn btn-neutral float-left" title="KillResult" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.games.kartea.gametheme.html" class="btn btn-neutral float-right" title="ttea.games.kartea.gametheme" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

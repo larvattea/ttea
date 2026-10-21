@@ -1,0 +1,25 @@
+ttea.games.kartea.service
+=========================
+
+.. automodule:: ttea.games.kartea.service
+
+.. currentmodule:: ttea.games.kartea.service
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/module.rst
+   :recursive:
+
+   csvcrudservice
+   karteahardwareservice
+   karteaphaseservice
+   playerkarteaconfigservice
+   playerkarteasessiondetailservice
+   playerkarteasessionservice
+
+
+

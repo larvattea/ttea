@@ -1,0 +1,253 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.games.kartea.gameview.feedbackview &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.games.kartea.gameview.feedbackview</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.games.kartea.gameview.feedbackview</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Immediate collision/avoidance feedback: sound and image."""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gamemodel</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">Sound</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gamemodel</span><span class="w"> </span><span class="kn">import</span> <span class="n">KillResult</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gameutil</span><span class="w"> </span><span class="kn">import</span> <span class="n">GameSettings</span>
+
+
+<div class="viewcode-block" id="FeedbackView">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gameview.feedbackview.FeedbackView.html#ttea.games.kartea.gameview.feedbackview.FeedbackView">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">FeedbackView</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Play the sound and show the feedback image of a KillResult.</span>
+
+<span class="sd">    A positive result (collided with a target, avoided an obstacle)</span>
+<span class="sd">    plays the hit sound and shows the positive image; a negative one,</span>
+<span class="sd">    the miss sound and the negative image. The image is centered at 20%</span>
+<span class="sd">    of the screen height and stays visible for</span>
+<span class="sd">    ``settings.FEEDBACK_IMAGE_TIME`` seconds (configurable per player, 0</span>
+<span class="sd">    to 2 s). With 0 the image appears for a single frame, as in the</span>
+<span class="sd">    original game. A new result replaces the current image and restarts</span>
+<span class="sd">    the count.</span>
+
+<span class="sd">    Use every frame: ``show`` when there is a result and ``draw`` after</span>
+<span class="sd">    drawing the road, the car and the HUD.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    settings : GameSettings</span>
+<span class="sd">        Game configuration (sounds, images and display time).</span>
+<span class="sd">    sound_enabled : bool, optional</span>
+<span class="sd">        Initial sound state. Defaults to True.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    settings : GameSettings</span>
+<span class="sd">        Game configuration.</span>
+<span class="sd">    sounds : dict[bool, pygame.mixer.Sound]</span>
+<span class="sd">        Hit (True) and miss (False) sounds.</span>
+<span class="sd">    images : dict[bool, pygame.Surface]</span>
+<span class="sd">        Positive (True) and negative (False) images.</span>
+<span class="sd">    duration : float</span>
+<span class="sd">        Display time (s) of an image.</span>
+<span class="sd">    current : bool | None</span>
+<span class="sd">        Image being shown (True positive, False negative), or None.</span>
+<span class="sd">    time_left : float</span>
+<span class="sd">        Seconds left to show the current image.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="s2">"GameSettings"</span><span class="p">,</span> <span class="n">sound_enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sounds</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="kc">True</span><span class="p">:</span> <span class="n">Sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">POINT_SOUND</span><span class="p">),</span>
+            <span class="kc">False</span><span class="p">:</span> <span class="n">Sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">MISS_SOUND</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">images</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="kc">True</span><span class="p">:</span> <span class="n">Image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">POSITIVE_FEEDBACK_IMAGE</span><span class="p">),</span>
+            <span class="kc">False</span><span class="p">:</span> <span class="n">Image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">NEGATIVE_FEEDBACK_IMAGE</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">FEEDBACK_IMAGE_TIME</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_left</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_sound_enabled</span><span class="p">(</span><span class="n">sound_enabled</span><span class="p">)</span>
+
+<div class="viewcode-block" id="FeedbackView.set_sound_enabled">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gameview.feedbackview.FeedbackView.html#ttea.games.kartea.gameview.feedbackview.FeedbackView.set_sound_enabled">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_sound_enabled</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Turn the feedback sounds on or off.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        enabled : bool</span>
+<span class="sd">            True sets the volume to 1; False mutes the sounds.</span>
+<span class="sd">        """</span>
+        <span class="n">volume</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">enabled</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">sound</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sounds</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">sound</span><span class="o">.</span><span class="n">set_volume</span><span class="p">(</span><span class="n">volume</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="FeedbackView.show">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gameview.feedbackview.FeedbackView.html#ttea.games.kartea.gameview.feedbackview.FeedbackView.show">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">,</span> <span class="n">result</span><span class="p">:</span> <span class="s2">"KillResult"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Play the sound and start showing the image of the result.</span>
+
+<span class="sd">        The image is drawn by ``draw``, from this same frame on, until</span>
+<span class="sd">        the configured time is complete.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        surface : pygame.Surface</span>
+<span class="sd">            Game screen (not used; drawing happens in ``draw``).</span>
+<span class="sd">        result : KillResult</span>
+<span class="sd">            Result of the removed object.</span>
+<span class="sd">        """</span>
+        <span class="n">positive</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">is_positive</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sounds</span><span class="p">[</span><span class="n">positive</span><span class="p">]</span><span class="o">.</span><span class="n">play</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">=</span> <span class="n">positive</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">duration</span></div>
+
+
+<div class="viewcode-block" id="FeedbackView.draw">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gameview.feedbackview.FeedbackView.html#ttea.games.kartea.gameview.feedbackview.FeedbackView.draw">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">,</span> <span class="n">delta_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Draw the image being shown and subtract the frame time.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        surface : pygame.Surface</span>
+<span class="sd">            Game screen.</span>
+<span class="sd">        delta_time : float</span>
+<span class="sd">            Frame duration in seconds (GameState.delta_time).</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_image</span><span class="p">(</span><span class="n">surface</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_left</span> <span class="o">-=</span> <span class="n">delta_time</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_left</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="FeedbackView.clear">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gameview.feedbackview.FeedbackView.html#ttea.games.kartea.gameview.feedbackview.FeedbackView.clear">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Remove the image being shown (e.g. when a level starts)."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_left</span> <span class="o">=</span> <span class="mf">0.0</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_draw_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Draw the current image, centered at 20% of the height."""</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">image_pos</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">surface</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">surface</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span> <span class="o">*</span> <span class="mf">0.20</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">Image</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span>
+            <span class="n">surface</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current</span><span class="p">],</span>
+            <span class="n">image_pos</span><span class="p">,</span>
+            <span class="n">pos_mode</span><span class="o">=</span><span class="n">Image</span><span class="o">.</span><span class="n">IMAGE_POS_CENTER</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

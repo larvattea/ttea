@@ -1,0 +1,9 @@
+CameraConfig
+============
+
+.. currentmodule:: ttea.games.kartea.model.hardwareconfig
+
+.. autoclass:: CameraConfig
+   :members:
+   :show-inheritance:
+

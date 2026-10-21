@@ -1,0 +1,287 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.util.helpschemehandler &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.util.helpschemehandler</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.util.helpschemehandler</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Serve compiled help (.qch) pages to Qt WebEngine.</span>
+
+<span class="sd">Qt WebEngine cannot read ``qthelp://`` URLs by itself. This module</span>
+<span class="sd">registers the scheme and answers each request with the bytes stored in</span>
+<span class="sd">the help collection, so pages, style sheets and images load directly</span>
+<span class="sd">from the .qch file.</span>
+
+<span class="sd">Notes</span>
+<span class="sd">-----</span>
+<span class="sd">This module imports QtWebEngineCore. Import it only where the help is</span>
+<span class="sd">used, so the rest of the application does not load Qt WebEngine.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">QBuffer</span><span class="p">,</span>
+    <span class="n">QByteArray</span><span class="p">,</span>
+    <span class="n">QCoreApplication</span><span class="p">,</span>
+    <span class="n">QIODevice</span><span class="p">,</span>
+    <span class="n">QMimeDatabase</span><span class="p">,</span>
+    <span class="n">QObject</span><span class="p">,</span>
+    <span class="n">Qt</span><span class="p">,</span>
+    <span class="n">QUrl</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtHelp</span><span class="w"> </span><span class="kn">import</span> <span class="n">QHelpEngineCore</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtWebEngineCore</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">QWebEngineProfile</span><span class="p">,</span>
+    <span class="n">QWebEngineUrlRequestJob</span><span class="p">,</span>
+    <span class="n">QWebEngineUrlScheme</span><span class="p">,</span>
+    <span class="n">QWebEngineUrlSchemeHandler</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="HelpSchemeHandler">
+<a class="viewcode-back" href="../../../api/ttea.util.helpschemehandler.HelpSchemeHandler.html#ttea.util.helpschemehandler.HelpSchemeHandler">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">HelpSchemeHandler</span><span class="p">(</span><span class="n">QWebEngineUrlSchemeHandler</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Answer ``qthelp://`` requests with data from a help engine.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parent : QObject | None, optional</span>
+<span class="sd">        Owner of the handler. It must live as long as the web</span>
+<span class="sd">        profile. Default is None.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    SCHEME : bytes, class attribute</span>
+<span class="sd">        URL scheme served by this handler (``b"qthelp"``).</span>
+<span class="sd">    _instance : HelpSchemeHandler | None, class attribute</span>
+<span class="sd">        Handler shared by every ``install`` call.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    register_scheme()</span>
+<span class="sd">        Register the scheme. Call before creating the QApplication.</span>
+<span class="sd">    install(engine)</span>
+<span class="sd">        Serve the given help engine in the default web profile.</span>
+<span class="sd">    """</span>
+
+    <span class="n">SCHEME</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">"qthelp"</span>
+
+    <span class="n">_instance</span><span class="p">:</span> <span class="s2">"HelpSchemeHandler | None"</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">QObject</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span><span class="p">:</span> <span class="n">QHelpEngineCore</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mime_db</span> <span class="o">=</span> <span class="n">QMimeDatabase</span><span class="p">()</span>
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Setup</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+<div class="viewcode-block" id="HelpSchemeHandler.register_scheme">
+<a class="viewcode-back" href="../../../api/ttea.util.helpschemehandler.HelpSchemeHandler.html#ttea.util.helpschemehandler.HelpSchemeHandler.register_scheme">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_scheme</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Register the ``qthelp`` scheme in Qt WebEngine.</span>
+
+<span class="sd">        Qt requires both calls to happen before the QApplication is</span>
+<span class="sd">        created.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Also sets ``Qt.AA_ShareOpenGLContexts``. The scheme uses the</span>
+<span class="sd">        host syntax and is flagged secure, local and allowed to access</span>
+<span class="sd">        local content.</span>
+<span class="sd">        """</span>
+        <span class="n">QCoreApplication</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span>
+            <span class="n">Qt</span><span class="o">.</span><span class="n">ApplicationAttribute</span><span class="o">.</span><span class="n">AA_ShareOpenGLContexts</span>
+        <span class="p">)</span>
+        <span class="n">scheme</span> <span class="o">=</span> <span class="n">QWebEngineUrlScheme</span><span class="p">(</span><span class="n">HelpSchemeHandler</span><span class="o">.</span><span class="n">SCHEME</span><span class="p">)</span>
+        <span class="n">scheme</span><span class="o">.</span><span class="n">setSyntax</span><span class="p">(</span><span class="n">QWebEngineUrlScheme</span><span class="o">.</span><span class="n">Syntax</span><span class="o">.</span><span class="n">Host</span><span class="p">)</span>
+        <span class="n">scheme</span><span class="o">.</span><span class="n">setFlags</span><span class="p">(</span>
+            <span class="n">QWebEngineUrlScheme</span><span class="o">.</span><span class="n">Flag</span><span class="o">.</span><span class="n">SecureScheme</span>
+            <span class="o">|</span> <span class="n">QWebEngineUrlScheme</span><span class="o">.</span><span class="n">Flag</span><span class="o">.</span><span class="n">LocalScheme</span>
+            <span class="o">|</span> <span class="n">QWebEngineUrlScheme</span><span class="o">.</span><span class="n">Flag</span><span class="o">.</span><span class="n">LocalAccessAllowed</span>
+        <span class="p">)</span>
+        <span class="n">QWebEngineUrlScheme</span><span class="o">.</span><span class="n">registerScheme</span><span class="p">(</span><span class="n">scheme</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="HelpSchemeHandler.install">
+<a class="viewcode-back" href="../../../api/ttea.util.helpschemehandler.HelpSchemeHandler.html#ttea.util.helpschemehandler.HelpSchemeHandler.install">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">install</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">engine</span><span class="p">:</span> <span class="n">QHelpEngineCore</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"HelpSchemeHandler"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Serve ``engine`` through the default web profile.</span>
+
+<span class="sd">        The handler is created once and reused; only the engine changes</span>
+<span class="sd">        when the language changes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        engine : QHelpEngineCore</span>
+<span class="sd">            Engine whose documentation will be served.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        HelpSchemeHandler</span>
+<span class="sd">            The shared handler.</span>
+<span class="sd">        """</span>
+        <span class="n">profile</span> <span class="o">=</span> <span class="n">QWebEngineProfile</span><span class="o">.</span><span class="n">defaultProfile</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="n">QCoreApplication</span><span class="o">.</span><span class="n">instance</span><span class="p">())</span>
+            <span class="n">profile</span><span class="o">.</span><span class="n">installUrlSchemeHandler</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">SCHEME</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span><span class="o">.</span><span class="n">_engine</span> <span class="o">=</span> <span class="n">engine</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span></div>
+
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Request handling</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+<div class="viewcode-block" id="HelpSchemeHandler.requestStarted">
+<a class="viewcode-back" href="../../../api/ttea.util.helpschemehandler.HelpSchemeHandler.html#ttea.util.helpschemehandler.HelpSchemeHandler.requestStarted">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">requestStarted</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">job</span><span class="p">:</span> <span class="n">QWebEngineUrlRequestJob</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Reply to a request with the file stored in the help engine.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        job : QWebEngineUrlRequestJob</span>
+<span class="sd">            Request made by the web view.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The request fails with ``UrlNotFound`` when the engine has no</span>
+<span class="sd">        data for the URL (or no engine is installed yet).</span>
+<span class="sd">        """</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_file_data</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">requestUrl</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">isEmpty</span><span class="p">():</span>
+            <span class="n">job</span><span class="o">.</span><span class="n">fail</span><span class="p">(</span><span class="n">QWebEngineUrlRequestJob</span><span class="o">.</span><span class="n">Error</span><span class="o">.</span><span class="n">UrlNotFound</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">buffer</span> <span class="o">=</span> <span class="n">QBuffer</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+        <span class="n">buffer</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">buffer</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">QIODevice</span><span class="o">.</span><span class="n">OpenModeFlag</span><span class="o">.</span><span class="n">ReadOnly</span><span class="p">)</span>
+        <span class="n">job</span><span class="o">.</span><span class="n">reply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mime_type</span><span class="p">(</span><span class="n">job</span><span class="o">.</span><span class="n">requestUrl</span><span class="p">()),</span> <span class="n">buffer</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_file_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="n">QUrl</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QByteArray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the file bytes for ``url``, or an empty array."""</span>
+        <span class="c1"># The host part of the URL is the help namespace. URLs lowercase</span>
+        <span class="c1"># the host, so the namespaces created by buildhelp.py are</span>
+        <span class="c1"># lowercase too.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">QByteArray</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span><span class="o">.</span><span class="n">fileData</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_mime_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="n">QUrl</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the MIME type for ``url`` based on its extension.</span>
+
+<span class="sd">        HTML, CSS and JavaScript are fixed; other types come from</span>
+<span class="sd">        ``QMimeDatabase``.</span>
+<span class="sd">        """</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">url</span><span class="o">.</span><span class="n">path</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">((</span><span class="s2">".html"</span><span class="p">,</span> <span class="s2">".htm"</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="sa">b</span><span class="s2">"text/html"</span>
+        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">".css"</span><span class="p">):</span>
+            <span class="k">return</span> <span class="sa">b</span><span class="s2">"text/css"</span>
+        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">".js"</span><span class="p">):</span>
+            <span class="k">return</span> <span class="sa">b</span><span class="s2">"text/javascript"</span>
+        <span class="n">mime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mime_db</span><span class="o">.</span><span class="n">mimeTypeForFile</span><span class="p">(</span>
+            <span class="n">url</span><span class="o">.</span><span class="n">path</span><span class="p">(),</span> <span class="n">QMimeDatabase</span><span class="o">.</span><span class="n">MatchMode</span><span class="o">.</span><span class="n">MatchExtension</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">mime</span><span class="o">.</span><span class="n">name</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+ttea.service.languageservice
+============================
+
+.. automodule:: ttea.service.languageservice
+
+.. currentmodule:: ttea.service.languageservice
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   LanguageService
+
+

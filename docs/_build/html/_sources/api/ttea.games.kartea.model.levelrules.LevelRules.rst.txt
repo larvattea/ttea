@@ -1,0 +1,17 @@
+LevelRules
+==========
+
+.. currentmodule:: ttea.games.kartea.model.levelrules
+
+.. autoclass:: LevelRules
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~LevelRules.allows_more
+      ~LevelRules.object_type

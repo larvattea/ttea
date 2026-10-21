@@ -1,0 +1,24 @@
+ttea.games.kartea.gameutil.alphablit
+====================================
+
+.. automodule:: ttea.games.kartea.gameutil.alphablit
+
+.. currentmodule:: ttea.games.kartea.gameutil.alphablit
+
+
+
+
+
+
+.. rubric:: Functions
+
+.. autosummary::
+   :nosignatures:
+
+   alpha_blit
+   alpha_blit_flags
+
+
+.. autofunction:: alpha_blit
+
+.. autofunction:: alpha_blit_flags

@@ -1,0 +1,21 @@
+ProfessionalListView
+====================
+
+.. currentmodule:: ttea.view.professionallistview
+
+.. autoclass:: ProfessionalListView
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~ProfessionalListView.clear_details
+      ~ProfessionalListView.closeEvent
+      ~ProfessionalListView.display_details
+      ~ProfessionalListView.get_selected_id
+      ~ProfessionalListView.populate_table
+      ~ProfessionalListView.select_row_by_id

@@ -1,0 +1,20 @@
+ttea.view.aboutview
+===================
+
+.. automodule:: ttea.view.aboutview
+
+.. currentmodule:: ttea.view.aboutview
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   AboutView
+
+

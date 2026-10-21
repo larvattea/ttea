@@ -1,0 +1,21 @@
+ttea.games.kartea.util.palettes
+===============================
+
+.. automodule:: ttea.games.kartea.util.palettes
+
+.. currentmodule:: ttea.games.kartea.util.palettes
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   KarteaPalettes
+   Palette
+
+

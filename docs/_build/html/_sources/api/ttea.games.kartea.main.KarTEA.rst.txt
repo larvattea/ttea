@@ -1,0 +1,24 @@
+KarTEA
+======
+
+.. currentmodule:: ttea.games.kartea.main
+
+.. autoclass:: KarTEA
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~KarTEA.draw_fps
+      ~KarTEA.exit_game
+      ~KarTEA.get_player_first_name
+      ~KarTEA.handle_events
+      ~KarTEA.run
+      ~KarTEA.set_game_language
+      ~KarTEA.update
+      ~KarTEA.update_game
+      ~KarTEA.update_menu

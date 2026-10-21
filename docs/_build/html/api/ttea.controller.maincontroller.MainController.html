@@ -1,0 +1,377 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MainController &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.controller.manualcalibrationcontroller" href="ttea.controller.manualcalibrationcontroller.html" />
+    <link rel="prev" title="ttea.controller.maincontroller" href="ttea.controller.maincontroller.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.controller.html">ttea.controller</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.automaticcalibrationcontroller.html">ttea.controller.automaticcalibrationcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.calibrationcontroller.html">ttea.controller.calibrationcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.calibrationsettingcontroller.html">ttea.controller.calibrationsettingcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.helpcontroller.html">ttea.controller.helpcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.institutionfacilityeditcontroller.html">ttea.controller.institutionfacilityeditcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.institutionfacilitylistcontroller.html">ttea.controller.institutionfacilitylistcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.languagecontroller.html">ttea.controller.languagecontroller</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.controller.maincontroller.html">ttea.controller.maincontroller</a><ul class="current">
+<li class="toctree-l5 current"><a class="current reference internal" href="#">MainController</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#ttea.controller.maincontroller.MainController"><code class="docutils literal notranslate"><span class="pre">MainController</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.maincontroller.MainController.handle_exit"><code class="docutils literal notranslate"><span class="pre">MainController.handle_exit()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.maincontroller.MainController.try_close"><code class="docutils literal notranslate"><span class="pre">MainController.try_close()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.maincontroller.MainController.open_player_list"><code class="docutils literal notranslate"><span class="pre">MainController.open_player_list()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.maincontroller.MainController.open_professional_list"><code class="docutils literal notranslate"><span class="pre">MainController.open_professional_list()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.maincontroller.MainController.open_institutionfacility_list"><code class="docutils literal notranslate"><span class="pre">MainController.open_institutionfacility_list()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.maincontroller.MainController.open_calibration"><code class="docutils literal notranslate"><span class="pre">MainController.open_calibration()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.maincontroller.MainController.open_calibration_setting"><code class="docutils literal notranslate"><span class="pre">MainController.open_calibration_setting()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.maincontroller.MainController.open_game_action"><code class="docutils literal notranslate"><span class="pre">MainController.open_game_action()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.maincontroller.MainController.open_help"><code class="docutils literal notranslate"><span class="pre">MainController.open_help()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.maincontroller.MainController.open_language"><code class="docutils literal notranslate"><span class="pre">MainController.open_language()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.maincontroller.MainController.open_about"><code class="docutils literal notranslate"><span class="pre">MainController.open_about()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.maincontroller.MainController.open_playergamelaunch"><code class="docutils literal notranslate"><span class="pre">MainController.open_playergamelaunch()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.manualcalibrationcontroller.html">ttea.controller.manualcalibrationcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.playereditcontroller.html">ttea.controller.playereditcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.playergamelaunchcontroller.html">ttea.controller.playergamelaunchcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.playerlistcontroller.html">ttea.controller.playerlistcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.professionaleditcontroller.html">ttea.controller.professionaleditcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.professionallistcontroller.html">ttea.controller.professionallistcontroller</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.games.html">ttea.games</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.controller.html">ttea.controller</a></li>
+          <li class="breadcrumb-item"><a href="ttea.controller.maincontroller.html">ttea.controller.maincontroller</a></li>
+      <li class="breadcrumb-item active">MainController</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.controller.maincontroller.MainController.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="maincontroller">
+<h1>MainController<a class="headerlink" href="#maincontroller" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.controller.maincontroller.MainController">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MainController</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">view</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message_service</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/maincontroller.html#MainController"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.maincontroller.MainController" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://doc.qt.io/qtforpython-6/PySide6/QtCore/QObject.html#PySide6.QtCore.QObject" title="(in PySide v6.12.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">QObject</span></code></a></p>
+<p>Controller of the main window.</p>
+<p>Opens the dialogs of the menus, the game actions and the help, and
+handles the application exit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>view</strong><span class="classifier">MainView</span></dt><dd><p>The main window; it is also the parent of the controller.</p>
+</dd>
+<dt><strong>model</strong><span class="classifier">AppModel</span></dt><dd><p>Global application state.</p>
+</dd>
+<dt><strong>message_service</strong><span class="classifier">MessageService</span></dt><dd><p>Service used to show dialogs.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>view</strong><span class="classifier">MainView</span></dt><dd><p>The main window.</p>
+</dd>
+<dt><strong>model</strong><span class="classifier">AppModel</span></dt><dd><p>Global application state.</p>
+</dd>
+<dt><strong>message_service</strong><span class="classifier">MessageService</span></dt><dd><p>Service used to show dialogs.</p>
+</dd>
+<dt><strong>app_service</strong><span class="classifier">MainService</span></dt><dd><p>Global service (exit confirmation).</p>
+</dd>
+<dt><strong>app_factory</strong><span class="classifier">AppViewFactory</span></dt><dd><p>Factory of the application views.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.controller.maincontroller.MainController.handle_exit" title="ttea.controller.maincontroller.MainController.handle_exit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_exit</span></code></a></p></td>
+<td><p>Ask for confirmation and quit the application.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.controller.maincontroller.MainController.open_about" title="ttea.controller.maincontroller.MainController.open_about"><code class="xref py py-obj docutils literal notranslate"><span class="pre">open_about</span></code></a></p></td>
+<td><p>Open the about dialog (modal).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.controller.maincontroller.MainController.open_calibration" title="ttea.controller.maincontroller.MainController.open_calibration"><code class="xref py py-obj docutils literal notranslate"><span class="pre">open_calibration</span></code></a></p></td>
+<td><p>Open the calibration dialog (modal).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.controller.maincontroller.MainController.open_calibration_setting" title="ttea.controller.maincontroller.MainController.open_calibration_setting"><code class="xref py py-obj docutils literal notranslate"><span class="pre">open_calibration_setting</span></code></a></p></td>
+<td><p>Open the calibration settings dialog (modal).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.controller.maincontroller.MainController.open_game_action" title="ttea.controller.maincontroller.MainController.open_game_action"><code class="xref py py-obj docutils literal notranslate"><span class="pre">open_game_action</span></code></a></p></td>
+<td><p>Open a dialog provided by a game's view factory.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.controller.maincontroller.MainController.open_help" title="ttea.controller.maincontroller.MainController.open_help"><code class="xref py py-obj docutils literal notranslate"><span class="pre">open_help</span></code></a></p></td>
+<td><p>Open the help at the topic of the active screen.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.controller.maincontroller.MainController.open_institutionfacility_list" title="ttea.controller.maincontroller.MainController.open_institutionfacility_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">open_institutionfacility_list</span></code></a></p></td>
+<td><p>Open the institution/facility list dialog (modal).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.controller.maincontroller.MainController.open_language" title="ttea.controller.maincontroller.MainController.open_language"><code class="xref py py-obj docutils literal notranslate"><span class="pre">open_language</span></code></a></p></td>
+<td><p>Open the language dialog and retranslate the main window.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.controller.maincontroller.MainController.open_player_list" title="ttea.controller.maincontroller.MainController.open_player_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">open_player_list</span></code></a></p></td>
+<td><p>Open the player list dialog (modal).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.controller.maincontroller.MainController.open_playergamelaunch" title="ttea.controller.maincontroller.MainController.open_playergamelaunch"><code class="xref py py-obj docutils literal notranslate"><span class="pre">open_playergamelaunch</span></code></a></p></td>
+<td><p>Open the game launch dialog (modal).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.controller.maincontroller.MainController.open_professional_list" title="ttea.controller.maincontroller.MainController.open_professional_list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">open_professional_list</span></code></a></p></td>
+<td><p>Open the professional list dialog (modal).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.controller.maincontroller.MainController.try_close" title="ttea.controller.maincontroller.MainController.try_close"><code class="xref py py-obj docutils literal notranslate"><span class="pre">try_close</span></code></a></p></td>
+<td><p>Ask for confirmation and quit when the window is closed.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.maincontroller.MainController.handle_exit">
+<span class="sig-name descname"><span class="pre">handle_exit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/maincontroller.html#MainController.handle_exit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.maincontroller.MainController.handle_exit" title="Link to this definition"></a></dt>
+<dd><p>Ask for confirmation and quit the application.</p>
+<p>Does nothing if the application is already quitting.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.maincontroller.MainController.try_close">
+<span class="sig-name descname"><span class="pre">try_close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/maincontroller.html#MainController.try_close"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.maincontroller.MainController.try_close" title="Link to this definition"></a></dt>
+<dd><p>Ask for confirmation and quit when the window is closed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>bool</dt><dd><p>True if the application is quitting (the close event can be
+accepted), False if the user cancelled.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.maincontroller.MainController.open_player_list">
+<span class="sig-name descname"><span class="pre">open_player_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/maincontroller.html#MainController.open_player_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.maincontroller.MainController.open_player_list" title="Link to this definition"></a></dt>
+<dd><p>Open the player list dialog (modal).</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.maincontroller.MainController.open_professional_list">
+<span class="sig-name descname"><span class="pre">open_professional_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/maincontroller.html#MainController.open_professional_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.maincontroller.MainController.open_professional_list" title="Link to this definition"></a></dt>
+<dd><p>Open the professional list dialog (modal).</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.maincontroller.MainController.open_institutionfacility_list">
+<span class="sig-name descname"><span class="pre">open_institutionfacility_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/maincontroller.html#MainController.open_institutionfacility_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.maincontroller.MainController.open_institutionfacility_list" title="Link to this definition"></a></dt>
+<dd><p>Open the institution/facility list dialog (modal).</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.maincontroller.MainController.open_calibration">
+<span class="sig-name descname"><span class="pre">open_calibration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/maincontroller.html#MainController.open_calibration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.maincontroller.MainController.open_calibration" title="Link to this definition"></a></dt>
+<dd><p>Open the calibration dialog (modal).</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.maincontroller.MainController.open_calibration_setting">
+<span class="sig-name descname"><span class="pre">open_calibration_setting</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/maincontroller.html#MainController.open_calibration_setting"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.maincontroller.MainController.open_calibration_setting" title="Link to this definition"></a></dt>
+<dd><p>Open the calibration settings dialog (modal).</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.maincontroller.MainController.open_game_action">
+<span class="sig-name descname"><span class="pre">open_game_action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">game_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edit_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/maincontroller.html#MainController.open_game_action"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.maincontroller.MainController.open_game_action" title="Link to this definition"></a></dt>
+<dd><p>Open a dialog provided by a game’s view factory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>game_name</strong><span class="classifier">str</span></dt><dd><p>Game ID registered in <code class="docutils literal notranslate"><span class="pre">ViewFactory</span></code>.</p>
+</dd>
+<dt><strong>method</strong><span class="classifier">str</span></dt><dd><p>Name of the factory method that creates the dialog.</p>
+</dd>
+<dt><strong>edit_method</strong><span class="classifier">str | None, optional</span></dt><dd><p>Name of the factory method that creates the edit dialog,
+passed to the first one when the factory has it. Default is
+None.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>KeyError</dt><dd><p>If no view factory is loaded for <code class="docutils literal notranslate"><span class="pre">game_name</span></code>.</p>
+</dd>
+<dt>AttributeError</dt><dd><p>If the factory has no <code class="docutils literal notranslate"><span class="pre">method</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.maincontroller.MainController.open_help">
+<span class="sig-name descname"><span class="pre">open_help</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/maincontroller.html#MainController.open_help"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.maincontroller.MainController.open_help" title="Link to this definition"></a></dt>
+<dd><p>Open the help at the topic of the active screen.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.maincontroller.MainController.open_language">
+<span class="sig-name descname"><span class="pre">open_language</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/maincontroller.html#MainController.open_language"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.maincontroller.MainController.open_language" title="Link to this definition"></a></dt>
+<dd><p>Open the language dialog and retranslate the main window.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.maincontroller.MainController.open_about">
+<span class="sig-name descname"><span class="pre">open_about</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/maincontroller.html#MainController.open_about"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.maincontroller.MainController.open_about" title="Link to this definition"></a></dt>
+<dd><p>Open the about dialog (modal).</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.maincontroller.MainController.open_playergamelaunch">
+<span class="sig-name descname"><span class="pre">open_playergamelaunch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/maincontroller.html#MainController.open_playergamelaunch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.maincontroller.MainController.open_playergamelaunch" title="Link to this definition"></a></dt>
+<dd><p>Open the game launch dialog (modal).</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.controller.maincontroller.html" class="btn btn-neutral float-left" title="ttea.controller.maincontroller" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.controller.manualcalibrationcontroller.html" class="btn btn-neutral float-right" title="ttea.controller.manualcalibrationcontroller" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

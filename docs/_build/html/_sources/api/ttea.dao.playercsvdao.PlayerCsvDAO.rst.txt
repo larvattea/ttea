@@ -1,0 +1,26 @@
+PlayerCsvDAO
+============
+
+.. currentmodule:: ttea.dao.playercsvdao
+
+.. autoclass:: PlayerCsvDAO
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~PlayerCsvDAO.delete
+      ~PlayerCsvDAO.generate_next_id
+      ~PlayerCsvDAO.get_filename
+      ~PlayerCsvDAO.insert
+      ~PlayerCsvDAO.list
+      ~PlayerCsvDAO.load_all_players
+      ~PlayerCsvDAO.sanitize_filename
+      ~PlayerCsvDAO.search_players
+      ~PlayerCsvDAO.select
+      ~PlayerCsvDAO.update
+      ~PlayerCsvDAO.write_with_lock

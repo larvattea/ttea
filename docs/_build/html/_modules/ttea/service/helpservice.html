@@ -1,0 +1,372 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.service.helpservice &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.service.helpservice</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.service.helpservice</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Help service: help files, languages and topics.</span>
+
+<span class="sd">The help is compiled by ``resources/help/buildhelp.py`` into one .qch</span>
+<span class="sd">file per language (``ttea_&lt;language&gt;.qch``). This service registers the</span>
+<span class="sd">file of the current language in a help collection stored in the user</span>
+<span class="sd">data folder, and translates screens and topic ids into help URLs.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">QUrl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtHelp</span><span class="w"> </span><span class="kn">import</span> <span class="n">QHelpEngine</span><span class="p">,</span> <span class="n">QHelpEngineCore</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QWidget</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Language</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">PathConfig</span>
+
+
+<div class="viewcode-block" id="HelpUnavailableError">
+<a class="viewcode-back" href="../../../api/ttea.service.helpservice.HelpUnavailableError.html#ttea.service.helpservice.HelpUnavailableError">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">HelpUnavailableError</span><span class="p">(</span><span class="ne">RuntimeError</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Raised when the help files are missing or cannot be opened."""</span></div>
+
+
+
+<div class="viewcode-block" id="HelpService">
+<a class="viewcode-back" href="../../../api/ttea.service.helpservice.HelpService.html#ttea.service.helpservice.HelpService">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">HelpService</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Locate, register and query the compiled help.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    HOME_TOPIC : str, class attribute</span>
+<span class="sd">        Topic opened when no other topic applies (``"inicio"``).</span>
+<span class="sd">    HELP_ID_PROPERTY : str, class attribute</span>
+<span class="sd">        Qt property that overrides the topic of a widget and its</span>
+<span class="sd">        children, e.g. ``widget.setProperty("help_id", "calibracao")``.</span>
+<span class="sd">    VIRTUAL_FOLDER : str, class attribute</span>
+<span class="sd">        Virtual folder of the pages inside the help (``"doc"``).</span>
+<span class="sd">    TOPICS : dict[str, str], class attribute</span>
+<span class="sd">        Topic id to page path inside the help, the same in every</span>
+<span class="sd">        language.</span>
+<span class="sd">    VIEW_TOPICS : dict[str, str], class attribute</span>
+<span class="sd">        Screen class name to topic id. Used by F1 to find the topic of</span>
+<span class="sd">        the active screen without changing the screens.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Typical use: ``engine = service.create_engine("en_US")`` and then</span>
+<span class="sd">    ``service.topic_url(engine, "cadastro_jogador")``.</span>
+<span class="sd">    """</span>
+
+    <span class="n">HOME_TOPIC</span> <span class="o">=</span> <span class="s2">"inicio"</span>
+    <span class="n">HELP_ID_PROPERTY</span> <span class="o">=</span> <span class="s2">"help_id"</span>
+    <span class="n">VIRTUAL_FOLDER</span> <span class="o">=</span> <span class="s2">"doc"</span>
+
+    <span class="n">TOPICS</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"inicio"</span><span class="p">:</span> <span class="s2">"index.html"</span><span class="p">,</span>
+        <span class="s2">"plataforma"</span><span class="p">:</span> <span class="s2">"introducao/plataforma.html"</span><span class="p">,</span>
+        <span class="s2">"primeiro_uso"</span><span class="p">:</span> <span class="s2">"introducao/primeiro_uso.html"</span><span class="p">,</span>
+        <span class="s2">"cadastro_instituicao"</span><span class="p">:</span> <span class="s2">"cadastro/instituicao.html"</span><span class="p">,</span>
+        <span class="s2">"cadastro_profissional"</span><span class="p">:</span> <span class="s2">"cadastro/profissional.html"</span><span class="p">,</span>
+        <span class="s2">"cadastro_jogador"</span><span class="p">:</span> <span class="s2">"cadastro/jogador.html"</span><span class="p">,</span>
+        <span class="s2">"sessao_de_jogo"</span><span class="p">:</span> <span class="s2">"exergames/sessao_de_jogo.html"</span><span class="p">,</span>
+        <span class="s2">"calibracao"</span><span class="p">:</span> <span class="s2">"configuracoes/calibracao.html"</span><span class="p">,</span>
+        <span class="s2">"calibracao_manual"</span><span class="p">:</span> <span class="s2">"configuracoes/calibracao_manual.html"</span><span class="p">,</span>
+        <span class="s2">"calibracao_automatica"</span><span class="p">:</span> <span class="s2">"configuracoes/calibracao_automatica.html"</span><span class="p">,</span>
+        <span class="s2">"configuracao_calibracao"</span><span class="p">:</span> <span class="s2">"sistema/configuracao_calibracao.html"</span><span class="p">,</span>
+        <span class="s2">"idioma"</span><span class="p">:</span> <span class="s2">"sistema/idioma.html"</span><span class="p">,</span>
+        <span class="s2">"kartea"</span><span class="p">:</span> <span class="s2">"jogos/kartea/index.html"</span><span class="p">,</span>
+        <span class="s2">"kartea_configuracao"</span><span class="p">:</span> <span class="s2">"jogos/kartea/configuracao.html"</span><span class="p">,</span>
+        <span class="s2">"problemas"</span><span class="p">:</span> <span class="s2">"problemas/index.html"</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">VIEW_TOPICS</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"MainView"</span><span class="p">:</span> <span class="s2">"inicio"</span><span class="p">,</span>
+        <span class="s2">"AboutView"</span><span class="p">:</span> <span class="s2">"plataforma"</span><span class="p">,</span>
+        <span class="s2">"InstitutionFacilityListView"</span><span class="p">:</span> <span class="s2">"cadastro_instituicao"</span><span class="p">,</span>
+        <span class="s2">"InstitutionFacilityEditView"</span><span class="p">:</span> <span class="s2">"cadastro_instituicao"</span><span class="p">,</span>
+        <span class="s2">"ProfessionalListView"</span><span class="p">:</span> <span class="s2">"cadastro_profissional"</span><span class="p">,</span>
+        <span class="s2">"ProfessionalEditView"</span><span class="p">:</span> <span class="s2">"cadastro_profissional"</span><span class="p">,</span>
+        <span class="s2">"PlayerListView"</span><span class="p">:</span> <span class="s2">"cadastro_jogador"</span><span class="p">,</span>
+        <span class="s2">"PlayerEditView"</span><span class="p">:</span> <span class="s2">"cadastro_jogador"</span><span class="p">,</span>
+        <span class="s2">"PlayerGameLaunchView"</span><span class="p">:</span> <span class="s2">"sessao_de_jogo"</span><span class="p">,</span>
+        <span class="s2">"CalibrationView"</span><span class="p">:</span> <span class="s2">"calibracao"</span><span class="p">,</span>
+        <span class="s2">"ManualCalibrationView"</span><span class="p">:</span> <span class="s2">"calibracao_manual"</span><span class="p">,</span>
+        <span class="s2">"AutomaticCalibrationView"</span><span class="p">:</span> <span class="s2">"calibracao_automatica"</span><span class="p">,</span>
+        <span class="s2">"CalibrationSettingView"</span><span class="p">:</span> <span class="s2">"configuracao_calibracao"</span><span class="p">,</span>
+        <span class="s2">"LanguageView"</span><span class="p">:</span> <span class="s2">"idioma"</span><span class="p">,</span>
+        <span class="c1"># Game screens are matched by name, so the platform does not</span>
+        <span class="c1"># import the game packages.</span>
+        <span class="s2">"PlayerKarteaConfigListView"</span><span class="p">:</span> <span class="s2">"kartea_configuracao"</span><span class="p">,</span>
+        <span class="s2">"PlayerKarteaConfigEditView"</span><span class="p">:</span> <span class="s2">"kartea_configuracao"</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Files and languages</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+<div class="viewcode-block" id="HelpService.help_language">
+<a class="viewcode-back" href="../../../api/ttea.service.helpservice.HelpService.html#ttea.service.helpservice.HelpService.help_language">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">help_language</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">language</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the language whose help file will be used.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        language : str</span>
+<span class="sd">            Requested language code, e.g. ``"es_ES"``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            ``language`` if its help file exists, otherwise the default</span>
+<span class="sd">            language.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        HelpUnavailableError</span>
+<span class="sd">            If no help file exists at all.</span>
+<span class="sd">        """</span>
+        <span class="k">for</span> <span class="n">code</span> <span class="ow">in</span> <span class="p">(</span><span class="n">language</span><span class="p">,</span> <span class="n">Language</span><span class="o">.</span><span class="n">DEFAULT_LANGUAGE</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">PathConfig</span><span class="o">.</span><span class="n">help_file</span><span class="p">(</span><span class="n">code</span><span class="p">)</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>
+                <span class="k">return</span> <span class="n">code</span>
+        <span class="k">raise</span> <span class="n">HelpUnavailableError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Help file not found: </span><span class="si">{</span><span class="n">PathConfig</span><span class="o">.</span><span class="n">help_file</span><span class="p">(</span><span class="n">language</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="HelpService.create_engine">
+<a class="viewcode-back" href="../../../api/ttea.service.helpservice.HelpService.html#ttea.service.helpservice.HelpService.create_engine">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_engine</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">language</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QHelpEngine</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Create a help engine for ``language``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        language : str</span>
+<span class="sd">            Language code; falls back to the default language when its</span>
+<span class="sd">            help file is missing.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QHelpEngine</span>
+<span class="sd">            Engine ready to use. The caller owns it.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        HelpUnavailableError</span>
+<span class="sd">            If no help file exists or the collection cannot be set up.</span>
+<span class="sd">        """</span>
+        <span class="n">code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">help_language</span><span class="p">(</span><span class="n">language</span><span class="p">)</span>
+        <span class="n">collection</span> <span class="o">=</span> <span class="n">PathConfig</span><span class="o">.</span><span class="n">help_collection</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_register</span><span class="p">(</span><span class="n">collection</span><span class="p">,</span> <span class="n">PathConfig</span><span class="o">.</span><span class="n">help_file</span><span class="p">(</span><span class="n">code</span><span class="p">))</span>
+
+        <span class="n">engine</span> <span class="o">=</span> <span class="n">QHelpEngine</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span>
+        <span class="n">engine</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># the search index is written here</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">engine</span><span class="o">.</span><span class="n">setupData</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">HelpUnavailableError</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">error</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">engine</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_register</span><span class="p">(</span><span class="n">collection</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">qch</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Register ``qch`` in ``collection``, refreshing it if changed.</span>
+
+<span class="sd">        The collection copies the table of contents and the index when a</span>
+<span class="sd">        file is registered, so the file is registered again whenever it</span>
+<span class="sd">        changes (new version) or moves (new install folder).</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        HelpUnavailableError</span>
+<span class="sd">            If the collection cannot be set up, the file is not a valid</span>
+<span class="sd">            help file or its registration fails.</span>
+<span class="sd">        """</span>
+        <span class="n">core</span> <span class="o">=</span> <span class="n">QHelpEngineCore</span><span class="p">(</span><span class="n">collection</span><span class="p">)</span>
+        <span class="n">core</span><span class="o">.</span><span class="n">setReadOnly</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">setupData</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="n">HelpUnavailableError</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">error</span><span class="p">())</span>
+
+        <span class="n">namespace</span> <span class="o">=</span> <span class="n">QHelpEngineCore</span><span class="o">.</span><span class="n">namespaceName</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">qch</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">namespace</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HelpUnavailableError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Invalid help file: </span><span class="si">{</span><span class="n">qch</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+        <span class="n">signature</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">qch</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="si">}</span><span class="s2">|</span><span class="si">{</span><span class="n">qch</span><span class="o">.</span><span class="n">stat</span><span class="p">()</span><span class="o">.</span><span class="n">st_mtime_ns</span><span class="si">}</span><span class="s2">"</span>
+        <span class="k">if</span> <span class="n">core</span><span class="o">.</span><span class="n">customValue</span><span class="p">(</span><span class="s2">"qch_signature"</span><span class="p">)</span> <span class="o">!=</span> <span class="n">signature</span><span class="p">:</span>
+            <span class="c1"># One collection per language, used only by this app.</span>
+            <span class="k">for</span> <span class="n">registered</span> <span class="ow">in</span> <span class="n">core</span><span class="o">.</span><span class="n">registeredDocumentations</span><span class="p">():</span>
+                <span class="n">core</span><span class="o">.</span><span class="n">unregisterDocumentation</span><span class="p">(</span><span class="n">registered</span><span class="p">)</span>
+            <span class="n">core</span><span class="o">.</span><span class="n">setCustomValue</span><span class="p">(</span><span class="s2">"qch_signature"</span><span class="p">,</span> <span class="n">signature</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">namespace</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">core</span><span class="o">.</span><span class="n">registeredDocumentations</span><span class="p">():</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">core</span><span class="o">.</span><span class="n">registerDocumentation</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">qch</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="n">HelpUnavailableError</span><span class="p">(</span><span class="n">core</span><span class="o">.</span><span class="n">error</span><span class="p">())</span>
+
+    <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Topics</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+<div class="viewcode-block" id="HelpService.topic_for_widget">
+<a class="viewcode-back" href="../../../api/ttea.service.helpservice.HelpService.html#ttea.service.helpservice.HelpService.topic_for_widget">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">topic_for_widget</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">widget</span><span class="p">:</span> <span class="n">QWidget</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the topic id for ``widget`` or its nearest parent.</span>
+
+<span class="sd">        A ``help_id`` property wins over the screen class name. Widgets</span>
+<span class="sd">        without a topic inherit the topic of their parent window, up to</span>
+<span class="sd">        the main window.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        widget : QWidget | None</span>
+<span class="sd">            Widget with focus, or the active window.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Topic id; ``HOME_TOPIC`` when nothing matches.</span>
+<span class="sd">        """</span>
+        <span class="k">while</span> <span class="n">widget</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">help_id</span> <span class="o">=</span> <span class="n">widget</span><span class="o">.</span><span class="n">property</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">HELP_ID_PROPERTY</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">help_id</span> <span class="ow">and</span> <span class="n">help_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">TOPICS</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">help_id</span>
+            <span class="n">topic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">VIEW_TOPICS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">widget</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">topic</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">topic</span>
+            <span class="n">widget</span> <span class="o">=</span> <span class="n">widget</span><span class="o">.</span><span class="n">parentWidget</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">HOME_TOPIC</span></div>
+
+
+<div class="viewcode-block" id="HelpService.topic_url">
+<a class="viewcode-back" href="../../../api/ttea.service.helpservice.HelpService.html#ttea.service.helpservice.HelpService.topic_url">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">topic_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">engine</span><span class="p">:</span> <span class="n">QHelpEngineCore</span><span class="p">,</span> <span class="n">topic</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QUrl</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the URL of ``topic`` in the help of ``engine``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        engine : QHelpEngineCore</span>
+<span class="sd">            Engine returned by ``create_engine``.</span>
+<span class="sd">        topic : str</span>
+<span class="sd">            Topic id from ``TOPICS``. Unknown topics and missing pages</span>
+<span class="sd">            fall back to the home page.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QUrl</span>
+<span class="sd">            ``qthelp://&lt;namespace&gt;/doc/&lt;page&gt;`` URL of the first</span>
+<span class="sd">            registered documentation.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        HelpUnavailableError</span>
+<span class="sd">            If the engine has no registered documentation.</span>
+<span class="sd">        """</span>
+        <span class="n">namespaces</span> <span class="o">=</span> <span class="n">engine</span><span class="o">.</span><span class="n">registeredDocumentations</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">namespaces</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">HelpUnavailableError</span><span class="p">(</span><span class="s2">"No help documentation registered."</span><span class="p">)</span>
+
+        <span class="n">home</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">(</span><span class="n">namespaces</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">TOPICS</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">HOME_TOPIC</span><span class="p">])</span>
+        <span class="n">page</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TOPICS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">topic</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">page</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">home</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">(</span><span class="n">namespaces</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">page</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">home</span> <span class="k">if</span> <span class="n">engine</span><span class="o">.</span><span class="n">fileData</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">isEmpty</span><span class="p">()</span> <span class="k">else</span> <span class="n">url</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">namespace</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">page</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QUrl</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Build the help URL of ``page``."""</span>
+        <span class="k">return</span> <span class="n">QUrl</span><span class="p">(</span><span class="sa">f</span><span class="s2">"qthelp://</span><span class="si">{</span><span class="n">namespace</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">VIRTUAL_FOLDER</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">page</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

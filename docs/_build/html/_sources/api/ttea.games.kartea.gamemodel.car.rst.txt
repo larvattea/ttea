@@ -1,0 +1,20 @@
+ttea.games.kartea.gamemodel.car
+===============================
+
+.. automodule:: ttea.games.kartea.gamemodel.car
+
+.. currentmodule:: ttea.games.kartea.gamemodel.car
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   Car
+
+

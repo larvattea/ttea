@@ -1,0 +1,25 @@
+Target
+======
+
+.. currentmodule:: ttea.games.kartea.gamemodel.target
+
+.. autoclass:: Target
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~Target.animate
+      ~Target.define_pos
+      ~Target.define_spawn_pos
+      ~Target.draw
+      ~Target.draw_hitbox
+      ~Target.kill
+      ~Target.move
+      ~Target.move_to
+      ~Target.reached
+      ~Target.update_current_pos

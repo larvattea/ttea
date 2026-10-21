@@ -1,0 +1,23 @@
+PlayerKarteaConfigListView
+==========================
+
+.. currentmodule:: ttea.games.kartea.view.playerkarteaconfiglistview
+
+.. autoclass:: PlayerKarteaConfigListView
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~PlayerKarteaConfigListView.bind
+      ~PlayerKarteaConfigListView.clear_details
+      ~PlayerKarteaConfigListView.closeEvent
+      ~PlayerKarteaConfigListView.display_config_details
+      ~PlayerKarteaConfigListView.get_search_text
+      ~PlayerKarteaConfigListView.get_selected_player_id
+      ~PlayerKarteaConfigListView.populate_table
+      ~PlayerKarteaConfigListView.select_row_by_id

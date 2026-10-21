@@ -1,0 +1,22 @@
+Car
+===
+
+.. currentmodule:: ttea.games.kartea.gamemodel.car
+
+.. autoclass:: Car
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~Car.draw
+      ~Car.draw_hitbox
+      ~Car.follow_mediapipe_hand
+      ~Car.follow_mouse
+      ~Car.hits
+      ~Car.kill_targets
+      ~Car.record_lane

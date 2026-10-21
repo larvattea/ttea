@@ -1,0 +1,590 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.games.kartea.gamemodel.background &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.games.kartea.gamemodel.background</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.games.kartea.gamemodel.background</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Rendering of the KarTEA horizon, pseudo-3D road and sprites."""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gametheme</span><span class="w"> </span><span class="kn">import</span> <span class="n">KarTEATheme</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.image</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.line</span><span class="w"> </span><span class="kn">import</span> <span class="n">Line</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gameutil</span><span class="w"> </span><span class="kn">import</span> <span class="n">GameSettings</span>
+
+
+<div class="viewcode-block" id="Background">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.background.Background.html#ttea.games.kartea.gamemodel.background.Background">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Background</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Render the game background, road and sprites.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    settings : GameSettings</span>
+<span class="sd">        Game configuration (injected).</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    settings : GameSettings</span>
+<span class="sd">        Game configuration.</span>
+<span class="sd">    theme : KarTEATheme</span>
+<span class="sd">        Track colors from the player's palette.</span>
+<span class="sd">    clock : pygame.time.Clock</span>
+<span class="sd">        Pygame clock.</span>
+<span class="sd">    last_time, time_left : float</span>
+<span class="sd">        Timestamps taken at creation.</span>
+<span class="sd">    dt : float</span>
+<span class="sd">        Delta time placeholder (0).</span>
+<span class="sd">    sprite_tree_left, sprite_tree_right : pygame.Surface</span>
+<span class="sd">        Environment images placed beside the road.</span>
+<span class="sd">    background_image : pygame.Surface</span>
+<span class="sd">        Horizon image scaled to the screen height (aspect ratio kept).</span>
+<span class="sd">    background_surface : pygame.Surface</span>
+<span class="sd">        Horizon image tiled to cover the screen width with a margin.</span>
+<span class="sd">    background_rect : pygame.Rect</span>
+<span class="sd">        Position of ``background_surface``.</span>
+<span class="sd">    menu_image : pygame.Surface | None</span>
+<span class="sd">        Menu background, loaded by ``background_menu``.</span>
+<span class="sd">    lines : list[Line]</span>
+<span class="sd">        The 5000 lines of the road.</span>
+<span class="sd">    line_count : int</span>
+<span class="sd">        Number of lines.</span>
+<span class="sd">    pos : float</span>
+<span class="sd">        Road position (advances with delta time).</span>
+<span class="sd">    last_start_pos : int | None</span>
+<span class="sd">        ``start_pos`` of the previous frame (see _handle_passed_lines).</span>
+<span class="sd">    player_x, player_y : int</span>
+<span class="sd">        Camera lateral position and height.</span>
+<span class="sd">    speed : float</span>
+<span class="sd">        Road speed, in units per real second.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The horizon image has a fixed native size and does not follow the</span>
+<span class="sd">    screen resolution. It is scaled to the screen height and tiled as</span>
+<span class="sd">    many times as needed, so no black bands appear vertically or on wide</span>
+<span class="sd">    screens (e.g. Full HD).</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="s2">"GameSettings"</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">theme</span> <span class="o">=</span> <span class="n">KarTEATheme</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">PALETTE</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clock</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">Clock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_left</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dt</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sprite_tree_left</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">ENVIRONMENT_IMAGE_LEFT</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">sprite_tree_right</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">ENVIRONMENT_IMAGE_RIGHT</span>
+        <span class="p">)</span>
+
+        <span class="c1"># The horizon has a fixed native size (e.g. 768x411): scale it</span>
+        <span class="c1"># to the screen height and tile it to cover the width (2 fixed</span>
+        <span class="c1"># copies left black bands on screens wider than ~1536px, like</span>
+        <span class="c1"># Full HD).</span>
+        <span class="n">raw_horizon</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">HORIZON_BG_IMAGE</span><span class="p">)</span>
+        <span class="n">native_w</span> <span class="o">=</span> <span class="n">raw_horizon</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span>
+        <span class="n">native_h</span> <span class="o">=</span> <span class="n">raw_horizon</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span>
+        <span class="n">scale_factor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SCREEN_HEIGHT</span> <span class="o">/</span> <span class="n">native_h</span>
+        <span class="n">scaled_w</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">native_w</span> <span class="o">*</span> <span class="n">scale_factor</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">background_image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span>
+            <span class="n">raw_horizon</span><span class="p">,</span> <span class="p">(</span><span class="n">scaled_w</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SCREEN_HEIGHT</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">tiles</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span> <span class="o">//</span> <span class="n">scaled_w</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">background_surface</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">scaled_w</span> <span class="o">*</span> <span class="n">tiles</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SCREEN_HEIGHT</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">tiles</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">background_surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">background_image</span><span class="p">,</span> <span class="p">(</span><span class="n">scaled_w</span> <span class="o">*</span> <span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">background_rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">background_surface</span><span class="o">.</span><span class="n">get_rect</span><span class="p">(</span><span class="n">topleft</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">menu_image</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Line</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_create_road_lines</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">line_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_start_pos</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_x</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_y</span> <span class="o">=</span> <span class="mi">1500</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">speed</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_road_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Create the 5000 lines that make up the road.</span>
+
+<span class="sd">        Colors alternate every 3 lines (dark/light tones of the theme)</span>
+<span class="sd">        and trees are placed every 70 lines.</span>
+<span class="sd">        """</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5000</span><span class="p">):</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">Line</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">)</span>
+            <span class="n">line</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SEGMENT_LENGTH</span> <span class="o">+</span> <span class="mf">0.00001</span>
+
+            <span class="n">is_alternate</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span> <span class="o">//</span> <span class="mi">3</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span>
+
+            <span class="n">line</span><span class="o">.</span><span class="n">grass_color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theme</span><span class="o">.</span><span class="n">grass</span><span class="p">[</span>
+                <span class="s2">"light"</span> <span class="k">if</span> <span class="n">is_alternate</span> <span class="k">else</span> <span class="s2">"dark"</span>
+            <span class="p">]</span>
+
+            <span class="n">line</span><span class="o">.</span><span class="n">rumble_color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theme</span><span class="o">.</span><span class="n">rumble</span><span class="p">[</span>
+                <span class="s2">"light"</span> <span class="k">if</span> <span class="n">is_alternate</span> <span class="k">else</span> <span class="s2">"dark"</span>
+            <span class="p">]</span>
+
+            <span class="n">line</span><span class="o">.</span><span class="n">road_color</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">theme</span><span class="o">.</span><span class="n">road</span><span class="p">[</span><span class="s2">"light"</span><span class="p">]</span>
+
+            <span class="n">line</span><span class="o">.</span><span class="n">div_color</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">theme</span><span class="o">.</span><span class="n">rumble</span><span class="p">[</span><span class="s2">"light"</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">is_alternate</span>
+                <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">theme</span><span class="o">.</span><span class="n">road</span><span class="p">[</span><span class="s2">"light"</span><span class="p">]</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">70</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">line</span><span class="o">.</span><span class="n">sprite_x</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.5</span>
+                <span class="n">line</span><span class="o">.</span><span class="n">sprite</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sprite_tree_left</span>
+                <span class="n">line</span><span class="o">.</span><span class="n">sprite2_x</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="n">line</span><span class="o">.</span><span class="n">sprite2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sprite_tree_right</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Background.set_speed_level">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.background.Background.html#ttea.games.kartea.gamemodel.background.Background.set_speed_level">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_speed_level</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Set the road speed from the arrival time.</span>
+
+<span class="sd">        The speed (units per real SECOND, applied in draw() with</span>
+<span class="sd">        delta_time) is computed so that an object takes</span>
+<span class="sd">        ``settings.OBJECT_ARRIVAL_TIME[level]`` seconds between</span>
+<span class="sd">        appearing on the road and reaching the front of the car, on any</span>
+<span class="sd">        machine and FPS.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        level : int</span>
+<span class="sd">            Speed 1 (levels 1-2), 2 (levels 3-4) or 3 (levels 5-7).</span>
+<span class="sd">        """</span>
+        <span class="n">seconds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">OBJECT_ARRIVAL_TIME</span><span class="p">[</span><span class="n">level</span><span class="p">]</span>
+        <span class="n">distance</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">OBJECT_ARRIVAL_SEGMENTS</span>
+            <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SEGMENT_LENGTH</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speed</span> <span class="o">=</span> <span class="n">distance</span> <span class="o">/</span> <span class="n">seconds</span></div>
+
+
+<div class="viewcode-block" id="Background.speed1">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.background.Background.html#ttea.games.kartea.gamemodel.background.Background.speed1">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">speed1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Set the slow speed (levels 1-2)."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_speed_level</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Background.speed2">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.background.Background.html#ttea.games.kartea.gamemodel.background.Background.speed2">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">speed2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Set the medium speed (levels 3-4)."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_speed_level</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Background.speed3">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.background.Background.html#ttea.games.kartea.gamemodel.background.Background.speed3">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">speed3</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Set the fast speed (levels 5-7)."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_speed_level</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Background.stop">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.background.Background.html#ttea.games.kartea.gamemodel.background.Background.stop">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Stop the road movement."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speed</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="Background.background_menu">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.background.Background.html#ttea.games.kartea.gamemodel.background.Background.background_menu">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">background_menu</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Load the menu background image, at screen size."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menu_image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">MENU_BACKGROUND</span><span class="p">,</span>
+            <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SCREEN_HEIGHT</span><span class="p">),</span>
+            <span class="n">convert</span><span class="o">=</span><span class="s2">"default"</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Background.get_start_pos">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.background.Background.html#ttea.games.kartea.gamemodel.background.Background.get_start_pos">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_start_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the line index where targets/obstacles spawn.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            OBJECT_SPAWN_SEGMENTS lines ahead of the current position,</span>
+<span class="sd">            wrapped around the road length.</span>
+<span class="sd">        """</span>
+        <span class="c1"># self.pos is a float (advances by delta time): // on a float</span>
+        <span class="c1"># returns a float, and list indexing requires an int.</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SEGMENT_LENGTH</span><span class="p">)</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">OBJECT_SPAWN_SEGMENTS</span>
+        <span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_count</span></div>
+
+
+<div class="viewcode-block" id="Background.draw">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.background.Background.html#ttea.games.kartea.gamemodel.background.Background.draw">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">,</span> <span class="n">delta_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Draw the background, the road and the sprites.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        surface : pygame.Surface</span>
+<span class="sd">            Surface drawn on.</span>
+<span class="sd">        delta_time : float, optional</span>
+<span class="sd">            Real time (s) since the previous frame</span>
+<span class="sd">            (GameState.delta_time). With 0 the road does not advance</span>
+<span class="sd">            (e.g. menu background).</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The road advances by real elapsed time, not per frame, so it</span>
+<span class="sd">        moves at the same speed in real seconds whatever FPS is</span>
+<span class="sd">        achieved. The road loops after the last line. Lines behind the</span>
+<span class="sd">        camera are not projected or drawn; each trapezoid joins the</span>
+<span class="sd">        previous line projected in THIS frame to the current one.</span>
+<span class="sd">        """</span>
+        <span class="c1"># Draw the fixed background</span>
+        <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">background_surface</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">background_rect</span><span class="p">)</span>
+
+        <span class="c1"># Clear to black and redraw (original effect)</span>
+        <span class="n">surface</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="s2">"black"</span><span class="p">)</span>
+        <span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">background_surface</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">background_rect</span><span class="p">)</span>
+
+        <span class="c1"># Advance by real elapsed time, not per frame, so the speed in</span>
+        <span class="c1"># real seconds does not depend on the FPS (e.g. pose processing</span>
+        <span class="c1"># can slow the game down on some machines).</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span> <span class="o">*</span> <span class="n">delta_time</span>
+
+        <span class="c1"># Infinite road loop</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_count</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SEGMENT_LENGTH</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_count</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SEGMENT_LENGTH</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_count</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SEGMENT_LENGTH</span>
+
+        <span class="c1"># start_pos must be an int: it is a list index and a range()</span>
+        <span class="c1"># limit below.</span>
+        <span class="n">start_pos</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SEGMENT_LENGTH</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_handle_passed_lines</span><span class="p">(</span><span class="n">start_pos</span><span class="p">)</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="n">dx</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="n">cam_h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_y</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">start_pos</span><span class="p">]</span><span class="o">.</span><span class="n">y</span>
+        <span class="n">maxy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SCREEN_HEIGHT</span> <span class="o">*</span> <span class="mi">2</span>
+
+        <span class="c1"># Previous line projected in THIS frame. Each trapezoid joins</span>
+        <span class="c1"># the previous line to the current one; using self.lines[n - 1]</span>
+        <span class="c1"># took, on the first loop line, a projection from an earlier</span>
+        <span class="c1"># frame.</span>
+        <span class="n">prev</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Render the road segments</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_pos</span><span class="p">,</span> <span class="n">start_pos</span> <span class="o">+</span> <span class="mi">300</span><span class="p">):</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">n</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_count</span><span class="p">]</span>
+            <span class="n">cam_z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">-</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">line_count</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SEGMENT_LENGTH</span>
+                <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_count</span>
+                <span class="k">else</span> <span class="mi">0</span>
+            <span class="p">)</span>
+
+            <span class="c1"># With delta_time, self.pos is fractional and line start_pos</span>
+            <span class="c1"># is BEHIND the camera (z &lt; cam_z). Projected, it would come</span>
+            <span class="c1"># out inverted (above the screen), become the clipping limit</span>
+            <span class="c1"># (maxy) and the rest of the road would be discarded, with a</span>
+            <span class="c1"># trapezoid drawn over the screen. Lines behind the camera</span>
+            <span class="c1"># are neither projected nor drawn.</span>
+            <span class="k">if</span> <span class="n">current</span><span class="o">.</span><span class="n">z</span> <span class="o">-</span> <span class="n">cam_z</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">+=</span> <span class="n">dx</span>
+                <span class="n">dx</span> <span class="o">+=</span> <span class="n">current</span><span class="o">.</span><span class="n">curve</span>
+                <span class="n">prev</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">continue</span>
+
+            <span class="n">current</span><span class="o">.</span><span class="n">project</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">player_x</span> <span class="o">-</span> <span class="n">x</span><span class="p">,</span> <span class="n">cam_h</span><span class="p">,</span> <span class="n">cam_z</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">+=</span> <span class="n">dx</span>
+            <span class="n">dx</span> <span class="o">+=</span> <span class="n">current</span><span class="o">.</span><span class="n">curve</span>
+
+            <span class="n">current</span><span class="o">.</span><span class="n">clip</span> <span class="o">=</span> <span class="n">maxy</span>
+
+            <span class="k">if</span> <span class="n">current</span><span class="o">.</span><span class="n">screen_y</span> <span class="o">&gt;=</span> <span class="n">maxy</span><span class="p">:</span>
+                <span class="n">prev</span> <span class="o">=</span> <span class="n">current</span>
+                <span class="k">continue</span>
+            <span class="n">maxy</span> <span class="o">=</span> <span class="n">current</span><span class="o">.</span><span class="n">screen_y</span>
+
+            <span class="c1"># First visible line: no previous line in this frame yet (it</span>
+            <span class="c1"># is below the bottom edge of the screen, so there is no</span>
+            <span class="c1"># gap).</span>
+            <span class="k">if</span> <span class="n">prev</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">prev</span> <span class="o">=</span> <span class="n">current</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># Road layers</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">draw_quad</span><span class="p">(</span>
+                <span class="n">surface</span><span class="p">,</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">grass_color</span><span class="p">,</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="n">prev</span><span class="o">.</span><span class="n">screen_y</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span><span class="p">,</span>
+                <span class="mi">0</span><span class="p">,</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">screen_y</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">draw_quad</span><span class="p">(</span>
+                <span class="n">surface</span><span class="p">,</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">rumble_color</span><span class="p">,</span>
+                <span class="n">prev</span><span class="o">.</span><span class="n">screen_x</span><span class="p">,</span>
+                <span class="n">prev</span><span class="o">.</span><span class="n">screen_y</span><span class="p">,</span>
+                <span class="n">prev</span><span class="o">.</span><span class="n">screen_w</span> <span class="o">*</span> <span class="mf">1.2</span><span class="p">,</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">screen_x</span><span class="p">,</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">screen_y</span><span class="p">,</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">screen_w</span> <span class="o">*</span> <span class="mf">1.2</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">draw_quad</span><span class="p">(</span>
+                <span class="n">surface</span><span class="p">,</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">road_color</span><span class="p">,</span>
+                <span class="n">prev</span><span class="o">.</span><span class="n">screen_x</span><span class="p">,</span>
+                <span class="n">prev</span><span class="o">.</span><span class="n">screen_y</span><span class="p">,</span>
+                <span class="n">prev</span><span class="o">.</span><span class="n">screen_w</span><span class="p">,</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">screen_x</span><span class="p">,</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">screen_y</span><span class="p">,</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">screen_w</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">draw_quad</span><span class="p">(</span>
+                <span class="n">surface</span><span class="p">,</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">div_color</span><span class="p">,</span>
+                <span class="n">prev</span><span class="o">.</span><span class="n">screen_x</span><span class="p">,</span>
+                <span class="n">prev</span><span class="o">.</span><span class="n">screen_y</span><span class="p">,</span>
+                <span class="n">prev</span><span class="o">.</span><span class="n">screen_w</span> <span class="o">*</span> <span class="mf">0.35</span><span class="p">,</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">screen_x</span><span class="p">,</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">screen_y</span><span class="p">,</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">screen_w</span> <span class="o">*</span> <span class="mf">0.35</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">draw_quad</span><span class="p">(</span>
+                <span class="n">surface</span><span class="p">,</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">road_color</span><span class="p">,</span>
+                <span class="n">prev</span><span class="o">.</span><span class="n">screen_x</span><span class="p">,</span>
+                <span class="n">prev</span><span class="o">.</span><span class="n">screen_y</span><span class="p">,</span>
+                <span class="n">prev</span><span class="o">.</span><span class="n">screen_w</span> <span class="o">*</span> <span class="mf">0.3</span><span class="p">,</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">screen_x</span><span class="p">,</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">screen_y</span><span class="p">,</span>
+                <span class="n">current</span><span class="o">.</span><span class="n">screen_w</span> <span class="o">*</span> <span class="mf">0.3</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">prev</span> <span class="o">=</span> <span class="n">current</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_sprites</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="n">start_pos</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_draw_sprites</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">,</span> <span class="n">start_pos</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Draw sprites, trees and targets, from back to front.</span>
+
+<span class="sd">        Uses only lines projected in this frame: start_pos + 1 to</span>
+<span class="sd">        start_pos + 299 (start_pos + 300 kept the projection of a</span>
+<span class="sd">        previous frame).</span>
+<span class="sd">        """</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_pos</span> <span class="o">+</span> <span class="mi">299</span><span class="p">,</span> <span class="n">start_pos</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">n</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_count</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">sprite</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">line</span><span class="o">.</span><span class="n">draw_sprite</span><span class="p">(</span><span class="n">surface</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">sprite2</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">line</span><span class="o">.</span><span class="n">draw_sprite2</span><span class="p">(</span><span class="n">surface</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">line</span><span class="o">.</span><span class="n">draw_target</span><span class="p">(</span><span class="n">surface</span><span class="p">)</span>
+                <span class="n">line</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">update_current_pos</span><span class="p">(</span>
+                    <span class="n">line</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">current_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">line</span><span class="o">.</span><span class="n">screen_y</span>
+                <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_handle_passed_lines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start_pos</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Handle the lines left behind the camera in this frame.</span>
+
+<span class="sd">        Each line passed is marked with ``line.passed = True`` (used to</span>
+<span class="sd">        detect the finish line crossing) and has its target released, as</span>
+<span class="sd">        described below.</span>
+
+<span class="sd">        A target/obstacle is only considered avoided when the projection</span>
+<span class="sd">        of its line goes past the bottom of the screen. With delta_time,</span>
+<span class="sd">        a slower frame (disk write, MediaPipe) makes the road advance</span>
+<span class="sd">        several segments at once, and the line could go straight behind</span>
+<span class="sd">        the camera without passing that point: the target stayed without</span>
+<span class="sd">        an outcome (no "Desviou" recorded) until the end of the level.</span>
+
+<span class="sd">        For each line passed since the previous frame:</span>
+
+<span class="sd">        - the target goes below the screen (position and rectangle), and</span>
+<span class="sd">          the GameController removal loop records it as avoided, without</span>
+<span class="sd">          counting a collision with the car;</span>
+<span class="sd">        - the line no longer points to the target, so it is not drawn</span>
+<span class="sd">          again when the road wraps around (5000 segments).</span>
+<span class="sd">        """</span>
+        <span class="n">last</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_start_pos</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_start_pos</span> <span class="o">=</span> <span class="n">start_pos</span>
+        <span class="k">if</span> <span class="n">last</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">passed</span> <span class="o">=</span> <span class="p">(</span><span class="n">start_pos</span> <span class="o">-</span> <span class="n">last</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_count</span>
+        <span class="n">far_below</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SCREEN_HEIGHT</span> <span class="o">*</span> <span class="mi">10</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">passed</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lines</span><span class="p">[(</span><span class="n">last</span> <span class="o">+</span> <span class="n">i</span><span class="p">)</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">line_count</span><span class="p">]</span>
+            <span class="n">line</span><span class="o">.</span><span class="n">passed</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">target</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">target</span>
+            <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">line</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">target</span><span class="o">.</span><span class="n">define_pos</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">far_below</span><span class="p">)</span>
+            <span class="n">target</span><span class="o">.</span><span class="n">update_current_pos</span><span class="p">(</span><span class="n">target</span><span class="o">.</span><span class="n">current_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">far_below</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Background.draw_quad">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.background.Background.html#ttea.games.kartea.gamemodel.background.Background.draw_quad">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw_quad</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">,</span>
+        <span class="n">color</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Color</span><span class="p">,</span>
+        <span class="n">x1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">y1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">w1</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">x2</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">y2</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">w2</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Draw a quadrilateral (trapezoid) used to render the road.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        surface : pygame.Surface</span>
+<span class="sd">            Surface drawn on.</span>
+<span class="sd">        color : pygame.Color</span>
+<span class="sd">            Fill color.</span>
+<span class="sd">        x1, y1, w1 : int</span>
+<span class="sd">            Center, height and half width of the bottom edge.</span>
+<span class="sd">        x2, y2, w2 : int</span>
+<span class="sd">            Center, height and half width of the top edge.</span>
+<span class="sd">        """</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">polygon</span><span class="p">(</span>
+            <span class="n">surface</span><span class="p">,</span>
+            <span class="n">color</span><span class="p">,</span>
+            <span class="p">[(</span><span class="n">x1</span> <span class="o">-</span> <span class="n">w1</span><span class="p">,</span> <span class="n">y1</span><span class="p">),</span> <span class="p">(</span><span class="n">x2</span> <span class="o">-</span> <span class="n">w2</span><span class="p">,</span> <span class="n">y2</span><span class="p">),</span> <span class="p">(</span><span class="n">x2</span> <span class="o">+</span> <span class="n">w2</span><span class="p">,</span> <span class="n">y2</span><span class="p">),</span> <span class="p">(</span><span class="n">x1</span> <span class="o">+</span> <span class="n">w1</span><span class="p">,</span> <span class="n">y1</span><span class="p">)],</span>
+        <span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,267 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.games.kartea.gameutil.window &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.games.kartea.gameutil.window</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.games.kartea.gameutil.window</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Window utilities of the game (pygame)."""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">ctypes</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">Log</span>
+
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"win"</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ctypes</span><span class="w"> </span><span class="kn">import</span> <span class="n">wintypes</span>
+
+    <span class="n">_user32</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">WinDLL</span><span class="p">(</span><span class="s2">"user32"</span><span class="p">,</span> <span class="n">use_last_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">_kernel32</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">WinDLL</span><span class="p">(</span><span class="s2">"kernel32"</span><span class="p">,</span> <span class="n">use_last_error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Explicit types: HWND is a 64-bit pointer, the ctypes default</span>
+    <span class="c1"># (C int) could truncate it.</span>
+    <span class="n">_user32</span><span class="o">.</span><span class="n">GetForegroundWindow</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">wintypes</span><span class="o">.</span><span class="n">HWND</span>
+    <span class="n">_user32</span><span class="o">.</span><span class="n">GetWindowThreadProcessId</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">wintypes</span><span class="o">.</span><span class="n">HWND</span><span class="p">,</span>
+        <span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">_user32</span><span class="o">.</span><span class="n">GetWindowThreadProcessId</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">wintypes</span><span class="o">.</span><span class="n">DWORD</span>
+    <span class="n">_user32</span><span class="o">.</span><span class="n">AttachThreadInput</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">wintypes</span><span class="o">.</span><span class="n">DWORD</span><span class="p">,</span>
+        <span class="n">wintypes</span><span class="o">.</span><span class="n">DWORD</span><span class="p">,</span>
+        <span class="n">wintypes</span><span class="o">.</span><span class="n">BOOL</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">_user32</span><span class="o">.</span><span class="n">ShowWindow</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">wintypes</span><span class="o">.</span><span class="n">HWND</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_int</span><span class="p">]</span>
+    <span class="n">_user32</span><span class="o">.</span><span class="n">IsIconic</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">wintypes</span><span class="o">.</span><span class="n">HWND</span><span class="p">]</span>
+    <span class="n">_user32</span><span class="o">.</span><span class="n">keybd_event</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">wintypes</span><span class="o">.</span><span class="n">BYTE</span><span class="p">,</span>
+        <span class="n">wintypes</span><span class="o">.</span><span class="n">BYTE</span><span class="p">,</span>
+        <span class="n">wintypes</span><span class="o">.</span><span class="n">DWORD</span><span class="p">,</span>
+        <span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="k">for</span> <span class="n">_name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"SetForegroundWindow"</span><span class="p">,</span> <span class="s2">"BringWindowToTop"</span><span class="p">,</span> <span class="s2">"SetFocus"</span><span class="p">):</span>
+        <span class="nb">getattr</span><span class="p">(</span><span class="n">_user32</span><span class="p">,</span> <span class="n">_name</span><span class="p">)</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">wintypes</span><span class="o">.</span><span class="n">HWND</span><span class="p">]</span>
+    <span class="n">_kernel32</span><span class="o">.</span><span class="n">GetCurrentThreadId</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">wintypes</span><span class="o">.</span><span class="n">DWORD</span>
+
+<span class="n">_SW_SHOW</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">_SW_RESTORE</span> <span class="o">=</span> <span class="mi">9</span>
+<span class="n">_VK_MENU</span> <span class="o">=</span> <span class="mh">0x12</span>
+<span class="n">_KEYEVENTF_KEYUP</span> <span class="o">=</span> <span class="mh">0x0002</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_win_force_foreground</span><span class="p">(</span><span class="n">hwnd</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Bring the window to the foreground on Windows.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    hwnd : int</span>
+<span class="sd">        Handle of the pygame window.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        True if the window is in the foreground at the end.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Windows blocks ``SetForegroundWindow`` when another process (e.g.</span>
+<span class="sd">    the monitoring screen that opened the game) owns the foreground.</span>
+<span class="sd">    To get around it, the input of the current thread is attached to</span>
+<span class="sd">    the thread of the foreground window; if that is not enough, an Alt</span>
+<span class="sd">    press is simulated, which releases the foreground lock.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">_user32</span><span class="o">.</span><span class="n">GetForegroundWindow</span><span class="p">()</span> <span class="o">==</span> <span class="n">hwnd</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">if</span> <span class="n">_user32</span><span class="o">.</span><span class="n">IsIconic</span><span class="p">(</span><span class="n">hwnd</span><span class="p">):</span>
+        <span class="n">_user32</span><span class="o">.</span><span class="n">ShowWindow</span><span class="p">(</span><span class="n">hwnd</span><span class="p">,</span> <span class="n">_SW_RESTORE</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_user32</span><span class="o">.</span><span class="n">ShowWindow</span><span class="p">(</span><span class="n">hwnd</span><span class="p">,</span> <span class="n">_SW_SHOW</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">use_alt</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="n">foreground</span> <span class="o">=</span> <span class="n">_user32</span><span class="o">.</span><span class="n">GetForegroundWindow</span><span class="p">()</span>
+        <span class="n">fg_thread</span> <span class="o">=</span> <span class="n">_user32</span><span class="o">.</span><span class="n">GetWindowThreadProcessId</span><span class="p">(</span><span class="n">foreground</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">cur_thread</span> <span class="o">=</span> <span class="n">_kernel32</span><span class="o">.</span><span class="n">GetCurrentThreadId</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">use_alt</span><span class="p">:</span>
+            <span class="n">_user32</span><span class="o">.</span><span class="n">keybd_event</span><span class="p">(</span><span class="n">_VK_MENU</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">_user32</span><span class="o">.</span><span class="n">keybd_event</span><span class="p">(</span><span class="n">_VK_MENU</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">_KEYEVENTF_KEYUP</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="n">attached</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">fg_thread</span> <span class="ow">and</span> <span class="n">fg_thread</span> <span class="o">!=</span> <span class="n">cur_thread</span><span class="p">:</span>
+            <span class="n">attached</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span>
+                <span class="n">_user32</span><span class="o">.</span><span class="n">AttachThreadInput</span><span class="p">(</span><span class="n">fg_thread</span><span class="p">,</span> <span class="n">cur_thread</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">_user32</span><span class="o">.</span><span class="n">BringWindowToTop</span><span class="p">(</span><span class="n">hwnd</span><span class="p">)</span>
+            <span class="n">_user32</span><span class="o">.</span><span class="n">SetForegroundWindow</span><span class="p">(</span><span class="n">hwnd</span><span class="p">)</span>
+            <span class="n">_user32</span><span class="o">.</span><span class="n">SetFocus</span><span class="p">(</span><span class="n">hwnd</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">attached</span><span class="p">:</span>
+                <span class="n">_user32</span><span class="o">.</span><span class="n">AttachThreadInput</span><span class="p">(</span><span class="n">fg_thread</span><span class="p">,</span> <span class="n">cur_thread</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">_user32</span><span class="o">.</span><span class="n">GetForegroundWindow</span><span class="p">()</span> <span class="o">==</span> <span class="n">hwnd</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="kc">False</span>
+
+
+<div class="viewcode-block" id="regain_focus">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gameutil.window.html#ttea.games.kartea.gameutil.window.regain_focus">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">regain_focus</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Bring the pygame window back to the foreground.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - Windows: ``_win_force_foreground`` (user32), which works even when</span>
+<span class="sd">      another process owns the foreground.</span>
+<span class="sd">    - Linux: requires the ``xdotool`` tool (X11).</span>
+<span class="sd">    - macOS: ``osascript`` brings the parent process to the front.</span>
+
+<span class="sd">    Does nothing if pygame has no window id. Any error, or a failure to</span>
+<span class="sd">    get the focus on Windows, does not interrupt the game: it is logged</span>
+<span class="sd">    as a warning.</span>
+<span class="sd">    """</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Let SDL finish showing the window before asking for the focus</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">pump</span><span class="p">()</span>
+
+        <span class="n">wm_info</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">get_wm_info</span><span class="p">()</span>
+        <span class="n">window_id</span> <span class="o">=</span> <span class="n">wm_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"window"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">window_id</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"win"</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">_win_force_foreground</span><span class="p">(</span><span class="n">window_id</span><span class="p">):</span>
+                <span class="n">Log</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span><span class="o">.</span><span class="n">log_warning</span><span class="p">(</span>
+                    <span class="s2">"Unable to regain focus: Windows rejected "</span>
+                    <span class="s2">"SetForegroundWindow."</span>
+                <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"linux"</span><span class="p">):</span>
+            <span class="c1"># Requires the xdotool tool on Linux/X11</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="p">[</span><span class="s2">"xdotool"</span><span class="p">,</span> <span class="s2">"windowactivate"</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">window_id</span><span class="p">)],</span>
+                <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span><span class="p">,</span>
+                <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span><span class="p">,</span>
+                <span class="n">check</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"darwin"</span><span class="p">):</span>  <span class="c1"># macOS</span>
+            <span class="n">apple_script</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s1">'tell application "System Events" to set frontmost of '</span>
+                <span class="s2">"first process whose unix id is "</span>
+                <span class="s1">'(do shell script "echo $PPID") to true'</span>
+            <span class="p">)</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="p">[</span><span class="s2">"osascript"</span><span class="p">,</span> <span class="s2">"-e"</span><span class="p">,</span> <span class="n">apple_script</span><span class="p">],</span>
+                <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span><span class="p">,</span>
+                <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span><span class="p">,</span>
+                <span class="n">check</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+        <span class="c1"># Do not stop the game, but keep the reason in the log.</span>
+        <span class="n">Log</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span><span class="o">.</span><span class="n">log_warning</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Não foi possível recuperar o foco: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">"</span>
+        <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

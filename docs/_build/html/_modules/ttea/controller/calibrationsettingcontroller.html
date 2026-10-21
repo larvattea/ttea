@@ -1,0 +1,231 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.controller.calibrationsettingcontroller &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.controller.calibrationsettingcontroller</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.controller.calibrationsettingcontroller</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Controller of the calibration settings window."""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">QObject</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QButtonGroup</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.service</span><span class="w"> </span><span class="kn">import</span> <span class="n">CalibrationSettingService</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">CalibrationSettingView</span>
+
+
+<div class="viewcode-block" id="CalibrationSettingController">
+<a class="viewcode-back" href="../../../api/ttea.controller.calibrationsettingcontroller.CalibrationSettingController.html#ttea.controller.calibrationsettingcontroller.CalibrationSettingController">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CalibrationSettingController</span><span class="p">(</span><span class="n">QObject</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Controller of the calibration settings window.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    view : CalibrationSettingView</span>
+<span class="sd">        The settings dialog.</span>
+<span class="sd">    service : CalibrationSettingService | None, optional</span>
+<span class="sd">        Settings service. Default is None, which creates a new</span>
+<span class="sd">        ``CalibrationSettingService``.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    view : CalibrationSettingView</span>
+<span class="sd">        The settings dialog.</span>
+<span class="sd">    service : CalibrationSettingService</span>
+<span class="sd">        Settings service.</span>
+<span class="sd">    calibration_group : QButtonGroup</span>
+<span class="sd">        Exclusive group of the three "default calibration" check boxes.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The saved settings are loaded first and the check box group is</span>
+<span class="sd">    created afterwards, selecting the automatic calibration as default.</span>
+<span class="sd">    TODO(doc): this overrides the saved default calibration mode; is it</span>
+<span class="sd">    intended?</span>
+
+<span class="sd">    Messages are translated with ``self.tr()``.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">view</span><span class="p">:</span> <span class="s2">"CalibrationSettingView"</span><span class="p">,</span>
+        <span class="n">service</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CalibrationSettingService</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span> <span class="o">=</span> <span class="n">view</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="n">service</span> <span class="ow">or</span> <span class="n">CalibrationSettingService</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_view</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setup_calibration_group</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setup_calibration_group</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Make the default calibration check boxes exclusive."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calibration_group</span> <span class="o">=</span> <span class="n">QButtonGroup</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calibration_group</span><span class="o">.</span><span class="n">setExclusive</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">calibration_group</span><span class="o">.</span><span class="n">addButton</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">chk_default_calibration_automatic</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calibration_group</span><span class="o">.</span><span class="n">addButton</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">chk_default_calibration_manual</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calibration_group</span><span class="o">.</span><span class="n">addButton</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">chk_default_calibration_semiautomatic</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">chk_default_calibration_automatic</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_initialize_view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Fill the proportions and load the saved settings."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">list_proportions</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_load_saved_settings</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_load_saved_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Show the saved settings, if any, in the view."""</span>
+        <span class="n">calibration_setting</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">dao</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">calibration_setting</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">calibration_setting</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CalibrationSettingController.list_proportions">
+<a class="viewcode-back" href="../../../api/ttea.controller.calibrationsettingcontroller.CalibrationSettingController.html#ttea.controller.calibrationsettingcontroller.CalibrationSettingController.list_proportions">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_proportions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Fill the ratio combo box with the supported proportions."""</span>
+        <span class="k">for</span> <span class="n">text</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_proportions</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_ratio</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingController.handle_ok">
+<a class="viewcode-back" href="../../../api/ttea.controller.calibrationsettingcontroller.CalibrationSettingController.html#ttea.controller.calibrationsettingcontroller.CalibrationSettingController.handle_ok">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle_ok</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Save the settings and close the dialog.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        On success, an information message is shown and the dialog is</span>
+<span class="sd">        accepted; if the settings are not valid, an error message is</span>
+<span class="sd">        shown and the dialog stays open.</span>
+<span class="sd">        """</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+
+        <span class="n">calibration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">create_calibration_setting</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">calibration</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Configuração de calibração salva com sucesso!"</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Erro ao salvar a configuração de calibração."</span><span class="p">)</span>
+            <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingController.handle_cancel">
+<a class="viewcode-back" href="../../../api/ttea.controller.calibrationsettingcontroller.CalibrationSettingController.html#ttea.controller.calibrationsettingcontroller.CalibrationSettingController.handle_cancel">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle_cancel</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Reject the dialog without saving."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">reject</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

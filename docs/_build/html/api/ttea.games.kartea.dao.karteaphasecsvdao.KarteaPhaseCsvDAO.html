@@ -1,0 +1,327 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KarteaPhaseCsvDAO &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.games.kartea.dao.karteaphaselevelcsvdao" href="ttea.games.kartea.dao.karteaphaselevelcsvdao.html" />
+    <link rel="prev" title="ttea.games.kartea.dao.karteaphasecsvdao" href="ttea.games.kartea.dao.karteaphasecsvdao.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.games.html">ttea.games</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.gametheme.html">ttea.games.gametheme</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.games.kartea.html">ttea.games.kartea</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.controller.html">ttea.games.kartea.controller</a></li>
+<li class="toctree-l5 current"><a class="reference internal" href="ttea.games.kartea.dao.html">ttea.games.kartea.dao</a><ul class="current">
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.dao.html#attributes">Attributes</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.dao.html#see-also">See Also</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.dao.html#notes">Notes</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.dao.basecsvdao.html">ttea.games.kartea.dao.basecsvdao</a></li>
+<li class="toctree-l6 current"><a class="reference internal" href="ttea.games.kartea.dao.karteaphasecsvdao.html">ttea.games.kartea.dao.karteaphasecsvdao</a><ul class="current">
+<li class="toctree-l7 current"><a class="current reference internal" href="#">KarteaPhaseCsvDAO</a><ul>
+<li class="toctree-l8"><a class="reference internal" href="#ttea.games.kartea.dao.karteaphasecsvdao.KarteaPhaseCsvDAO"><code class="docutils literal notranslate"><span class="pre">KarteaPhaseCsvDAO</span></code></a><ul>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.dao.karteaphasecsvdao.KarteaPhaseCsvDAO.list_phase_ids"><code class="docutils literal notranslate"><span class="pre">KarteaPhaseCsvDAO.list_phase_ids()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.dao.karteaphasecsvdao.KarteaPhaseCsvDAO.load_phase_from_csv"><code class="docutils literal notranslate"><span class="pre">KarteaPhaseCsvDAO.load_phase_from_csv()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.dao.karteaphasecsvdao.KarteaPhaseCsvDAO.select"><code class="docutils literal notranslate"><span class="pre">KarteaPhaseCsvDAO.select()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.dao.karteaphasecsvdao.KarteaPhaseCsvDAO.list"><code class="docutils literal notranslate"><span class="pre">KarteaPhaseCsvDAO.list()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.dao.karteaphaselevelcsvdao.html">ttea.games.kartea.dao.karteaphaselevelcsvdao</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.dao.playerkarteaconfigcsvdao.html">ttea.games.kartea.dao.playerkarteaconfigcsvdao</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.dao.playerkarteasessioncsvdao.html">ttea.games.kartea.dao.playerkarteasessioncsvdao</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.dao.playerkarteasessiondetailcsvdao.html">ttea.games.kartea.dao.playerkarteasessiondetailcsvdao</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.dao.readonlydao.html">ttea.games.kartea.dao.readonlydao</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.factory.html">ttea.games.kartea.factory</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamecontroller.html">ttea.games.kartea.gamecontroller</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamecore.html">ttea.games.kartea.gamecore</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamemodel.html">ttea.games.kartea.gamemodel</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gametheme.html">ttea.games.kartea.gametheme</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameui.html">ttea.games.kartea.gameui</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameutil.html">ttea.games.kartea.gameutil</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameview.html">ttea.games.kartea.gameview</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.main.html">ttea.games.kartea.main</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.model.html">ttea.games.kartea.model</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.service.html">ttea.games.kartea.service</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.util.html">ttea.games.kartea.util</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.view.html">ttea.games.kartea.view</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.html">ttea.games</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.html">ttea.games.kartea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.dao.html">ttea.games.kartea.dao</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.dao.karteaphasecsvdao.html">ttea.games.kartea.dao.karteaphasecsvdao</a></li>
+      <li class="breadcrumb-item active">KarteaPhaseCsvDAO</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.games.kartea.dao.karteaphasecsvdao.KarteaPhaseCsvDAO.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="karteaphasecsvdao">
+<h1>KarteaPhaseCsvDAO<a class="headerlink" href="#karteaphasecsvdao" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.games.kartea.dao.karteaphasecsvdao.KarteaPhaseCsvDAO">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">KarteaPhaseCsvDAO</span></span><a class="reference internal" href="../_modules/ttea/games/kartea/dao/karteaphasecsvdao.html#KarteaPhaseCsvDAO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.dao.karteaphasecsvdao.KarteaPhaseCsvDAO" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="ttea.games.kartea.dao.readonlydao.ReadOnlyDAO.html#ttea.games.kartea.dao.readonlydao.ReadOnlyDAO" title="ttea.games.kartea.dao.readonlydao.ReadOnlyDAO"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReadOnlyDAO</span></code></a></p>
+<p>Read-only DAO of KarteaPhase, read from the phase CSV files.</p>
+<p>Each phase is a CSV file (<code class="docutils literal notranslate"><span class="pre">{phase}.csv</span></code>) with one row per level.
+The file in the user’s data folder takes priority over the built-in
+resource (see KarteaPathConfig.read_phase_data). This is the only
+place that reads these CSV files: KarteaPhaseLevelCsvDAO queries the
+levels through it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>csv_handler</strong><span class="classifier">CSVHandler</span></dt><dd><p>Utility for reading CSV content.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><strong>list_phase_ids() -&gt; list[int]</strong></p></td>
+<td><p>Ids of the existing phases (user folder + built-in resources).</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>load_phase_from_csv(kartea_phase_id) -&gt; KarteaPhase | None</strong></p></td>
+<td><p>Read the phase and its levels (each level points to the phase).</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>select(obj_id) -&gt; KarteaPhase | None</strong></p></td>
+<td><p>Phase by id, with its levels.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>list() -&gt; list[KarteaPhase]</strong></p></td>
+<td><p>All phases, ordered by id, with their levels.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Creating the DAO ensures the KarTEA folders exist. Phases are not
+cached: every call reads the CSV again.</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.dao.karteaphasecsvdao.KarteaPhaseCsvDAO.list" title="ttea.games.kartea.dao.karteaphasecsvdao.KarteaPhaseCsvDAO.list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a></p></td>
+<td><p>Return all existing phases, ordered by id.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.dao.karteaphasecsvdao.KarteaPhaseCsvDAO.list_phase_ids" title="ttea.games.kartea.dao.karteaphasecsvdao.KarteaPhaseCsvDAO.list_phase_ids"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_phase_ids</span></code></a></p></td>
+<td><p>Return the ids of the existing phases.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.dao.karteaphasecsvdao.KarteaPhaseCsvDAO.load_phase_from_csv" title="ttea.games.kartea.dao.karteaphasecsvdao.KarteaPhaseCsvDAO.load_phase_from_csv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_phase_from_csv</span></code></a></p></td>
+<td><p>Read a phase and its levels.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.dao.karteaphasecsvdao.KarteaPhaseCsvDAO.select" title="ttea.games.kartea.dao.karteaphasecsvdao.KarteaPhaseCsvDAO.select"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select</span></code></a></p></td>
+<td><p>Return the phase with the given id, with its levels.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.dao.karteaphasecsvdao.KarteaPhaseCsvDAO.list_phase_ids">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">list_phase_ids</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/dao/karteaphasecsvdao.html#KarteaPhaseCsvDAO.list_phase_ids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.dao.karteaphasecsvdao.KarteaPhaseCsvDAO.list_phase_ids" title="Link to this definition"></a></dt>
+<dd><p>Return the ids of the existing phases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>list[int]</dt><dd><p>Sorted ids, without duplicates, from the CSV files of the
+user’s phases folder and of the <code class="docutils literal notranslate"><span class="pre">:/phases</span></code> Qt resource.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Only files whose name (without <code class="docutils literal notranslate"><span class="pre">.csv</span></code>) is a number count.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.dao.karteaphasecsvdao.KarteaPhaseCsvDAO.load_phase_from_csv">
+<span class="sig-name descname"><span class="pre">load_phase_from_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kartea_phase_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/dao/karteaphasecsvdao.html#KarteaPhaseCsvDAO.load_phase_from_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.dao.karteaphasecsvdao.KarteaPhaseCsvDAO.load_phase_from_csv" title="Link to this definition"></a></dt>
+<dd><p>Read a phase and its levels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>kartea_phase_id</strong><span class="classifier">int</span></dt><dd><p>Id of the phase (name of its CSV file).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>KarteaPhase | None</dt><dd><p>The phase with <code class="docutils literal notranslate"><span class="pre">level_list</span></code> filled, or None if the file
+does not exist, is empty or has no valid level.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Rows whose <code class="docutils literal notranslate"><span class="pre">phase</span></code> column differs from <code class="docutils literal notranslate"><span class="pre">kartea_phase_id</span></code>
+are skipped, as are rows without an <code class="docutils literal notranslate"><span class="pre">id</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">obj_type</span></code> is parsed from space-separated numbers;
+non-numeric tokens are ignored.</p></li>
+<li><p>Columns annotated as int or float in KarteaPhaseLevel are
+converted; the others keep the text.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.dao.karteaphasecsvdao.KarteaPhaseCsvDAO.select">
+<span class="sig-name descname"><span class="pre">select</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/dao/karteaphasecsvdao.html#KarteaPhaseCsvDAO.select"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.dao.karteaphasecsvdao.KarteaPhaseCsvDAO.select" title="Link to this definition"></a></dt>
+<dd><p>Return the phase with the given id, with its levels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>obj_id</strong><span class="classifier">int</span></dt><dd><p>Id of the phase.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>KarteaPhase | None</dt><dd><p>The phase read from the CSV, or None if it does not exist.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.dao.karteaphasecsvdao.KarteaPhaseCsvDAO.list">
+<span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/dao/karteaphasecsvdao.html#KarteaPhaseCsvDAO.list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.dao.karteaphasecsvdao.KarteaPhaseCsvDAO.list" title="Link to this definition"></a></dt>
+<dd><p>Return all existing phases, ordered by id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>list[KarteaPhase]</dt><dd><p>Phases with their levels; phases without levels are left
+out.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.games.kartea.dao.karteaphasecsvdao.html" class="btn btn-neutral float-left" title="ttea.games.kartea.dao.karteaphasecsvdao" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.games.kartea.dao.karteaphaselevelcsvdao.html" class="btn btn-neutral float-right" title="ttea.games.kartea.dao.karteaphaselevelcsvdao" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

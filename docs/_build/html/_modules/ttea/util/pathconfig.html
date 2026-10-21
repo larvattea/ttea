@@ -1,0 +1,964 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.util.pathconfig &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.util.pathconfig</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.util.pathconfig</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Application path configuration for T-TEA.</span>
+
+<span class="sd">Handles data directories in both development and frozen</span>
+<span class="sd">(PyInstaller) environments. Also provides Qt resource path helpers</span>
+<span class="sd">and user file path constructors.</span>
+<span class="sd">"""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">platformdirs</span><span class="w"> </span><span class="kn">import</span> <span class="n">user_data_dir</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">QDir</span><span class="p">,</span> <span class="n">QDirIterator</span>
+
+
+<div class="viewcode-block" id="PathConfig">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PathConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Centralized application path settings.</span>
+
+<span class="sd">    This class exposes directory constants and helper methods for</span>
+<span class="sd">    configuration, calibration, logs, exports, and Qt resources.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    APP_NAME : str, class attribute</span>
+<span class="sd">        Application name used for platform-specific data directories.</span>
+<span class="sd">    APP_AUTHOR : str, class attribute</span>
+<span class="sd">        Application author name used for platform-specific data</span>
+<span class="sd">        directories.</span>
+<span class="sd">    CONFIG_FILENAME : str, class attribute</span>
+<span class="sd">        Default file name for configuration files.</span>
+<span class="sd">    CALIBRATION_HARDWARE_FILENAME : str, class attribute</span>
+<span class="sd">        Default file name for calibration hardware settings.</span>
+<span class="sd">    CALIBRATION_SETTING_FILENAME : str, class attribute</span>
+<span class="sd">        Default file name for calibration settings.</span>
+<span class="sd">    CALIBRATION_POINT_FILENAME : str, class attribute</span>
+<span class="sd">        Default file name for calibration point CSV data.</span>
+<span class="sd">    HELP_BASENAME : str, class attribute</span>
+<span class="sd">        Base name of the compiled help files</span>
+<span class="sd">        (``ttea_&lt;language&gt;.qch``).</span>
+<span class="sd">    PROJECT_DIR : Path, class attribute</span>
+<span class="sd">        Repository root. Defined only in development mode.</span>
+<span class="sd">    BASE_DIR : Path, class attribute</span>
+<span class="sd">        Base application data directory: ``&lt;project&gt;/data`` in</span>
+<span class="sd">        development, the platform user data folder when frozen.</span>
+<span class="sd">    EXERGAME_DIR : Path, class attribute</span>
+<span class="sd">        Base directory for exergame save data:</span>
+<span class="sd">        ``&lt;project&gt;/src/ttea/games`` in development,</span>
+<span class="sd">        ``BASE_DIR / "exergames"`` when frozen.</span>
+<span class="sd">    RESOURCES_ROOT : Path, class attribute</span>
+<span class="sd">        Installed resources: ``&lt;project&gt;/resources`` in development,</span>
+<span class="sd">        ``resources`` inside the PyInstaller bundle when frozen.</span>
+<span class="sd">    CONFIG_DIR : Path, class attribute</span>
+<span class="sd">        Directory for configuration files.</span>
+<span class="sd">    CALIBRATION_DIR : Path, class attribute</span>
+<span class="sd">        Directory for calibration files.</span>
+<span class="sd">    EXPORTS_DIR : Path, class attribute</span>
+<span class="sd">        Directory for exported files.</span>
+<span class="sd">    INSTITUTIONFACILITY_DIR : Path, class attribute</span>
+<span class="sd">        Directory for institution facility data.</span>
+<span class="sd">    LOG_DIR : Path, class attribute</span>
+<span class="sd">        Directory for log files.</span>
+<span class="sd">    MODELS_DIR : Path, class attribute</span>
+<span class="sd">        Directory containing the bundled MediaPipe models.</span>
+<span class="sd">    HELP_ROOT : Path, class attribute</span>
+<span class="sd">        Directory containing the compiled help files (.qch), one per</span>
+<span class="sd">        language. Read-only in installed builds.</span>
+<span class="sd">    HELP_CACHE_DIR : Path, class attribute</span>
+<span class="sd">        Writable directory for the help collections and search</span>
+<span class="sd">        index.</span>
+<span class="sd">    PLAYERS_DIR : Path, class attribute</span>
+<span class="sd">        Directory for player files.</span>
+<span class="sd">    PROFESSIONAL_DIR : Path, class attribute</span>
+<span class="sd">        Directory for professional files.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    resource(path='')</span>
+<span class="sd">        Build a Qt resource path.</span>
+<span class="sd">    icon_system(name)</span>
+<span class="sd">        Return a Qt system icon resource path.</span>
+<span class="sd">    icon_ui_button(name)</span>
+<span class="sd">        Return a Qt UI button icon resource path.</span>
+<span class="sd">    icon_ui_menu(name)</span>
+<span class="sd">        Return a Qt UI menu icon resource path.</span>
+<span class="sd">    flag(name)</span>
+<span class="sd">        Return a Qt flag resource path.</span>
+<span class="sd">    image(name)</span>
+<span class="sd">        Return a Qt image resource path.</span>
+<span class="sd">    ui(name)</span>
+<span class="sd">        Return a Qt UI resource path.</span>
+<span class="sd">    translation(name)</span>
+<span class="sd">        Return a Qt translation resource path.</span>
+<span class="sd">    sounds(name)</span>
+<span class="sd">        Return a Qt sound resource path.</span>
+<span class="sd">    ensure_dirs()</span>
+<span class="sd">        Create all user directories.</span>
+<span class="sd">    config(filename=CONFIG_FILENAME)</span>
+<span class="sd">        Return application config file path.</span>
+<span class="sd">    calibration_hardware(filename=CALIBRATION_HARDWARE_FILENAME)</span>
+<span class="sd">        Return calibration hardware file path.</span>
+<span class="sd">    calibration_setting(filename=CALIBRATION_SETTING_FILENAME)</span>
+<span class="sd">        Return calibration setting file path.</span>
+<span class="sd">    calibration_point(filename=CALIBRATION_POINT_FILENAME)</span>
+<span class="sd">        Return calibration point CSV file path.</span>
+<span class="sd">    professional(filename)</span>
+<span class="sd">        Return professional data file path.</span>
+<span class="sd">    institutionfacility(filename)</span>
+<span class="sd">        Return institution facility data file path.</span>
+<span class="sd">    player(filename)</span>
+<span class="sd">        Return player data file path.</span>
+<span class="sd">    model(filename)</span>
+<span class="sd">        Return Mediapipe model file path.</span>
+<span class="sd">    export(filename)</span>
+<span class="sd">        Return export file path.</span>
+<span class="sd">    log(filename)</span>
+<span class="sd">        Return log file path.</span>
+<span class="sd">    help_file(language)</span>
+<span class="sd">        Return the compiled help file of a language.</span>
+<span class="sd">    help_collection(language)</span>
+<span class="sd">        Return the help collection file of a language.</span>
+<span class="sd">    game_save(game_name, filename)</span>
+<span class="sd">        Return game save file path.</span>
+<span class="sd">    set_base_dir(path)</span>
+<span class="sd">        Set a different base directory for tests.</span>
+<span class="sd">    config_file_exists(filename=CONFIG_FILENAME)</span>
+<span class="sd">        Check if configuration file exists.</span>
+<span class="sd">    calibration_file_exists(filename=CALIBRATION_HARDWARE_FILENAME)</span>
+<span class="sd">        Check if calibration file exists.</span>
+<span class="sd">    find_resource_built_in(base_path, name)</span>
+<span class="sd">        Find an embedded Qt resource from a base path.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Every class attribute whose name ends in ``_DIR`` is treated as a</span>
+<span class="sd">    user directory: ``ensure_dirs`` creates it and ``set_base_dir``</span>
+<span class="sd">    moves it. That includes ``MODELS_DIR`` and, in development,</span>
+<span class="sd">    ``PROJECT_DIR``; ``HELP_ROOT`` and ``RESOURCES_ROOT`` are</span>
+<span class="sd">    deliberately named otherwise.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; PathConfig.resource('images/logo.png')</span>
+<span class="sd">    ':/images/logo.png'</span>
+<span class="sd">    &gt;&gt;&gt; PathConfig.help_file('en_US').name</span>
+<span class="sd">    'ttea_en_US.qch'</span>
+<span class="sd">    """</span>
+
+    <span class="n">APP_NAME</span> <span class="o">=</span> <span class="s2">"ttea"</span>
+    <span class="n">APP_AUTHOR</span> <span class="o">=</span> <span class="s2">"udesc"</span>
+
+    <span class="n">CONFIG_FILENAME</span> <span class="o">=</span> <span class="s2">"config.ini"</span>
+    <span class="n">CALIBRATION_HARDWARE_FILENAME</span> <span class="o">=</span> <span class="s2">"calibration_hardware.ini"</span>
+    <span class="n">CALIBRATION_SETTING_FILENAME</span> <span class="o">=</span> <span class="s2">"calibration_setting.ini"</span>
+    <span class="n">CALIBRATION_POINT_FILENAME</span> <span class="o">=</span> <span class="s2">"calibration_point.csv"</span>
+    <span class="n">HELP_BASENAME</span> <span class="o">=</span> <span class="s2">"ttea"</span>
+
+    <span class="c1"># ==================================================================</span>
+    <span class="c1"># Base directory</span>
+    <span class="c1"># ==================================================================</span>
+    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="s2">"frozen"</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="n">BASE_DIR</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">user_data_dir</span><span class="p">(</span><span class="n">APP_NAME</span><span class="p">,</span> <span class="n">APP_AUTHOR</span><span class="p">))</span>
+        <span class="n">EXERGAME_DIR</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">BASE_DIR</span> <span class="o">/</span> <span class="s2">"exergames"</span>
+        <span class="n">RESOURCES_ROOT</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">Path</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="s2">"_MEIPASS"</span><span class="p">,</span> <span class="n">Path</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="p">))</span>
+            <span class="o">/</span> <span class="s2">"resources"</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">PROJECT_DIR</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">EXERGAME_DIR</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">PROJECT_DIR</span> <span class="o">/</span> <span class="s2">"src"</span> <span class="o">/</span> <span class="s2">"ttea"</span> <span class="o">/</span> <span class="s2">"games"</span>
+        <span class="n">BASE_DIR</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">PROJECT_DIR</span> <span class="o">/</span> <span class="s2">"data"</span>
+        <span class="n">RESOURCES_ROOT</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">PROJECT_DIR</span> <span class="o">/</span> <span class="s2">"resources"</span>
+
+    <span class="n">MODELS_DIR</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">RESOURCES_ROOT</span> <span class="o">/</span> <span class="s2">"mediapipemodels"</span>
+    <span class="c1"># Not named *_DIR: it is part of the installed resources, not a</span>
+    <span class="c1"># user folder created by ensure_dirs().</span>
+    <span class="n">HELP_ROOT</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">RESOURCES_ROOT</span> <span class="o">/</span> <span class="s2">"help"</span>
+
+    <span class="c1"># Subdirectories — add new folders here</span>
+    <span class="n">CONFIG_DIR</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">BASE_DIR</span> <span class="o">/</span> <span class="s2">"config"</span>
+    <span class="n">CALIBRATION_DIR</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">BASE_DIR</span> <span class="o">/</span> <span class="s2">"calibration"</span>
+    <span class="n">EXPORTS_DIR</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">BASE_DIR</span> <span class="o">/</span> <span class="s2">"exports"</span>
+    <span class="n">HELP_CACHE_DIR</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">BASE_DIR</span> <span class="o">/</span> <span class="s2">"helpcache"</span>
+    <span class="n">INSTITUTIONFACILITY_DIR</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">BASE_DIR</span> <span class="o">/</span> <span class="s2">"institutionfacilities"</span>
+    <span class="n">LOG_DIR</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">BASE_DIR</span> <span class="o">/</span> <span class="s2">"log"</span>
+    <span class="n">PLAYERS_DIR</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">BASE_DIR</span> <span class="o">/</span> <span class="s2">"players"</span>
+    <span class="n">PROFESSIONAL_DIR</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">BASE_DIR</span> <span class="o">/</span> <span class="s2">"professionals"</span>
+
+    <span class="c1"># ==================================================================</span>
+    <span class="c1"># Built-in Resources (Qt)</span>
+    <span class="c1"># ==================================================================</span>
+<div class="viewcode-block" id="PathConfig.resource">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.resource">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">resource</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return a Qt resource path.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path : str, optional</span>
+<span class="sd">            Resource path segment. Default is empty string.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Qt resource path starting with ``:/``.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Trailing slashes are removed from the generated resource path,</span>
+<span class="sd">        so an empty ``path`` gives ``":"``.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; PathConfig.resource('images/logo.png')</span>
+<span class="sd">        ':/images/logo.png'</span>
+<span class="sd">        &gt;&gt;&gt; PathConfig.resource()</span>
+<span class="sd">        ':'</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">":/</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">"</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PathConfig.icon_system">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.icon_system">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">icon_system</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return a Qt resource path for a system icon.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Icon file name.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Qt path for the system icon.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">":/icons/system/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span></div>
+
+
+<div class="viewcode-block" id="PathConfig.icon_ui_button">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.icon_ui_button">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">icon_ui_button</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return a Qt resource path for a UI button icon.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Button icon file name.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Qt path for the UI button icon.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">":/icons/ui/buttons/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span></div>
+
+
+<div class="viewcode-block" id="PathConfig.icon_ui_menu">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.icon_ui_menu">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">icon_ui_menu</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return a Qt resource path for a UI menu icon.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Menu icon file name.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Qt path for the UI menu icon.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">":/icons/ui/menu/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span></div>
+
+
+<div class="viewcode-block" id="PathConfig.flag">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.flag">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">flag</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return a Qt resource path for a flag image.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Flag file name.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Qt path for the flag resource.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">":/flags/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span></div>
+
+
+<div class="viewcode-block" id="PathConfig.image">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.image">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">image</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return a Qt resource path for an image.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Image file name.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Qt path for the image resource.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">":/images/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span></div>
+
+
+<div class="viewcode-block" id="PathConfig.ui">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.ui">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ui</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return a Qt resource path for a UI file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            UI file name.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Qt path for the UI resource.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">":/ui/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span></div>
+
+
+<div class="viewcode-block" id="PathConfig.translation">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.translation">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">translation</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return a Qt resource path for a translation file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Translation file name.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Qt path for the translation resource.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">":/translations/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span></div>
+
+
+<div class="viewcode-block" id="PathConfig.sounds">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.sounds">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sounds</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return a Qt resource path for a sound file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Sound file name.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Qt path for the sound resource.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">":/sounds/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span></div>
+
+
+    <span class="c1"># ==================================================================</span>
+    <span class="c1"># Automatic Introspection</span>
+    <span class="c1"># ==================================================================</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_dir_names</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return class attribute names that end with ``_DIR``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[str]</span>
+<span class="sd">            Names of the public ``*_DIR`` class attributes, in</span>
+<span class="sd">            definition order.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">name</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">"_DIR"</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"_"</span><span class="p">)</span>
+        <span class="p">]</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_user_dirs</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Path</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return Path objects for all user directories.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[Path]</span>
+<span class="sd">            Path objects for each ``_DIR`` class attribute.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">value</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">"_DIR"</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"_"</span><span class="p">)</span>
+        <span class="p">]</span>
+
+    <span class="c1"># ==================================================================</span>
+    <span class="c1"># User data methods</span>
+    <span class="c1"># ==================================================================</span>
+<div class="viewcode-block" id="PathConfig.ensure_dirs">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.ensure_dirs">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ensure_dirs</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Create all configured directories if they do not exist.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Creates every directory of ``_get_user_dirs`` with its parents.</span>
+<span class="sd">        """</span>
+        <span class="k">for</span> <span class="n">directory</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_user_dirs</span><span class="p">():</span>
+            <span class="n">directory</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_user_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">directory</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the full file path for a given user directory.</span>
+
+<span class="sd">        Calls ``ensure_dirs`` first, so all user directories exist.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        directory : Path</span>
+<span class="sd">            Target directory.</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            File name to append to the directory.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Full path to the user file.</span>
+<span class="sd">        """</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">ensure_dirs</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">directory</span> <span class="o">/</span> <span class="n">filename</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PathConfig.config">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.config">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">config</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">CONFIG_FILENAME</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the configuration file path.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str, optional</span>
+<span class="sd">            Name of the configuration file. Default is</span>
+<span class="sd">            ``CONFIG_FILENAME``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Full path to the configuration file.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Creates the user directories if needed (see ``_user_file``).</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_user_file</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">CONFIG_DIR</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PathConfig.calibration_hardware">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.calibration_hardware">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calibration_hardware</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">CALIBRATION_HARDWARE_FILENAME</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the calibration hardware file path.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str, optional</span>
+<span class="sd">            Name of the calibration hardware file. Default is</span>
+<span class="sd">            ``CALIBRATION_HARDWARE_FILENAME``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Full path to the calibration hardware file.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_user_file</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">CALIBRATION_DIR</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PathConfig.calibration_setting">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.calibration_setting">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calibration_setting</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">CALIBRATION_SETTING_FILENAME</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the calibration setting file path.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str, optional</span>
+<span class="sd">            Name of the calibration setting file. Default is</span>
+<span class="sd">            ``CALIBRATION_SETTING_FILENAME``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Full path to the calibration setting file.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_user_file</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">CALIBRATION_DIR</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PathConfig.calibration_point">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.calibration_point">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calibration_point</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">CALIBRATION_POINT_FILENAME</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the calibration point CSV file path.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str, optional</span>
+<span class="sd">            Name of the calibration point CSV file. Default is</span>
+<span class="sd">            ``CALIBRATION_POINT_FILENAME``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Full path to the calibration point CSV file.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_user_file</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">CALIBRATION_DIR</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PathConfig.professional">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.professional">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">professional</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the professional data file path.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            Name of the professional file.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Full path to the professional file.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_user_file</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">PROFESSIONAL_DIR</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PathConfig.institutionfacility">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.institutionfacility">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">institutionfacility</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the institution facility data file path.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            Name of the institution facility file.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Full path to the institution facility file.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_user_file</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">INSTITUTIONFACILITY_DIR</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PathConfig.player">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.player">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">player</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the player data file path.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            Name of the player file.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Full path to the player file.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_user_file</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">PLAYERS_DIR</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PathConfig.model">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.model">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">model</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the MediaPipe model file path.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            Name of the model file.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Full path to the model file.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">MODELS_DIR</span> <span class="o">/</span> <span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PathConfig.export">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.export">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">export</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the export file path.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            Name of the export file.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Full path to the export file.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_user_file</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">EXPORTS_DIR</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PathConfig.log">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.log">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">log</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the log file path.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            Name of the log file.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Full path to the log file.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_user_file</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">LOG_DIR</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PathConfig.help_file">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.help_file">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">help_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">language</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the compiled help file of a language.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        language : str</span>
+<span class="sd">            Language code, e.g. ``"pt_BR"``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Path</span>
+<span class="sd">            Path of ``ttea_&lt;language&gt;.qch``. The file may not exist.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; PathConfig.help_file('en_US').name</span>
+<span class="sd">        'ttea_en_US.qch'</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">HELP_ROOT</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="n">HELP_BASENAME</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">language</span><span class="si">}</span><span class="s2">.qch"</span></div>
+
+
+<div class="viewcode-block" id="PathConfig.help_collection">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.help_collection">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">help_collection</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">language</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the help collection file of a language.</span>
+
+<span class="sd">        The collection and the search index are created on first use,</span>
+<span class="sd">        in a writable user folder.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        language : str</span>
+<span class="sd">            Language code, e.g. ``"pt_BR"``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Full path of ``ttea_&lt;language&gt;.qhc``.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_user_file</span><span class="p">(</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">HELP_CACHE_DIR</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="n">HELP_BASENAME</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">language</span><span class="si">}</span><span class="s2">.qhc"</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PathConfig.game_save">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.game_save">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">game_save</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">game_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the game save file path.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        game_name : str</span>
+<span class="sd">            Identifier for the game save directory.</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            Name of the save file.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Full path to the game save file.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Creates the user directories and ``EXERGAME_DIR / game_name``</span>
+<span class="sd">        if needed.</span>
+<span class="sd">        """</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">ensure_dirs</span><span class="p">()</span>
+        <span class="n">game_dir</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">EXERGAME_DIR</span> <span class="o">/</span> <span class="n">game_name</span>
+        <span class="n">game_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">game_dir</span> <span class="o">/</span> <span class="n">filename</span><span class="p">)</span></div>
+
+
+    <span class="c1"># ==================================================================</span>
+    <span class="c1"># Test support</span>
+    <span class="c1"># ==================================================================</span>
+<div class="viewcode-block" id="PathConfig.set_base_dir">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.set_base_dir">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_base_dir</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Set a different base directory, primarily for tests.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path : str | Path</span>
+<span class="sd">            New base directory path; it is resolved to an absolute path.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        ``BASE_DIR`` becomes the new base and ``EXERGAME_DIR`` its</span>
+<span class="sd">        ``exergames`` subfolder. Every other ``*_DIR`` attribute becomes</span>
+<span class="sd">        ``&lt;base&gt;/&lt;name&gt;``, where ``name`` is the attribute name without</span>
+<span class="sd">        ``_DIR`` in lower case. These names do not always match the</span>
+<span class="sd">        defaults (``help_cache``, ``institutionfacility``,</span>
+<span class="sd">        ``professional``), and ``MODELS_DIR`` and ``PROJECT_DIR`` are</span>
+<span class="sd">        moved too. Directories are not created here.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; PathConfig.set_base_dir('tests_data')</span>
+<span class="sd">        &gt;&gt;&gt; PathConfig.HELP_CACHE_DIR.name</span>
+<span class="sd">        'help_cache'</span>
+<span class="sd">        """</span>
+        <span class="n">new_base</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">new_base</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">EXERGAME_DIR</span> <span class="o">=</span> <span class="n">new_base</span> <span class="o">/</span> <span class="s2">"exergames"</span>
+
+        <span class="k">for</span> <span class="n">dir_name</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_get_dir_names</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">dir_name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"BASE_DIR"</span><span class="p">,</span> <span class="s2">"EXERGAME_DIR"</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">subdir</span> <span class="o">=</span> <span class="n">dir_name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"_DIR"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">dir_name</span><span class="p">,</span> <span class="n">new_base</span> <span class="o">/</span> <span class="n">subdir</span><span class="p">)</span></div>
+
+
+    <span class="c1"># ==================================================================</span>
+    <span class="c1"># Checks</span>
+    <span class="c1"># ==================================================================</span>
+<div class="viewcode-block" id="PathConfig.config_file_exists">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.config_file_exists">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">config_file_exists</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">CONFIG_FILENAME</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return whether the configuration file exists.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str, optional</span>
+<span class="sd">            Name of the configuration file. Default is</span>
+<span class="sd">            ``CONFIG_FILENAME``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if the configuration file exists, otherwise False.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Creates the user directories if needed (see ``config``).</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">config</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="PathConfig.calibration_file_exists">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.calibration_file_exists">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calibration_file_exists</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">CALIBRATION_HARDWARE_FILENAME</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return whether the calibration file exists.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str, optional</span>
+<span class="sd">            Name of the calibration file. Default is</span>
+<span class="sd">            ``CALIBRATION_HARDWARE_FILENAME``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if the calibration file exists, otherwise False.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Looks in ``CALIBRATION_DIR`` and creates the user directories if</span>
+<span class="sd">        needed.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">calibration_hardware</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span></div>
+
+
+    <span class="c1"># ==================================================================</span>
+    <span class="c1"># Utilities</span>
+    <span class="c1"># ==================================================================</span>
+<div class="viewcode-block" id="PathConfig.find_resource_built_in">
+<a class="viewcode-back" href="../../../api/ttea.util.pathconfig.PathConfig.html#ttea.util.pathconfig.PathConfig.find_resource_built_in">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_resource_built_in</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">base_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Find an embedded Qt resource from a base path.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        base_path : str</span>
+<span class="sd">            Base resource path to search in.</span>
+<span class="sd">        name : str</span>
+<span class="sd">            File name to locate.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Full resource path of the first match, otherwise an empty</span>
+<span class="sd">            string.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Searches ``base_path`` and its subdirectories for a file whose</span>
+<span class="sd">        name matches ``name`` (a ``QDir`` name filter, so wildcards</span>
+<span class="sd">        work).</span>
+<span class="sd">        """</span>
+        <span class="n">it</span> <span class="o">=</span> <span class="n">QDirIterator</span><span class="p">(</span>
+            <span class="n">base_path</span><span class="p">,</span> <span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">QDir</span><span class="o">.</span><span class="n">Files</span><span class="p">,</span> <span class="n">QDirIterator</span><span class="o">.</span><span class="n">Subdirectories</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">it</span><span class="o">.</span><span class="n">next</span><span class="p">()</span> <span class="k">if</span> <span class="n">it</span><span class="o">.</span><span class="n">hasNext</span><span class="p">()</span> <span class="k">else</span> <span class="s2">""</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

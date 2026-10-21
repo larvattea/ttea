@@ -1,0 +1,28 @@
+ttea.model
+==========
+
+.. automodule:: ttea.model
+
+.. currentmodule:: ttea.model
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/module.rst
+   :recursive:
+
+   appmodel
+   calibration
+   calibrationpoint
+   calibrationsetting
+   gamemetadata
+   institutionfacility
+   language
+   player
+   professional
+
+
+

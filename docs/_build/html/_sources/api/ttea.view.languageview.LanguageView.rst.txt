@@ -1,0 +1,20 @@
+LanguageView
+============
+
+.. currentmodule:: ttea.view.languageview
+
+.. autoclass:: LanguageView
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~LanguageView.closeEvent
+      ~LanguageView.get_selected_language
+      ~LanguageView.populate_languages
+      ~LanguageView.set_preselected_language
+      ~LanguageView.show_warning

@@ -1,0 +1,20 @@
+ttea.games.kartea.service.karteahardwareservice
+===============================================
+
+.. automodule:: ttea.games.kartea.service.karteahardwareservice
+
+.. currentmodule:: ttea.games.kartea.service.karteahardwareservice
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   KarteaHardwareService
+
+

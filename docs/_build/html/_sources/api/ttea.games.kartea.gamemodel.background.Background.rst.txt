@@ -1,0 +1,24 @@
+Background
+==========
+
+.. currentmodule:: ttea.games.kartea.gamemodel.background
+
+.. autoclass:: Background
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~Background.background_menu
+      ~Background.draw
+      ~Background.draw_quad
+      ~Background.get_start_pos
+      ~Background.set_speed_level
+      ~Background.speed1
+      ~Background.speed2
+      ~Background.speed3
+      ~Background.stop

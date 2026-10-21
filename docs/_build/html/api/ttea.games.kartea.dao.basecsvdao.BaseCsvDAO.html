@@ -1,0 +1,436 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BaseCsvDAO &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.games.kartea.dao.karteaphasecsvdao" href="ttea.games.kartea.dao.karteaphasecsvdao.html" />
+    <link rel="prev" title="ttea.games.kartea.dao.basecsvdao" href="ttea.games.kartea.dao.basecsvdao.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.games.html">ttea.games</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.gametheme.html">ttea.games.gametheme</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.games.kartea.html">ttea.games.kartea</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.controller.html">ttea.games.kartea.controller</a></li>
+<li class="toctree-l5 current"><a class="reference internal" href="ttea.games.kartea.dao.html">ttea.games.kartea.dao</a><ul class="current">
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.dao.html#attributes">Attributes</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.dao.html#see-also">See Also</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.dao.html#notes">Notes</a></li>
+<li class="toctree-l6 current"><a class="reference internal" href="ttea.games.kartea.dao.basecsvdao.html">ttea.games.kartea.dao.basecsvdao</a><ul class="current">
+<li class="toctree-l7 current"><a class="current reference internal" href="#">BaseCsvDAO</a><ul>
+<li class="toctree-l8"><a class="reference internal" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO"><code class="docutils literal notranslate"><span class="pre">BaseCsvDAO</span></code></a><ul>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.sanitize_filename"><code class="docutils literal notranslate"><span class="pre">BaseCsvDAO.sanitize_filename()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.get_filename"><code class="docutils literal notranslate"><span class="pre">BaseCsvDAO.get_filename()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.load_all"><code class="docutils literal notranslate"><span class="pre">BaseCsvDAO.load_all()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.insert"><code class="docutils literal notranslate"><span class="pre">BaseCsvDAO.insert()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.update"><code class="docutils literal notranslate"><span class="pre">BaseCsvDAO.update()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.delete"><code class="docutils literal notranslate"><span class="pre">BaseCsvDAO.delete()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.select"><code class="docutils literal notranslate"><span class="pre">BaseCsvDAO.select()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.list"><code class="docutils literal notranslate"><span class="pre">BaseCsvDAO.list()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.dao.karteaphasecsvdao.html">ttea.games.kartea.dao.karteaphasecsvdao</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.dao.karteaphaselevelcsvdao.html">ttea.games.kartea.dao.karteaphaselevelcsvdao</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.dao.playerkarteaconfigcsvdao.html">ttea.games.kartea.dao.playerkarteaconfigcsvdao</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.dao.playerkarteasessioncsvdao.html">ttea.games.kartea.dao.playerkarteasessioncsvdao</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.dao.playerkarteasessiondetailcsvdao.html">ttea.games.kartea.dao.playerkarteasessiondetailcsvdao</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.dao.readonlydao.html">ttea.games.kartea.dao.readonlydao</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.factory.html">ttea.games.kartea.factory</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamecontroller.html">ttea.games.kartea.gamecontroller</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamecore.html">ttea.games.kartea.gamecore</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamemodel.html">ttea.games.kartea.gamemodel</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gametheme.html">ttea.games.kartea.gametheme</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameui.html">ttea.games.kartea.gameui</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameutil.html">ttea.games.kartea.gameutil</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameview.html">ttea.games.kartea.gameview</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.main.html">ttea.games.kartea.main</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.model.html">ttea.games.kartea.model</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.service.html">ttea.games.kartea.service</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.util.html">ttea.games.kartea.util</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.view.html">ttea.games.kartea.view</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.html">ttea.games</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.html">ttea.games.kartea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.dao.html">ttea.games.kartea.dao</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.dao.basecsvdao.html">ttea.games.kartea.dao.basecsvdao</a></li>
+      <li class="breadcrumb-item active">BaseCsvDAO</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="basecsvdao">
+<h1>BaseCsvDAO<a class="headerlink" href="#basecsvdao" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.games.kartea.dao.basecsvdao.BaseCsvDAO">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BaseCsvDAO</span></span><a class="reference internal" href="../_modules/ttea/games/kartea/dao/basecsvdao.html#BaseCsvDAO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="ttea.dao.dao.DAO.html#ttea.dao.dao.DAO" title="ttea.dao.dao.DAO"><code class="xref py py-class docutils literal notranslate"><span class="pre">DAO</span></code></a>[<code class="xref py py-obj docutils literal notranslate"><span class="pre">T</span></code>]</p>
+<p>CRUD of a model stored in one CSV file per player.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>model</strong><span class="classifier">type, class attribute</span></dt><dd><p>Model dataclass (with PROPERTIES and <code class="docutils literal notranslate"><span class="pre">get_data()</span></code>). Defined by
+the subclass.</p>
+</dd>
+<dt><strong>suffix</strong><span class="classifier">str, class attribute</span></dt><dd><p>File name suffix, e.g. “kartea_session”. Defined by the
+subclass.</p>
+</dd>
+<dt><strong>single_row</strong><span class="classifier">bool, class attribute</span></dt><dd><p>True when the file has a single row per player (the key is the
+player id, e.g. configuration). False (default): one row per
+record, with an incremental id (sessions, details).</p>
+</dd>
+<dt><strong>csv_handler</strong><span class="classifier">CSVHandler</span></dt><dd><p>Reads/writes in the T-TEA format (<code class="docutils literal notranslate"><span class="pre">;</span></code>, UTF-8 with BOM).</p>
+</dd>
+<dt><strong>cache</strong><span class="classifier">dict[int, T]</span></dt><dd><p>Loaded objects, by key (record id or player id).</p>
+</dd>
+<dt><strong>file_map</strong><span class="classifier">dict[int, str]</span></dt><dd><p>Player id -&gt; path of the player’s file.</p>
+</dd>
+<dt><strong>next_id</strong><span class="classifier">int</span></dt><dd><p>Next free id (used only when <code class="docutils literal notranslate"><span class="pre">single_row</span></code> is False).</p>
+</dd>
+<dt><strong>int_properties</strong><span class="classifier">list[str]</span></dt><dd><p>Fields annotated as <code class="docutils literal notranslate"><span class="pre">int</span></code>, converted from text on load.</p>
+</dd>
+<dt><strong>float_properties</strong><span class="classifier">list[str]</span></dt><dd><p>Fields annotated as <code class="docutils literal notranslate"><span class="pre">float</span></code>, converted from text on load.</p>
+</dd>
+<dt><strong>bool_properties</strong><span class="classifier">list[str]</span></dt><dd><p>Fields annotated as <code class="docutils literal notranslate"><span class="pre">bool</span></code>, converted from text on load.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Subclasses must define <code class="docutils literal notranslate"><span class="pre">model</span></code> and <code class="docutils literal notranslate"><span class="pre">suffix</span></code> (and <code class="docutils literal notranslate"><span class="pre">single_row</span></code>
+when needed) and implement <code class="docutils literal notranslate"><span class="pre">_deserialize(row,</span> <span class="pre">player_id)</span></code>, which
+builds the object from a CSV row (None = skip the row). They may
+override <code class="docutils literal notranslate"><span class="pre">_player(obj)</span></code> (owner of the object, which defines the
+file; default <code class="docutils literal notranslate"><span class="pre">obj.player</span></code>) and <code class="docutils literal notranslate"><span class="pre">_is_valid(obj)</span></code>.</p>
+<p>Creating the DAO loads all the files of its suffix into the cache
+(<code class="docutils literal notranslate"><span class="pre">load_all</span></code>).</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.delete" title="ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.delete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete</span></code></a></p></td>
+<td><p>Remove the record; delete the file if it becomes empty.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.get_filename" title="ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.get_filename"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_filename</span></code></a></p></td>
+<td><p>Return the file path of the player who owns <code class="docutils literal notranslate"><span class="pre">obj</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.insert" title="ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.insert"><code class="xref py py-obj docutils literal notranslate"><span class="pre">insert</span></code></a></p></td>
+<td><p>Write a new record and return its key.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.list" title="ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a></p></td>
+<td><p>Return all records in the cache.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.load_all" title="ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.load_all"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_all</span></code></a></p></td>
+<td><p>Load the <code class="docutils literal notranslate"><span class="pre">*_*_{suffix}.csv</span></code> files into the cache.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.sanitize_filename" title="ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.sanitize_filename"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sanitize_filename</span></code></a></p></td>
+<td><p>Return the player name made safe for a file name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.select" title="ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.select"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select</span></code></a></p></td>
+<td><p>Return the record with the given key, from the cache.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.update" title="ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a></p></td>
+<td><p>Rewrite the object's row (and the file name).</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.sanitize_filename">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sanitize_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/dao/basecsvdao.html#BaseCsvDAO.sanitize_filename"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.sanitize_filename" title="Link to this definition"></a></dt>
+<dd><p>Return the player name made safe for a file name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Player name.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>The name stripped and lowercased, with every character that
+is not a letter, digit, <code class="docutils literal notranslate"><span class="pre">_</span></code> or <code class="docutils literal notranslate"><span class="pre">-</span></code> replaced by <code class="docutils literal notranslate"><span class="pre">_</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">BaseCsvDAO</span><span class="o">.</span><span class="n">sanitize_filename</span><span class="p">(</span><span class="s2">" André Avô "</span><span class="p">)</span>
+<span class="go">'andré_avô'</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.get_filename">
+<span class="sig-name descname"><span class="pre">get_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/dao/basecsvdao.html#BaseCsvDAO.get_filename"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.get_filename" title="Link to this definition"></a></dt>
+<dd><p>Return the file path of the player who owns <code class="docutils literal notranslate"><span class="pre">obj</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>obj</strong><span class="classifier">T</span></dt><dd><p>Model object.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p><code class="docutils literal notranslate"><span class="pre">KARTEA_PLAYER_DIR/{player_id}_{sanitized_name}_{suffix}.csv</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.load_all">
+<span class="sig-name descname"><span class="pre">load_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/dao/basecsvdao.html#BaseCsvDAO.load_all"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.load_all" title="Link to this definition"></a></dt>
+<dd><p>Load the <code class="docutils literal notranslate"><span class="pre">*_*_{suffix}.csv</span></code> files into the cache.</p>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Ensures the KarTEA folders exist first.</p></li>
+<li><p>The player id is the number before the first <code class="docutils literal notranslate"><span class="pre">_</span></code> of the file
+name; files without it are skipped.</p></li>
+<li><p>Rows for which <code class="docutils literal notranslate"><span class="pre">_deserialize</span></code> returns None are skipped.</p></li>
+<li><p>With incremental ids, <code class="docutils literal notranslate"><span class="pre">next_id</span></code> becomes the highest key + 1.</p></li>
+</ul>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.insert">
+<span class="sig-name descname"><span class="pre">insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/dao/basecsvdao.html#BaseCsvDAO.insert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.insert" title="Link to this definition"></a></dt>
+<dd><p>Write a new record and return its key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>obj</strong><span class="classifier">T</span></dt><dd><p>Object to insert. With incremental ids, <code class="docutils literal notranslate"><span class="pre">obj.id</span></code> is
+overwritten with <code class="docutils literal notranslate"><span class="pre">next_id</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>int | bool | None</dt><dd><p>The key of the record, or False if the object is invalid.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Records with incremental ids are appended to the end of the
+file; in <code class="docutils literal notranslate"><span class="pre">single_row</span></code> mode the file is (re)created with the
+row.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/dao/basecsvdao.html#BaseCsvDAO.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.update" title="Link to this definition"></a></dt>
+<dd><p>Rewrite the object’s row (and the file name).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>obj</strong><span class="classifier">T</span></dt><dd><p>Object with the new data.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if updated; False if the object is invalid or its key
+is not in the cache.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>If the player’s name changed, the file is renamed to the new
+sanitized name. If no row has the object’s key, the row is
+appended.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/dao/basecsvdao.html#BaseCsvDAO.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.delete" title="Link to this definition"></a></dt>
+<dd><p>Remove the record; delete the file if it becomes empty.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>obj_id</strong><span class="classifier">int</span></dt><dd><p>Key of the record.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if removed from the file; False if the key is unknown
+or the player has no file.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The record is removed from the cache even when the player has no
+file mapped (in that case False is returned).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.select">
+<span class="sig-name descname"><span class="pre">select</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/dao/basecsvdao.html#BaseCsvDAO.select"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.select" title="Link to this definition"></a></dt>
+<dd><p>Return the record with the given key, from the cache.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>obj_id</strong><span class="classifier">int</span></dt><dd><p>Key of the record (record id or player id).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>T | None</dt><dd><p>The record, or None if not found.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.list">
+<span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/dao/basecsvdao.html#BaseCsvDAO.list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.dao.basecsvdao.BaseCsvDAO.list" title="Link to this definition"></a></dt>
+<dd><p>Return all records in the cache.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>list[T]</dt><dd><p>The cached records, in loading/insertion order.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.games.kartea.dao.basecsvdao.html" class="btn btn-neutral float-left" title="ttea.games.kartea.dao.basecsvdao" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.games.kartea.dao.karteaphasecsvdao.html" class="btn btn-neutral float-right" title="ttea.games.kartea.dao.karteaphasecsvdao" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

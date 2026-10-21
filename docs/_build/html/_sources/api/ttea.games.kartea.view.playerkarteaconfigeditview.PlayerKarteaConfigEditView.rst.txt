@@ -1,0 +1,27 @@
+PlayerKarteaConfigEditView
+==========================
+
+.. currentmodule:: ttea.games.kartea.view.playerkarteaconfigeditview
+
+.. autoclass:: PlayerKarteaConfigEditView
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~PlayerKarteaConfigEditView.bind
+      ~PlayerKarteaConfigEditView.eventFilter
+      ~PlayerKarteaConfigEditView.get_form_data
+      ~PlayerKarteaConfigEditView.open_mods_folder
+      ~PlayerKarteaConfigEditView.set_form_data
+      ~PlayerKarteaConfigEditView.set_level_choices
+      ~PlayerKarteaConfigEditView.set_phase_choices
+      ~PlayerKarteaConfigEditView.set_player_choices
+      ~PlayerKarteaConfigEditView.set_player_editable
+      ~PlayerKarteaConfigEditView.set_resource_choices
+      ~PlayerKarteaConfigEditView.update_feedback_preview
+      ~PlayerKarteaConfigEditView.update_resource_preview

@@ -1,0 +1,9 @@
+BaseTheme
+=========
+
+.. currentmodule:: ttea.games.gametheme.basetheme
+
+.. autoclass:: BaseTheme
+   :members:
+   :show-inheritance:
+

@@ -1,0 +1,371 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.games.kartea.gamecontroller.sessionrecorder &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.games.kartea.gamecontroller.sessionrecorder</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.games.kartea.gamecontroller.sessionrecorder</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Recording of the game session (session, details and configuration).</span>
+
+<span class="sd">Attributes</span>
+<span class="sd">----------</span>
+<span class="sd">DATE_FORMAT : str</span>
+<span class="sd">    ISO 8601 date format used in all records ("%Y-%m-%d").</span>
+<span class="sd">TIME_FORMAT : str</span>
+<span class="sd">    ISO 8601 time format used in all records ("%H:%M:%S").</span>
+<span class="sd">"""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerKarteaSessionDetail</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gameutil</span><span class="w"> </span><span class="kn">import</span> <span class="n">GameState</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerKarteaSession</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.service</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+        <span class="n">PlayerKarteaConfigService</span><span class="p">,</span>
+        <span class="n">PlayerKarteaSessionDetailService</span><span class="p">,</span>
+        <span class="n">PlayerKarteaSessionService</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="n">EventType</span> <span class="o">=</span> <span class="n">PlayerKarteaSessionDetail</span><span class="o">.</span><span class="n">EventType</span>
+
+<span class="n">DATE_FORMAT</span> <span class="o">=</span> <span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2">"</span>
+<span class="n">TIME_FORMAT</span> <span class="o">=</span> <span class="s2">"%H:%M:%S"</span>
+
+
+<div class="viewcode-block" id="utc_offset">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamecontroller.sessionrecorder.html#ttea.games.kartea.gamecontroller.sessionrecorder.utc_offset">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">utc_offset</span><span class="p">(</span><span class="n">moment</span><span class="p">:</span> <span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Return the UTC offset of the local time in ISO 8601.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    moment : datetime</span>
+<span class="sd">        Moment whose offset is taken, in the computer's local time zone.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    str</span>
+<span class="sd">        Offset such as "-03:00", or "" if it cannot be determined.</span>
+<span class="sd">    """</span>
+    <span class="n">offset</span> <span class="o">=</span> <span class="n">moment</span><span class="o">.</span><span class="n">astimezone</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%z"</span><span class="p">)</span>  <span class="c1"># e.g. "-0300"</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">offset</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">offset</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span><span class="si">}</span><span class="s2">"</span> <span class="k">if</span> <span class="n">offset</span> <span class="k">else</span> <span class="s2">""</span></div>
+
+
+
+<div class="viewcode-block" id="SessionRecorder">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamecontroller.sessionrecorder.SessionRecorder.html#ttea.games.kartea.gamecontroller.sessionrecorder.SessionRecorder">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SessionRecorder</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Persist the match: session row, events (details) and config.</span>
+
+<span class="sd">    Reads the GameState and writes through the services; it does not</span>
+<span class="sd">    decide game rules. Session, configuration and detail go together:</span>
+<span class="sd">    the session's phase_reached/level_reached and the kartea_config</span>
+<span class="sd">    phase/level receive the current phase/level, the same as the events</span>
+<span class="sd">    recorded in the detail.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    state : GameState</span>
+<span class="sd">        Match state (source of the recorded values).</span>
+<span class="sd">    config_service : PlayerKarteaConfigService</span>
+<span class="sd">        Player/professional lookup and recording of phase/level/session</span>
+<span class="sd">        in the configuration.</span>
+<span class="sd">    session_service : PlayerKarteaSessionService</span>
+<span class="sd">        Sessions (must share the config_service session DAO, so that the</span>
+<span class="sd">        session created here is recorded in kartea_config).</span>
+<span class="sd">    session_detail_service : PlayerKarteaSessionDetailService</span>
+<span class="sd">        Events (details) of the session.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    AUTOSAVE_INTERVAL : float, class attribute</span>
+<span class="sd">        Interval (real seconds) between automatic session saves (30).</span>
+<span class="sd">    SESSION_TOTAL_BY_EVENT : dict[EventType, str], class attribute</span>
+<span class="sd">        Detail event -&gt; session total (SessionStats) it increments.</span>
+<span class="sd">    state : GameState</span>
+<span class="sd">        Match state.</span>
+<span class="sd">    config_service : PlayerKarteaConfigService</span>
+<span class="sd">        Configuration service.</span>
+<span class="sd">    session_service : PlayerKarteaSessionService</span>
+<span class="sd">        Session service.</span>
+<span class="sd">    session_detail_service : PlayerKarteaSessionDetailService</span>
+<span class="sd">        Session detail service.</span>
+<span class="sd">    current_session : PlayerKarteaSession | None</span>
+<span class="sd">        Open session; None until the first event.</span>
+<span class="sd">    start_date, start_time : str | None</span>
+<span class="sd">        Start of the session (DATE_FORMAT / TIME_FORMAT).</span>
+<span class="sd">    last_save : float</span>
+<span class="sd">        Time of the last session save (``time.time()``).</span>
+<span class="sd">    """</span>
+
+    <span class="n">AUTOSAVE_INTERVAL</span> <span class="o">=</span> <span class="mf">30.0</span>
+
+    <span class="n">SESSION_TOTAL_BY_EVENT</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">EventType</span><span class="o">.</span><span class="n">COLLIDED_TARGET</span><span class="p">:</span> <span class="s2">"collided_target"</span><span class="p">,</span>
+        <span class="n">EventType</span><span class="o">.</span><span class="n">AVOIDED_TARGET</span><span class="p">:</span> <span class="s2">"avoided_target"</span><span class="p">,</span>
+        <span class="n">EventType</span><span class="o">.</span><span class="n">COLLIDED_OBSTACLE</span><span class="p">:</span> <span class="s2">"collided_obstacle"</span><span class="p">,</span>
+        <span class="n">EventType</span><span class="o">.</span><span class="n">AVOIDED_OBSTACLE</span><span class="p">:</span> <span class="s2">"avoided_obstacle"</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">state</span><span class="p">:</span> <span class="s2">"GameState"</span><span class="p">,</span>
+        <span class="n">config_service</span><span class="p">:</span> <span class="s2">"PlayerKarteaConfigService"</span><span class="p">,</span>
+        <span class="n">session_service</span><span class="p">:</span> <span class="s2">"PlayerKarteaSessionService"</span><span class="p">,</span>
+        <span class="n">session_detail_service</span><span class="p">:</span> <span class="s2">"PlayerKarteaSessionDetailService"</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_service</span> <span class="o">=</span> <span class="n">config_service</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session_service</span> <span class="o">=</span> <span class="n">session_service</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session_detail_service</span> <span class="o">=</span> <span class="n">session_detail_service</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_session</span><span class="p">:</span> <span class="n">PlayerKarteaSession</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_date</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_save</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">has_session</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Whether a session is already open."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_session</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+    <span class="c1"># ======================</span>
+    <span class="c1"># Events</span>
+    <span class="c1"># ======================</span>
+<div class="viewcode-block" id="SessionRecorder.record">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamecontroller.sessionrecorder.SessionRecorder.html#ttea.games.kartea.gamecontroller.sessionrecorder.SessionRecorder.record">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">record</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">event_type</span><span class="p">:</span> <span class="n">EventType</span> <span class="o">|</span> <span class="nb">str</span><span class="p">,</span> <span class="n">event_position</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Record an event (opening the session on the first event).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        event_type : EventType | str</span>
+<span class="sd">            Type of the event.</span>
+<span class="sd">        event_position : int, optional</span>
+<span class="sd">            Lane related to the event (0 when it has none).</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Collision/avoidance events also add to the session totals</span>
+<span class="sd">        (SessionStats), at this single point. The event gets the current</span>
+<span class="sd">        date/time, phase, level and player lane.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_session</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_create_session</span><span class="p">()</span>
+
+        <span class="n">total_key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SESSION_TOTAL_BY_EVENT</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">event_type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">total_key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">session_stats</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">total_key</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">total_key</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session_detail_service</span><span class="o">.</span><span class="n">create_player_kartea_session_detail</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s2">"id"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="s2">"session"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_session</span><span class="p">,</span>
+                <span class="s2">"event_date"</span><span class="p">:</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">DATE_FORMAT</span><span class="p">),</span>
+                <span class="s2">"event_time"</span><span class="p">:</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">TIME_FORMAT</span><span class="p">),</span>
+                <span class="s2">"phase"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">phase</span><span class="p">,</span>
+                <span class="s2">"level"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">level</span><span class="p">,</span>
+                <span class="s2">"player_position"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lane</span><span class="p">,</span>
+                <span class="s2">"event_position"</span><span class="p">:</span> <span class="n">event_position</span><span class="p">,</span>
+                <span class="s2">"event_type"</span><span class="p">:</span> <span class="n">event_type</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="p">)</span></div>
+
+
+    <span class="c1"># ======================</span>
+    <span class="c1"># Session</span>
+    <span class="c1"># ======================</span>
+<div class="viewcode-block" id="SessionRecorder.save">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamecontroller.sessionrecorder.SessionRecorder.html#ttea.games.kartea.gamecontroller.sessionrecorder.SessionRecorder.save">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Save the session row and the phase/level in the config.</span>
+
+<span class="sd">        The session row gets the totals up to this moment. Called at the</span>
+<span class="sd">        end of each level, after every phase/level change and at the</span>
+<span class="sd">        checkpoints (pause, menu choices, game exit and autosave), so</span>
+<span class="sd">        that an interrupted level also reaches the session.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The configuration follows the game (advance, regress...): the</span>
+<span class="sd">        next session starts where this one stopped. It is updated even</span>
+<span class="sd">        when no session is open.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_session</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">session_service</span><span class="o">.</span><span class="n">update_player_kartea_session</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">current_session</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+                <span class="p">{</span>
+                    <span class="s2">"end_date"</span><span class="p">:</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">DATE_FORMAT</span><span class="p">),</span>
+                    <span class="s2">"end_time"</span><span class="p">:</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">TIME_FORMAT</span><span class="p">),</span>
+                    <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_totals_data</span><span class="p">(),</span>
+                <span class="p">},</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">last_save</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_service</span><span class="o">.</span><span class="n">update_config_level</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">player_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">phase</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">level</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SessionRecorder.autosave_if_due">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamecontroller.sessionrecorder.SessionRecorder.html#ttea.games.kartea.gamecontroller.sessionrecorder.SessionRecorder.autosave_if_due">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">autosave_if_due</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Save the session if AUTOSAVE_INTERVAL has passed."""</span>
+        <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_save</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">AUTOSAVE_INTERVAL</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_totals_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the whole session totals (never reset per level)."""</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">"phase_reached"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">phase</span><span class="p">,</span>
+            <span class="s2">"level_reached"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">level</span><span class="p">,</span>
+            <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">session_stats</span><span class="o">.</span><span class="n">totals</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">level_stats</span><span class="p">),</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_session</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Create the session row and record it in the configuration.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The session id is copied to ``GameState.session_id`` and saved</span>
+<span class="sd">        in the player's configuration only if it allows it</span>
+<span class="sd">        (``update_session_id``).</span>
+<span class="sd">        """</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_date</span> <span class="o">=</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">DATE_FORMAT</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">TIME_FORMAT</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_session</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">session_service</span><span class="o">.</span><span class="n">create_player_kartea_session</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="s2">"id"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="s2">"player"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_service</span><span class="o">.</span><span class="n">find_player</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">player_id</span>
+                    <span class="p">),</span>
+                    <span class="s2">"professional"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_service</span><span class="o">.</span><span class="n">find_professional</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">professional_id</span>
+                    <span class="p">),</span>
+                    <span class="s2">"start_date"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_date</span><span class="p">,</span>
+                    <span class="s2">"start_time"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="p">,</span>
+                    <span class="s2">"end_date"</span><span class="p">:</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">DATE_FORMAT</span><span class="p">),</span>
+                    <span class="s2">"end_time"</span><span class="p">:</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">TIME_FORMAT</span><span class="p">),</span>
+                    <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_totals_data</span><span class="p">(),</span>
+                    <span class="s2">"utc_offset"</span><span class="p">:</span> <span class="n">utc_offset</span><span class="p">(</span><span class="n">now</span><span class="p">),</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_session</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">session_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_session</span><span class="o">.</span><span class="n">id</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config_service</span><span class="o">.</span><span class="n">update_config_session</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">player_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_session</span><span class="o">.</span><span class="n">id</span>
+            <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

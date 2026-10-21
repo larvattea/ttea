@@ -1,0 +1,20 @@
+ttea.view.playerlistview
+========================
+
+.. automodule:: ttea.view.playerlistview
+
+.. currentmodule:: ttea.view.playerlistview
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   PlayerListView
+
+

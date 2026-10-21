@@ -1,0 +1,20 @@
+ttea.view.professionallistview
+==============================
+
+.. automodule:: ttea.view.professionallistview
+
+.. currentmodule:: ttea.view.professionallistview
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   ProfessionalListView
+
+

@@ -1,0 +1,340 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CalibrationPointCsvDAO &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.dao.calibrationsettinginidao" href="ttea.dao.calibrationsettinginidao.html" />
+    <link rel="prev" title="ttea.dao.calibrationpointcsvdao" href="ttea.dao.calibrationpointcsvdao.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.dao.html">ttea.dao</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.dao.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.dao.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.dao.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.dao.calibrationinidao.html">ttea.dao.calibrationinidao</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.dao.calibrationpointcsvdao.html">ttea.dao.calibrationpointcsvdao</a><ul class="current">
+<li class="toctree-l5 current"><a class="current reference internal" href="#">CalibrationPointCsvDAO</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO"><code class="docutils literal notranslate"><span class="pre">CalibrationPointCsvDAO</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.write_with_lock"><code class="docutils literal notranslate"><span class="pre">CalibrationPointCsvDAO.write_with_lock()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.insert"><code class="docutils literal notranslate"><span class="pre">CalibrationPointCsvDAO.insert()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.update"><code class="docutils literal notranslate"><span class="pre">CalibrationPointCsvDAO.update()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.delete"><code class="docutils literal notranslate"><span class="pre">CalibrationPointCsvDAO.delete()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.select"><code class="docutils literal notranslate"><span class="pre">CalibrationPointCsvDAO.select()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.list"><code class="docutils literal notranslate"><span class="pre">CalibrationPointCsvDAO.list()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.load_all_calibration_points"><code class="docutils literal notranslate"><span class="pre">CalibrationPointCsvDAO.load_all_calibration_points()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.dao.calibrationsettinginidao.html">ttea.dao.calibrationsettinginidao</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.dao.dao.html">ttea.dao.dao</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.dao.institutionfacilitycsvdao.html">ttea.dao.institutionfacilitycsvdao</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.dao.playercsvdao.html">ttea.dao.playercsvdao</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.dao.professionalcsvdao.html">ttea.dao.professionalcsvdao</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.games.html">ttea.games</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.dao.html">ttea.dao</a></li>
+          <li class="breadcrumb-item"><a href="ttea.dao.calibrationpointcsvdao.html">ttea.dao.calibrationpointcsvdao</a></li>
+      <li class="breadcrumb-item active">CalibrationPointCsvDAO</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="calibrationpointcsvdao">
+<h1>CalibrationPointCsvDAO<a class="headerlink" href="#calibrationpointcsvdao" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CalibrationPointCsvDAO</span></span><a class="reference internal" href="../_modules/ttea/dao/calibrationpointcsvdao.html#CalibrationPointCsvDAO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="ttea.dao.dao.DAO.html#ttea.dao.dao.DAO" title="ttea.dao.dao.DAO"><code class="xref py py-class docutils literal notranslate"><span class="pre">DAO</span></code></a>[<a class="reference internal" href="ttea.model.calibrationpoint.CalibrationPoint.html#ttea.model.calibrationpoint.CalibrationPoint" title="ttea.model.calibrationpoint.CalibrationPoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">CalibrationPoint</span></code></a>]</p>
+<p>DAO for the single <code class="docutils literal notranslate"><span class="pre">CalibrationPoint</span></code> record in a CSV file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>csv_handler</strong><span class="classifier">CSVHandler</span></dt><dd><p>Utility for reading and writing CSV data.</p>
+</dd>
+<dt><strong>calibration_points</strong><span class="classifier">dict[int, CalibrationPoint]</span></dt><dd><p>In-memory cache by ID (at most one entry).</p>
+</dd>
+<dt><strong>file_map</strong><span class="classifier">dict[int, str]</span></dt><dd><p>CSV file path by ID.</p>
+</dd>
+<dt><strong>int_properties</strong><span class="classifier">list[str]</span></dt><dd><p>Names of the <code class="docutils literal notranslate"><span class="pre">CalibrationPoint</span></code> fields typed <code class="docutils literal notranslate"><span class="pre">int</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The record is stored in <code class="docutils literal notranslate"><span class="pre">PathConfig.calibration_point()</span></code> with ID
+<code class="docutils literal notranslate"><span class="pre">CalibrationPoint.ID_VALUE</span></code> and loaded into the cache when the DAO
+is created. <code class="docutils literal notranslate"><span class="pre">update</span></code>, <code class="docutils literal notranslate"><span class="pre">delete</span></code> and <code class="docutils literal notranslate"><span class="pre">list</span></code> are not implemented
+and raise <code class="docutils literal notranslate"><span class="pre">NotImplementedError</span></code>.</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.delete" title="ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.delete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete</span></code></a></p></td>
+<td><p>Not implemented.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.insert" title="ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.insert"><code class="xref py py-obj docutils literal notranslate"><span class="pre">insert</span></code></a></p></td>
+<td><p>Save the calibration points, replacing the previous ones.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.list" title="ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a></p></td>
+<td><p>Not implemented.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.load_all_calibration_points" title="ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.load_all_calibration_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_all_calibration_points</span></code></a></p></td>
+<td><p>Load the calibration point CSV file into the cache.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.select" title="ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.select"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select</span></code></a></p></td>
+<td><p>Return the calibration points from the in-memory cache.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.update" title="ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a></p></td>
+<td><p>Not implemented.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.write_with_lock" title="ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.write_with_lock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_with_lock</span></code></a></p></td>
+<td><p>Write rows to a CSV file while holding an exclusive lock.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.write_with_lock">
+<span class="sig-name descname"><span class="pre">write_with_lock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/dao/calibrationpointcsvdao.html#CalibrationPointCsvDAO.write_with_lock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.write_with_lock" title="Link to this definition"></a></dt>
+<dd><p>Write rows to a CSV file while holding an exclusive lock.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filepath</strong><span class="classifier">str</span></dt><dd><p>Full path to the target CSV file.</p>
+</dd>
+<dt><strong>data</strong><span class="classifier">list[dict]</span></dt><dd><p>Rows to write, one dictionary per row.</p>
+</dd>
+<dt><strong>headers</strong><span class="classifier">list[str]</span></dt><dd><p>Ordered column names; a header row is written first.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>portalocker.exceptions.LockException</dt><dd><p>If the lock cannot be acquired within 10 seconds.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The user directories are created if needed. The file is opened
+by <code class="docutils literal notranslate"><span class="pre">portalocker.Lock</span></code> in mode <code class="docutils literal notranslate"><span class="pre">&quot;w&quot;</span></code> with Python’s defaults,
+so it uses the platform’s default encoding and newline
+translation, unlike <code class="docutils literal notranslate"><span class="pre">CSVHandler.write_csv</span></code> with a path (UTF-8
+with BOM).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.insert">
+<span class="sig-name descname"><span class="pre">insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/dao/calibrationpointcsvdao.html#CalibrationPointCsvDAO.insert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.insert" title="Link to this definition"></a></dt>
+<dd><p>Save the calibration points, replacing the previous ones.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>obj</strong><span class="classifier">CalibrationPoint</span></dt><dd><p>The points to save. They are not validated.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>int</dt><dd><p><code class="docutils literal notranslate"><span class="pre">CalibrationPoint.ID_VALUE</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/dao/calibrationpointcsvdao.html#CalibrationPointCsvDAO.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.update" title="Link to this definition"></a></dt>
+<dd><p>Not implemented.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>NotImplementedError</dt><dd><p>Always.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/dao/calibrationpointcsvdao.html#CalibrationPointCsvDAO.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.delete" title="Link to this definition"></a></dt>
+<dd><p>Not implemented.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>NotImplementedError</dt><dd><p>Always.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.select">
+<span class="sig-name descname"><span class="pre">select</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/dao/calibrationpointcsvdao.html#CalibrationPointCsvDAO.select"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.select" title="Link to this definition"></a></dt>
+<dd><p>Return the calibration points from the in-memory cache.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>obj_id</strong><span class="classifier">int</span></dt><dd><p>The record ID, normally <code class="docutils literal notranslate"><span class="pre">CalibrationPoint.ID_VALUE</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>CalibrationPoint | None</dt><dd><p>The cached points, or None if none were loaded or saved.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.list">
+<span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/dao/calibrationpointcsvdao.html#CalibrationPointCsvDAO.list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.list" title="Link to this definition"></a></dt>
+<dd><p>Not implemented.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>NotImplementedError</dt><dd><p>Always.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.load_all_calibration_points">
+<span class="sig-name descname"><span class="pre">load_all_calibration_points</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/dao/calibrationpointcsvdao.html#CalibrationPointCsvDAO.load_all_calibration_points"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.dao.calibrationpointcsvdao.CalibrationPointCsvDAO.load_all_calibration_points" title="Link to this definition"></a></dt>
+<dd><p>Load the calibration point CSV file into the cache.</p>
+<p class="rubric">Notes</p>
+<p>Only the first row of the file is used. Coordinates that are not
+plain digits, including negative numbers, are loaded as 0.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.dao.calibrationpointcsvdao.html" class="btn btn-neutral float-left" title="ttea.dao.calibrationpointcsvdao" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.dao.calibrationsettinginidao.html" class="btn btn-neutral float-right" title="ttea.dao.calibrationsettinginidao" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

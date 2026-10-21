@@ -1,0 +1,80 @@
+CalibrationService
+==================
+
+.. currentmodule:: ttea.service.calibrationservice
+
+.. autoclass:: CalibrationService
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~CalibrationService.create_calibration_hardware
+      ~CalibrationService.create_calibration_point
+      ~CalibrationService.find_by_id_calibration
+      ~CalibrationService.find_by_id_calibration_point
+      ~CalibrationService.get_automatic_dictionary
+      ~CalibrationService.get_automatic_height
+      ~CalibrationService.get_automatic_margin
+      ~CalibrationService.get_automatic_multiplier
+      ~CalibrationService.get_automatic_num_columns
+      ~CalibrationService.get_automatic_num_rows
+      ~CalibrationService.get_automatic_width
+      ~CalibrationService.get_automatic_window_open_mode
+      ~CalibrationService.get_automatic_window_position
+      ~CalibrationService.get_available_geometry_of_screen
+      ~CalibrationService.get_camera_info
+      ~CalibrationService.get_filter_average_smooth_frames
+      ~CalibrationService.get_filter_clahe_clip
+      ~CalibrationService.get_filter_clahe_grid
+      ~CalibrationService.get_filter_clahe_lum_below
+      ~CalibrationService.get_filter_gamma_factor
+      ~CalibrationService.get_filter_gamma_lum_above
+      ~CalibrationService.get_filter_landmark_limit
+      ~CalibrationService.get_geometry_of_screen
+      ~CalibrationService.get_manual_window_open_mode
+      ~CalibrationService.get_manual_window_position
+      ~CalibrationService.get_mediapipe_detection_position
+      ~CalibrationService.get_mediapipe_detection_presence
+      ~CalibrationService.get_mediapipe_detection_tracking
+      ~CalibrationService.get_mediapipe_embedded_processing
+      ~CalibrationService.get_mediapipe_execution_mode
+      ~CalibrationService.get_mediapipe_linux_processing
+      ~CalibrationService.get_mediapipe_mac_processing
+      ~CalibrationService.get_mediapipe_model_desktop
+      ~CalibrationService.get_mediapipe_model_embedded
+      ~CalibrationService.get_mediapipe_num_position
+      ~CalibrationService.get_mediapipe_windows_processing
+      ~CalibrationService.get_opencv_buffer_size
+      ~CalibrationService.get_opencv_capture_backend
+      ~CalibrationService.get_opencv_fps
+      ~CalibrationService.get_opencv_height
+      ~CalibrationService.get_opencv_ratio
+      ~CalibrationService.get_opencv_width
+      ~CalibrationService.get_proportions
+      ~CalibrationService.get_screen_info
+      ~CalibrationService.get_screen_size
+      ~CalibrationService.get_screens
+      ~CalibrationService.get_semiautomatic_window_open_mode
+      ~CalibrationService.get_semiautomatic_window_position
+      ~CalibrationService.get_video_inputs
+      ~CalibrationService.is_automatic_default_calibration
+      ~CalibrationService.is_automatic_mirror_mode
+      ~CalibrationService.is_automatic_open_projector
+      ~CalibrationService.is_enable_mediapipe_pose
+      ~CalibrationService.is_filter_enable_filter
+      ~CalibrationService.is_fullscreen
+      ~CalibrationService.is_manual_default_calibration
+      ~CalibrationService.is_manual_mirror_mode
+      ~CalibrationService.is_manual_open_projector
+      ~CalibrationService.is_opencv_custom_camera
+      ~CalibrationService.is_raspberry_pi
+      ~CalibrationService.is_semiautomatic_default_calibration
+      ~CalibrationService.is_semiautomatic_mirror_mode
+      ~CalibrationService.is_semiautomatic_open_projector
+      ~CalibrationService.is_telemetry_enable_panel
+      ~CalibrationService.is_windows

@@ -1,0 +1,19 @@
+WindowConfig
+============
+
+.. currentmodule:: ttea.window.windowconfig
+
+.. autoclass:: WindowConfig
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~WindowConfig.adjust_size
+      ~WindowConfig.center_window
+      ~WindowConfig.get_base_size
+      ~WindowConfig.setup_window

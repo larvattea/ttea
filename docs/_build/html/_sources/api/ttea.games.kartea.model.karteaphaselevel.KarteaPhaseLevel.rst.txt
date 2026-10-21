@@ -1,0 +1,9 @@
+KarteaPhaseLevel
+================
+
+.. currentmodule:: ttea.games.kartea.model.karteaphaselevel
+
+.. autoclass:: KarteaPhaseLevel
+   :members:
+   :show-inheritance:
+

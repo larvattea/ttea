@@ -1,0 +1,18 @@
+PlayerEditController
+====================
+
+.. currentmodule:: ttea.controller.playereditcontroller
+
+.. autoclass:: PlayerEditController
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~PlayerEditController.get_data
+      ~PlayerEditController.handle_cancel
+      ~PlayerEditController.handle_ok

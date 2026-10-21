@@ -1,0 +1,20 @@
+CalibrationSettingIniDAO
+========================
+
+.. currentmodule:: ttea.dao.calibrationsettinginidao
+
+.. autoclass:: CalibrationSettingIniDAO
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~CalibrationSettingIniDAO.delete
+      ~CalibrationSettingIniDAO.insert
+      ~CalibrationSettingIniDAO.list
+      ~CalibrationSettingIniDAO.select
+      ~CalibrationSettingIniDAO.update

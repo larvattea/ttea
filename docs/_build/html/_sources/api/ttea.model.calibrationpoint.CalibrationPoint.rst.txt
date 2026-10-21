@@ -1,0 +1,17 @@
+CalibrationPoint
+================
+
+.. currentmodule:: ttea.model.calibrationpoint
+
+.. autoclass:: CalibrationPoint
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~CalibrationPoint.get_data
+      ~CalibrationPoint.set_data

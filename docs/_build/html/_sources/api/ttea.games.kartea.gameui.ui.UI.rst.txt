@@ -1,0 +1,19 @@
+UI
+==
+
+.. currentmodule:: ttea.games.kartea.gameui.ui
+
+.. autoclass:: UI
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~UI.button
+      ~UI.draw_player_marker
+      ~UI.draw_text
+      ~UI.reset_feet_selection

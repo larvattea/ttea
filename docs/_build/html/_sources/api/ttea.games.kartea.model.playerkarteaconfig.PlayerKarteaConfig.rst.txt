@@ -1,0 +1,16 @@
+PlayerKarteaConfig
+==================
+
+.. currentmodule:: ttea.games.kartea.model.playerkarteaconfig
+
+.. autoclass:: PlayerKarteaConfig
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~PlayerKarteaConfig.is_valid

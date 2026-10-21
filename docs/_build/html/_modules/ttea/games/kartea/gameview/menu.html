@@ -1,0 +1,453 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.games.kartea.gameview.menu &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.games.kartea.gameview.menu</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.games.kartea.gameview.menu</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Menus and feedback screens of the KarTEA game (pygame)."""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gamemodel</span><span class="w"> </span><span class="kn">import</span> <span class="n">Background</span><span class="p">,</span> <span class="n">Image</span><span class="p">,</span> <span class="n">Sound</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gameui</span><span class="w"> </span><span class="kn">import</span> <span class="n">UI</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gameutil</span><span class="w"> </span><span class="kn">import</span> <span class="n">GameSettings</span><span class="p">,</span> <span class="n">GameState</span>
+
+
+<div class="viewcode-block" id="Menu">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gameview.menu.Menu.html#ttea.games.kartea.gameview.menu.Menu">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Menu</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Manage all menus and feedback screens of the game.</span>
+
+<span class="sd">    Reads from the GameState which screen to show (``state.menu``) and</span>
+<span class="sd">    the level counters (``state.level_stats``); it does not change the</span>
+<span class="sd">    state.</span>
+
+<span class="sd">    With feet click on (``state.feet_click``), ``update`` receives the</span>
+<span class="sd">    feet position: the buttons are also triggered by the feet and the</span>
+<span class="sd">    feet dot is drawn on top of everything. ``selected_by_feet`` tells</span>
+<span class="sd">    whether the last action came from the feet.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    surface : pygame.Surface</span>
+<span class="sd">        Game screen.</span>
+<span class="sd">    settings : GameSettings</span>
+<span class="sd">        Game configuration.</span>
+<span class="sd">    state : GameState</span>
+<span class="sd">        Match state.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    surface : pygame.Surface</span>
+<span class="sd">        Game screen.</span>
+<span class="sd">    settings : GameSettings</span>
+<span class="sd">        Game configuration.</span>
+<span class="sd">    state : GameState</span>
+<span class="sd">        Match state.</span>
+<span class="sd">    ui : UI</span>
+<span class="sd">        Drawing helpers (buttons, texts, feet dot).</span>
+<span class="sd">    background : Background</span>
+<span class="sd">        Road background with the menu image.</span>
+<span class="sd">    click_sound : pygame.mixer.Sound</span>
+<span class="sd">        Menu click sound.</span>
+<span class="sd">    feet_pos : tuple | None</span>
+<span class="sd">        Feet position in the current frame (None: feet selection off or</span>
+<span class="sd">        player not detected).</span>
+<span class="sd">    selected_by_feet : bool</span>
+<span class="sd">        True if the action returned by the last ``update`` came from the</span>
+<span class="sd">        feet.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    All texts are translated with gettext ``_()`` (i18n).</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="s2">"GameSettings"</span><span class="p">,</span> <span class="n">state</span><span class="p">:</span> <span class="s2">"GameState"</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surface</span> <span class="o">=</span> <span class="n">surface</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span> <span class="o">=</span> <span class="n">UI</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="n">Background</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">background_menu</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">click_sound</span> <span class="o">=</span> <span class="n">Sound</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">MENU_CLICK_SOUND</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feet_pos</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selected_by_feet</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_s</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Scale a value in pixels of the base resolution (800x600)."""</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">UI_SCALE</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_content_area</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Return the content area of the menu.</span>
+
+<span class="sd">        The area keeps the aspect ratio of the original design</span>
+<span class="sd">        (800x600), scaled uniformly by UI_SCALE and centered on the</span>
+<span class="sd">        screen (letterbox). Using this area, instead of stretching</span>
+<span class="sd">        images to cover the whole screen, avoids distortion and keeps</span>
+<span class="sd">        any background image aligned with texts positioned with</span>
+<span class="sd">        ``_s()``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple[int, int, int, int]</span>
+<span class="sd">            ``(origin_x, origin_y, width, height)``.</span>
+<span class="sd">        """</span>
+        <span class="n">content_w</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">BASE_WIDTH</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">UI_SCALE</span><span class="p">)</span>
+        <span class="n">content_h</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">BASE_HEIGHT</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">UI_SCALE</span><span class="p">)</span>
+        <span class="n">origin_x</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span> <span class="o">-</span> <span class="n">content_w</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="n">origin_y</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span> <span class="o">-</span> <span class="n">content_h</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="k">return</span> <span class="n">origin_x</span><span class="p">,</span> <span class="n">origin_y</span><span class="p">,</span> <span class="n">content_w</span><span class="p">,</span> <span class="n">content_h</span>
+
+<div class="viewcode-block" id="Menu.draw">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gameview.menu.Menu.html#ttea.games.kartea.gameview.menu.Menu.draw">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Draw the basic menu background."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="p">)</span>
+        <span class="n">background_image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">MENU_BACKGROUND</span><span class="p">,</span>
+            <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">get_width</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">get_height</span><span class="p">()),</span>
+        <span class="p">)</span>
+        <span class="n">Image</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="p">,</span> <span class="n">background_image</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_draw_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">font</span><span class="o">=</span><span class="s2">"medium"</span><span class="p">,</span> <span class="n">pos_mode</span><span class="o">=</span><span class="s2">"top_left"</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Draw a text in the menu style (title color, white shadow)."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">draw_text</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="p">,</span>
+            <span class="n">text</span><span class="p">,</span>
+            <span class="n">pos</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">COLORS</span><span class="p">[</span><span class="s2">"title"</span><span class="p">],</span>
+            <span class="n">font</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">FONTS</span><span class="p">[</span><span class="n">font</span><span class="p">],</span>
+            <span class="n">shadow</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">shadow_color</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+            <span class="n">pos_mode</span><span class="o">=</span><span class="n">pos_mode</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_draw_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Draw a title centered at the top of the menu."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_label</span><span class="p">(</span>
+            <span class="n">text</span><span class="p">,</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_s</span><span class="p">(</span><span class="mi">120</span><span class="p">)),</span>
+            <span class="n">font</span><span class="o">=</span><span class="s2">"big"</span><span class="p">,</span>
+            <span class="n">pos_mode</span><span class="o">=</span><span class="s2">"center"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_buttons</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buttons</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Draw the buttons; return the action of the first triggered.</span>
+
+<span class="sd">        All buttons are drawn every frame (the feet selection depends on</span>
+<span class="sd">        it to keep counting). If the action came from the feet,</span>
+<span class="sd">        ``selected_by_feet`` becomes True.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        buttons : list[tuple]</span>
+<span class="sd">            (column, row, text, key, action). The row is measured in</span>
+<span class="sd">            button heights below y=300 (800x600 base).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str | None</span>
+<span class="sd">            Action of the clicked button (or of the pressed key).</span>
+<span class="sd">        """</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">get_pressed</span><span class="p">()</span>
+        <span class="n">button_h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">BUTTONS_SIZES</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">column</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">buttons</span><span class="p">:</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">button</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="p">,</span>
+                <span class="n">column</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_s</span><span class="p">(</span><span class="mi">300</span><span class="p">)</span> <span class="o">+</span> <span class="n">button_h</span> <span class="o">*</span> <span class="n">row</span><span class="p">,</span>
+                <span class="n">text</span><span class="p">,</span>
+                <span class="n">click_sound</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">click_sound</span><span class="p">,</span>
+                <span class="n">feet_pos</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">feet_pos</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="n">source</span> <span class="ow">or</span> <span class="n">keys</span><span class="p">[</span><span class="n">key</span><span class="p">]):</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">action</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">selected_by_feet</span> <span class="o">=</span> <span class="n">source</span> <span class="o">==</span> <span class="n">UI</span><span class="o">.</span><span class="n">CLICK_FEET</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+<div class="viewcode-block" id="Menu.draw_feedback">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gameview.menu.Menu.html#ttea.games.kartea.gameview.menu.Menu.draw_feedback">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw_feedback</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Draw the feedback screen with the level statistics.</span>
+
+<span class="sd">        One (label, value) row every 30 px from y=100, aligned with the</span>
+<span class="sd">        content area of the background image.</span>
+<span class="sd">        """</span>
+        <span class="c1"># origin_y aligns the text with the content area (letterbox) of</span>
+        <span class="c1"># the background image drawn in _handle_feedback_menu.</span>
+        <span class="n">_origin_x</span><span class="p">,</span> <span class="n">origin_y</span><span class="p">,</span> <span class="n">_content_w</span><span class="p">,</span> <span class="n">_content_h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_content_area</span><span class="p">()</span>
+        <span class="n">stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">level_stats</span>
+
+        <span class="n">rows</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">"Feedback"</span><span class="p">),</span> <span class="n">_</span><span class="p">(</span><span class="s2">"Quantidade"</span><span class="p">)),</span>
+            <span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">"Pontuação"</span><span class="p">),</span> <span class="n">stats</span><span class="o">.</span><span class="n">score</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">"Movimentos"</span><span class="p">),</span> <span class="n">stats</span><span class="o">.</span><span class="n">movement</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">"Alvos Gerados"</span><span class="p">),</span> <span class="n">stats</span><span class="o">.</span><span class="n">targets</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">"Alvos Colididos"</span><span class="p">),</span> <span class="n">stats</span><span class="o">.</span><span class="n">targets_collided</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">"Alvos Desviados"</span><span class="p">),</span> <span class="n">stats</span><span class="o">.</span><span class="n">targets_avoided</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">"Obst. Gerados"</span><span class="p">),</span> <span class="n">stats</span><span class="o">.</span><span class="n">obstacles</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">"Obst. Desviados"</span><span class="p">),</span> <span class="n">stats</span><span class="o">.</span><span class="n">obstacles_avoided</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">"Obst. Colididos"</span><span class="p">),</span> <span class="n">stats</span><span class="o">.</span><span class="n">obstacles_collided</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="n">center_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">rows</span><span class="p">):</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">origin_y</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_s</span><span class="p">(</span><span class="mi">100</span> <span class="o">+</span> <span class="mi">30</span> <span class="o">*</span> <span class="n">index</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_draw_label</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="p">(</span><span class="n">center_x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_s</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">y</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_draw_label</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">),</span> <span class="p">(</span><span class="n">center_x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_s</span><span class="p">(</span><span class="mi">250</span><span class="p">),</span> <span class="n">y</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Menu.draw_player_name">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gameview.menu.Menu.html#ttea.games.kartea.gameview.menu.Menu.draw_player_name">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw_player_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Draw the player's first name centered under the trophy.</span>
+
+<span class="sd">        The trophy of the feedback images is centered at x=200 and ends</span>
+<span class="sd">        near y=400 (800x600 base), so the name is centered at (200, 430)</span>
+<span class="sd">        of the content area. Nothing is drawn without a name.</span>
+<span class="sd">        """</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">player_name</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">origin_x</span><span class="p">,</span> <span class="n">origin_y</span><span class="p">,</span> <span class="n">_content_w</span><span class="p">,</span> <span class="n">_content_h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_content_area</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_label</span><span class="p">(</span>
+            <span class="n">name</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">origin_x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_s</span><span class="p">(</span><span class="mi">200</span><span class="p">),</span> <span class="n">origin_y</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_s</span><span class="p">(</span><span class="mi">430</span><span class="p">)),</span>
+            <span class="n">font</span><span class="o">=</span><span class="s2">"medium"</span><span class="p">,</span>
+            <span class="n">pos_mode</span><span class="o">=</span><span class="s2">"center"</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_handle_initial_menu</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Handle the start menu (main screen).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str | None</span>
+<span class="sd">            "game" (F2) or "exit" (F7); main records the exit in the</span>
+<span class="sd">            session and ends the game.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_title</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">GAME_TITLE</span><span class="p">))</span>
+        <span class="c1"># main records the exit ("exit") in the session and ends the</span>
+        <span class="c1"># game</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buttons</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">"Jogar [F2]"</span><span class="p">),</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_F2</span><span class="p">,</span> <span class="s2">"game"</span><span class="p">),</span>
+                <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">"Sair [F7]"</span><span class="p">),</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_F7</span><span class="p">,</span> <span class="s2">"exit"</span><span class="p">),</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_handle_pause_menu</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Handle the pause menu.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str | None</span>
+<span class="sd">            "game" (F3), "prev" (F4), "rest" (F5), "next" (F6) or "exit"</span>
+<span class="sd">            (F7).</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_title</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s2">"Pause"</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buttons</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">"Continuar [F3]"</span><span class="p">),</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_F3</span><span class="p">,</span> <span class="s2">"game"</span><span class="p">),</span>
+                <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">"Retroceder [F4]"</span><span class="p">),</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_F4</span><span class="p">,</span> <span class="s2">"prev"</span><span class="p">),</span>
+                <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">"Reiniciar [F5]"</span><span class="p">),</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_F5</span><span class="p">,</span> <span class="s2">"rest"</span><span class="p">),</span>
+                <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">"Avançar [F6]"</span><span class="p">),</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_F6</span><span class="p">,</span> <span class="s2">"next"</span><span class="p">),</span>
+                <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">"Sair [F7]"</span><span class="p">),</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_F7</span><span class="p">,</span> <span class="s2">"exit"</span><span class="p">),</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_handle_feedback_menu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feedback_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Handle the feedback screens (Feedback_1, _2 and _3).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        feedback_type : str</span>
+<span class="sd">            "Feedback_1" (25% trophy), "Feedback_2" (50%) or</span>
+<span class="sd">            "Feedback_3" (75%).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str | None</span>
+<span class="sd">            "play" (F2) or "exit" (F7); None for an unknown type.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        - The player's first name is drawn under the trophy</span>
+<span class="sd">          (``draw_player_name``), followed by the level statistics</span>
+<span class="sd">          (``draw_feedback``).</span>
+<span class="sd">        - "play" only starts the next level: it was already set at the</span>
+<span class="sd">          end of the level (GameController).</span>
+<span class="sd">        """</span>
+        <span class="n">image_path</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">"Feedback_1"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">MENU_FEEDBACK_25</span><span class="p">,</span>
+            <span class="s2">"Feedback_2"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">MENU_FEEDBACK_50</span><span class="p">,</span>
+            <span class="s2">"Feedback_3"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">MENU_FEEDBACK_75</span><span class="p">,</span>
+        <span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">feedback_type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">image_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">origin_x</span><span class="p">,</span> <span class="n">origin_y</span><span class="p">,</span> <span class="n">content_w</span><span class="p">,</span> <span class="n">content_h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_content_area</span><span class="p">()</span>
+        <span class="n">trophy</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">content_w</span><span class="p">,</span> <span class="n">content_h</span><span class="p">))</span>
+        <span class="n">Image</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="p">,</span> <span class="n">trophy</span><span class="p">,</span> <span class="p">(</span><span class="n">origin_x</span><span class="p">,</span> <span class="n">origin_y</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">draw_player_name</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">draw_feedback</span><span class="p">()</span>
+
+        <span class="c1"># "exit": main records the exit.</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buttons</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">"Jogar [F2]"</span><span class="p">),</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_F2</span><span class="p">,</span> <span class="s2">"play"</span><span class="p">),</span>
+                <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s2">"Sair [F7]"</span><span class="p">),</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_F7</span><span class="p">,</span> <span class="s2">"exit"</span><span class="p">),</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="Menu.update">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gameview.menu.Menu.html#ttea.games.kartea.gameview.menu.Menu.update">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feet_pos</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Update the current menu and return the chosen action.</span>
+
+<span class="sd">        Actions: "game" (play/continue), "prev", "rest", "next" (pause</span>
+<span class="sd">        menu), "play" (feedback screen: starts the level already</span>
+<span class="sd">        defined) and "exit". ``selected_by_feet`` tells whether the</span>
+<span class="sd">        action came from the feet.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        feet_pos : tuple | None, optional</span>
+<span class="sd">            Feet (x, y) position on screen, when feet click is on</span>
+<span class="sd">            (``state.feet_click``). None: mouse/keyboard only.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str | None</span>
+<span class="sd">            The chosen action, or None.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feet_pos</span> <span class="o">=</span> <span class="n">feet_pos</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">feet_click</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selected_by_feet</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">menu</span> <span class="o">==</span> <span class="s2">"Inicial"</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_initial_menu</span><span class="p">()</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">menu</span> <span class="o">==</span> <span class="s2">"Pause"</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_pause_menu</span><span class="p">()</span>
+
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">menu</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"Feedback_1"</span><span class="p">,</span> <span class="s2">"Feedback_2"</span><span class="p">,</span> <span class="s2">"Feedback_3"</span><span class="p">):</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_feedback_menu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">menu</span><span class="p">)</span>
+
+        <span class="c1"># Feet dot on top of the buttons: without it the player cannot</span>
+        <span class="c1"># tell where they are "pointing".</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">feet_click</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">draw_player_marker</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">feet_pos</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

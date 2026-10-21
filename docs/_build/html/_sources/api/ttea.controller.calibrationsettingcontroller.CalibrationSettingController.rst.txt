@@ -1,0 +1,18 @@
+CalibrationSettingController
+============================
+
+.. currentmodule:: ttea.controller.calibrationsettingcontroller
+
+.. autoclass:: CalibrationSettingController
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~CalibrationSettingController.handle_cancel
+      ~CalibrationSettingController.handle_ok
+      ~CalibrationSettingController.list_proportions

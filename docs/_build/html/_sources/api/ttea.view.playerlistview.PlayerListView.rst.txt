@@ -1,0 +1,21 @@
+PlayerListView
+==============
+
+.. currentmodule:: ttea.view.playerlistview
+
+.. autoclass:: PlayerListView
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~PlayerListView.clear_details
+      ~PlayerListView.closeEvent
+      ~PlayerListView.display_details
+      ~PlayerListView.get_selected_id
+      ~PlayerListView.populate_table
+      ~PlayerListView.select_row_by_id

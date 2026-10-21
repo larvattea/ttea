@@ -1,0 +1,35 @@
+PlayerKarteaConfigService
+=========================
+
+.. currentmodule:: ttea.games.kartea.service.playerkarteaconfigservice
+
+.. autoclass:: PlayerKarteaConfigService
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~PlayerKarteaConfigService.build_game_settings
+      ~PlayerKarteaConfigService.config_to_data
+      ~PlayerKarteaConfigService.create_config
+      ~PlayerKarteaConfigService.delete_config
+      ~PlayerKarteaConfigService.find_config_by_player_id
+      ~PlayerKarteaConfigService.find_player
+      ~PlayerKarteaConfigService.find_professional
+      ~PlayerKarteaConfigService.get_all_configs
+      ~PlayerKarteaConfigService.get_all_players
+      ~PlayerKarteaConfigService.get_available_resources
+      ~PlayerKarteaConfigService.get_default_config_data
+      ~PlayerKarteaConfigService.get_effective_config_data
+      ~PlayerKarteaConfigService.get_kartea_ini_config
+      ~PlayerKarteaConfigService.get_or_create_config
+      ~PlayerKarteaConfigService.get_session
+      ~PlayerKarteaConfigService.search_configs
+      ~PlayerKarteaConfigService.set_interface_option
+      ~PlayerKarteaConfigService.update_config
+      ~PlayerKarteaConfigService.update_config_level
+      ~PlayerKarteaConfigService.update_config_session

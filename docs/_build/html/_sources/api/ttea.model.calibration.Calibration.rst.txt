@@ -1,0 +1,20 @@
+Calibration
+===========
+
+.. currentmodule:: ttea.model.calibration
+
+.. autoclass:: Calibration
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~Calibration.get_data
+      ~Calibration.get_proportion_tuple
+      ~Calibration.get_section_for_property
+      ~Calibration.is_valid
+      ~Calibration.set_data

@@ -1,0 +1,23 @@
+KarteaHardwareService
+=====================
+
+.. currentmodule:: ttea.games.kartea.service.karteahardwareservice
+
+.. autoclass:: KarteaHardwareService
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~KarteaHardwareService.get_calibration_points
+      ~KarteaHardwareService.get_camera_config
+      ~KarteaHardwareService.get_pose_tracking_config
+      ~KarteaHardwareService.get_screen_info
+      ~KarteaHardwareService.get_screen_settings
+      ~KarteaHardwareService.get_screen_size
+      ~KarteaHardwareService.is_fullscreen
+      ~KarteaHardwareService.is_raspberry_pi

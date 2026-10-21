@@ -1,0 +1,9 @@
+PoseTrackingConfig
+==================
+
+.. currentmodule:: ttea.games.kartea.model.hardwareconfig
+
+.. autoclass:: PoseTrackingConfig
+   :members:
+   :show-inheritance:
+

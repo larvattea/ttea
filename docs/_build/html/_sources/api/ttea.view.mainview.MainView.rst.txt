@@ -1,0 +1,20 @@
+MainView
+========
+
+.. currentmodule:: ttea.view.mainview
+
+.. autoclass:: MainView
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~MainView.closeEvent
+      ~MainView.setup_status_bar
+      ~MainView.show_critical_error
+      ~MainView.update_status_info_time
+      ~MainView.update_status_message

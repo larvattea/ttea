@@ -1,0 +1,34 @@
+﻿ttea
+====
+
+.. automodule:: ttea
+
+.. currentmodule:: ttea
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/module.rst
+   :recursive:
+
+   app
+   controller
+   core
+   dao
+   exception
+   factory
+   games
+   log
+   main
+   model
+   service
+   testrunner
+   util
+   view
+   window
+
+
+

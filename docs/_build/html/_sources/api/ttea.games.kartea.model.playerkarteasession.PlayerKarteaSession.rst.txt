@@ -1,0 +1,9 @@
+PlayerKarteaSession
+===================
+
+.. currentmodule:: ttea.games.kartea.model.playerkarteasession
+
+.. autoclass:: PlayerKarteaSession
+   :members:
+   :show-inheritance:
+

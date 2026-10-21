@@ -1,0 +1,30 @@
+ttea.games.kartea.main
+======================
+
+.. automodule:: ttea.games.kartea.main
+
+.. currentmodule:: ttea.games.kartea.main
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   KarTEA
+
+
+
+.. rubric:: Functions
+
+.. autosummary::
+   :nosignatures:
+
+   main
+
+
+.. autofunction:: main

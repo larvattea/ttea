@@ -1,0 +1,22 @@
+PlayerListController
+====================
+
+.. currentmodule:: ttea.controller.playerlistcontroller
+
+.. autoclass:: PlayerListController
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~PlayerListController.create_player
+      ~PlayerListController.delete_player
+      ~PlayerListController.filter_players
+      ~PlayerListController.load_players
+      ~PlayerListController.on_table_selection
+      ~PlayerListController.reload_data
+      ~PlayerListController.update_player

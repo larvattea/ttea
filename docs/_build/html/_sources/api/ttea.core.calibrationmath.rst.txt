@@ -1,0 +1,20 @@
+ttea.core.calibrationmath
+=========================
+
+.. automodule:: ttea.core.calibrationmath
+
+.. currentmodule:: ttea.core.calibrationmath
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   CalibrationMath
+
+

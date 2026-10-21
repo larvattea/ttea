@@ -1,0 +1,30 @@
+ttea.model.player
+=================
+
+.. automodule:: ttea.model.player
+
+.. currentmodule:: ttea.model.player
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   Player
+
+
+
+.. rubric:: Functions
+
+.. autosummary::
+   :nosignatures:
+
+   initialize_reflexive
+
+
+.. autofunction:: initialize_reflexive

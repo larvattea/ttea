@@ -1,0 +1,21 @@
+ttea.testrunner
+===============
+
+.. automodule:: ttea.testrunner
+
+.. currentmodule:: ttea.testrunner
+
+
+
+
+
+
+.. rubric:: Functions
+
+.. autosummary::
+   :nosignatures:
+
+   main
+
+
+.. autofunction:: main

@@ -1,0 +1,1057 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.games.kartea.util.karteapathconfig &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.games.kartea.util.karteapathconfig</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.games.kartea.util.karteapathconfig</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""File paths, folders and Qt resources of the KarTEA game.</span>
+
+<span class="sd">Importing this module registers the Qt resources of the .qrc</span>
+<span class="sd">(``resourceskartea_rc``). The private ``_MODS_README_*`` texts are the</span>
+<span class="sd">README files of the mods folder, one per game language (pt-BR, en-US,</span>
+<span class="sd">es-ES), mapped by file name in ``_MODS_READMES``.</span>
+<span class="sd">"""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">configparser</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">QDir</span><span class="p">,</span> <span class="n">QDirIterator</span><span class="p">,</span> <span class="n">QFile</span><span class="p">,</span> <span class="n">QIODevice</span>
+
+<span class="c1"># Imported for its side effect: registers the .qrc resources in Qt.</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.resources</span><span class="w"> </span><span class="kn">import</span> <span class="n">resourceskartea_rc</span>  <span class="c1"># noqa: F401</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">PathConfig</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.inidefaults</span><span class="w"> </span><span class="kn">import</span> <span class="n">KarteaIniDefaults</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.resourcefields</span><span class="w"> </span><span class="kn">import</span> <span class="n">KarteaResourceFields</span>
+
+<span class="c1"># README of the mods folder, one file per game language (pt-BR, en-US,</span>
+<span class="c1"># es-ES). Each is created only if missing, so user notes are not</span>
+<span class="c1"># overwritten.</span>
+<span class="n">_MODS_README_PT</span> <span class="o">=</span> <span class="s2">"""</span><span class="se">\</span>
+<span class="s2">Recursos personalizados do KarTEA</span>
+<span class="s2">=================================</span>
+
+<span class="s2">Coloque aqui imagens e sons para aparecerem na tela de configuração do</span>
+<span class="s2">jogador, junto com os que já vêm no jogo. Cada arquivo vai na pasta do</span>
+<span class="s2">recurso que ele substitui:</span>
+
+<span class="s2">  images/vehicle/              veículo</span>
+<span class="s2">  images/horizon/              horizonte (fundo da pista)</span>
+<span class="s2">  images/environment/          ambiente (esquerda e direita)</span>
+<span class="s2">  images/target/               alvo</span>
+<span class="s2">  images/obstacle/             obstáculo</span>
+<span class="s2">  images/feedback/positive/    feedback visual positivo</span>
+<span class="s2">  images/feedback/neutral/     feedback visual neutro</span>
+<span class="s2">  images/feedback/negative/    feedback visual negativo</span>
+<span class="s2">  sounds/feedback/positive/    som de acerto</span>
+<span class="s2">  sounds/feedback/neutral/     som neutro</span>
+<span class="s2">  sounds/feedback/negative/    som de erro</span>
+
+<span class="s2">Formatos aceitos:</span>
+<span class="s2">  imagens: .png (recomendado, com fundo transparente), .jpg, .jpeg, .bmp</span>
+<span class="s2">  sons:    .wav</span>
+
+<span class="s2">Recomendações</span>
+<span class="s2">-------------</span>
+
+<span class="s2">  Veículo      512x512 pixels (mínimo 384x384 em telas Full HD).</span>
+<span class="s2">               Imagem quadrada, carro visto de trás, fundo</span>
+<span class="s2">               transparente. Na tela, o carro ocupa um quadrado de 1/5</span>
+<span class="s2">               da largura: imagem menor fica borrada, e imagem</span>
+<span class="s2">               retangular sai achatada.</span>
+<span class="s2">  Alvo e       256x256 pixels (mínimo 100x100). Imagem quadrada, fundo</span>
+<span class="s2">  obstáculo    transparente. O jogo reduz a imagem para 100x100 antes</span>
+<span class="s2">               da perspectiva da pista: arquivos maiores não melhoram</span>
+<span class="s2">               a qualidade.</span>
+<span class="s2">  Horizonte    imagem larga, como o horizonte original (768x411</span>
+<span class="s2">               pixels). É ajustada à altura da tela e repetida na</span>
+<span class="s2">               largura; não precisa de transparência.</span>
+<span class="s2">  Ambiente     tamanho próximo de 500x520 pixels (como as árvores</span>
+<span class="s2">               originais). O tamanho na tela segue o tamanho do</span>
+<span class="s2">               arquivo: imagem muito grande vira um objeto gigante, e</span>
+<span class="s2">               muito pequena, um objeto minúsculo. A da esquerda e a da</span>
+<span class="s2">               direita devem estar viradas para o lado certo.</span>
+<span class="s2">  Feedback     tamanho próximo de 800x200 pixels. É mostrada no tamanho</span>
+<span class="s2">  visual       original, sem redimensionar: uma foto grande cobre a</span>
+<span class="s2">               tela.</span>
+<span class="s2">  Sons         .wav PCM de 16 bits, curtos e com volume parecido com o</span>
+<span class="s2">               dos sons originais. WAV compactado (ADPCM) ou de 32 bits</span>
+<span class="s2">               pode não tocar.</span>
+
+<span class="s2">O feedback neutro (imagem e som) pode ser escolhido, mas não é usado</span>
+<span class="s2">durante a partida.</span>
+
+<span class="s2">Depois de copiar um arquivo, feche e abra de novo a tela de</span>
+<span class="s2">configuração para ele aparecer na lista. Se um arquivo escolhido for</span>
+<span class="s2">apagado, o jogo volta a usar o recurso padrão.</span>
+<span class="s2">"""</span>
+
+<span class="n">_MODS_README_EN</span> <span class="o">=</span> <span class="s2">"""</span><span class="se">\</span>
+<span class="s2">KarTEA custom resources</span>
+<span class="s2">=======================</span>
+
+<span class="s2">Put images and sounds here to make them available on the player</span>
+<span class="s2">configuration screen, alongside the ones that come with the game. Each</span>
+<span class="s2">file goes in the folder of the resource it replaces:</span>
+
+<span class="s2">  images/vehicle/              vehicle</span>
+<span class="s2">  images/horizon/              horizon (track background)</span>
+<span class="s2">  images/environment/          scenery (left and right)</span>
+<span class="s2">  images/target/               target</span>
+<span class="s2">  images/obstacle/             obstacle</span>
+<span class="s2">  images/feedback/positive/    positive visual feedback</span>
+<span class="s2">  images/feedback/neutral/     neutral visual feedback</span>
+<span class="s2">  images/feedback/negative/    negative visual feedback</span>
+<span class="s2">  sounds/feedback/positive/    hit sound</span>
+<span class="s2">  sounds/feedback/neutral/     neutral sound</span>
+<span class="s2">  sounds/feedback/negative/    miss sound</span>
+
+<span class="s2">Accepted formats:</span>
+<span class="s2">  images: .png (recommended, with a transparent background), .jpg,</span>
+<span class="s2">          .jpeg, .bmp</span>
+<span class="s2">  sounds: .wav</span>
+
+<span class="s2">Recommendations</span>
+<span class="s2">---------------</span>
+
+<span class="s2">  Vehicle      512x512 pixels (at least 384x384 on Full HD screens).</span>
+<span class="s2">               Square image, car seen from behind, transparent</span>
+<span class="s2">               background. On screen, the car fills a square 1/5 of the</span>
+<span class="s2">               screen width: a smaller image looks blurry, and a</span>
+<span class="s2">               rectangular image ends up squashed.</span>
+<span class="s2">  Target and   256x256 pixels (at least 100x100). Square image,</span>
+<span class="s2">  obstacle     transparent background. The game shrinks the image to</span>
+<span class="s2">               100x100 before the track perspective is applied: larger</span>
+<span class="s2">               files do not improve quality.</span>
+<span class="s2">  Horizon      wide image, like the original horizon (768x411</span>
+<span class="s2">               pixels). It is fitted to the screen height and repeated</span>
+<span class="s2">               across the width; no transparency needed.</span>
+<span class="s2">  Scenery      size close to 500x520 pixels (like the original trees).</span>
+<span class="s2">               The size on screen follows the file size: a very large</span>
+<span class="s2">               image becomes a giant object, and a very small one a</span>
+<span class="s2">               tiny object. The left and right images must face the</span>
+<span class="s2">               correct side.</span>
+<span class="s2">  Visual       size close to 800x200 pixels. It is shown at its</span>
+<span class="s2">  feedback     original size, without resizing: a large photo covers</span>
+<span class="s2">               the screen.</span>
+<span class="s2">  Sounds       16-bit PCM .wav, short and about as loud as the</span>
+<span class="s2">               original sounds. Compressed (ADPCM) or 32-bit WAV files</span>
+<span class="s2">               may not play.</span>
+
+<span class="s2">The neutral feedback (image and sound) can be selected, but it is not</span>
+<span class="s2">used during the game.</span>
+
+<span class="s2">After copying a file, close and reopen the configuration screen for it</span>
+<span class="s2">to appear in the list. If a selected file is deleted, the game goes</span>
+<span class="s2">back to the default resource.</span>
+<span class="s2">"""</span>
+
+<span class="n">_MODS_README_ES</span> <span class="o">=</span> <span class="s2">"""</span><span class="se">\</span>
+<span class="s2">Recursos personalizados de KarTEA</span>
+<span class="s2">=================================</span>
+
+<span class="s2">Coloque aquí imágenes y sonidos para que aparezcan en la pantalla de</span>
+<span class="s2">configuración del jugador, junto con los que ya trae el juego. Cada</span>
+<span class="s2">archivo va en la carpeta del recurso que reemplaza:</span>
+
+<span class="s2">  images/vehicle/              vehículo</span>
+<span class="s2">  images/horizon/              horizonte (fondo de la pista)</span>
+<span class="s2">  images/environment/          entorno (izquierda y derecha)</span>
+<span class="s2">  images/target/               objetivo</span>
+<span class="s2">  images/obstacle/             obstáculo</span>
+<span class="s2">  images/feedback/positive/    retroalimentación visual positiva</span>
+<span class="s2">  images/feedback/neutral/     retroalimentación visual neutra</span>
+<span class="s2">  images/feedback/negative/    retroalimentación visual negativa</span>
+<span class="s2">  sounds/feedback/positive/    sonido de acierto</span>
+<span class="s2">  sounds/feedback/neutral/     sonido neutro</span>
+<span class="s2">  sounds/feedback/negative/    sonido de error</span>
+
+<span class="s2">Formatos aceptados:</span>
+<span class="s2">  imágenes: .png (recomendado, con fondo transparente), .jpg, .jpeg,</span>
+<span class="s2">            .bmp</span>
+<span class="s2">  sonidos:  .wav</span>
+
+<span class="s2">Recomendaciones</span>
+<span class="s2">---------------</span>
+
+<span class="s2">  Vehículo     512x512 píxeles (mínimo 384x384 en pantallas Full HD).</span>
+<span class="s2">               Imagen cuadrada, coche visto desde atrás, fondo</span>
+<span class="s2">               transparente. En pantalla, el coche ocupa un cuadrado de</span>
+<span class="s2">               1/5 del ancho: una imagen más pequeña se ve borrosa, y</span>
+<span class="s2">               una imagen rectangular queda achatada.</span>
+<span class="s2">  Objetivo y   256x256 píxeles (mínimo 100x100). Imagen cuadrada, fondo</span>
+<span class="s2">  obstáculo    transparente. El juego reduce la imagen a 100x100 antes</span>
+<span class="s2">               de aplicar la perspectiva de la pista: los archivos más</span>
+<span class="s2">               grandes no mejoran la calidad.</span>
+<span class="s2">  Horizonte    imagen ancha, como el horizonte original (768x411</span>
+<span class="s2">               píxeles). Se ajusta a la altura de la pantalla y se</span>
+<span class="s2">               repite a lo ancho; no necesita transparencia.</span>
+<span class="s2">  Entorno      tamaño cercano a 500x520 píxeles (como los árboles</span>
+<span class="s2">               originales). El tamaño en pantalla sigue el tamaño del</span>
+<span class="s2">               archivo: una imagen muy grande se convierte en un objeto</span>
+<span class="s2">               gigante, y una muy pequeña, en un objeto diminuto. La de</span>
+<span class="s2">               la izquierda y la de la derecha deben mirar hacia el</span>
+<span class="s2">               lado correcto.</span>
+<span class="s2">  Retroali-    tamaño cercano a 800x200 píxeles. Se muestra en su</span>
+<span class="s2">  mentación    tamaño original, sin redimensionar: una foto grande</span>
+<span class="s2">  visual       cubre la pantalla.</span>
+<span class="s2">  Sonidos      .wav PCM de 16 bits, cortos y con un volumen parecido al</span>
+<span class="s2">               de los sonidos originales. Los WAV comprimidos (ADPCM) o</span>
+<span class="s2">               de 32 bits pueden no sonar.</span>
+
+<span class="s2">La retroalimentación neutra (imagen y sonido) se puede seleccionar,</span>
+<span class="s2">pero no se usa durante la partida.</span>
+
+<span class="s2">Después de copiar un archivo, cierre y vuelva a abrir la pantalla de</span>
+<span class="s2">configuración para que aparezca en la lista. Si se borra un archivo</span>
+<span class="s2">seleccionado, el juego vuelve a usar el recurso predeterminado.</span>
+<span class="s2">"""</span>
+
+<span class="n">_MODS_READMES</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"LEIA-ME.txt"</span><span class="p">:</span> <span class="n">_MODS_README_PT</span><span class="p">,</span>
+    <span class="s2">"README.txt"</span><span class="p">:</span> <span class="n">_MODS_README_EN</span><span class="p">,</span>
+    <span class="s2">"LEAME.txt"</span><span class="p">:</span> <span class="n">_MODS_README_ES</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="KarteaPathConfig">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">KarteaPathConfig</span><span class="p">(</span><span class="n">PathConfig</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Path configuration specific to the KarTEA game.</span>
+
+<span class="sd">    Inherits all the logic of PathConfig. Class with only class</span>
+<span class="sd">    attributes and class methods: it is not instantiated.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    KARTEA_CONFIG_FILENAME : str, class attribute</span>
+<span class="sd">        Name of the configuration file ("kartea.ini").</span>
+<span class="sd">    KARTEA_LOG_FILENAME : str, class attribute</span>
+<span class="sd">        Name of the log file ("kartea.log").</span>
+<span class="sd">    KARTEA_DIR : Path, class attribute</span>
+<span class="sd">        KarTEA data folder (``PathConfig.EXERGAME_DIR / "kartea"``).</span>
+<span class="sd">    KARTEA_LOG_DIR : Path, class attribute</span>
+<span class="sd">        Log folder.</span>
+<span class="sd">    KARTEA_RESOURCES_DIR : Path, class attribute</span>
+<span class="sd">        Folder of the user's resources (images, sounds, phases).</span>
+<span class="sd">    KARTEA_IMAGES_DIR : Path, class attribute</span>
+<span class="sd">        Folder of the user's images.</span>
+<span class="sd">    KARTEA_SOUNDS_DIR : Path, class attribute</span>
+<span class="sd">        Folder of the user's sounds.</span>
+<span class="sd">    KARTEA_PHASES_DIR : Path, class attribute</span>
+<span class="sd">        Folder of the user's phase CSV files (priority over the built-in</span>
+<span class="sd">        ones).</span>
+<span class="sd">    KARTEA_PLAYER_DIR : Path, class attribute</span>
+<span class="sd">        Folder of the per-player CSV files.</span>
+<span class="sd">    KARTEA_MODS_DIR : Path, class attribute</span>
+<span class="sd">        Custom resources (images and sounds) placed by the user.</span>
+<span class="sd">    KARTEA_CONFIG_FILE : Path, class attribute</span>
+<span class="sd">        Full path of kartea.ini.</span>
+<span class="sd">    """</span>
+
+    <span class="n">KARTEA_CONFIG_FILENAME</span> <span class="o">=</span> <span class="s2">"kartea.ini"</span>
+    <span class="n">KARTEA_LOG_FILENAME</span> <span class="o">=</span> <span class="s2">"kartea.log"</span>
+
+    <span class="c1"># ==================================================================</span>
+    <span class="c1"># KarTEA-specific folders</span>
+    <span class="c1"># ==================================================================</span>
+    <span class="n">KARTEA_DIR</span> <span class="o">=</span> <span class="n">PathConfig</span><span class="o">.</span><span class="n">EXERGAME_DIR</span> <span class="o">/</span> <span class="s2">"kartea"</span>
+    <span class="n">KARTEA_LOG_DIR</span> <span class="o">=</span> <span class="n">KARTEA_DIR</span> <span class="o">/</span> <span class="s2">"log"</span>
+    <span class="n">KARTEA_RESOURCES_DIR</span> <span class="o">=</span> <span class="n">KARTEA_DIR</span> <span class="o">/</span> <span class="s2">"resources"</span>
+    <span class="n">KARTEA_IMAGES_DIR</span> <span class="o">=</span> <span class="n">KARTEA_RESOURCES_DIR</span> <span class="o">/</span> <span class="s2">"images"</span>
+    <span class="n">KARTEA_SOUNDS_DIR</span> <span class="o">=</span> <span class="n">KARTEA_RESOURCES_DIR</span> <span class="o">/</span> <span class="s2">"sounds"</span>
+    <span class="n">KARTEA_PHASES_DIR</span> <span class="o">=</span> <span class="n">KARTEA_RESOURCES_DIR</span> <span class="o">/</span> <span class="s2">"phases"</span>
+    <span class="n">KARTEA_PLAYER_DIR</span> <span class="o">=</span> <span class="n">KARTEA_DIR</span> <span class="o">/</span> <span class="s2">"players"</span>
+    <span class="c1"># Custom resources (images and sounds) placed by the user.</span>
+    <span class="c1"># Installed: AppData\Local\udesc\ttea\exergames\kartea\mods.</span>
+    <span class="n">KARTEA_MODS_DIR</span> <span class="o">=</span> <span class="n">KARTEA_DIR</span> <span class="o">/</span> <span class="s2">"mods"</span>
+
+    <span class="n">KARTEA_CONFIG_FILE</span> <span class="o">=</span> <span class="n">KARTEA_DIR</span> <span class="o">/</span> <span class="n">KARTEA_CONFIG_FILENAME</span>
+
+    <span class="c1"># ==================================================================</span>
+    <span class="c1"># Folder structure</span>
+    <span class="c1"># ==================================================================</span>
+<div class="viewcode-block" id="KarteaPathConfig.ensure_kartea_dirs">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.ensure_kartea_dirs">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ensure_kartea_dirs</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Create all the folders KarTEA needs.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Also creates the PathConfig folders, the default kartea.ini (if</span>
+<span class="sd">        missing) and the mods folders with their README files.</span>
+<span class="sd">        """</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">ensure_dirs</span><span class="p">()</span>  <span class="c1"># PathConfig method</span>
+        <span class="k">for</span> <span class="n">directory</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">KARTEA_DIR</span><span class="p">,</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">KARTEA_LOG_DIR</span><span class="p">,</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">KARTEA_RESOURCES_DIR</span><span class="p">,</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">KARTEA_IMAGES_DIR</span><span class="p">,</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">KARTEA_SOUNDS_DIR</span><span class="p">,</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">KARTEA_PHASES_DIR</span><span class="p">,</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">KARTEA_PLAYER_DIR</span><span class="p">,</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">KARTEA_MODS_DIR</span><span class="p">,</span>
+        <span class="p">]:</span>
+            <span class="n">directory</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="bp">cls</span><span class="o">.</span><span class="n">create_default_ini</span><span class="p">()</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">ensure_mods_dirs</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="KarteaPathConfig.ensure_mods_dirs">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.ensure_mods_dirs">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ensure_mods_dirs</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Create the mods folder, its subfolders and README files.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        One subfolder per resource field and the README in Portuguese,</span>
+<span class="sd">        English and Spanish (each created only if it does not exist yet,</span>
+<span class="sd">        so user notes are not overwritten). OSError is ignored: the game</span>
+<span class="sd">        works without the folder.</span>
+<span class="sd">        """</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">KarteaResourceFields</span><span class="o">.</span><span class="n">ALL</span><span class="p">:</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">mod_dir_for_field</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span>
+                    <span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">)</span>
+            <span class="k">for</span> <span class="n">filename</span><span class="p">,</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">_MODS_READMES</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">readme</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">KARTEA_MODS_DIR</span> <span class="o">/</span> <span class="n">filename</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">readme</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                    <span class="n">readme</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="KarteaPathConfig.log">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.log">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">log</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">KARTEA_LOG_FILENAME</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the log file path, in the KarTEA log folder.</span>
+
+<span class="sd">        Overrides ``PathConfig.log``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str, optional</span>
+<span class="sd">            Log file name. Defaults to KARTEA_LOG_FILENAME.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Full path of the log file (folders are created if missing).</span>
+<span class="sd">        """</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">ensure_kartea_dirs</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">KARTEA_LOG_DIR</span> <span class="o">/</span> <span class="n">filename</span><span class="p">)</span></div>
+
+
+    <span class="c1"># ==================================================================</span>
+    <span class="c1"># Built-in resources (Qt)</span>
+    <span class="c1"># ==================================================================</span>
+<div class="viewcode-block" id="KarteaPathConfig.kartea_resource">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.kartea_resource">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">kartea_resource</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return a Qt resource path under ``:/kartea``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path : str, optional</span>
+<span class="sd">            Relative path inside the resource prefix.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            ``:/kartea/{path}`` without a trailing slash.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; KarteaPathConfig.kartea_resource("images")</span>
+<span class="sd">        ':/kartea/images'</span>
+<span class="sd">        &gt;&gt;&gt; KarteaPathConfig.kartea_resource()</span>
+<span class="sd">        ':/kartea'</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">":/kartea/</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">"</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_find_resource</span><span class="p">(</span><span class="n">base_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the first built-in resource ``name`` found.</span>
+
+<span class="sd">        Searches ``base_path`` and its subfolders; returns "" if not</span>
+<span class="sd">        found.</span>
+<span class="sd">        """</span>
+        <span class="n">it</span> <span class="o">=</span> <span class="n">QDirIterator</span><span class="p">(</span>
+            <span class="n">base_path</span><span class="p">,</span> <span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="n">QDir</span><span class="o">.</span><span class="n">Files</span><span class="p">,</span> <span class="n">QDirIterator</span><span class="o">.</span><span class="n">Subdirectories</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">it</span><span class="o">.</span><span class="n">next</span><span class="p">()</span> <span class="k">if</span> <span class="n">it</span><span class="o">.</span><span class="n">hasNext</span><span class="p">()</span> <span class="k">else</span> <span class="s2">""</span>
+
+<div class="viewcode-block" id="KarteaPathConfig.game_builtin_image">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.game_builtin_image">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">game_builtin_image</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the Qt path of a built-in image.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Resource name (alias in the .qrc).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            The first match under ``:/images`` (subfolders included), or</span>
+<span class="sd">            "" if not found.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">_find_resource</span><span class="p">(</span><span class="s2">":/images"</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="KarteaPathConfig.game_builtin_sound">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.game_builtin_sound">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">game_builtin_sound</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the Qt path of a built-in sound.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Resource name (alias in the .qrc).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            The first match under ``:/sounds`` (subfolders included), or</span>
+<span class="sd">            "" if not found.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">_find_resource</span><span class="p">(</span><span class="s2">":/sounds"</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
+
+
+    <span class="c1"># ==================================================================</span>
+    <span class="c1"># Phases</span>
+    <span class="c1"># ==================================================================</span>
+<div class="viewcode-block" id="KarteaPathConfig.get_phase_source">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.get_phase_source">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_phase_source</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">phase_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return where the CSV of a phase is read from.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        phase_id : int</span>
+<span class="sd">            Id of the phase.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict[str, str]</span>
+<span class="sd">            ``{"type": "file", "path": ...}`` when the user's phases</span>
+<span class="sd">            folder has ``{phase_id}.csv``; otherwise ``{"type":</span>
+<span class="sd">            "resource", "path": ":/phases/{phase_id}"}``.</span>
+<span class="sd">        """</span>
+        <span class="n">user_file</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">KARTEA_PHASES_DIR</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">phase_id</span><span class="si">}</span><span class="s2">.csv"</span>
+        <span class="k">if</span> <span class="n">user_file</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"file"</span><span class="p">,</span> <span class="s2">"path"</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">user_file</span><span class="p">)}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">"type"</span><span class="p">:</span> <span class="s2">"resource"</span><span class="p">,</span> <span class="s2">"path"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">":/phases/</span><span class="si">{</span><span class="n">phase_id</span><span class="si">}</span><span class="s2">"</span><span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="KarteaPathConfig.read_phase_data">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.read_phase_data">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_phase_data</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">phase_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the CSV content of a phase.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        phase_id : int</span>
+<span class="sd">            Id of the phase.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str | None</span>
+<span class="sd">            The CSV text, or None if it cannot be read.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The user's file takes priority over the built-in resource (see</span>
+<span class="sd">        ``get_phase_source``). The user's file is read as UTF-8 with or</span>
+<span class="sd">        without BOM; any error reading it returns None.</span>
+<span class="sd">        """</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_phase_source</span><span class="p">(</span><span class="n">phase_id</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">source</span><span class="p">[</span><span class="s2">"type"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"file"</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">source</span><span class="p">[</span><span class="s2">"path"</span><span class="p">])</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8-sig"</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">qfile</span> <span class="o">=</span> <span class="n">QFile</span><span class="p">(</span><span class="n">source</span><span class="p">[</span><span class="s2">"path"</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">qfile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">QIODevice</span><span class="o">.</span><span class="n">ReadOnly</span> <span class="o">|</span> <span class="n">QIODevice</span><span class="o">.</span><span class="n">Text</span><span class="p">):</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">qfile</span><span class="o">.</span><span class="n">readAll</span><span class="p">())</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>
+            <span class="n">qfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">content</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+    <span class="c1"># ==================================================================</span>
+    <span class="c1"># User data paths</span>
+    <span class="c1"># ==================================================================</span>
+<div class="viewcode-block" id="KarteaPathConfig.player">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.player">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">player</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the path of a file in the players folder.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            File name.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Full path (folders are created if missing).</span>
+<span class="sd">        """</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">ensure_kartea_dirs</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">KARTEA_PLAYER_DIR</span> <span class="o">/</span> <span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="KarteaPathConfig.phase">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.phase">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">phase</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the path of a file in the user's phases folder.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            File name.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Full path (folders are created if missing).</span>
+<span class="sd">        """</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">ensure_kartea_dirs</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">KARTEA_PHASES_DIR</span> <span class="o">/</span> <span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="KarteaPathConfig.kartea_config">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.kartea_config">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">kartea_config</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">KARTEA_CONFIG_FILENAME</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the path of a configuration file in the KarTEA folder.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str, optional</span>
+<span class="sd">            File name. Defaults to KARTEA_CONFIG_FILENAME.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Full path (folders are created if missing).</span>
+<span class="sd">        """</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">ensure_kartea_dirs</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">KARTEA_DIR</span> <span class="o">/</span> <span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="KarteaPathConfig.game_image">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.game_image">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">game_image</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the path of a file in the user's images folder.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            File name.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Full path (folders are created if missing).</span>
+<span class="sd">        """</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">ensure_kartea_dirs</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">KARTEA_IMAGES_DIR</span> <span class="o">/</span> <span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="KarteaPathConfig.game_sound">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.game_sound">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">game_sound</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the path of a file in the user's sounds folder.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            File name.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Full path (folders are created if missing).</span>
+<span class="sd">        """</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">ensure_kartea_dirs</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">KARTEA_SOUNDS_DIR</span> <span class="o">/</span> <span class="n">filename</span><span class="p">)</span></div>
+
+
+    <span class="c1"># ==================================================================</span>
+    <span class="c1"># INI configuration</span>
+    <span class="c1"># ==================================================================</span>
+<div class="viewcode-block" id="KarteaPathConfig.kartea_config_file_exists">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.kartea_config_file_exists">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">kartea_config_file_exists</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">KARTEA_CONFIG_FILENAME</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Check whether a KarTEA configuration file exists.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str, optional</span>
+<span class="sd">            File name. Defaults to KARTEA_CONFIG_FILENAME.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if the file exists.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Ensures the folders first, which also creates the default</span>
+<span class="sd">        kartea.ini; so for the default file name the result is normally</span>
+<span class="sd">        True.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">kartea_config</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="KarteaPathConfig.read_config">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.read_config">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_config</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">"""Read kartea.ini.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict[str, dict[str, str]]</span>
+<span class="sd">            ``{section: {key: value}}``, as read by ConfigParser (keys</span>
+<span class="sd">            in lowercase).</span>
+<span class="sd">        """</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">ensure_kartea_dirs</span><span class="p">()</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">KARTEA_CONFIG_FILE</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="n">section</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="n">section</span><span class="p">])</span> <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">sections</span><span class="p">()</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="KarteaPathConfig.create_default_ini">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.create_default_ini">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_default_ini</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Create kartea.ini with the defaults, if missing.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Values come from the single table KarteaIniDefaults.TABLE</span>
+<span class="sd">        (util/inidefaults.py). An existing file is never changed.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">KARTEA_CONFIG_FILE</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">return</span>
+
+        <span class="n">config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">(</span><span class="n">allow_no_value</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">read_dict</span><span class="p">(</span><span class="n">KarteaIniDefaults</span><span class="o">.</span><span class="n">sections</span><span class="p">())</span>
+
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">KARTEA_CONFIG_FILE</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">f</span><span class="p">)</span></div>
+
+
+    <span class="c1"># ==================================================================</span>
+    <span class="c1"># Listings</span>
+    <span class="c1"># ==================================================================</span>
+<div class="viewcode-block" id="KarteaPathConfig.list_images">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.list_images">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_images</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return the image files of the user's images folder.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[str]</span>
+<span class="sd">            Sorted file names with extension .png, .jpg, .jpeg, .gif,</span>
+<span class="sd">            .bmp or .tiff.</span>
+<span class="sd">        """</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">ensure_kartea_dirs</span><span class="p">()</span>
+        <span class="n">exts</span> <span class="o">=</span> <span class="p">{</span><span class="s2">".png"</span><span class="p">,</span> <span class="s2">".jpg"</span><span class="p">,</span> <span class="s2">".jpeg"</span><span class="p">,</span> <span class="s2">".gif"</span><span class="p">,</span> <span class="s2">".bmp"</span><span class="p">,</span> <span class="s2">".tiff"</span><span class="p">}</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">KARTEA_IMAGES_DIR</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="n">f</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">exts</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="KarteaPathConfig.list_sounds">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.list_sounds">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_sounds</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return the sound files of the user's sounds folder.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[str]</span>
+<span class="sd">            Sorted file names with extension .wav, .mp3, .ogg, .flac or</span>
+<span class="sd">            .aac.</span>
+<span class="sd">        """</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">ensure_kartea_dirs</span><span class="p">()</span>
+        <span class="n">exts</span> <span class="o">=</span> <span class="p">{</span><span class="s2">".wav"</span><span class="p">,</span> <span class="s2">".mp3"</span><span class="p">,</span> <span class="s2">".ogg"</span><span class="p">,</span> <span class="s2">".flac"</span><span class="p">,</span> <span class="s2">".aac"</span><span class="p">}</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">name</span>
+            <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">KARTEA_SOUNDS_DIR</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="n">f</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">exts</span>
+        <span class="p">)</span></div>
+
+
+    <span class="c1"># ==================================================================</span>
+    <span class="c1"># Built-in resources by field</span>
+    <span class="c1"># ==================================================================</span>
+<div class="viewcode-block" id="KarteaPathConfig.list_builtin_resources">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.list_builtin_resources">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_builtin_resources</span><span class="p">(</span><span class="n">base_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">"""Return the Qt resources under ``base_path``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        base_path : str</span>
+<span class="sd">            Qt resource folder, e.g. ":/images/vehicle".</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[tuple[str, str]]</span>
+<span class="sd">            Sorted ``[(name, path)]``, subfolders included.</span>
+<span class="sd">        """</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">it</span> <span class="o">=</span> <span class="n">QDirIterator</span><span class="p">(</span><span class="n">base_path</span><span class="p">,</span> <span class="n">QDir</span><span class="o">.</span><span class="n">Files</span><span class="p">,</span> <span class="n">QDirIterator</span><span class="o">.</span><span class="n">Subdirectories</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">it</span><span class="o">.</span><span class="n">hasNext</span><span class="p">():</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">it</span><span class="o">.</span><span class="n">fileName</span><span class="p">()</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="p">))</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="KarteaPathConfig.list_builtin_for_field">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.list_builtin_for_field">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_builtin_for_field</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">"""Return the built-in resources of a configuration field.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        field : str</span>
+<span class="sd">            Field name (e.g. "vehicle_image"), as in</span>
+<span class="sd">            KarteaResourceFields.ALL.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[tuple[str, str]]</span>
+<span class="sd">            ``[(name, path)]`` from the field's ``builtin_dir``.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">list_builtin_resources</span><span class="p">(</span>
+            <span class="n">KarteaResourceFields</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="p">)</span><span class="o">.</span><span class="n">builtin_dir</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="KarteaPathConfig.find_builtin_for_field">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.find_builtin_for_field">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_builtin_for_field</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the Qt path of a built-in resource of ``field``.</span>
+
+<span class="sd">        Searches ``name`` only in the field's ``builtin_dir`` (e.g.</span>
+<span class="sd">        ":/sounds/feedback/positive"), so that an equal name in another</span>
+<span class="sd">        folder is not chosen.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        field : str</span>
+<span class="sd">            Field name, as in KarteaResourceFields.ALL.</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Resource name.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            The Qt path, or "" if ``name`` is empty or does not exist</span>
+<span class="sd">            there.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">""</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_find_resource</span><span class="p">(</span>
+            <span class="n">KarteaResourceFields</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="p">)</span><span class="o">.</span><span class="n">builtin_dir</span><span class="p">,</span> <span class="n">name</span>
+        <span class="p">)</span></div>
+
+
+    <span class="c1"># ==================================================================</span>
+    <span class="c1"># Custom resources (mods folder)</span>
+    <span class="c1"># ==================================================================</span>
+<div class="viewcode-block" id="KarteaPathConfig.mod_dir_for_field">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.mod_dir_for_field">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mod_dir_for_field</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the mods folder of a field.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        field : str</span>
+<span class="sd">            Field name, as in KarteaResourceFields.ALL.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Path</span>
+<span class="sd">            E.g. ``mods/sounds/feedback/positive``.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">KARTEA_MODS_DIR</span> <span class="o">/</span> <span class="n">KarteaResourceFields</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="p">)</span><span class="o">.</span><span class="n">mod_subdir</span></div>
+
+
+<div class="viewcode-block" id="KarteaPathConfig.list_mod_for_field">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.list_mod_for_field">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_mod_for_field</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">"""Return the files of the field's mods folder.</span>
+
+<span class="sd">        Only files directly in the folder, with the extensions accepted</span>
+<span class="sd">        for the field. The displayed name has an extension, so it never</span>
+<span class="sd">        matches a built-in resource (.qrc aliases have no extension).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        field : str</span>
+<span class="sd">            Field name, as in KarteaResourceFields.ALL.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[tuple[str, str]]</span>
+<span class="sd">            ``[(name, path)]`` sorted by name (case-insensitive); empty</span>
+<span class="sd">            if the folder cannot be read.</span>
+<span class="sd">        """</span>
+        <span class="n">folder</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">mod_dir_for_field</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+        <span class="n">extensions</span> <span class="o">=</span> <span class="n">KarteaResourceFields</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="p">)</span><span class="o">.</span><span class="n">mod_extensions</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">f</span>
+                <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">folder</span><span class="o">.</span><span class="n">iterdir</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="ow">and</span> <span class="n">f</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="n">extensions</span>
+            <span class="p">]</span>
+        <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="n">files</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">f</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+        <span class="k">return</span> <span class="p">[(</span><span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">))</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">files</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="KarteaPathConfig.find_mod_for_field">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.find_mod_for_field">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_mod_for_field</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the path of file ``name`` in the field's mods folder.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        field : str</span>
+<span class="sd">            Field name, as in KarteaResourceFields.ALL.</span>
+<span class="sd">        name : str</span>
+<span class="sd">            File name only (no folders), with an extension accepted for</span>
+<span class="sd">            the field.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            The file path, or "" if ``name`` is invalid or the file does</span>
+<span class="sd">            not exist.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">name</span> <span class="ow">or</span> <span class="n">Path</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="n">name</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">""</span>
+        <span class="k">if</span> <span class="n">Path</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">suffix</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="n">KarteaResourceFields</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="p">)</span><span class="o">.</span><span class="n">mod_extensions</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="s2">""</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">mod_dir_for_field</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">/</span> <span class="n">name</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">is_file</span><span class="p">()</span> <span class="k">else</span> <span class="s2">""</span></div>
+
+
+    <span class="c1"># ==================================================================</span>
+    <span class="c1"># Built-in + mods</span>
+    <span class="c1"># ==================================================================</span>
+<div class="viewcode-block" id="KarteaPathConfig.list_resources_for_field">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.list_resources_for_field">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_resources_for_field</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">"""Return the resources available for a field.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        field : str</span>
+<span class="sd">            Field name, as in KarteaResourceFields.ALL.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[tuple[str, str]]</span>
+<span class="sd">            ``[(name, path)]``: the built-in ones and, after them, those</span>
+<span class="sd">            of the mods folder.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">list_builtin_for_field</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">+</span> <span class="bp">cls</span><span class="o">.</span><span class="n">list_mod_for_field</span><span class="p">(</span>
+            <span class="n">field</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="KarteaPathConfig.resolve_for_field">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.resolve_for_field">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">resolve_for_field</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the path of resource ``name`` of a field.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        field : str</span>
+<span class="sd">            Field name, as in KarteaResourceFields.ALL.</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Resource name (built-in alias or mods file name).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Qt path (":/...") if built-in, the mods file path, or "" if</span>
+<span class="sd">            it does not exist.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">find_builtin_for_field</span><span class="p">(</span>
+            <span class="n">field</span><span class="p">,</span> <span class="n">name</span>
+        <span class="p">)</span> <span class="ow">or</span> <span class="bp">cls</span><span class="o">.</span><span class="n">find_mod_for_field</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="KarteaPathConfig.resolve_for_field_or_default">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.html#ttea.games.kartea.util.karteapathconfig.KarteaPathConfig.resolve_for_field_or_default">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">resolve_for_field_or_default</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">field</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the path of a field resource, or of its default.</span>
+
+<span class="sd">        Like ``resolve_for_field``, but uses the field default</span>
+<span class="sd">        (KarteaResourceFields.ALL) when ``name`` is empty or no longer</span>
+<span class="sd">        exists (e.g. a file deleted from the mods folder).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        field : str</span>
+<span class="sd">            Field name, as in KarteaResourceFields.ALL.</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Resource name.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            The resolved path, or "" if even the default does not exist.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">resolve_for_field</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">cls</span><span class="o">.</span><span class="n">resolve_for_field</span><span class="p">(</span>
+            <span class="n">field</span><span class="p">,</span> <span class="n">KarteaResourceFields</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="p">)</span><span class="o">.</span><span class="n">default</span>
+        <span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

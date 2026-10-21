@@ -1,0 +1,377 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.games.kartea.gamemodel.line &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.games.kartea.gamemodel.line</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.games.kartea.gamemodel.line</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Segment (line) of the KarTEA pseudo-3D road."""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gameutil.alphablit</span><span class="w"> </span><span class="kn">import</span> <span class="n">alpha_blit</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gamemodel</span><span class="w"> </span><span class="kn">import</span> <span class="n">Target</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gameutil</span><span class="w"> </span><span class="kn">import</span> <span class="n">GameSettings</span>
+
+
+<div class="viewcode-block" id="Line">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.line.Line.html#ttea.games.kartea.gamemodel.line.Line">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Line</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Line (segment) of the road in the pseudo-3D system.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    settings : GameSettings</span>
+<span class="sd">        Game configuration (injected).</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    TARGET_X_BY_ROAD : dict[int, float], class attribute</span>
+<span class="sd">        Lateral position of a target/obstacle by lane (0 left, 1</span>
+<span class="sd">        middle).</span>
+<span class="sd">    TARGET_X_RIGHT : float, class attribute</span>
+<span class="sd">        Lateral position for any other lane (right).</span>
+<span class="sd">    settings : GameSettings</span>
+<span class="sd">        Game configuration.</span>
+<span class="sd">    x, y, z : float</span>
+<span class="sd">        3D position of the line.</span>
+<span class="sd">    screen_x, screen_y, screen_w : float</span>
+<span class="sd">        Projected 2D position and half width of the road on screen.</span>
+<span class="sd">    scale : float</span>
+<span class="sd">        Projection scale.</span>
+<span class="sd">    curve : float</span>
+<span class="sd">        Road curvature at this line.</span>
+<span class="sd">    clip : float</span>
+<span class="sd">        Screen y below which sprites of this line are hidden (terrain in</span>
+<span class="sd">        front).</span>
+<span class="sd">    passed : bool</span>
+<span class="sd">        True after the camera has gone past this line (set by</span>
+<span class="sd">        Background); used to detect the finish line crossing even when</span>
+<span class="sd">        the road advances several segments per frame.</span>
+<span class="sd">    sprite_x : float</span>
+<span class="sd">        Lateral offset of the left side sprite (tree).</span>
+<span class="sd">    sprite : pygame.Surface | None</span>
+<span class="sd">        Left side sprite.</span>
+<span class="sd">    sprite_rect : pygame.Rect | None</span>
+<span class="sd">        Rect of the left side sprite.</span>
+<span class="sd">    sprite2_x : float</span>
+<span class="sd">        Lateral offset of the right side sprite (tree).</span>
+<span class="sd">    sprite2 : pygame.Surface | None</span>
+<span class="sd">        Right side sprite.</span>
+<span class="sd">    sprite2_rect : pygame.Rect | None</span>
+<span class="sd">        Rect of the right side sprite.</span>
+<span class="sd">    target_x : float</span>
+<span class="sd">        Lateral offset of the target/obstacle.</span>
+<span class="sd">    target : Target | None</span>
+<span class="sd">        Target/obstacle on this line.</span>
+<span class="sd">    target_rect : pygame.Rect | None</span>
+<span class="sd">        Rect of the target/obstacle.</span>
+<span class="sd">    grass_color, rumble_color, road_color, div_color : pygame.Color</span>
+<span class="sd">        Colors of the line, set by Background when the road is created.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="s2">"GameSettings"</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span>
+
+        <span class="c1"># 3D position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="c1"># Projected 2D position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen_x</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen_y</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen_w</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">curve</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clip</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">passed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># Left side sprite (tree)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sprite_x</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sprite</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sprite_rect</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Right side sprite (tree)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sprite2_x</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sprite2</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sprite2_rect</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Target / obstacle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_x</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">:</span> <span class="n">Target</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_rect</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Line.project">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.line.Line.html#ttea.games.kartea.gamemodel.line.Line.project">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cam_x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">cam_y</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">cam_z</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Project the 3D position to 2D screen coordinates.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        cam_x, cam_y, cam_z : float</span>
+<span class="sd">            Camera position.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Updates ``scale``, ``screen_x``, ``screen_y`` and ``screen_w``.</span>
+<span class="sd">        Must only be called for lines in front of the camera (``z &gt;</span>
+<span class="sd">        cam_z``).</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">CAMERA_DEPTH</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">-</span> <span class="n">cam_z</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen_x</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">cam_x</span><span class="p">))</span>
+            <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span>
+            <span class="o">/</span> <span class="mi">2</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen_y</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">cam_y</span><span class="p">))</span>
+            <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SCREEN_HEIGHT</span>
+            <span class="o">/</span> <span class="mi">5</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen_w</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">scale</span>
+            <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">ROAD_WIDTH</span>
+            <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span>
+            <span class="o">/</span> <span class="mi">2</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Line.draw_sprite">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.line.Line.html#ttea.games.kartea.gamemodel.line.Line.draw_sprite">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw_sprite</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">draw_surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Draw the left side sprite (left tree).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        draw_surface : pygame.Surface</span>
+<span class="sd">            Surface drawn on.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_side_sprite</span><span class="p">(</span><span class="n">draw_surface</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sprite</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sprite_x</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Line.draw_sprite2">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.line.Line.html#ttea.games.kartea.gamemodel.line.Line.draw_sprite2">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw_sprite2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">draw_surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Draw the right side sprite (right tree).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        draw_surface : pygame.Surface</span>
+<span class="sd">            Surface drawn on.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_side_sprite</span><span class="p">(</span><span class="n">draw_surface</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sprite2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sprite2_x</span><span class="p">)</span></div>
+
+
+    <span class="n">TARGET_X_BY_ROAD</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="o">-</span><span class="mf">2.25</span><span class="p">,</span> <span class="mi">1</span><span class="p">:</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">}</span>
+    <span class="n">TARGET_X_RIGHT</span> <span class="o">=</span> <span class="mf">1.25</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_project</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sprite</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">,</span> <span class="n">offset_x</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Project a sprite on this line of the road.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sprite : pygame.Surface</span>
+<span class="sd">            Image at its original size.</span>
+<span class="sd">        offset_x : float</span>
+<span class="sd">            Lateral position relative to the road center.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple</span>
+<span class="sd">            ``(dest_x, dest_y, dest_w, dest_h, hidden)``: rectangle on</span>
+<span class="sd">            screen and whether the sprite is fully hidden by the terrain</span>
+<span class="sd">            in front (``self.clip``).</span>
+<span class="sd">        """</span>
+        <span class="n">dest_w</span> <span class="o">=</span> <span class="n">sprite</span><span class="o">.</span><span class="n">get_width</span><span class="p">()</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_w</span> <span class="o">/</span> <span class="mi">266</span>
+        <span class="n">dest_h</span> <span class="o">=</span> <span class="n">sprite</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_w</span> <span class="o">/</span> <span class="mi">266</span>
+        <span class="n">dest_x</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">screen_x</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">*</span> <span class="n">offset_x</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="o">+</span> <span class="n">dest_w</span> <span class="o">*</span> <span class="n">offset_x</span>
+        <span class="p">)</span>
+        <span class="n">dest_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_y</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">-</span> <span class="n">dest_h</span>
+
+        <span class="c1"># Only hide the part of the sprite below self.clip</span>
+        <span class="n">clip_h</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dest_y</span> <span class="o">+</span> <span class="n">dest_h</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">clip</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dest_x</span><span class="p">,</span> <span class="n">dest_y</span><span class="p">,</span> <span class="n">dest_w</span><span class="p">,</span> <span class="n">dest_h</span><span class="p">,</span> <span class="n">clip_h</span> <span class="o">&gt;=</span> <span class="n">dest_h</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_draw_projected</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">draw_surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">,</span>
+        <span class="n">sprite</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">,</span>
+        <span class="n">offset_x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">max_scale</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">target</span><span class="p">:</span> <span class="s2">"Target | None"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Project and draw a sprite; return True if it was drawn.</span>
+
+<span class="sd">        ``max_scale`` limits the size on screen (relative to the</span>
+<span class="sd">        original image). With ``target``, the projected position is</span>
+<span class="sd">        passed to it (``define_pos``) even when the sprite is not drawn.</span>
+<span class="sd">        """</span>
+        <span class="n">dest_x</span><span class="p">,</span> <span class="n">dest_y</span><span class="p">,</span> <span class="n">dest_w</span><span class="p">,</span> <span class="n">dest_h</span><span class="p">,</span> <span class="n">hidden</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_project</span><span class="p">(</span>
+            <span class="n">sprite</span><span class="p">,</span> <span class="n">offset_x</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">target</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">target</span><span class="o">.</span><span class="n">define_pos</span><span class="p">(</span><span class="n">dest_x</span><span class="p">,</span> <span class="n">dest_y</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">hidden</span> <span class="ow">or</span> <span class="n">dest_w</span> <span class="o">&gt;</span> <span class="n">max_scale</span> <span class="o">*</span> <span class="n">sprite</span><span class="o">.</span><span class="n">get_width</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">scaled_sprite</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">sprite</span><span class="p">,</span> <span class="p">(</span><span class="n">dest_w</span><span class="p">,</span> <span class="n">dest_h</span><span class="p">))</span>
+        <span class="n">alpha_blit</span><span class="p">(</span><span class="n">draw_surface</span><span class="p">,</span> <span class="n">scaled_sprite</span><span class="p">,</span> <span class="p">(</span><span class="n">dest_x</span><span class="p">,</span> <span class="n">dest_y</span><span class="p">))</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_draw_side_sprite</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">draw_surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">,</span>
+        <span class="n">sprite</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">offset_x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Draw a side sprite (tree) projected on this line.</span>
+
+<span class="sd">        Clipping uses the same rule as draw_target (see _project): only</span>
+<span class="sd">        the part of the sprite below ``self.clip`` (terrain in front) is</span>
+<span class="sd">        hidden.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">sprite</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_draw_projected</span><span class="p">(</span><span class="n">draw_surface</span><span class="p">,</span> <span class="n">sprite</span><span class="p">,</span> <span class="n">offset_x</span><span class="p">,</span> <span class="n">max_scale</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Line.draw_target">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.line.Line.html#ttea.games.kartea.gamemodel.line.Line.draw_target">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw_target</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">draw_surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Draw the target or obstacle attached to this line.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        draw_surface : pygame.Surface</span>
+<span class="sd">            Surface drawn on.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The lateral position comes from the target lane</span>
+<span class="sd">        (TARGET_X_BY_ROAD). The hitbox is drawn too when ``DRAW_HITBOX``</span>
+<span class="sd">        is on.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">target_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TARGET_X_BY_ROAD</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">current_road</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">TARGET_X_RIGHT</span>
+        <span class="p">)</span>
+        <span class="n">drawn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_draw_projected</span><span class="p">(</span>
+            <span class="n">draw_surface</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">target_x</span><span class="p">,</span>
+            <span class="n">max_scale</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+            <span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">drawn</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">DRAW_HITBOX</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="o">.</span><span class="n">draw_hitbox</span><span class="p">(</span><span class="n">draw_surface</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

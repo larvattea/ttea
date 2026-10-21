@@ -1,0 +1,19 @@
+KarteaIniDefaults
+=================
+
+.. currentmodule:: ttea.games.kartea.util.inidefaults
+
+.. autoclass:: KarteaIniDefaults
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~KarteaIniDefaults.sections
+      ~KarteaIniDefaults.to_bool
+      ~KarteaIniDefaults.to_float
+      ~KarteaIniDefaults.value

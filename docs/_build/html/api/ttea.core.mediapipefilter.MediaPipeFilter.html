@@ -1,0 +1,309 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MediaPipeFilter &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.core.mediapipemanager" href="ttea.core.mediapipemanager.html" />
+    <link rel="prev" title="ttea.core.mediapipefilter" href="ttea.core.mediapipefilter.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.core.html">ttea.core</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.core.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.core.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.core.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.core.calibrationmath.html">ttea.core.calibrationmath</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.core.cameravideo.html">ttea.core.cameravideo</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.core.cameravideothread.html">ttea.core.cameravideothread</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.core.mediapipefilter.html">ttea.core.mediapipefilter</a><ul class="current">
+<li class="toctree-l5 current"><a class="current reference internal" href="#">MediaPipeFilter</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#ttea.core.mediapipefilter.MediaPipeFilter"><code class="docutils literal notranslate"><span class="pre">MediaPipeFilter</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.core.mediapipefilter.MediaPipeFilter.apply_enhancements"><code class="docutils literal notranslate"><span class="pre">MediaPipeFilter.apply_enhancements()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.core.mediapipefilter.MediaPipeFilter.apply_clahe"><code class="docutils literal notranslate"><span class="pre">MediaPipeFilter.apply_clahe()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.core.mediapipefilter.MediaPipeFilter.apply_gamma"><code class="docutils literal notranslate"><span class="pre">MediaPipeFilter.apply_gamma()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.core.mediapipefilter.MediaPipeFilter.smooth_landmarks"><code class="docutils literal notranslate"><span class="pre">MediaPipeFilter.smooth_landmarks()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.core.mediapipemanager.html">ttea.core.mediapipemanager</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.games.html">ttea.games</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.core.html">ttea.core</a></li>
+          <li class="breadcrumb-item"><a href="ttea.core.mediapipefilter.html">ttea.core.mediapipefilter</a></li>
+      <li class="breadcrumb-item active">MediaPipeFilter</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.core.mediapipefilter.MediaPipeFilter.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="mediapipefilter">
+<h1>MediaPipeFilter<a class="headerlink" href="#mediapipefilter" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.core.mediapipefilter.MediaPipeFilter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MediaPipeFilter</span></span><a class="reference internal" href="../_modules/ttea/core/mediapipefilter.html#MediaPipeFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.core.mediapipefilter.MediaPipeFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Enhance camera frames and smooth pose landmarks.</p>
+<p>All thresholds and factors are read from <code class="docutils literal notranslate"><span class="pre">CalibrationService</span></code>
+when the object is created, except the brightness limits and the
+movement threshold, which are read on every call.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>service</strong><span class="classifier">CalibrationService</span></dt><dd><p>Source of the filter settings.</p>
+</dd>
+<dt><strong>clahe</strong><span class="classifier">cv2.CLAHE</span></dt><dd><p>CLAHE operator built with the configured clip limit and tile
+grid size.</p>
+</dd>
+<dt><strong>smoothing_frames</strong><span class="classifier">int</span></dt><dd><p>Number of recent positions averaged per landmark.</p>
+</dd>
+<dt><strong>history</strong><span class="classifier">dict[int, collections.deque]</span></dt><dd><p>Recent <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> positions per landmark index, each deque
+limited to <code class="docutils literal notranslate"><span class="pre">smoothing_frames</span></code> items.</p>
+</dd>
+<dt><strong>gamma_table</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>256-entry <code class="docutils literal notranslate"><span class="pre">uint8</span></code> lookup table for gamma correction.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The gamma table maps each level <code class="docutils literal notranslate"><span class="pre">i</span></code> to
+<code class="docutils literal notranslate"><span class="pre">255</span> <span class="pre">*</span> <span class="pre">(i</span> <span class="pre">/</span> <span class="pre">255)</span> <span class="pre">**</span> <span class="pre">(1</span> <span class="pre">/</span> <span class="pre">gamma)</span></code>, where <code class="docutils literal notranslate"><span class="pre">gamma</span></code> is
+<code class="docutils literal notranslate"><span class="pre">get_filter_gamma_factor()</span></code>.</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.core.mediapipefilter.MediaPipeFilter.apply_clahe" title="ttea.core.mediapipefilter.MediaPipeFilter.apply_clahe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_clahe</span></code></a></p></td>
+<td><p>Apply CLAHE to the lightness channel of a BGR frame.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.core.mediapipefilter.MediaPipeFilter.apply_enhancements" title="ttea.core.mediapipefilter.MediaPipeFilter.apply_enhancements"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_enhancements</span></code></a></p></td>
+<td><p>Apply the filters that suit the frame brightness.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.core.mediapipefilter.MediaPipeFilter.apply_gamma" title="ttea.core.mediapipefilter.MediaPipeFilter.apply_gamma"><code class="xref py py-obj docutils literal notranslate"><span class="pre">apply_gamma</span></code></a></p></td>
+<td><p>Apply gamma correction to a BGR frame.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.core.mediapipefilter.MediaPipeFilter.smooth_landmarks" title="ttea.core.mediapipefilter.MediaPipeFilter.smooth_landmarks"><code class="xref py py-obj docutils literal notranslate"><span class="pre">smooth_landmarks</span></code></a></p></td>
+<td><p>Smooth landmark positions with a moving average.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.core.mediapipefilter.MediaPipeFilter.apply_enhancements">
+<span class="sig-name descname"><span class="pre">apply_enhancements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/core/mediapipefilter.html#MediaPipeFilter.apply_enhancements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.core.mediapipefilter.MediaPipeFilter.apply_enhancements" title="Link to this definition"></a></dt>
+<dd><p>Apply the filters that suit the frame brightness.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>frame</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>BGR image from OpenCV.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>numpy.ndarray</dt><dd><p>The enhanced BGR image (or the input frame if no filter
+applies).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Brightness is the mean of the V channel in HSV (0-255). Below
+<code class="docutils literal notranslate"><span class="pre">get_filter_clahe_lum_below()</span></code> CLAHE is applied to help the
+detection in dark scenes; above <code class="docutils literal notranslate"><span class="pre">get_filter_gamma_lum_above()</span></code>
+gamma correction is applied for full-light scenes. Both checks
+use the brightness of the original frame.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.core.mediapipefilter.MediaPipeFilter.apply_clahe">
+<span class="sig-name descname"><span class="pre">apply_clahe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/core/mediapipefilter.html#MediaPipeFilter.apply_clahe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.core.mediapipefilter.MediaPipeFilter.apply_clahe" title="Link to this definition"></a></dt>
+<dd><p>Apply CLAHE to the lightness channel of a BGR frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>frame</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>BGR image from OpenCV.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>numpy.ndarray</dt><dd><p>BGR image with CLAHE applied to the L channel in LAB space.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.core.mediapipefilter.MediaPipeFilter.apply_gamma">
+<span class="sig-name descname"><span class="pre">apply_gamma</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/core/mediapipefilter.html#MediaPipeFilter.apply_gamma"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.core.mediapipefilter.MediaPipeFilter.apply_gamma" title="Link to this definition"></a></dt>
+<dd><p>Apply gamma correction to a BGR frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>frame</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>BGR image from OpenCV.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>numpy.ndarray</dt><dd><p>Image mapped through <code class="docutils literal notranslate"><span class="pre">gamma_table</span></code> with <code class="docutils literal notranslate"><span class="pre">cv2.LUT</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.core.mediapipefilter.MediaPipeFilter.smooth_landmarks">
+<span class="sig-name descname"><span class="pre">smooth_landmarks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pose_landmarks_list</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/core/mediapipefilter.html#MediaPipeFilter.smooth_landmarks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.core.mediapipefilter.MediaPipeFilter.smooth_landmarks" title="Link to this definition"></a></dt>
+<dd><p>Smooth landmark positions with a moving average.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>pose_landmarks_list</strong><span class="classifier">list</span></dt><dd><p>One list of normalized landmarks per detected pose, as in
+<code class="docutils literal notranslate"><span class="pre">PoseLandmarkerResult.pose_landmarks</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>list</dt><dd><p>The same list, with <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> of each landmark
+replaced in place by the average of its last
+<code class="docutils literal notranslate"><span class="pre">smoothing_frames</span></code> positions; an empty list when the input
+is empty.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>All body landmarks are smoothed. When a landmark moves farther
+than <code class="docutils literal notranslate"><span class="pre">get_filter_landmark_limit()</span></code> (Euclidean distance in
+normalized x, y) from its last position, its history is cleared
+so fast movements, such as steps, are not delayed. An empty
+input clears the whole history.</p>
+<p>The history is keyed only by landmark index, so with more than
+one detected pose the positions of different people are
+averaged together.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.core.mediapipefilter.html" class="btn btn-neutral float-left" title="ttea.core.mediapipefilter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.core.mediapipemanager.html" class="btn btn-neutral float-right" title="ttea.core.mediapipemanager" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

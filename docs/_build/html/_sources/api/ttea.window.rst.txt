@@ -1,0 +1,20 @@
+ttea.window
+===========
+
+.. automodule:: ttea.window
+
+.. currentmodule:: ttea.window
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/module.rst
+   :recursive:
+
+   windowconfig
+
+
+

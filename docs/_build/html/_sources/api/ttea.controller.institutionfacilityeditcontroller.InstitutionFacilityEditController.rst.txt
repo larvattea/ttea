@@ -1,0 +1,19 @@
+InstitutionFacilityEditController
+=================================
+
+.. currentmodule:: ttea.controller.institutionfacilityeditcontroller
+
+.. autoclass:: InstitutionFacilityEditController
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~InstitutionFacilityEditController.get_data
+      ~InstitutionFacilityEditController.handle_cancel
+      ~InstitutionFacilityEditController.handle_ok
+      ~InstitutionFacilityEditController.list_types

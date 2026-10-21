@@ -1,0 +1,316 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PlayerGameLaunchController &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.controller.playerlistcontroller" href="ttea.controller.playerlistcontroller.html" />
+    <link rel="prev" title="ttea.controller.playergamelaunchcontroller" href="ttea.controller.playergamelaunchcontroller.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.controller.html">ttea.controller</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.automaticcalibrationcontroller.html">ttea.controller.automaticcalibrationcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.calibrationcontroller.html">ttea.controller.calibrationcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.calibrationsettingcontroller.html">ttea.controller.calibrationsettingcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.helpcontroller.html">ttea.controller.helpcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.institutionfacilityeditcontroller.html">ttea.controller.institutionfacilityeditcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.institutionfacilitylistcontroller.html">ttea.controller.institutionfacilitylistcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.languagecontroller.html">ttea.controller.languagecontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.maincontroller.html">ttea.controller.maincontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.manualcalibrationcontroller.html">ttea.controller.manualcalibrationcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.playereditcontroller.html">ttea.controller.playereditcontroller</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.controller.playergamelaunchcontroller.html">ttea.controller.playergamelaunchcontroller</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="ttea.controller.playergamelaunchcontroller.html#attributes">Attributes</a></li>
+<li class="toctree-l5 current"><a class="current reference internal" href="#">PlayerGameLaunchController</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController"><code class="docutils literal notranslate"><span class="pre">PlayerGameLaunchController</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.handle_cancel"><code class="docutils literal notranslate"><span class="pre">PlayerGameLaunchController.handle_cancel()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.handle_game_info"><code class="docutils literal notranslate"><span class="pre">PlayerGameLaunchController.handle_game_info()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.launch_game"><code class="docutils literal notranslate"><span class="pre">PlayerGameLaunchController.launch_game()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.is_game_running"><code class="docutils literal notranslate"><span class="pre">PlayerGameLaunchController.is_game_running()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.update_tooltip"><code class="docutils literal notranslate"><span class="pre">PlayerGameLaunchController.update_tooltip()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.cleanup"><code class="docutils literal notranslate"><span class="pre">PlayerGameLaunchController.cleanup()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.playerlistcontroller.html">ttea.controller.playerlistcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.professionaleditcontroller.html">ttea.controller.professionaleditcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.professionallistcontroller.html">ttea.controller.professionallistcontroller</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.games.html">ttea.games</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.controller.html">ttea.controller</a></li>
+          <li class="breadcrumb-item"><a href="ttea.controller.playergamelaunchcontroller.html">ttea.controller.playergamelaunchcontroller</a></li>
+      <li class="breadcrumb-item active">PlayerGameLaunchController</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="playergamelaunchcontroller">
+<h1>PlayerGameLaunchController<a class="headerlink" href="#playergamelaunchcontroller" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PlayerGameLaunchController</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">view</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message_service</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calibration_service</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/playergamelaunchcontroller.html#PlayerGameLaunchController"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://doc.qt.io/qtforpython-6/PySide6/QtCore/QObject.html#PySide6.QtCore.QObject" title="(in PySide v6.12.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">QObject</span></code></a></p>
+<p>Controller of the game launch window.</p>
+<p>Validates the selection and the calibration, starts the chosen game
+as a separate process and stops it when the window closes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>view</strong><span class="classifier">PlayerGameLaunchView</span></dt><dd><p>The game launch dialog.</p>
+</dd>
+<dt><strong>message_service</strong><span class="classifier">MessageService | None, optional</span></dt><dd><p>Service used to show messages. Default is None, which creates
+<code class="docutils literal notranslate"><span class="pre">MessageService(view)</span></code>.</p>
+</dd>
+<dt><strong>service</strong><span class="classifier">PlayerGameLaunchService | None, optional</span></dt><dd><p>Launch service. Default is None, which creates a new one.</p>
+</dd>
+<dt><strong>calibration_service</strong><span class="classifier">CalibrationService | None, optional</span></dt><dd><p>Calibration service. Default is None, which creates a new one.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>view</strong><span class="classifier">PlayerGameLaunchView</span></dt><dd><p>The game launch dialog.</p>
+</dd>
+<dt><strong>msg</strong><span class="classifier">MessageService</span></dt><dd><p>Service used to show messages.</p>
+</dd>
+<dt><strong>service</strong><span class="classifier">PlayerGameLaunchService</span></dt><dd><p>Launch service.</p>
+</dd>
+<dt><strong>calibration_service</strong><span class="classifier">CalibrationService</span></dt><dd><p>Calibration service.</p>
+</dd>
+<dt><strong>current_process</strong><span class="classifier">subprocess.Popen | None</span></dt><dd><p>Process of the running game, if any.</p>
+</dd>
+<dt><strong>monitor_timer</strong><span class="classifier">QTimer | None</span></dt><dd><p>Timer that checks whether the game has started.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>All messages are translated with <code class="docutils literal notranslate"><span class="pre">self.tr()</span></code>.</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.cleanup" title="ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.cleanup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cleanup</span></code></a></p></td>
+<td><p>Stop the game and all its child processes.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.handle_cancel" title="ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.handle_cancel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_cancel</span></code></a></p></td>
+<td><p>Close the window, asking first if a game is running.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.handle_game_info" title="ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.handle_game_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_game_info</span></code></a></p></td>
+<td><p>Show the developers, version and years of the selected game.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.is_game_running" title="ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.is_game_running"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_game_running</span></code></a></p></td>
+<td><p>Check whether the game process is still running.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.launch_game" title="ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.launch_game"><code class="xref py py-obj docutils literal notranslate"><span class="pre">launch_game</span></code></a></p></td>
+<td><p>Validate the selection and start the selected game.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.update_tooltip" title="ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.update_tooltip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_tooltip</span></code></a></p></td>
+<td><p>Show the tooltip of the selected game on the game combo box.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.handle_cancel">
+<span class="sig-name descname"><span class="pre">handle_cancel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/playergamelaunchcontroller.html#PlayerGameLaunchController.handle_cancel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.handle_cancel" title="Link to this definition"></a></dt>
+<dd><p>Close the window, asking first if a game is running.</p>
+<p class="rubric">Notes</p>
+<p>“No” is the default answer. The game itself is stopped by
+<code class="docutils literal notranslate"><span class="pre">cleanup</span></code> when the window closes.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.handle_game_info">
+<span class="sig-name descname"><span class="pre">handle_game_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/playergamelaunchcontroller.html#PlayerGameLaunchController.handle_game_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.handle_game_info" title="Link to this definition"></a></dt>
+<dd><p>Show the developers, version and years of the selected game.</p>
+<p>A warning is shown when the metadata has no developers or
+version.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.launch_game">
+<span class="sig-name descname"><span class="pre">launch_game</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/playergamelaunchcontroller.html#PlayerGameLaunchController.launch_game"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.launch_game" title="Link to this definition"></a></dt>
+<dd><p>Validate the selection and start the selected game.</p>
+<p class="rubric">Notes</p>
+<p>A player, a professional and a game must be selected, no game
+may be running, the game entry point must exist and both the
+calibration points and the hardware calibration must be saved;
+then <code class="docutils literal notranslate"><span class="pre">_verify_hardware_configuration</span></code> is checked.</p>
+<p>The game runs in its folder with the arguments <code class="docutils literal notranslate"><span class="pre">--lang</span></code>,
+<code class="docutils literal notranslate"><span class="pre">--player_id</span></code> and <code class="docutils literal notranslate"><span class="pre">--professional_id</span></code>; <code class="docutils literal notranslate"><span class="pre">.py</span></code> and <code class="docutils literal notranslate"><span class="pre">.pyw</span></code>
+entry points run with the current Python interpreter. On Windows
+it starts in a new process group. The buttons stay disabled
+until the game is up (checked every 500 ms) or for at most 7 s.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.is_game_running">
+<span class="sig-name descname"><span class="pre">is_game_running</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/playergamelaunchcontroller.html#PlayerGameLaunchController.is_game_running"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.is_game_running" title="Link to this definition"></a></dt>
+<dd><p>Check whether the game process is still running.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>bool</dt><dd><p>True if a game process exists and has not exited.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.update_tooltip">
+<span class="sig-name descname"><span class="pre">update_tooltip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/playergamelaunchcontroller.html#PlayerGameLaunchController.update_tooltip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.update_tooltip" title="Link to this definition"></a></dt>
+<dd><p>Show the tooltip of the selected game on the game combo box.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>index</strong><span class="classifier">int</span></dt><dd><p>Index of the selected game; negative values are ignored.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.cleanup">
+<span class="sig-name descname"><span class="pre">cleanup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/playergamelaunchcontroller.html#PlayerGameLaunchController.cleanup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.cleanup" title="Link to this definition"></a></dt>
+<dd><p>Stop the game and all its child processes.</p>
+<p class="rubric">Notes</p>
+<p>Called when the window closes. With <code class="docutils literal notranslate"><span class="pre">psutil</span></code>, the children and
+the game are terminated, and those still alive after 2 s are
+killed; without it, only the game process is terminated (and
+killed on error). The monitor timer is stopped and the buttons
+are restored in every case.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.controller.playergamelaunchcontroller.html" class="btn btn-neutral float-left" title="ttea.controller.playergamelaunchcontroller" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.controller.playerlistcontroller.html" class="btn btn-neutral float-right" title="ttea.controller.playerlistcontroller" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

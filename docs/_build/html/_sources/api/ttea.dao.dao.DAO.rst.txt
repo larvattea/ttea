@@ -1,0 +1,20 @@
+DAO
+===
+
+.. currentmodule:: ttea.dao.dao
+
+.. autoclass:: DAO
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~DAO.delete
+      ~DAO.insert
+      ~DAO.list
+      ~DAO.select
+      ~DAO.update

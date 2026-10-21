@@ -1,0 +1,18 @@
+CsvCrudService
+==============
+
+.. currentmodule:: ttea.games.kartea.service.csvcrudservice
+
+.. autoclass:: CsvCrudService
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~CsvCrudService.create
+      ~CsvCrudService.find_by_id
+      ~CsvCrudService.update

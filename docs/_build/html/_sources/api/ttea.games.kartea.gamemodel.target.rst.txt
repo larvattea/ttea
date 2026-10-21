@@ -1,0 +1,21 @@
+ttea.games.kartea.gamemodel.target
+==================================
+
+.. automodule:: ttea.games.kartea.gamemodel.target
+
+.. currentmodule:: ttea.games.kartea.gamemodel.target
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   KillResult
+   Target
+
+

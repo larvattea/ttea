@@ -1,0 +1,271 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.games.kartea.model.reflexivemodel &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.games.kartea.model.reflexivemodel</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.games.kartea.model.reflexivemodel</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Common base of the KarTEA data models.</span>
+
+<span class="sd">Gathers what used to be copied in each file of ``model/``: the</span>
+<span class="sd">``initialize_reflexive`` decorator (PROPERTIES and DATA_PROPERTIES) and</span>
+<span class="sd">the ``set_data``/``get_data`` methods.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">fields</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClassVar</span>
+
+
+<div class="viewcode-block" id="initialize_reflexive">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.model.reflexivemodel.html#ttea.games.kartea.model.reflexivemodel.initialize_reflexive">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">initialize_reflexive</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Fill the reflection class attributes of a dataclass.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cls : type</span>
+<span class="sd">        The dataclass to be decorated.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    type</span>
+<span class="sd">        The same class, with PROPERTIES and DATA_PROPERTIES filled.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - ``PROPERTIES`` receives the names of all dataclass fields.</span>
+<span class="sd">    - ``DATA_PROPERTIES`` receives the default value of each init</span>
+<span class="sd">      field (``dataclasses.MISSING`` when the field has none).</span>
+<span class="sd">    - Must be applied above ``@dataclass``, since it reads the fields</span>
+<span class="sd">      created by it.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from dataclasses import dataclass</span>
+<span class="sd">    &gt;&gt;&gt; @initialize_reflexive</span>
+<span class="sd">    ... @dataclass</span>
+<span class="sd">    ... class Point(ReflexiveModel):</span>
+<span class="sd">    ...     x: int</span>
+<span class="sd">    ...     y: int = 0</span>
+<span class="sd">    &gt;&gt;&gt; Point.PROPERTIES</span>
+<span class="sd">    ['x', 'y']</span>
+<span class="sd">    &gt;&gt;&gt; Point.DATA_PROPERTIES[1]</span>
+<span class="sd">    0</span>
+<span class="sd">    """</span>
+    <span class="bp">cls</span><span class="o">.</span><span class="n">PROPERTIES</span> <span class="o">=</span> <span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">(</span><span class="bp">cls</span><span class="p">)]</span>
+    <span class="bp">cls</span><span class="o">.</span><span class="n">DATA_PROPERTIES</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">field</span><span class="o">.</span><span class="n">default</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">init</span>
+    <span class="p">]</span>
+    <span class="k">return</span> <span class="bp">cls</span></div>
+
+
+
+<div class="viewcode-block" id="ReflexiveModel">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.model.reflexivemodel.ReflexiveModel.html#ttea.games.kartea.model.reflexivemodel.ReflexiveModel">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ReflexiveModel</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Mixin with ``set_data``/``get_data`` based on PROPERTIES.</span>
+
+<span class="sd">    Subclasses (dataclasses decorated with ``initialize_reflexive``)</span>
+<span class="sd">    declare in ``REF_PROPERTIES`` the fields that reference another</span>
+<span class="sd">    model: in ``get_data`` they become the ``id`` of the referenced</span>
+<span class="sd">    object (or None). Enum values become their ``value``.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    PROPERTIES : ClassVar[list[str]], class attribute</span>
+<span class="sd">        Field names of the model, filled by ``initialize_reflexive``.</span>
+<span class="sd">    DATA_PROPERTIES : ClassVar[list], class attribute</span>
+<span class="sd">        Default value of each init field, filled by</span>
+<span class="sd">        ``initialize_reflexive``.</span>
+<span class="sd">    REF_PROPERTIES : ClassVar[tuple[str, ...]], class attribute</span>
+<span class="sd">        Fields that reference another model. Empty by default.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from dataclasses import dataclass</span>
+<span class="sd">    &gt;&gt;&gt; from types import SimpleNamespace</span>
+<span class="sd">    &gt;&gt;&gt; @initialize_reflexive</span>
+<span class="sd">    ... @dataclass</span>
+<span class="sd">    ... class Item(ReflexiveModel):</span>
+<span class="sd">    ...     id: int</span>
+<span class="sd">    ...     owner: object</span>
+<span class="sd">    ...     REF_PROPERTIES = ("owner",)</span>
+<span class="sd">    &gt;&gt;&gt; item = Item(id=7, owner=SimpleNamespace(id=3))</span>
+<span class="sd">    &gt;&gt;&gt; item.get_data()</span>
+<span class="sd">    [{'id': 7, 'owner': 3}]</span>
+<span class="sd">    &gt;&gt;&gt; item.set_data({"id": 8, "unknown": 1})</span>
+<span class="sd">    &gt;&gt;&gt; item.id</span>
+<span class="sd">    8</span>
+<span class="sd">    """</span>
+
+    <span class="n">PROPERTIES</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">DATA_PROPERTIES</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">REF_PROPERTIES</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]]</span> <span class="o">=</span> <span class="p">()</span>
+
+<div class="viewcode-block" id="ReflexiveModel.set_data">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.model.reflexivemodel.ReflexiveModel.html#ttea.games.kartea.model.reflexivemodel.ReflexiveModel.set_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Update attributes from a dictionary.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : dict</span>
+<span class="sd">            New values, keyed by field name.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Only keys present in PROPERTIES are applied; other keys are</span>
+<span class="sd">        ignored. No validation or type conversion is performed on the</span>
+<span class="sd">        input data.</span>
+<span class="sd">        """</span>
+        <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">PROPERTIES</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prop</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">prop</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="ReflexiveModel.get_data">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.model.reflexivemodel.ReflexiveModel.html#ttea.games.kartea.model.reflexivemodel.ReflexiveModel.get_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">dict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return the model data as a list with one dictionary.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[dict]</span>
+<span class="sd">            A single dictionary with one entry per field of PROPERTIES.</span>
+<span class="sd">            A list is returned for consistency with potential</span>
+<span class="sd">            multi-record returns.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        - References (REF_PROPERTIES) are replaced by their ``id``. A</span>
+<span class="sd">          value without ``id`` (e.g. text already read from the CSV) is</span>
+<span class="sd">          kept as is, and a falsy value (None, 0, "") becomes None.</span>
+<span class="sd">        - Enum values are replaced by their ``value``.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; from dataclasses import dataclass</span>
+<span class="sd">        &gt;&gt;&gt; @initialize_reflexive</span>
+<span class="sd">        ... @dataclass</span>
+<span class="sd">        ... class Item(ReflexiveModel):</span>
+<span class="sd">        ...     id: int</span>
+<span class="sd">        ...     owner: object</span>
+<span class="sd">        ...     REF_PROPERTIES = ("owner",)</span>
+<span class="sd">        &gt;&gt;&gt; Item(id=7, owner="3").get_data()</span>
+<span class="sd">        [{'id': 7, 'owner': '3'}]</span>
+<span class="sd">        &gt;&gt;&gt; Item(id=7, owner=None).get_data()</span>
+<span class="sd">        [{'id': 7, 'owner': None}]</span>
+<span class="sd">        """</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">PROPERTIES</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prop</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">prop</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">REF_PROPERTIES</span><span class="p">:</span>
+                <span class="c1"># Object -&gt; id; a value already in id form (e.g. text</span>
+                <span class="c1"># read from the CSV) is kept.</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s2">"id"</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">info</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">info</span><span class="p">]</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

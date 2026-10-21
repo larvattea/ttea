@@ -1,0 +1,21 @@
+ttea.games.kartea.gamecontroller
+================================
+
+.. automodule:: ttea.games.kartea.gamecontroller
+
+.. currentmodule:: ttea.games.kartea.gamecontroller
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/module.rst
+   :recursive:
+
+   gamecontroller
+   sessionrecorder
+
+
+

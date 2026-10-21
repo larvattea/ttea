@@ -1,0 +1,21 @@
+LanguageService
+===============
+
+.. currentmodule:: ttea.service.languageservice
+
+.. autoclass:: LanguageService
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~LanguageService.apply_language
+      ~LanguageService.get_initial_language
+      ~LanguageService.get_saved_language
+      ~LanguageService.get_system_language
+      ~LanguageService.preview_language
+      ~LanguageService.save_language

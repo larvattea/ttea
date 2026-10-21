@@ -1,0 +1,16 @@
+LaneDetector
+============
+
+.. currentmodule:: ttea.games.kartea.gamecore.lanedetector
+
+.. autoclass:: LaneDetector
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~LaneDetector.lane_for_x

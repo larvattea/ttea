@@ -1,0 +1,16 @@
+Image
+=====
+
+.. currentmodule:: ttea.util.image
+
+.. autoclass:: Image
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~Image.load_from_qt_resource

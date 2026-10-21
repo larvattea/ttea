@@ -1,0 +1,26 @@
+ttea.games.kartea.gamemodel
+===========================
+
+.. automodule:: ttea.games.kartea.gamemodel
+
+.. currentmodule:: ttea.games.kartea.gamemodel
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/module.rst
+   :recursive:
+
+   background
+   car
+   image
+   line
+   obstacle
+   sound
+   target
+
+
+

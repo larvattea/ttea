@@ -1,0 +1,398 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KarTEA &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.games.kartea.model" href="ttea.games.kartea.model.html" />
+    <link rel="prev" title="ttea.games.kartea.main" href="ttea.games.kartea.main.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.games.html">ttea.games</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.gametheme.html">ttea.games.gametheme</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.games.kartea.html">ttea.games.kartea</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.controller.html">ttea.games.kartea.controller</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.dao.html">ttea.games.kartea.dao</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.factory.html">ttea.games.kartea.factory</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamecontroller.html">ttea.games.kartea.gamecontroller</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamecore.html">ttea.games.kartea.gamecore</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamemodel.html">ttea.games.kartea.gamemodel</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gametheme.html">ttea.games.kartea.gametheme</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameui.html">ttea.games.kartea.gameui</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameutil.html">ttea.games.kartea.gameutil</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameview.html">ttea.games.kartea.gameview</a></li>
+<li class="toctree-l5 current"><a class="reference internal" href="ttea.games.kartea.main.html">ttea.games.kartea.main</a><ul class="current">
+<li class="toctree-l6 current"><a class="current reference internal" href="#">KarTEA</a><ul>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.games.kartea.main.KarTEA"><code class="docutils literal notranslate"><span class="pre">KarTEA</span></code></a><ul>
+<li class="toctree-l8"><a class="reference internal" href="#ttea.games.kartea.main.KarTEA.get_player_first_name"><code class="docutils literal notranslate"><span class="pre">KarTEA.get_player_first_name()</span></code></a></li>
+<li class="toctree-l8"><a class="reference internal" href="#ttea.games.kartea.main.KarTEA.set_game_language"><code class="docutils literal notranslate"><span class="pre">KarTEA.set_game_language()</span></code></a></li>
+<li class="toctree-l8"><a class="reference internal" href="#ttea.games.kartea.main.KarTEA.handle_events"><code class="docutils literal notranslate"><span class="pre">KarTEA.handle_events()</span></code></a></li>
+<li class="toctree-l8"><a class="reference internal" href="#ttea.games.kartea.main.KarTEA.exit_game"><code class="docutils literal notranslate"><span class="pre">KarTEA.exit_game()</span></code></a></li>
+<li class="toctree-l8"><a class="reference internal" href="#ttea.games.kartea.main.KarTEA.update_menu"><code class="docutils literal notranslate"><span class="pre">KarTEA.update_menu()</span></code></a></li>
+<li class="toctree-l8"><a class="reference internal" href="#ttea.games.kartea.main.KarTEA.update_game"><code class="docutils literal notranslate"><span class="pre">KarTEA.update_game()</span></code></a></li>
+<li class="toctree-l8"><a class="reference internal" href="#ttea.games.kartea.main.KarTEA.update"><code class="docutils literal notranslate"><span class="pre">KarTEA.update()</span></code></a></li>
+<li class="toctree-l8"><a class="reference internal" href="#ttea.games.kartea.main.KarTEA.draw_fps"><code class="docutils literal notranslate"><span class="pre">KarTEA.draw_fps()</span></code></a></li>
+<li class="toctree-l8"><a class="reference internal" href="#ttea.games.kartea.main.KarTEA.run"><code class="docutils literal notranslate"><span class="pre">KarTEA.run()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.main.html#ttea.games.kartea.main.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.model.html">ttea.games.kartea.model</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.service.html">ttea.games.kartea.service</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.util.html">ttea.games.kartea.util</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.view.html">ttea.games.kartea.view</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.html">ttea.games</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.html">ttea.games.kartea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.main.html">ttea.games.kartea.main</a></li>
+      <li class="breadcrumb-item active">KarTEA</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.games.kartea.main.KarTEA.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="kartea">
+<h1>KarTEA<a class="headerlink" href="#kartea" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.games.kartea.main.KarTEA">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">KarTEA</span></span><a class="reference internal" href="../_modules/ttea/games/kartea/main.html#KarTEA"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.main.KarTEA" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Main class that manages the KarTEA game.</p>
+<p>The constructor reads the command line arguments, installs the
+translation, creates the services, the settings, the game state, the
+pygame window and the game objects (composition root: everything is
+created once here and injected where needed).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>logger</strong><span class="classifier">Log</span></dt><dd><p>Application logger (<code class="docutils literal notranslate"><span class="pre">Log.get_log()</span></code>).</p>
+</dd>
+<dt><strong>hardware</strong><span class="classifier">KarteaHardwareService</span></dt><dd><p>Camera and pose tracking configuration.</p>
+</dd>
+<dt><strong>phase_service</strong><span class="classifier">KarteaPhaseService</span></dt><dd><p>Phases and levels read from the phase CSV files.</p>
+</dd>
+<dt><strong>service</strong><span class="classifier">PlayerKarteaConfigService</span></dt><dd><p>Player configuration; also provides the session and session
+detail services, so they share the same sessions DAO.</p>
+</dd>
+<dt><strong>player_config</strong><span class="classifier">PlayerKarteaConfig</span></dt><dd><p>Configuration of the player given by <code class="docutils literal notranslate"><span class="pre">--player_id</span></code> (created
+when missing).</p>
+</dd>
+<dt><strong>settings</strong><span class="classifier">GameSettings</span></dt><dd><p>Immutable game configuration built from <code class="docutils literal notranslate"><span class="pre">player_config</span></code>.</p>
+</dd>
+<dt><strong>game_state</strong><span class="classifier">GameState</span></dt><dd><p>Mutable state of the match.</p>
+</dd>
+<dt><strong>screen</strong><span class="classifier">pygame.Surface</span></dt><dd><p>Game window.</p>
+</dd>
+<dt><strong>clock</strong><span class="classifier">pygame.time.Clock</span></dt><dd><p>Frame clock, limited to <code class="docutils literal notranslate"><span class="pre">GameSettings.FPS</span></code>.</p>
+</dd>
+<dt><strong>fps_font</strong><span class="classifier">pygame.font.Font</span></dt><dd><p>Font of the FPS counter.</p>
+</dd>
+<dt><strong>game</strong><span class="classifier">GameController</span></dt><dd><p>Game logic (track, objects, camera, pose tracking, session).</p>
+</dd>
+<dt><strong>menu</strong><span class="classifier">Menu</span></dt><dd><p>Start, pause and feedback menus.</p>
+</dd>
+<dt><strong>state</strong><span class="classifier">str</span></dt><dd><p>Current screen: <code class="docutils literal notranslate"><span class="pre">&quot;menu&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;game&quot;</span></code>. Starts at <code class="docutils literal notranslate"><span class="pre">&quot;menu&quot;</span></code>.</p>
+</dd>
+<dt><strong>running</strong><span class="classifier">bool</span></dt><dd><p>False ends the main loop.</p>
+</dd>
+<dt><strong>events</strong><span class="classifier">list[pygame.event.Event]</span></dt><dd><p>Events of the current frame, read once per frame by
+<code class="docutils literal notranslate"><span class="pre">handle_events</span></code> and passed to the GameController.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Command line arguments: <code class="docutils literal notranslate"><span class="pre">--lang</span></code> (default <code class="docutils literal notranslate"><span class="pre">&quot;pt_BR&quot;</span></code>),
+<code class="docutils literal notranslate"><span class="pre">--player_id</span></code> and <code class="docutils literal notranslate"><span class="pre">--professional_id</span></code> (default 0).</p></li>
+<li><p>With <code class="docutils literal notranslate"><span class="pre">GameSettings.FULLSCREEN</span></code> the window is a borderless
+(<code class="docutils literal notranslate"><span class="pre">pygame.NOFRAME</span></code>) window of the screen size, on display
+<code class="docutils literal notranslate"><span class="pre">SCREEN_OS_INDEX</span></code>, instead of true fullscreen.</p></li>
+</ul>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.main.KarTEA.draw_fps" title="ttea.games.kartea.main.KarTEA.draw_fps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">draw_fps</span></code></a></p></td>
+<td><p>Draw the FPS counter in the top left corner.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.main.KarTEA.exit_game" title="ttea.games.kartea.main.KarTEA.exit_game"><code class="xref py py-obj docutils literal notranslate"><span class="pre">exit_game</span></code></a></p></td>
+<td><p>Record the exit in the session (if any) and end the loop.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.main.KarTEA.get_player_first_name" title="ttea.games.kartea.main.KarTEA.get_player_first_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_player_first_name</span></code></a></p></td>
+<td><p>Return the first name of the player of this match.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.main.KarTEA.handle_events" title="ttea.games.kartea.main.KarTEA.handle_events"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_events</span></code></a></p></td>
+<td><p>Handle the global user events.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.main.KarTEA.run" title="ttea.games.kartea.main.KarTEA.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code></a></p></td>
+<td><p>Run the main game loop.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.main.KarTEA.set_game_language" title="ttea.games.kartea.main.KarTEA.set_game_language"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_game_language</span></code></a></p></td>
+<td><p>Install the gettext translation of the game.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.main.KarTEA.update" title="ttea.games.kartea.main.KarTEA.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a></p></td>
+<td><p>Update the current screen (menu or game).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.main.KarTEA.update_game" title="ttea.games.kartea.main.KarTEA.update_game"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_game</span></code></a></p></td>
+<td><p>Update the game logic and go back to the menu when asked.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.main.KarTEA.update_menu" title="ttea.games.kartea.main.KarTEA.update_menu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_menu</span></code></a></p></td>
+<td><p>Update the menu and handle the state transitions.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.main.KarTEA.get_player_first_name">
+<span class="sig-name descname"><span class="pre">get_player_first_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/main.html#KarTEA.get_player_first_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.main.KarTEA.get_player_first_name" title="Link to this definition"></a></dt>
+<dd><p>Return the first name of the player of this match.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>First word of <code class="docutils literal notranslate"><span class="pre">player_config.player.name</span></code> (e.g. “Fulano”
+for “Fulano Silva”), or “” when there is no player or name.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.main.KarTEA.set_game_language">
+<span class="sig-name descname"><span class="pre">set_game_language</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lang_code</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'pt_BR'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/main.html#KarTEA.set_game_language"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.main.KarTEA.set_game_language" title="Link to this definition"></a></dt>
+<dd><p>Install the gettext translation of the game.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>lang_code</strong><span class="classifier">str, optional</span></dt><dd><p>Language code, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;pt_BR&quot;</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">&quot;en_US&quot;</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Installs <code class="docutils literal notranslate"><span class="pre">_()</span></code> into builtins with the <code class="docutils literal notranslate"><span class="pre">kartea</span></code> catalog from
+<code class="docutils literal notranslate"><span class="pre">resources/locales</span></code>. A missing catalog falls back to the
+source texts (pt_BR).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.main.KarTEA.handle_events">
+<span class="sig-name descname"><span class="pre">handle_events</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/main.html#KarTEA.handle_events"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.main.KarTEA.handle_events" title="Link to this definition"></a></dt>
+<dd><p>Handle the global user events.</p>
+<p>Reads the pygame queue once per frame and keeps the events in
+<code class="docutils literal notranslate"><span class="pre">self.events</span></code> for the GameController.</p>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Closing the window, Esc or Q exit the game; Q also closes the
+OpenCV “Tela de Captura” window.</p></li>
+<li><p>The Space key (pause) is handled by the GameController, which
+records the pause event.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.main.KarTEA.exit_game">
+<span class="sig-name descname"><span class="pre">exit_game</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">by_feet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/main.html#KarTEA.exit_game"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.main.KarTEA.exit_game" title="Link to this definition"></a></dt>
+<dd><p>Record the exit in the session (if any) and end the loop.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>by_feet</strong><span class="classifier">bool, optional</span></dt><dd><p>True if the player chose to exit with the feet. Defaults to
+False.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The exit is recorded only on the first call (while <code class="docutils literal notranslate"><span class="pre">running</span></code>
+is True).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.main.KarTEA.update_menu">
+<span class="sig-name descname"><span class="pre">update_menu</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/main.html#KarTEA.update_menu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.main.KarTEA.update_menu" title="Link to this definition"></a></dt>
+<dd><p>Update the menu and handle the state transitions.</p>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>With feet click enabled (<code class="docutils literal notranslate"><span class="pre">GameState.feet_click</span></code>), the camera
+and feet tracking keep running in the menus, so the feet can
+trigger the buttons.</p></li>
+<li><p>Choices made with the feet are recorded as “Controle do
+Jogador”; with mouse/keyboard, as “Controle UFE”.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;game&quot;</span></code> (Play or Continue) and <code class="docutils literal notranslate"><span class="pre">&quot;play&quot;</span></code> (feedback screen)
+are recorded only when chosen with the feet: with
+mouse/keyboard, the Unpause is recorded when the game resumes,
+and the level result was already applied and saved by the
+GameController.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;prev&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;rest&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;next&quot;</span></code> (pause menu) are
+recorded before the level changes, so the event carries the
+source phase/level; the level is then reset.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.main.KarTEA.update_game">
+<span class="sig-name descname"><span class="pre">update_game</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/main.html#KarTEA.update_game"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.main.KarTEA.update_game" title="Link to this definition"></a></dt>
+<dd><p>Update the game logic and go back to the menu when asked.</p>
+<p class="rubric">Notes</p>
+<p>The level clock advances in the GameController, using the delta
+time of the GameState.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.main.KarTEA.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/main.html#KarTEA.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.main.KarTEA.update" title="Link to this definition"></a></dt>
+<dd><p>Update the current screen (menu or game).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.main.KarTEA.draw_fps">
+<span class="sig-name descname"><span class="pre">draw_fps</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/main.html#KarTEA.draw_fps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.main.KarTEA.draw_fps" title="Link to this definition"></a></dt>
+<dd><p>Draw the FPS counter in the top left corner.</p>
+<p class="rubric">Notes</p>
+<p>Drawn only when <code class="docutils literal notranslate"><span class="pre">GameSettings.DRAW_FPS</span></code> is True.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.main.KarTEA.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/main.html#KarTEA.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.main.KarTEA.run" title="Link to this definition"></a></dt>
+<dd><p>Run the main game loop.</p>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>Each frame handles the events, waits for <code class="docutils literal notranslate"><span class="pre">GameSettings.FPS</span></code>
+and sets <code class="docutils literal notranslate"><span class="pre">GameState.delta_time</span></code> to the real elapsed time in
+seconds, capped at <code class="docutils literal notranslate"><span class="pre">GameSettings.MAX_DELTA_TIME</span></code>.</p></li>
+<li><p>On any exit, including errors, the session is saved one last
+time (so the level in progress also reaches the session) and
+pygame is shut down. A failure while saving is logged and does
+not hide the original error.</p></li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.games.kartea.main.html" class="btn btn-neutral float-left" title="ttea.games.kartea.main" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.games.kartea.model.html" class="btn btn-neutral float-right" title="ttea.games.kartea.model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

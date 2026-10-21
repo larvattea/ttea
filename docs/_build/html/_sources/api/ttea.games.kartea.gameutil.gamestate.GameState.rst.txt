@@ -1,0 +1,16 @@
+GameState
+=========
+
+.. currentmodule:: ttea.games.kartea.gameutil.gamestate
+
+.. autoclass:: GameState
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~GameState.from_settings

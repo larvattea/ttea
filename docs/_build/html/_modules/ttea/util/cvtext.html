@@ -1,0 +1,349 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.util.cvtext &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.util.cvtext</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.util.cvtext</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Draw Unicode text on OpenCV frames and name OpenCV windows.</span>
+
+<span class="sd">OpenCV's ``cv2.putText`` uses Hershey fonts, which only cover ASCII,</span>
+<span class="sd">so accented letters (é, ó, ñ, ç) are drawn as "??". On Windows the</span>
+<span class="sd">HighGUI window title is also passed through the ANSI code page, so a</span>
+<span class="sd">UTF-8 title shows broken characters. This module draws the text with</span>
+<span class="sd">Pillow and sets the window title with the Unicode Windows API.</span>
+<span class="sd">"""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">unicodedata</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">lru_cache</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">cv2</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PIL</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span><span class="p">,</span> <span class="n">ImageDraw</span><span class="p">,</span> <span class="n">ImageFont</span>
+
+<span class="c1"># TrueType fonts tried in order: Windows, Linux, macOS.</span>
+<span class="n">_FONT_CANDIDATES</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"arial.ttf"</span><span class="p">,</span>
+    <span class="s2">"DejaVuSans.ttf"</span><span class="p">,</span>
+    <span class="s2">"/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"</span><span class="p">,</span>
+    <span class="s2">"/System/Library/Fonts/Supplemental/Arial.ttf"</span><span class="p">,</span>
+    <span class="s2">"/Library/Fonts/Arial.ttf"</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="CvText">
+<a class="viewcode-back" href="../../../api/ttea.util.cvtext.CvText.html#ttea.util.cvtext.CvText">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CvText</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Unicode text and window titles for OpenCV (HighGUI) windows.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The window *name* is the key that every HighGUI call uses</span>
+<span class="sd">    (``imshow``, ``destroyWindow``, ``setMouseCallback``...). It is</span>
+<span class="sd">    kept ASCII by ``window_name`` so that it is the same in every</span>
+<span class="sd">    platform; the text the user sees is set apart with</span>
+<span class="sd">    ``set_window_title``.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; CvText.window_name("Pantalla de monitorización")</span>
+<span class="sd">    'Pantalla de monitorizacion'</span>
+<span class="sd">    """</span>
+
+<div class="viewcode-block" id="CvText.window_name">
+<a class="viewcode-back" href="../../../api/ttea.util.cvtext.CvText.html#ttea.util.cvtext.CvText.window_name">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">window_name</span><span class="p">(</span><span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return an ASCII-only window name derived from ``title``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        title : str</span>
+<span class="sd">            Translated window title, possibly with accents.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            ``title`` without diacritics and non-ASCII characters.</span>
+<span class="sd">        """</span>
+        <span class="n">decomposed</span> <span class="o">=</span> <span class="n">unicodedata</span><span class="o">.</span><span class="n">normalize</span><span class="p">(</span><span class="s2">"NFKD"</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">decomposed</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"ascii"</span><span class="p">,</span> <span class="s2">"ignore"</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"ascii"</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CvText.set_window_title">
+<a class="viewcode-back" href="../../../api/ttea.util.cvtext.CvText.html#ttea.util.cvtext.CvText.set_window_title">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_window_title</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Show ``title`` (Unicode) in the window called ``name``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Window name given to ``cv2.namedWindow`` (see</span>
+<span class="sd">            ``window_name``).</span>
+<span class="sd">        title : str</span>
+<span class="sd">            Text to show in the title bar.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        On Windows the title is set with ``SetWindowTextW``, because</span>
+<span class="sd">        ``cv2.setWindowTitle`` uses the ANSI API there. If the window</span>
+<span class="sd">        is not found, the ASCII name stays as the title. On other</span>
+<span class="sd">        platforms ``cv2.setWindowTitle`` already handles UTF-8.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="n">title</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">"win32"</span><span class="p">:</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">ctypes</span>  <span class="c1"># noqa: PLC0415 - Windows only</span>
+
+            <span class="n">user32</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">windll</span><span class="o">.</span><span class="n">user32</span>
+            <span class="n">hwnd</span> <span class="o">=</span> <span class="n">user32</span><span class="o">.</span><span class="n">FindWindowW</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">hwnd</span><span class="p">:</span>
+                <span class="n">user32</span><span class="o">.</span><span class="n">SetWindowTextW</span><span class="p">(</span><span class="n">hwnd</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">cv2</span><span class="o">.</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">title</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">cv2</span><span class="o">.</span><span class="n">error</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="CvText.font">
+<a class="viewcode-back" href="../../../api/ttea.util.cvtext.CvText.html#ttea.util.cvtext.CvText.font">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">font</span><span class="p">(</span><span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ImageFont</span><span class="o">.</span><span class="n">ImageFont</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return a TrueType font of ``size`` pixels (cached).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        size : int</span>
+<span class="sd">            Font size in pixels.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PIL.ImageFont.ImageFont</span>
+<span class="sd">            First available font of ``_FONT_CANDIDATES`` or Pillow's</span>
+<span class="sd">            default font.</span>
+<span class="sd">        """</span>
+        <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">_FONT_CANDIDATES</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ImageFont</span><span class="o">.</span><span class="n">truetype</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+                <span class="k">continue</span>
+        <span class="k">return</span> <span class="n">ImageFont</span><span class="o">.</span><span class="n">load_default</span><span class="p">(</span><span class="n">size</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CvText.wrap">
+<a class="viewcode-back" href="../../../api/ttea.util.cvtext.CvText.html#ttea.util.cvtext.CvText.wrap">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">wrap</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">font</span><span class="p">:</span> <span class="n">ImageFont</span><span class="o">.</span><span class="n">ImageFont</span><span class="p">,</span> <span class="n">max_width</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Split ``text`` into lines no wider than ``max_width`` pixels.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        text : str</span>
+<span class="sd">            Text to split; existing line breaks are kept.</span>
+<span class="sd">        font : PIL.ImageFont.ImageFont</span>
+<span class="sd">            Font used to measure the text.</span>
+<span class="sd">        max_width : int</span>
+<span class="sd">            Maximum line width in pixels.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[str]</span>
+<span class="sd">            Lines of text. A single word wider than ``max_width`` is</span>
+<span class="sd">            kept on its own line.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; from types import SimpleNamespace</span>
+<span class="sd">        &gt;&gt;&gt; font = SimpleNamespace(getlength=len)  # 1 px per character</span>
+<span class="sd">        &gt;&gt;&gt; CvText.wrap("aa bb cc", font, 5)</span>
+<span class="sd">        ['aa bb', 'cc']</span>
+<span class="sd">        """</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">paragraph</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">):</span>
+            <span class="n">current</span> <span class="o">=</span> <span class="s2">""</span>
+            <span class="k">for</span> <span class="n">word</span> <span class="ow">in</span> <span class="n">paragraph</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">" "</span><span class="p">):</span>
+                <span class="n">candidate</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">current</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">word</span><span class="si">}</span><span class="s2">"</span> <span class="k">if</span> <span class="n">current</span> <span class="k">else</span> <span class="n">word</span>
+                <span class="k">if</span> <span class="n">current</span> <span class="ow">and</span> <span class="n">font</span><span class="o">.</span><span class="n">getlength</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">max_width</span><span class="p">:</span>
+                    <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current</span><span class="p">)</span>
+                    <span class="n">current</span> <span class="o">=</span> <span class="n">word</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">current</span> <span class="o">=</span> <span class="n">candidate</span>
+            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">lines</span></div>
+
+
+<div class="viewcode-block" id="CvText.draw_lines">
+<a class="viewcode-back" href="../../../api/ttea.util.cvtext.CvText.html#ttea.util.cvtext.CvText.draw_lines">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw_lines</span><span class="p">(</span>
+        <span class="n">img</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">lines</span><span class="p">,</span>
+        <span class="n">origin</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span>
+        <span class="n">font_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="n">color</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+        <span class="n">outline_color</span><span class="p">:</span> <span class="nb">tuple</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+        <span class="n">outline_width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="n">line_spacing</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span>
+        <span class="n">margin</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Draw lines of Unicode text on a BGR frame, wrapping to fit.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        img : numpy.ndarray</span>
+<span class="sd">            BGR frame (``H x W x 3``, ``uint8``). It is not modified.</span>
+<span class="sd">        lines : Iterable[str]</span>
+<span class="sd">            Lines to draw, top to bottom.</span>
+<span class="sd">        origin : tuple[int, int], optional</span>
+<span class="sd">            Top-left corner ``(x, y)`` of the first line, in pixels.</span>
+<span class="sd">            Default is ``(20, 20)``.</span>
+<span class="sd">        font_size : int, optional</span>
+<span class="sd">            Font size in pixels. Default is 20.</span>
+<span class="sd">        color : tuple[int, int, int], optional</span>
+<span class="sd">            Text color in BGR. Default is ``(0, 255, 255)`` (yellow).</span>
+<span class="sd">        outline_color : tuple[int, int, int], optional</span>
+<span class="sd">            Outline color in BGR, drawn around each letter for contrast.</span>
+<span class="sd">            Default is ``(0, 0, 0)``.</span>
+<span class="sd">        outline_width : int, optional</span>
+<span class="sd">            Outline width in pixels; 0 draws no outline. Default is 2.</span>
+<span class="sd">        line_spacing : int, optional</span>
+<span class="sd">            Extra space between lines, in pixels. Default is 8.</span>
+<span class="sd">        margin : int, optional</span>
+<span class="sd">            Right margin kept free when wrapping, in pixels. Default is</span>
+<span class="sd">            20.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Lines are wrapped to the frame width minus ``origin[0]`` and</span>
+<span class="sd">        ``margin``, but never to less than ``font_size`` pixels. Each</span>
+<span class="sd">        line advances ``font_size + line_spacing`` pixels.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            New BGR frame with the text drawn.</span>
+<span class="sd">        """</span>
+        <span class="n">font</span> <span class="o">=</span> <span class="n">CvText</span><span class="o">.</span><span class="n">font</span><span class="p">(</span><span class="n">font_size</span><span class="p">)</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">origin</span>
+        <span class="n">max_width</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">x</span> <span class="o">-</span> <span class="n">margin</span><span class="p">,</span> <span class="n">font_size</span><span class="p">)</span>
+        <span class="n">line_height</span> <span class="o">=</span> <span class="n">font_size</span> <span class="o">+</span> <span class="n">line_spacing</span>
+
+        <span class="n">pil_img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">))</span>
+        <span class="n">draw</span> <span class="o">=</span> <span class="n">ImageDraw</span><span class="o">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">pil_img</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">part</span> <span class="ow">in</span> <span class="n">CvText</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">font</span><span class="p">,</span> <span class="n">max_width</span><span class="p">):</span>
+                <span class="n">draw</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+                    <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span>
+                    <span class="n">part</span><span class="p">,</span>
+                    <span class="n">font</span><span class="o">=</span><span class="n">font</span><span class="p">,</span>
+                    <span class="n">fill</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">color</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+                    <span class="n">stroke_width</span><span class="o">=</span><span class="n">outline_width</span><span class="p">,</span>
+                    <span class="n">stroke_fill</span><span class="o">=</span><span class="nb">tuple</span><span class="p">(</span><span class="n">outline_color</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+                <span class="p">)</span>
+                <span class="n">y</span> <span class="o">+=</span> <span class="n">line_height</span>
+        <span class="k">return</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pil_img</span><span class="p">),</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_RGB2BGR</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

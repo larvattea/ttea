@@ -1,0 +1,356 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UI &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.games.kartea.gameutil" href="ttea.games.kartea.gameutil.html" />
+    <link rel="prev" title="ttea.games.kartea.gameui.ui" href="ttea.games.kartea.gameui.ui.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.games.html">ttea.games</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.gametheme.html">ttea.games.gametheme</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.games.kartea.html">ttea.games.kartea</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.controller.html">ttea.games.kartea.controller</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.dao.html">ttea.games.kartea.dao</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.factory.html">ttea.games.kartea.factory</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamecontroller.html">ttea.games.kartea.gamecontroller</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamecore.html">ttea.games.kartea.gamecore</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamemodel.html">ttea.games.kartea.gamemodel</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gametheme.html">ttea.games.kartea.gametheme</a></li>
+<li class="toctree-l5 current"><a class="reference internal" href="ttea.games.kartea.gameui.html">ttea.games.kartea.gameui</a><ul class="current">
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gameui.html#attributes">Attributes</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gameui.html#see-also">See Also</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gameui.html#notes">Notes</a></li>
+<li class="toctree-l6 current"><a class="reference internal" href="ttea.games.kartea.gameui.ui.html">ttea.games.kartea.gameui.ui</a><ul class="current">
+<li class="toctree-l7 current"><a class="current reference internal" href="#">UI</a><ul>
+<li class="toctree-l8"><a class="reference internal" href="#ttea.games.kartea.gameui.ui.UI"><code class="docutils literal notranslate"><span class="pre">UI</span></code></a><ul>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gameui.ui.UI.reset_feet_selection"><code class="docutils literal notranslate"><span class="pre">UI.reset_feet_selection()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gameui.ui.UI.draw_player_marker"><code class="docutils literal notranslate"><span class="pre">UI.draw_player_marker()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gameui.ui.UI.draw_text"><code class="docutils literal notranslate"><span class="pre">UI.draw_text()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gameui.ui.UI.button"><code class="docutils literal notranslate"><span class="pre">UI.button()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameutil.html">ttea.games.kartea.gameutil</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameview.html">ttea.games.kartea.gameview</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.main.html">ttea.games.kartea.main</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.model.html">ttea.games.kartea.model</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.service.html">ttea.games.kartea.service</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.util.html">ttea.games.kartea.util</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.view.html">ttea.games.kartea.view</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.html">ttea.games</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.html">ttea.games.kartea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.gameui.html">ttea.games.kartea.gameui</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.gameui.ui.html">ttea.games.kartea.gameui.ui</a></li>
+      <li class="breadcrumb-item active">UI</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.games.kartea.gameui.ui.UI.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ui">
+<h1>UI<a class="headerlink" href="#ui" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.games.kartea.gameui.ui.UI">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">UI</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gameui/ui.html#UI"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gameui.ui.UI" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Draw text and buttons on the game interface.</p>
+<p>Buttons can be triggered by the mouse or by the player’s feet
+(<code class="docutils literal notranslate"><span class="pre">feet_pos</span></code> in <code class="docutils literal notranslate"><span class="pre">button</span></code>): with the feet, the player has to stand
+still on the button for <code class="docutils literal notranslate"><span class="pre">GameSettings.FEET_CLICK_TIME</span></code> seconds
+while the button fills up.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>settings</strong><span class="classifier">GameSettings</span></dt><dd><p>Game settings (fonts, colors, sizes), injected by the caller.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>settings</strong><span class="classifier">GameSettings</span></dt><dd><p>The injected game settings.</p>
+</dd>
+<dt><strong>CLICK_MOUSE</strong><span class="classifier">str, class attribute</span></dt><dd><p>Source returned by <code class="docutils literal notranslate"><span class="pre">button</span></code> when the mouse clicked it
+(<code class="docutils literal notranslate"><span class="pre">&quot;mouse&quot;</span></code>).</p>
+</dd>
+<dt><strong>CLICK_FEET</strong><span class="classifier">str, class attribute</span></dt><dd><p>Source returned by <code class="docutils literal notranslate"><span class="pre">button</span></code> when the feet confirmed it
+(<code class="docutils literal notranslate"><span class="pre">&quot;feet&quot;</span></code>).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">Menu</span></code></dt><dd><p>Menus built from these buttons.</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.gameui.ui.UI.button" title="ttea.games.kartea.gameui.ui.UI.button"><code class="xref py py-obj docutils literal notranslate"><span class="pre">button</span></code></a></p></td>
+<td><p>Draw a button and report whether it was triggered this frame.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.gameui.ui.UI.draw_player_marker" title="ttea.games.kartea.gameui.ui.UI.draw_player_marker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">draw_player_marker</span></code></a></p></td>
+<td><p>Draw the dot at the position of the player's feet.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.gameui.ui.UI.draw_text" title="ttea.games.kartea.gameui.ui.UI.draw_text"><code class="xref py py-obj docutils literal notranslate"><span class="pre">draw_text</span></code></a></p></td>
+<td><p>Draw text on the surface, optionally with a shadow.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.gameui.ui.UI.reset_feet_selection" title="ttea.games.kartea.gameui.ui.UI.reset_feet_selection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset_feet_selection</span></code></a></p></td>
+<td><p>Cancel the feet selection in progress.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gameui.ui.UI.reset_feet_selection">
+<span class="sig-name descname"><span class="pre">reset_feet_selection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gameui/ui.html#UI.reset_feet_selection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gameui.ui.UI.reset_feet_selection" title="Link to this definition"></a></dt>
+<dd><p>Cancel the feet selection in progress.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gameui.ui.UI.draw_player_marker">
+<span class="sig-name descname"><span class="pre">draw_player_marker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gameui/ui.html#UI.draw_player_marker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gameui.ui.UI.draw_player_marker" title="Link to this definition"></a></dt>
+<dd><p>Draw the dot at the position of the player’s feet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>surface</strong><span class="classifier">pygame.Surface</span></dt><dd><p>Surface to draw on.</p>
+</dd>
+<dt><strong>pos</strong><span class="classifier">tuple | None</span></dt><dd><p>Position (x, y) on the screen; None (player not detected)
+draws nothing.</p>
+</dd>
+<dt><strong>radius</strong><span class="classifier">int | None, optional</span></dt><dd><p>Radius in pixels. Defaults to
+<code class="docutils literal notranslate"><span class="pre">GameSettings.FEET_MARKER_RADIUS</span></code> (already scaled).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The dot is clamped so it stays entirely on the screen, and it
+gets a border (<code class="docutils literal notranslate"><span class="pre">FEET_MARKER_BORDER_COLOR</span></code>, width <code class="docutils literal notranslate"><span class="pre">radius</span> <span class="pre">//</span>
+<span class="pre">6</span></code>, at least 1 px) so it remains visible over light
+backgrounds.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gameui.ui.UI.draw_text">
+<span class="sig-name descname"><span class="pre">draw_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'top_left'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shadow</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shadow_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shadow_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gameui/ui.html#UI.draw_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gameui.ui.UI.draw_text" title="Link to this definition"></a></dt>
+<dd><p>Draw text on the surface, optionally with a shadow.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>surface</strong><span class="classifier">pygame.Surface</span></dt><dd><p>Surface to draw on.</p>
+</dd>
+<dt><strong>text</strong><span class="classifier">str</span></dt><dd><p>Text to render.</p>
+</dd>
+<dt><strong>pos</strong><span class="classifier">tuple</span></dt><dd><p>Position (x, y), interpreted according to <code class="docutils literal notranslate"><span class="pre">pos_mode</span></code>.</p>
+</dd>
+<dt><strong>color</strong><span class="classifier">tuple</span></dt><dd><p>Text color.</p>
+</dd>
+<dt><strong>font</strong><span class="classifier">pygame.font.Font, optional</span></dt><dd><p>Font to use. Defaults to <code class="docutils literal notranslate"><span class="pre">GameSettings.FONTS[&quot;medium&quot;]</span></code>.</p>
+</dd>
+<dt><strong>pos_mode</strong><span class="classifier">str, optional</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">&quot;top_left&quot;</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">&quot;center&quot;</span></code>: which point of the
+text <code class="docutils literal notranslate"><span class="pre">pos</span></code> refers to. Any other value leaves the text at
+(0, 0).</p>
+</dd>
+<dt><strong>shadow</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to draw a shadow under the text. Defaults to False.</p>
+</dd>
+<dt><strong>shadow_color</strong><span class="classifier">tuple, optional</span></dt><dd><p>Shadow color. Defaults to black.</p>
+</dd>
+<dt><strong>shadow_offset</strong><span class="classifier">int, optional</span></dt><dd><p>Shadow offset in pixels, to the left and down. Defaults to
+2.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gameui.ui.UI.button">
+<span class="sig-name descname"><span class="pre">button</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">click_sound</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feet_pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gameui/ui.html#UI.button"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gameui.ui.UI.button" title="Link to this definition"></a></dt>
+<dd><p>Draw a button and report whether it was triggered this frame.</p>
+<p>With <code class="docutils literal notranslate"><span class="pre">feet_pos</span></code>, the player’s feet can also trigger the
+button: the player has to stand still on it for
+<code class="docutils literal notranslate"><span class="pre">FEET_CLICK_TIME</span></code> seconds. While counting, the button fills
+up, so the player sees it is being selected and can step off
+before it is confirmed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>surface</strong><span class="classifier">pygame.Surface</span></dt><dd><p>Surface to draw on.</p>
+</dd>
+<dt><strong>pos_x</strong><span class="classifier">int</span></dt><dd><p>Horizontal position: 1 left quarter, 2 right quarter, any
+other value (usually 0) center.</p>
+</dd>
+<dt><strong>pos_y</strong><span class="classifier">int</span></dt><dd><p>Y position of the top of the button.</p>
+</dd>
+<dt><strong>text</strong><span class="classifier">str | None, optional</span></dt><dd><p>Text of the button. Defaults to no text.</p>
+</dd>
+<dt><strong>click_sound</strong><span class="classifier">pygame.mixer.Sound | None, optional</span></dt><dd><p>Sound played when the button is triggered.</p>
+</dd>
+<dt><strong>feet_pos</strong><span class="classifier">tuple | None, optional</span></dt><dd><p>Position (x, y) of the feet on the screen; None disables the
+feet selection.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str | None</dt><dd><p><code class="docutils literal notranslate"><span class="pre">UI.CLICK_MOUSE</span></code> or <code class="docutils literal notranslate"><span class="pre">UI.CLICK_FEET</span></code> if the button was
+triggered this frame (both truthy in an <code class="docutils literal notranslate"><span class="pre">if</span></code>); None
+otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>The button size is <code class="docutils literal notranslate"><span class="pre">GameSettings.BUTTONS_SIZES</span></code> and it is
+highlighted (<code class="docutils literal notranslate"><span class="pre">&quot;second&quot;</span></code> color) while the mouse or the feet
+are on it.</p></li>
+<li><p>The mouse triggers the button while the left button is pressed
+over it; this takes precedence over the feet.</p></li>
+<li><p>Once the feet count starts, the button “grows”
+<code class="docutils literal notranslate"><span class="pre">FEET_CLICK_MARGIN</span></code> px and stepping off for less than
+<code class="docutils literal notranslate"><span class="pre">FEET_CLICK_EXIT_TOLERANCE</span></code> s does not cancel the selection
+(pose tracking jitters a few pixels).</p></li>
+<li><p>A button is identified by <code class="docutils literal notranslate"><span class="pre">(pos_x,</span> <span class="pre">pos_y,</span> <span class="pre">text)</span></code>; only one
+button can be selected with the feet at a time.</p></li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.games.kartea.gameui.ui.html" class="btn btn-neutral float-left" title="ttea.games.kartea.gameui.ui" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.games.kartea.gameutil.html" class="btn btn-neutral float-right" title="ttea.games.kartea.gameutil" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

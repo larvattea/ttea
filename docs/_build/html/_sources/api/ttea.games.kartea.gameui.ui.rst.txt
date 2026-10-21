@@ -1,0 +1,20 @@
+ttea.games.kartea.gameui.ui
+===========================
+
+.. automodule:: ttea.games.kartea.gameui.ui
+
+.. currentmodule:: ttea.games.kartea.gameui.ui
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   UI
+
+

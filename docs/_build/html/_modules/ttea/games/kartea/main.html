@@ -1,0 +1,548 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.games.kartea.main &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.games.kartea.main</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.games.kartea.main</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Entry point of the KarTEA exergame (pygame side).</span>
+
+<span class="sd">Parses the command line, wires the services, settings and game objects</span>
+<span class="sd">together and runs the main loop, switching between the menus and the</span>
+<span class="sd">game. The language, player and professional come from the command</span>
+<span class="sd">line (``--lang``, ``--player_id`` and ``--professional_id``).</span>
+<span class="sd">"""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">gettext</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">cv2</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gamecontroller</span><span class="w"> </span><span class="kn">import</span> <span class="n">GameController</span><span class="p">,</span> <span class="n">SessionRecorder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gamecore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Camera</span><span class="p">,</span> <span class="n">PoseTracking</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gameutil</span><span class="w"> </span><span class="kn">import</span> <span class="n">GameSettings</span><span class="p">,</span> <span class="n">GameState</span><span class="p">,</span> <span class="n">regain_focus</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gameutil.alphablit</span><span class="w"> </span><span class="kn">import</span> <span class="n">alpha_blit</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gameview</span><span class="w"> </span><span class="kn">import</span> <span class="n">Menu</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.service</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">KarteaHardwareService</span><span class="p">,</span>
+    <span class="n">KarteaPhaseService</span><span class="p">,</span>
+    <span class="n">PlayerKarteaConfigService</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">KarteaPathConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">Log</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">CriticalHooks</span>
+
+
+<div class="viewcode-block" id="KarTEA">
+<a class="viewcode-back" href="../../../../api/ttea.games.kartea.main.KarTEA.html#ttea.games.kartea.main.KarTEA">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">KarTEA</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Main class that manages the KarTEA game.</span>
+
+<span class="sd">    The constructor reads the command line arguments, installs the</span>
+<span class="sd">    translation, creates the services, the settings, the game state, the</span>
+<span class="sd">    pygame window and the game objects (composition root: everything is</span>
+<span class="sd">    created once here and injected where needed).</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    logger : Log</span>
+<span class="sd">        Application logger (``Log.get_log()``).</span>
+<span class="sd">    hardware : KarteaHardwareService</span>
+<span class="sd">        Camera and pose tracking configuration.</span>
+<span class="sd">    phase_service : KarteaPhaseService</span>
+<span class="sd">        Phases and levels read from the phase CSV files.</span>
+<span class="sd">    service : PlayerKarteaConfigService</span>
+<span class="sd">        Player configuration; also provides the session and session</span>
+<span class="sd">        detail services, so they share the same sessions DAO.</span>
+<span class="sd">    player_config : PlayerKarteaConfig</span>
+<span class="sd">        Configuration of the player given by ``--player_id`` (created</span>
+<span class="sd">        when missing).</span>
+<span class="sd">    settings : GameSettings</span>
+<span class="sd">        Immutable game configuration built from ``player_config``.</span>
+<span class="sd">    game_state : GameState</span>
+<span class="sd">        Mutable state of the match.</span>
+<span class="sd">    screen : pygame.Surface</span>
+<span class="sd">        Game window.</span>
+<span class="sd">    clock : pygame.time.Clock</span>
+<span class="sd">        Frame clock, limited to ``GameSettings.FPS``.</span>
+<span class="sd">    fps_font : pygame.font.Font</span>
+<span class="sd">        Font of the FPS counter.</span>
+<span class="sd">    game : GameController</span>
+<span class="sd">        Game logic (track, objects, camera, pose tracking, session).</span>
+<span class="sd">    menu : Menu</span>
+<span class="sd">        Start, pause and feedback menus.</span>
+<span class="sd">    state : str</span>
+<span class="sd">        Current screen: ``"menu"`` or ``"game"``. Starts at ``"menu"``.</span>
+<span class="sd">    running : bool</span>
+<span class="sd">        False ends the main loop.</span>
+<span class="sd">    events : list[pygame.event.Event]</span>
+<span class="sd">        Events of the current frame, read once per frame by</span>
+<span class="sd">        ``handle_events`` and passed to the GameController.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - Command line arguments: ``--lang`` (default ``"pt_BR"``),</span>
+<span class="sd">      ``--player_id`` and ``--professional_id`` (default 0).</span>
+<span class="sd">    - With ``GameSettings.FULLSCREEN`` the window is a borderless</span>
+<span class="sd">      (``pygame.NOFRAME``) window of the screen size, on display</span>
+<span class="sd">      ``SCREEN_OS_INDEX``, instead of true fullscreen.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">Log</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span>
+
+        <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">"KarTEA Exergame"</span><span class="p">)</span>
+
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">"--lang"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">"pt_BR"</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"Idioma do app"</span>
+        <span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">"--player_id"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"ID do Jogador"</span>
+        <span class="p">)</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span>
+            <span class="s2">"--professional_id"</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">"ID do Profissional"</span>
+        <span class="p">)</span>
+
+        <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_game_language</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">lang</span><span class="p">)</span>
+
+        <span class="c1"># Sessions and details come from the configuration service so</span>
+        <span class="c1"># they share the same sessions DAO (a single ID counter, no</span>
+        <span class="c1"># stale data).</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hardware</span> <span class="o">=</span> <span class="n">KarteaHardwareService</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phase_service</span> <span class="o">=</span> <span class="n">KarteaPhaseService</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="n">PlayerKarteaConfigService</span><span class="p">(</span>
+            <span class="n">hardware_service</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hardware</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_or_create_config</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">player_id</span><span class="p">)</span>
+
+        <span class="n">settings_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">build_game_settings</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">player_config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">GameSettings</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">lang</span><span class="p">,</span> <span class="n">settings_data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game_state</span> <span class="o">=</span> <span class="n">GameState</span><span class="o">.</span><span class="n">from_settings</span><span class="p">(</span>
+            <span class="n">settings_data</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">player_id</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">professional_id</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game_state</span><span class="o">.</span><span class="n">player_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_player_first_name</span><span class="p">()</span>
+
+        <span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_caption</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">WINDOW_NAME</span><span class="p">)</span>
+
+        <span class="n">screen_size</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SCREEN_HEIGHT</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">FULLSCREEN</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">(</span>
+                <span class="n">screen_size</span><span class="p">,</span>
+                <span class="c1"># pygame.FULLSCREEN,</span>
+                <span class="n">pygame</span><span class="o">.</span><span class="n">NOFRAME</span><span class="p">,</span>
+                <span class="n">display</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SCREEN_OS_INDEX</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">(</span>
+                <span class="n">screen_size</span><span class="p">,</span>
+                <span class="n">display</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">SCREEN_OS_INDEX</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="n">regain_focus</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">clock</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">Clock</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">fps_font</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">SysFont</span><span class="p">(</span><span class="s2">"cooperblack"</span><span class="p">,</span> <span class="mi">22</span><span class="p">)</span>
+
+        <span class="n">pygame</span><span class="o">.</span><span class="n">mixer</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+
+        <span class="n">recorder</span> <span class="o">=</span> <span class="n">SessionRecorder</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">game_state</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">session_service</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">session_detail_service</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">camera</span> <span class="o">=</span> <span class="n">Camera</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hardware</span><span class="o">.</span><span class="n">get_camera_config</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">)</span>
+        <span class="n">pose_tracking</span> <span class="o">=</span> <span class="n">PoseTracking</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">hardware</span><span class="o">.</span><span class="n">get_pose_tracking_config</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game</span> <span class="o">=</span> <span class="n">GameController</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">game_state</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phase_service</span><span class="p">,</span>
+            <span class="n">recorder</span><span class="p">,</span>
+            <span class="n">camera</span><span class="p">,</span>
+            <span class="n">pose_tracking</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">menu</span> <span class="o">=</span> <span class="n">Menu</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_state</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s2">"menu"</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">running</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">events</span> <span class="o">=</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="KarTEA.get_player_first_name">
+<a class="viewcode-back" href="../../../../api/ttea.games.kartea.main.KarTEA.html#ttea.games.kartea.main.KarTEA.get_player_first_name">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_player_first_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the first name of the player of this match.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            First word of ``player_config.player.name`` (e.g. "Fulano"</span>
+<span class="sd">            for "Fulano Silva"), or "" when there is no player or name.</span>
+<span class="sd">        """</span>
+        <span class="n">player</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">player_config</span><span class="p">,</span> <span class="s2">"player"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">player</span><span class="p">,</span> <span class="s2">"name"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">name</span> <span class="k">else</span> <span class="s2">""</span></div>
+
+
+<div class="viewcode-block" id="KarTEA.set_game_language">
+<a class="viewcode-back" href="../../../../api/ttea.games.kartea.main.KarTEA.html#ttea.games.kartea.main.KarTEA.set_game_language">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_game_language</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lang_code</span><span class="o">=</span><span class="s2">"pt_BR"</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Install the gettext translation of the game.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        lang_code : str, optional</span>
+<span class="sd">            Language code, e.g. ``"pt_BR"`` (default) or ``"en_US"``.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Installs ``_()`` into builtins with the ``kartea`` catalog from</span>
+<span class="sd">        ``resources/locales``. A missing catalog falls back to the</span>
+<span class="sd">        source texts (pt_BR).</span>
+<span class="sd">        """</span>
+        <span class="n">locales_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">KARTEA_RESOURCES_DIR</span><span class="p">,</span> <span class="s2">"locales"</span>
+        <span class="p">)</span>
+        <span class="n">translation</span> <span class="o">=</span> <span class="n">gettext</span><span class="o">.</span><span class="n">translation</span><span class="p">(</span>
+            <span class="s2">"kartea"</span><span class="p">,</span>
+            <span class="n">localedir</span><span class="o">=</span><span class="n">locales_dir</span><span class="p">,</span>
+            <span class="n">languages</span><span class="o">=</span><span class="p">[</span><span class="n">lang_code</span><span class="p">],</span>
+            <span class="n">fallback</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">translation</span><span class="o">.</span><span class="n">install</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="KarTEA.handle_events">
+<a class="viewcode-back" href="../../../../api/ttea.games.kartea.main.KarTEA.html#ttea.games.kartea.main.KarTEA.handle_events">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle_events</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Handle the global user events.</span>
+
+<span class="sd">        Reads the pygame queue once per frame and keeps the events in</span>
+<span class="sd">        ``self.events`` for the GameController.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        - Closing the window, Esc or Q exit the game; Q also closes the</span>
+<span class="sd">          OpenCV "Tela de Captura" window.</span>
+<span class="sd">        - The Space key (pause) is handled by the GameController, which</span>
+<span class="sd">          records the pause event.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">events</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">QUIT</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">exit_game</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">KEYDOWN</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_ESCAPE</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">exit_game</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_q</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">exit_game</span><span class="p">()</span>
+                    <span class="n">cv2</span><span class="o">.</span><span class="n">destroyWindow</span><span class="p">(</span><span class="s2">"Tela de Captura"</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="KarTEA.exit_game">
+<a class="viewcode-back" href="../../../../api/ttea.games.kartea.main.KarTEA.html#ttea.games.kartea.main.KarTEA.exit_game">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">exit_game</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">by_feet</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Record the exit in the session (if any) and end the loop.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        by_feet : bool, optional</span>
+<span class="sd">            True if the player chose to exit with the feet. Defaults to</span>
+<span class="sd">            False.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The exit is recorded only on the first call (while ``running``</span>
+<span class="sd">        is True).</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">register_menu_choice</span><span class="p">(</span><span class="s2">"exit"</span><span class="p">,</span> <span class="n">by_feet</span><span class="o">=</span><span class="n">by_feet</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">running</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="KarTEA.update_menu">
+<a class="viewcode-back" href="../../../../api/ttea.games.kartea.main.KarTEA.html#ttea.games.kartea.main.KarTEA.update_menu">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_menu</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Update the menu and handle the state transitions.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        - With feet click enabled (``GameState.feet_click``), the camera</span>
+<span class="sd">          and feet tracking keep running in the menus, so the feet can</span>
+<span class="sd">          trigger the buttons.</span>
+<span class="sd">        - Choices made with the feet are recorded as "Controle do</span>
+<span class="sd">          Jogador"; with mouse/keyboard, as "Controle UFE".</span>
+<span class="sd">        - ``"game"`` (Play or Continue) and ``"play"`` (feedback screen)</span>
+<span class="sd">          are recorded only when chosen with the feet: with</span>
+<span class="sd">          mouse/keyboard, the Unpause is recorded when the game resumes,</span>
+<span class="sd">          and the level result was already applied and saved by the</span>
+<span class="sd">          GameController.</span>
+<span class="sd">        - ``"prev"``, ``"rest"`` and ``"next"`` (pause menu) are</span>
+<span class="sd">          recorded before the level changes, so the event carries the</span>
+<span class="sd">          source phase/level; the level is then reset.</span>
+<span class="sd">        """</span>
+        <span class="n">feet_pos</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">game_state</span><span class="o">.</span><span class="n">feet_click</span><span class="p">:</span>
+            <span class="n">feet_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">track_feet_for_menu</span><span class="p">()</span>
+
+        <span class="n">menu_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">feet_pos</span><span class="p">)</span>
+        <span class="n">by_feet</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">menu</span><span class="o">.</span><span class="n">selected_by_feet</span>
+
+        <span class="k">if</span> <span class="n">menu_result</span> <span class="o">==</span> <span class="s2">"exit"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exit_game</span><span class="p">(</span><span class="n">by_feet</span><span class="o">=</span><span class="n">by_feet</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">menu_result</span> <span class="o">==</span> <span class="s2">"game"</span><span class="p">:</span>
+            <span class="c1"># Play (start menu) or Continue (pause); with mouse or</span>
+            <span class="c1"># keyboard the Unpause is recorded when the game resumes.</span>
+            <span class="k">if</span> <span class="n">by_feet</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">register_menu_choice</span><span class="p">(</span><span class="s2">"game"</span><span class="p">,</span> <span class="n">by_feet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s2">"game"</span>
+            <span class="n">regain_focus</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">menu_result</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"prev"</span><span class="p">,</span> <span class="s2">"rest"</span><span class="p">,</span> <span class="s2">"next"</span><span class="p">):</span>
+            <span class="c1"># Pause menu. Record before applying (event with the</span>
+            <span class="c1"># source phase/level).</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">register_menu_choice</span><span class="p">(</span><span class="n">menu_result</span><span class="p">,</span> <span class="n">by_feet</span><span class="o">=</span><span class="n">by_feet</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">change_level</span><span class="p">(</span><span class="n">menu_result</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s2">"game"</span>
+        <span class="k">elif</span> <span class="n">menu_result</span> <span class="o">==</span> <span class="s2">"play"</span><span class="p">:</span>
+            <span class="c1"># Feedback screen: the level result was already applied and</span>
+            <span class="c1"># saved by the GameController; just start the level.</span>
+            <span class="k">if</span> <span class="n">by_feet</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">register_menu_choice</span><span class="p">(</span><span class="s2">"play"</span><span class="p">,</span> <span class="n">by_feet</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s2">"game"</span></div>
+
+
+<div class="viewcode-block" id="KarTEA.update_game">
+<a class="viewcode-back" href="../../../../api/ttea.games.kartea.main.KarTEA.html#ttea.games.kartea.main.KarTEA.update_game">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_game</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Update the game logic and go back to the menu when asked.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The level clock advances in the GameController, using the delta</span>
+<span class="sd">        time of the GameState.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">events</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"menu"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="s2">"menu"</span></div>
+
+
+<div class="viewcode-block" id="KarTEA.update">
+<a class="viewcode-back" href="../../../../api/ttea.games.kartea.main.KarTEA.html#ttea.games.kartea.main.KarTEA.update">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Update the current screen (menu or game)."""</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s2">"menu"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_menu</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s2">"game"</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_game</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="KarTEA.draw_fps">
+<a class="viewcode-back" href="../../../../api/ttea.games.kartea.main.KarTEA.html#ttea.games.kartea.main.KarTEA.draw_fps">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw_fps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Draw the FPS counter in the top left corner.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Drawn only when ``GameSettings.DRAW_FPS`` is True.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">DRAW_FPS</span><span class="p">:</span>
+            <span class="n">fps_label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fps_font</span><span class="o">.</span><span class="n">render</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"FPS: </span><span class="si">{</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">get_fps</span><span class="p">())</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">alpha_blit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="p">,</span> <span class="n">fps_label</span><span class="p">,</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="KarTEA.run">
+<a class="viewcode-back" href="../../../../api/ttea.games.kartea.main.KarTEA.html#ttea.games.kartea.main.KarTEA.run">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Run the main game loop.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        - Each frame handles the events, waits for ``GameSettings.FPS``</span>
+<span class="sd">          and sets ``GameState.delta_time`` to the real elapsed time in</span>
+<span class="sd">          seconds, capped at ``GameSettings.MAX_DELTA_TIME``.</span>
+<span class="sd">        - On any exit, including errors, the session is saved one last</span>
+<span class="sd">          time (so the level in progress also reaches the session) and</span>
+<span class="sd">          pygame is shut down. A failure while saving is logged and does</span>
+<span class="sd">          not hide the original error.</span>
+<span class="sd">        """</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">running</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">handle_events</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">FPS</span><span class="p">)</span>
+
+                <span class="n">raw_dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">get_time</span><span class="p">()</span> <span class="o">/</span> <span class="mf">1000.0</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">game_state</span><span class="o">.</span><span class="n">delta_time</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span>
+                    <span class="n">raw_dt</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">MAX_DELTA_TIME</span>
+                <span class="p">)</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+                <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">draw_fps</span><span class="p">()</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="c1"># Last session save on any exit, including errors, so the</span>
+            <span class="c1"># level in progress also reaches the session.</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">save_session</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1"># Do not let a failure here hide the original error</span>
+                <span class="n">log</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">"log_error"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">getattr</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">,</span> <span class="s2">"error"</span><span class="p">,</span> <span class="nb">print</span>
+                <span class="p">)</span>
+                <span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Erro ao gravar a sessão: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="n">pygame</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../../../../api/ttea.games.kartea.main.html#ttea.games.kartea.main.main">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Start the KarTEA game.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Installs the critical exception hooks and the log file</span>
+<span class="sd">    (``KarteaPathConfig.KARTEA_LOG_FILENAME``), then runs the game. A</span>
+<span class="sd">    critical error is logged with its stack trace and re-raised; the</span>
+<span class="sd">    process always ends with ``sys.exit`` (exit code 1 on error, 0</span>
+<span class="sd">    otherwise).</span>
+<span class="sd">    """</span>
+    <span class="n">CriticalHooks</span><span class="o">.</span><span class="n">setup_exception_hooks</span><span class="p">()</span>
+
+    <span class="n">log_file_path</span> <span class="o">=</span> <span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">KARTEA_LOG_FILENAME</span><span class="p">)</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">Log</span><span class="p">(</span><span class="n">log_file</span><span class="o">=</span><span class="n">log_file_path</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">"KarTEA started successfully."</span><span class="p">)</span>
+
+    <span class="n">exit_code</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">kartea</span> <span class="o">=</span> <span class="n">KarTEA</span><span class="p">()</span>
+        <span class="n">kartea</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">exit_code</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_error</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Critical error KarTEA: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_error_with_stack</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">e</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">"KarTEA process finished."</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">exit_code</span><span class="p">)</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

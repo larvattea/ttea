@@ -1,0 +1,17 @@
+Camera
+======
+
+.. currentmodule:: ttea.games.kartea.gamecore.camera
+
+.. autoclass:: Camera
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~Camera.close_camera
+      ~Camera.load_camera

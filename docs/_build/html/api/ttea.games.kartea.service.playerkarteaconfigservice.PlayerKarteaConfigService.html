@@ -1,0 +1,817 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PlayerKarteaConfigService &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.games.kartea.service.playerkarteasessiondetailservice" href="ttea.games.kartea.service.playerkarteasessiondetailservice.html" />
+    <link rel="prev" title="ttea.games.kartea.service.playerkarteaconfigservice" href="ttea.games.kartea.service.playerkarteaconfigservice.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.games.html">ttea.games</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.gametheme.html">ttea.games.gametheme</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.games.kartea.html">ttea.games.kartea</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.controller.html">ttea.games.kartea.controller</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.dao.html">ttea.games.kartea.dao</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.factory.html">ttea.games.kartea.factory</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamecontroller.html">ttea.games.kartea.gamecontroller</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamecore.html">ttea.games.kartea.gamecore</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamemodel.html">ttea.games.kartea.gamemodel</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gametheme.html">ttea.games.kartea.gametheme</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameui.html">ttea.games.kartea.gameui</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameutil.html">ttea.games.kartea.gameutil</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameview.html">ttea.games.kartea.gameview</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.main.html">ttea.games.kartea.main</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.model.html">ttea.games.kartea.model</a></li>
+<li class="toctree-l5 current"><a class="reference internal" href="ttea.games.kartea.service.html">ttea.games.kartea.service</a><ul class="current">
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.service.html#attributes">Attributes</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.service.html#see-also">See Also</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.service.html#notes">Notes</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.service.csvcrudservice.html">ttea.games.kartea.service.csvcrudservice</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.service.karteahardwareservice.html">ttea.games.kartea.service.karteahardwareservice</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.service.karteaphaseservice.html">ttea.games.kartea.service.karteaphaseservice</a></li>
+<li class="toctree-l6 current"><a class="reference internal" href="ttea.games.kartea.service.playerkarteaconfigservice.html">ttea.games.kartea.service.playerkarteaconfigservice</a><ul class="current">
+<li class="toctree-l7 current"><a class="current reference internal" href="#">PlayerKarteaConfigService</a><ul>
+<li class="toctree-l8"><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigService</span></code></a><ul>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.session_detail_service"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigService.session_detail_service</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_all_configs"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigService.get_all_configs()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.create_config"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigService.create_config()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.update_config"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigService.update_config()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.update_config_session"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigService.update_config_session()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.update_config_level"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigService.update_config_level()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.delete_config"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigService.delete_config()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.find_config_by_player_id"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigService.find_config_by_player_id()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.search_configs"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigService.search_configs()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_all_players"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigService.get_all_players()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_session"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigService.get_session()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_or_create_config"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigService.get_or_create_config()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.find_player"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigService.find_player()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.find_professional"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigService.find_professional()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.set_interface_option"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigService.set_interface_option()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_available_resources"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigService.get_available_resources()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_default_config_data"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigService.get_default_config_data()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.config_to_data"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigService.config_to_data()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_effective_config_data"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigService.get_effective_config_data()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.build_game_settings"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigService.build_game_settings()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_kartea_ini_config"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigService.get_kartea_ini_config()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.service.playerkarteasessiondetailservice.html">ttea.games.kartea.service.playerkarteasessiondetailservice</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.service.playerkarteasessionservice.html">ttea.games.kartea.service.playerkarteasessionservice</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.util.html">ttea.games.kartea.util</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.view.html">ttea.games.kartea.view</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.html">ttea.games</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.html">ttea.games.kartea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.service.html">ttea.games.kartea.service</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.service.playerkarteaconfigservice.html">ttea.games.kartea.service.playerkarteaconfigservice</a></li>
+      <li class="breadcrumb-item active">PlayerKarteaConfigService</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="playerkarteaconfigservice">
+<h1>PlayerKarteaConfigService<a class="headerlink" href="#playerkarteaconfigservice" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PlayerKarteaConfigService</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dao</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calibration_service</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">player_service</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">professional_service</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hardware_service</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/playerkarteaconfigservice.html#PlayerKarteaConfigService"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Service layer (MVCS) with the business rules of the config.</p>
+<p>Hardware (screen, camera, calibration, MediaPipe) lives in
+KarteaHardwareService, available as <code class="docutils literal notranslate"><span class="pre">hardware_service</span></code>. Phases,
+levels, progression and level rules live in KarteaPhaseService.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>dao</strong><span class="classifier">PlayerKarteaConfigCsvDAO | None, optional</span></dt><dd><p>Instance used for persistence. If None, a default
+<code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigCsvDAO</span></code> is created. Kept private: callers
+go through the service methods.</p>
+</dd>
+<dt><strong>calibration_service</strong><span class="classifier">CalibrationService | None, optional</span></dt><dd><p>Used to build the hardware service when <code class="docutils literal notranslate"><span class="pre">hardware_service</span></code> is
+not given.</p>
+</dd>
+<dt><strong>player_service</strong><span class="classifier">PlayerService | None, optional</span></dt><dd><p>Player service. Created if None.</p>
+</dd>
+<dt><strong>professional_service</strong><span class="classifier">ProfessionalService | None, optional</span></dt><dd><p>Professional service. Created if None.</p>
+</dd>
+<dt><strong>hardware_service</strong><span class="classifier">KarteaHardwareService | None, optional</span></dt><dd><p>Screen, camera, calibration and MediaPipe. Created if None.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>INTERFACE_OPTIONS</strong><span class="classifier">tuple[str, …], class attribute</span></dt><dd><p>Interface options (bool) that can be toggled during the game:
+“hud”, “sound”, “feet_marker” and “feet_click”.</p>
+</dd>
+<dt><strong>hardware_service</strong><span class="classifier">KarteaHardwareService</span></dt><dd><p>Screen, camera, calibration and MediaPipe.</p>
+</dd>
+<dt><strong>player_service</strong><span class="classifier">PlayerService</span></dt><dd><p>Access to the T-TEA players.</p>
+</dd>
+<dt><strong>professional_service</strong><span class="classifier">ProfessionalService</span></dt><dd><p>Access to the T-TEA professionals.</p>
+</dd>
+<dt><strong>session_service</strong><span class="classifier">PlayerKarteaSessionService</span></dt><dd><p>Session service that shares the configuration DAO’s session DAO.</p>
+</dd>
+<dt><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.session_detail_service" title="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.session_detail_service"><code class="xref py py-obj docutils literal notranslate"><span class="pre">session_detail_service</span></code></a><span class="classifier">PlayerKarteaSessionDetailService</span></dt><dd><p>Session detail service that shares the session DAO.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><strong>get_all_configs()</strong></p></td>
+<td><p>Return all registered configs.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>create_config(data)</strong></p></td>
+<td><p>Create a new config from the provided data dictionary.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>update_config(player_id, data)</strong></p></td>
+<td><p>Update an existing config with the given data.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>update_config_session(player_id, session_id)</strong></p></td>
+<td><p>Record the current game session in the config.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>update_config_level(player_id, phase_id, level_id)</strong></p></td>
+<td><p>Record the current phase/level in the config.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>delete_config(player_id)</strong></p></td>
+<td><p>Delete a config by player ID.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>find_config_by_player_id(player_id)</strong></p></td>
+<td><p>Retrieve a config by player ID.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>search_configs(query=””)</strong></p></td>
+<td><p>Search configs by player name or ID (case-insensitive).</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>get_or_create_config(player_id)</strong></p></td>
+<td><p>Return the player’s config, creating it with defaults if missing.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>set_interface_option(player_id, option, value)</strong></p></td>
+<td><p>Save one of INTERFACE_OPTIONS.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>get_available_resources()</strong></p></td>
+<td><p>Resources available for each resource field.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>get_default_config_data(player_id=None)</strong></p></td>
+<td><p>Data of a new config, from kartea.ini.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>config_to_data(config)</strong></p></td>
+<td><p>Convert a config to the form data dictionary.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>get_effective_config_data(config)</strong></p></td>
+<td><p>Config data with the .ini defaults in the empty fields.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>build_game_settings(config)</strong></p></td>
+<td><p>Everything the game needs to build GameSettings.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The session service uses the SAME session DAO as the configuration
+DAO, so a session created by the game is found when it is recorded
+in the configuration.</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.build_game_settings" title="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.build_game_settings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">build_game_settings</span></code></a></p></td>
+<td><p>Return everything the game needs to build GameSettings.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.config_to_data" title="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.config_to_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">config_to_data</span></code></a></p></td>
+<td><p>Convert the config to the dictionary used by forms.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.create_config" title="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.create_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_config</span></code></a></p></td>
+<td><p>Create a new config from a dictionary of attributes.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.delete_config" title="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.delete_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_config</span></code></a></p></td>
+<td><p>Delete a config by player ID.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.find_config_by_player_id" title="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.find_config_by_player_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_config_by_player_id</span></code></a></p></td>
+<td><p>Find a config by player ID.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.find_player" title="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.find_player"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_player</span></code></a></p></td>
+<td><p>Return a player by id.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.find_professional" title="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.find_professional"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_professional</span></code></a></p></td>
+<td><p>Return a professional by id.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_all_configs" title="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_all_configs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_all_configs</span></code></a></p></td>
+<td><p>Return a list of all registered configs.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_all_players" title="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_all_players"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_all_players</span></code></a></p></td>
+<td><p>Return all T-TEA players, sorted by name.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_available_resources" title="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_available_resources"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_available_resources</span></code></a></p></td>
+<td><p>Return the resources available for each resource field.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_default_config_data" title="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_default_config_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_default_config_data</span></code></a></p></td>
+<td><p>Return the data of a new config, from kartea.ini.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_effective_config_data" title="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_effective_config_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_effective_config_data</span></code></a></p></td>
+<td><p>Return the config with the .ini defaults in the empty fields.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_kartea_ini_config" title="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_kartea_ini_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_kartea_ini_config</span></code></a></p></td>
+<td><p>Return the kartea.ini values.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_or_create_config" title="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_or_create_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_or_create_config</span></code></a></p></td>
+<td><p>Return the player's config, creating it if missing.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_session" title="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_session</span></code></a></p></td>
+<td><p>Return a game session by id.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.search_configs" title="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.search_configs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">search_configs</span></code></a></p></td>
+<td><p>Search configs by player name or ID.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.set_interface_option" title="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.set_interface_option"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_interface_option</span></code></a></p></td>
+<td><p>Save an interface option of the player.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.update_config" title="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.update_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_config</span></code></a></p></td>
+<td><p>Update an existing config.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.update_config_level" title="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.update_config_level"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_config_level</span></code></a></p></td>
+<td><p>Record in the config the phase/level the game is on.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.update_config_session" title="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.update_config_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_config_session</span></code></a></p></td>
+<td><p>Record the current game session in the player's config.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.session_detail_service">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">session_detail_service</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="ttea.games.kartea.service.playerkarteasessiondetailservice.PlayerKarteaSessionDetailService.html#ttea.games.kartea.service.playerkarteasessiondetailservice.PlayerKarteaSessionDetailService" title="ttea.games.kartea.service.playerkarteasessiondetailservice.PlayerKarteaSessionDetailService"><span class="pre">PlayerKarteaSessionDetailService</span></a></em><a class="headerlink" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.session_detail_service" title="Link to this definition"></a></dt>
+<dd><p>Session detail service that shares the session DAO.</p>
+<p class="rubric">Notes</p>
+<p>Created on first use (only the game records details; the
+register screens do not need to read the details CSV). A single
+instance per configuration service, so the detail ID counter is
+not duplicated between instances.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_all_configs">
+<span class="sig-name descname"><span class="pre">get_all_configs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/playerkarteaconfigservice.html#PlayerKarteaConfigService.get_all_configs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_all_configs" title="Link to this definition"></a></dt>
+<dd><p>Return a list of all registered configs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>list[PlayerKarteaConfig]</dt><dd><p>Complete list of PlayerKarteaConfig instances stored in the
+DAO.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.create_config">
+<span class="sig-name descname"><span class="pre">create_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/playerkarteaconfigservice.html#PlayerKarteaConfigService.create_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.create_config" title="Link to this definition"></a></dt>
+<dd><p>Create a new config from a dictionary of attributes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data</strong><span class="classifier">dict[str, Any]</span></dt><dd><p>Same format as <code class="docutils literal notranslate"><span class="pre">get_default_config_data</span></code>: <code class="docutils literal notranslate"><span class="pre">player_id</span></code>,
+<code class="docutils literal notranslate"><span class="pre">session_id</span></code>, <code class="docutils literal notranslate"><span class="pre">phase_id</span></code>, <code class="docutils literal notranslate"><span class="pre">level_id</span></code> and the plain
+fields of PlayerKarteaConfig.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>PlayerKarteaConfig | None</dt><dd><p>The created config if validation and insertion succeed; None
+otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<ul class="simple">
+<li><p>The ids are resolved to objects through the DAOs; missing ids
+become None.</p></li>
+<li><p>A missing plain field gets the model default or, without one,
+the empty value of its type (0, 0.0, False, “”).
+<code class="docutils literal notranslate"><span class="pre">update_session_id</span></code> defaults to UPDATE_SESSION_ID_YES.</p></li>
+<li><p>The config must have player, phase and level (<code class="docutils literal notranslate"><span class="pre">is_valid</span></code>).</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.update_config">
+<span class="sig-name descname"><span class="pre">update_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">player_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/playerkarteaconfigservice.html#PlayerKarteaConfigService.update_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.update_config" title="Link to this definition"></a></dt>
+<dd><p>Update an existing config.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>player_id</strong><span class="classifier">int</span></dt><dd><p>Player ID (key of the config).</p>
+</dd>
+<dt><strong>data</strong><span class="classifier">dict[str, Any]</span></dt><dd><p>Same format as <code class="docutils literal notranslate"><span class="pre">create_config</span></code>; only the given keys
+change.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if saved; False if the config does not exist, becomes
+invalid (no player, phase or level) or the DAO rejects it.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Fields missing from <code class="docutils literal notranslate"><span class="pre">data</span></code> keep their current value; the
+references are resolved again from the current ids.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.update_config_session">
+<span class="sig-name descname"><span class="pre">update_config_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">player_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/playerkarteaconfigservice.html#PlayerKarteaConfigService.update_config_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.update_config_session" title="Link to this definition"></a></dt>
+<dd><p>Record the current game session in the player’s config.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>player_id</strong><span class="classifier">int</span></dt><dd><p>Player ID.</p>
+</dd>
+<dt><strong>session_id</strong><span class="classifier">int</span></dt><dd><p>Id of the current session.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if the config was updated.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Only records it if the config has <code class="docutils literal notranslate"><span class="pre">update_session_id</span></code> = True;
+otherwise, the session recorded in the config is kept.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.update_config_level">
+<span class="sig-name descname"><span class="pre">update_config_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">player_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/playerkarteaconfigservice.html#PlayerKarteaConfigService.update_config_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.update_config_level" title="Link to this definition"></a></dt>
+<dd><p>Record in the config the phase/level the game is on.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>player_id</strong><span class="classifier">int</span></dt><dd><p>Player ID.</p>
+</dd>
+<dt><strong>phase_id</strong><span class="classifier">int</span></dt><dd><p>Current phase.</p>
+</dd>
+<dt><strong>level_id</strong><span class="classifier">int</span></dt><dd><p>Current level.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if the config holds the given phase/level.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The config follows the game (advance, regress, etc.), and the
+next session starts where the previous one stopped. The file is
+only rewritten when the phase or the level changes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.delete_config">
+<span class="sig-name descname"><span class="pre">delete_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">player_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/playerkarteaconfigservice.html#PlayerKarteaConfigService.delete_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.delete_config" title="Link to this definition"></a></dt>
+<dd><p>Delete a config by player ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>player_id</strong><span class="classifier">int</span></dt><dd><p>Player ID.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if deleted.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.find_config_by_player_id">
+<span class="sig-name descname"><span class="pre">find_config_by_player_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">player_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/playerkarteaconfigservice.html#PlayerKarteaConfigService.find_config_by_player_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.find_config_by_player_id" title="Link to this definition"></a></dt>
+<dd><p>Find a config by player ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>player_id</strong><span class="classifier">int</span></dt><dd><p>Player ID.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>PlayerKarteaConfig | None</dt><dd><p>The config, or None if the player has none.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.search_configs">
+<span class="sig-name descname"><span class="pre">search_configs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/playerkarteaconfigservice.html#PlayerKarteaConfigService.search_configs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.search_configs" title="Link to this definition"></a></dt>
+<dd><p>Search configs by player name or ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>query</strong><span class="classifier">str, optional</span></dt><dd><p>Text searched (case-insensitive) in the player name and ID.
+An empty or blank query returns all configs.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>list[PlayerKarteaConfig]</dt><dd><p>Matching configs; configs without a player are left out.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_all_players">
+<span class="sig-name descname"><span class="pre">get_all_players</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/playerkarteaconfigservice.html#PlayerKarteaConfigService.get_all_players"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_all_players" title="Link to this definition"></a></dt>
+<dd><p>Return all T-TEA players, sorted by name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>list[Player]</dt><dd><p>Players from the PlayerService.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_session">
+<span class="sig-name descname"><span class="pre">get_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/playerkarteaconfigservice.html#PlayerKarteaConfigService.get_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_session" title="Link to this definition"></a></dt>
+<dd><p>Return a game session by id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>session_id</strong><span class="classifier">int</span></dt><dd><p>Id of the session.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>PlayerKarteaSession | None</dt><dd><p>The session, or None if not found.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_or_create_config">
+<span class="sig-name descname"><span class="pre">get_or_create_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">player_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/playerkarteaconfigservice.html#PlayerKarteaConfigService.get_or_create_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_or_create_config" title="Link to this definition"></a></dt>
+<dd><p>Return the player’s config, creating it if missing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>player_id</strong><span class="classifier">int</span></dt><dd><p>Player ID.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>PlayerKarteaConfig | None</dt><dd><p>The existing config, or a new one built with the kartea.ini
+defaults; None if creation fails (e.g. the
+kartea.ini defaults have no valid phase/level).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.find_player">
+<span class="sig-name descname"><span class="pre">find_player</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">player_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/playerkarteaconfigservice.html#PlayerKarteaConfigService.find_player"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.find_player" title="Link to this definition"></a></dt>
+<dd><p>Return a player by id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>player_id</strong><span class="classifier">int</span></dt><dd><p>Player ID.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>Player | None</dt><dd><p>The player, or None if not found.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.find_professional">
+<span class="sig-name descname"><span class="pre">find_professional</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">professional_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/playerkarteaconfigservice.html#PlayerKarteaConfigService.find_professional"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.find_professional" title="Link to this definition"></a></dt>
+<dd><p>Return a professional by id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>professional_id</strong><span class="classifier">int</span></dt><dd><p>Professional ID.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>Professional | None</dt><dd><p>The professional, or None if not found.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.set_interface_option">
+<span class="sig-name descname"><span class="pre">set_interface_option</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">player_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">option</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/playerkarteaconfigservice.html#PlayerKarteaConfigService.set_interface_option"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.set_interface_option" title="Link to this definition"></a></dt>
+<dd><p>Save an interface option of the player.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>player_id</strong><span class="classifier">int</span></dt><dd><p>Player ID.</p>
+</dd>
+<dt><strong>option</strong><span class="classifier">str</span></dt><dd><p>One of INTERFACE_OPTIONS (“hud”, “sound”, “feet_marker” or
+“feet_click”).</p>
+</dd>
+<dt><strong>value</strong><span class="classifier">bool</span></dt><dd><p>New value.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if saved; False if the player has no config yet (only
+existing configs are updated).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>ValueError</dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">option</span></code> is not in INTERFACE_OPTIONS.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_available_resources">
+<span class="sig-name descname"><span class="pre">get_available_resources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/playerkarteaconfigservice.html#PlayerKarteaConfigService.get_available_resources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_available_resources" title="Link to this definition"></a></dt>
+<dd><p>Return the resources available for each resource field.</p>
+<p>The built-in ones and, after them, the files the user placed in
+the field’s mods folder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>dict[str, list[tuple[str, str]]]</dt><dd><p><code class="docutils literal notranslate"><span class="pre">{field:</span> <span class="pre">[(name,</span> <span class="pre">path),</span> <span class="pre">...]}</span></code>, with the image and sound
+fields of the config (vehicle_image, target_image, …).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_default_config_data">
+<span class="sig-name descname"><span class="pre">get_default_config_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">player_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/playerkarteaconfigservice.html#PlayerKarteaConfigService.get_default_config_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_default_config_data" title="Link to this definition"></a></dt>
+<dd><p>Return the data of a new config, from kartea.ini.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>player_id</strong><span class="classifier">int | None, optional</span></dt><dd><p>Player ID to put in the data.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>dict[str, Any]</dt><dd><p>Same format accepted by create_config/update_config, with
+<code class="docutils literal notranslate"><span class="pre">session_id</span></code> None and one entry per field of
+KarteaIniDefaults.TABLE.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.config_to_data">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">config_to_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/playerkarteaconfigservice.html#PlayerKarteaConfigService.config_to_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.config_to_data" title="Link to this definition"></a></dt>
+<dd><p>Convert the config to the dictionary used by forms.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>config</strong><span class="classifier">PlayerKarteaConfig</span></dt><dd><p>Config to convert.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>dict[str, Any]</dt><dd><p>Same format as get_default_config_data. References become
+<code class="docutils literal notranslate"><span class="pre">*_id</span></code> keys; fields without a value in the config are
+None.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_effective_config_data">
+<span class="sig-name descname"><span class="pre">get_effective_config_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/playerkarteaconfigservice.html#PlayerKarteaConfigService.get_effective_config_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_effective_config_data" title="Link to this definition"></a></dt>
+<dd><p>Return the config with the .ini defaults in the empty fields.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>config</strong><span class="classifier">PlayerKarteaConfig | None</span></dt><dd><p>Player’s config; None returns only the defaults.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>dict[str, Any]</dt><dd><p>Same format as get_default_config_data; values of <code class="docutils literal notranslate"><span class="pre">config</span></code>
+that are not None override the defaults.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.build_game_settings">
+<span class="sig-name descname"><span class="pre">build_game_settings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/playerkarteaconfigservice.html#PlayerKarteaConfigService.build_game_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.build_game_settings" title="Link to this definition"></a></dt>
+<dd><p>Return everything the game needs to build GameSettings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>config</strong><span class="classifier">PlayerKarteaConfig | None</span></dt><dd><p>Player’s config.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>dict[str, Any]</dt><dd><p>Screen settings, <code class="docutils literal notranslate"><span class="pre">calibration_points</span></code>
+(KarteaHardwareService) and the player’s effective config
+data.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>GameSettings receives only this dictionary and does not access
+services.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_kartea_ini_config">
+<span class="sig-name descname"><span class="pre">get_kartea_ini_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/playerkarteaconfigservice.html#PlayerKarteaConfigService.get_kartea_ini_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_kartea_ini_config" title="Link to this definition"></a></dt>
+<dd><p>Return the kartea.ini values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>dict[str, str]</dt><dd><p>Values read by KarteaPathConfig.read_config.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.games.kartea.service.playerkarteaconfigservice.html" class="btn btn-neutral float-left" title="ttea.games.kartea.service.playerkarteaconfigservice" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.games.kartea.service.playerkarteasessiondetailservice.html" class="btn btn-neutral float-right" title="ttea.games.kartea.service.playerkarteasessiondetailservice" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

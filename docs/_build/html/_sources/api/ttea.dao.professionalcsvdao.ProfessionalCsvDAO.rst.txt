@@ -1,0 +1,26 @@
+ProfessionalCsvDAO
+==================
+
+.. currentmodule:: ttea.dao.professionalcsvdao
+
+.. autoclass:: ProfessionalCsvDAO
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~ProfessionalCsvDAO.delete
+      ~ProfessionalCsvDAO.generate_next_id
+      ~ProfessionalCsvDAO.get_filename
+      ~ProfessionalCsvDAO.insert
+      ~ProfessionalCsvDAO.list
+      ~ProfessionalCsvDAO.load_all_professionals
+      ~ProfessionalCsvDAO.sanitize_filename
+      ~ProfessionalCsvDAO.search_professionals
+      ~ProfessionalCsvDAO.select
+      ~ProfessionalCsvDAO.update
+      ~ProfessionalCsvDAO.write_with_lock

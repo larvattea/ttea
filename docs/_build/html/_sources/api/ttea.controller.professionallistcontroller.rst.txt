@@ -1,0 +1,20 @@
+ttea.controller.professionallistcontroller
+==========================================
+
+.. automodule:: ttea.controller.professionallistcontroller
+
+.. currentmodule:: ttea.controller.professionallistcontroller
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   ProfessionalListController
+
+

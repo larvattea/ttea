@@ -1,0 +1,386 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.games.kartea.gameutil.gamestate &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.games.kartea.gameutil.gamestate</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.games.kartea.gameutil.gamestate</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""State of a KarTEA match.</span>
+
+<span class="sd">``GameSettings`` holds only the configuration (screen, sizes,</span>
+<span class="sd">resources), defined once at startup. Everything that changes during</span>
+<span class="sd">the match (phase/level, score, counters, player lane, current menu,</span>
+<span class="sd">clock) lives here, in an instance created by ``main`` and handed to</span>
+<span class="sd">``GameController`` and ``Menu``; there is no global state.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
+
+
+<div class="viewcode-block" id="LevelStats">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gameutil.gamestate.LevelStats.html#ttea.games.kartea.gameutil.gamestate.LevelStats">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">LevelStats</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Counters of the level in progress (reset at each new level).</span>
+
+<span class="sd">    They are the values shown on the feedback screen.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    score : int</span>
+<span class="sd">        Score of the level. Defaults to 0.</span>
+<span class="sd">    movement : int</span>
+<span class="sd">        Lane changes. Defaults to 0.</span>
+<span class="sd">    targets : int</span>
+<span class="sd">        Targets created. Defaults to 0.</span>
+<span class="sd">    targets_collided : int</span>
+<span class="sd">        Targets hit. Defaults to 0.</span>
+<span class="sd">    targets_avoided : int</span>
+<span class="sd">        Targets missed. Defaults to 0.</span>
+<span class="sd">    obstacles : int</span>
+<span class="sd">        Obstacles created. Defaults to 0.</span>
+<span class="sd">    obstacles_collided : int</span>
+<span class="sd">        Obstacles hit. Defaults to 0.</span>
+<span class="sd">    obstacles_avoided : int</span>
+<span class="sd">        Obstacles avoided. Defaults to 0.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; stats = LevelStats(score=5)</span>
+<span class="sd">    &gt;&gt;&gt; stats.reset()</span>
+<span class="sd">    &gt;&gt;&gt; stats.score</span>
+<span class="sd">    0</span>
+<span class="sd">    """</span>
+
+    <span class="n">score</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">movement</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">targets</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">targets_collided</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">targets_avoided</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">obstacles</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">obstacles_collided</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">obstacles_avoided</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="LevelStats.reset">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gameutil.gamestate.LevelStats.html#ttea.games.kartea.gameutil.gamestate.LevelStats.reset">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Reset all level counters to zero."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="SessionStats">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gameutil.gamestate.SessionStats.html#ttea.games.kartea.gameutil.gamestate.SessionStats">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SessionStats</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Session totals (the whole game run), never reset.</span>
+
+<span class="sd">    ``score_done`` and ``movement_done`` accumulate the levels already</span>
+<span class="sd">    closed; the session total is this accumulated value plus the value</span>
+<span class="sd">    of the level in progress.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    score_done : int</span>
+<span class="sd">        Score of the closed levels. Defaults to 0.</span>
+<span class="sd">    movement_done : int</span>
+<span class="sd">        Lane changes of the closed levels. Defaults to 0.</span>
+<span class="sd">    collided_target : int</span>
+<span class="sd">        Targets hit in the session. Defaults to 0.</span>
+<span class="sd">    avoided_target : int</span>
+<span class="sd">        Targets missed in the session. Defaults to 0.</span>
+<span class="sd">    collided_obstacle : int</span>
+<span class="sd">        Obstacles hit in the session. Defaults to 0.</span>
+<span class="sd">    avoided_obstacle : int</span>
+<span class="sd">        Obstacles avoided in the session. Defaults to 0.</span>
+<span class="sd">    """</span>
+
+    <span class="n">score_done</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">movement_done</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">collided_target</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">avoided_target</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">collided_obstacle</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">avoided_obstacle</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="SessionStats.close_level">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gameutil.gamestate.SessionStats.html#ttea.games.kartea.gameutil.gamestate.SessionStats.close_level">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close_level</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="n">LevelStats</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Add the level score and lane changes to the accumulated ones.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        level : LevelStats</span>
+<span class="sd">            Counters of the level being closed.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score_done</span> <span class="o">+=</span> <span class="n">level</span><span class="o">.</span><span class="n">score</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">movement_done</span> <span class="o">+=</span> <span class="n">level</span><span class="o">.</span><span class="n">movement</span></div>
+
+
+<div class="viewcode-block" id="SessionStats.totals">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gameutil.gamestate.SessionStats.html#ttea.games.kartea.gameutil.gamestate.SessionStats.totals">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">totals</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="n">LevelStats</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the session totals in the session row format (DAO).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        level : LevelStats</span>
+<span class="sd">            Counters of the level in progress, added to the accumulated</span>
+<span class="sd">            score and movement.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict</span>
+<span class="sd">            ``general_score``, ``q_movement``, ``q_collided_target``,</span>
+<span class="sd">            ``q_avoided_target``, ``q_collided_obstacle`` and</span>
+<span class="sd">            ``q_avoided_obstacle``.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; session = SessionStats(score_done=10, movement_done=4)</span>
+<span class="sd">        &gt;&gt;&gt; totals = session.totals(LevelStats(score=5, movement=1))</span>
+<span class="sd">        &gt;&gt;&gt; totals["general_score"], totals["q_movement"]</span>
+<span class="sd">        (15, 5)</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">"general_score"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">score_done</span> <span class="o">+</span> <span class="n">level</span><span class="o">.</span><span class="n">score</span><span class="p">,</span>
+            <span class="s2">"q_movement"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">movement_done</span> <span class="o">+</span> <span class="n">level</span><span class="o">.</span><span class="n">movement</span><span class="p">,</span>
+            <span class="s2">"q_collided_target"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">collided_target</span><span class="p">,</span>
+            <span class="s2">"q_avoided_target"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">avoided_target</span><span class="p">,</span>
+            <span class="s2">"q_collided_obstacle"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">collided_obstacle</span><span class="p">,</span>
+            <span class="s2">"q_avoided_obstacle"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">avoided_obstacle</span><span class="p">,</span>
+        <span class="p">}</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="GameState">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gameutil.gamestate.GameState.html#ttea.games.kartea.gameutil.gamestate.GameState">[docs]</a>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">GameState</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Mutable state of a match.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    player_id : int</span>
+<span class="sd">        Who plays (command line argument). Defaults to 0.</span>
+<span class="sd">    player_name : str</span>
+<span class="sd">        First name of the player, shown under the trophy on the</span>
+<span class="sd">        feedback screen. Defaults to "".</span>
+<span class="sd">    professional_id : int</span>
+<span class="sd">        Who supervises (command line argument). Defaults to 0.</span>
+<span class="sd">    session_id : int</span>
+<span class="sd">        Open session (0 while none was created). Defaults to 0.</span>
+<span class="sd">    phase : int</span>
+<span class="sd">        Phase in progress. Defaults to 1.</span>
+<span class="sd">    level : int</span>
+<span class="sd">        Level in progress. Defaults to 1.</span>
+<span class="sd">    level_time : int</span>
+<span class="sd">        Level duration (s). Defaults to 120.</span>
+<span class="sd">    hud : bool</span>
+<span class="sd">        Interface option (can be toggled during the game). Defaults to</span>
+<span class="sd">        True.</span>
+<span class="sd">    sound : bool</span>
+<span class="sd">        Interface option (can be toggled during the game). Defaults to</span>
+<span class="sd">        True.</span>
+<span class="sd">    feet_marker : bool</span>
+<span class="sd">        Draws the dot at the real feet position during the game.</span>
+<span class="sd">        Defaults to False.</span>
+<span class="sd">    feet_click : bool</span>
+<span class="sd">        The feet select the menu buttons (the dot always appears in the</span>
+<span class="sd">        menus). Defaults to False.</span>
+<span class="sd">    lane : int</span>
+<span class="sd">        Current lane of the player (0, 1, 2; -1 outside the area).</span>
+<span class="sd">        Defaults to 1.</span>
+<span class="sd">    menu : str</span>
+<span class="sd">        Menu screen to show: "Inicial", "Pause", "Feedback_1..3".</span>
+<span class="sd">        Defaults to "Inicial".</span>
+<span class="sd">    time_past : float</span>
+<span class="sd">        Game time (ms) of the level in progress. Defaults to 0.0.</span>
+<span class="sd">    delta_time : float</span>
+<span class="sd">        Real time (s) since the previous frame, already capped. Defaults</span>
+<span class="sd">        to 1/60.</span>
+<span class="sd">    targets_spawn_time : float</span>
+<span class="sd">        Interval (s) between objects in the current level. Defaults to</span>
+<span class="sd">        8.</span>
+<span class="sd">    targets_move_speed : int</span>
+<span class="sd">        Speed of the objects in the current level. Defaults to 1.</span>
+<span class="sd">    level_stats : LevelStats</span>
+<span class="sd">        Counters of the level in progress.</span>
+<span class="sd">    session_stats : SessionStats</span>
+<span class="sd">        Totals of the session.</span>
+<span class="sd">    """</span>
+
+    <span class="n">player_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">player_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
+    <span class="n">professional_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">session_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="n">phase</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">level</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">level_time</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">120</span>
+
+    <span class="n">hud</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">sound</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">feet_marker</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">feet_click</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="n">lane</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">menu</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"Inicial"</span>
+
+    <span class="n">time_past</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">delta_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">60</span>
+
+    <span class="n">targets_spawn_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="n">targets_move_speed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="n">level_stats</span><span class="p">:</span> <span class="n">LevelStats</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">LevelStats</span><span class="p">)</span>
+    <span class="n">session_stats</span><span class="p">:</span> <span class="n">SessionStats</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">SessionStats</span><span class="p">)</span>
+
+<div class="viewcode-block" id="GameState.from_settings">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gameutil.gamestate.GameState.html#ttea.games.kartea.gameutil.gamestate.GameState.from_settings">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">from_settings</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">professional_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"GameState"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Create the initial state from the effective configuration.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        settings : dict</span>
+<span class="sd">            Dictionary from</span>
+<span class="sd">            ``PlayerKarteaConfigService.build_game_settings``.</span>
+<span class="sd">        player_id : int</span>
+<span class="sd">            Who plays.</span>
+<span class="sd">        professional_id : int</span>
+<span class="sd">            Who supervises.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        GameState</span>
+<span class="sd">            State with phase, level, level time and interface options</span>
+<span class="sd">            from ``settings``; ``feet_marker``/``feet_click`` default to</span>
+<span class="sd">            False when missing.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; settings = {</span>
+<span class="sd">        ...     "phase_id": "2", "level_id": 3, "level_time": 60,</span>
+<span class="sd">        ...     "hud": 1, "sound": 0,</span>
+<span class="sd">        ... }</span>
+<span class="sd">        &gt;&gt;&gt; state = GameState.from_settings(settings, 1, 2)</span>
+<span class="sd">        &gt;&gt;&gt; state.phase, state.level, state.sound, state.feet_click</span>
+<span class="sd">        (2, 3, False, False)</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span>
+            <span class="n">player_id</span><span class="o">=</span><span class="n">player_id</span><span class="p">,</span>
+            <span class="n">professional_id</span><span class="o">=</span><span class="n">professional_id</span><span class="p">,</span>
+            <span class="n">phase</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"phase_id"</span><span class="p">]),</span>
+            <span class="n">level</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"level_id"</span><span class="p">]),</span>
+            <span class="n">level_time</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"level_time"</span><span class="p">]),</span>
+            <span class="n">hud</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"hud"</span><span class="p">]),</span>
+            <span class="n">sound</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"sound"</span><span class="p">]),</span>
+            <span class="n">feet_marker</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"feet_marker"</span><span class="p">,</span> <span class="kc">False</span><span class="p">)),</span>
+            <span class="n">feet_click</span><span class="o">=</span><span class="nb">bool</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"feet_click"</span><span class="p">,</span> <span class="kc">False</span><span class="p">)),</span>
+        <span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,267 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CalibrationSettingView &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.view.calibrationview" href="ttea.view.calibrationview.html" />
+    <link rel="prev" title="ttea.view.calibrationsettingview" href="ttea.view.calibrationsettingview.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.games.html">ttea.games</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.view.html">ttea.view</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.aboutview.html">ttea.view.aboutview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.automaticcalibrationview.html">ttea.view.automaticcalibrationview</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.view.calibrationsettingview.html">ttea.view.calibrationsettingview</a><ul class="current">
+<li class="toctree-l5 current"><a class="current reference internal" href="#">CalibrationSettingView</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#ttea.view.calibrationsettingview.CalibrationSettingView"><code class="docutils literal notranslate"><span class="pre">CalibrationSettingView</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.view.calibrationsettingview.CalibrationSettingView.get_data"><code class="docutils literal notranslate"><span class="pre">CalibrationSettingView.get_data()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.view.calibrationsettingview.CalibrationSettingView.set_data"><code class="docutils literal notranslate"><span class="pre">CalibrationSettingView.set_data()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.view.calibrationsettingview.CalibrationSettingView.closeEvent"><code class="docutils literal notranslate"><span class="pre">CalibrationSettingView.closeEvent()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.calibrationview.html">ttea.view.calibrationview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.helpview.html">ttea.view.helpview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.institutionfacilityeditview.html">ttea.view.institutionfacilityeditview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.institutionfacilitylistview.html">ttea.view.institutionfacilitylistview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.languageview.html">ttea.view.languageview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.mainview.html">ttea.view.mainview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.manualcalibrationview.html">ttea.view.manualcalibrationview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.playereditview.html">ttea.view.playereditview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.playergamelaunchview.html">ttea.view.playergamelaunchview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.playerlistview.html">ttea.view.playerlistview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.professionaleditview.html">ttea.view.professionaleditview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.professionallistview.html">ttea.view.professionallistview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.splashscreen.html">ttea.view.splashscreen</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.view.html">ttea.view</a></li>
+          <li class="breadcrumb-item"><a href="ttea.view.calibrationsettingview.html">ttea.view.calibrationsettingview</a></li>
+      <li class="breadcrumb-item active">CalibrationSettingView</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.view.calibrationsettingview.CalibrationSettingView.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="calibrationsettingview">
+<h1>CalibrationSettingView<a class="headerlink" href="#calibrationsettingview" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.view.calibrationsettingview.CalibrationSettingView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CalibrationSettingView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/view/calibrationsettingview.html#CalibrationSettingView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.view.calibrationsettingview.CalibrationSettingView" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://doc.qt.io/qtforpython-6/PySide6/QtWidgets/QDialog.html#PySide6.QtWidgets.QDialog" title="(in PySide v6.12.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">QDialog</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_CalibrationSettingView</span></code>, <a class="reference internal" href="ttea.window.windowconfig.WindowConfig.html#ttea.window.windowconfig.WindowConfig" title="ttea.window.windowconfig.WindowConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">WindowConfig</span></code></a></p>
+<p>Modal dialog with the calibration settings.</p>
+<p>Each settings widget has the Qt property <code class="docutils literal notranslate"><span class="pre">dataclass_property</span></code> with
+the name of its <code class="docutils literal notranslate"><span class="pre">CalibrationSetting</span></code> field; <code class="docutils literal notranslate"><span class="pre">get_data</span></code> and
+<code class="docutils literal notranslate"><span class="pre">set_data</span></code> use it to read and fill the form. The logic is in
+<code class="docutils literal notranslate"><span class="pre">CalibrationSettingController</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>parent</strong><span class="classifier">QDialog | None, optional</span></dt><dd><p>Parent widget. Default is None.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>msg</strong><span class="classifier">MessageService</span></dt><dd><p>Service used to show dialogs.</p>
+</dd>
+<dt><strong>controller</strong><span class="classifier">CalibrationSettingController</span></dt><dd><p>Controller of the dialog.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The window is fixed at 5% wider and 75% taller than the parent. The
+camera groups are enabled by the custom camera check box and the
+filter group by the filter check box.</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.view.calibrationsettingview.CalibrationSettingView.closeEvent" title="ttea.view.calibrationsettingview.CalibrationSettingView.closeEvent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">closeEvent</span></code></a></p></td>
+<td><p>Ask for confirmation before closing.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.view.calibrationsettingview.CalibrationSettingView.get_data" title="ttea.view.calibrationsettingview.CalibrationSettingView.get_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data</span></code></a></p></td>
+<td><p>Read the settings from the widgets.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.view.calibrationsettingview.CalibrationSettingView.set_data" title="ttea.view.calibrationsettingview.CalibrationSettingView.set_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_data</span></code></a></p></td>
+<td><p>Fill the widgets with saved settings.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.view.calibrationsettingview.CalibrationSettingView.get_data">
+<span class="sig-name descname"><span class="pre">get_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/view/calibrationsettingview.html#CalibrationSettingView.get_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.view.calibrationsettingview.CalibrationSettingView.get_data" title="Link to this definition"></a></dt>
+<dd><p>Read the settings from the widgets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>dict[str, Any]</dt><dd><p>Values by <code class="docutils literal notranslate"><span class="pre">dataclass_property</span></code> name.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Check boxes give 1 or 0, spin boxes their value and combo boxes
+their current text. For radio buttons, only the checked one sets
+the value: its <code class="docutils literal notranslate"><span class="pre">dataclass_property_value</span></code> property, or its
+text.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.view.calibrationsettingview.CalibrationSettingView.set_data">
+<span class="sig-name descname"><span class="pre">set_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/view/calibrationsettingview.html#CalibrationSettingView.set_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.view.calibrationsettingview.CalibrationSettingView.set_data" title="Link to this definition"></a></dt>
+<dd><p>Fill the widgets with saved settings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data</strong><span class="classifier">dict[str, Any] | CalibrationSetting</span></dt><dd><p>Settings by field name, or a <code class="docutils literal notranslate"><span class="pre">CalibrationSetting</span></code> (read
+with <code class="docutils literal notranslate"><span class="pre">get_data</span></code>). Other types are ignored.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Empty or None values are skipped. Combo boxes select the item
+with the same text, and a radio button is checked when its
+<code class="docutils literal notranslate"><span class="pre">dataclass_property_value</span></code> (or text) equals the value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.view.calibrationsettingview.CalibrationSettingView.closeEvent">
+<span class="sig-name descname"><span class="pre">closeEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/view/calibrationsettingview.html#CalibrationSettingView.closeEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.view.calibrationsettingview.CalibrationSettingView.closeEvent" title="Link to this definition"></a></dt>
+<dd><p>Ask for confirmation before closing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>event</strong><span class="classifier">QCloseEvent</span></dt><dd><p>Close event; accepted only if the user confirms.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.view.calibrationsettingview.html" class="btn btn-neutral float-left" title="ttea.view.calibrationsettingview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.view.calibrationview.html" class="btn btn-neutral float-right" title="ttea.view.calibrationview" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

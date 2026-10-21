@@ -1,0 +1,33 @@
+ttea.controller
+===============
+
+.. automodule:: ttea.controller
+
+.. currentmodule:: ttea.controller
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/module.rst
+   :recursive:
+
+   automaticcalibrationcontroller
+   calibrationcontroller
+   calibrationsettingcontroller
+   helpcontroller
+   institutionfacilityeditcontroller
+   institutionfacilitylistcontroller
+   languagecontroller
+   maincontroller
+   manualcalibrationcontroller
+   playereditcontroller
+   playergamelaunchcontroller
+   playerlistcontroller
+   professionaleditcontroller
+   professionallistcontroller
+
+
+

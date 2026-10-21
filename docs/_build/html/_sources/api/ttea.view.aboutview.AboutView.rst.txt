@@ -1,0 +1,9 @@
+AboutView
+=========
+
+.. currentmodule:: ttea.view.aboutview
+
+.. autoclass:: AboutView
+   :members:
+   :show-inheritance:
+

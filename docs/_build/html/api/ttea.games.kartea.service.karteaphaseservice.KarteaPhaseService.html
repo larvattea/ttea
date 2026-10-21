@@ -1,0 +1,474 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KarteaPhaseService &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.games.kartea.service.playerkarteaconfigservice" href="ttea.games.kartea.service.playerkarteaconfigservice.html" />
+    <link rel="prev" title="ttea.games.kartea.service.karteaphaseservice" href="ttea.games.kartea.service.karteaphaseservice.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.games.html">ttea.games</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.gametheme.html">ttea.games.gametheme</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.games.kartea.html">ttea.games.kartea</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.controller.html">ttea.games.kartea.controller</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.dao.html">ttea.games.kartea.dao</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.factory.html">ttea.games.kartea.factory</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamecontroller.html">ttea.games.kartea.gamecontroller</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamecore.html">ttea.games.kartea.gamecore</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamemodel.html">ttea.games.kartea.gamemodel</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gametheme.html">ttea.games.kartea.gametheme</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameui.html">ttea.games.kartea.gameui</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameutil.html">ttea.games.kartea.gameutil</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameview.html">ttea.games.kartea.gameview</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.main.html">ttea.games.kartea.main</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.model.html">ttea.games.kartea.model</a></li>
+<li class="toctree-l5 current"><a class="reference internal" href="ttea.games.kartea.service.html">ttea.games.kartea.service</a><ul class="current">
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.service.html#attributes">Attributes</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.service.html#see-also">See Also</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.service.html#notes">Notes</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.service.csvcrudservice.html">ttea.games.kartea.service.csvcrudservice</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.service.karteahardwareservice.html">ttea.games.kartea.service.karteahardwareservice</a></li>
+<li class="toctree-l6 current"><a class="reference internal" href="ttea.games.kartea.service.karteaphaseservice.html">ttea.games.kartea.service.karteaphaseservice</a><ul class="current">
+<li class="toctree-l7"><a class="reference internal" href="ttea.games.kartea.service.karteaphaseservice.html#attributes">Attributes</a></li>
+<li class="toctree-l7 current"><a class="current reference internal" href="#">KarteaPhaseService</a><ul>
+<li class="toctree-l8"><a class="reference internal" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService"><code class="docutils literal notranslate"><span class="pre">KarteaPhaseService</span></code></a><ul>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_all_phases"><code class="docutils literal notranslate"><span class="pre">KarteaPhaseService.get_all_phases()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_phase"><code class="docutils literal notranslate"><span class="pre">KarteaPhaseService.get_phase()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_levels_for_phase"><code class="docutils literal notranslate"><span class="pre">KarteaPhaseService.get_levels_for_phase()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_level"><code class="docutils literal notranslate"><span class="pre">KarteaPhaseService.get_level()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.next_level"><code class="docutils literal notranslate"><span class="pre">KarteaPhaseService.next_level()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.previous_level"><code class="docutils literal notranslate"><span class="pre">KarteaPhaseService.previous_level()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.change_level"><code class="docutils literal notranslate"><span class="pre">KarteaPhaseService.change_level()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.speed_for_level"><code class="docutils literal notranslate"><span class="pre">KarteaPhaseService.speed_for_level()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_level_rules"><code class="docutils literal notranslate"><span class="pre">KarteaPhaseService.get_level_rules()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.service.playerkarteaconfigservice.html">ttea.games.kartea.service.playerkarteaconfigservice</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.service.playerkarteasessiondetailservice.html">ttea.games.kartea.service.playerkarteasessiondetailservice</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.service.playerkarteasessionservice.html">ttea.games.kartea.service.playerkarteasessionservice</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.util.html">ttea.games.kartea.util</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.view.html">ttea.games.kartea.view</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.html">ttea.games</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.html">ttea.games.kartea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.service.html">ttea.games.kartea.service</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.service.karteaphaseservice.html">ttea.games.kartea.service.karteaphaseservice</a></li>
+      <li class="breadcrumb-item active">KarteaPhaseService</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="karteaphaseservice">
+<h1>KarteaPhaseService<a class="headerlink" href="#karteaphaseservice" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">KarteaPhaseService</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dao</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/karteaphaseservice.html#KarteaPhaseService"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Service (MVCS) of the KarTEA phases and levels.</p>
+<p>Business rules of the phases, read from the CSV files
+(resources/phases): which phases and levels exist, the progression
+between them (advance, regress) and the rules of each level
+(interval, amount and type of objects, speed range).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>dao</strong><span class="classifier">KarteaPhaseCsvDAO | None, optional</span></dt><dd><p>DAO of the phases. Created if None. Kept private.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The CSV files are read once, on first use, and kept in cache
+(phases in order, the sorted level ids of each phase, and each
+KarteaPhaseLevel indexed by the (phase, level) pair).</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleNamespace</span> <span class="k">as</span> <span class="n">NS</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">phases</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span>    <span class="n">NS</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">level_list</span><span class="o">=</span><span class="p">[</span><span class="n">NS</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">NS</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">)]),</span>
+<span class="gp">... </span>    <span class="n">NS</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">level_list</span><span class="o">=</span><span class="p">[</span><span class="n">NS</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">1</span><span class="p">)]),</span>
+<span class="gp">... </span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">service</span> <span class="o">=</span> <span class="n">KarteaPhaseService</span><span class="p">(</span><span class="n">dao</span><span class="o">=</span><span class="n">NS</span><span class="p">(</span><span class="nb">list</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="n">phases</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">service</span><span class="o">.</span><span class="n">next_level</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">(1, 2)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">service</span><span class="o">.</span><span class="n">next_level</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="go">(2, 1)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">service</span><span class="o">.</span><span class="n">previous_level</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">(2, 1)</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.change_level" title="ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.change_level"><code class="xref py py-obj docutils literal notranslate"><span class="pre">change_level</span></code></a></p></td>
+<td><p>Apply a level action (&quot;next&quot;, &quot;prev&quot; or &quot;rest&quot;).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_all_phases" title="ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_all_phases"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_all_phases</span></code></a></p></td>
+<td><p>Return the available phases, ordered by id.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_level" title="ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_level"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_level</span></code></a></p></td>
+<td><p>Return a level by phase and level id.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_level_rules" title="ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_level_rules"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_level_rules</span></code></a></p></td>
+<td><p>Return the rules of a level, read from the phase CSV file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_levels_for_phase" title="ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_levels_for_phase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_levels_for_phase</span></code></a></p></td>
+<td><p>Return the levels of a phase, ordered by level id.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_phase" title="ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_phase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_phase</span></code></a></p></td>
+<td><p>Return the phase with the given id.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.next_level" title="ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.next_level"><code class="xref py py-obj docutils literal notranslate"><span class="pre">next_level</span></code></a></p></td>
+<td><p>Return the next phase/level.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.previous_level" title="ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.previous_level"><code class="xref py py-obj docutils literal notranslate"><span class="pre">previous_level</span></code></a></p></td>
+<td><p>Return the previous phase/level, one level back in the phase.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.speed_for_level" title="ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.speed_for_level"><code class="xref py py-obj docutils literal notranslate"><span class="pre">speed_for_level</span></code></a></p></td>
+<td><p>Return the speed range (1, 2 or 3) of a level.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_all_phases">
+<span class="sig-name descname"><span class="pre">get_all_phases</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/karteaphaseservice.html#KarteaPhaseService.get_all_phases"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_all_phases" title="Link to this definition"></a></dt>
+<dd><p>Return the available phases, ordered by id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>list[KarteaPhase]</dt><dd><p>All phases read from the CSV files.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_phase">
+<span class="sig-name descname"><span class="pre">get_phase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phase_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/karteaphaseservice.html#KarteaPhaseService.get_phase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_phase" title="Link to this definition"></a></dt>
+<dd><p>Return the phase with the given id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>phase_id</strong><span class="classifier">int</span></dt><dd><p>Id of the phase.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>KarteaPhase | None</dt><dd><p>The phase, or None if it does not exist.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_levels_for_phase">
+<span class="sig-name descname"><span class="pre">get_levels_for_phase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phase</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/karteaphaseservice.html#KarteaPhaseService.get_levels_for_phase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_levels_for_phase" title="Link to this definition"></a></dt>
+<dd><p>Return the levels of a phase, ordered by level id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>phase</strong><span class="classifier">int | KarteaPhase | None</span></dt><dd><p>Phase id or object.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>list[KarteaPhaseLevel]</dt><dd><p>The levels, or an empty list if the phase is None, does not
+exist or has no levels.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_level">
+<span class="sig-name descname"><span class="pre">get_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phase_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/karteaphaseservice.html#KarteaPhaseService.get_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_level" title="Link to this definition"></a></dt>
+<dd><p>Return a level by phase and level id.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>phase_id</strong><span class="classifier">int</span></dt><dd><p>Id of the phase.</p>
+</dd>
+<dt><strong>level_id</strong><span class="classifier">int</span></dt><dd><p>Id of the level within the phase.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>KarteaPhaseLevel | None</dt><dd><p>The level, or None if it does not exist.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.next_level">
+<span class="sig-name descname"><span class="pre">next_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phase_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/karteaphaseservice.html#KarteaPhaseService.next_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.next_level" title="Link to this definition"></a></dt>
+<dd><p>Return the next phase/level.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>phase_id</strong><span class="classifier">int</span></dt><dd><p>Current phase.</p>
+</dd>
+<dt><strong>level_id</strong><span class="classifier">int</span></dt><dd><p>Current level.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple[int, int]</dt><dd><p>The (phase, level) to play next.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Advances one level within the phase; after the last level of the
+phase, moves to the first level of the next phase. On the last
+level of the last phase, stays. Uses the actual number of phases
+and levels in the CSV files.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.previous_level">
+<span class="sig-name descname"><span class="pre">previous_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phase_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/karteaphaseservice.html#KarteaPhaseService.previous_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.previous_level" title="Link to this definition"></a></dt>
+<dd><p>Return the previous phase/level, one level back in the phase.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>phase_id</strong><span class="classifier">int</span></dt><dd><p>Current phase.</p>
+</dd>
+<dt><strong>level_id</strong><span class="classifier">int</span></dt><dd><p>Current level.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple[int, int]</dt><dd><p>The (phase, level) to play next.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>On the first level of the phase, stays (does not go back a
+phase).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.change_level">
+<span class="sig-name descname"><span class="pre">change_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phase_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/karteaphaseservice.html#KarteaPhaseService.change_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.change_level" title="Link to this definition"></a></dt>
+<dd><p>Apply a level action (“next”, “prev” or “rest”).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>phase_id</strong><span class="classifier">int</span></dt><dd><p>Current phase.</p>
+</dd>
+<dt><strong>level_id</strong><span class="classifier">int</span></dt><dd><p>Current level.</p>
+</dd>
+<dt><strong>action</strong><span class="classifier">str</span></dt><dd><p>LEVEL_ACTION_NEXT, LEVEL_ACTION_PREVIOUS or
+LEVEL_ACTION_RESTART.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple[int, int]</dt><dd><p>The resulting (phase, level). “rest” (restart) and any
+unknown action keep the current phase and level.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.speed_for_level">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">speed_for_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/karteaphaseservice.html#KarteaPhaseService.speed_for_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.speed_for_level" title="Link to this definition"></a></dt>
+<dd><p>Return the speed range (1, 2 or 3) of a level.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>level_id</strong><span class="classifier">int</span></dt><dd><p>Id of the level.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>int</dt><dd><p>1 for levels 1-2, 2 for levels 3-4 and 3 (DEFAULT_SPEED) for
+the others. The phase CSV files have no speed column.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">KarteaPhaseService</span><span class="o">.</span><span class="n">speed_for_level</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="go">2</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">KarteaPhaseService</span><span class="o">.</span><span class="n">speed_for_level</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+<span class="go">3</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_level_rules">
+<span class="sig-name descname"><span class="pre">get_level_rules</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phase_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/service/karteaphaseservice.html#KarteaPhaseService.get_level_rules"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.service.karteaphaseservice.KarteaPhaseService.get_level_rules" title="Link to this definition"></a></dt>
+<dd><p>Return the rules of a level, read from the phase CSV file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>phase_id</strong><span class="classifier">int</span></dt><dd><p>Id of the phase.</p>
+</dd>
+<dt><strong>level_id</strong><span class="classifier">int</span></dt><dd><p>Id of the level.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>LevelRules</dt><dd><p><code class="docutils literal notranslate"><span class="pre">interval</span></code> (s between objects), <code class="docutils literal notranslate"><span class="pre">num_obj</span></code> (maximum
+number of objects) and <code class="docutils literal notranslate"><span class="pre">obj_types</span></code> (0 target, 1 obstacle,
+in order) from the CSV, plus the speed range of the level.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>If the phase/level does not exist, default rules are returned:
+interval DEFAULT_LEVEL_INTERVAL, no object limit and random
+types.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.games.kartea.service.karteaphaseservice.html" class="btn btn-neutral float-left" title="ttea.games.kartea.service.karteaphaseservice" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.games.kartea.service.playerkarteaconfigservice.html" class="btn btn-neutral float-right" title="ttea.games.kartea.service.playerkarteaconfigservice" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

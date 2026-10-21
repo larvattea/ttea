@@ -1,0 +1,476 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.games.kartea.gamemodel.target &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.games.kartea.gamemodel.target</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.games.kartea.gamemodel.target</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Target (star) object of the KarTEA road and its kill result."""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">NamedTuple</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerKarteaSessionDetail</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.image</span><span class="w"> </span><span class="kn">import</span> <span class="n">Image</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gameutil</span><span class="w"> </span><span class="kn">import</span> <span class="n">GameSettings</span>
+
+<span class="n">EventType</span> <span class="o">=</span> <span class="n">PlayerKarteaSessionDetail</span><span class="o">.</span><span class="n">EventType</span>
+
+
+<div class="viewcode-block" id="KillResult">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.target.KillResult.html#ttea.games.kartea.gamemodel.target.KillResult">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">KillResult</span><span class="p">(</span><span class="n">NamedTuple</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Result of removing a target/obstacle.</span>
+
+<span class="sd">    The model only reports what happened. GameController records the</span>
+<span class="sd">    event and updates score and counters; FeedbackView plays the sound</span>
+<span class="sd">    and shows the feedback image.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    points : int</span>
+<span class="sd">        Points earned.</span>
+<span class="sd">    event_type : PlayerKarteaSessionDetail.EventType</span>
+<span class="sd">        Event that happened (collided with/avoided target/obstacle).</span>
+<span class="sd">    road : int</span>
+<span class="sd">        Lane of the object (event position).</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; KillResult(10, EventType.COLLIDED_TARGET, 1).is_positive</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; KillResult(0, EventType.COLLIDED_OBSTACLE, 2).is_positive</span>
+<span class="sd">    False</span>
+<span class="sd">    """</span>
+
+    <span class="n">points</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">event_type</span><span class="p">:</span> <span class="n">EventType</span>
+    <span class="n">road</span><span class="p">:</span> <span class="nb">int</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_positive</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Whether the result is good (positive feedback)."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">event_type</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="n">EventType</span><span class="o">.</span><span class="n">COLLIDED_TARGET</span><span class="p">,</span>
+            <span class="n">EventType</span><span class="o">.</span><span class="n">AVOIDED_OBSTACLE</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Target">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.target.Target.html#ttea.games.kartea.gamemodel.target.Target">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Target</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Target (star) in the game.</span>
+
+<span class="sd">    Subclasses change only the image, the size and the ``kill`` result</span>
+<span class="sd">    (see Obstacle).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    r : int | None</span>
+<span class="sd">        Lane index (0, 1 or 2). If None (or out of range), chosen at</span>
+<span class="sd">        random.</span>
+<span class="sd">    settings : GameSettings</span>
+<span class="sd">        Game configuration (injected).</span>
+<span class="sd">    move_speed : int, optional</span>
+<span class="sd">        Speed used by move() (set by the current level, in</span>
+<span class="sd">        GameController). Defaults to 1.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    COLLIDED_RESULT : tuple[int, EventType], class attribute</span>
+<span class="sd">        (points, event) when it collides: ``(10, COLLIDED_TARGET)``.</span>
+<span class="sd">    AVOIDED_RESULT : tuple[int, EventType], class attribute</span>
+<span class="sd">        (points, event) when it is avoided: ``(0, AVOIDED_TARGET)``.</span>
+<span class="sd">    MOVE_PATTERN : dict[int, tuple[int, int, int]], class attribute</span>
+<span class="sd">        By speed: (lateral move step, growth step, lateral offset). Used</span>
+<span class="sd">        by move().</span>
+<span class="sd">    settings : GameSettings</span>
+<span class="sd">        Game configuration.</span>
+<span class="sd">    move_speed : int</span>
+<span class="sd">        Speed used by move().</span>
+<span class="sd">    size : tuple[int, int]</span>
+<span class="sd">        Current size (grows as the object approaches).</span>
+<span class="sd">    rect : pygame.Rect</span>
+<span class="sd">        Hitbox/position on screen.</span>
+<span class="sd">    images : list[pygame.Surface]</span>
+<span class="sd">        Animation frames.</span>
+<span class="sd">    current_frame : int</span>
+<span class="sd">        Index of the frame being shown.</span>
+<span class="sd">    current_pos : tuple</span>
+<span class="sd">        Current position.</span>
+<span class="sd">    current_road : int</span>
+<span class="sd">        Lane of the object (0 left, 1 middle, 2 right).</span>
+<span class="sd">    animation_timer : float</span>
+<span class="sd">        Time of the next frame change.</span>
+<span class="sd">    line : Line | None</span>
+<span class="sd">        Road line the object is attached to.</span>
+<span class="sd">    prev_pos_y : float</span>
+<span class="sd">        Height in the previous frame, set by update_current_pos (used by</span>
+<span class="sd">        reached).</span>
+<span class="sd">    """</span>
+
+    <span class="n">COLLIDED_RESULT</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">EventType</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">EventType</span><span class="o">.</span><span class="n">COLLIDED_TARGET</span><span class="p">)</span>
+    <span class="n">AVOIDED_RESULT</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">EventType</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">EventType</span><span class="o">.</span><span class="n">AVOIDED_TARGET</span><span class="p">)</span>
+
+    <span class="n">MOVE_PATTERN</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="mi">1</span><span class="p">:</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span>
+        <span class="mi">2</span><span class="p">:</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+        <span class="mi">3</span><span class="p">:</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="mi">4</span><span class="p">:</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">r</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">settings</span><span class="p">:</span> <span class="s2">"GameSettings"</span><span class="p">,</span>
+        <span class="n">move_speed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">move_speed</span> <span class="o">=</span> <span class="n">move_speed</span>
+
+        <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_size</span><span class="p">()</span>
+        <span class="n">road</span><span class="p">,</span> <span class="n">start_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">define_spawn_pos</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span><span class="n">start_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">start_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">images</span> <span class="o">=</span> <span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_image_path</span><span class="p">(),</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_frame</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_pos</span> <span class="o">=</span> <span class="n">start_pos</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_road</span> <span class="o">=</span> <span class="n">road</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">animation_timer</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">line</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return the object size (``GameSettings.TARGETS_SIZES``)."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">TARGETS_SIZES</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_image_path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the object image (``GameSettings.TARGET_IMAGE``)."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">TARGET_IMAGE</span>
+
+<div class="viewcode-block" id="Target.define_spawn_pos">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.target.Target.html#ttea.games.kartea.gamemodel.target.Target.define_spawn_pos">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">define_spawn_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Define the lane and initial position of the object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        r : int | None, optional</span>
+<span class="sd">            Desired lane (0 left, 1 middle, 2 right); random if None or</span>
+<span class="sd">            out of range.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple</span>
+<span class="sd">            ``(road, start_pos)``, with ``start_pos`` from</span>
+<span class="sd">            ``GameSettings.OBJ_POS``.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">r</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">r</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">road</span> <span class="o">=</span> <span class="n">r</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">road</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>  <span class="c1"># 0 left, 1 middle, 2 right</span>
+
+        <span class="n">start_pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">OBJ_POS</span><span class="p">[</span><span class="n">road</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">road</span><span class="p">,</span> <span class="n">start_pos</span></div>
+
+
+<div class="viewcode-block" id="Target.define_pos">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.target.Target.html#ttea.games.kartea.gamemodel.target.Target.define_pos">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">define_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Move the object rectangle to the projected coordinates.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x, y : float</span>
+<span class="sd">            Projected position; the current rect size is kept.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">height</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_grow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Grow the object by 3 px (approaching effect)."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">inflate_ip</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">3</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">3</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">images</span> <span class="o">=</span> <span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_image_path</span><span class="p">(),</span> <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_lateral</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the lateral move by lane (left -dx, right +dx)."""</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_road</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="o">-</span><span class="n">dx</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_road</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">dx</span>
+        <span class="k">return</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="Target.move">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.target.Target.html#ttea.games.kartea.gamemodel.target.Target.move">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Move the object down with a small lateral drift.</span>
+
+<span class="sd">        The drift depends on the lane and on the current speed</span>
+<span class="sd">        (MOVE_PATTERN); speeds outside the table use a default pattern.</span>
+<span class="sd">        """</span>
+        <span class="n">speed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">move_speed</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">vel</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">speed</span><span class="p">]</span>
+
+        <span class="n">pattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">MOVE_PATTERN</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">speed</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pattern</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">lateral_step</span><span class="p">,</span> <span class="n">grow_step</span><span class="p">,</span> <span class="n">dx</span> <span class="o">=</span> <span class="n">pattern</span>
+            <span class="k">if</span> <span class="n">y</span> <span class="o">%</span> <span class="n">lateral_step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">vel</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_lateral</span><span class="p">(</span><span class="n">dx</span><span class="p">),</span> <span class="n">speed</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">y</span> <span class="o">%</span> <span class="n">grow_step</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_grow</span><span class="p">()</span>
+                <span class="n">vel</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_lateral</span><span class="p">(</span><span class="n">dx</span><span class="p">),</span> <span class="n">speed</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># default speed</span>
+            <span class="k">if</span> <span class="n">y</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_grow</span><span class="p">()</span>
+            <span class="n">vel</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_lateral</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">speed</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">move_ip</span><span class="p">(</span><span class="n">vel</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_pos</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">vel</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">vel</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Target.move_to">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.target.Target.html#ttea.games.kartea.gamemodel.target.Target.move_to">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">move_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Move the object directly to a given position.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x, y : float</span>
+<span class="sd">            New position; the rect is moved by the same offset.</span>
+<span class="sd">        """</span>
+        <span class="n">vel</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_pos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">move_ip</span><span class="p">(</span><span class="n">vel</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Target.update_current_pos">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.target.Target.html#ttea.games.kartea.gamemodel.target.Target.update_current_pos">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_current_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Update the current position directly (used by Background).</span>
+
+<span class="sd">        Keeps the height of the previous frame to detect the passage in</span>
+<span class="sd">        front of the car (see reached).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x, y : float</span>
+<span class="sd">            New position.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prev_pos_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_pos</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Target.reached">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.target.Target.html#ttea.games.kartea.gamemodel.target.Target.reached">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reached</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line_y</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Check whether the object base crossed ``line_y`` this frame.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        line_y : float</span>
+<span class="sd">            Screen y to test (front of the car).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if the previous height was above ``line_y`` and the</span>
+<span class="sd">            current one is at or below it.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Compares with the previous frame, so the passage is detected</span>
+<span class="sd">        even when the road advances several segments at once (low FPS).</span>
+<span class="sd">        """</span>
+        <span class="n">prev_y</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"prev_pos_y"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">prev_y</span> <span class="o">&lt;</span> <span class="n">line_y</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Target.animate">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.target.Target.html#ttea.games.kartea.gamemodel.target.Target.animate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">animate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Advance the animation frame when its time has come."""</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">animation_timer</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">animation_timer</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">ANIMATION_SPEED</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_frame</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_frame</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">current_frame</span> <span class="o">=</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="Target.draw_hitbox">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.target.Target.html#ttea.games.kartea.gamemodel.target.Target.draw_hitbox">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw_hitbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Draw the object hitbox (when enabled).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        surface : pygame.Surface</span>
+<span class="sd">            Surface drawn on.</span>
+<span class="sd">        """</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">draw</span><span class="o">.</span><span class="n">rect</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Target.draw">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.target.Target.html#ttea.games.kartea.gamemodel.target.Target.draw">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Draw the object on screen, animated.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        surface : pygame.Surface</span>
+<span class="sd">            Surface drawn on. The hitbox is drawn too when</span>
+<span class="sd">            ``DRAW_HITBOX`` is on.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">animate</span><span class="p">()</span>
+        <span class="n">Image</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span>
+            <span class="n">surface</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">current_frame</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">center</span><span class="p">,</span>
+            <span class="n">pos_mode</span><span class="o">=</span><span class="s2">"center"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">DRAW_HITBOX</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">draw_hitbox</span><span class="p">(</span><span class="n">surface</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Target.kill">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamemodel.target.Target.html#ttea.games.kartea.gamemodel.target.Target.kill">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">kill</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">targets</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">collided</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KillResult</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Remove the object from the list and return the result.</span>
+
+<span class="sd">        Does not play sounds or draw: GameController hands the result to</span>
+<span class="sd">        FeedbackView.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        targets : list</span>
+<span class="sd">            Active objects (the object is removed from it).</span>
+<span class="sd">        collided : bool</span>
+<span class="sd">            True when it collided with the car; False when it left the</span>
+<span class="sd">            screen without colliding.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        KillResult</span>
+<span class="sd">            Points, event and lane. Target: 10 when collided, 0 when</span>
+<span class="sd">            avoided.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+            <span class="n">targets</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="n">points</span><span class="p">,</span> <span class="n">event_type</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">COLLIDED_RESULT</span> <span class="k">if</span> <span class="n">collided</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">AVOIDED_RESULT</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">KillResult</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">event_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_road</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

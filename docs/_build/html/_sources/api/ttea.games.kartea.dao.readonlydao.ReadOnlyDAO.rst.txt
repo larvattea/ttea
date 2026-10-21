@@ -1,0 +1,18 @@
+ReadOnlyDAO
+===========
+
+.. currentmodule:: ttea.games.kartea.dao.readonlydao
+
+.. autoclass:: ReadOnlyDAO
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~ReadOnlyDAO.delete
+      ~ReadOnlyDAO.insert
+      ~ReadOnlyDAO.update

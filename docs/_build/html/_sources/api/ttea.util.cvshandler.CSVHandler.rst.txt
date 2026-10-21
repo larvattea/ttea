@@ -1,0 +1,17 @@
+CSVHandler
+==========
+
+.. currentmodule:: ttea.util.cvshandler
+
+.. autoclass:: CSVHandler
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~CSVHandler.read_csv
+      ~CSVHandler.write_csv

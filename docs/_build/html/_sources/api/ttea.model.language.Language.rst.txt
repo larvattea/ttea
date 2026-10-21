@@ -1,0 +1,16 @@
+Language
+========
+
+.. currentmodule:: ttea.model.language
+
+.. autoclass:: Language
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~Language.get_languages

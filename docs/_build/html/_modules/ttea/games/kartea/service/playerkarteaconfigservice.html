@@ -1,0 +1,838 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.games.kartea.service.playerkarteaconfigservice &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.games.kartea.service.playerkarteaconfigservice</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.games.kartea.service.playerkarteaconfigservice</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Service of the players' Kartea game configuration.</span>
+
+<span class="sd">The private module constants ``_PLAIN_FIELDS`` (configuration fields</span>
+<span class="sd">that are not references) and ``_CREATE_DEFAULTS`` (value of each of</span>
+<span class="sd">them when ``create_config`` does not receive it) support the service.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">MISSING</span><span class="p">,</span> <span class="n">fields</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.dao</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">PlayerKarteaConfigCsvDAO</span><span class="p">,</span>
+    <span class="n">PlayerKarteaSessionDetailCsvDAO</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerKarteaConfig</span><span class="p">,</span> <span class="n">PlayerKarteaSession</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.util</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">KarteaIniDefaults</span><span class="p">,</span>
+    <span class="n">KarteaPathConfig</span><span class="p">,</span>
+    <span class="n">KarteaResourceFields</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Player</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.service</span><span class="w"> </span><span class="kn">import</span> <span class="n">CalibrationService</span><span class="p">,</span> <span class="n">PlayerService</span><span class="p">,</span> <span class="n">ProfessionalService</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.karteahardwareservice</span><span class="w"> </span><span class="kn">import</span> <span class="n">KarteaHardwareService</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.playerkarteasessiondetailservice</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerKarteaSessionDetailService</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.playerkarteasessionservice</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerKarteaSessionService</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Professional</span>
+
+
+<span class="c1"># Plain config fields (the references are resolved by id)</span>
+<span class="n">_PLAIN_FIELDS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">prop</span>
+    <span class="k">for</span> <span class="n">prop</span> <span class="ow">in</span> <span class="n">PlayerKarteaConfig</span><span class="o">.</span><span class="n">PROPERTIES</span>
+    <span class="k">if</span> <span class="n">prop</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">PlayerKarteaConfig</span><span class="o">.</span><span class="n">REF_PROPERTIES</span>
+<span class="p">]</span>
+
+<span class="c1"># Value of each plain field when create_config does not receive it:</span>
+<span class="c1"># the model default or, without one, the "empty" value of its type.</span>
+<span class="n">_EMPTY_BY_TYPE</span> <span class="o">=</span> <span class="p">{</span><span class="nb">int</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">float</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="nb">bool</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="nb">str</span><span class="p">:</span> <span class="s2">""</span><span class="p">}</span>
+<span class="n">_CREATE_DEFAULTS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">f</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="p">(</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">default</span>
+        <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">default</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">MISSING</span>
+        <span class="k">else</span> <span class="n">_EMPTY_BY_TYPE</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">(</span><span class="n">PlayerKarteaConfig</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">name</span> <span class="ow">in</span> <span class="n">_PLAIN_FIELDS</span>
+<span class="p">}</span>
+<span class="n">_CREATE_DEFAULTS</span><span class="p">[</span><span class="s2">"update_session_id"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">PlayerKarteaConfig</span><span class="o">.</span><span class="n">UPDATE_SESSION_ID_YES</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigService">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.html#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PlayerKarteaConfigService</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Service layer (MVCS) with the business rules of the config.</span>
+
+<span class="sd">    Hardware (screen, camera, calibration, MediaPipe) lives in</span>
+<span class="sd">    KarteaHardwareService, available as ``hardware_service``. Phases,</span>
+<span class="sd">    levels, progression and level rules live in KarteaPhaseService.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dao : PlayerKarteaConfigCsvDAO | None, optional</span>
+<span class="sd">        Instance used for persistence. If None, a default</span>
+<span class="sd">        ``PlayerKarteaConfigCsvDAO`` is created. Kept private: callers</span>
+<span class="sd">        go through the service methods.</span>
+<span class="sd">    calibration_service : CalibrationService | None, optional</span>
+<span class="sd">        Used to build the hardware service when ``hardware_service`` is</span>
+<span class="sd">        not given.</span>
+<span class="sd">    player_service : PlayerService | None, optional</span>
+<span class="sd">        Player service. Created if None.</span>
+<span class="sd">    professional_service : ProfessionalService | None, optional</span>
+<span class="sd">        Professional service. Created if None.</span>
+<span class="sd">    hardware_service : KarteaHardwareService | None, optional</span>
+<span class="sd">        Screen, camera, calibration and MediaPipe. Created if None.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    INTERFACE_OPTIONS : tuple[str, ...], class attribute</span>
+<span class="sd">        Interface options (bool) that can be toggled during the game:</span>
+<span class="sd">        "hud", "sound", "feet_marker" and "feet_click".</span>
+<span class="sd">    hardware_service : KarteaHardwareService</span>
+<span class="sd">        Screen, camera, calibration and MediaPipe.</span>
+<span class="sd">    player_service : PlayerService</span>
+<span class="sd">        Access to the T-TEA players.</span>
+<span class="sd">    professional_service : ProfessionalService</span>
+<span class="sd">        Access to the T-TEA professionals.</span>
+<span class="sd">    session_service : PlayerKarteaSessionService</span>
+<span class="sd">        Session service that shares the configuration DAO's session DAO.</span>
+<span class="sd">    session_detail_service : PlayerKarteaSessionDetailService</span>
+<span class="sd">        Session detail service, created on first use (read-only</span>
+<span class="sd">        property).</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    get_all_configs()</span>
+<span class="sd">        Return all registered configs.</span>
+<span class="sd">    create_config(data)</span>
+<span class="sd">        Create a new config from the provided data dictionary.</span>
+<span class="sd">    update_config(player_id, data)</span>
+<span class="sd">        Update an existing config with the given data.</span>
+<span class="sd">    update_config_session(player_id, session_id)</span>
+<span class="sd">        Record the current game session in the config.</span>
+<span class="sd">    update_config_level(player_id, phase_id, level_id)</span>
+<span class="sd">        Record the current phase/level in the config.</span>
+<span class="sd">    delete_config(player_id)</span>
+<span class="sd">        Delete a config by player ID.</span>
+<span class="sd">    find_config_by_player_id(player_id)</span>
+<span class="sd">        Retrieve a config by player ID.</span>
+<span class="sd">    search_configs(query="")</span>
+<span class="sd">        Search configs by player name or ID (case-insensitive).</span>
+<span class="sd">    get_or_create_config(player_id)</span>
+<span class="sd">        Return the player's config, creating it with defaults if</span>
+<span class="sd">        missing.</span>
+<span class="sd">    set_interface_option(player_id, option, value)</span>
+<span class="sd">        Save one of INTERFACE_OPTIONS.</span>
+<span class="sd">    get_available_resources()</span>
+<span class="sd">        Resources available for each resource field.</span>
+<span class="sd">    get_default_config_data(player_id=None)</span>
+<span class="sd">        Data of a new config, from kartea.ini.</span>
+<span class="sd">    config_to_data(config)</span>
+<span class="sd">        Convert a config to the form data dictionary.</span>
+<span class="sd">    get_effective_config_data(config)</span>
+<span class="sd">        Config data with the .ini defaults in the empty fields.</span>
+<span class="sd">    build_game_settings(config)</span>
+<span class="sd">        Everything the game needs to build GameSettings.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The session service uses the SAME session DAO as the configuration</span>
+<span class="sd">    DAO, so a session created by the game is found when it is recorded</span>
+<span class="sd">    in the configuration.</span>
+<span class="sd">    """</span>
+
+    <span class="n">INTERFACE_OPTIONS</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"hud"</span><span class="p">,</span> <span class="s2">"sound"</span><span class="p">,</span> <span class="s2">"feet_marker"</span><span class="p">,</span> <span class="s2">"feet_click"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">dao</span><span class="p">:</span> <span class="n">PlayerKarteaConfigCsvDAO</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">calibration_service</span><span class="p">:</span> <span class="n">CalibrationService</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">player_service</span><span class="p">:</span> <span class="n">PlayerService</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">professional_service</span><span class="p">:</span> <span class="n">ProfessionalService</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">hardware_service</span><span class="p">:</span> <span class="n">KarteaHardwareService</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dao</span> <span class="o">=</span> <span class="n">dao</span> <span class="ow">or</span> <span class="n">PlayerKarteaConfigCsvDAO</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hardware_service</span> <span class="o">=</span> <span class="n">hardware_service</span> <span class="ow">or</span> <span class="n">KarteaHardwareService</span><span class="p">(</span>
+            <span class="n">calibration_service</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_service</span> <span class="o">=</span> <span class="n">player_service</span> <span class="ow">or</span> <span class="n">PlayerService</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">professional_service</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">professional_service</span> <span class="ow">or</span> <span class="n">ProfessionalService</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="c1"># Use the SAME session DAO as the config: a session created by</span>
+        <span class="c1"># the game is then found when it is recorded in the config</span>
+        <span class="c1"># (with separate instances the cache did not know it and the</span>
+        <span class="c1"># "session" column of kartea_config was written empty).</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session_service</span> <span class="o">=</span> <span class="n">PlayerKarteaSessionService</span><span class="p">(</span>
+            <span class="n">dao</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dao</span><span class="o">.</span><span class="n">session_dao</span>
+        <span class="p">)</span>
+        <span class="c1"># Created on demand (see session_detail_service).</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_session_detail_service</span><span class="p">:</span> <span class="p">(</span>
+            <span class="n">PlayerKarteaSessionDetailService</span> <span class="o">|</span> <span class="kc">None</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">session_detail_service</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PlayerKarteaSessionDetailService</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Session detail service that shares the session DAO.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Created on first use (only the game records details; the</span>
+<span class="sd">        register screens do not need to read the details CSV). A single</span>
+<span class="sd">        instance per configuration service, so the detail ID counter is</span>
+<span class="sd">        not duplicated between instances.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session_detail_service</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_session_detail_service</span> <span class="o">=</span> <span class="n">PlayerKarteaSessionDetailService</span><span class="p">(</span>
+                <span class="n">dao</span><span class="o">=</span><span class="n">PlayerKarteaSessionDetailCsvDAO</span><span class="p">(</span>
+                    <span class="n">session_dao</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dao</span><span class="o">.</span><span class="n">session_dao</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session_detail_service</span>
+
+<div class="viewcode-block" id="PlayerKarteaConfigService.get_all_configs">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.html#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_all_configs">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_all_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">PlayerKarteaConfig</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return a list of all registered configs.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[PlayerKarteaConfig]</span>
+<span class="sd">            Complete list of PlayerKarteaConfig instances stored in the</span>
+<span class="sd">            DAO.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dao</span><span class="o">.</span><span class="n">list</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigService.create_config">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.html#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.create_config">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">PlayerKarteaConfig</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Create a new config from a dictionary of attributes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : dict[str, Any]</span>
+<span class="sd">            Same format as ``get_default_config_data``: ``player_id``,</span>
+<span class="sd">            ``session_id``, ``phase_id``, ``level_id`` and the plain</span>
+<span class="sd">            fields of PlayerKarteaConfig.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PlayerKarteaConfig | None</span>
+<span class="sd">            The created config if validation and insertion succeed; None</span>
+<span class="sd">            otherwise.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        - The ids are resolved to objects through the DAOs; missing ids</span>
+<span class="sd">          become None.</span>
+<span class="sd">        - A missing plain field gets the model default or, without one,</span>
+<span class="sd">          the empty value of its type (0, 0.0, False, "").</span>
+<span class="sd">          ``update_session_id`` defaults to UPDATE_SESSION_ID_YES.</span>
+<span class="sd">        - The config must have player, phase and level (``is_valid``).</span>
+<span class="sd">        """</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_references</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">_PLAIN_FIELDS</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">_CREATE_DEFAULTS</span><span class="p">[</span><span class="n">field</span><span class="p">])</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">PlayerKarteaConfig</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">player_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dao</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dao</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span> <span class="k">if</span> <span class="n">player_id</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigService.update_config">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.html#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.update_config">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Update an existing config.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        player_id : int</span>
+<span class="sd">            Player ID (key of the config).</span>
+<span class="sd">        data : dict[str, Any]</span>
+<span class="sd">            Same format as ``create_config``; only the given keys</span>
+<span class="sd">            change.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if saved; False if the config does not exist, becomes</span>
+<span class="sd">            invalid (no player, phase or level) or the DAO rejects it.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Fields missing from ``data`` keep their current value; the</span>
+<span class="sd">        references are resolved again from the current ids.</span>
+<span class="sd">        """</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dao</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_references</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">_PLAIN_FIELDS</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">field</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dao</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">config</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_resolve_references</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
+        <span class="n">config</span><span class="p">:</span> <span class="n">PlayerKarteaConfig</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Look up the referenced objects by the ids in ``data``.</span>
+
+<span class="sd">        Player, session, phase and level are looked up by the ``*_id``</span>
+<span class="sd">        keys. Ids missing from ``data`` come from ``config`` (update) or</span>
+<span class="sd">        stay None (creation).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict[str, Any]</span>
+<span class="sd">            ``player``, ``session``, ``phase`` and ``level`` objects (or</span>
+<span class="sd">            None).</span>
+<span class="sd">        """</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_to_data</span><span class="p">(</span><span class="n">config</span><span class="p">)</span> <span class="k">if</span> <span class="n">config</span> <span class="k">else</span> <span class="p">{}</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">current</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+
+        <span class="n">phase_id</span> <span class="o">=</span> <span class="n">get</span><span class="p">(</span><span class="s2">"phase_id"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">"player"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dao</span><span class="o">.</span><span class="n">player_dao</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">get</span><span class="p">(</span><span class="s2">"player_id"</span><span class="p">)),</span>
+            <span class="s2">"session"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dao</span><span class="o">.</span><span class="n">session_dao</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">get</span><span class="p">(</span><span class="s2">"session_id"</span><span class="p">)),</span>
+            <span class="s2">"phase"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dao</span><span class="o">.</span><span class="n">phase_dao</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">phase_id</span><span class="p">),</span>
+            <span class="s2">"level"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dao</span><span class="o">.</span><span class="n">level_dao</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">phase_id</span><span class="p">,</span> <span class="n">get</span><span class="p">(</span><span class="s2">"level_id"</span><span class="p">)),</span>
+        <span class="p">}</span>
+
+<div class="viewcode-block" id="PlayerKarteaConfigService.update_config_session">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.html#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.update_config_session">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_config_session</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">session_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Record the current game session in the player's config.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        player_id : int</span>
+<span class="sd">            Player ID.</span>
+<span class="sd">        session_id : int</span>
+<span class="sd">            Id of the current session.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if the config was updated.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Only records it if the config has ``update_session_id`` = True;</span>
+<span class="sd">        otherwise, the session recorded in the config is kept.</span>
+<span class="sd">        """</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dao</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">config</span><span class="o">.</span><span class="n">update_session_id</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_config</span><span class="p">(</span><span class="n">player_id</span><span class="p">,</span> <span class="p">{</span><span class="s2">"session_id"</span><span class="p">:</span> <span class="n">session_id</span><span class="p">})</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigService.update_config_level">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.html#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.update_config_level">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_config_level</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">phase_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">level_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Record in the config the phase/level the game is on.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        player_id : int</span>
+<span class="sd">            Player ID.</span>
+<span class="sd">        phase_id : int</span>
+<span class="sd">            Current phase.</span>
+<span class="sd">        level_id : int</span>
+<span class="sd">            Current level.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if the config holds the given phase/level.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The config follows the game (advance, regress, etc.), and the</span>
+<span class="sd">        next session starts where the previous one stopped. The file is</span>
+<span class="sd">        only rewritten when the phase or the level changes.</span>
+<span class="sd">        """</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dao</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">phase</span>
+            <span class="ow">and</span> <span class="n">config</span><span class="o">.</span><span class="n">level</span>
+            <span class="ow">and</span> <span class="n">config</span><span class="o">.</span><span class="n">phase</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">phase_id</span>
+            <span class="ow">and</span> <span class="n">config</span><span class="o">.</span><span class="n">level</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">level_id</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_config</span><span class="p">(</span>
+            <span class="n">player_id</span><span class="p">,</span> <span class="p">{</span><span class="s2">"phase_id"</span><span class="p">:</span> <span class="n">phase_id</span><span class="p">,</span> <span class="s2">"level_id"</span><span class="p">:</span> <span class="n">level_id</span><span class="p">}</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigService.delete_config">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.html#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.delete_config">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">delete_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Delete a config by player ID.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        player_id : int</span>
+<span class="sd">            Player ID.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if deleted.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dao</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigService.find_config_by_player_id">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.html#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.find_config_by_player_id">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_config_by_player_id</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PlayerKarteaConfig</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Find a config by player ID.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        player_id : int</span>
+<span class="sd">            Player ID.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PlayerKarteaConfig | None</span>
+<span class="sd">            The config, or None if the player has none.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dao</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigService.search_configs">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.html#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.search_configs">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">search_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">PlayerKarteaConfig</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Search configs by player name or ID.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        query : str, optional</span>
+<span class="sd">            Text searched (case-insensitive) in the player name and ID.</span>
+<span class="sd">            An empty or blank query returns all configs.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[PlayerKarteaConfig]</span>
+<span class="sd">            Matching configs; configs without a player are left out.</span>
+<span class="sd">        """</span>
+        <span class="n">all_configs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_all_configs</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">query</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">all_configs</span>
+
+        <span class="n">q</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">c</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">all_configs</span>
+            <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="n">player</span>
+            <span class="ow">and</span> <span class="p">(</span><span class="n">q</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="ow">or</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">())</span>
+        <span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigService.get_all_players">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.html#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_all_players">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_all_players</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">Player</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return all T-TEA players, sorted by name.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[Player]</span>
+<span class="sd">            Players from the PlayerService.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">player_service</span><span class="o">.</span><span class="n">get_all_players</span><span class="p">(),</span>
+            <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigService.get_session">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.html#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_session">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_session</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">session_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PlayerKarteaSession</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return a game session by id.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        session_id : int</span>
+<span class="sd">            Id of the session.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PlayerKarteaSession | None</span>
+<span class="sd">            The session, or None if not found.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dao</span><span class="o">.</span><span class="n">session_dao</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">session_id</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigService.get_or_create_config">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.html#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_or_create_config">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_or_create_config</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PlayerKarteaConfig</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the player's config, creating it if missing.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        player_id : int</span>
+<span class="sd">            Player ID.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PlayerKarteaConfig | None</span>
+<span class="sd">            The existing config, or a new one built with the kartea.ini</span>
+<span class="sd">            defaults; None if creation fails (e.g. the</span>
+<span class="sd">            kartea.ini defaults have no valid phase/level).</span>
+<span class="sd">        """</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_config_by_player_id</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_config</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">get_default_config_data</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">config</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigService.find_player">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.html#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.find_player">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_player</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Player</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return a player by id.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        player_id : int</span>
+<span class="sd">            Player ID.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Player | None</span>
+<span class="sd">            The player, or None if not found.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_service</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigService.find_professional">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.html#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.find_professional">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_professional</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">professional_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"Professional | None"</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return a professional by id.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        professional_id : int</span>
+<span class="sd">            Professional ID.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Professional | None</span>
+<span class="sd">            The professional, or None if not found.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">professional_service</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="n">professional_id</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigService.set_interface_option">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.html#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.set_interface_option">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_interface_option</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">option</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Save an interface option of the player.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        player_id : int</span>
+<span class="sd">            Player ID.</span>
+<span class="sd">        option : str</span>
+<span class="sd">            One of INTERFACE_OPTIONS ("hud", "sound", "feet_marker" or</span>
+<span class="sd">            "feet_click").</span>
+<span class="sd">        value : bool</span>
+<span class="sd">            New value.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if saved; False if the player has no config yet (only</span>
+<span class="sd">            existing configs are updated).</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If ``option`` is not in INTERFACE_OPTIONS.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">option</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">INTERFACE_OPTIONS</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Opção de interface inválida: </span><span class="si">{</span><span class="n">option</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_config_by_player_id</span><span class="p">(</span><span class="n">player_id</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_config</span><span class="p">(</span><span class="n">player_id</span><span class="p">,</span> <span class="p">{</span><span class="n">option</span><span class="p">:</span> <span class="n">value</span><span class="p">})</span></div>
+
+
+    <span class="c1"># ======================</span>
+    <span class="c1"># Resources and defaults</span>
+    <span class="c1"># ======================</span>
+<div class="viewcode-block" id="PlayerKarteaConfigService.get_available_resources">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.html#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_available_resources">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_available_resources</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]:</span>
+<span class="w">        </span><span class="sd">"""Return the resources available for each resource field.</span>
+
+<span class="sd">        The built-in ones and, after them, the files the user placed in</span>
+<span class="sd">        the field's mods folder.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict[str, list[tuple[str, str]]]</span>
+<span class="sd">            ``{field: [(name, path), ...]}``, with the image and sound</span>
+<span class="sd">            fields of the config (vehicle_image, target_image, ...).</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">list_resources_for_field</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">KarteaResourceFields</span><span class="o">.</span><span class="n">ALL</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigService.get_default_config_data">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.html#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_default_config_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_default_config_data</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return the data of a new config, from kartea.ini.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        player_id : int | None, optional</span>
+<span class="sd">            Player ID to put in the data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict[str, Any]</span>
+<span class="sd">            Same format accepted by create_config/update_config, with</span>
+<span class="sd">            ``session_id`` None and one entry per field of</span>
+<span class="sd">            KarteaIniDefaults.TABLE.</span>
+<span class="sd">        """</span>
+        <span class="n">ini</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_kartea_ini_config</span><span class="p">()</span>
+        <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"player_id"</span><span class="p">:</span> <span class="n">player_id</span><span class="p">,</span> <span class="s2">"session_id"</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">KarteaIniDefaults</span><span class="o">.</span><span class="n">TABLE</span><span class="p">:</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">KarteaIniDefaults</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">ini</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigService.config_to_data">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.html#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.config_to_data">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">config_to_data</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="n">PlayerKarteaConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Convert the config to the dictionary used by forms.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config : PlayerKarteaConfig</span>
+<span class="sd">            Config to convert.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict[str, Any]</span>
+<span class="sd">            Same format as get_default_config_data. References become</span>
+<span class="sd">            ``*_id`` keys; fields without a value in the config are</span>
+<span class="sd">            None.</span>
+<span class="sd">        """</span>
+        <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">"player_id"</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">id</span> <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">player</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"session_id"</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">id</span> <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">session</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"phase_id"</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">phase</span><span class="o">.</span><span class="n">id</span> <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">phase</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="s2">"level_id"</span><span class="p">:</span> <span class="n">config</span><span class="o">.</span><span class="n">level</span><span class="o">.</span><span class="n">id</span> <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">level</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">KarteaIniDefaults</span><span class="o">.</span><span class="n">TABLE</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+                <span class="n">data</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigService.get_effective_config_data">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.html#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_effective_config_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_effective_config_data</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">PlayerKarteaConfig</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return the config with the .ini defaults in the empty fields.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config : PlayerKarteaConfig | None</span>
+<span class="sd">            Player's config; None returns only the defaults.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict[str, Any]</span>
+<span class="sd">            Same format as get_default_config_data; values of ``config``</span>
+<span class="sd">            that are not None override the defaults.</span>
+<span class="sd">        """</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_default_config_data</span><span class="p">(</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">id</span> <span class="k">if</span> <span class="n">config</span> <span class="ow">and</span> <span class="n">config</span><span class="o">.</span><span class="n">player</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">config_to_data</span><span class="p">(</span><span class="n">config</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">data</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigService.build_game_settings">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.html#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.build_game_settings">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">build_game_settings</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">PlayerKarteaConfig</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return everything the game needs to build GameSettings.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config : PlayerKarteaConfig | None</span>
+<span class="sd">            Player's config.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict[str, Any]</span>
+<span class="sd">            Screen settings, ``calibration_points``</span>
+<span class="sd">            (KarteaHardwareService) and the player's effective config</span>
+<span class="sd">            data.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        GameSettings receives only this dictionary and does not access</span>
+<span class="sd">        services.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">hardware_service</span><span class="o">.</span><span class="n">get_screen_settings</span><span class="p">(),</span>
+            <span class="s2">"calibration_points"</span><span class="p">:</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">hardware_service</span><span class="o">.</span><span class="n">get_calibration_points</span><span class="p">()</span>
+            <span class="p">),</span>
+            <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">get_effective_config_data</span><span class="p">(</span><span class="n">config</span><span class="p">),</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigService.get_kartea_ini_config">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.html#ttea.games.kartea.service.playerkarteaconfigservice.PlayerKarteaConfigService.get_kartea_ini_config">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_kartea_ini_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return the kartea.ini values.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict[str, str]</span>
+<span class="sd">            Values read by KarteaPathConfig.read_config.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">read_config</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

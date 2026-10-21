@@ -1,0 +1,28 @@
+CalibrationController
+=====================
+
+.. currentmodule:: ttea.controller.calibrationcontroller
+
+.. autoclass:: CalibrationController
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~CalibrationController.control_camera
+      ~CalibrationController.get_data
+      ~CalibrationController.handle_calibrate_auto
+      ~CalibrationController.handle_calibrate_manual
+      ~CalibrationController.handle_calibrate_semi
+      ~CalibrationController.handle_camera_error
+      ~CalibrationController.handle_cancel
+      ~CalibrationController.handle_ok
+      ~CalibrationController.list_cameras
+      ~CalibrationController.list_monitors
+      ~CalibrationController.list_proportions
+      ~CalibrationController.stop_camera_stream
+      ~CalibrationController.update_image

@@ -1,0 +1,21 @@
+AutomaticCalibrationController
+==============================
+
+.. currentmodule:: ttea.controller.automaticcalibrationcontroller
+
+.. autoclass:: AutomaticCalibrationController
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~AutomaticCalibrationController.create_calibration_point
+      ~AutomaticCalibrationController.generate_board_pixmap
+      ~AutomaticCalibrationController.get_available_geometry_of_screen
+      ~AutomaticCalibrationController.get_data
+      ~AutomaticCalibrationController.numpy_to_pixmap
+      ~AutomaticCalibrationController.run_auto_calibration

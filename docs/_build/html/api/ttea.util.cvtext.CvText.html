@@ -1,0 +1,341 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CvText &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.util.helpkeyfilter" href="ttea.util.helpkeyfilter.html" />
+    <link rel="prev" title="ttea.util.cvtext" href="ttea.util.cvtext.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.games.html">ttea.games</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.util.html">ttea.util</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.util.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.util.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.util.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.util.criticalhooks.html">ttea.util.criticalhooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.util.cvshandler.html">ttea.util.cvshandler</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.util.cvtext.html">ttea.util.cvtext</a><ul class="current">
+<li class="toctree-l5 current"><a class="current reference internal" href="#">CvText</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#ttea.util.cvtext.CvText"><code class="docutils literal notranslate"><span class="pre">CvText</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.cvtext.CvText.window_name"><code class="docutils literal notranslate"><span class="pre">CvText.window_name()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.cvtext.CvText.set_window_title"><code class="docutils literal notranslate"><span class="pre">CvText.set_window_title()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.cvtext.CvText.font"><code class="docutils literal notranslate"><span class="pre">CvText.font()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.cvtext.CvText.wrap"><code class="docutils literal notranslate"><span class="pre">CvText.wrap()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.cvtext.CvText.draw_lines"><code class="docutils literal notranslate"><span class="pre">CvText.draw_lines()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.util.helpkeyfilter.html">ttea.util.helpkeyfilter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.util.helpschemehandler.html">ttea.util.helpschemehandler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.util.image.html">ttea.util.image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.util.messageservice.html">ttea.util.messageservice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.util.pathconfig.html">ttea.util.pathconfig</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.util.qtdateformat.html">ttea.util.qtdateformat</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.util.html">ttea.util</a></li>
+          <li class="breadcrumb-item"><a href="ttea.util.cvtext.html">ttea.util.cvtext</a></li>
+      <li class="breadcrumb-item active">CvText</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.util.cvtext.CvText.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cvtext">
+<h1>CvText<a class="headerlink" href="#cvtext" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.util.cvtext.CvText">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CvText</span></span><a class="reference internal" href="../_modules/ttea/util/cvtext.html#CvText"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.cvtext.CvText" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Unicode text and window titles for OpenCV (HighGUI) windows.</p>
+<p class="rubric">Notes</p>
+<p>The window <em>name</em> is the key that every HighGUI call uses
+(<code class="docutils literal notranslate"><span class="pre">imshow</span></code>, <code class="docutils literal notranslate"><span class="pre">destroyWindow</span></code>, <code class="docutils literal notranslate"><span class="pre">setMouseCallback</span></code>…). It is
+kept ASCII by <code class="docutils literal notranslate"><span class="pre">window_name</span></code> so that it is the same in every
+platform; the text the user sees is set apart with
+<code class="docutils literal notranslate"><span class="pre">set_window_title</span></code>.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">CvText</span><span class="o">.</span><span class="n">window_name</span><span class="p">(</span><span class="s2">"Pantalla de monitorización"</span><span class="p">)</span>
+<span class="go">'Pantalla de monitorizacion'</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.util.cvtext.CvText.draw_lines" title="ttea.util.cvtext.CvText.draw_lines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">draw_lines</span></code></a></p></td>
+<td><p>Draw lines of Unicode text on a BGR frame, wrapping to fit.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.util.cvtext.CvText.font" title="ttea.util.cvtext.CvText.font"><code class="xref py py-obj docutils literal notranslate"><span class="pre">font</span></code></a></p></td>
+<td><p>Return a TrueType font of <code class="docutils literal notranslate"><span class="pre">size</span></code> pixels (cached).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.util.cvtext.CvText.set_window_title" title="ttea.util.cvtext.CvText.set_window_title"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_window_title</span></code></a></p></td>
+<td><p>Show <code class="docutils literal notranslate"><span class="pre">title</span></code> (Unicode) in the window called <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.util.cvtext.CvText.window_name" title="ttea.util.cvtext.CvText.window_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">window_name</span></code></a></p></td>
+<td><p>Return an ASCII-only window name derived from <code class="docutils literal notranslate"><span class="pre">title</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.util.cvtext.CvText.wrap" title="ttea.util.cvtext.CvText.wrap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">wrap</span></code></a></p></td>
+<td><p>Split <code class="docutils literal notranslate"><span class="pre">text</span></code> into lines no wider than <code class="docutils literal notranslate"><span class="pre">max_width</span></code> pixels.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.cvtext.CvText.window_name">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">window_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/cvtext.html#CvText.window_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.cvtext.CvText.window_name" title="Link to this definition"></a></dt>
+<dd><p>Return an ASCII-only window name derived from <code class="docutils literal notranslate"><span class="pre">title</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>title</strong><span class="classifier">str</span></dt><dd><p>Translated window title, possibly with accents.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p><code class="docutils literal notranslate"><span class="pre">title</span></code> without diacritics and non-ASCII characters.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.cvtext.CvText.set_window_title">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set_window_title</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/cvtext.html#CvText.set_window_title"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.cvtext.CvText.set_window_title" title="Link to this definition"></a></dt>
+<dd><p>Show <code class="docutils literal notranslate"><span class="pre">title</span></code> (Unicode) in the window called <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Window name given to <code class="docutils literal notranslate"><span class="pre">cv2.namedWindow</span></code> (see
+<code class="docutils literal notranslate"><span class="pre">window_name</span></code>).</p>
+</dd>
+<dt><strong>title</strong><span class="classifier">str</span></dt><dd><p>Text to show in the title bar.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>On Windows the title is set with <code class="docutils literal notranslate"><span class="pre">SetWindowTextW</span></code>, because
+<code class="docutils literal notranslate"><span class="pre">cv2.setWindowTitle</span></code> uses the ANSI API there. If the window
+is not found, the ASCII name stays as the title. On other
+platforms <code class="docutils literal notranslate"><span class="pre">cv2.setWindowTitle</span></code> already handles UTF-8.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.cvtext.CvText.font">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">font</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">size</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/cvtext.html#CvText.font"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.cvtext.CvText.font" title="Link to this definition"></a></dt>
+<dd><p>Return a TrueType font of <code class="docutils literal notranslate"><span class="pre">size</span></code> pixels (cached).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>size</strong><span class="classifier">int</span></dt><dd><p>Font size in pixels.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>PIL.ImageFont.ImageFont</dt><dd><p>First available font of <code class="docutils literal notranslate"><span class="pre">_FONT_CANDIDATES</span></code> or Pillow’s
+default font.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.cvtext.CvText.wrap">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wrap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_width</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/cvtext.html#CvText.wrap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.cvtext.CvText.wrap" title="Link to this definition"></a></dt>
+<dd><p>Split <code class="docutils literal notranslate"><span class="pre">text</span></code> into lines no wider than <code class="docutils literal notranslate"><span class="pre">max_width</span></code> pixels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>text</strong><span class="classifier">str</span></dt><dd><p>Text to split; existing line breaks are kept.</p>
+</dd>
+<dt><strong>font</strong><span class="classifier">PIL.ImageFont.ImageFont</span></dt><dd><p>Font used to measure the text.</p>
+</dd>
+<dt><strong>max_width</strong><span class="classifier">int</span></dt><dd><p>Maximum line width in pixels.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>list[str]</dt><dd><p>Lines of text. A single word wider than <code class="docutils literal notranslate"><span class="pre">max_width</span></code> is
+kept on its own line.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleNamespace</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">font</span> <span class="o">=</span> <span class="n">SimpleNamespace</span><span class="p">(</span><span class="n">getlength</span><span class="o">=</span><span class="nb">len</span><span class="p">)</span>  <span class="c1"># 1 px per character</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">CvText</span><span class="o">.</span><span class="n">wrap</span><span class="p">(</span><span class="s2">"aa bb cc"</span><span class="p">,</span> <span class="n">font</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="go">['aa bb', 'cc']</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.cvtext.CvText.draw_lines">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">draw_lines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(20,</span> <span class="pre">20)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">255,</span> <span class="pre">255)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outline_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outline_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_spacing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">margin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/cvtext.html#CvText.draw_lines"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.cvtext.CvText.draw_lines" title="Link to this definition"></a></dt>
+<dd><p>Draw lines of Unicode text on a BGR frame, wrapping to fit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>img</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>BGR frame (<code class="docutils literal notranslate"><span class="pre">H</span> <span class="pre">x</span> <span class="pre">W</span> <span class="pre">x</span> <span class="pre">3</span></code>, <code class="docutils literal notranslate"><span class="pre">uint8</span></code>). It is not modified.</p>
+</dd>
+<dt><strong>lines</strong><span class="classifier">Iterable[str]</span></dt><dd><p>Lines to draw, top to bottom.</p>
+</dd>
+<dt><strong>origin</strong><span class="classifier">tuple[int, int], optional</span></dt><dd><p>Top-left corner <code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> of the first line, in pixels.
+Default is <code class="docutils literal notranslate"><span class="pre">(20,</span> <span class="pre">20)</span></code>.</p>
+</dd>
+<dt><strong>font_size</strong><span class="classifier">int, optional</span></dt><dd><p>Font size in pixels. Default is 20.</p>
+</dd>
+<dt><strong>color</strong><span class="classifier">tuple[int, int, int], optional</span></dt><dd><p>Text color in BGR. Default is <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">255,</span> <span class="pre">255)</span></code> (yellow).</p>
+</dd>
+<dt><strong>outline_color</strong><span class="classifier">tuple[int, int, int], optional</span></dt><dd><p>Outline color in BGR, drawn around each letter for contrast.
+Default is <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">0)</span></code>.</p>
+</dd>
+<dt><strong>outline_width</strong><span class="classifier">int, optional</span></dt><dd><p>Outline width in pixels; 0 draws no outline. Default is 2.</p>
+</dd>
+<dt><strong>line_spacing</strong><span class="classifier">int, optional</span></dt><dd><p>Extra space between lines, in pixels. Default is 8.</p>
+</dd>
+<dt><strong>margin</strong><span class="classifier">int, optional</span></dt><dd><p>Right margin kept free when wrapping, in pixels. Default is
+20.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>numpy.ndarray</dt><dd><p>New BGR frame with the text drawn.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Lines are wrapped to the frame width minus <code class="docutils literal notranslate"><span class="pre">origin[0]</span></code> and
+<code class="docutils literal notranslate"><span class="pre">margin</span></code>, but never to less than <code class="docutils literal notranslate"><span class="pre">font_size</span></code> pixels. Each
+line advances <code class="docutils literal notranslate"><span class="pre">font_size</span> <span class="pre">+</span> <span class="pre">line_spacing</span></code> pixels.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.util.cvtext.html" class="btn btn-neutral float-left" title="ttea.util.cvtext" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.util.helpkeyfilter.html" class="btn btn-neutral float-right" title="ttea.util.helpkeyfilter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

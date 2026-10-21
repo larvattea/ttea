@@ -1,0 +1,17 @@
+HelpView
+========
+
+.. currentmodule:: ttea.view.helpview
+
+.. autoclass:: HelpView
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~HelpView.closeEvent
+      ~HelpView.show_url

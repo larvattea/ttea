@@ -1,0 +1,9 @@
+Obstacle
+========
+
+.. currentmodule:: ttea.games.kartea.gamemodel.obstacle
+
+.. autoclass:: Obstacle
+   :members:
+   :show-inheritance:
+

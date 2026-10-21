@@ -1,0 +1,333 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.games.kartea.controller.playerkarteaconfigeditcontroller &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.games.kartea.controller.playerkarteaconfigeditcontroller</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.games.kartea.controller.playerkarteaconfigeditcontroller</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Controller of the player Kartea configuration create/edit dialog."""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">QObject</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">KarteaResourceFields</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">MessageService</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerKarteaConfig</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.service</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+        <span class="n">KarteaPhaseService</span><span class="p">,</span>
+        <span class="n">PlayerKarteaConfigService</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerKarteaConfigEditView</span>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigEditController">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.controller.playerkarteaconfigeditcontroller.PlayerKarteaConfigEditController.html#ttea.games.kartea.controller.playerkarteaconfigeditcontroller.PlayerKarteaConfigEditController">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PlayerKarteaConfigEditController</span><span class="p">(</span><span class="n">QObject</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Controller for the player Kartea config edit/create dialog.</span>
+
+<span class="sd">    Manages the interaction between PlayerKarteaConfigEditView and the</span>
+<span class="sd">    PlayerKarteaConfig model, including field population, input</span>
+<span class="sd">    validation, and data extraction. The controller talks to the view</span>
+<span class="sd">    only through its form API (set_form_data, get_form_data,</span>
+<span class="sd">    set_*_choices) and to data only through the injected services.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    view : PlayerKarteaConfigEditView</span>
+<span class="sd">        The associated dialog view.</span>
+<span class="sd">    config : PlayerKarteaConfig | None</span>
+<span class="sd">        Config object to edit; None creates a new config.</span>
+<span class="sd">    service : PlayerKarteaConfigService</span>
+<span class="sd">        Shared service (injected by the view factory).</span>
+<span class="sd">    phase_service : KarteaPhaseService</span>
+<span class="sd">        Phases and levels offered in the form.</span>
+<span class="sd">    message_service : MessageService | None, optional</span>
+<span class="sd">        Custom message service; defaults to ``MessageService(view)``.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    view : PlayerKarteaConfigEditView</span>
+<span class="sd">        The dialog view containing the input widgets.</span>
+<span class="sd">    config : PlayerKarteaConfig | None</span>
+<span class="sd">        Config instance being edited, or None when creating a new</span>
+<span class="sd">        config.</span>
+<span class="sd">    ok_clicked : bool</span>
+<span class="sd">        True if the dialog was accepted with valid data.</span>
+<span class="sd">    service : PlayerKarteaConfigService</span>
+<span class="sd">        Config service (players, resources, defaults).</span>
+<span class="sd">    phase_service : KarteaPhaseService</span>
+<span class="sd">        Phase service (phase and level choices).</span>
+<span class="sd">    msg : MessageService</span>
+<span class="sd">        Service used to display validation/error messages.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    handle_phase_changed(phase_id)</span>
+<span class="sd">        Reload the level choices for the selected phase.</span>
+<span class="sd">    handle_ok()</span>
+<span class="sd">        Validate inputs and accept dialog if valid.</span>
+<span class="sd">    handle_cancel()</span>
+<span class="sd">        Reject dialog without saving changes.</span>
+<span class="sd">    is_input_valid()</span>
+<span class="sd">        Check required fields and show errors if needed.</span>
+<span class="sd">    get_data()</span>
+<span class="sd">        Extract entered data as a dictionary.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    On creation the controller fills the player, resource and phase</span>
+<span class="sd">    choices and the form: with the config data when editing (the player</span>
+<span class="sd">    then cannot be changed) or with the kartea.ini defaults when</span>
+<span class="sd">    creating.</span>
+
+<span class="sd">    The validation messages are translated with ``self.tr()`` in the</span>
+<span class="sd">    "PlayerKarteaConfigEditController" context (i18n).</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">view</span><span class="p">:</span> <span class="s2">"PlayerKarteaConfigEditView"</span><span class="p">,</span>
+        <span class="n">config</span><span class="p">:</span> <span class="s2">"PlayerKarteaConfig | None"</span><span class="p">,</span>
+        <span class="n">service</span><span class="p">:</span> <span class="s2">"PlayerKarteaConfigService"</span><span class="p">,</span>
+        <span class="n">phase_service</span><span class="p">:</span> <span class="s2">"KarteaPhaseService"</span><span class="p">,</span>
+        <span class="n">message_service</span><span class="p">:</span> <span class="n">MessageService</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span> <span class="o">=</span> <span class="n">view</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ok_clicked</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="n">service</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phase_service</span> <span class="o">=</span> <span class="n">phase_service</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">msg</span> <span class="o">=</span> <span class="n">message_service</span> <span class="ow">or</span> <span class="n">MessageService</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
+
+        <span class="c1"># Combo box choices</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">set_player_choices</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_all_players</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">set_resource_choices</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_available_resources</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">set_phase_choices</span><span class="p">(</span>
+            <span class="n">p</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">phase_service</span><span class="o">.</span><span class="n">get_all_phases</span><span class="p">()</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Form data: existing config or the .ini defaults</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">config_to_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">set_player_editable</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_default_config_data</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle_phase_changed</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"phase_id"</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">set_form_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PlayerKarteaConfigEditController.handle_phase_changed">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.controller.playerkarteaconfigeditcontroller.PlayerKarteaConfigEditController.html#ttea.games.kartea.controller.playerkarteaconfigeditcontroller.PlayerKarteaConfigEditController.handle_phase_changed">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle_phase_changed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phase_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Load in the view the levels of the selected phase.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        phase_id : int | None</span>
+<span class="sd">            Selected phase; None clears the level choices.</span>
+<span class="sd">        """</span>
+        <span class="n">levels</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">phase_service</span><span class="o">.</span><span class="n">get_levels_for_phase</span><span class="p">(</span><span class="n">phase_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">phase_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">else</span> <span class="p">[]</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">set_level_choices</span><span class="p">(</span><span class="n">level</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="n">levels</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigEditController.handle_ok">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.controller.playerkarteaconfigeditcontroller.PlayerKarteaConfigEditController.html#ttea.games.kartea.controller.playerkarteaconfigeditcontroller.PlayerKarteaConfigEditController.handle_ok">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle_ok</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Validate input and close the dialog with acceptance.</span>
+
+<span class="sd">        If validation passes, sets ``ok_clicked`` to True and accepts</span>
+<span class="sd">        the dialog. Otherwise ``is_input_valid`` shows a critical</span>
+<span class="sd">        message with the errors and the dialog stays open.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_input_valid</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ok_clicked</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigEditController.handle_cancel">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.controller.playerkarteaconfigeditcontroller.PlayerKarteaConfigEditController.html#ttea.games.kartea.controller.playerkarteaconfigeditcontroller.PlayerKarteaConfigEditController.handle_cancel">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle_cancel</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Close the dialog without saving changes.</span>
+
+<span class="sd">        Rejects the dialog, discarding any entered data.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">reject</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigEditController.is_input_valid">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.controller.playerkarteaconfigeditcontroller.PlayerKarteaConfigEditController.html#ttea.games.kartea.controller.playerkarteaconfigeditcontroller.PlayerKarteaConfigEditController.is_input_valid">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_input_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Validate required fields.</span>
+
+<span class="sd">        Checks that the player, the phase and level, and the required</span>
+<span class="sd">        resources (KarteaResourceFields) are filled. Shows a critical</span>
+<span class="sd">        message listing all errors if validation fails.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if all inputs are valid, False otherwise.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Resource fields that share the same message (environment</span>
+<span class="sd">        right/left) produce a single error line. The messages are</span>
+<span class="sd">        translated with ``self.tr()``: the resource messages are the</span>
+<span class="sd">        ``QT_TRANSLATE_NOOP`` source texts of KarteaResourceFields</span>
+<span class="sd">        (i18n).</span>
+<span class="sd">        """</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">get_form_data</span><span class="p">()</span>
+        <span class="n">error_message</span> <span class="o">=</span> <span class="s2">""</span>
+
+        <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">"player_id"</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">error_message</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Jogador é obrigatório!</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="s2">"phase_id"</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">data</span><span class="p">[</span><span class="s2">"level_id"</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">error_message</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Fase e nível são obrigatórios!</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+        <span class="c1"># Required resources (KarteaResourceFields.ALL)</span>
+        <span class="n">missing</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">KarteaResourceFields</span><span class="o">.</span><span class="n">ALL</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">field</span><span class="o">.</span><span class="n">required</span>
+                <span class="ow">and</span> <span class="ow">not</span> <span class="n">data</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+                <span class="ow">and</span> <span class="n">field</span><span class="o">.</span><span class="n">required_message</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">missing</span>
+            <span class="p">):</span>
+                <span class="n">missing</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">required_message</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">message</span> <span class="ow">in</span> <span class="n">missing</span><span class="p">:</span>
+            <span class="n">error_message</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">error_message</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Por favor, corrija os dados inválidos:</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+                <span class="o">+</span> <span class="n">error_message</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigEditController.get_data">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.controller.playerkarteaconfigeditcontroller.PlayerKarteaConfigEditController.html#ttea.games.kartea.controller.playerkarteaconfigeditcontroller.PlayerKarteaConfigEditController.get_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return the current form values.</span>
+
+<span class="sd">        Same format that create_config/update_config expect.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict[str, Any]</span>
+<span class="sd">            ``player_id``, ``session_id``, ``phase_id``, ``level_id``</span>
+<span class="sd">            and the other config fields. The service resolves the ids</span>
+<span class="sd">            into objects.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">get_form_data</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

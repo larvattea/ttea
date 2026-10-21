@@ -1,0 +1,17 @@
+ReflexiveModel
+==============
+
+.. currentmodule:: ttea.games.kartea.model.reflexivemodel
+
+.. autoclass:: ReflexiveModel
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~ReflexiveModel.get_data
+      ~ReflexiveModel.set_data

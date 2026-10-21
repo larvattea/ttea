@@ -1,0 +1,29 @@
+ttea.service.helpservice
+========================
+
+.. automodule:: ttea.service.helpservice
+
+.. currentmodule:: ttea.service.helpservice
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   HelpService
+
+
+.. rubric:: Exceptions
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   HelpUnavailableError
+

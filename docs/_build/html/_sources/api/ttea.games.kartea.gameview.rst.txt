@@ -1,0 +1,22 @@
+ttea.games.kartea.gameview
+==========================
+
+.. automodule:: ttea.games.kartea.gameview
+
+.. currentmodule:: ttea.games.kartea.gameview
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/module.rst
+   :recursive:
+
+   feedbackview
+   hudview
+   menu
+
+
+

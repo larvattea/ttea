@@ -1,0 +1,20 @@
+ttea.controller.playerlistcontroller
+====================================
+
+.. automodule:: ttea.controller.playerlistcontroller
+
+.. currentmodule:: ttea.controller.playerlistcontroller
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   PlayerListController
+
+

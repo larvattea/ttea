@@ -1,0 +1,24 @@
+KarteaPhaseService
+==================
+
+.. currentmodule:: ttea.games.kartea.service.karteaphaseservice
+
+.. autoclass:: KarteaPhaseService
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~KarteaPhaseService.change_level
+      ~KarteaPhaseService.get_all_phases
+      ~KarteaPhaseService.get_level
+      ~KarteaPhaseService.get_level_rules
+      ~KarteaPhaseService.get_levels_for_phase
+      ~KarteaPhaseService.get_phase
+      ~KarteaPhaseService.next_level
+      ~KarteaPhaseService.previous_level
+      ~KarteaPhaseService.speed_for_level

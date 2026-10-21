@@ -1,0 +1,19 @@
+FeedbackView
+============
+
+.. currentmodule:: ttea.games.kartea.gameview.feedbackview
+
+.. autoclass:: FeedbackView
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~FeedbackView.clear
+      ~FeedbackView.draw
+      ~FeedbackView.set_sound_enabled
+      ~FeedbackView.show

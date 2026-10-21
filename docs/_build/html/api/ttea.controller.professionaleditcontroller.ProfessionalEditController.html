@@ -1,0 +1,305 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProfessionalEditController &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.controller.professionallistcontroller" href="ttea.controller.professionallistcontroller.html" />
+    <link rel="prev" title="ttea.controller.professionaleditcontroller" href="ttea.controller.professionaleditcontroller.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.controller.html">ttea.controller</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.automaticcalibrationcontroller.html">ttea.controller.automaticcalibrationcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.calibrationcontroller.html">ttea.controller.calibrationcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.calibrationsettingcontroller.html">ttea.controller.calibrationsettingcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.helpcontroller.html">ttea.controller.helpcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.institutionfacilityeditcontroller.html">ttea.controller.institutionfacilityeditcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.institutionfacilitylistcontroller.html">ttea.controller.institutionfacilitylistcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.languagecontroller.html">ttea.controller.languagecontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.maincontroller.html">ttea.controller.maincontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.manualcalibrationcontroller.html">ttea.controller.manualcalibrationcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.playereditcontroller.html">ttea.controller.playereditcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.playergamelaunchcontroller.html">ttea.controller.playergamelaunchcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.playerlistcontroller.html">ttea.controller.playerlistcontroller</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.controller.professionaleditcontroller.html">ttea.controller.professionaleditcontroller</a><ul class="current">
+<li class="toctree-l5 current"><a class="current reference internal" href="#">ProfessionalEditController</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#ttea.controller.professionaleditcontroller.ProfessionalEditController"><code class="docutils literal notranslate"><span class="pre">ProfessionalEditController</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.professionaleditcontroller.ProfessionalEditController.list_types"><code class="docutils literal notranslate"><span class="pre">ProfessionalEditController.list_types()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.professionaleditcontroller.ProfessionalEditController.list_institutions"><code class="docutils literal notranslate"><span class="pre">ProfessionalEditController.list_institutions()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.professionaleditcontroller.ProfessionalEditController.handle_ok"><code class="docutils literal notranslate"><span class="pre">ProfessionalEditController.handle_ok()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.professionaleditcontroller.ProfessionalEditController.handle_cancel"><code class="docutils literal notranslate"><span class="pre">ProfessionalEditController.handle_cancel()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.professionaleditcontroller.ProfessionalEditController.get_data"><code class="docutils literal notranslate"><span class="pre">ProfessionalEditController.get_data()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.professionallistcontroller.html">ttea.controller.professionallistcontroller</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.games.html">ttea.games</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.controller.html">ttea.controller</a></li>
+          <li class="breadcrumb-item"><a href="ttea.controller.professionaleditcontroller.html">ttea.controller.professionaleditcontroller</a></li>
+      <li class="breadcrumb-item active">ProfessionalEditController</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.controller.professionaleditcontroller.ProfessionalEditController.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="professionaleditcontroller">
+<h1>ProfessionalEditController<a class="headerlink" href="#professionaleditcontroller" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.controller.professionaleditcontroller.ProfessionalEditController">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ProfessionalEditController</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">view</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">professional</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message_service</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/professionaleditcontroller.html#ProfessionalEditController"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.professionaleditcontroller.ProfessionalEditController" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://doc.qt.io/qtforpython-6/PySide6/QtCore/QObject.html#PySide6.QtCore.QObject" title="(in PySide v6.12.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">QObject</span></code></a></p>
+<p>Controller for the professional edit/create dialog.</p>
+<p>Fills the form of <code class="docutils literal notranslate"><span class="pre">ProfessionalEditView</span></code>, validates the input
+through the service and returns the entered data to the list
+controller.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>view</strong><span class="classifier">ProfessionalEditView</span></dt><dd><p>The dialog view.</p>
+</dd>
+<dt><strong>professional</strong><span class="classifier">Professional | None, optional</span></dt><dd><p>Professional to edit; None creates a new one. Default is None.</p>
+</dd>
+<dt><strong>message_service</strong><span class="classifier">MessageService | None, optional</span></dt><dd><p>Service used to show messages. Default is None, which creates
+<code class="docutils literal notranslate"><span class="pre">MessageService(view)</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>view</strong><span class="classifier">ProfessionalEditView</span></dt><dd><p>The dialog view.</p>
+</dd>
+<dt><strong>service</strong><span class="classifier">ProfessionalService</span></dt><dd><p>Service used to validate the data.</p>
+</dd>
+<dt><strong>professional</strong><span class="classifier">Professional | None</span></dt><dd><p>Professional being edited, or None when creating one.</p>
+</dd>
+<dt><strong>ok_clicked</strong><span class="classifier">bool</span></dt><dd><p>True after the dialog was accepted with valid data.</p>
+</dd>
+<dt><strong>msg</strong><span class="classifier">MessageService</span></dt><dd><p>Service used to show messages.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><strong>handle_ok()</strong></p></td>
+<td><p>Validate the input and accept the dialog if valid.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>handle_cancel()</strong></p></td>
+<td><p>Reject the dialog without saving.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>get_data()</strong></p></td>
+<td><p>Return the entered data as a dictionary.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>list_types()</strong></p></td>
+<td><p>Fill the type combo box.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>list_institutions()</strong></p></td>
+<td><p>Fill the institution combo box.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The OK and Cancel buttons are connected to <code class="docutils literal notranslate"><span class="pre">handle_ok</span></code> and
+<code class="docutils literal notranslate"><span class="pre">handle_cancel</span></code>. Saving is done by the list controller, which
+reads <code class="docutils literal notranslate"><span class="pre">get_data()</span></code> after the dialog is accepted.</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.controller.professionaleditcontroller.ProfessionalEditController.get_data" title="ttea.controller.professionaleditcontroller.ProfessionalEditController.get_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data</span></code></a></p></td>
+<td><p>Return the form values as a dictionary.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.controller.professionaleditcontroller.ProfessionalEditController.handle_cancel" title="ttea.controller.professionaleditcontroller.ProfessionalEditController.handle_cancel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_cancel</span></code></a></p></td>
+<td><p>Reject the dialog, discarding the entered data.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.controller.professionaleditcontroller.ProfessionalEditController.handle_ok" title="ttea.controller.professionaleditcontroller.ProfessionalEditController.handle_ok"><code class="xref py py-obj docutils literal notranslate"><span class="pre">handle_ok</span></code></a></p></td>
+<td><p>Validate the input and accept the dialog if it is valid.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.controller.professionaleditcontroller.ProfessionalEditController.list_institutions" title="ttea.controller.professionaleditcontroller.ProfessionalEditController.list_institutions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_institutions</span></code></a></p></td>
+<td><p>Fill the institution combo box, sorted by name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.controller.professionaleditcontroller.ProfessionalEditController.list_types" title="ttea.controller.professionaleditcontroller.ProfessionalEditController.list_types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list_types</span></code></a></p></td>
+<td><p>Fill the type combo box with the translated types.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.professionaleditcontroller.ProfessionalEditController.list_types">
+<span class="sig-name descname"><span class="pre">list_types</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/professionaleditcontroller.html#ProfessionalEditController.list_types"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.professionaleditcontroller.ProfessionalEditController.list_types" title="Link to this definition"></a></dt>
+<dd><p>Fill the type combo box with the translated types.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.professionaleditcontroller.ProfessionalEditController.list_institutions">
+<span class="sig-name descname"><span class="pre">list_institutions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/professionaleditcontroller.html#ProfessionalEditController.list_institutions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.professionaleditcontroller.ProfessionalEditController.list_institutions" title="Link to this definition"></a></dt>
+<dd><p>Fill the institution combo box, sorted by name.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.professionaleditcontroller.ProfessionalEditController.handle_ok">
+<span class="sig-name descname"><span class="pre">handle_ok</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/professionaleditcontroller.html#ProfessionalEditController.handle_ok"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.professionaleditcontroller.ProfessionalEditController.handle_ok" title="Link to this definition"></a></dt>
+<dd><p>Validate the input and accept the dialog if it is valid.</p>
+<p class="rubric">Notes</p>
+<p>The data is checked by <code class="docutils literal notranslate"><span class="pre">service.validate_data</span></code>. On errors, a
+critical message lists them and the dialog stays open; otherwise
+<code class="docutils literal notranslate"><span class="pre">ok_clicked</span></code> becomes True and the dialog is accepted. The
+message header is translated with <code class="docutils literal notranslate"><span class="pre">self.tr()</span></code>.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.professionaleditcontroller.ProfessionalEditController.handle_cancel">
+<span class="sig-name descname"><span class="pre">handle_cancel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/professionaleditcontroller.html#ProfessionalEditController.handle_cancel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.professionaleditcontroller.ProfessionalEditController.handle_cancel" title="Link to this definition"></a></dt>
+<dd><p>Reject the dialog, discarding the entered data.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.professionaleditcontroller.ProfessionalEditController.get_data">
+<span class="sig-name descname"><span class="pre">get_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/professionaleditcontroller.html#ProfessionalEditController.get_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.professionaleditcontroller.ProfessionalEditController.get_data" title="Link to this definition"></a></dt>
+<dd><p>Return the form values as a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>dict[str, Any]</dt><dd><p>Keys <code class="docutils literal notranslate"><span class="pre">&quot;id&quot;</span></code> (the edited professional’s ID, or 0 for a new
+one), <code class="docutils literal notranslate"><span class="pre">&quot;name&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;type&quot;</span></code> (type code) and
+<code class="docutils literal notranslate"><span class="pre">&quot;institutionfacility&quot;</span></code> (the selected
+<code class="docutils literal notranslate"><span class="pre">InstitutionFacility</span></code>, or None).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.controller.professionaleditcontroller.html" class="btn btn-neutral float-left" title="ttea.controller.professionaleditcontroller" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.controller.professionallistcontroller.html" class="btn btn-neutral float-right" title="ttea.controller.professionallistcontroller" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

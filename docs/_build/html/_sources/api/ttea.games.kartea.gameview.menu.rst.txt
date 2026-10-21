@@ -1,0 +1,20 @@
+ttea.games.kartea.gameview.menu
+===============================
+
+.. automodule:: ttea.games.kartea.gameview.menu
+
+.. currentmodule:: ttea.games.kartea.gameview.menu
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   Menu
+
+

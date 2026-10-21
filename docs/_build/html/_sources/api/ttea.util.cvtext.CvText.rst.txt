@@ -1,0 +1,20 @@
+CvText
+======
+
+.. currentmodule:: ttea.util.cvtext
+
+.. autoclass:: CvText
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~CvText.draw_lines
+      ~CvText.font
+      ~CvText.set_window_title
+      ~CvText.window_name
+      ~CvText.wrap

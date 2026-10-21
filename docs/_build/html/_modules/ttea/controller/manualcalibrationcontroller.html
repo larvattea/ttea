@@ -1,0 +1,507 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.controller.manualcalibrationcontroller &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.controller.manualcalibrationcontroller</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.controller.manualcalibrationcontroller</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Controller of the manual calibration: corners clicked by the user."""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">cv2</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mediapipe</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mediapipe.tasks</span><span class="w"> </span><span class="kn">import</span> <span class="n">python</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mediapipe.tasks.python</span><span class="w"> </span><span class="kn">import</span> <span class="n">vision</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCoreApplication</span><span class="p">,</span> <span class="n">QObject</span><span class="p">,</span> <span class="n">QRect</span><span class="p">,</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">QTimer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtGui</span><span class="w"> </span><span class="kn">import</span> <span class="n">QKeyEvent</span><span class="p">,</span> <span class="n">QPixmap</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">AppModel</span><span class="p">,</span> <span class="n">CalibrationPoint</span><span class="p">,</span> <span class="n">Language</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.service</span><span class="w"> </span><span class="kn">import</span> <span class="n">CalibrationService</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">CvText</span><span class="p">,</span> <span class="n">PathConfig</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">ManualCalibrationView</span>
+
+<span class="n">mp_drawing</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">solutions</span><span class="o">.</span><span class="n">drawing_utils</span>
+<span class="n">mp_pose</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">solutions</span><span class="o">.</span><span class="n">pose</span>
+
+
+<div class="viewcode-block" id="ManualCalibrationController">
+<a class="viewcode-back" href="../../../api/ttea.controller.manualcalibrationcontroller.ManualCalibrationController.html#ttea.controller.manualcalibrationcontroller.ManualCalibrationController">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ManualCalibrationController</span><span class="p">(</span><span class="n">QObject</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Controller of the manual calibration.</span>
+
+<span class="sd">    Shows the camera image, with the detected skeleton, in an OpenCV</span>
+<span class="sd">    window where the user clicks the four corners of the projected area,</span>
+<span class="sd">    and saves them as ``CalibrationPoint``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    view : ManualCalibrationView</span>
+<span class="sd">        The manual calibration dialog.</span>
+<span class="sd">    camera_index : int</span>
+<span class="sd">        OpenCV index of the camera.</span>
+<span class="sd">    monitor_index : int</span>
+<span class="sd">        Index of the projection screen.</span>
+<span class="sd">    service : CalibrationService | None, optional</span>
+<span class="sd">        Calibration service. Default is None, which creates a new</span>
+<span class="sd">        ``CalibrationService``.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    view : ManualCalibrationView</span>
+<span class="sd">        The manual calibration dialog.</span>
+<span class="sd">    service : CalibrationService</span>
+<span class="sd">        Calibration service (settings and saving).</span>
+<span class="sd">    monitor_index : int</span>
+<span class="sd">        Index of the projection screen.</span>
+<span class="sd">    camera_index : int</span>
+<span class="sd">        OpenCV index of the camera.</span>
+<span class="sd">    camera : cv2.VideoCapture | None</span>
+<span class="sd">        Open camera, or None before the user presses C.</span>
+<span class="sd">    monitor_screen : str</span>
+<span class="sd">        Translated title of the OpenCV window.</span>
+<span class="sd">    monitor_window : str</span>
+<span class="sd">        ASCII name of the OpenCV window (``CvText.window_name``).</span>
+<span class="sd">    pose_detector : vision.PoseLandmarker</span>
+<span class="sd">        MediaPipe pose landmarker, configured from the settings.</span>
+<span class="sd">    frame_timestamp : int</span>
+<span class="sd">        Timestamp in ms passed to ``detect_for_video``.</span>
+<span class="sd">    calibration_points : numpy.ndarray</span>
+<span class="sd">        ``(4, 2)`` int64 array with the clicked corners, in click order.</span>
+<span class="sd">    click_calibration_count : int</span>
+<span class="sd">        Number of corners clicked so far (0 to 4).</span>
+<span class="sd">    language_app : str</span>
+<span class="sd">        Current language code, used to pick the instruction images.</span>
+<span class="sd">    camera_timer : QTimer</span>
+<span class="sd">        Timer that refreshes the camera window (every 30 ms).</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Keys: C starts the camera and shows the calibration image; Q closes</span>
+<span class="sd">    the dialog. The corners are camera pixel coordinates, taken after</span>
+<span class="sd">    the optional mirroring (``is_manual_mirror_mode``). The outline</span>
+<span class="sd">    drawn after the fourth click joins 1-2, 2-4, 3-1 and 3-4, i.e. the</span>
+<span class="sd">    expected click order is top-left, top-right, bottom-left,</span>
+<span class="sd">    bottom-right.</span>
+
+<span class="sd">    The instruction images are chosen by the language prefix</span>
+<span class="sd">    (``warning&lt;xx&gt;``, ``calibration&lt;xx&gt;``, ``calibrationok&lt;xx&gt;``). The</span>
+<span class="sd">    window title is translated with ``QCoreApplication.translate`` in</span>
+<span class="sd">    the ``"ManualCalibrationController"`` context, and messages with</span>
+<span class="sd">    ``self.tr()``.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">view</span><span class="p">:</span> <span class="s2">"ManualCalibrationView"</span><span class="p">,</span>
+        <span class="n">camera_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">monitor_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">service</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CalibrationService</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span> <span class="o">=</span> <span class="n">view</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="n">service</span> <span class="ow">or</span> <span class="n">CalibrationService</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">monitor_index</span> <span class="o">=</span> <span class="n">monitor_index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">camera_index</span> <span class="o">=</span> <span class="n">camera_index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">monitor_screen</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">QCoreApplication</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span>
+            <span class="s2">"ManualCalibrationController"</span><span class="p">,</span> <span class="s2">"Tela de Monitoramento"</span>
+        <span class="p">)</span>
+        <span class="c1"># ASCII key of the OpenCV window; the translated title (with</span>
+        <span class="c1"># accents) is shown with CvText.set_window_title.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">monitor_window</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">CvText</span><span class="o">.</span><span class="n">window_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">monitor_screen</span><span class="p">)</span>
+
+        <span class="c1"># MediaPipe Tasks (Pose Landmarker)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">is_raspberry_pi</span><span class="p">():</span>
+            <span class="n">model_path</span> <span class="o">=</span> <span class="n">PathConfig</span><span class="o">.</span><span class="n">model</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_mediapipe_model_embedded</span><span class="p">()</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">model_path</span> <span class="o">=</span> <span class="n">PathConfig</span><span class="o">.</span><span class="n">model</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_mediapipe_model_desktop</span><span class="p">()</span>
+            <span class="p">)</span>
+
+        <span class="n">base_options</span> <span class="o">=</span> <span class="n">python</span><span class="o">.</span><span class="n">BaseOptions</span><span class="p">(</span><span class="n">model_asset_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">)</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="n">vision</span><span class="o">.</span><span class="n">PoseLandmarkerOptions</span><span class="p">(</span>
+            <span class="n">base_options</span><span class="o">=</span><span class="n">base_options</span><span class="p">,</span>
+            <span class="n">running_mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_mediapipe_execution_mode</span><span class="p">(),</span>
+            <span class="n">num_poses</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_mediapipe_num_position</span><span class="p">(),</span>
+            <span class="n">min_pose_detection_confidence</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_mediapipe_detection_position</span><span class="p">(),</span>
+            <span class="n">min_pose_presence_confidence</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_mediapipe_detection_presence</span><span class="p">(),</span>
+            <span class="n">min_tracking_confidence</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_mediapipe_detection_tracking</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pose_detector</span> <span class="o">=</span> <span class="n">vision</span><span class="o">.</span><span class="n">PoseLandmarker</span><span class="o">.</span><span class="n">create_from_options</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frame_timestamp</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">calibration_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">click_calibration_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">language_app</span> <span class="o">=</span> <span class="n">AppModel</span><span class="o">.</span><span class="n">get_instance</span><span class="p">()</span><span class="o">.</span><span class="n">current_language</span>
+        <span class="k">for</span> <span class="n">lang</span> <span class="ow">in</span> <span class="n">Language</span><span class="o">.</span><span class="n">LANGUAGES</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">language_app</span> <span class="o">==</span> <span class="n">lang</span><span class="p">[</span><span class="s2">"code"</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_load_image</span><span class="p">(</span><span class="sa">f</span><span class="s2">"warning</span><span class="si">{</span><span class="n">lang</span><span class="p">[</span><span class="s1">'code'</span><span class="p">][:</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                <span class="k">break</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">camera_timer</span> <span class="o">=</span> <span class="n">QTimer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">camera_timer</span><span class="o">.</span><span class="n">timeout</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_update_camera_feed</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setup_calibration_window</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Open the OpenCV window and bind the mouse callback."""</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">namedWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">monitor_window</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">WINDOW_NORMAL</span><span class="p">)</span>
+        <span class="n">CvText</span><span class="o">.</span><span class="n">set_window_title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">monitor_window</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">monitor_screen</span><span class="p">)</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">setMouseCallback</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">monitor_window</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mouse_click_callback</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ManualCalibrationController.keyPressEvent">
+<a class="viewcode-back" href="../../../api/ttea.controller.manualcalibrationcontroller.ManualCalibrationController.html#ttea.controller.manualcalibrationcontroller.ManualCalibrationController.keyPressEvent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">keyPressEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">QKeyEvent</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Handle the keys of the calibration dialog.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        event : QKeyEvent</span>
+<span class="sd">            Key event forwarded by the view: C starts the camera (and</span>
+<span class="sd">            the refresh timer) and Q closes the dialog.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span><span class="p">()</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Key_C</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">lang</span> <span class="ow">in</span> <span class="n">Language</span><span class="o">.</span><span class="n">LANGUAGES</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">language_app</span> <span class="o">==</span> <span class="n">lang</span><span class="p">[</span><span class="s2">"code"</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_load_image</span><span class="p">(</span><span class="sa">f</span><span class="s2">"calibration</span><span class="si">{</span><span class="n">lang</span><span class="p">[</span><span class="s1">'code'</span><span class="p">][:</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                    <span class="k">break</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">isOpened</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">camera_index</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_opencv_capture_backend</span><span class="p">(),</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">isOpened</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_setup_calibration_window</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">camera_timer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Não foi possível abrir a câmera."</span><span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span><span class="p">()</span> <span class="o">==</span> <span class="n">Qt</span><span class="o">.</span><span class="n">Key_Q</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_mouse_click_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">flags</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Store a clicked corner (OpenCV mouse callback).</span>
+
+<span class="sd">        Only left clicks count, up to four; after the fourth, the</span>
+<span class="sd">        success image and message are shown.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">event</span> <span class="o">==</span> <span class="n">cv2</span><span class="o">.</span><span class="n">EVENT_LBUTTONDOWN</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">click_calibration_count</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">calibration_points</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">click_calibration_count</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">click_calibration_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">click_calibration_count</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">lang</span> <span class="ow">in</span> <span class="n">Language</span><span class="o">.</span><span class="n">LANGUAGES</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">language_app</span> <span class="o">==</span> <span class="n">lang</span><span class="p">[</span><span class="s2">"code"</span><span class="p">]:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_load_image</span><span class="p">(</span>
+                                <span class="sa">f</span><span class="s2">"calibrationok</span><span class="si">{</span><span class="n">lang</span><span class="p">[</span><span class="s1">'code'</span><span class="p">][:</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
+                            <span class="p">)</span>
+                            <span class="k">break</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Calibração concluída com sucesso!"</span><span class="p">)</span>
+                    <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_load_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Show a Qt resource image in the instruction label."""</span>
+        <span class="n">qimage</span> <span class="o">=</span> <span class="n">PathConfig</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="n">image_name</span><span class="p">)</span>
+        <span class="n">pixmap</span> <span class="o">=</span> <span class="n">QPixmap</span><span class="p">(</span><span class="n">qimage</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">lbl_image</span><span class="o">.</span><span class="n">setScaledContents</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">lbl_image</span><span class="o">.</span><span class="n">setPixmap</span><span class="p">(</span><span class="n">pixmap</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_camera_feed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Show the next camera frame with skeleton and corners.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The OpenCV window is recreated if the user closed it. The frame</span>
+<span class="sd">        is mirrored when ``is_manual_mirror_mode()`` is set. When pose</span>
+<span class="sd">        detection is enabled, the skeleton is drawn; in VIDEO mode the</span>
+<span class="sd">        timestamp advances 33 ms per frame (about 30 fps). The clicked</span>
+<span class="sd">        corners are drawn as blue dots, and the outline is drawn after</span>
+<span class="sd">        the fourth click.</span>
+<span class="sd">        """</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">mediapipe.framework.formats</span><span class="w"> </span><span class="kn">import</span> <span class="n">landmark_pb2</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">isOpened</span><span class="p">():</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">cv2</span><span class="o">.</span><span class="n">getWindowProperty</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">monitor_window</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">WND_PROP_VISIBLE</span>
+                <span class="p">)</span>
+                <span class="o">&lt;</span> <span class="mi">1</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_setup_calibration_window</span><span class="p">()</span>
+
+            <span class="n">ret</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">camera</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">ret</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">is_manual_mirror_mode</span><span class="p">():</span>
+                    <span class="n">control_screen</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">control_screen</span> <span class="o">=</span> <span class="n">frame</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">is_enable_mediapipe_pose</span><span class="p">():</span>
+                    <span class="c1"># MediaPipe expects RGB</span>
+                    <span class="n">rgb_frame</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">control_screen</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2RGB</span><span class="p">)</span>
+
+                    <span class="c1"># The Tasks API takes an mp.Image</span>
+                    <span class="n">mp_image</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span>
+                        <span class="n">image_format</span><span class="o">=</span><span class="n">mp</span><span class="o">.</span><span class="n">ImageFormat</span><span class="o">.</span><span class="n">SRGB</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">rgb_frame</span>
+                    <span class="p">)</span>
+
+                    <span class="c1"># IMAGE or VIDEO mode, as configured</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_mediapipe_execution_mode</span><span class="p">()</span>
+                        <span class="o">==</span> <span class="n">vision</span><span class="o">.</span><span class="n">RunningMode</span><span class="o">.</span><span class="n">VIDEO</span>
+                    <span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">frame_timestamp</span> <span class="o">+=</span> <span class="mi">33</span>  <span class="c1"># about 30 fps</span>
+                        <span class="n">detection_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pose_detector</span><span class="o">.</span><span class="n">detect_for_video</span><span class="p">(</span>
+                            <span class="n">mp_image</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame_timestamp</span>
+                        <span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">detection_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pose_detector</span><span class="o">.</span><span class="n">detect</span><span class="p">(</span><span class="n">mp_image</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">detection_result</span><span class="o">.</span><span class="n">pose_landmarks</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">pose_landmarks</span> <span class="ow">in</span> <span class="n">detection_result</span><span class="o">.</span><span class="n">pose_landmarks</span><span class="p">:</span>
+                            <span class="c1"># drawing_utils needs the protobuf format</span>
+                            <span class="n">pose_landmarks_proto</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="n">landmark_pb2</span><span class="o">.</span><span class="n">NormalizedLandmarkList</span><span class="p">()</span>
+                            <span class="p">)</span>
+                            <span class="n">pose_landmarks_proto</span><span class="o">.</span><span class="n">landmark</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span>
+                                <span class="p">[</span>
+                                    <span class="n">landmark_pb2</span><span class="o">.</span><span class="n">NormalizedLandmark</span><span class="p">(</span>
+                                        <span class="n">x</span><span class="o">=</span><span class="n">landmark</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+                                        <span class="n">y</span><span class="o">=</span><span class="n">landmark</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+                                        <span class="n">z</span><span class="o">=</span><span class="n">landmark</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+                                        <span class="n">visibility</span><span class="o">=</span><span class="n">landmark</span><span class="o">.</span><span class="n">visibility</span><span class="p">,</span>
+                                        <span class="n">presence</span><span class="o">=</span><span class="n">landmark</span><span class="o">.</span><span class="n">presence</span><span class="p">,</span>
+                                    <span class="p">)</span>
+                                    <span class="k">for</span> <span class="n">landmark</span> <span class="ow">in</span> <span class="n">pose_landmarks</span>
+                                <span class="p">]</span>
+                            <span class="p">)</span>
+
+                            <span class="n">mp_drawing</span><span class="o">.</span><span class="n">draw_landmarks</span><span class="p">(</span>
+                                <span class="n">control_screen</span><span class="p">,</span>
+                                <span class="n">pose_landmarks_proto</span><span class="p">,</span>
+                                <span class="n">mp_pose</span><span class="o">.</span><span class="n">POSE_CONNECTIONS</span><span class="p">,</span>
+                                <span class="n">mp_drawing</span><span class="o">.</span><span class="n">DrawingSpec</span><span class="p">(</span>
+                                    <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                                    <span class="n">thickness</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                    <span class="n">circle_radius</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                                <span class="p">),</span>
+                                <span class="n">mp_drawing</span><span class="o">.</span><span class="n">DrawingSpec</span><span class="p">(</span>
+                                    <span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="n">thickness</span><span class="o">=</span><span class="mi">2</span>
+                                <span class="p">),</span>
+                            <span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+                    <span class="n">cv2</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span>
+                        <span class="n">control_screen</span><span class="p">,</span>
+                        <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">calibration_points</span><span class="p">[</span><span class="n">i</span><span class="p">]),</span>
+                        <span class="mi">8</span><span class="p">,</span>
+                        <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>  <span class="c1"># blue (BGR)</span>
+                        <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">click_calibration_count</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
+                    <span class="n">pts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calibration_points</span>
+                    <span class="n">cv2</span><span class="o">.</span><span class="n">line</span><span class="p">(</span>
+                        <span class="n">control_screen</span><span class="p">,</span>
+                        <span class="nb">tuple</span><span class="p">(</span><span class="n">pts</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                        <span class="nb">tuple</span><span class="p">(</span><span class="n">pts</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+                        <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                        <span class="mi">2</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">cv2</span><span class="o">.</span><span class="n">line</span><span class="p">(</span>
+                        <span class="n">control_screen</span><span class="p">,</span>
+                        <span class="nb">tuple</span><span class="p">(</span><span class="n">pts</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+                        <span class="nb">tuple</span><span class="p">(</span><span class="n">pts</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span>
+                        <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                        <span class="mi">2</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">cv2</span><span class="o">.</span><span class="n">line</span><span class="p">(</span>
+                        <span class="n">control_screen</span><span class="p">,</span>
+                        <span class="nb">tuple</span><span class="p">(</span><span class="n">pts</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
+                        <span class="nb">tuple</span><span class="p">(</span><span class="n">pts</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                        <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                        <span class="mi">2</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">cv2</span><span class="o">.</span><span class="n">line</span><span class="p">(</span>
+                        <span class="n">control_screen</span><span class="p">,</span>
+                        <span class="nb">tuple</span><span class="p">(</span><span class="n">pts</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
+                        <span class="nb">tuple</span><span class="p">(</span><span class="n">pts</span><span class="p">[</span><span class="mi">3</span><span class="p">]),</span>
+                        <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                        <span class="mi">2</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                <span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">monitor_window</span><span class="p">,</span> <span class="n">control_screen</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Falha ao capturar imagem da câmera."</span><span class="p">)</span>
+                <span class="p">)</span>
+
+<div class="viewcode-block" id="ManualCalibrationController.get_available_geometry_of_screen">
+<a class="viewcode-back" href="../../../api/ttea.controller.manualcalibrationcontroller.ManualCalibrationController.html#ttea.controller.manualcalibrationcontroller.ManualCalibrationController.get_available_geometry_of_screen">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_available_geometry_of_screen</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">monitor_index</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">QRect</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return the available geometry of a screen.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        monitor_index : int | None, optional</span>
+<span class="sd">            Screen index. Default is None, which uses ``monitor_index``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QRect | None</span>
+<span class="sd">            The available geometry, or None if the index is out of</span>
+<span class="sd">            range.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">monitor_index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">monitor_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">monitor_index</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_available_geometry_of_screen</span><span class="p">(</span><span class="n">monitor_index</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ManualCalibrationController.create_calibration_point">
+<a class="viewcode-back" href="../../../api/ttea.controller.manualcalibrationcontroller.ManualCalibrationController.html#ttea.controller.manualcalibrationcontroller.ManualCalibrationController.create_calibration_point">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_calibration_point</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Save the clicked corners and show the result."""</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">create_calibration_point</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Calibração manual salva com sucesso!"</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Erro ao salvar os pontos da calibração manual."</span><span class="p">)</span>
+            <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ManualCalibrationController.get_data">
+<a class="viewcode-back" href="../../../api/ttea.controller.manualcalibrationcontroller.ManualCalibrationController.html#ttea.controller.manualcalibrationcontroller.ManualCalibrationController.get_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return the corners as ``CalibrationPoint`` field values.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict[str, int]</span>
+<span class="sd">            ``pointx1``, ``pointy1``... ``pointy4`` from</span>
+<span class="sd">            ``calibration_points``, in click order.</span>
+<span class="sd">        """</span>
+        <span class="c1"># (4, 2) array -&gt; [x1, y1, x2, y2, ...]</span>
+        <span class="n">flat_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calibration_points</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="n">prop</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">prop</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">CalibrationPoint</span><span class="o">.</span><span class="n">PROPERTIES</span><span class="p">,</span> <span class="n">flat_points</span><span class="p">)</span>
+        <span class="p">}</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

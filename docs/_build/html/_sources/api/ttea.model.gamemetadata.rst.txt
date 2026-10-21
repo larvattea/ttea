@@ -1,0 +1,20 @@
+ttea.model.gamemetadata
+=======================
+
+.. automodule:: ttea.model.gamemetadata
+
+.. currentmodule:: ttea.model.gamemetadata
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   GameMetadata
+
+

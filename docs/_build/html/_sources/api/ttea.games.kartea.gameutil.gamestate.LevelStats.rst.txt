@@ -1,0 +1,16 @@
+LevelStats
+==========
+
+.. currentmodule:: ttea.games.kartea.gameutil.gamestate
+
+.. autoclass:: LevelStats
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~LevelStats.reset

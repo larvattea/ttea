@@ -1,0 +1,9 @@
+ProfessionalEditView
+====================
+
+.. currentmodule:: ttea.view.professionaleditview
+
+.. autoclass:: ProfessionalEditView
+   :members:
+   :show-inheritance:
+

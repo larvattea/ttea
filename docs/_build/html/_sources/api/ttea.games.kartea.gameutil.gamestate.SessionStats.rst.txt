@@ -1,0 +1,17 @@
+SessionStats
+============
+
+.. currentmodule:: ttea.games.kartea.gameutil.gamestate
+
+.. autoclass:: SessionStats
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~SessionStats.close_level
+      ~SessionStats.totals

@@ -1,0 +1,9 @@
+HelpUnavailableError
+====================
+
+.. currentmodule:: ttea.service.helpservice
+
+.. autoclass:: HelpUnavailableError
+   :members:
+   :show-inheritance:
+

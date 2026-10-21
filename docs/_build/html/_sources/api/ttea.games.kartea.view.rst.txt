@@ -1,0 +1,21 @@
+ttea.games.kartea.view
+======================
+
+.. automodule:: ttea.games.kartea.view
+
+.. currentmodule:: ttea.games.kartea.view
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/module.rst
+   :recursive:
+
+   playerkarteaconfigeditview
+   playerkarteaconfiglistview
+
+
+

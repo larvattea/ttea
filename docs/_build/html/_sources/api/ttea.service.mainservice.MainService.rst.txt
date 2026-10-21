@@ -1,0 +1,17 @@
+MainService
+===========
+
+.. currentmodule:: ttea.service.mainservice
+
+.. autoclass:: MainService
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~MainService.confirm_exit
+      ~MainService.quit_application

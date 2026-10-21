@@ -1,0 +1,270 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.util.criticalhooks &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.util.criticalhooks</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.util.criticalhooks</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Global exception hook utilities for the T-TEA application.</span>
+
+<span class="sd">This module installs hooks for uncaught exceptions in the main thread</span>
+<span class="sd">and worker threads. It also shows an error dialog using translated</span>
+<span class="sd">messages when Qt is available.</span>
+<span class="sd">"""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">TracebackType</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCoreApplication</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QApplication</span>
+
+
+<div class="viewcode-block" id="CriticalHooks">
+<a class="viewcode-back" href="../../../api/ttea.util.criticalhooks.CriticalHooks.html#ttea.util.criticalhooks.CriticalHooks">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CriticalHooks</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Encapsulate global exception hooks for the application.</span>
+
+<span class="sd">    This class registers handlers for uncaught exceptions in the main</span>
+<span class="sd">    thread and worker threads, and displays a translated error dialog</span>
+<span class="sd">    when Qt is available.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    show_critical_error(exception)</span>
+<span class="sd">        Display a translated critical error dialog for an exception.</span>
+<span class="sd">    global_exception_hook(exctype, value, traceback_obj)</span>
+<span class="sd">        Handle uncaught exceptions on the main thread.</span>
+<span class="sd">    threading_exception_hook(args)</span>
+<span class="sd">        Handle uncaught exceptions in worker threads.</span>
+<span class="sd">    setup_exception_hooks()</span>
+<span class="sd">        Register global exception hooks for the application.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The dialog text is translated at runtime with</span>
+<span class="sd">    ``QCoreApplication.translate`` in the ``"CriticalHooks"`` context.</span>
+<span class="sd">    """</span>
+
+<div class="viewcode-block" id="CriticalHooks.show_critical_error">
+<a class="viewcode-back" href="../../../api/ttea.util.criticalhooks.CriticalHooks.html#ttea.util.criticalhooks.CriticalHooks.show_critical_error">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">show_critical_error</span><span class="p">(</span><span class="n">exception</span><span class="p">:</span> <span class="ne">BaseException</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Show a translated critical error dialog.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        exception : BaseException</span>
+<span class="sd">            The exception that caused the failure; its text is appended</span>
+<span class="sd">            to the message.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The message (pt_BR source text) is translated at runtime with</span>
+<span class="sd">        ``QCoreApplication.translate`` in the ``"CriticalHooks"``</span>
+<span class="sd">        context and shown with ``MessageService.critical_global``. If</span>
+<span class="sd">        the dialog cannot be displayed (e.g. Qt is not ready yet), the</span>
+<span class="sd">        error is printed to standard output instead.</span>
+<span class="sd">        """</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">MessageService</span>
+
+        <span class="n">message</span> <span class="o">=</span> <span class="n">QCoreApplication</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span>
+            <span class="s2">"CriticalHooks"</span><span class="p">,</span>
+            <span class="s2">"Ocorreu um erro inesperado e o aplicativo será encerrado.</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="s2">"Por favor, entre em contato com o suporte e envie o arquivo de log.</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="s2">"Detalhes do erro: </span><span class="si">{0}</span><span class="s2">"</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">exception</span><span class="p">))</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">MessageService</span><span class="o">.</span><span class="n">critical_global</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="c1"># Fallback in case the dialog fails or Qt is not yet ready</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"Critical error (failed to display dialogue): "</span><span class="p">,</span> <span class="n">exception</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CriticalHooks.global_exception_hook">
+<a class="viewcode-back" href="../../../api/ttea.util.criticalhooks.CriticalHooks.html#ttea.util.criticalhooks.CriticalHooks.global_exception_hook">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">global_exception_hook</span><span class="p">(</span>
+        <span class="n">exctype</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="ne">BaseException</span><span class="p">],</span>
+        <span class="n">value</span><span class="p">:</span> <span class="ne">BaseException</span><span class="p">,</span>
+        <span class="n">traceback_obj</span><span class="p">:</span> <span class="n">TracebackType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Handle uncaught exceptions on the main thread.</span>
+
+<span class="sd">        Installed as ``sys.excepthook``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        exctype : type[BaseException]</span>
+<span class="sd">            The exception class.</span>
+<span class="sd">        value : BaseException</span>
+<span class="sd">            The exception instance.</span>
+<span class="sd">        traceback_obj : TracebackType | None</span>
+<span class="sd">            The traceback object, if available.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The exception is written to the application log with its stack</span>
+<span class="sd">        trace. The dialog is shown only if a QApplication instance</span>
+<span class="sd">        exists; otherwise a message is printed. The default</span>
+<span class="sd">        ``sys.__excepthook__`` then prints the traceback and the</span>
+<span class="sd">        application exits with status 1.</span>
+<span class="sd">        """</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">Log</span>
+
+        <span class="n">Log</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span><span class="o">.</span><span class="n">log_error</span><span class="p">(</span><span class="s2">"Untreated global exception"</span><span class="p">)</span>
+        <span class="n">Log</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span><span class="o">.</span><span class="n">log_error_with_stack</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">traceback_obj</span><span class="o">=</span><span class="n">traceback_obj</span><span class="p">)</span>
+
+        <span class="c1"># Qt widgets can only be created once a QApplication exists.</span>
+        <span class="k">if</span> <span class="n">QApplication</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">CriticalHooks</span><span class="o">.</span><span class="n">show_critical_error</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">"Critical error (failed to display dialogue)."</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"Critical error before QApplication initialization:"</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+        <span class="n">sys</span><span class="o">.</span><span class="n">__excepthook__</span><span class="p">(</span><span class="n">exctype</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">traceback_obj</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CriticalHooks.threading_exception_hook">
+<a class="viewcode-back" href="../../../api/ttea.util.criticalhooks.CriticalHooks.html#ttea.util.criticalhooks.CriticalHooks.threading_exception_hook">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">threading_exception_hook</span><span class="p">(</span><span class="n">args</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">ExceptHookArgs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Handle uncaught exceptions in worker threads.</span>
+
+<span class="sd">        Installed as ``threading.excepthook``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        args : threading.ExceptHookArgs</span>
+<span class="sd">            Thread exception hook arguments.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        This hook only logs the exception with its stack trace. It shows</span>
+<span class="sd">        no dialog, to avoid thread safety issues with Qt widgets, and</span>
+<span class="sd">        does not end the application.</span>
+<span class="sd">        """</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">Log</span>
+
+        <span class="n">Log</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span><span class="o">.</span><span class="n">log_error</span><span class="p">(</span><span class="s2">"Untreated exception in thread"</span><span class="p">)</span>
+        <span class="n">Log</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span><span class="o">.</span><span class="n">log_error_with_stack</span><span class="p">(</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">exc_value</span><span class="p">,</span> <span class="n">traceback_obj</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">exc_traceback</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CriticalHooks.setup_exception_hooks">
+<a class="viewcode-back" href="../../../api/ttea.util.criticalhooks.CriticalHooks.html#ttea.util.criticalhooks.CriticalHooks.setup_exception_hooks">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup_exception_hooks</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Register the global exception hooks for the application.</span>
+
+<span class="sd">        Sets ``sys.excepthook`` to ``global_exception_hook`` and</span>
+<span class="sd">        ``threading.excepthook`` to ``threading_exception_hook``.</span>
+<span class="sd">        """</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">excepthook</span> <span class="o">=</span> <span class="n">CriticalHooks</span><span class="o">.</span><span class="n">global_exception_hook</span>
+        <span class="n">threading</span><span class="o">.</span><span class="n">excepthook</span> <span class="o">=</span> <span class="n">CriticalHooks</span><span class="o">.</span><span class="n">threading_exception_hook</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

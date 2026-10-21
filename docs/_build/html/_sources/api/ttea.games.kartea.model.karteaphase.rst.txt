@@ -1,0 +1,20 @@
+ttea.games.kartea.model.karteaphase
+===================================
+
+.. automodule:: ttea.games.kartea.model.karteaphase
+
+.. currentmodule:: ttea.games.kartea.model.karteaphase
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   KarteaPhase
+
+

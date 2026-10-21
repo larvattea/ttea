@@ -1,0 +1,180 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.games.kartea.model.karteaphaselevel &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.games.kartea.model.karteaphaselevel</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.games.kartea.model.karteaphaselevel</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Model of a level within a Kartea game phase."""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">ClassVar</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.reflexivemodel</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReflexiveModel</span><span class="p">,</span> <span class="n">initialize_reflexive</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.model.karteaphase</span><span class="w"> </span><span class="kn">import</span> <span class="n">KarteaPhase</span>
+
+
+<div class="viewcode-block" id="KarteaPhaseLevel">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.model.karteaphaselevel.KarteaPhaseLevel.html#ttea.games.kartea.model.karteaphaselevel.KarteaPhaseLevel">[docs]</a>
+<span class="nd">@initialize_reflexive</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">KarteaPhaseLevel</span><span class="p">(</span><span class="n">ReflexiveModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Summary model for Kartea game phase level data.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    id : int</span>
+<span class="sd">        Unique identifier for the level.</span>
+<span class="sd">    phase : KarteaPhase</span>
+<span class="sd">        The phase associated with this level.</span>
+<span class="sd">    interval : float</span>
+<span class="sd">        Time interval between objects (in seconds).</span>
+<span class="sd">    num_obj : int</span>
+<span class="sd">        Number of objects in the level.</span>
+<span class="sd">    obj_type : list[int]</span>
+<span class="sd">        Type of each object, in order (0 target, 1 obstacle), parsed</span>
+<span class="sd">        from the space-separated ``obj_type`` column of the phase CSV.</span>
+<span class="sd">    PROPERTIES : ClassVar[list[str]], class attribute</span>
+<span class="sd">        Field names of the class, filled by ``initialize_reflexive``.</span>
+<span class="sd">    DATA_PROPERTIES : ClassVar[list], class attribute</span>
+<span class="sd">        Default value of each init field (``dataclasses.MISSING`` when</span>
+<span class="sd">        the field has none), filled by ``initialize_reflexive``.</span>
+<span class="sd">    REF_PROPERTIES : tuple[str, ...], class attribute</span>
+<span class="sd">        Fields written as the referenced object's ``id`` by</span>
+<span class="sd">        ``get_data``: ``("phase",)``.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    set_data(data)</span>
+<span class="sd">        Update level data from a dictionary.</span>
+<span class="sd">    get_data()</span>
+<span class="sd">        Return level data as a list with one dictionary.</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    KarteaPhase : Phase that owns the level.</span>
+<span class="sd">    LevelRules : Rules of a level used while the game is running.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from ttea.games.kartea.model.karteaphase import KarteaPhase</span>
+<span class="sd">    &gt;&gt;&gt; phase = KarteaPhase(id=1, level_list=[])</span>
+<span class="sd">    &gt;&gt;&gt; level = KarteaPhaseLevel(</span>
+<span class="sd">    ...     id=1, phase=phase, interval=1.5, num_obj=10,</span>
+<span class="sd">    ...     obj_type=[1, 2, 3],</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; level.get_data()  # doctest: +NORMALIZE_WHITESPACE</span>
+<span class="sd">    [{'id': 1, 'phase': 1, 'interval': 1.5, 'num_obj': 10,</span>
+<span class="sd">      'obj_type': [1, 2, 3]}]</span>
+<span class="sd">    """</span>
+
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">phase</span><span class="p">:</span> <span class="s2">"KarteaPhase"</span>
+    <span class="n">interval</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">num_obj</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">obj_type</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="n">PROPERTIES</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">DATA_PROPERTIES</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">REF_PROPERTIES</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"phase"</span><span class="p">,)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

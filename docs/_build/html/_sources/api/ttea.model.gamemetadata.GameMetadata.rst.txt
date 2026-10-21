@@ -1,0 +1,18 @@
+GameMetadata
+============
+
+.. currentmodule:: ttea.model.gamemetadata
+
+.. autoclass:: GameMetadata
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~GameMetadata.load
+      ~GameMetadata.name
+      ~GameMetadata.text

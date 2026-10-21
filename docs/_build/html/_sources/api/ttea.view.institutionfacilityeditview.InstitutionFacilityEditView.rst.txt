@@ -1,0 +1,9 @@
+InstitutionFacilityEditView
+===========================
+
+.. currentmodule:: ttea.view.institutionfacilityeditview
+
+.. autoclass:: InstitutionFacilityEditView
+   :members:
+   :show-inheritance:
+

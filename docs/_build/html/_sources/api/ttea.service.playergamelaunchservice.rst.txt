@@ -1,0 +1,20 @@
+ttea.service.playergamelaunchservice
+====================================
+
+.. automodule:: ttea.service.playergamelaunchservice
+
+.. currentmodule:: ttea.service.playergamelaunchservice
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   PlayerGameLaunchService
+
+

@@ -1,0 +1,20 @@
+MessageService
+==============
+
+.. currentmodule:: ttea.util.messageservice
+
+.. autoclass:: MessageService
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~MessageService.critical
+      ~MessageService.critical_global
+      ~MessageService.info
+      ~MessageService.question
+      ~MessageService.warning

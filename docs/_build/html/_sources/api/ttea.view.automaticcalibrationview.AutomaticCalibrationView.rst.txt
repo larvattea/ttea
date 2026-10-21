@@ -1,0 +1,19 @@
+AutomaticCalibrationView
+========================
+
+.. currentmodule:: ttea.view.automaticcalibrationview
+
+.. autoclass:: AutomaticCalibrationView
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~AutomaticCalibrationView.closeEvent
+      ~AutomaticCalibrationView.handle_info_then_close
+      ~AutomaticCalibrationView.paintEvent
+      ~AutomaticCalibrationView.showEvent

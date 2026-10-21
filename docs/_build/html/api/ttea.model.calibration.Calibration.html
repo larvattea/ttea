@@ -1,0 +1,343 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calibration &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.model.calibrationpoint" href="ttea.model.calibrationpoint.html" />
+    <link rel="prev" title="ttea.model.calibration" href="ttea.model.calibration.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.games.html">ttea.games</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.model.html">ttea.model</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.appmodel.html">ttea.model.appmodel</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.model.calibration.html">ttea.model.calibration</a><ul class="current">
+<li class="toctree-l5 current"><a class="current reference internal" href="#">Calibration</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#ttea.model.calibration.Calibration"><code class="docutils literal notranslate"><span class="pre">Calibration</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.model.calibration.Calibration.is_valid"><code class="docutils literal notranslate"><span class="pre">Calibration.is_valid()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.model.calibration.Calibration.set_data"><code class="docutils literal notranslate"><span class="pre">Calibration.set_data()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.model.calibration.Calibration.get_data"><code class="docutils literal notranslate"><span class="pre">Calibration.get_data()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.model.calibration.Calibration.get_proportion_tuple"><code class="docutils literal notranslate"><span class="pre">Calibration.get_proportion_tuple()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.model.calibration.Calibration.get_section_for_property"><code class="docutils literal notranslate"><span class="pre">Calibration.get_section_for_property()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.model.calibration.html#ttea.model.calibration.initialize_reflexive"><code class="docutils literal notranslate"><span class="pre">initialize_reflexive()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.calibrationpoint.html">ttea.model.calibrationpoint</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.calibrationsetting.html">ttea.model.calibrationsetting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.gamemetadata.html">ttea.model.gamemetadata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.institutionfacility.html">ttea.model.institutionfacility</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.language.html">ttea.model.language</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.player.html">ttea.model.player</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.professional.html">ttea.model.professional</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.model.html">ttea.model</a></li>
+          <li class="breadcrumb-item"><a href="ttea.model.calibration.html">ttea.model.calibration</a></li>
+      <li class="breadcrumb-item active">Calibration</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.model.calibration.Calibration.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="calibration">
+<h1>Calibration<a class="headerlink" href="#calibration" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.model.calibration.Calibration">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Calibration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">camera_description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera_position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera_width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera_max_fps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera_min_fps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">screen_manufacturer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">screen_model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">screen_position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">screen_serial_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">screen_width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">screen_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">screen_available_width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">screen_available_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">screen_pos_x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">screen_pos_y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content_width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content_width_ratio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content_height_ratio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">content_proportion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calibration_date</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calibration_hour</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/model/calibration.html#Calibration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.model.calibration.Calibration" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Camera, screen and projected content calibration data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>camera_description</strong><span class="classifier">str</span></dt><dd><p>Camera description.</p>
+</dd>
+<dt><strong>camera_id</strong><span class="classifier">str</span></dt><dd><p>Camera identifier.</p>
+</dd>
+<dt><strong>camera_position</strong><span class="classifier">int</span></dt><dd><p>Camera position (index).</p>
+</dd>
+<dt><strong>camera_width, camera_height</strong><span class="classifier">int</span></dt><dd><p>Camera resolution in pixels.</p>
+</dd>
+<dt><strong>camera_max_fps, camera_min_fps</strong><span class="classifier">int</span></dt><dd><p>Camera frame rate range.</p>
+</dd>
+<dt><strong>screen_manufacturer, screen_model</strong><span class="classifier">str</span></dt><dd><p>Manufacturer and model of the projection screen.</p>
+</dd>
+<dt><strong>screen_position</strong><span class="classifier">int</span></dt><dd><p>Screen position (index).</p>
+</dd>
+<dt><strong>screen_serial_number</strong><span class="classifier">str</span></dt><dd><p>Screen serial number.</p>
+</dd>
+<dt><strong>screen_width, screen_height</strong><span class="classifier">int</span></dt><dd><p>Screen resolution in pixels.</p>
+</dd>
+<dt><strong>screen_available_width, screen_available_height</strong><span class="classifier">int</span></dt><dd><p>Available screen area in pixels.</p>
+</dd>
+<dt><strong>screen_pos_x, screen_pos_y</strong><span class="classifier">int</span></dt><dd><p>Screen position on the virtual desktop, in pixels.</p>
+</dd>
+<dt><strong>content_width, content_height</strong><span class="classifier">int</span></dt><dd><p>Area available for the projection, in pixels.</p>
+</dd>
+<dt><strong>content_width_ratio, content_height_ratio</strong><span class="classifier">int</span></dt><dd><p>Aspect ratio of the content, e.g. 16 and 9.</p>
+</dd>
+<dt><strong>content_proportion</strong><span class="classifier">str</span></dt><dd><p>Aspect ratio name, <code class="docutils literal notranslate"><span class="pre">&quot;4:3&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;16:9&quot;</span></code>.</p>
+</dd>
+<dt><strong>calibration_date, calibration_hour</strong><span class="classifier">str</span></dt><dd><p>Date and time of the calibration.</p>
+</dd>
+<dt><strong>PROPERTIES</strong><span class="classifier">list[str], class attribute</span></dt><dd><p>Field names, filled by <code class="docutils literal notranslate"><span class="pre">initialize_reflexive</span></code>.</p>
+</dd>
+<dt><strong>DATA_PROPERTIES</strong><span class="classifier">list, class attribute</span></dt><dd><p>Field defaults, filled by <code class="docutils literal notranslate"><span class="pre">initialize_reflexive</span></code>.</p>
+</dd>
+<dt><strong>ID_VALUE</strong><span class="classifier">int, class attribute</span></dt><dd><p>Fixed identifier of the single calibration record (1).</p>
+</dd>
+<dt><strong>PROPORTIONS</strong><span class="classifier">dict[str, tuple[int, int]], class attribute</span></dt><dd><p>Supported aspect ratios by name.</p>
+</dd>
+<dt><strong>SECTIONS_MAP</strong><span class="classifier">dict[str, str], class attribute</span></dt><dd><p>Field name prefix to .ini section.</p>
+</dd>
+<dt><strong>IGNORED_PROPERTIES</strong><span class="classifier">list[str], class attribute</span></dt><dd><p>Class attribute names that must not be saved.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Every field is required by the constructor; there are no
+defaults.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">Calibration</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">Calibration</span><span class="o">.</span><span class="n">PROPERTIES</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">is_valid</span><span class="p">()</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">get_section_for_property</span><span class="p">(</span><span class="s2">"camera_width"</span><span class="p">)</span>
+<span class="go">'camera'</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span><span class="o">.</span><span class="n">get_proportion_tuple</span><span class="p">(</span><span class="s2">"16:9"</span><span class="p">)</span>
+<span class="go">(16, 9)</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.model.calibration.Calibration.get_data" title="ttea.model.calibration.Calibration.get_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data</span></code></a></p></td>
+<td><p>Return the field values as a one-item list.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.model.calibration.Calibration.get_proportion_tuple" title="ttea.model.calibration.Calibration.get_proportion_tuple"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_proportion_tuple</span></code></a></p></td>
+<td><p>Return the <code class="docutils literal notranslate"><span class="pre">(width,</span> <span class="pre">height)</span></code> ratio of a proportion name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.model.calibration.Calibration.get_section_for_property" title="ttea.model.calibration.Calibration.get_section_for_property"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_section_for_property</span></code></a></p></td>
+<td><p>Return the .ini section of a field, based on its prefix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.model.calibration.Calibration.is_valid" title="ttea.model.calibration.Calibration.is_valid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_valid</span></code></a></p></td>
+<td><p>Check that no field is None.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.model.calibration.Calibration.set_data" title="ttea.model.calibration.Calibration.set_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_data</span></code></a></p></td>
+<td><p>Update the fields from a dictionary.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.model.calibration.Calibration.is_valid">
+<span class="sig-name descname"><span class="pre">is_valid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/model/calibration.html#Calibration.is_valid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.model.calibration.Calibration.is_valid" title="Link to this definition"></a></dt>
+<dd><p>Check that no field is None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>bool</dt><dd><p>False if any field of <code class="docutils literal notranslate"><span class="pre">PROPERTIES</span></code> is None, True
+otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.model.calibration.Calibration.set_data">
+<span class="sig-name descname"><span class="pre">set_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/model/calibration.html#Calibration.set_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.model.calibration.Calibration.set_data" title="Link to this definition"></a></dt>
+<dd><p>Update the fields from a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data</strong><span class="classifier">dict</span></dt><dd><p>Values keyed by field name. Keys that are not fields are
+ignored, and fields missing from <code class="docutils literal notranslate"><span class="pre">data</span></code> keep their value.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>No validation or type conversion is done.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.model.calibration.Calibration.get_data">
+<span class="sig-name descname"><span class="pre">get_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/model/calibration.html#Calibration.get_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.model.calibration.Calibration.get_data" title="Link to this definition"></a></dt>
+<dd><p>Return the field values as a one-item list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>list[dict]</dt><dd><p>A list with one dictionary that maps each name of
+<code class="docutils literal notranslate"><span class="pre">PROPERTIES</span></code> to its current value.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.model.calibration.Calibration.get_proportion_tuple">
+<span class="sig-name descname"><span class="pre">get_proportion_tuple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proportion</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/model/calibration.html#Calibration.get_proportion_tuple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.model.calibration.Calibration.get_proportion_tuple" title="Link to this definition"></a></dt>
+<dd><p>Return the <code class="docutils literal notranslate"><span class="pre">(width,</span> <span class="pre">height)</span></code> ratio of a proportion name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>proportion</strong><span class="classifier">str</span></dt><dd><p>Proportion name, <code class="docutils literal notranslate"><span class="pre">&quot;4:3&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;16:9&quot;</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple[int, int]</dt><dd><p>The ratio from <code class="docutils literal notranslate"><span class="pre">PROPORTIONS</span></code>, or <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">0)</span></code> if the name is
+unknown.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.model.calibration.Calibration.get_section_for_property">
+<span class="sig-name descname"><span class="pre">get_section_for_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prop_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/model/calibration.html#Calibration.get_section_for_property"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.model.calibration.Calibration.get_section_for_property" title="Link to this definition"></a></dt>
+<dd><p>Return the .ini section of a field, based on its prefix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>prop_name</strong><span class="classifier">str</span></dt><dd><p>Field name.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Section from <code class="docutils literal notranslate"><span class="pre">SECTIONS_MAP</span></code> for the first matching prefix,
+or <code class="docutils literal notranslate"><span class="pre">&quot;geral&quot;</span></code> if no prefix matches.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.model.calibration.html" class="btn btn-neutral float-left" title="ttea.model.calibration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.model.calibrationpoint.html" class="btn btn-neutral float-right" title="ttea.model.calibrationpoint" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+ProfessionalListController
+==========================
+
+.. currentmodule:: ttea.controller.professionallistcontroller
+
+.. autoclass:: ProfessionalListController
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~ProfessionalListController.create_professional
+      ~ProfessionalListController.delete_professional
+      ~ProfessionalListController.filter_professionals
+      ~ProfessionalListController.get_professional_types
+      ~ProfessionalListController.load_professionals
+      ~ProfessionalListController.on_table_selection
+      ~ProfessionalListController.reload_data
+      ~ProfessionalListController.update_professional

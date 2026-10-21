@@ -1,0 +1,276 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.games.kartea.util.arrivaltimefields &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.games.kartea.util.arrivaltimefields</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.games.kartea.util.arrivaltimefields</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Single table of the object arrival times by speed.</span>
+
+<span class="sd">The arrival time (seconds between the object appearing on the track</span>
+<span class="sd">and reaching the front of the car) defines the track speed. Each speed</span>
+<span class="sd">range (LevelRules.speed, see karteaphaseservice.SPEED_BY_LEVEL) has a</span>
+<span class="sd">field in the player configuration. From this table are built:</span>
+
+<span class="sd">- the key and default value in kartea.ini (KarteaIniDefaults);</span>
+<span class="sd">- the range of the spin boxes of the edit screen (view);</span>
+<span class="sd">- the GameSettings.OBJECT_ARRIVAL_TIME used in the game.</span>
+
+<span class="sd">The defaults are those of the simulations (6.5 / 3.3 / 2.2 s). The</span>
+<span class="sd">limits are round numbers close to the simulated ranges (3.3-9.8 /</span>
+<span class="sd">1.6-4.9 / 1.1-3.3 s), chosen so that the ranges do not overlap: the</span>
+<span class="sd">minimum of one speed is the maximum of the next (10 | 5 | 3 | 1),</span>
+<span class="sd">marking the level transition. On the shared boundary,</span>
+<span class="sd">KarteaArrivalTimeFields.order guarantees GAP seconds of difference, so</span>
+<span class="sd">advancing a level never makes the track slower or equal.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+
+
+<div class="viewcode-block" id="ArrivalTimeField">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.arrivaltimefields.ArrivalTimeField.html#ttea.games.kartea.util.arrivaltimefields.ArrivalTimeField">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ArrivalTimeField</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""One arrival time field of the player configuration.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    speed : int</span>
+<span class="sd">        Speed range (key of GameSettings.OBJECT_ARRIVAL_TIME).</span>
+<span class="sd">    name : str</span>
+<span class="sd">        Field of PlayerKarteaConfig (and CSV column).</span>
+<span class="sd">    levels : str</span>
+<span class="sd">        Levels that use this speed (documentation only).</span>
+<span class="sd">    minimum : float</span>
+<span class="sd">        Lowest accepted value (s).</span>
+<span class="sd">    default : float</span>
+<span class="sd">        Default value (s).</span>
+<span class="sd">    maximum : float</span>
+<span class="sd">        Highest accepted value (s).</span>
+<span class="sd">    step : float</span>
+<span class="sd">        Increment (s) of the spin box. Defaults to 0.1.</span>
+<span class="sd">    """</span>
+
+    <span class="n">speed</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">levels</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">minimum</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">default</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">maximum</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">step</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ini_key</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Key of the field in kartea.ini (``{name}_default``)."""</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">_default"</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">widget_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Spin box of the field in the edit screen (``spn_{name}``)."""</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"spn_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
+
+<div class="viewcode-block" id="ArrivalTimeField.clamp">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.arrivaltimefields.ArrivalTimeField.html#ttea.games.kartea.util.arrivaltimefields.ArrivalTimeField.clamp">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clamp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Convert a value to float and limit it to the field range.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        value : object</span>
+<span class="sd">            Number or text (dot or comma as decimal separator).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            The value limited to [minimum, maximum] and rounded to 2</span>
+<span class="sd">            decimals, or ``default`` if it is not a number.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; field = KarteaArrivalTimeFields.ALL[0]</span>
+<span class="sd">        &gt;&gt;&gt; field.clamp("7,25")</span>
+<span class="sd">        7.25</span>
+<span class="sd">        &gt;&gt;&gt; field.clamp(20)</span>
+<span class="sd">        10.0</span>
+<span class="sd">        &gt;&gt;&gt; field.clamp("abc")</span>
+<span class="sd">        6.5</span>
+<span class="sd">        """</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">number</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">","</span><span class="p">,</span> <span class="s2">"."</span><span class="p">))</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">default</span>
+        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">minimum</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">maximum</span><span class="p">,</span> <span class="n">number</span><span class="p">)),</span> <span class="mi">2</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="KarteaArrivalTimeFields">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.arrivaltimefields.KarteaArrivalTimeFields.html#ttea.games.kartea.util.arrivaltimefields.KarteaArrivalTimeFields">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">KarteaArrivalTimeFields</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Single table of the arrival times by speed.</span>
+
+<span class="sd">    Class with only class attributes and class methods, following the</span>
+<span class="sd">    KarteaPathConfig pattern: it is not instantiated.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ALL : tuple[ArrivalTimeField, ...], class attribute</span>
+<span class="sd">        Fields in speed order (from the slowest to the fastest).</span>
+<span class="sd">    GAP : float, class attribute</span>
+<span class="sd">        Minimum difference (s) between neighboring speeds: the next</span>
+<span class="sd">        speed must be strictly faster (shorter arrival time).</span>
+<span class="sd">    """</span>
+
+    <span class="n">ALL</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">ArrivalTimeField</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">ArrivalTimeField</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"object_arrival_time_1"</span><span class="p">,</span> <span class="s2">"1 a 2"</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.5</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">),</span>
+        <span class="n">ArrivalTimeField</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"object_arrival_time_2"</span><span class="p">,</span> <span class="s2">"3 a 4"</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">3.3</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">),</span>
+        <span class="n">ArrivalTimeField</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">"object_arrival_time_3"</span><span class="p">,</span> <span class="s2">"5 a 7"</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.2</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">),</span>
+    <span class="p">)</span>
+
+    <span class="n">GAP</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+<div class="viewcode-block" id="KarteaArrivalTimeFields.order">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.arrivaltimefields.KarteaArrivalTimeFields.html#ttea.games.kartea.util.arrivaltimefields.KarteaArrivalTimeFields.order">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">order</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return valid arrival times, in decreasing order.</span>
+
+<span class="sd">        Each value is limited to its field range (default if missing or</span>
+<span class="sd">        invalid) and then to the time of the previous speed minus GAP.</span>
+<span class="sd">        With the table limits this is always possible: the minimum of</span>
+<span class="sd">        each range is below the minimum of the previous one minus GAP.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        values : dict[str, object]</span>
+<span class="sd">            ``{field name: value}``; missing fields use the default.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict[str, float]</span>
+<span class="sd">            ``{field name: seconds}``, in the order of ALL.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; values = {</span>
+<span class="sd">        ...     "object_arrival_time_1": 5.0,</span>
+<span class="sd">        ...     "object_arrival_time_2": 5.0,</span>
+<span class="sd">        ... }</span>
+<span class="sd">        &gt;&gt;&gt; times = KarteaArrivalTimeFields.order(values)</span>
+<span class="sd">        &gt;&gt;&gt; list(times.values())</span>
+<span class="sd">        [5.0, 4.9, 2.2]</span>
+<span class="sd">        """</span>
+        <span class="n">ordered</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">previous</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">ALL</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">clamp</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">default</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">previous</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+                    <span class="n">field</span><span class="o">.</span><span class="n">minimum</span><span class="p">,</span>
+                    <span class="nb">min</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">previous</span> <span class="o">-</span> <span class="bp">cls</span><span class="o">.</span><span class="n">GAP</span><span class="p">,</span> <span class="mi">2</span><span class="p">)),</span>
+                <span class="p">)</span>
+            <span class="n">ordered</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="n">previous</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">return</span> <span class="n">ordered</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

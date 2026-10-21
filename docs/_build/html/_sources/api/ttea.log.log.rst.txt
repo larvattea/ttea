@@ -1,0 +1,20 @@
+ttea.log.log
+============
+
+.. automodule:: ttea.log.log
+
+.. currentmodule:: ttea.log.log
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   Log
+
+

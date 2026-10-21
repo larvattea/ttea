@@ -1,0 +1,580 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GameController &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.games.kartea.gamecontroller.sessionrecorder" href="ttea.games.kartea.gamecontroller.sessionrecorder.html" />
+    <link rel="prev" title="ttea.games.kartea.gamecontroller.gamecontroller" href="ttea.games.kartea.gamecontroller.gamecontroller.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.games.html">ttea.games</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.gametheme.html">ttea.games.gametheme</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.games.kartea.html">ttea.games.kartea</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.controller.html">ttea.games.kartea.controller</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.dao.html">ttea.games.kartea.dao</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.factory.html">ttea.games.kartea.factory</a></li>
+<li class="toctree-l5 current"><a class="reference internal" href="ttea.games.kartea.gamecontroller.html">ttea.games.kartea.gamecontroller</a><ul class="current">
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gamecontroller.html#attributes">Attributes</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gamecontroller.html#see-also">See Also</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gamecontroller.html#notes">Notes</a></li>
+<li class="toctree-l6 current"><a class="reference internal" href="ttea.games.kartea.gamecontroller.gamecontroller.html">ttea.games.kartea.gamecontroller.gamecontroller</a><ul class="current">
+<li class="toctree-l7 current"><a class="current reference internal" href="#">GameController</a><ul>
+<li class="toctree-l8"><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController"><code class="docutils literal notranslate"><span class="pre">GameController</span></code></a><ul>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.change_level"><code class="docutils literal notranslate"><span class="pre">GameController.change_level()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.reset"><code class="docutils literal notranslate"><span class="pre">GameController.reset()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.register_menu_choice"><code class="docutils literal notranslate"><span class="pre">GameController.register_menu_choice()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.save_session"><code class="docutils literal notranslate"><span class="pre">GameController.save_session()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.spawn_targets"><code class="docutils literal notranslate"><span class="pre">GameController.spawn_targets()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.spawn_finish"><code class="docutils literal notranslate"><span class="pre">GameController.spawn_finish()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.load_camera"><code class="docutils literal notranslate"><span class="pre">GameController.load_camera()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.track_feet_for_menu"><code class="docutils literal notranslate"><span class="pre">GameController.track_feet_for_menu()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.set_feet_position"><code class="docutils literal notranslate"><span class="pre">GameController.set_feet_position()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.draw"><code class="docutils literal notranslate"><span class="pre">GameController.draw()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.game_time_update"><code class="docutils literal notranslate"><span class="pre">GameController.game_time_update()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.update"><code class="docutils literal notranslate"><span class="pre">GameController.update()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.toggle_sound"><code class="docutils literal notranslate"><span class="pre">GameController.toggle_sound()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.toggle_hud"><code class="docutils literal notranslate"><span class="pre">GameController.toggle_hud()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.toggle_feet_marker"><code class="docutils literal notranslate"><span class="pre">GameController.toggle_feet_marker()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.toggle_feet_click"><code class="docutils literal notranslate"><span class="pre">GameController.toggle_feet_click()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gamecontroller.sessionrecorder.html">ttea.games.kartea.gamecontroller.sessionrecorder</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamecore.html">ttea.games.kartea.gamecore</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamemodel.html">ttea.games.kartea.gamemodel</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gametheme.html">ttea.games.kartea.gametheme</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameui.html">ttea.games.kartea.gameui</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameutil.html">ttea.games.kartea.gameutil</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameview.html">ttea.games.kartea.gameview</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.main.html">ttea.games.kartea.main</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.model.html">ttea.games.kartea.model</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.service.html">ttea.games.kartea.service</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.util.html">ttea.games.kartea.util</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.view.html">ttea.games.kartea.view</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.html">ttea.games</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.html">ttea.games.kartea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.gamecontroller.html">ttea.games.kartea.gamecontroller</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.gamecontroller.gamecontroller.html">ttea.games.kartea.gamecontroller.gamecontroller</a></li>
+      <li class="breadcrumb-item active">GameController</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.games.kartea.gamecontroller.gamecontroller.GameController.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="gamecontroller">
+<h1>GameController<a class="headerlink" href="#gamecontroller" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamecontroller.gamecontroller.GameController">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GameController</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config_service</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">phase_service</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recorder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pose_tracking</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamecontroller/gamecontroller.html#GameController"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>KarTEA game controller: match rules and frame flow.</p>
+<p>Everything arrives by injection (created once in main): GameSettings
+(configuration), GameState (match state), the configuration service
+(player interface options), the phase service (progression and level
+rules), the SessionRecorder (persistence), the camera and the pose
+tracking.</p>
+<p>Delegated responsibilities:</p>
+<ul class="simple">
+<li><p>LaneDetector: feet position -&gt; lane;</p></li>
+<li><p>HudView: drawing of the HUD;</p></li>
+<li><p>FeedbackView: hit/miss sound and image;</p></li>
+<li><p>SessionRecorder: session, events and configuration;</p></li>
+<li><p>models (Target, Obstacle, Car): return KillResult.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>surface</strong><span class="classifier">pygame.Surface</span></dt><dd><p>Game screen.</p>
+</dd>
+<dt><strong>settings</strong><span class="classifier">GameSettings</span></dt><dd><p>Game configuration.</p>
+</dd>
+<dt><strong>state</strong><span class="classifier">GameState</span></dt><dd><p>Match state (phase/level, score, counters…).</p>
+</dd>
+<dt><strong>config_service</strong><span class="classifier">PlayerKarteaConfigService</span></dt><dd><p>Player interface options (sound, HUD, feet marker/click).</p>
+</dd>
+<dt><strong>phase_service</strong><span class="classifier">KarteaPhaseService</span></dt><dd><p>Phase/level progression and level rules (CSV files).</p>
+</dd>
+<dt><strong>recorder</strong><span class="classifier">SessionRecorder</span></dt><dd><p>Recording of the session, events and configuration.</p>
+</dd>
+<dt><strong>camera</strong><span class="classifier">Camera</span></dt><dd><p>Video capture.</p>
+</dd>
+<dt><strong>pose_tracking</strong><span class="classifier">PoseTracking</span></dt><dd><p>Feet detection (MediaPipe).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>FINISH_LINE_LEAD_TIME</strong><span class="classifier">float, class attribute</span></dt><dd><p>Minimum time (s) before the end at which the finish line appears
+(12).</p>
+</dd>
+<dt><strong>FINISH_COUNTDOWN_DURATION</strong><span class="classifier">float, class attribute</span></dt><dd><p>Duration (s) of the timer animation to zero after the finish
+line is crossed (2).</p>
+</dd>
+<dt><strong>LANE_CHANGE_POINTS</strong><span class="classifier">int, class attribute</span></dt><dd><p>Points per lane change (2).</p>
+</dd>
+<dt><strong>LEVEL_COUNTER_BY_EVENT</strong><span class="classifier">dict[EventType, str], class attribute</span></dt><dd><p>Removal event -&gt; level counter (LevelStats) it increments.</p>
+</dd>
+<dt><strong>MENU_CHOICE_EVENTS</strong><span class="classifier">dict[str, EventType], class attribute</span></dt><dd><p>Menu choice made with mouse/keyboard (pause or end of level) -&gt;
+“Controle UFE” detail event.</p>
+</dd>
+<dt><strong>FEET_MENU_CHOICE_EVENTS</strong><span class="classifier">dict[str, EventType], class attribute</span></dt><dd><p>The same choices made by the player with the feet -&gt;
+“Controle do Jogador” event. “game” depends on the screen:
+“Jogar” in the start menu, “Continuar” in the pause menu.</p>
+</dd>
+<dt><strong>INTERFACE_OPTION_EVENTS</strong><span class="classifier">dict, class attribute</span></dt><dd><p>Interface option -&gt; (event when enabled, event when disabled).</p>
+</dd>
+<dt><strong>surface</strong><span class="classifier">pygame.Surface</span></dt><dd><p>Game screen.</p>
+</dd>
+<dt><strong>settings</strong><span class="classifier">GameSettings</span></dt><dd><p>Game configuration.</p>
+</dd>
+<dt><strong>state</strong><span class="classifier">GameState</span></dt><dd><p>Match state.</p>
+</dd>
+<dt><strong>config_service</strong><span class="classifier">PlayerKarteaConfigService</span></dt><dd><p>Configuration service.</p>
+</dd>
+<dt><strong>phase_service</strong><span class="classifier">KarteaPhaseService</span></dt><dd><p>Phase service.</p>
+</dd>
+<dt><strong>recorder</strong><span class="classifier">SessionRecorder</span></dt><dd><p>Session recorder.</p>
+</dd>
+<dt><strong>cap</strong><span class="classifier">Camera</span></dt><dd><p>Video capture.</p>
+</dd>
+<dt><strong>pose_tracking</strong><span class="classifier">PoseTracking</span></dt><dd><p>Feet detection.</p>
+</dd>
+<dt><strong>ui</strong><span class="classifier">UI</span></dt><dd><p>Drawing helpers shared by HUD and menus.</p>
+</dd>
+<dt><strong>hud</strong><span class="classifier">HudView</span></dt><dd><p>HUD drawing.</p>
+</dd>
+<dt><strong>feedback</strong><span class="classifier">FeedbackView</span></dt><dd><p>Hit/miss sound and image.</p>
+</dd>
+<dt><strong>lane_detector</strong><span class="classifier">LaneDetector</span></dt><dd><p>Feet x -&gt; lane.</p>
+</dd>
+<dt><strong>awaiting_unpause</strong><span class="classifier">bool</span></dt><dd><p>True while the game is paused (Space or leaving the game area);
+on the first update after the pause the “Controle UFE: Unpause”
+event is recorded, which allows measuring the pause time.</p>
+</dd>
+<dt><strong>pause_requested</strong><span class="classifier">bool</span></dt><dd><p>Automatic pause requested in this frame (player left the area).</p>
+</dd>
+<dt><strong>level_rules</strong><span class="classifier">LevelRules | None</span></dt><dd><p>Rules of the current level (phase CSV).</p>
+</dd>
+<dt><strong>background</strong><span class="classifier">Background</span></dt><dd><p>Road and sprites of the level.</p>
+</dd>
+<dt><strong>car</strong><span class="classifier">Car</span></dt><dd><p>Player’s car.</p>
+</dd>
+<dt><strong>targets</strong><span class="classifier">list[Target]</span></dt><dd><p>Active targets and obstacles.</p>
+</dd>
+<dt><strong>last_lane</strong><span class="classifier">int</span></dt><dd><p>Lane of the last object created (-1 at the level start).</p>
+</dd>
+<dt><strong>targets_spawn_timer</strong><span class="classifier">float</span></dt><dd><p>Time after which the next object may be created.</p>
+</dd>
+<dt><strong>spawned</strong><span class="classifier">int</span></dt><dd><p>Objects already created in the level (index in
+LevelRules.obj_types).</p>
+</dd>
+<dt><strong>game_start_time</strong><span class="classifier">float</span></dt><dd><p>Real time when the level started.</p>
+</dd>
+<dt><strong>time_left</strong><span class="classifier">int</span></dt><dd><p>Seconds left in the level (shown in the HUD).</p>
+</dd>
+<dt><strong>finish</strong><span class="classifier">int</span></dt><dd><p>1 after the finish line was placed, 0 before.</p>
+</dd>
+<dt><strong>finish_line_segment</strong><span class="classifier">Line | None</span></dt><dd><p>Road line holding the finish line.</p>
+</dd>
+<dt><strong>crossed_finish_line</strong><span class="classifier">bool</span></dt><dd><p>Whether the car crossed the finish line.</p>
+</dd>
+<dt><strong>finish_countdown_active</strong><span class="classifier">bool</span></dt><dd><p>Whether the timer is animating down to zero.</p>
+</dd>
+<dt><strong>finish_countdown_start_time_left</strong><span class="classifier">int</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">time_left</span></code> when the countdown started.</p>
+</dd>
+<dt><strong>finish_countdown_start_real_time</strong><span class="classifier">float</span></dt><dd><p>Game time (ms) when the countdown started.</p>
+</dd>
+<dt><strong>level_complete_pending</strong><span class="classifier">bool</span></dt><dd><p>True when the countdown reached zero and the level must end.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p><code class="docutils literal notranslate"><span class="pre">PoseTracking</span></code> is created once in main: recreating it at each
+level would reload the MediaPipe model.</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.change_level" title="ttea.games.kartea.gamecontroller.gamecontroller.GameController.change_level"><code class="xref py py-obj docutils literal notranslate"><span class="pre">change_level</span></code></a></p></td>
+<td><p>Apply a level change to the GameState.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.draw" title="ttea.games.kartea.gamecontroller.gamecontroller.GameController.draw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">draw</span></code></a></p></td>
+<td><p>Draw the road, the car and the HUD.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.game_time_update" title="ttea.games.kartea.gamecontroller.gamecontroller.GameController.game_time_update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">game_time_update</span></code></a></p></td>
+<td><p>Update the time left in the level from the game clock.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.load_camera" title="ttea.games.kartea.gamecontroller.gamecontroller.GameController.load_camera"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_camera</span></code></a></p></td>
+<td><p>Load/update the camera frame.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.register_menu_choice" title="ttea.games.kartea.gamecontroller.gamecontroller.GameController.register_menu_choice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_menu_choice</span></code></a></p></td>
+<td><p>Record a decision made in a menu.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.reset" title="ttea.games.kartea.gamecontroller.gamecontroller.GameController.reset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset</span></code></a></p></td>
+<td><p>Start a new level (after advance, regress or restart).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.save_session" title="ttea.games.kartea.gamecontroller.gamecontroller.GameController.save_session"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save_session</span></code></a></p></td>
+<td><p>Save the session and the configuration (current values).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.set_feet_position" title="ttea.games.kartea.gamecontroller.gamecontroller.GameController.set_feet_position"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_feet_position</span></code></a></p></td>
+<td><p>Position the car from the detected feet position.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.spawn_finish" title="ttea.games.kartea.gamecontroller.gamecontroller.GameController.spawn_finish"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spawn_finish</span></code></a></p></td>
+<td><p>Place the finish line on the road.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.spawn_targets" title="ttea.games.kartea.gamecontroller.gamecontroller.GameController.spawn_targets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spawn_targets</span></code></a></p></td>
+<td><p>Create a target or obstacle according to the level rules.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.toggle_feet_click" title="ttea.games.kartea.gamecontroller.gamecontroller.GameController.toggle_feet_click"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toggle_feet_click</span></code></a></p></td>
+<td><p>Toggle the selection of menu buttons with the feet.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.toggle_feet_marker" title="ttea.games.kartea.gamecontroller.gamecontroller.GameController.toggle_feet_marker"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toggle_feet_marker</span></code></a></p></td>
+<td><p>Toggle the feet marker (dot at the real feet position).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.toggle_hud" title="ttea.games.kartea.gamecontroller.gamecontroller.GameController.toggle_hud"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toggle_hud</span></code></a></p></td>
+<td><p>Toggle the HUD.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.toggle_sound" title="ttea.games.kartea.gamecontroller.gamecontroller.GameController.toggle_sound"><code class="xref py py-obj docutils literal notranslate"><span class="pre">toggle_sound</span></code></a></p></td>
+<td><p>Toggle the sound and apply it to the feedback sounds.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.track_feet_for_menu" title="ttea.games.kartea.gamecontroller.gamecontroller.GameController.track_feet_for_menu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">track_feet_for_menu</span></code></a></p></td>
+<td><p>Read the camera and the pose outside the game (menus).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.update" title="ttea.games.kartea.gamecontroller.gamecontroller.GameController.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a></p></td>
+<td><p>Run one frame of the game (main update loop).</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamecontroller.gamecontroller.GameController.change_level">
+<span class="sig-name descname"><span class="pre">change_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamecontroller/gamecontroller.html#GameController.change_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.change_level" title="Link to this definition"></a></dt>
+<dd><p>Apply a level change to the GameState.</p>
+<p>Used by the end-of-level result (the game’s recommendation) and
+by the professional’s choices in the pause menu. The progression
+rule belongs to the service, from the phase CSV files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>action</strong><span class="classifier">str</span></dt><dd><p>“next”, “prev” or “rest” (see
+KarteaPhaseService.change_level).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamecontroller.gamecontroller.GameController.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamecontroller/gamecontroller.html#GameController.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.reset" title="Link to this definition"></a></dt>
+<dd><p>Start a new level (after advance, regress or restart).</p>
+<p class="rubric">Notes</p>
+<p>The session totals are not reset: the score and lane changes of
+the ending level are added to the session accumulated values.
+Session and configuration are saved right away, since
+phase/level just changed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamecontroller.gamecontroller.GameController.register_menu_choice">
+<span class="sig-name descname"><span class="pre">register_menu_choice</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">choice</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">by_feet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamecontroller/gamecontroller.html#GameController.register_menu_choice"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.register_menu_choice" title="Link to this definition"></a></dt>
+<dd><p>Record a decision made in a menu.</p>
+<p>Must be called BEFORE the choice is applied, so that the event
+phase and level are those of the level where the decision was
+made.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>choice</strong><span class="classifier">str</span></dt><dd><p>“next”, “rest”, “prev”, “exit”, “play” or “game”.</p>
+</dd>
+<dt><strong>by_feet</strong><span class="classifier">bool, optional</span></dt><dd><p>True when the player chose with the feet (feet click).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>With mouse or keyboard (<code class="docutils literal notranslate"><span class="pre">by_feet</span></code> False) the decision is the
+professional’s (“Controle UFE”); “Jogar” and “Continuar” are not
+recorded (the Unpause is recorded when the game resumes). With
+the feet (<code class="docutils literal notranslate"><span class="pre">by_feet</span></code> True) the decision is the player’s own
+(“Controle do Jogador”), including “Jogar” and “Continuar”.</p>
+<p>Without an open session, exiting records nothing, so that no
+empty session is created; “Jogar” with the feet opens the
+session, which would start at the first game event anyway. The
+session totals are saved before the choice is applied.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamecontroller.gamecontroller.GameController.save_session">
+<span class="sig-name descname"><span class="pre">save_session</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamecontroller/gamecontroller.html#GameController.save_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.save_session" title="Link to this definition"></a></dt>
+<dd><p>Save the session and the configuration (current values).</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamecontroller.gamecontroller.GameController.spawn_targets">
+<span class="sig-name descname"><span class="pre">spawn_targets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamecontroller/gamecontroller.html#GameController.spawn_targets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.spawn_targets" title="Link to this definition"></a></dt>
+<dd><p>Create a target or obstacle according to the level rules.</p>
+<p class="rubric">Notes</p>
+<p>Interval, maximum amount and type of each object come from the
+phase CSV (LevelRules). Nothing is created while the spawn timer
+has not expired or the level limit was reached. The object is
+attached to the road line ahead of the camera and a “Criou”
+event is recorded.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamecontroller.gamecontroller.GameController.spawn_finish">
+<span class="sig-name descname"><span class="pre">spawn_finish</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamecontroller/gamecontroller.html#GameController.spawn_finish"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.spawn_finish" title="Link to this definition"></a></dt>
+<dd><p>Place the finish line on the road.</p>
+<p class="rubric">Notes</p>
+<p>The road is a loop: the same line may have been passed on an
+earlier lap, so its <code class="docutils literal notranslate"><span class="pre">passed</span></code> mark is reset to detect only the
+crossing of this finish line.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamecontroller.gamecontroller.GameController.load_camera">
+<span class="sig-name descname"><span class="pre">load_camera</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamecontroller/gamecontroller.html#GameController.load_camera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.load_camera" title="Link to this definition"></a></dt>
+<dd><p>Load/update the camera frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>bool</dt><dd><p>True if a frame was read.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamecontroller.gamecontroller.GameController.track_feet_for_menu">
+<span class="sig-name descname"><span class="pre">track_feet_for_menu</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamecontroller/gamecontroller.html#GameController.track_feet_for_menu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.track_feet_for_menu" title="Link to this definition"></a></dt>
+<dd><p>Read the camera and the pose outside the game (menus).</p>
+<p>Used by the feet click; keeps the OpenCV capture window
+responsive.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>tuple[int, int] | None</dt><dd><p>Real (x, y) position of the feet on screen, or None without
+a camera image or without a detected player.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamecontroller.gamecontroller.GameController.set_feet_position">
+<span class="sig-name descname"><span class="pre">set_feet_position</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamecontroller/gamecontroller.html#GameController.set_feet_position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.set_feet_position" title="Link to this definition"></a></dt>
+<dd><p>Position the car from the detected feet position.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamecontroller.gamecontroller.GameController.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamecontroller/gamecontroller.html#GameController.draw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.draw" title="Link to this definition"></a></dt>
+<dd><p>Draw the road, the car and the HUD.</p>
+<p class="rubric">Notes</p>
+<p>The road stops while a pause is requested. The feet dot is drawn
+when the player’s <code class="docutils literal notranslate"><span class="pre">feet_marker</span></code> option is on.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamecontroller.gamecontroller.GameController.game_time_update">
+<span class="sig-name descname"><span class="pre">game_time_update</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamecontroller/gamecontroller.html#GameController.game_time_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.game_time_update" title="Link to this definition"></a></dt>
+<dd><p>Update the time left in the level from the game clock.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamecontroller.gamecontroller.GameController.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamecontroller/gamecontroller.html#GameController.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.update" title="Link to this definition"></a></dt>
+<dd><p>Run one frame of the game (main update loop).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>events</strong><span class="classifier">list, optional</span></dt><dd><p>Pygame events already read by the main loop (main.py). The
+event queue must be read only once per frame; if None, the
+queue is read here (compatibility).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str | None</dt><dd><p>“menu” when the game must go to a menu (pause or end of
+level); None to stay in the game.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Order of a frame: clock and autosave, camera and feet, automatic
+pause, timer, spawning, finish line and countdown, drawing,
+active play (until the finish line), feedback image, end of
+level and keyboard events. Without a camera frame, the frame
+ends early.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamecontroller.gamecontroller.GameController.toggle_sound">
+<span class="sig-name descname"><span class="pre">toggle_sound</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamecontroller/gamecontroller.html#GameController.toggle_sound"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.toggle_sound" title="Link to this definition"></a></dt>
+<dd><p>Toggle the sound and apply it to the feedback sounds.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamecontroller.gamecontroller.GameController.toggle_hud">
+<span class="sig-name descname"><span class="pre">toggle_hud</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamecontroller/gamecontroller.html#GameController.toggle_hud"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.toggle_hud" title="Link to this definition"></a></dt>
+<dd><p>Toggle the HUD.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamecontroller.gamecontroller.GameController.toggle_feet_marker">
+<span class="sig-name descname"><span class="pre">toggle_feet_marker</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamecontroller/gamecontroller.html#GameController.toggle_feet_marker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.toggle_feet_marker" title="Link to this definition"></a></dt>
+<dd><p>Toggle the feet marker (dot at the real feet position).</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamecontroller.gamecontroller.GameController.toggle_feet_click">
+<span class="sig-name descname"><span class="pre">toggle_feet_click</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamecontroller/gamecontroller.html#GameController.toggle_feet_click"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamecontroller.gamecontroller.GameController.toggle_feet_click" title="Link to this definition"></a></dt>
+<dd><p>Toggle the selection of menu buttons with the feet.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.games.kartea.gamecontroller.gamecontroller.html" class="btn btn-neutral float-left" title="ttea.games.kartea.gamecontroller.gamecontroller" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.games.kartea.gamecontroller.sessionrecorder.html" class="btn btn-neutral float-right" title="ttea.games.kartea.gamecontroller.sessionrecorder" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

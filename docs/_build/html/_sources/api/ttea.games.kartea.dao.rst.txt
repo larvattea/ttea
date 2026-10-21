@@ -1,0 +1,26 @@
+ttea.games.kartea.dao
+=====================
+
+.. automodule:: ttea.games.kartea.dao
+
+.. currentmodule:: ttea.games.kartea.dao
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/module.rst
+   :recursive:
+
+   basecsvdao
+   karteaphasecsvdao
+   karteaphaselevelcsvdao
+   playerkarteaconfigcsvdao
+   playerkarteasessioncsvdao
+   playerkarteasessiondetailcsvdao
+   readonlydao
+
+
+

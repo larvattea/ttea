@@ -1,0 +1,18 @@
+Image
+=====
+
+.. currentmodule:: ttea.games.kartea.gamemodel.image
+
+.. autoclass:: Image
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~Image.draw
+      ~Image.load
+      ~Image.scale

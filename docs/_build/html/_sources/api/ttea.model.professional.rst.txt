@@ -1,0 +1,30 @@
+ttea.model.professional
+=======================
+
+.. automodule:: ttea.model.professional
+
+.. currentmodule:: ttea.model.professional
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   Professional
+
+
+
+.. rubric:: Functions
+
+.. autosummary::
+   :nosignatures:
+
+   initialize_reflexive
+
+
+.. autofunction:: initialize_reflexive

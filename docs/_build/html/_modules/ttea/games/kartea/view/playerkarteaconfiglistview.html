@@ -1,0 +1,382 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.games.kartea.view.playerkarteaconfiglistview &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.games.kartea.view.playerkarteaconfiglistview</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.games.kartea.view.playerkarteaconfiglistview</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""View (Qt dialog) of the player Kartea configuration list."""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtGui</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCloseEvent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QDialog</span><span class="p">,</span> <span class="n">QHeaderView</span><span class="p">,</span> <span class="n">QTableWidgetItem</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.ui</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Ui_PlayerKarteaConfigListView</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">MessageService</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.window</span><span class="w"> </span><span class="kn">import</span> <span class="n">WindowConfig</span>
+
+<span class="c1"># Imported only for type checking, to avoid circular imports at</span>
+<span class="c1"># runtime.</span>
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.controller</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerKarteaConfigListController</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerKarteaConfig</span>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigListView">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.html#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PlayerKarteaConfigListView</span><span class="p">(</span>
+    <span class="n">QDialog</span><span class="p">,</span> <span class="n">Ui_PlayerKarteaConfigListView</span><span class="p">,</span> <span class="n">WindowConfig</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Dialog that lists and manages PlayerKarteaConfig records.</span>
+
+<span class="sd">    Modal window that shows a searchable table of configs with quick</span>
+<span class="sd">    actions for creating, editing and deleting records. Follows the MVC</span>
+<span class="sd">    pattern: all business logic and data access are delegated to</span>
+<span class="sd">    PlayerKarteaConfigListController. The view does not create its</span>
+<span class="sd">    controller: KarteaViewFactory creates both and calls</span>
+<span class="sd">    ``bind(controller)``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parent : QDialog | None, optional</span>
+<span class="sd">        Parent widget; used for translator and icon inheritance.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    msg : MessageService</span>
+<span class="sd">        Helper service used to show info/warning/question dialogs.</span>
+<span class="sd">    controller : PlayerKarteaConfigListController | None</span>
+<span class="sd">        Controller that handles all CRUD operations and data flow; None</span>
+<span class="sd">        until ``bind`` is called.</span>
+<span class="sd">    tbl_config : QTableWidget</span>
+<span class="sd">        Table displaying ID and name of each player config.</span>
+<span class="sd">    pb_new : QPushButton</span>
+<span class="sd">        Button that opens the config creation dialog.</span>
+<span class="sd">    pb_edit : QPushButton</span>
+<span class="sd">        Button that opens the edit dialog for the selected config.</span>
+<span class="sd">    pb_delete : QPushButton</span>
+<span class="sd">        Button that removes the selected config after confirmation.</span>
+<span class="sd">    led_search : QLineEdit</span>
+<span class="sd">        Line edit used to filter configs by ID or name.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    bind(controller)</span>
+<span class="sd">        Connect signals to the controller and load the initial data.</span>
+<span class="sd">    get_search_text()</span>
+<span class="sd">        Return the current search text.</span>
+<span class="sd">    populate_table(configs)</span>
+<span class="sd">        Fill the table with configs.</span>
+<span class="sd">    clear_details() / display_config_details(config)</span>
+<span class="sd">        Clear or fill the details panel.</span>
+<span class="sd">    get_selected_player_id() / select_row_by_id(player_id)</span>
+<span class="sd">        Read or set the selected row.</span>
+<span class="sd">    closeEvent(event)</span>
+<span class="sd">        Ask for confirmation before closing the dialog.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The widgets come from the generated Ui_PlayerKarteaConfigListView</span>
+<span class="sd">    (``setupUi``). User texts are translated with ``self.tr()`` (i18n).</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">:</span> <span class="n">QDialog</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="p">:</span> <span class="n">PlayerKarteaConfigListController</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">msg</span> <span class="o">=</span> <span class="n">MessageService</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_window</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">windowTitle</span><span class="p">(),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">windowIcon</span><span class="p">(),</span>
+            <span class="n">WindowConfig</span><span class="o">.</span><span class="n">DECREMENT_SIZE_PERCENT</span><span class="p">,</span>
+            <span class="mi">10</span><span class="p">,</span>
+            <span class="mi">5</span><span class="p">,</span>
+            <span class="n">parent</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Column widths: ID fits its content, name stretches</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tbl_config</span><span class="o">.</span><span class="n">horizontalHeader</span><span class="p">()</span><span class="o">.</span><span class="n">setSectionResizeMode</span><span class="p">(</span>
+            <span class="mi">0</span><span class="p">,</span> <span class="n">QHeaderView</span><span class="o">.</span><span class="n">ResizeToContents</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tbl_config</span><span class="o">.</span><span class="n">horizontalHeader</span><span class="p">()</span><span class="o">.</span><span class="n">setSectionResizeMode</span><span class="p">(</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="n">QHeaderView</span><span class="o">.</span><span class="n">Stretch</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="PlayerKarteaConfigListView.bind">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.html#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.bind">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">bind</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">controller</span><span class="p">:</span> <span class="s2">"PlayerKarteaConfigListController"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Connect the signals to the controller and load the data.</span>
+
+<span class="sd">        Called by KarteaViewFactory.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        controller : PlayerKarteaConfigListController</span>
+<span class="sd">            Controller of this view.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controller</span> <span class="o">=</span> <span class="n">controller</span>
+
+        <span class="c1"># Signals and slots</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb_new</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">handle_new_config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb_edit</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">handle_edit_config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb_delete</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">delete_config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">led_search</span><span class="o">.</span><span class="n">textChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">filter_configs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tbl_config</span><span class="o">.</span><span class="n">selectionModel</span><span class="p">()</span><span class="o">.</span><span class="n">selectionChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">on_table_selection</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">load_configs</span><span class="p">()</span></div>
+
+
+    <span class="c1"># ==================================================================</span>
+    <span class="c1"># High-level methods used by the Controller (required for</span>
+    <span class="c1"># decoupling)</span>
+    <span class="c1"># ==================================================================</span>
+
+<div class="viewcode-block" id="PlayerKarteaConfigListView.get_search_text">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.html#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.get_search_text">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_search_text</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the current text of the search field.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Text typed in ``led_search``.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">led_search</span><span class="o">.</span><span class="n">text</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigListView.populate_table">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.html#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.populate_table">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">populate_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">configs</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="s2">"PlayerKarteaConfig"</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Fill the table with a list of configs.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        configs : list[PlayerKarteaConfig]</span>
+<span class="sd">            Configs shown as rows (player ID and name).</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Table signals are blocked while filling, so the selection</span>
+<span class="sd">        handler is not triggered.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tbl_config</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tbl_config</span><span class="o">.</span><span class="n">setRowCount</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">config</span> <span class="ow">in</span> <span class="n">configs</span><span class="p">:</span>
+            <span class="n">row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tbl_config</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tbl_config</span><span class="o">.</span><span class="n">insertRow</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tbl_config</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span>
+                <span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">QTableWidgetItem</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tbl_config</span><span class="o">.</span><span class="n">setItem</span><span class="p">(</span>
+                <span class="n">row</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">QTableWidgetItem</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tbl_config</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigListView.clear_details">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.html#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.clear_details">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">clear_details</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Clear all fields in the details panel."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lbl_id_value</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lbl_name_value</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lbl_phase_value</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lbl_level_value</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lbl_time_value</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigListView.display_config_details">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.html#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.display_config_details">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">display_config_details</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="s2">"PlayerKarteaConfig | None"</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Show the selected config's details in the right panel.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        config : PlayerKarteaConfig | None</span>
+<span class="sd">            Config to show (ID, name, phase, level and level time); None</span>
+<span class="sd">            clears the panel.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">clear_details</span><span class="p">()</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lbl_id_value</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">id</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lbl_name_value</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">player</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lbl_phase_value</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">phase</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">phase</span> <span class="k">else</span> <span class="s2">""</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lbl_level_value</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">level</span><span class="o">.</span><span class="n">id</span><span class="p">)</span> <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">level</span> <span class="k">else</span> <span class="s2">""</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lbl_time_value</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">level_time</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigListView.get_selected_player_id">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.html#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.get_selected_player_id">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_selected_player_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the player ID of the selected row.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int | None</span>
+<span class="sd">            The ID in the first selected cell, or None if nothing is</span>
+<span class="sd">            selected or the text is not a number.</span>
+<span class="sd">        """</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tbl_config</span><span class="o">.</span><span class="n">selectedItems</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">items</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigListView.select_row_by_id">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.html#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.select_row_by_id">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">select_row_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Programmatically select the row with the given player ID.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        player_id : int</span>
+<span class="sd">            Player ID to select; the table scrolls to it. Signals are</span>
+<span class="sd">            blocked while selecting.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tbl_config</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tbl_config</span><span class="o">.</span><span class="n">rowCount</span><span class="p">()):</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tbl_config</span><span class="o">.</span><span class="n">item</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">item</span> <span class="ow">and</span> <span class="nb">int</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">text</span><span class="p">())</span> <span class="o">==</span> <span class="n">player_id</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tbl_config</span><span class="o">.</span><span class="n">selectRow</span><span class="p">(</span><span class="n">row</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tbl_config</span><span class="o">.</span><span class="n">scrollToItem</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                <span class="k">break</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tbl_config</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigListView.closeEvent">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.html#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.closeEvent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">closeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">QCloseEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Confirm before closing the dialog.</span>
+
+<span class="sd">        Shows a confirmation question before allowing the window to</span>
+<span class="sd">        close.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        event : QCloseEvent</span>
+<span class="sd">            The close event to accept or ignore.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">question</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Deseja sair do cadastro?"</span><span class="p">),</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">True</span><span class="p">):</span>
+            <span class="n">event</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">event</span><span class="o">.</span><span class="n">ignore</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

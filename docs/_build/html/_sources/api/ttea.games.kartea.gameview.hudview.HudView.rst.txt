@@ -1,0 +1,16 @@
+HudView
+=======
+
+.. currentmodule:: ttea.games.kartea.gameview.hudview
+
+.. autoclass:: HudView
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~HudView.draw

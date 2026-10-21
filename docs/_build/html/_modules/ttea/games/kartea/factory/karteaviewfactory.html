@@ -1,0 +1,299 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.games.kartea.factory.karteaviewfactory &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.games.kartea.factory.karteaviewfactory</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.games.kartea.factory.karteaviewfactory</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Factory of the KarTEA register screens (views + controllers).</span>
+
+<span class="sd">Attributes</span>
+<span class="sd">----------</span>
+<span class="sd">EditViewFactory : type</span>
+<span class="sd">    Type of a callable that builds the edit screen:</span>
+<span class="sd">    ``(parent, config) -&gt; PlayerKarteaConfigEditView``.</span>
+<span class="sd">"""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">QObject</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QDialog</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.factory.gameviewfactoryprotocol</span><span class="w"> </span><span class="kn">import</span> <span class="n">GameViewFactoryProtocol</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.controller</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">PlayerKarteaConfigEditController</span><span class="p">,</span>
+    <span class="n">PlayerKarteaConfigListController</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.service</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">KarteaPhaseService</span><span class="p">,</span>
+    <span class="n">PlayerKarteaConfigService</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.view</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">PlayerKarteaConfigEditView</span><span class="p">,</span>
+    <span class="n">PlayerKarteaConfigListView</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerKarteaConfig</span>
+
+
+<span class="n">EditViewFactory</span> <span class="o">=</span> <span class="n">Callable</span><span class="p">[</span>
+    <span class="p">[</span><span class="n">QDialog</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">"PlayerKarteaConfig | None"</span><span class="p">],</span>
+    <span class="n">PlayerKarteaConfigEditView</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_supported_kwargs</span><span class="p">(</span>
+    <span class="n">factory</span><span class="p">:</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">"""Return only the keyword arguments the factory accepts.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    factory : Callable</span>
+<span class="sd">        Function whose signature is inspected.</span>
+<span class="sd">    kwargs : dict[str, Any]</span>
+<span class="sd">        Candidate keyword arguments.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict[str, Any]</span>
+<span class="sd">        All ``kwargs`` if the factory takes ``**kwargs``; otherwise only</span>
+<span class="sd">        those named in its signature. Empty if the signature cannot be</span>
+<span class="sd">        inspected.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; def make(parent, config, service=None):</span>
+<span class="sd">    ...     pass</span>
+<span class="sd">    &gt;&gt;&gt; _supported_kwargs(make, {"service": 1, "phase_service": 2})</span>
+<span class="sd">    {'service': 1}</span>
+<span class="sd">    """</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">factory</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">kind</span> <span class="ow">is</span> <span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">VAR_KEYWORD</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">params</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">kwargs</span>
+    <span class="n">names</span> <span class="o">=</span> <span class="p">{</span><span class="n">p</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">params</span><span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">names</span><span class="p">}</span>
+
+
+<div class="viewcode-block" id="KarteaViewFactory">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.factory.karteaviewfactory.KarteaViewFactory.html#ttea.games.kartea.factory.karteaviewfactory.KarteaViewFactory">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">KarteaViewFactory</span><span class="p">(</span><span class="n">GameViewFactoryProtocol</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Build the KarTEA register screens.</span>
+
+<span class="sd">    For each screen, create the view, create the controller with the</span>
+<span class="sd">    services and connect both (``view.bind(controller)``). Views and</span>
+<span class="sd">    controllers neither create each other nor create services.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Each list screen receives ONE instance of each service, shared with</span>
+<span class="sd">    the edit dialogs opened from it. The instances are deliberately not</span>
+<span class="sd">    global: the game runs in another process and writes the same CSV</span>
+<span class="sd">    files (phase/level, session); a list opened after a match must read</span>
+<span class="sd">    the data again, not an old cache.</span>
+<span class="sd">    """</span>
+
+<div class="viewcode-block" id="KarteaViewFactory.create_player_config_edit_view">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.factory.karteaviewfactory.KarteaViewFactory.html#ttea.games.kartea.factory.karteaviewfactory.KarteaViewFactory.create_player_config_edit_view">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_player_config_edit_view</span><span class="p">(</span>
+        <span class="n">parent</span><span class="p">:</span> <span class="n">QDialog</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">config</span><span class="p">:</span> <span class="s2">"PlayerKarteaConfig | None"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">service</span><span class="p">:</span> <span class="n">PlayerKarteaConfigService</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">phase_service</span><span class="p">:</span> <span class="n">KarteaPhaseService</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PlayerKarteaConfigEditView</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Create the player configuration edit screen.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        parent : QDialog | None, optional</span>
+<span class="sd">            Parent widget of the dialog.</span>
+<span class="sd">        config : PlayerKarteaConfig | None, optional</span>
+<span class="sd">            Config to edit; None opens the screen to create a new one.</span>
+<span class="sd">        service : PlayerKarteaConfigService | None, optional</span>
+<span class="sd">            Config service to share (e.g. the list screen's). Created if</span>
+<span class="sd">            None.</span>
+<span class="sd">        phase_service : KarteaPhaseService | None, optional</span>
+<span class="sd">            Phase service to share. Created if None.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PlayerKarteaConfigEditView</span>
+<span class="sd">            The view, already bound to its controller.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Without services (dialog opened outside the list), the screen</span>
+<span class="sd">        creates its own.</span>
+<span class="sd">        """</span>
+        <span class="n">service</span> <span class="o">=</span> <span class="n">service</span> <span class="ow">or</span> <span class="n">PlayerKarteaConfigService</span><span class="p">()</span>
+        <span class="n">phase_service</span> <span class="o">=</span> <span class="n">phase_service</span> <span class="ow">or</span> <span class="n">KarteaPhaseService</span><span class="p">()</span>
+
+        <span class="n">view</span> <span class="o">=</span> <span class="n">PlayerKarteaConfigEditView</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">editing</span><span class="o">=</span><span class="n">config</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">controller</span> <span class="o">=</span> <span class="n">PlayerKarteaConfigEditController</span><span class="p">(</span>
+            <span class="n">view</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">service</span><span class="p">,</span> <span class="n">phase_service</span>
+        <span class="p">)</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">controller</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">view</span></div>
+
+
+<div class="viewcode-block" id="KarteaViewFactory.create_player_config_list_view">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.factory.karteaviewfactory.KarteaViewFactory.html#ttea.games.kartea.factory.karteaviewfactory.KarteaViewFactory.create_player_config_list_view">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_player_config_list_view</span><span class="p">(</span>
+        <span class="n">parent</span><span class="p">:</span> <span class="n">QObject</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">player_config_edit_view</span><span class="p">:</span> <span class="n">EditViewFactory</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PlayerKarteaConfigListView</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Create the player configuration list screen.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        parent : QObject | None, optional</span>
+<span class="sd">            Parent of the view.</span>
+<span class="sd">        player_config_edit_view : EditViewFactory | None, optional</span>
+<span class="sd">            Factory of the edit dialog. Defaults to</span>
+<span class="sd">            ``create_player_config_edit_view``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PlayerKarteaConfigListView</span>
+<span class="sd">            The view, already bound to its controller.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Creates one PlayerKarteaConfigService and one KarteaPhaseService</span>
+<span class="sd">        and shares them with every edit dialog opened from the list.</span>
+<span class="sd">        They are passed only as the keyword arguments the edit factory</span>
+<span class="sd">        accepts, so a factory with the plain ``(parent, config)``</span>
+<span class="sd">        signature also works.</span>
+<span class="sd">        """</span>
+        <span class="n">service</span> <span class="o">=</span> <span class="n">PlayerKarteaConfigService</span><span class="p">()</span>
+        <span class="n">phase_service</span> <span class="o">=</span> <span class="n">KarteaPhaseService</span><span class="p">()</span>
+        <span class="n">edit_factory</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">player_config_edit_view</span>
+            <span class="ow">or</span> <span class="n">KarteaViewFactory</span><span class="o">.</span><span class="n">create_player_config_edit_view</span>
+        <span class="p">)</span>
+        <span class="n">shared</span> <span class="o">=</span> <span class="n">_supported_kwargs</span><span class="p">(</span>
+            <span class="n">edit_factory</span><span class="p">,</span> <span class="p">{</span><span class="s2">"service"</span><span class="p">:</span> <span class="n">service</span><span class="p">,</span> <span class="s2">"phase_service"</span><span class="p">:</span> <span class="n">phase_service</span><span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">bound_edit_factory</span><span class="p">(</span>
+            <span class="n">edit_parent</span><span class="p">:</span> <span class="n">QDialog</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+            <span class="n">config</span><span class="p">:</span> <span class="s2">"PlayerKarteaConfig | None"</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PlayerKarteaConfigEditView</span><span class="p">:</span>
+<span class="w">            </span><span class="sd">"""Open the edit dialog with the list's shared services."""</span>
+            <span class="k">return</span> <span class="n">edit_factory</span><span class="p">(</span><span class="n">edit_parent</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="o">**</span><span class="n">shared</span><span class="p">)</span>
+
+        <span class="n">view</span> <span class="o">=</span> <span class="n">PlayerKarteaConfigListView</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="n">controller</span> <span class="o">=</span> <span class="n">PlayerKarteaConfigListController</span><span class="p">(</span>
+            <span class="n">view</span><span class="p">,</span> <span class="n">bound_edit_factory</span><span class="p">,</span> <span class="n">service</span>
+        <span class="p">)</span>
+        <span class="n">view</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="n">controller</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">view</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

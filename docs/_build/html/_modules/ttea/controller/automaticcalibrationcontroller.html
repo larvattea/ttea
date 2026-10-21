@@ -1,0 +1,784 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.controller.automaticcalibrationcontroller &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.controller.automaticcalibrationcontroller</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.controller.automaticcalibrationcontroller</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Controller of the automatic calibration with a ChArUco board."""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">cv2</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mediapipe</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mp</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mediapipe.tasks</span><span class="w"> </span><span class="kn">import</span> <span class="n">python</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mediapipe.tasks.python</span><span class="w"> </span><span class="kn">import</span> <span class="n">vision</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCoreApplication</span><span class="p">,</span> <span class="n">QObject</span><span class="p">,</span> <span class="n">QRect</span><span class="p">,</span> <span class="n">Signal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtGui</span><span class="w"> </span><span class="kn">import</span> <span class="n">QImage</span><span class="p">,</span> <span class="n">QPixmap</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">CalibrationPoint</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.service</span><span class="w"> </span><span class="kn">import</span> <span class="n">CalibrationService</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">CvText</span><span class="p">,</span> <span class="n">PathConfig</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">AutomaticCalibrationView</span>
+
+<span class="n">mp_drawing</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">solutions</span><span class="o">.</span><span class="n">drawing_utils</span>
+<span class="n">mp_pose</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">solutions</span><span class="o">.</span><span class="n">pose</span>
+
+
+<div class="viewcode-block" id="AutomaticCalibrationController">
+<a class="viewcode-back" href="../../../api/ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.html#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AutomaticCalibrationController</span><span class="p">(</span><span class="n">QObject</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Controller of the automatic calibration.</span>
+
+<span class="sd">    The view shows a ChArUco board on the projection screen; this</span>
+<span class="sd">    controller reads the camera, detects the board, estimates where the</span>
+<span class="sd">    screen corners are in the camera image and saves them as</span>
+<span class="sd">    ``CalibrationPoint``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    view : AutomaticCalibrationView</span>
+<span class="sd">        The automatic calibration dialog.</span>
+<span class="sd">    camera_index : int</span>
+<span class="sd">        OpenCV index of the camera.</span>
+<span class="sd">    monitor_index : int</span>
+<span class="sd">        Index of the projection screen.</span>
+<span class="sd">    service : CalibrationService | None, optional</span>
+<span class="sd">        Calibration service. Default is None, which creates a new</span>
+<span class="sd">        ``CalibrationService``.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    msg_info_signal : Signal(str)</span>
+<span class="sd">        Emitted with a translated information message.</span>
+<span class="sd">    msg_warning_signal : Signal(str)</span>
+<span class="sd">        Emitted with a translated warning message.</span>
+<span class="sd">    msg_critical_signal : Signal(str)</span>
+<span class="sd">        Emitted with a translated error message.</span>
+<span class="sd">    close_view_signal : Signal()</span>
+<span class="sd">        Declared for the view; not emitted by this class.</span>
+<span class="sd">    view : AutomaticCalibrationView</span>
+<span class="sd">        The automatic calibration dialog.</span>
+<span class="sd">    service : CalibrationService</span>
+<span class="sd">        Calibration service (settings and saving).</span>
+<span class="sd">    monitor_index : int</span>
+<span class="sd">        Index of the projection screen.</span>
+<span class="sd">    camera_index : int</span>
+<span class="sd">        OpenCV index of the camera.</span>
+<span class="sd">    camera : None</span>
+<span class="sd">        Not used: ``run_auto_calibration`` opens its own capture.</span>
+<span class="sd">    modo_preview : bool</span>
+<span class="sd">        True while a captured sample is shown for confirmation.</span>
+<span class="sd">    monitor_screen : str</span>
+<span class="sd">        Translated title of the OpenCV window.</span>
+<span class="sd">    monitor_window : str</span>
+<span class="sd">        ASCII name of the OpenCV window (``CvText.window_name``).</span>
+<span class="sd">    pose_detector : vision.PoseLandmarker</span>
+<span class="sd">        MediaPipe pose landmarker, configured from the settings.</span>
+<span class="sd">    calibration_points : numpy.ndarray</span>
+<span class="sd">        ``(4, 2)`` int64 array with the corners to save.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Messages are sent through the signals so the view shows them. The</span>
+<span class="sd">    window title is translated with ``QCoreApplication.translate`` in</span>
+<span class="sd">    the ``"AutomaticCalibrationController"`` context, and messages with</span>
+<span class="sd">    ``self.tr()``.</span>
+<span class="sd">    """</span>
+
+    <span class="n">msg_info_signal</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">msg_warning_signal</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="n">msg_critical_signal</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+
+    <span class="n">close_view_signal</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">view</span><span class="p">:</span> <span class="s2">"AutomaticCalibrationView"</span><span class="p">,</span>
+        <span class="n">camera_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">monitor_index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">service</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CalibrationService</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span> <span class="o">=</span> <span class="n">view</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="n">service</span> <span class="ow">or</span> <span class="n">CalibrationService</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">monitor_index</span> <span class="o">=</span> <span class="n">monitor_index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">camera_index</span> <span class="o">=</span> <span class="n">camera_index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">camera</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modo_preview</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">monitor_screen</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">QCoreApplication</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span>
+            <span class="s2">"AutomaticCalibrationController"</span><span class="p">,</span> <span class="s2">"Tela de Monitoramento"</span>
+        <span class="p">)</span>
+        <span class="c1"># ASCII key of the OpenCV window; the translated title (with</span>
+        <span class="c1"># accents) is shown with CvText.set_window_title.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">monitor_window</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">CvText</span><span class="o">.</span><span class="n">window_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">monitor_screen</span><span class="p">)</span>
+
+        <span class="c1"># MediaPipe Tasks (Pose Landmarker)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">is_raspberry_pi</span><span class="p">():</span>
+            <span class="n">model_path</span> <span class="o">=</span> <span class="n">PathConfig</span><span class="o">.</span><span class="n">model</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_mediapipe_model_embedded</span><span class="p">()</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">model_path</span> <span class="o">=</span> <span class="n">PathConfig</span><span class="o">.</span><span class="n">model</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_mediapipe_model_desktop</span><span class="p">()</span>
+            <span class="p">)</span>
+
+        <span class="n">base_options</span> <span class="o">=</span> <span class="n">python</span><span class="o">.</span><span class="n">BaseOptions</span><span class="p">(</span><span class="n">model_asset_path</span><span class="o">=</span><span class="n">model_path</span><span class="p">)</span>
+        <span class="n">options</span> <span class="o">=</span> <span class="n">vision</span><span class="o">.</span><span class="n">PoseLandmarkerOptions</span><span class="p">(</span>
+            <span class="n">base_options</span><span class="o">=</span><span class="n">base_options</span><span class="p">,</span>
+            <span class="n">running_mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_mediapipe_execution_mode</span><span class="p">(),</span>
+            <span class="n">num_poses</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_mediapipe_num_position</span><span class="p">(),</span>
+            <span class="n">min_pose_detection_confidence</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_mediapipe_detection_position</span><span class="p">(),</span>
+            <span class="n">min_pose_presence_confidence</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_mediapipe_detection_presence</span><span class="p">(),</span>
+            <span class="n">min_tracking_confidence</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_mediapipe_detection_tracking</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pose_detector</span> <span class="o">=</span> <span class="n">vision</span><span class="o">.</span><span class="n">PoseLandmarker</span><span class="o">.</span><span class="n">create_from_options</span><span class="p">(</span><span class="n">options</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">calibration_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+
+<div class="viewcode-block" id="AutomaticCalibrationController.numpy_to_pixmap">
+<a class="viewcode-back" href="../../../api/ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.html#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.numpy_to_pixmap">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">numpy_to_pixmap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QPixmap</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Convert an OpenCV image to a ``QPixmap``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        img : numpy.ndarray</span>
+<span class="sd">            Grayscale (2-D) or BGR (3-D) ``uint8`` image.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QPixmap</span>
+<span class="sd">            The image as a pixmap.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>  <span class="c1"># Grayscale</span>
+            <span class="n">height</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span>
+            <span class="n">bytes_per_line</span> <span class="o">=</span> <span class="n">width</span>
+            <span class="n">q_img</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span>
+                <span class="n">img</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                <span class="n">width</span><span class="p">,</span>
+                <span class="n">height</span><span class="p">,</span>
+                <span class="n">bytes_per_line</span><span class="p">,</span>
+                <span class="n">QImage</span><span class="o">.</span><span class="n">Format</span><span class="o">.</span><span class="n">Format_Grayscale8</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># BGR</span>
+            <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">channels</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span>
+            <span class="n">bytes_per_line</span> <span class="o">=</span> <span class="n">channels</span> <span class="o">*</span> <span class="n">width</span>
+            <span class="n">q_img</span> <span class="o">=</span> <span class="n">QImage</span><span class="p">(</span>
+                <span class="n">img</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+                <span class="n">width</span><span class="p">,</span>
+                <span class="n">height</span><span class="p">,</span>
+                <span class="n">bytes_per_line</span><span class="p">,</span>
+                <span class="n">QImage</span><span class="o">.</span><span class="n">Format</span><span class="o">.</span><span class="n">Format_BGR888</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">QPixmap</span><span class="o">.</span><span class="n">fromImage</span><span class="p">(</span><span class="n">q_img</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AutomaticCalibrationController.generate_board_pixmap">
+<a class="viewcode-back" href="../../../api/ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.html#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.generate_board_pixmap">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_board_pixmap</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QPixmap</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Create the ChArUco board image for the screen.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QPixmap</span>
+<span class="sd">            Board with ``get_automatic_num_columns()`` by</span>
+<span class="sd">            ``get_automatic_num_rows()`` squares, stretched to the</span>
+<span class="sd">            available screen size.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The square size is the mean of the screen width per column and</span>
+<span class="sd">        the screen height per row; the marker size is that value times</span>
+<span class="sd">        ``get_automatic_multiplier()``. The board is drawn at 100 px per</span>
+<span class="sd">        square with ``get_automatic_margin()`` and resized with nearest</span>
+<span class="sd">        neighbor interpolation.</span>
+<span class="sd">        """</span>
+        <span class="n">screen_geometry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_available_geometry_of_screen</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">monitor_index</span>
+        <span class="p">)</span>
+        <span class="n">screen_width</span> <span class="o">=</span> <span class="n">screen_geometry</span><span class="o">.</span><span class="n">width</span><span class="p">()</span>
+        <span class="n">screen_height</span> <span class="o">=</span> <span class="n">screen_geometry</span><span class="o">.</span><span class="n">height</span><span class="p">()</span>
+
+        <span class="n">aruco_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_automatic_num_columns</span><span class="p">()</span>
+        <span class="n">aruco_rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_automatic_num_rows</span><span class="p">()</span>
+
+        <span class="n">square_width</span> <span class="o">=</span> <span class="n">screen_width</span> <span class="o">//</span> <span class="n">aruco_cols</span>
+        <span class="n">square_height</span> <span class="o">=</span> <span class="n">screen_height</span> <span class="o">//</span> <span class="n">aruco_rows</span>
+        <span class="n">square_size_average</span> <span class="o">=</span> <span class="p">(</span><span class="n">square_width</span> <span class="o">+</span> <span class="n">square_height</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">marker_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="n">square_size_average</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_automatic_multiplier</span><span class="p">()</span>
+        <span class="p">)</span>
+
+        <span class="n">aruco</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">aruco</span>
+        <span class="n">dictionary</span> <span class="o">=</span> <span class="n">aruco</span><span class="o">.</span><span class="n">getPredefinedDictionary</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_automatic_dictionary</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">board</span> <span class="o">=</span> <span class="n">aruco</span><span class="o">.</span><span class="n">CharucoBoard</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">aruco_cols</span><span class="p">,</span> <span class="n">aruco_rows</span><span class="p">),</span>
+            <span class="n">square_size_average</span><span class="p">,</span>
+            <span class="n">marker_size</span><span class="p">,</span>
+            <span class="n">dictionary</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">base_img</span> <span class="o">=</span> <span class="n">board</span><span class="o">.</span><span class="n">generateImage</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">aruco_cols</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="n">aruco_rows</span> <span class="o">*</span> <span class="mi">100</span><span class="p">),</span>
+            <span class="n">marginSize</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_automatic_margin</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="n">board_img</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span>
+            <span class="n">base_img</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">screen_width</span><span class="p">,</span> <span class="n">screen_height</span><span class="p">),</span>
+            <span class="n">interpolation</span><span class="o">=</span><span class="n">cv2</span><span class="o">.</span><span class="n">INTER_NEAREST</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">numpy_to_pixmap</span><span class="p">(</span><span class="n">board_img</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_process_frame_geometry</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">frame</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+        <span class="n">detector</span><span class="p">:</span> <span class="n">cv2</span><span class="o">.</span><span class="n">aruco</span><span class="o">.</span><span class="n">ArucoDetector</span><span class="p">,</span>
+        <span class="n">board</span><span class="p">:</span> <span class="n">cv2</span><span class="o">.</span><span class="n">aruco</span><span class="o">.</span><span class="n">CharucoBoard</span><span class="p">,</span>
+        <span class="n">square_size_average</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">square_width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">square_height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">screen_width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">screen_height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return the screen corners found in a camera frame.</span>
+
+<span class="sd">        Detects the ArUco markers, interpolates the ChArUco corners,</span>
+<span class="sd">        estimates the homography from board to camera (RANSAC, 5 px) and</span>
+<span class="sd">        projects the screen corners with it.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray | None</span>
+<span class="sd">            ``(4, 2)`` int array with the camera positions of the screen</span>
+<span class="sd">            corners top-left, top-right, bottom-left, bottom-right; None</span>
+<span class="sd">            if fewer than 4 ChArUco corners are found or the homography</span>
+<span class="sd">            fails.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        ChArUco errors are reported through ``msg_warning_signal``.</span>
+<span class="sd">        """</span>
+        <span class="n">gray</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">cvtColor</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">COLOR_BGR2GRAY</span><span class="p">)</span>
+        <span class="n">corners</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">detector</span><span class="o">.</span><span class="n">detectMarkers</span><span class="p">(</span><span class="n">gray</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">ids</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">retval</span><span class="p">,</span> <span class="n">charuco_corners</span><span class="p">,</span> <span class="n">charuco_ids</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">cv2</span><span class="o">.</span><span class="n">aruco</span><span class="o">.</span><span class="n">interpolateCornersCharuco</span><span class="p">(</span><span class="n">corners</span><span class="p">,</span> <span class="n">ids</span><span class="p">,</span> <span class="n">gray</span><span class="p">,</span> <span class="n">board</span><span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">retval</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+            <span class="n">chess_corners</span> <span class="o">=</span> <span class="n">board</span><span class="o">.</span><span class="n">getChessboardCorners</span><span class="p">()</span>
+            <span class="n">src_points</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">dst_points</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">corner_id</span><span class="p">,</span> <span class="n">detected_corner</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+                <span class="n">charuco_ids</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">charuco_corners</span>
+            <span class="p">):</span>
+                <span class="n">world_pt</span> <span class="o">=</span> <span class="n">chess_corners</span><span class="p">[</span><span class="n">corner_id</span><span class="p">][:</span><span class="mi">2</span><span class="p">]</span>
+                <span class="n">pixel_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">world_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">square_size_average</span><span class="p">)</span> <span class="o">*</span> <span class="n">square_width</span>
+                <span class="n">pixel_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">world_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">square_size_average</span><span class="p">)</span> <span class="o">*</span> <span class="n">square_height</span>
+
+                <span class="n">src_points</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">pixel_x</span><span class="p">,</span> <span class="n">pixel_y</span><span class="p">])</span>
+                <span class="n">dst_points</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">detected_corner</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+            <span class="n">src_pts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">src_points</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+            <span class="n">dst_pts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dst_points</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+            <span class="n">H</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">findHomography</span><span class="p">(</span><span class="n">src_pts</span><span class="p">,</span> <span class="n">dst_pts</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">RANSAC</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">H</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">rect_expandido</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                        <span class="p">[</span><span class="n">screen_width</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                        <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">screen_height</span><span class="p">],</span>
+                        <span class="p">[</span><span class="n">screen_width</span><span class="p">,</span> <span class="n">screen_height</span><span class="p">],</span>
+                    <span class="p">],</span>
+                    <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+                <span class="n">projected</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">perspectiveTransform</span><span class="p">(</span><span class="n">rect_expandido</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">projected</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e_charuco</span><span class="p">:</span>
+            <span class="n">mensagem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span>
+                <span class="s2">"Aviso de detecção ChArUco.</span><span class="se">\n</span><span class="s2">Detalhes: </span><span class="si">{0}</span><span class="s2">"</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e_charuco</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">msg_warning_signal</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">mensagem</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_draw_quadrilateral</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">img</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">vertices</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">with_labels</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Draw the detected screen outline and corners on a frame.</span>
+
+<span class="sd">        With ``with_labels``, the corners are labeled SE, SD, IE, ID</span>
+<span class="sd">        (Portuguese for top-left, top-right, bottom-left, bottom-right).</span>
+<span class="sd">        """</span>
+        <span class="n">render_pts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">2</span><span class="p">]],</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">polylines</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="p">[</span><span class="n">render_pts</span><span class="p">],</span> <span class="kc">True</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="mi">4</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">vertices</span><span class="p">:</span>
+            <span class="n">cv2</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="p">(</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="mi">10</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">with_labels</span><span class="p">:</span>
+            <span class="n">rotulos</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">(</span><span class="s2">"SE"</span><span class="p">,</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="o">-</span><span class="mi">15</span><span class="p">)),</span>
+                <span class="p">(</span><span class="s2">"SD"</span><span class="p">,</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="o">-</span><span class="mi">15</span><span class="p">)),</span>
+                <span class="p">(</span><span class="s2">"IE"</span><span class="p">,</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="p">(</span><span class="o">-</span><span class="mi">25</span><span class="p">,</span> <span class="mi">25</span><span class="p">)),</span>
+                <span class="p">(</span><span class="s2">"ID"</span><span class="p">,</span> <span class="n">vertices</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">25</span><span class="p">)),</span>
+            <span class="p">]</span>
+            <span class="k">for</span> <span class="n">texto</span><span class="p">,</span> <span class="n">pt</span><span class="p">,</span> <span class="n">offset</span> <span class="ow">in</span> <span class="n">rotulos</span><span class="p">:</span>
+                <span class="n">pos_x</span><span class="p">,</span> <span class="n">pos_y</span> <span class="o">=</span> <span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">offset</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">cv2</span><span class="o">.</span><span class="n">putText</span><span class="p">(</span>
+                    <span class="n">img</span><span class="p">,</span>
+                    <span class="n">texto</span><span class="p">,</span>
+                    <span class="p">(</span><span class="n">pos_x</span><span class="p">,</span> <span class="n">pos_y</span><span class="p">),</span>
+                    <span class="n">cv2</span><span class="o">.</span><span class="n">FONT_HERSHEY_SIMPLEX</span><span class="p">,</span>
+                    <span class="mf">0.6</span><span class="p">,</span>
+                    <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                    <span class="mi">3</span><span class="p">,</span>
+                    <span class="n">cv2</span><span class="o">.</span><span class="n">LINE_AA</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">cv2</span><span class="o">.</span><span class="n">putText</span><span class="p">(</span>
+                    <span class="n">img</span><span class="p">,</span>
+                    <span class="n">texto</span><span class="p">,</span>
+                    <span class="p">(</span><span class="n">pos_x</span><span class="p">,</span> <span class="n">pos_y</span><span class="p">),</span>
+                    <span class="n">cv2</span><span class="o">.</span><span class="n">FONT_HERSHEY_SIMPLEX</span><span class="p">,</span>
+                    <span class="mf">0.6</span><span class="p">,</span>
+                    <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+                    <span class="mi">2</span><span class="p">,</span>
+                    <span class="n">cv2</span><span class="o">.</span><span class="n">LINE_AA</span><span class="p">,</span>
+                <span class="p">)</span>
+
+<div class="viewcode-block" id="AutomaticCalibrationController.run_auto_calibration">
+<a class="viewcode-back" href="../../../api/ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.html#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.run_auto_calibration">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run_auto_calibration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Detect the board in the camera and save the corners.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Keys in the OpenCV window:</span>
+
+<span class="sd">        - S: close the window, wait 1 s, discard 5 buffered frames and</span>
+<span class="sd">          detect the board on a clean frame; on success, show it as a</span>
+<span class="sd">          sample (preview mode).</span>
+<span class="sd">        - R: discard the sample and resume tracking.</span>
+<span class="sd">        - ESC: save the sample corners (if any) and finish; without a</span>
+<span class="sd">          sample, finish without saving.</span>
+
+<span class="sd">        The corners are saved as the screen's top-right, top-left,</span>
+<span class="sd">        bottom-right, bottom-left corners in the camera image. With</span>
+<span class="sd">        ``is_automatic_mirror_mode()``, the x coordinates become ``frame</span>
+<span class="sd">        width - x``, so the saved order is the same in the mirrored</span>
+<span class="sd">        image. TODO(doc): the manual calibration saves the clicks as</span>
+<span class="sd">        top-left, top-right, bottom-left, bottom-right; is the different</span>
+<span class="sd">        order intended?</span>
+
+<span class="sd">        Errors are reported through ``msg_critical_signal``; the camera</span>
+<span class="sd">        is released and all OpenCV windows are closed at the end.</span>
+<span class="sd">        """</span>
+        <span class="n">cap</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># --- Screen metrics ---</span>
+            <span class="n">screen_geometry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_available_geometry_of_screen</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">monitor_index</span>
+            <span class="p">)</span>
+            <span class="n">screen_width</span> <span class="o">=</span> <span class="n">screen_geometry</span><span class="o">.</span><span class="n">width</span><span class="p">()</span>
+            <span class="n">screen_height</span> <span class="o">=</span> <span class="n">screen_geometry</span><span class="o">.</span><span class="n">height</span><span class="p">()</span>
+
+            <span class="c1"># --- ChArUco board ---</span>
+            <span class="n">aruco_cols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_automatic_num_columns</span><span class="p">()</span>
+            <span class="n">aruco_rows</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_automatic_num_rows</span><span class="p">()</span>
+
+            <span class="n">square_width</span> <span class="o">=</span> <span class="n">screen_width</span> <span class="o">//</span> <span class="n">aruco_cols</span>
+            <span class="n">square_height</span> <span class="o">=</span> <span class="n">screen_height</span> <span class="o">//</span> <span class="n">aruco_rows</span>
+            <span class="n">square_size_average</span> <span class="o">=</span> <span class="p">(</span><span class="n">square_width</span> <span class="o">+</span> <span class="n">square_height</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="n">marker_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+                <span class="n">square_size_average</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_automatic_multiplier</span><span class="p">()</span>
+            <span class="p">)</span>
+
+            <span class="n">aruco</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">aruco</span>
+            <span class="n">dictionary</span> <span class="o">=</span> <span class="n">aruco</span><span class="o">.</span><span class="n">getPredefinedDictionary</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_automatic_dictionary</span><span class="p">()</span>
+            <span class="p">)</span>
+            <span class="n">board</span> <span class="o">=</span> <span class="n">aruco</span><span class="o">.</span><span class="n">CharucoBoard</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">aruco_cols</span><span class="p">,</span> <span class="n">aruco_rows</span><span class="p">),</span>
+                <span class="n">square_size_average</span><span class="p">,</span>
+                <span class="n">marker_size</span><span class="p">,</span>
+                <span class="n">dictionary</span><span class="p">,</span>
+            <span class="p">)</span>
+
+            <span class="c1"># --- Camera ---</span>
+            <span class="n">cap</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">camera_index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_opencv_capture_backend</span><span class="p">()</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">cap</span><span class="o">.</span><span class="n">isOpened</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">msg_critical_signal</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Não foi possível abrir a câmera."</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">return</span>
+
+            <span class="n">detector</span> <span class="o">=</span> <span class="n">aruco</span><span class="o">.</span><span class="n">ArucoDetector</span><span class="p">(</span><span class="n">dictionary</span><span class="p">)</span>
+            <span class="n">cv2</span><span class="o">.</span><span class="n">namedWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">monitor_window</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">WINDOW_AUTOSIZE</span><span class="p">)</span>
+            <span class="n">CvText</span><span class="o">.</span><span class="n">set_window_title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">monitor_window</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">monitor_screen</span><span class="p">)</span>
+
+            <span class="n">last_camera_vertices</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">frozen_frame</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="c1"># --- Main loop ---</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">modo_preview</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">cap</span><span class="o">.</span><span class="n">isOpened</span><span class="p">():</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">msg_critical_signal</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Não foi possível abrir a câmera."</span><span class="p">)</span>
+                        <span class="p">)</span>
+                        <span class="k">break</span>
+
+                    <span class="n">ret</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">cap</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">ret</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">msg_critical_signal</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span>
+                                <span class="s2">"Erro ao capturar imagem da câmera. Dispositivo desconectado.</span><span class="se">\n</span><span class="s2">Verifique a conexão do cabo e/ou a instalação da câmera.</span><span class="se">\n</span><span class="s2">Feche a janela e tente novamente."</span>
+                            <span class="p">)</span>
+                        <span class="p">)</span>
+                        <span class="k">break</span>
+
+                    <span class="n">vertices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_frame_geometry</span><span class="p">(</span>
+                        <span class="n">frame</span><span class="p">,</span>
+                        <span class="n">detector</span><span class="p">,</span>
+                        <span class="n">board</span><span class="p">,</span>
+                        <span class="n">square_size_average</span><span class="p">,</span>
+                        <span class="n">square_width</span><span class="p">,</span>
+                        <span class="n">square_height</span><span class="p">,</span>
+                        <span class="n">screen_width</span><span class="p">,</span>
+                        <span class="n">screen_height</span><span class="p">,</span>
+                    <span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">vertices</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">last_camera_vertices</span> <span class="o">=</span> <span class="n">vertices</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_draw_quadrilateral</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="n">vertices</span><span class="p">)</span>
+
+                    <span class="n">display_frame</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    <span class="n">hud_lines</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span>
+                            <span class="s2">"Tecle [S] para ocultar a tela e capturar a imagem."</span>
+                        <span class="p">),</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span>
+                            <span class="s2">"Tecle [ESC] para sair da tela de monitoramento."</span>
+                        <span class="p">),</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span>
+                            <span class="s2">"Tecle [ALT+F4 ou CMD+W] para fechar a tela das figuras."</span>
+                        <span class="p">),</span>
+                    <span class="p">]</span>
+
+                    <span class="c1"># Pillow instead of cv2.putText: accents (é, ó, ñ)</span>
+                    <span class="c1"># and wrapping of lines wider than the frame.</span>
+                    <span class="n">display_frame</span> <span class="o">=</span> <span class="n">CvText</span><span class="o">.</span><span class="n">draw_lines</span><span class="p">(</span>
+                        <span class="n">display_frame</span><span class="p">,</span> <span class="n">hud_lines</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">24</span><span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">display_frame</span> <span class="o">=</span> <span class="n">frozen_frame</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    <span class="n">msg_hud</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span>
+                        <span class="s2">"Amostra: Tecle [ESC] para salvar | Tecle [R] para repetir."</span>
+                    <span class="p">)</span>
+                    <span class="n">display_frame</span> <span class="o">=</span> <span class="n">CvText</span><span class="o">.</span><span class="n">draw_lines</span><span class="p">(</span>
+                        <span class="n">display_frame</span><span class="p">,</span> <span class="p">[</span><span class="n">msg_hud</span><span class="p">],</span> <span class="n">origin</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">24</span><span class="p">)</span>
+                    <span class="p">)</span>
+
+                <span class="n">cv2</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">monitor_window</span><span class="p">,</span> <span class="n">display_frame</span><span class="p">)</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mh">0xFF</span>
+
+                <span class="c1"># --- S: hide the window and take a clean capture ---</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">key</span> <span class="o">==</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">"s"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">key</span> <span class="o">==</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">"S"</span><span class="p">)</span>
+                <span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">modo_preview</span><span class="p">:</span>
+                    <span class="n">cv2</span><span class="o">.</span><span class="n">destroyWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">monitor_window</span><span class="p">)</span>
+                    <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+                    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+
+                    <span class="c1"># Drop buffered frames; a failed grab means the</span>
+                    <span class="c1"># camera was disconnected.</span>
+                    <span class="n">buffer_ok</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">cap</span><span class="o">.</span><span class="n">grab</span><span class="p">():</span>
+                            <span class="n">buffer_ok</span> <span class="o">=</span> <span class="kc">False</span>
+                            <span class="k">break</span>
+
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">buffer_ok</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">msg_critical_signal</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span>
+                                <span class="s2">"Erro ao capturar imagem da câmera. Dispositivo desconectado.</span><span class="se">\n</span><span class="s2">Verifique a conexão do cabo e/ou a instalação da câmera.</span><span class="se">\n</span><span class="s2">Feche a janela e tente novamente."</span>
+                            <span class="p">)</span>
+                        <span class="p">)</span>
+                        <span class="k">break</span>
+
+                    <span class="n">ret</span><span class="p">,</span> <span class="n">clean_frame</span> <span class="o">=</span> <span class="n">cap</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+                    <span class="k">if</span> <span class="n">ret</span><span class="p">:</span>
+                        <span class="n">clean_vertices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_process_frame_geometry</span><span class="p">(</span>
+                            <span class="n">clean_frame</span><span class="p">,</span>
+                            <span class="n">detector</span><span class="p">,</span>
+                            <span class="n">board</span><span class="p">,</span>
+                            <span class="n">square_size_average</span><span class="p">,</span>
+                            <span class="n">square_width</span><span class="p">,</span>
+                            <span class="n">square_height</span><span class="p">,</span>
+                            <span class="n">screen_width</span><span class="p">,</span>
+                            <span class="n">screen_height</span><span class="p">,</span>
+                        <span class="p">)</span>
+
+                        <span class="k">if</span> <span class="n">clean_vertices</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="n">last_camera_vertices</span> <span class="o">=</span> <span class="n">clean_vertices</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_draw_quadrilateral</span><span class="p">(</span>
+                                <span class="n">clean_frame</span><span class="p">,</span> <span class="n">clean_vertices</span><span class="p">,</span> <span class="n">with_labels</span><span class="o">=</span><span class="kc">True</span>
+                            <span class="p">)</span>
+                            <span class="n">frozen_frame</span> <span class="o">=</span> <span class="n">clean_frame</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">modo_preview</span> <span class="o">=</span> <span class="kc">True</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">msg_info_signal</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span>
+                                    <span class="s2">"Sucesso! Captura realizada sem obstruções."</span>
+                                <span class="p">)</span>
+                            <span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">msg_warning_signal</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span>
+                                    <span class="s2">"O tabuleiro não pôde ser lido na foto limpa. Retornando..."</span>
+                                <span class="p">)</span>
+                            <span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">msg_critical_signal</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span>
+                                <span class="s2">"Erro ao capturar imagem da câmera. Dispositivo desconectado.</span><span class="se">\n</span><span class="s2">Verifique a conexão do cabo e/ou a instalação da câmera.</span><span class="se">\n</span><span class="s2">Feche a janela e tente novamente."</span>
+                            <span class="p">)</span>
+                        <span class="p">)</span>
+                        <span class="k">break</span>
+
+                    <span class="n">cv2</span><span class="o">.</span><span class="n">namedWindow</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">monitor_window</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">WINDOW_AUTOSIZE</span><span class="p">)</span>
+                    <span class="n">CvText</span><span class="o">.</span><span class="n">set_window_title</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">monitor_window</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">monitor_screen</span>
+                    <span class="p">)</span>
+
+                <span class="c1"># --- R: back to live tracking ---</span>
+                <span class="k">elif</span> <span class="p">(</span>
+                    <span class="n">key</span> <span class="o">==</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">"r"</span><span class="p">)</span> <span class="ow">or</span> <span class="n">key</span> <span class="o">==</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">"R"</span><span class="p">)</span>
+                <span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">modo_preview</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">modo_preview</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="n">frozen_frame</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">msg_warning_signal</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Captura descartada. Rastreio reativado."</span><span class="p">)</span>
+                    <span class="p">)</span>
+
+                <span class="c1"># --- ESC: save and close ---</span>
+                <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="mi">27</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">modo_preview</span> <span class="ow">and</span> <span class="n">last_camera_vertices</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">se</span><span class="p">,</span> <span class="n">sd</span><span class="p">,</span> <span class="n">ie</span><span class="p">,</span> <span class="n">id_pt</span> <span class="o">=</span> <span class="n">last_camera_vertices</span>
+
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">is_automatic_mirror_mode</span><span class="p">():</span>
+                            <span class="n">largura_cam</span> <span class="o">=</span> <span class="n">frozen_frame</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">calibration_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                                <span class="p">[</span>
+                                    <span class="p">[</span><span class="n">largura_cam</span> <span class="o">-</span> <span class="n">se</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">se</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>  <span class="c1"># TR</span>
+                                    <span class="p">[</span><span class="n">largura_cam</span> <span class="o">-</span> <span class="n">sd</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">sd</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>  <span class="c1"># TL</span>
+                                    <span class="p">[</span><span class="n">largura_cam</span> <span class="o">-</span> <span class="n">ie</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ie</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>  <span class="c1"># BR</span>
+                                    <span class="p">[</span><span class="n">largura_cam</span> <span class="o">-</span> <span class="n">id_pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">id_pt</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>  <span class="c1"># BL</span>
+                                <span class="p">],</span>
+                                <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span>
+                            <span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">calibration_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                                <span class="p">[</span><span class="n">sd</span><span class="p">,</span> <span class="n">se</span><span class="p">,</span> <span class="n">id_pt</span><span class="p">,</span> <span class="n">ie</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span>
+                            <span class="p">)</span>
+
+                        <span class="bp">self</span><span class="o">.</span><span class="n">create_calibration_point</span><span class="p">()</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">msg_info_signal</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Fechando sem salvar."</span><span class="p">)</span>
+                        <span class="p">)</span>
+                    <span class="k">break</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">mensagem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span>
+                <span class="s2">"Erro crítico na calibração automática.</span><span class="se">\n</span><span class="s2">Detalhes: </span><span class="si">{0}</span><span class="s2">."</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">msg_critical_signal</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">mensagem</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">cap</span><span class="o">.</span><span class="n">isOpened</span><span class="p">():</span>
+                <span class="n">cap</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+            <span class="n">cv2</span><span class="o">.</span><span class="n">destroyAllWindows</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="AutomaticCalibrationController.get_available_geometry_of_screen">
+<a class="viewcode-back" href="../../../api/ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.html#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.get_available_geometry_of_screen">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_available_geometry_of_screen</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">monitor_index</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">QRect</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return the available geometry of a screen.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        monitor_index : int | None, optional</span>
+<span class="sd">            Screen index. Default is None, which uses ``monitor_index``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        QRect | None</span>
+<span class="sd">            The available geometry, or None if the index is out of</span>
+<span class="sd">            range.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">monitor_index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">monitor_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">monitor_index</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_available_geometry_of_screen</span><span class="p">(</span><span class="n">monitor_index</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AutomaticCalibrationController.create_calibration_point">
+<a class="viewcode-back" href="../../../api/ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.html#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.create_calibration_point">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_calibration_point</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Save the corners and report the result."""</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">create_calibration_point</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">msg_info_signal</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Calibração automática salva com sucesso!"</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">msg_critical_signal</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Erro ao salvar os pontos da calibração automática."</span><span class="p">)</span>
+            <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="AutomaticCalibrationController.get_data">
+<a class="viewcode-back" href="../../../api/ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.html#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.get_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return the corners as ``CalibrationPoint`` field values.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict[str, int]</span>
+<span class="sd">            ``pointx1``, ``pointy1``... ``pointy4`` from</span>
+<span class="sd">            ``calibration_points``.</span>
+<span class="sd">        """</span>
+        <span class="n">flat_points</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calibration_points</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="n">prop</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">prop</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">CalibrationPoint</span><span class="o">.</span><span class="n">PROPERTIES</span><span class="p">,</span> <span class="n">flat_points</span><span class="p">)</span>
+        <span class="p">}</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+ttea.main
+=========
+
+.. automodule:: ttea.main
+
+.. currentmodule:: ttea.main
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   App
+
+
+
+.. rubric:: Functions
+
+.. autosummary::
+   :nosignatures:
+
+   main
+
+
+.. autofunction:: main

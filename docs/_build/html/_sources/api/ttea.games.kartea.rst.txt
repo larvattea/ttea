@@ -1,0 +1,34 @@
+ttea.games.kartea
+=================
+
+.. automodule:: ttea.games.kartea
+
+.. currentmodule:: ttea.games.kartea
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/module.rst
+   :recursive:
+
+   controller
+   dao
+   factory
+   gamecontroller
+   gamecore
+   gamemodel
+   gametheme
+   gameui
+   gameutil
+   gameview
+   main
+   model
+   service
+   util
+   view
+
+
+

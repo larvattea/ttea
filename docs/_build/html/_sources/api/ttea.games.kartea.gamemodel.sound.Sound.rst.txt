@@ -1,0 +1,17 @@
+Sound
+=====
+
+.. currentmodule:: ttea.games.kartea.gamemodel.sound
+
+.. autoclass:: Sound
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~Sound.load
+      ~Sound.resolve

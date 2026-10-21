@@ -39,3 +39,6 @@ resources/help/_build/
 # Game data
 src/ttea/games/kartea/players/*.csv
 src/ttea/games/kartea/log/*.log
+
+# Docs
+docs/api/

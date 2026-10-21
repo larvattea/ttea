@@ -1,0 +1,9 @@
+KarTEATheme
+===========
+
+.. currentmodule:: ttea.games.kartea.gametheme.karteatheme
+
+.. autoclass:: KarTEATheme
+   :members:
+   :show-inheritance:
+

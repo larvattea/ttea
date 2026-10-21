@@ -1,0 +1,539 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.games.kartea.gameutil.gamesettings &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.games.kartea.gameutil.gamesettings</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.games.kartea.gameutil.gamesettings</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Immutable configuration of the KarTEA game (pygame side)."""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">MappingProxyType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.util</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">KarteaArrivalTimeFields</span><span class="p">,</span>
+    <span class="n">KarteaPalettes</span><span class="p">,</span>
+    <span class="n">KarteaPathConfig</span><span class="p">,</span>
+    <span class="n">KarteaResourceFields</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="GameSettings">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gameutil.gamesettings.GameSettings.html#ttea.games.kartea.gameutil.gamesettings.GameSettings">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">GameSettings</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""KarTEA game configuration: screen, sizes, colors and resources.</span>
+
+<span class="sd">    A single instance is created by ``main`` and injected where needed</span>
+<span class="sd">    (GameController, Menu, models, views). There is no global reading:</span>
+<span class="sd">    no module imports an already configured GameSettings. Once created,</span>
+<span class="sd">    the instance cannot be changed (``AttributeError``).</span>
+
+<span class="sd">    The match state (phase/level, score, counters, lane, menu, clock)</span>
+<span class="sd">    lives in ``GameState``; data access, in the services.</span>
+
+<span class="sd">    The class constants below apply to any resolution; the instance</span>
+<span class="sd">    attributes depend on the screen and on the player's configuration.</span>
+<span class="sd">    Since the instance is frozen at the end of ``__init__``, all</span>
+<span class="sd">    attributes are constants and follow the PEP 8 convention</span>
+<span class="sd">    (uppercase).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    lang : str</span>
+<span class="sd">        Game language.</span>
+<span class="sd">    settings : dict[str, Any]</span>
+<span class="sd">        Effective configuration built by</span>
+<span class="sd">        ``PlayerKarteaConfigService.build_game_settings``: screen,</span>
+<span class="sd">        calibration points and the player's configuration already</span>
+<span class="sd">        completed with the kartea.ini defaults.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    WINDOW_NAME, GAME_TITLE : str, class attribute</span>
+<span class="sd">        Window title ("KarTEA").</span>
+<span class="sd">    BASE_WIDTH, BASE_HEIGHT : int, class attribute</span>
+<span class="sd">        Reference resolution of the original design (800x600).</span>
+<span class="sd">    FPS : int, class attribute</span>
+<span class="sd">        Target frames per second (60).</span>
+<span class="sd">    DRAW_FPS : bool, class attribute</span>
+<span class="sd">        Whether the FPS counter is drawn.</span>
+<span class="sd">    MAX_DELTA_TIME : float, class attribute</span>
+<span class="sd">        Safety cap (s) for ``GameState.delta_time``: avoids big jumps in</span>
+<span class="sd">        the game position after a real pause (window switch, loading,</span>
+<span class="sd">        debugger breakpoint).</span>
+<span class="sd">    ROAD_WIDTH, SEGMENT_LENGTH, CAMERA_DEPTH : int, class attribute</span>
+<span class="sd">        Pseudo-3D road geometry.</span>
+<span class="sd">    DRAW_HITBOX : bool, class attribute</span>
+<span class="sd">        Whether the car hitbox is drawn (debugging).</span>
+<span class="sd">    ANIMATION_SPEED : float, class attribute</span>
+<span class="sd">        Animation speed.</span>
+<span class="sd">    COLLISION_LANE_TOLERANCE : float, class attribute</span>
+<span class="sd">        Tolerance (s) of the player lane before an object passes the</span>
+<span class="sd">        car. 0 uses only the lane at that instant; &gt; 0 collides if the</span>
+<span class="sd">        player was in the object's lane for most of the last N seconds,</span>
+<span class="sd">        absorbing the feet reading jitter near the lane boundary.</span>
+<span class="sd">    OBJECT_SPAWN_SEGMENTS : int, class attribute</span>
+<span class="sd">        Segments ahead of the camera where targets, obstacles and the</span>
+<span class="sd">        finish line appear.</span>
+<span class="sd">    OBJECT_ARRIVAL_SEGMENTS : int, class attribute</span>
+<span class="sd">        Distance (segments) from that point to the front of the car,</span>
+<span class="sd">        used to turn the arrival time into speed (measured: ~191 in</span>
+<span class="sd">        SVGA, HD and Full HD).</span>
+<span class="sd">    COLORS : dict, class attribute</span>
+<span class="sd">        RGB colors of title, score, timer and buttons.</span>
+<span class="sd">    CALIBRATION_POINT_COLOR, CALIBRATION_LINE_COLOR : tuple, class</span>
+<span class="sd">    attribute</span>
+<span class="sd">        BGR (OpenCV) colors of the calibration area drawn over the</span>
+<span class="sd">        camera image: points in red, sides in green.</span>
+<span class="sd">    CONTROL_WIDTH, CONTROL_HEIGHT : int, class attribute</span>
+<span class="sd">        Resolution of the control (camera) image used in the mapping.</span>
+<span class="sd">    FEEDBACK_IMAGE_TIME_MIN, FEEDBACK_IMAGE_TIME_MAX : float, class</span>
+<span class="sd">    attribute</span>
+<span class="sd">        Range (s) of the feedback image display time.</span>
+<span class="sd">    FEET_CLICK_TIME_MIN, FEET_CLICK_TIME_MAX : float, class attribute</span>
+<span class="sd">        Range (s) of the time standing on a button to select it.</span>
+<span class="sd">    FEET_CLICK_TIME_DEFAULT : float, class attribute</span>
+<span class="sd">        Default selection time (1.2 s).</span>
+<span class="sd">    FEET_CLICK_BASE_MARGIN : int, class attribute</span>
+<span class="sd">        Selection hysteresis: once selection starts, the button "grows"</span>
+<span class="sd">        this many px (800x600 base) on each side.</span>
+<span class="sd">    FEET_CLICK_EXIT_TOLERANCE : float, class attribute</span>
+<span class="sd">        Leaving the button for less than this time (s) does not</span>
+<span class="sd">        interrupt the count.</span>
+<span class="sd">    FEET_MARKER_BASE_RADIUS : int, class attribute</span>
+<span class="sd">        Radius of the feet dot (800x600 base).</span>
+<span class="sd">    FEET_MARKER_COLOR, FEET_MARKER_BORDER_COLOR : tuple, class attribute</span>
+<span class="sd">        RGB colors of the feet dot and its border.</span>
+<span class="sd">    BASE_OBJ_POS : list[tuple[int, int]], class attribute</span>
+<span class="sd">        Reference positions (800x600) where objects appear, per lane.</span>
+<span class="sd">    CURRENT_LANG : str</span>
+<span class="sd">        Game language.</span>
+<span class="sd">    SCREEN_WIDTH, SCREEN_HEIGHT : int</span>
+<span class="sd">        Screen size (px).</span>
+<span class="sd">    SCREEN_OS_INDEX, SCREEN_POS_X, SCREEN_POS_Y : int</span>
+<span class="sd">        Monitor index and window position.</span>
+<span class="sd">    FULLSCREEN : bool</span>
+<span class="sd">        Whether the game runs fullscreen.</span>
+<span class="sd">    CALIBRATION_POINTS : numpy.ndarray</span>
+<span class="sd">        Read-only 4x2 int array with the calibrated area; zeros when</span>
+<span class="sd">        there is no calibration.</span>
+<span class="sd">    LANE_DIV_0, LANE_DIV_1, LANE_DIV_2, LANE_DIV_3 : int</span>
+<span class="sd">        Screen x of the lane boundaries (thirds of the width).</span>
+<span class="sd">    UI_SCALE : float</span>
+<span class="sd">        UI scale factor (smallest of the width/height scales, so nothing</span>
+<span class="sd">        is distorted).</span>
+<span class="sd">    WIDTH_RATIO, HEIGHT_RATIO : float</span>
+<span class="sd">        Camera -&gt; screen mapping; without it the car cannot cross the</span>
+<span class="sd">        whole screen at resolutions other than 800x600.</span>
+<span class="sd">    BUTTONS_SIZES : tuple[int, int]</span>
+<span class="sd">        Menu button size, scaled.</span>
+<span class="sd">    FONTS : dict[str, pygame.font.Font]</span>
+<span class="sd">        "small", "medium" and "big" fonts, scaled.</span>
+<span class="sd">    CAR_SIZE : int</span>
+<span class="sd">        Car size (1/5 of the screen width).</span>
+<span class="sd">    CAR_HITBOX_SIZE : tuple[int, int]</span>
+<span class="sd">        Car hitbox size.</span>
+<span class="sd">    TARGETS_SIZES, OBSTACLE_SIZES : tuple[int, int]</span>
+<span class="sd">        Size of targets and obstacles before perspective (100x100).</span>
+<span class="sd">    OBJ_POS : list[tuple[int, int]]</span>
+<span class="sd">        BASE_OBJ_POS scaled to the screen.</span>
+<span class="sd">    VEHICLE_IMAGE, ENVIRONMENT_IMAGE_RIGHT, ENVIRONMENT_IMAGE_LEFT : str</span>
+<span class="sd">        Resolved paths (":/..." or mods file) of the image resources.</span>
+<span class="sd">    HORIZON_IMAGE : str</span>
+<span class="sd">        Resolved path of the horizon (environment background) image.</span>
+<span class="sd">    TARGET_IMAGE, OBSTACLE_IMAGE : str</span>
+<span class="sd">        Resolved paths of the target and obstacle images.</span>
+<span class="sd">    POSITIVE_FEEDBACK_IMAGE, NEUTRAL_FEEDBACK_IMAGE : str</span>
+<span class="sd">        Resolved paths of the feedback images (also</span>
+<span class="sd">        NEGATIVE_FEEDBACK_IMAGE).</span>
+<span class="sd">    POSITIVE_FEEDBACK_SOUND, NEUTRAL_FEEDBACK_SOUND : str</span>
+<span class="sd">        Resolved paths of the feedback sounds (also</span>
+<span class="sd">        NEGATIVE_FEEDBACK_SOUND).</span>
+<span class="sd">    FEEDBACK_IMAGE_TIME : float</span>
+<span class="sd">        Time (s) the positive/negative feedback image stays on screen,</span>
+<span class="sd">        clamped to the allowed range.</span>
+<span class="sd">    FEET_CLICK_TIME : float</span>
+<span class="sd">        Time (s) on a button to select it with the feet, clamped.</span>
+<span class="sd">    FEET_CLICK_MARGIN : int</span>
+<span class="sd">        FEET_CLICK_BASE_MARGIN scaled.</span>
+<span class="sd">    FEET_MARKER_RADIUS : int</span>
+<span class="sd">        Radius of the feet dot, scaled (at least 4 px).</span>
+<span class="sd">    OBJECT_ARRIVAL_TIME : Mapping[int, float]</span>
+<span class="sd">        Read-only ``{speed: seconds}`` from the player's configuration.</span>
+<span class="sd">    PALETTE : int</span>
+<span class="sd">        Number of the track color palette (KarteaPalettes).</span>
+<span class="sd">    MENU_BACKGROUND, MENU_FEEDBACK_25, MENU_FEEDBACK_50 : str</span>
+<span class="sd">        Built-in menu images (also MENU_FEEDBACK_75).</span>
+<span class="sd">    MENU_CLICK_SOUND : str</span>
+<span class="sd">        Menu's own click sound ("click" alias in the QRC), independent</span>
+<span class="sd">        of the player's positive feedback sound.</span>
+<span class="sd">    MISS_SOUND, POINT_SOUND : str</span>
+<span class="sd">        Miss and hit sounds: the player's negative and positive feedback</span>
+<span class="sd">        sounds.</span>
+<span class="sd">    CRASH_SOUND, WIN_SOUND, CLOCK_TICK_SOUND : str</span>
+<span class="sd">        Sounds of the user's sounds folder.</span>
+<span class="sd">    FINISH_IMAGE : str</span>
+<span class="sd">        Built-in finish line image.</span>
+<span class="sd">    HORIZON_BG_IMAGE : str</span>
+<span class="sd">        Horizon image: HORIZON_IMAGE or, if it does not resolve, the</span>
+<span class="sd">        built-in "horizon".</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Speed is defined by the ARRIVAL (reaction) TIME: seconds between an</span>
+<span class="sd">    object appearing on the road and reaching the front of the car.</span>
+<span class="sd">    Since the road advances by delta-time (real seconds), the time is</span>
+<span class="sd">    the same on any machine, FPS and resolution; FPS only affects the</span>
+<span class="sd">    visual smoothness. The speed range of each level (1, 2 or 3) comes</span>
+<span class="sd">    from LevelRules.speed; the time of each range comes from the</span>
+<span class="sd">    player's configuration, clamped and ordered by</span>
+<span class="sd">    KarteaArrivalTimeFields.order.</span>
+
+<span class="sd">    Collision is decided by LANE: when the base of a target/obstacle</span>
+<span class="sd">    passes the front of the car, it collides if the player is in the</span>
+<span class="sd">    object's lane (see COLLISION_LANE_TOLERANCE); it does not depend on</span>
+<span class="sd">    resolution, image sizes, depth or FPS.</span>
+
+<span class="sd">    Each resource field of KarteaResourceFields.ALL becomes an uppercase</span>
+<span class="sd">    attribute. The configuration stores the name chosen on the screen</span>
+<span class="sd">    (built-in alias, e.g. "defaultvehicle", or mods file, e.g.</span>
+<span class="sd">    "mycar.png"); here it becomes the path to load. If the name no</span>
+<span class="sd">    longer exists (e.g. a file deleted from mods), the field default is</span>
+<span class="sd">    used.</span>
+<span class="sd">    """</span>
+
+    <span class="c1"># ========== Constants ==========</span>
+    <span class="n">WINDOW_NAME</span> <span class="o">=</span> <span class="s2">"KarTEA"</span>
+    <span class="n">GAME_TITLE</span> <span class="o">=</span> <span class="n">WINDOW_NAME</span>
+
+    <span class="n">BASE_WIDTH</span> <span class="o">=</span> <span class="mi">800</span>
+    <span class="n">BASE_HEIGHT</span> <span class="o">=</span> <span class="mi">600</span>
+
+    <span class="n">FPS</span> <span class="o">=</span> <span class="mi">60</span>
+    <span class="n">DRAW_FPS</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="c1"># Without the cap, a single very long frame would make the game</span>
+    <span class="c1"># skip a whole stretch of the track at once.</span>
+    <span class="n">MAX_DELTA_TIME</span> <span class="o">=</span> <span class="mf">0.25</span>
+
+    <span class="n">ROAD_WIDTH</span> <span class="o">=</span> <span class="mi">400</span>
+    <span class="n">SEGMENT_LENGTH</span> <span class="o">=</span> <span class="mi">200</span>
+    <span class="n">CAMERA_DEPTH</span> <span class="o">=</span> <span class="mi">3</span>
+
+    <span class="c1"># Drawing and debugging</span>
+    <span class="n">DRAW_HITBOX</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="c1"># Animation</span>
+    <span class="n">ANIMATION_SPEED</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+    <span class="c1"># ========== Collision (by lane) ==========</span>
+    <span class="n">COLLISION_LANE_TOLERANCE</span> <span class="o">=</span> <span class="mf">0.2</span>
+
+    <span class="c1"># ========== Speed (arrival time) ==========</span>
+    <span class="c1"># Arrival segments measured: ~191 in SVGA, HD and Full HD.</span>
+    <span class="n">OBJECT_SPAWN_SEGMENTS</span> <span class="o">=</span> <span class="mi">200</span>
+    <span class="n">OBJECT_ARRIVAL_SEGMENTS</span> <span class="o">=</span> <span class="mi">191</span>
+
+    <span class="c1"># ========== Colors ==========</span>
+    <span class="n">COLORS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"title"</span><span class="p">:</span> <span class="p">(</span><span class="mi">38</span><span class="p">,</span> <span class="mi">61</span><span class="p">,</span> <span class="mi">39</span><span class="p">),</span>
+        <span class="s2">"score"</span><span class="p">:</span> <span class="p">(</span><span class="mi">38</span><span class="p">,</span> <span class="mi">61</span><span class="p">,</span> <span class="mi">39</span><span class="p">),</span>
+        <span class="s2">"timer"</span><span class="p">:</span> <span class="p">(</span><span class="mi">38</span><span class="p">,</span> <span class="mi">61</span><span class="p">,</span> <span class="mi">39</span><span class="p">),</span>
+        <span class="s2">"buttons"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"default"</span><span class="p">:</span> <span class="p">(</span><span class="mi">56</span><span class="p">,</span> <span class="mi">67</span><span class="p">,</span> <span class="mi">209</span><span class="p">),</span>
+            <span class="s2">"second"</span><span class="p">:</span> <span class="p">(</span><span class="mi">87</span><span class="p">,</span> <span class="mi">99</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+            <span class="s2">"text"</span><span class="p">:</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span>
+            <span class="s2">"shadow"</span><span class="p">:</span> <span class="p">(</span><span class="mi">46</span><span class="p">,</span> <span class="mi">54</span><span class="p">,</span> <span class="mi">163</span><span class="p">),</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+
+    <span class="n">CALIBRATION_POINT_COLOR</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+    <span class="n">CALIBRATION_LINE_COLOR</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">CONTROL_WIDTH</span> <span class="o">=</span> <span class="mi">640</span>
+    <span class="n">CONTROL_HEIGHT</span> <span class="o">=</span> <span class="mi">480</span>
+
+    <span class="c1"># 0 = a single frame, as in the original game.</span>
+    <span class="n">FEEDBACK_IMAGE_TIME_MIN</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">FEEDBACK_IMAGE_TIME_MAX</span> <span class="o">=</span> <span class="mf">2.0</span>
+
+    <span class="c1"># ========== Feet: marker and button selection ==========</span>
+    <span class="n">FEET_CLICK_TIME_MIN</span> <span class="o">=</span> <span class="mf">0.5</span>
+    <span class="n">FEET_CLICK_TIME_MAX</span> <span class="o">=</span> <span class="mf">3.0</span>
+    <span class="n">FEET_CLICK_TIME_DEFAULT</span> <span class="o">=</span> <span class="mf">1.2</span>
+    <span class="c1"># Selection hysteresis: the tracking jitters a few pixels from</span>
+    <span class="c1"># one frame to the next.</span>
+    <span class="n">FEET_CLICK_BASE_MARGIN</span> <span class="o">=</span> <span class="mi">30</span>
+    <span class="n">FEET_CLICK_EXIT_TOLERANCE</span> <span class="o">=</span> <span class="mf">0.4</span>
+    <span class="n">FEET_MARKER_BASE_RADIUS</span> <span class="o">=</span> <span class="mi">15</span>
+    <span class="n">FEET_MARKER_COLOR</span> <span class="o">=</span> <span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">FEET_MARKER_BORDER_COLOR</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">BASE_OBJ_POS</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">368</span><span class="p">,</span> <span class="mi">80</span><span class="p">),</span> <span class="p">(</span><span class="mi">393</span><span class="p">,</span> <span class="mi">80</span><span class="p">),</span> <span class="p">(</span><span class="mi">419</span><span class="p">,</span> <span class="mi">80</span><span class="p">)]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lang</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CURRENT_LANG</span> <span class="o">=</span> <span class="n">lang</span>
+
+        <span class="c1"># ========== Screen ==========</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"screen_width"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SCREEN_HEIGHT</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"screen_height"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SCREEN_OS_INDEX</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"screen_os_index"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SCREEN_POS_X</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"screen_pos_x"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SCREEN_POS_Y</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"screen_pos_y"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FULLSCREEN</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">settings</span><span class="p">[</span><span class="s2">"fullscreen"</span><span class="p">]</span>
+
+        <span class="c1"># ========== Calibration ==========</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span>
+            <span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"calibration_points"</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[]</span>
+        <span class="p">):</span>
+            <span class="n">points</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span>
+            <span class="n">points</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="n">points</span><span class="o">.</span><span class="n">setflags</span><span class="p">(</span><span class="n">write</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CALIBRATION_POINTS</span> <span class="o">=</span> <span class="n">points</span>
+
+        <span class="c1"># ========== Lane boundaries ==========</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LANE_DIV_0</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LANE_DIV_1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span> <span class="o">//</span> <span class="mi">3</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LANE_DIV_2</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span> <span class="o">//</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LANE_DIV_3</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span>
+
+        <span class="c1"># ========== Scale factors ==========</span>
+        <span class="n">width_scale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">BASE_WIDTH</span>
+        <span class="n">height_scale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SCREEN_HEIGHT</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">BASE_HEIGHT</span>
+        <span class="c1"># for the UI, without distortion</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">UI_SCALE</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">width_scale</span><span class="p">,</span> <span class="n">height_scale</span><span class="p">)</span>
+
+        <span class="c1"># ========== Camera -&gt; screen mapping ==========</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">WIDTH_RATIO</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">CONTROL_WIDTH</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">HEIGHT_RATIO</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SCREEN_HEIGHT</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">CONTROL_HEIGHT</span>
+
+        <span class="c1"># ========== UI sizes (menus, buttons, fonts) ==========</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">BUTTONS_SIZES</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="nb">int</span><span class="p">(</span><span class="mi">150</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">UI_SCALE</span><span class="p">),</span>
+            <span class="nb">int</span><span class="p">(</span><span class="mi">45</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">UI_SCALE</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FONTS</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">"small"</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">Font</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mi">10</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">UI_SCALE</span><span class="p">))),</span>
+            <span class="s2">"medium"</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">Font</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mi">25</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">UI_SCALE</span><span class="p">))),</span>
+            <span class="s2">"big"</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">font</span><span class="o">.</span><span class="n">Font</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="mi">50</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">UI_SCALE</span><span class="p">))),</span>
+        <span class="p">}</span>
+
+        <span class="c1"># ========== Game object sizes and positions ==========</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CAR_SIZE</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SCREEN_WIDTH</span> <span class="o">/</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CAR_HITBOX_SIZE</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">CAR_SIZE</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="mi">50</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">UI_SCALE</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">CAR_SIZE</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="mi">50</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">UI_SCALE</span><span class="p">),</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TARGETS_SIZES</span> <span class="o">=</span> <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">OBSTACLE_SIZES</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TARGETS_SIZES</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">OBJ_POS</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">width_scale</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span> <span class="o">*</span> <span class="n">height_scale</span><span class="p">))</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">BASE_OBJ_POS</span>
+        <span class="p">]</span>
+
+        <span class="c1"># ===== Visual resources, visual and sound feedback =====</span>
+        <span class="c1"># One uppercase attribute per KarteaResourceFields.ALL field.</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">KarteaResourceFields</span><span class="o">.</span><span class="n">ALL</span><span class="p">:</span>
+            <span class="nb">setattr</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span>
+                <span class="n">field</span><span class="o">.</span><span class="n">setting_name</span><span class="p">,</span>
+                <span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">resolve_for_field_or_default</span><span class="p">(</span>
+                    <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span>
+                <span class="p">),</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Feedback image time (s), clamped to the allowed range</span>
+        <span class="n">feedback_time</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">"feedback_image_time"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">FEEDBACK_IMAGE_TIME_MIN</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">feedback_time</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">feedback_time</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">","</span><span class="p">,</span> <span class="s2">"."</span><span class="p">))</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+            <span class="n">feedback_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FEEDBACK_IMAGE_TIME_MIN</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FEEDBACK_IMAGE_TIME</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span>
+            <span class="nb">max</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">FEEDBACK_IMAGE_TIME_MIN</span><span class="p">,</span>
+                <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FEEDBACK_IMAGE_TIME_MAX</span><span class="p">,</span> <span class="n">feedback_time</span><span class="p">),</span>
+            <span class="p">),</span>
+            <span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># ========== Feet: marker and button selection ==========</span>
+        <span class="n">click_time</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">"feet_click_time"</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">FEET_CLICK_TIME_DEFAULT</span>
+        <span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">click_time</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">click_time</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">","</span><span class="p">,</span> <span class="s2">"."</span><span class="p">))</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+            <span class="n">click_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FEET_CLICK_TIME_DEFAULT</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FEET_CLICK_TIME</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span>
+            <span class="nb">max</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">FEET_CLICK_TIME_MIN</span><span class="p">,</span>
+                <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FEET_CLICK_TIME_MAX</span><span class="p">,</span> <span class="n">click_time</span><span class="p">),</span>
+            <span class="p">),</span>
+            <span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FEET_CLICK_MARGIN</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">FEET_CLICK_BASE_MARGIN</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">UI_SCALE</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FEET_MARKER_RADIUS</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+            <span class="mi">4</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FEET_MARKER_BASE_RADIUS</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">UI_SCALE</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># ========== Speed (arrival time) ==========</span>
+        <span class="n">arrival_times</span> <span class="o">=</span> <span class="n">KarteaArrivalTimeFields</span><span class="o">.</span><span class="n">order</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">OBJECT_ARRIVAL_TIME</span> <span class="o">=</span> <span class="n">MappingProxyType</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="n">field</span><span class="o">.</span><span class="n">speed</span><span class="p">:</span> <span class="n">arrival_times</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">KarteaArrivalTimeFields</span><span class="o">.</span><span class="n">ALL</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="c1"># ========== Interface ==========</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">PALETTE</span> <span class="o">=</span> <span class="n">KarteaPalettes</span><span class="o">.</span><span class="n">id_of</span><span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s2">"palette"</span><span class="p">])</span>
+
+        <span class="c1"># ========== Menu resources ==========</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">MENU_BACKGROUND</span> <span class="o">=</span> <span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">game_builtin_image</span><span class="p">(</span><span class="s2">"menu"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">MENU_CLICK_SOUND</span> <span class="o">=</span> <span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">game_builtin_sound</span><span class="p">(</span><span class="s2">"click"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">MENU_FEEDBACK_25</span> <span class="o">=</span> <span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">game_builtin_image</span><span class="p">(</span><span class="s2">"trophy25"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">MENU_FEEDBACK_50</span> <span class="o">=</span> <span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">game_builtin_image</span><span class="p">(</span><span class="s2">"trophy50"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">MENU_FEEDBACK_75</span> <span class="o">=</span> <span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">game_builtin_image</span><span class="p">(</span><span class="s2">"trophy75"</span><span class="p">)</span>
+
+        <span class="c1"># ========== Sounds ==========</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">MISS_SOUND</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">NEGATIVE_FEEDBACK_SOUND</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CRASH_SOUND</span> <span class="o">=</span> <span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">game_sound</span><span class="p">(</span><span class="s2">"crash.wav"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">POINT_SOUND</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">POSITIVE_FEEDBACK_SOUND</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">WIN_SOUND</span> <span class="o">=</span> <span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">game_sound</span><span class="p">(</span><span class="s2">"win.wav"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CLOCK_TICK_SOUND</span> <span class="o">=</span> <span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">game_sound</span><span class="p">(</span><span class="s2">"clocktick.wav"</span><span class="p">)</span>
+
+        <span class="c1"># ========== Game images ==========</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FINISH_IMAGE</span> <span class="o">=</span> <span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">game_builtin_image</span><span class="p">(</span><span class="s2">"finish"</span><span class="p">)</span>
+        <span class="c1"># Horizon chosen in the player's config; falls back to the</span>
+        <span class="c1"># built-in "horizon" if the chosen one cannot be resolved.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">HORIZON_BG_IMAGE</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">HORIZON_IMAGE</span>
+            <span class="ow">or</span> <span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">game_builtin_image</span><span class="p">(</span><span class="s2">"horizon"</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frozen</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Set an attribute while the instance is being built.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        AttributeError</span>
+<span class="sd">            After ``__init__`` (the instance is frozen): match state</span>
+<span class="sd">            belongs in GameState.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"_frozen"</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"GameSettings é imutável: não é possível alterar '</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">'. "</span>
+                <span class="s2">"Estado da partida fica no GameState."</span>
+            <span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

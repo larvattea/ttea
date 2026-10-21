@@ -1,0 +1,17 @@
+ManualCalibrationView
+=====================
+
+.. currentmodule:: ttea.view.manualcalibrationview
+
+.. autoclass:: ManualCalibrationView
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~ManualCalibrationView.closeEvent
+      ~ManualCalibrationView.keyPressEvent

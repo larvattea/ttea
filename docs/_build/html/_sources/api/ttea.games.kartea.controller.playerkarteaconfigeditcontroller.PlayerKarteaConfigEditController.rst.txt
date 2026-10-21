@@ -1,0 +1,20 @@
+PlayerKarteaConfigEditController
+================================
+
+.. currentmodule:: ttea.games.kartea.controller.playerkarteaconfigeditcontroller
+
+.. autoclass:: PlayerKarteaConfigEditController
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~PlayerKarteaConfigEditController.get_data
+      ~PlayerKarteaConfigEditController.handle_cancel
+      ~PlayerKarteaConfigEditController.handle_ok
+      ~PlayerKarteaConfigEditController.handle_phase_changed
+      ~PlayerKarteaConfigEditController.is_input_valid

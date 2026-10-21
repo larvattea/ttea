@@ -1,0 +1,9 @@
+PlayerEditView
+==============
+
+.. currentmodule:: ttea.view.playereditview
+
+.. autoclass:: PlayerEditView
+   :members:
+   :show-inheritance:
+

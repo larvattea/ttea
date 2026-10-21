@@ -1,0 +1,20 @@
+ttea.games.kartea.gameview.hudview
+==================================
+
+.. automodule:: ttea.games.kartea.gameview.hudview
+
+.. currentmodule:: ttea.games.kartea.gameview.hudview
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   HudView
+
+

@@ -1,0 +1,22 @@
+ttea.games.kartea.gameutil.gamestate
+====================================
+
+.. automodule:: ttea.games.kartea.gameutil.gamestate
+
+.. currentmodule:: ttea.games.kartea.gameutil.gamestate
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   GameState
+   LevelStats
+   SessionStats
+
+

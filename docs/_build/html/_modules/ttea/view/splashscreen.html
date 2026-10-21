@@ -1,0 +1,320 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.view.splashscreen &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.view.splashscreen</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.view.splashscreen</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Splash screen module for application startup display.</span>
+
+<span class="sd">This module provides a splash screen widget that displays an animated</span>
+<span class="sd">progress bar and rotating status messages during application</span>
+<span class="sd">initialization. It also creates a sound effect object once, to warm up</span>
+<span class="sd">the audio system before the sounds of the game configuration screens are</span>
+<span class="sd">tested.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">QPropertyAnimation</span><span class="p">,</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">QTimer</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtGui</span><span class="w"> </span><span class="kn">import</span> <span class="n">QPixmap</span><span class="p">,</span> <span class="n">QResizeEvent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtMultimedia</span><span class="w"> </span><span class="kn">import</span> <span class="n">QSoundEffect</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QLabel</span><span class="p">,</span> <span class="n">QProgressBar</span><span class="p">,</span> <span class="n">QSplashScreen</span><span class="p">,</span> <span class="n">QWidget</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">PathConfig</span>
+
+
+<div class="viewcode-block" id="SplashScreen">
+<a class="viewcode-back" href="../../../api/ttea.view.splashscreen.SplashScreen.html#ttea.view.splashscreen.SplashScreen">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SplashScreen</span><span class="p">(</span><span class="n">QSplashScreen</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Splash screen with animated progress for the application startup.</span>
+
+<span class="sd">    Displays a splash screen during application initialization with a</span>
+<span class="sd">    status label and animated progress bar. Shows rotating status</span>
+<span class="sd">    messages every 1.2 seconds and includes sound effect initialization.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    status_label : QLabel</span>
+<span class="sd">        Label widget displaying current loading status message.</span>
+<span class="sd">    progress_bar : QProgressBar</span>
+<span class="sd">        Progress bar widget with infinite animation effect during</span>
+<span class="sd">        startup.</span>
+<span class="sd">    animation : QPropertyAnimation</span>
+<span class="sd">        Animation object controlling the progress bar's value with</span>
+<span class="sd">        infinite loop.</span>
+<span class="sd">    messages : list[str]</span>
+<span class="sd">        List of rotating status messages to display during loading.</span>
+<span class="sd">    msg_index : int</span>
+<span class="sd">        Current index in the messages list, used by the timer callback.</span>
+<span class="sd">    timer : QTimer</span>
+<span class="sd">        Timer object that triggers message updates every 1.2 seconds.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    _update_geometry()</span>
+<span class="sd">        Update positions and sizes of child widgets based on splash</span>
+<span class="sd">        size.</span>
+<span class="sd">    _next_message()</span>
+<span class="sd">        Rotate to the next status message in the message list.</span>
+<span class="sd">    finish(main_window)</span>
+<span class="sd">        Complete the splash screen animation and close the widget.</span>
+<span class="sd">    load_resource()</span>
+<span class="sd">        Initialize sound effect resources for warm-up.</span>
+<span class="sd">    resizeEvent(event)</span>
+<span class="sd">        Handle resize events by updating widget geometry.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The progress bar operates in "indeterminate" mode (infinite</span>
+<span class="sd">    animation) during startup. When finish() is called, it switches to</span>
+<span class="sd">    determinate mode and shows 100% completion. The class supports</span>
+<span class="sd">    localization: the messages are translated at runtime with</span>
+<span class="sd">    ``self.tr()``.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">pixmap</span> <span class="o">=</span> <span class="n">QPixmap</span><span class="p">(</span><span class="n">PathConfig</span><span class="o">.</span><span class="n">image</span><span class="p">(</span><span class="s2">"ttealogo"</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">pixmap</span><span class="o">.</span><span class="n">isNull</span><span class="p">():</span>
+            <span class="c1"># Fill with a black pixmap if the image fails to load</span>
+            <span class="n">pixmap</span> <span class="o">=</span> <span class="n">QPixmap</span><span class="p">(</span><span class="mi">600</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span>
+            <span class="n">pixmap</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">black</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">pixmap</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setWindowFlags</span><span class="p">(</span>
+            <span class="n">Qt</span><span class="o">.</span><span class="n">SplashScreen</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">FramelessWindowHint</span> <span class="o">|</span> <span class="n">Qt</span><span class="o">.</span><span class="n">WindowStaysOnTopHint</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setAttribute</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">WA_TranslucentBackground</span><span class="p">)</span>
+
+        <span class="c1"># Status label</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_label</span> <span class="o">=</span> <span class="n">QLabel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Iniciando aplicação..."</span><span class="p">),</span> <span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_label</span><span class="o">.</span><span class="n">setAlignment</span><span class="p">(</span><span class="n">Qt</span><span class="o">.</span><span class="n">AlignCenter</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_label</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">"""</span>
+<span class="s2">            QLabel {</span>
+<span class="s2">                color: white;</span>
+<span class="s2">                font-size: 15px;</span>
+<span class="s2">                font-weight: bold;</span>
+<span class="s2">                background: rgba(0, 0, 0, 160);</span>
+<span class="s2">                padding: 8px;</span>
+<span class="s2">                border-radius: 6px;</span>
+<span class="s2">            }</span>
+<span class="s2">        """</span><span class="p">)</span>
+
+        <span class="c1"># Progress bar animated</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">progress_bar</span> <span class="o">=</span> <span class="n">QProgressBar</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">progress_bar</span><span class="o">.</span><span class="n">setTextVisible</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">progress_bar</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># mode "indeterminate" while loading</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">progress_bar</span><span class="o">.</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="s2">"""</span>
+<span class="s2">            QProgressBar {</span>
+<span class="s2">                border: 2px solid white;</span>
+<span class="s2">                border-radius: 5px;</span>
+<span class="s2">                background: rgba(0,0,0,180);</span>
+<span class="s2">                height: 24px;</span>
+<span class="s2">            }</span>
+<span class="s2">            QProgressBar::chunk {</span>
+<span class="s2">                background: qlineargradient(x1:0, y1:0, x2:1, y2:0,</span>
+<span class="s2">                    stop:0 #00ff00, stop:0.5 #00cc00, stop:1 #006600);</span>
+<span class="s2">                border-radius: 3px;</span>
+<span class="s2">            }</span>
+<span class="s2">        """</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_geometry</span><span class="p">()</span>
+
+        <span class="c1"># Infinite bar animation ("loading" effect)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">animation</span> <span class="o">=</span> <span class="n">QPropertyAnimation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">progress_bar</span><span class="p">,</span> <span class="sa">b</span><span class="s2">"value"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">animation</span><span class="o">.</span><span class="n">setDuration</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">animation</span><span class="o">.</span><span class="n">setStartValue</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">animation</span><span class="o">.</span><span class="n">setEndValue</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">animation</span><span class="o">.</span><span class="n">setLoopCount</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># repeats forever</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">animation</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+        <span class="c1"># Message exchange every 1.2s</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">messages</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Iniciando aplicação..."</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Carregando módulos..."</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Inicializando interface..."</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Verificando configurações..."</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Quase lá..."</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">msg_index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timer</span> <span class="o">=</span> <span class="n">QTimer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timer</span><span class="o">.</span><span class="n">timeout</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_next_message</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="mi">1200</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_geometry</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Fit the child widgets to the splash size.</span>
+
+<span class="sd">        Repositions the progress bar and status label relative to the</span>
+<span class="sd">        current splash screen dimensions to maintain proper layout when</span>
+<span class="sd">        the window is resized.</span>
+<span class="sd">        """</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">()</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">()</span>
+        <span class="n">bar_w</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="mf">0.7</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">progress_bar</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">((</span><span class="n">w</span> <span class="o">-</span> <span class="n">bar_w</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">70</span><span class="p">,</span> <span class="n">bar_w</span><span class="p">,</span> <span class="mi">24</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_label</span><span class="o">.</span><span class="n">setGeometry</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">h</span> <span class="o">-</span> <span class="mi">110</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_next_message</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Rotate to the next status message in the message list.</span>
+
+<span class="sd">        Updates the status label with the next message in the rotation</span>
+<span class="sd">        and increments the message index. Called by the internal timer</span>
+<span class="sd">        every 1.2 seconds.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_label</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">messages</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">msg_index</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">msg_index</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">msg_index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">messages</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SplashScreen.finish">
+<a class="viewcode-back" href="../../../api/ttea.view.splashscreen.SplashScreen.html#ttea.view.splashscreen.SplashScreen.finish">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">finish</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">main_window</span><span class="p">:</span> <span class="n">QWidget</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Complete the splash screen animation and close the widget.</span>
+
+<span class="sd">        Stops timers and animations, sets the progress bar to 100%</span>
+<span class="sd">        completion, displays the final "Concluído!" message, and calls</span>
+<span class="sd">        the parent QSplashScreen.finish() to properly close the splash</span>
+<span class="sd">        screen and show the main window.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        main_window : QWidget</span>
+<span class="sd">            The main application window to display after splash closes.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_resource</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timer</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">animation</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">progress_bar</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">progress_bar</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_label</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Concluído!"</span><span class="p">))</span>
+
+        <span class="c1"># Call the original Qt finish()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">finish</span><span class="p">(</span><span class="n">main_window</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SplashScreen.load_resource">
+<a class="viewcode-back" href="../../../api/ttea.view.splashscreen.SplashScreen.html#ttea.view.splashscreen.SplashScreen.load_resource">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Initialize sound effect resources for warm-up.</span>
+
+<span class="sd">        Instantiates a QSoundEffect object to ensure audio system</span>
+<span class="sd">        initialization before the main application starts. This prevents</span>
+<span class="sd">        audio-related delays during gameplay.</span>
+<span class="sd">        """</span>
+        <span class="c1"># Warm up instance of sound libraries</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">QSoundEffect</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SplashScreen.resizeEvent">
+<a class="viewcode-back" href="../../../api/ttea.view.splashscreen.SplashScreen.html#ttea.view.splashscreen.SplashScreen.resizeEvent">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">resizeEvent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">QResizeEvent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Handle resize events by updating widget geometry.</span>
+
+<span class="sd">        Calls the parent resize event handler and updates the positions</span>
+<span class="sd">        of child widgets (progress bar and status label) to maintain</span>
+<span class="sd">        proper layout when the splash screen is resized.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        event : QResizeEvent</span>
+<span class="sd">            The resize event object containing size information.</span>
+<span class="sd">        """</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">resizeEvent</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_geometry</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

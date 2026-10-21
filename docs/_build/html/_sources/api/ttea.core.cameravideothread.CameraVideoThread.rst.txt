@@ -1,0 +1,18 @@
+CameraVideoThread
+=================
+
+.. currentmodule:: ttea.core.cameravideothread
+
+.. autoclass:: CameraVideoThread
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~CameraVideoThread.put_text_unicode
+      ~CameraVideoThread.run
+      ~CameraVideoThread.stop

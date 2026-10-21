@@ -1,0 +1,21 @@
+ttea.games.kartea.util.arrivaltimefields
+========================================
+
+.. automodule:: ttea.games.kartea.util.arrivaltimefields
+
+.. currentmodule:: ttea.games.kartea.util.arrivaltimefields
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   ArrivalTimeField
+   KarteaArrivalTimeFields
+
+

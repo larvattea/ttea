@@ -1,0 +1,20 @@
+ttea.games.kartea.gamemodel.obstacle
+====================================
+
+.. automodule:: ttea.games.kartea.gamemodel.obstacle
+
+.. currentmodule:: ttea.games.kartea.gamemodel.obstacle
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   Obstacle
+
+

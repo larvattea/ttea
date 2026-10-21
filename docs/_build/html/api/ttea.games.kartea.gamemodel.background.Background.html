@@ -1,0 +1,389 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Background &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.games.kartea.gamemodel.car" href="ttea.games.kartea.gamemodel.car.html" />
+    <link rel="prev" title="ttea.games.kartea.gamemodel.background" href="ttea.games.kartea.gamemodel.background.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.games.html">ttea.games</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.gametheme.html">ttea.games.gametheme</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.games.kartea.html">ttea.games.kartea</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.controller.html">ttea.games.kartea.controller</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.dao.html">ttea.games.kartea.dao</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.factory.html">ttea.games.kartea.factory</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamecontroller.html">ttea.games.kartea.gamecontroller</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamecore.html">ttea.games.kartea.gamecore</a></li>
+<li class="toctree-l5 current"><a class="reference internal" href="ttea.games.kartea.gamemodel.html">ttea.games.kartea.gamemodel</a><ul class="current">
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gamemodel.html#attributes">Attributes</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gamemodel.html#see-also">See Also</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gamemodel.html#notes">Notes</a></li>
+<li class="toctree-l6 current"><a class="reference internal" href="ttea.games.kartea.gamemodel.background.html">ttea.games.kartea.gamemodel.background</a><ul class="current">
+<li class="toctree-l7 current"><a class="current reference internal" href="#">Background</a><ul>
+<li class="toctree-l8"><a class="reference internal" href="#ttea.games.kartea.gamemodel.background.Background"><code class="docutils literal notranslate"><span class="pre">Background</span></code></a><ul>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamemodel.background.Background.set_speed_level"><code class="docutils literal notranslate"><span class="pre">Background.set_speed_level()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamemodel.background.Background.speed1"><code class="docutils literal notranslate"><span class="pre">Background.speed1()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamemodel.background.Background.speed2"><code class="docutils literal notranslate"><span class="pre">Background.speed2()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamemodel.background.Background.speed3"><code class="docutils literal notranslate"><span class="pre">Background.speed3()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamemodel.background.Background.stop"><code class="docutils literal notranslate"><span class="pre">Background.stop()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamemodel.background.Background.background_menu"><code class="docutils literal notranslate"><span class="pre">Background.background_menu()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamemodel.background.Background.get_start_pos"><code class="docutils literal notranslate"><span class="pre">Background.get_start_pos()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamemodel.background.Background.draw"><code class="docutils literal notranslate"><span class="pre">Background.draw()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.gamemodel.background.Background.draw_quad"><code class="docutils literal notranslate"><span class="pre">Background.draw_quad()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gamemodel.car.html">ttea.games.kartea.gamemodel.car</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gamemodel.image.html">ttea.games.kartea.gamemodel.image</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gamemodel.line.html">ttea.games.kartea.gamemodel.line</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gamemodel.obstacle.html">ttea.games.kartea.gamemodel.obstacle</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gamemodel.sound.html">ttea.games.kartea.gamemodel.sound</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.gamemodel.target.html">ttea.games.kartea.gamemodel.target</a></li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gametheme.html">ttea.games.kartea.gametheme</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameui.html">ttea.games.kartea.gameui</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameutil.html">ttea.games.kartea.gameutil</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameview.html">ttea.games.kartea.gameview</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.main.html">ttea.games.kartea.main</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.model.html">ttea.games.kartea.model</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.service.html">ttea.games.kartea.service</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.util.html">ttea.games.kartea.util</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.view.html">ttea.games.kartea.view</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.html">ttea.games</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.html">ttea.games.kartea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.gamemodel.html">ttea.games.kartea.gamemodel</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.gamemodel.background.html">ttea.games.kartea.gamemodel.background</a></li>
+      <li class="breadcrumb-item active">Background</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.games.kartea.gamemodel.background.Background.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="background">
+<h1>Background<a class="headerlink" href="#background" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamemodel.background.Background">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Background</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">settings</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamemodel/background.html#Background"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamemodel.background.Background" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Render the game background, road and sprites.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>settings</strong><span class="classifier">GameSettings</span></dt><dd><p>Game configuration (injected).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>settings</strong><span class="classifier">GameSettings</span></dt><dd><p>Game configuration.</p>
+</dd>
+<dt><strong>theme</strong><span class="classifier">KarTEATheme</span></dt><dd><p>Track colors from the player’s palette.</p>
+</dd>
+<dt><strong>clock</strong><span class="classifier">pygame.time.Clock</span></dt><dd><p>Pygame clock.</p>
+</dd>
+<dt><strong>last_time, time_left</strong><span class="classifier">float</span></dt><dd><p>Timestamps taken at creation.</p>
+</dd>
+<dt><strong>dt</strong><span class="classifier">float</span></dt><dd><p>Delta time placeholder (0).</p>
+</dd>
+<dt><strong>sprite_tree_left, sprite_tree_right</strong><span class="classifier">pygame.Surface</span></dt><dd><p>Environment images placed beside the road.</p>
+</dd>
+<dt><strong>background_image</strong><span class="classifier">pygame.Surface</span></dt><dd><p>Horizon image scaled to the screen height (aspect ratio kept).</p>
+</dd>
+<dt><strong>background_surface</strong><span class="classifier">pygame.Surface</span></dt><dd><p>Horizon image tiled to cover the screen width with a margin.</p>
+</dd>
+<dt><strong>background_rect</strong><span class="classifier">pygame.Rect</span></dt><dd><p>Position of <code class="docutils literal notranslate"><span class="pre">background_surface</span></code>.</p>
+</dd>
+<dt><strong>menu_image</strong><span class="classifier">pygame.Surface | None</span></dt><dd><p>Menu background, loaded by <code class="docutils literal notranslate"><span class="pre">background_menu</span></code>.</p>
+</dd>
+<dt><strong>lines</strong><span class="classifier">list[Line]</span></dt><dd><p>The 5000 lines of the road.</p>
+</dd>
+<dt><strong>line_count</strong><span class="classifier">int</span></dt><dd><p>Number of lines.</p>
+</dd>
+<dt><strong>pos</strong><span class="classifier">float</span></dt><dd><p>Road position (advances with delta time).</p>
+</dd>
+<dt><strong>last_start_pos</strong><span class="classifier">int | None</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">start_pos</span></code> of the previous frame (see _handle_passed_lines).</p>
+</dd>
+<dt><strong>player_x, player_y</strong><span class="classifier">int</span></dt><dd><p>Camera lateral position and height.</p>
+</dd>
+<dt><strong>speed</strong><span class="classifier">float</span></dt><dd><p>Road speed, in units per real second.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The horizon image has a fixed native size and does not follow the
+screen resolution. It is scaled to the screen height and tiled as
+many times as needed, so no black bands appear vertically or on wide
+screens (e.g. Full HD).</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.gamemodel.background.Background.background_menu" title="ttea.games.kartea.gamemodel.background.Background.background_menu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">background_menu</span></code></a></p></td>
+<td><p>Load the menu background image, at screen size.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.gamemodel.background.Background.draw" title="ttea.games.kartea.gamemodel.background.Background.draw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">draw</span></code></a></p></td>
+<td><p>Draw the background, the road and the sprites.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.gamemodel.background.Background.draw_quad" title="ttea.games.kartea.gamemodel.background.Background.draw_quad"><code class="xref py py-obj docutils literal notranslate"><span class="pre">draw_quad</span></code></a></p></td>
+<td><p>Draw a quadrilateral (trapezoid) used to render the road.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.gamemodel.background.Background.get_start_pos" title="ttea.games.kartea.gamemodel.background.Background.get_start_pos"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_start_pos</span></code></a></p></td>
+<td><p>Return the line index where targets/obstacles spawn.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.gamemodel.background.Background.set_speed_level" title="ttea.games.kartea.gamemodel.background.Background.set_speed_level"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_speed_level</span></code></a></p></td>
+<td><p>Set the road speed from the arrival time.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.gamemodel.background.Background.speed1" title="ttea.games.kartea.gamemodel.background.Background.speed1"><code class="xref py py-obj docutils literal notranslate"><span class="pre">speed1</span></code></a></p></td>
+<td><p>Set the slow speed (levels 1-2).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.gamemodel.background.Background.speed2" title="ttea.games.kartea.gamemodel.background.Background.speed2"><code class="xref py py-obj docutils literal notranslate"><span class="pre">speed2</span></code></a></p></td>
+<td><p>Set the medium speed (levels 3-4).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.gamemodel.background.Background.speed3" title="ttea.games.kartea.gamemodel.background.Background.speed3"><code class="xref py py-obj docutils literal notranslate"><span class="pre">speed3</span></code></a></p></td>
+<td><p>Set the fast speed (levels 5-7).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.gamemodel.background.Background.stop" title="ttea.games.kartea.gamemodel.background.Background.stop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stop</span></code></a></p></td>
+<td><p>Stop the road movement.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamemodel.background.Background.set_speed_level">
+<span class="sig-name descname"><span class="pre">set_speed_level</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamemodel/background.html#Background.set_speed_level"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamemodel.background.Background.set_speed_level" title="Link to this definition"></a></dt>
+<dd><p>Set the road speed from the arrival time.</p>
+<p>The speed (units per real SECOND, applied in draw() with
+delta_time) is computed so that an object takes
+<code class="docutils literal notranslate"><span class="pre">settings.OBJECT_ARRIVAL_TIME[level]</span></code> seconds between
+appearing on the road and reaching the front of the car, on any
+machine and FPS.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>level</strong><span class="classifier">int</span></dt><dd><p>Speed 1 (levels 1-2), 2 (levels 3-4) or 3 (levels 5-7).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamemodel.background.Background.speed1">
+<span class="sig-name descname"><span class="pre">speed1</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamemodel/background.html#Background.speed1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamemodel.background.Background.speed1" title="Link to this definition"></a></dt>
+<dd><p>Set the slow speed (levels 1-2).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamemodel.background.Background.speed2">
+<span class="sig-name descname"><span class="pre">speed2</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamemodel/background.html#Background.speed2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamemodel.background.Background.speed2" title="Link to this definition"></a></dt>
+<dd><p>Set the medium speed (levels 3-4).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamemodel.background.Background.speed3">
+<span class="sig-name descname"><span class="pre">speed3</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamemodel/background.html#Background.speed3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamemodel.background.Background.speed3" title="Link to this definition"></a></dt>
+<dd><p>Set the fast speed (levels 5-7).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamemodel.background.Background.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamemodel/background.html#Background.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamemodel.background.Background.stop" title="Link to this definition"></a></dt>
+<dd><p>Stop the road movement.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamemodel.background.Background.background_menu">
+<span class="sig-name descname"><span class="pre">background_menu</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamemodel/background.html#Background.background_menu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamemodel.background.Background.background_menu" title="Link to this definition"></a></dt>
+<dd><p>Load the menu background image, at screen size.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamemodel.background.Background.get_start_pos">
+<span class="sig-name descname"><span class="pre">get_start_pos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamemodel/background.html#Background.get_start_pos"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamemodel.background.Background.get_start_pos" title="Link to this definition"></a></dt>
+<dd><p>Return the line index where targets/obstacles spawn.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>OBJECT_SPAWN_SEGMENTS lines ahead of the current position,
+wrapped around the road length.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamemodel.background.Background.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delta_time</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamemodel/background.html#Background.draw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamemodel.background.Background.draw" title="Link to this definition"></a></dt>
+<dd><p>Draw the background, the road and the sprites.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>surface</strong><span class="classifier">pygame.Surface</span></dt><dd><p>Surface drawn on.</p>
+</dd>
+<dt><strong>delta_time</strong><span class="classifier">float, optional</span></dt><dd><p>Real time (s) since the previous frame
+(GameState.delta_time). With 0 the road does not advance
+(e.g. menu background).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The road advances by real elapsed time, not per frame, so it
+moves at the same speed in real seconds whatever FPS is
+achieved. The road loops after the last line. Lines behind the
+camera are not projected or drawn; each trapezoid joins the
+previous line projected in THIS frame to the current one.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.gamemodel.background.Background.draw_quad">
+<span class="sig-name descname"><span class="pre">draw_quad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">surface</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/gamemodel/background.html#Background.draw_quad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.gamemodel.background.Background.draw_quad" title="Link to this definition"></a></dt>
+<dd><p>Draw a quadrilateral (trapezoid) used to render the road.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>surface</strong><span class="classifier">pygame.Surface</span></dt><dd><p>Surface drawn on.</p>
+</dd>
+<dt><strong>color</strong><span class="classifier">pygame.Color</span></dt><dd><p>Fill color.</p>
+</dd>
+<dt><strong>x1, y1, w1</strong><span class="classifier">int</span></dt><dd><p>Center, height and half width of the bottom edge.</p>
+</dd>
+<dt><strong>x2, y2, w2</strong><span class="classifier">int</span></dt><dd><p>Center, height and half width of the top edge.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.games.kartea.gamemodel.background.html" class="btn btn-neutral float-left" title="ttea.games.kartea.gamemodel.background" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.games.kartea.gamemodel.car.html" class="btn btn-neutral float-right" title="ttea.games.kartea.gamemodel.car" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

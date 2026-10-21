@@ -1,0 +1,24 @@
+Log
+===
+
+.. currentmodule:: ttea.log.log
+
+.. autoclass:: Log
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~Log.ensure_log_directory_exists
+      ~Log.get_log
+      ~Log.get_python_info
+      ~Log.get_system_info
+      ~Log.log_error
+      ~Log.log_error_with_stack
+      ~Log.log_info
+      ~Log.log_system_info
+      ~Log.log_warning

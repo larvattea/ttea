@@ -1,0 +1,17 @@
+AppModel
+========
+
+.. currentmodule:: ttea.model.appmodel
+
+.. autoclass:: AppModel
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~AppModel.get_instance
+      ~AppModel.is_english

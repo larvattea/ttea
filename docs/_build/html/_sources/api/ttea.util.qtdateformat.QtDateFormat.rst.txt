@@ -1,0 +1,19 @@
+QtDateFormat
+============
+
+.. currentmodule:: ttea.util.qtdateformat
+
+.. autoclass:: QtDateFormat
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~QtDateFormat.format_python_date
+      ~QtDateFormat.from_config
+      ~QtDateFormat.strftime_to_qt
+      ~QtDateFormat.to_qdate

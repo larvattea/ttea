@@ -1,0 +1,22 @@
+PlayerKarteaConfigListController
+================================
+
+.. currentmodule:: ttea.games.kartea.controller.playerkarteaconfiglistcontroller
+
+.. autoclass:: PlayerKarteaConfigListController
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~PlayerKarteaConfigListController.delete_config
+      ~PlayerKarteaConfigListController.filter_configs
+      ~PlayerKarteaConfigListController.handle_edit_config
+      ~PlayerKarteaConfigListController.handle_new_config
+      ~PlayerKarteaConfigListController.load_configs
+      ~PlayerKarteaConfigListController.on_table_selection
+      ~PlayerKarteaConfigListController.select_and_show_config

@@ -1,0 +1,16 @@
+MediaPipeManager
+================
+
+.. currentmodule:: ttea.core.mediapipemanager
+
+.. autoclass:: MediaPipeManager
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~MediaPipeManager.detect_for_video

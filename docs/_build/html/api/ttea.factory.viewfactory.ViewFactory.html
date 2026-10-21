@@ -1,0 +1,306 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ViewFactory &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.games" href="ttea.games.html" />
+    <link rel="prev" title="ttea.factory.viewfactory" href="ttea.factory.viewfactory.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.factory.html">ttea.factory</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.factory.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.factory.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.factory.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.factory.appviewfactory.html">ttea.factory.appviewfactory</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.factory.gameviewfactoryprotocol.html">ttea.factory.gameviewfactoryprotocol</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.factory.viewfactory.html">ttea.factory.viewfactory</a><ul class="current">
+<li class="toctree-l5 current"><a class="current reference internal" href="#">ViewFactory</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#ttea.factory.viewfactory.ViewFactory"><code class="docutils literal notranslate"><span class="pre">ViewFactory</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.factory.viewfactory.ViewFactory.get_app_view_factory"><code class="docutils literal notranslate"><span class="pre">ViewFactory.get_app_view_factory()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.factory.viewfactory.ViewFactory.get_games_metadata"><code class="docutils literal notranslate"><span class="pre">ViewFactory.get_games_metadata()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.factory.viewfactory.ViewFactory.discover_games"><code class="docutils literal notranslate"><span class="pre">ViewFactory.discover_games()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.factory.viewfactory.ViewFactory.get_game_view_factory"><code class="docutils literal notranslate"><span class="pre">ViewFactory.get_game_view_factory()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.factory.viewfactory.ViewFactory.get_game_metadata"><code class="docutils literal notranslate"><span class="pre">ViewFactory.get_game_metadata()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.games.html">ttea.games</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.factory.html">ttea.factory</a></li>
+          <li class="breadcrumb-item"><a href="ttea.factory.viewfactory.html">ttea.factory.viewfactory</a></li>
+      <li class="breadcrumb-item active">ViewFactory</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.factory.viewfactory.ViewFactory.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="viewfactory">
+<h1>ViewFactory<a class="headerlink" href="#viewfactory" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.factory.viewfactory.ViewFactory">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ViewFactory</span></span><a class="reference internal" href="../_modules/ttea/factory/viewfactory.html#ViewFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.factory.viewfactory.ViewFactory" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Factory of factories for the application and game views.</p>
+<p>It is the central point for getting the application view factory
+and the view factory of each installed game.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>_game_factories</strong><span class="classifier">dict[str, object], class attribute</span></dt><dd><p>Game view factory instances (<code class="docutils literal notranslate"><span class="pre">GameViewFactoryProtocol</span></code>) by
+game ID, filled by <code class="docutils literal notranslate"><span class="pre">discover_games</span></code>.</p>
+</dd>
+<dt><strong>_game_metadata</strong><span class="classifier">dict[str, GameMetadata], class attribute</span></dt><dd><p>Metadata of the games that have a view factory, by game ID.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><strong>get_app_view_factory()</strong></p></td>
+<td><p>Return the factory for application views.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>get_games_metadata()</strong></p></td>
+<td><p>Return the metadata of the installed games.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>discover_games()</strong></p></td>
+<td><p>Load the view factories declared by the games.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>get_game_view_factory(name)</strong></p></td>
+<td><p>Return the view factory of a game.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>get_game_metadata(name)</strong></p></td>
+<td><p>Return the metadata of a game with a view factory.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.factory.viewfactory.ViewFactory.discover_games" title="ttea.factory.viewfactory.ViewFactory.discover_games"><code class="xref py py-obj docutils literal notranslate"><span class="pre">discover_games</span></code></a></p></td>
+<td><p>Load the view factories declared in the game metadata.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.factory.viewfactory.ViewFactory.get_app_view_factory" title="ttea.factory.viewfactory.ViewFactory.get_app_view_factory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_app_view_factory</span></code></a></p></td>
+<td><p>Return the factory for application views.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.factory.viewfactory.ViewFactory.get_game_metadata" title="ttea.factory.viewfactory.ViewFactory.get_game_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_game_metadata</span></code></a></p></td>
+<td><p>Return the metadata of a game loaded by <code class="docutils literal notranslate"><span class="pre">discover_games</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.factory.viewfactory.ViewFactory.get_game_view_factory" title="ttea.factory.viewfactory.ViewFactory.get_game_view_factory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_game_view_factory</span></code></a></p></td>
+<td><p>Return the view factory of a game.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.factory.viewfactory.ViewFactory.get_games_metadata" title="ttea.factory.viewfactory.ViewFactory.get_games_metadata"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_games_metadata</span></code></a></p></td>
+<td><p>Return the metadata of the installed games.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.factory.viewfactory.ViewFactory.get_app_view_factory">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_app_view_factory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/factory/viewfactory.html#ViewFactory.get_app_view_factory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.factory.viewfactory.ViewFactory.get_app_view_factory" title="Link to this definition"></a></dt>
+<dd><p>Return the factory for application views.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>AppViewFactory</dt><dd><p>A new <code class="docutils literal notranslate"><span class="pre">AppViewFactory</span></code> instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.factory.viewfactory.ViewFactory.get_games_metadata">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_games_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/factory/viewfactory.html#ViewFactory.get_games_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.factory.viewfactory.ViewFactory.get_games_metadata" title="Link to this definition"></a></dt>
+<dd><p>Return the metadata of the installed games.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>list[GameMetadata]</dt><dd><p>Metadata from
+<code class="docutils literal notranslate"><span class="pre">PlayerGameLaunchService.get_games_metadata()</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.factory.viewfactory.ViewFactory.discover_games">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">discover_games</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/factory/viewfactory.html#ViewFactory.discover_games"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.factory.viewfactory.ViewFactory.discover_games" title="Link to this definition"></a></dt>
+<dd><p>Load the view factories declared in the game metadata.</p>
+<p class="rubric">Notes</p>
+<p>For each game whose metadata has <code class="docutils literal notranslate"><span class="pre">view_factory</span></code> (a dotted path
+<code class="docutils literal notranslate"><span class="pre">&quot;package.module.ClassName&quot;</span></code>), the module is imported, the
+class is instantiated and the instance is stored with the game
+metadata under the game ID. Games without <code class="docutils literal notranslate"><span class="pre">view_factory</span></code> are
+skipped. Import errors are not caught.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.factory.viewfactory.ViewFactory.get_game_view_factory">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_game_view_factory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/factory/viewfactory.html#ViewFactory.get_game_view_factory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.factory.viewfactory.ViewFactory.get_game_view_factory" title="Link to this definition"></a></dt>
+<dd><p>Return the view factory of a game.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Game ID, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;br.udesc.larva.kartea&quot;</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>GameViewFactoryProtocol</dt><dd><p>The factory instance created by <code class="docutils literal notranslate"><span class="pre">discover_games</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>KeyError</dt><dd><p>If no factory was loaded for <code class="docutils literal notranslate"><span class="pre">name</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.factory.viewfactory.ViewFactory.get_game_metadata">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_game_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/factory/viewfactory.html#ViewFactory.get_game_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.factory.viewfactory.ViewFactory.get_game_metadata" title="Link to this definition"></a></dt>
+<dd><p>Return the metadata of a game loaded by <code class="docutils literal notranslate"><span class="pre">discover_games</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Game ID.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>GameMetadata | None</dt><dd><p>The metadata, or None if the game has no loaded factory.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.factory.viewfactory.html" class="btn btn-neutral float-left" title="ttea.factory.viewfactory" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.games.html" class="btn btn-neutral float-right" title="ttea.games" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,280 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.main &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.main</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.main</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Main entry point of the T-TEA Qt application.</span>
+
+<span class="sd">This module sets the Qt logging rules (debug messages off) when it is</span>
+<span class="sd">imported and defines the ``App`` class, which starts the application and</span>
+<span class="sd">its Qt event loop, and the ``main`` function used by the ``dev`` script</span>
+<span class="sd">of ``pyproject.toml``.</span>
+<span class="sd">"""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"QT_LOGGING_RULES"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"*.debug=false"</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtGui</span><span class="w"> </span><span class="kn">import</span> <span class="n">QIcon</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QApplication</span><span class="p">,</span> <span class="n">QDialog</span><span class="p">,</span> <span class="n">QMainWindow</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.app</span><span class="w"> </span><span class="kn">import</span> <span class="n">AppConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.controller</span><span class="w"> </span><span class="kn">import</span> <span class="n">HelpController</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.factory</span><span class="w"> </span><span class="kn">import</span> <span class="n">ViewFactory</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">Log</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.service</span><span class="w"> </span><span class="kn">import</span> <span class="n">LanguageService</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">CriticalHooks</span><span class="p">,</span> <span class="n">HelpKeyFilter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">SplashScreen</span>
+
+
+<div class="viewcode-block" id="App">
+<a class="viewcode-back" href="../../api/ttea.main.App.html#ttea.main.App">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">App</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Main application class that initializes and runs the Qt app.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    app : QApplication | None</span>
+<span class="sd">        The Qt application instance used for the event loop.</span>
+<span class="sd">    splash : SplashScreen | None</span>
+<span class="sd">        The splash screen displayed while the application starts.</span>
+<span class="sd">    language_view : QDialog | None</span>
+<span class="sd">        The language selection view instance (not set by ``run``, which</span>
+<span class="sd">        uses a local variable).</span>
+<span class="sd">    main_view : QMainWindow | None</span>
+<span class="sd">        The main application window.</span>
+<span class="sd">    help_key_filter : HelpKeyFilter | None</span>
+<span class="sd">        Application-wide F1 handler, active in every window.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    run()</span>
+<span class="sd">        Create the Qt application, initialize the language, show the</span>
+<span class="sd">        splash screen and the main window, and run the event loop.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="p">:</span> <span class="n">QApplication</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">splash</span><span class="p">:</span> <span class="n">SplashScreen</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">language_view</span><span class="p">:</span> <span class="n">QDialog</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">main_view</span><span class="p">:</span> <span class="n">QMainWindow</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">help_key_filter</span><span class="p">:</span> <span class="n">HelpKeyFilter</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="App.run">
+<a class="viewcode-back" href="../../api/ttea.main.App.html#ttea.main.App.run">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Start the application and run the Qt event loop.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Steps:</span>
+
+<span class="sd">        1. Install the global exception hooks and log the start.</span>
+<span class="sd">        2. Register the ``qthelp`` URL scheme (before the QApplication).</span>
+<span class="sd">        3. Create the QApplication (name, version, icon) and install the</span>
+<span class="sd">           F1 help filter.</span>
+<span class="sd">        4. Detect the initial language (``get_initial_language``) and</span>
+<span class="sd">           install it as a preview.</span>
+<span class="sd">        5. Show the splash screen. On the first run (no configuration</span>
+<span class="sd">           file), the language dialog is shown; rejecting it exits with</span>
+<span class="sd">           status 0, and a different choice is applied and saved.</span>
+<span class="sd">        6. Show the main window and run the event loop.</span>
+
+<span class="sd">        This method does not return: it ends with ``sys.exit`` and the</span>
+<span class="sd">        exit code of the event loop, which is logged.</span>
+<span class="sd">        """</span>
+        <span class="n">CriticalHooks</span><span class="o">.</span><span class="n">setup_exception_hooks</span><span class="p">()</span>
+        <span class="n">Log</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">"Application started successfully."</span><span class="p">)</span>
+
+        <span class="c1"># Qt WebEngine (help window) must be set up before the</span>
+        <span class="c1"># QApplication exists.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_register_help_scheme</span><span class="p">()</span>
+
+        <span class="c1"># Creation of the QApplication</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span> <span class="o">=</span> <span class="n">QApplication</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">setApplicationName</span><span class="p">(</span><span class="n">AppConfig</span><span class="o">.</span><span class="n">get_title</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">setApplicationVersion</span><span class="p">(</span><span class="n">AppConfig</span><span class="o">.</span><span class="n">VERSION</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">setWindowIcon</span><span class="p">(</span><span class="n">QIcon</span><span class="p">(</span><span class="n">AppConfig</span><span class="o">.</span><span class="n">ICON_APP</span><span class="p">))</span>
+
+        <span class="c1"># F1 opens the help of the active screen, also in modal dialogs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">help_key_filter</span> <span class="o">=</span> <span class="n">HelpKeyFilter</span><span class="p">(</span>
+            <span class="n">HelpController</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">show_help</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">installEventFilter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">help_key_filter</span><span class="p">)</span>
+
+        <span class="c1"># === Detects initial language and applies it ===</span>
+        <span class="n">language_service</span> <span class="o">=</span> <span class="n">LanguageService</span><span class="p">()</span>
+        <span class="n">initial_lang</span> <span class="o">=</span> <span class="n">language_service</span><span class="o">.</span><span class="n">get_initial_language</span><span class="p">()</span>
+        <span class="n">language_service</span><span class="o">.</span><span class="n">preview_language</span><span class="p">(</span><span class="n">initial_lang</span><span class="p">)</span>
+        <span class="n">selected_lang</span> <span class="o">=</span> <span class="n">initial_lang</span>
+
+        <span class="c1"># ======================</span>
+        <span class="c1"># SPLASH SCREEN</span>
+        <span class="c1"># ======================</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">splash</span> <span class="o">=</span> <span class="n">SplashScreen</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">splash</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">processEvents</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">splash</span><span class="o">.</span><span class="n">raise_</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">AppConfig</span><span class="o">.</span><span class="n">config_file_exists</span><span class="p">():</span>
+            <span class="c1"># === Language selection screen ===</span>
+            <span class="n">language_view</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">ViewFactory</span><span class="o">.</span><span class="n">get_app_view_factory</span><span class="p">()</span><span class="o">.</span><span class="n">create_language_view</span><span class="p">()</span>
+            <span class="p">)</span>
+
+            <span class="c1"># === Applies the initial language as preview ===</span>
+            <span class="n">language_view</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">preview_language</span><span class="p">(</span><span class="n">initial_lang</span><span class="p">)</span>
+            <span class="n">language_view</span><span class="o">.</span><span class="n">retranslateUi</span><span class="p">(</span>
+                <span class="n">language_view</span>
+            <span class="p">)</span>  <span class="c1"># forces immediate translation</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">splash</span><span class="o">.</span><span class="n">finish</span><span class="p">(</span><span class="n">language_view</span><span class="p">)</span>
+
+            <span class="n">result</span> <span class="o">=</span> <span class="n">language_view</span><span class="o">.</span><span class="n">exec</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="n">QDialog</span><span class="o">.</span><span class="n">DialogCode</span><span class="o">.</span><span class="n">Rejected</span><span class="p">:</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="n">selected_lang</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">language_view</span><span class="o">.</span><span class="n">get_selected_language</span><span class="p">()</span> <span class="ow">or</span> <span class="n">initial_lang</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">selected_lang</span> <span class="o">!=</span> <span class="n">initial_lang</span><span class="p">:</span>
+                <span class="n">language_service</span><span class="o">.</span><span class="n">apply_language</span><span class="p">(</span><span class="n">selected_lang</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">splash</span><span class="o">.</span><span class="n">finish</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+        <span class="c1"># === Initializes the app model and menu ===</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">main_view</span> <span class="o">=</span> <span class="n">ViewFactory</span><span class="o">.</span><span class="n">get_app_view_factory</span><span class="p">()</span><span class="o">.</span><span class="n">create_main_view</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">main_view</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+        <span class="n">Log</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="s2">"Main window shown. Starting event loop."</span><span class="p">)</span>
+
+        <span class="n">exit_code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">exec</span><span class="p">()</span>
+        <span class="n">Log</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Application exited with code: </span><span class="si">{</span><span class="n">exit_code</span><span class="si">}</span><span class="s2">."</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">exit_code</span><span class="p">)</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_register_help_scheme</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Register the ``qthelp`` URL scheme of the help window."""</span>
+        <span class="c1"># Imported here so the help module is the only one that loads</span>
+        <span class="c1"># Qt WebEngine; importing App (e.g. in tests) stays light.</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">helpschemehandler</span>  <span class="c1"># noqa: PLC0415</span>
+
+        <span class="n">helpschemehandler</span><span class="o">.</span><span class="n">HelpSchemeHandler</span><span class="o">.</span><span class="n">register_scheme</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../../api/ttea.main.html#ttea.main.main">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Start the T-TEA application."""</span>
+    <span class="n">application</span> <span class="o">=</span> <span class="n">App</span><span class="p">()</span>
+    <span class="n">application</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

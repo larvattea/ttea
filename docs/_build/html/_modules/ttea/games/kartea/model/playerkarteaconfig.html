@@ -1,0 +1,326 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.games.kartea.model.playerkarteaconfig &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.games.kartea.model.playerkarteaconfig</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.games.kartea.model.playerkarteaconfig</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Model of a player's Kartea game configuration."""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">ClassVar</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.reflexivemodel</span><span class="w"> </span><span class="kn">import</span> <span class="n">ReflexiveModel</span><span class="p">,</span> <span class="n">initialize_reflexive</span>
+
+<span class="c1"># Imported only for type checking, to avoid circular imports at</span>
+<span class="c1"># runtime.</span>
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.model</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+        <span class="n">KarteaPhase</span><span class="p">,</span>
+        <span class="n">KarteaPhaseLevel</span><span class="p">,</span>
+        <span class="n">PlayerKarteaSession</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Player</span>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfig">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.model.playerkarteaconfig.PlayerKarteaConfig.html#ttea.games.kartea.model.playerkarteaconfig.PlayerKarteaConfig">[docs]</a>
+<span class="nd">@initialize_reflexive</span>
+<span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PlayerKarteaConfig</span><span class="p">(</span><span class="n">ReflexiveModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Model for player configuration in the Kartea game.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    player : Player</span>
+<span class="sd">        The player associated with this configuration.</span>
+<span class="sd">    session : PlayerKarteaSession</span>
+<span class="sd">        Last game session recorded in this configuration.</span>
+<span class="sd">    update_session_id : bool</span>
+<span class="sd">        Whether each new game session is written to ``session``</span>
+<span class="sd">        (UPDATE_SESSION_ID_YES) or the recorded session is kept</span>
+<span class="sd">        (UPDATE_SESSION_ID_NO).</span>
+<span class="sd">    phase : KarteaPhase</span>
+<span class="sd">        The game phase for this configuration.</span>
+<span class="sd">    level : KarteaPhaseLevel</span>
+<span class="sd">        The level within the phase for this configuration.</span>
+<span class="sd">    level_time : int</span>
+<span class="sd">        Time allocated for the level (in seconds).</span>
+<span class="sd">    vehicle_image : str</span>
+<span class="sd">        Vehicle image resource (see KarteaResourceFields).</span>
+<span class="sd">    environment_image_right : str</span>
+<span class="sd">        Environment image drawn on the right side of the track.</span>
+<span class="sd">    environment_image_left : str</span>
+<span class="sd">        Environment image drawn on the left side of the track.</span>
+<span class="sd">    target_image : str</span>
+<span class="sd">        Target image resource.</span>
+<span class="sd">    obstacle_image : str</span>
+<span class="sd">        Obstacle image resource.</span>
+<span class="sd">    positive_feedback_image : str</span>
+<span class="sd">        Positive feedback image resource.</span>
+<span class="sd">    neutral_feedback_image : str</span>
+<span class="sd">        Neutral feedback image resource.</span>
+<span class="sd">    negative_feedback_image : str</span>
+<span class="sd">        Negative feedback image resource.</span>
+<span class="sd">    positive_feedback_sound : str</span>
+<span class="sd">        Positive feedback sound resource.</span>
+<span class="sd">    neutral_feedback_sound : str</span>
+<span class="sd">        Neutral feedback sound resource.</span>
+<span class="sd">    negative_feedback_sound : str</span>
+<span class="sd">        Negative feedback sound resource.</span>
+<span class="sd">    palette : int</span>
+<span class="sd">        Number of the track color palette (key of KarteaPalettes.ALL);</span>
+<span class="sd">        unknown numbers fall back to the default palette (0).</span>
+<span class="sd">    hud : bool</span>
+<span class="sd">        Whether the heads-up display (HUD) is enabled.</span>
+<span class="sd">    sound : bool</span>
+<span class="sd">        Whether sound effects are enabled.</span>
+<span class="sd">    feedback_image_time : float</span>
+<span class="sd">        Time (in seconds, 0 to 2, step 0.1) the positive/negative</span>
+<span class="sd">        feedback image stays on screen. 0 shows it for a single frame</span>
+<span class="sd">        (original behavior). Defaults to 0.0.</span>
+<span class="sd">    object_arrival_time_1 : float</span>
+<span class="sd">        Time (in seconds, 5 to 10, step 0.1) an object takes from</span>
+<span class="sd">        appearing on the road to reaching the car at speed 1</span>
+<span class="sd">        (levels 1 and 2). Defaults to 6.5.</span>
+<span class="sd">    object_arrival_time_2 : float</span>
+<span class="sd">        Same for speed 2 (levels 3 and 4): 3 to 5 s. Defaults to</span>
+<span class="sd">        3.3. Must be lower than object_arrival_time_1.</span>
+<span class="sd">    object_arrival_time_3 : float</span>
+<span class="sd">        Same for speed 3 (levels 5 to 7): 1 to 3 s. Defaults to</span>
+<span class="sd">        2.2. Must be lower than object_arrival_time_2.</span>
+<span class="sd">    feet_marker : bool</span>
+<span class="sd">        Whether a marker (yellow dot) is drawn at the player's real</span>
+<span class="sd">        feet position during the game. Defaults to False.</span>
+<span class="sd">    feet_click : bool</span>
+<span class="sd">        Whether the player can select menu buttons with the feet,</span>
+<span class="sd">        standing on a button for ``feet_click_time`` seconds. When</span>
+<span class="sd">        enabled, the marker is always shown in the menus. Defaults</span>
+<span class="sd">        to False.</span>
+<span class="sd">    feet_click_time : float</span>
+<span class="sd">        Time (in seconds, 0.5 to 3, step 0.1) the player must stay on</span>
+<span class="sd">        a button to select it with the feet. Defaults to 1.2.</span>
+<span class="sd">    horizon_image : str</span>
+<span class="sd">        Horizon image resource, drawn behind the track (see</span>
+<span class="sd">        KarteaResourceFields). Defaults to "horizon". Comes last so</span>
+<span class="sd">        that CSV files written before this column existed can still</span>
+<span class="sd">        be loaded.</span>
+<span class="sd">    PROPERTIES : ClassVar[list[str]], class attribute</span>
+<span class="sd">        Field names of the class, filled by ``initialize_reflexive``.</span>
+<span class="sd">    DATA_PROPERTIES : ClassVar[list], class attribute</span>
+<span class="sd">        Default value of each init field (``dataclasses.MISSING`` when</span>
+<span class="sd">        the field has none), filled by ``initialize_reflexive``.</span>
+<span class="sd">    REF_PROPERTIES : tuple[str, ...], class attribute</span>
+<span class="sd">        Fields written as the referenced object's ``id`` by</span>
+<span class="sd">        ``get_data``: player, session, phase and level.</span>
+<span class="sd">    UPDATE_SESSION_ID_NO : bool, class attribute</span>
+<span class="sd">        Value of ``update_session_id`` that keeps the recorded</span>
+<span class="sd">        session (False).</span>
+<span class="sd">    UPDATE_SESSION_ID_YES : bool, class attribute</span>
+<span class="sd">        Value of ``update_session_id`` that records each new session</span>
+<span class="sd">        (True). Default for new configurations.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    is_valid()</span>
+<span class="sd">        Check whether the required references are set.</span>
+<span class="sd">    set_data(data)</span>
+<span class="sd">        Update configuration data from a dictionary.</span>
+<span class="sd">    get_data()</span>
+<span class="sd">        Return configuration data as a list with one dictionary.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The image and sound fields hold resource names listed by</span>
+<span class="sd">    KarteaResourceFields (built-in resources or files in the mods</span>
+<span class="sd">    folder). The fields with defaults come last so that CSV files</span>
+<span class="sd">    written before those columns existed can still be loaded.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from types import SimpleNamespace</span>
+<span class="sd">    &gt;&gt;&gt; config = PlayerKarteaConfig(</span>
+<span class="sd">    ...     player=SimpleNamespace(id=1),</span>
+<span class="sd">    ...     session=SimpleNamespace(id=10),</span>
+<span class="sd">    ...     update_session_id=PlayerKarteaConfig.UPDATE_SESSION_ID_YES,</span>
+<span class="sd">    ...     phase=SimpleNamespace(id=1),</span>
+<span class="sd">    ...     level=SimpleNamespace(id=2),</span>
+<span class="sd">    ...     level_time=60,</span>
+<span class="sd">    ...     vehicle_image="defaultvehicle",</span>
+<span class="sd">    ...     environment_image_right="right",</span>
+<span class="sd">    ...     environment_image_left="left",</span>
+<span class="sd">    ...     target_image="defaultstar",</span>
+<span class="sd">    ...     obstacle_image="defaultobstacle",</span>
+<span class="sd">    ...     positive_feedback_image="positive",</span>
+<span class="sd">    ...     neutral_feedback_image="neutral",</span>
+<span class="sd">    ...     negative_feedback_image="negative",</span>
+<span class="sd">    ...     positive_feedback_sound="point",</span>
+<span class="sd">    ...     neutral_feedback_sound="miss",</span>
+<span class="sd">    ...     negative_feedback_sound="miss",</span>
+<span class="sd">    ...     palette=0,</span>
+<span class="sd">    ...     hud=True,</span>
+<span class="sd">    ...     sound=True,</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; config.is_valid()</span>
+<span class="sd">    True</span>
+<span class="sd">    &gt;&gt;&gt; data = config.get_data()[0]</span>
+<span class="sd">    &gt;&gt;&gt; data["player"], data["session"], data["phase"], data["level"]</span>
+<span class="sd">    (1, 10, 1, 2)</span>
+<span class="sd">    &gt;&gt;&gt; data["object_arrival_time_1"]</span>
+<span class="sd">    6.5</span>
+<span class="sd">    &gt;&gt;&gt; data["horizon_image"]</span>
+<span class="sd">    'horizon'</span>
+<span class="sd">    """</span>
+
+    <span class="n">player</span><span class="p">:</span> <span class="s2">"Player"</span>
+    <span class="n">session</span><span class="p">:</span> <span class="s2">"PlayerKarteaSession"</span>
+    <span class="n">update_session_id</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">phase</span><span class="p">:</span> <span class="s2">"KarteaPhase"</span>
+    <span class="n">level</span><span class="p">:</span> <span class="s2">"KarteaPhaseLevel"</span>
+    <span class="n">level_time</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">vehicle_image</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">environment_image_right</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">environment_image_left</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">target_image</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">obstacle_image</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">positive_feedback_image</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">neutral_feedback_image</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">negative_feedback_image</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">positive_feedback_sound</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">neutral_feedback_sound</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">negative_feedback_sound</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">palette</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">hud</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">sound</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="c1"># Fields with defaults stay last: CSVs written before these columns</span>
+    <span class="c1"># existed can still be loaded.</span>
+    <span class="n">feedback_image_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="c1"># Used as GameSettings.OBJECT_ARRIVAL_TIME. Defaults equal to those</span>
+    <span class="c1"># of KarteaArrivalTimeFields.ALL.</span>
+    <span class="n">object_arrival_time_1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">6.5</span>
+    <span class="n">object_arrival_time_2</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">3.3</span>
+    <span class="n">object_arrival_time_3</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">2.2</span>
+    <span class="n">feet_marker</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">feet_click</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">feet_click_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.2</span>
+    <span class="c1"># Default equal to that of KarteaResourceFields.ALL.</span>
+    <span class="n">horizon_image</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"horizon"</span>
+    <span class="n">PROPERTIES</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">DATA_PROPERTIES</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">list</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">REF_PROPERTIES</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"player"</span><span class="p">,</span> <span class="s2">"session"</span><span class="p">,</span> <span class="s2">"phase"</span><span class="p">,</span> <span class="s2">"level"</span><span class="p">)</span>
+    <span class="n">UPDATE_SESSION_ID_NO</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">UPDATE_SESSION_ID_YES</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="PlayerKarteaConfig.is_valid">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.model.playerkarteaconfig.PlayerKarteaConfig.html#ttea.games.kartea.model.playerkarteaconfig.PlayerKarteaConfig.is_valid">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Check whether the required references are set.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if ``player``, ``phase`` and ``level`` are all set</span>
+<span class="sd">            (truthy), False otherwise.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">player</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">phase</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

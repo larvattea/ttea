@@ -1,0 +1,23 @@
+ttea.games.kartea.gameutil
+==========================
+
+.. automodule:: ttea.games.kartea.gameutil
+
+.. currentmodule:: ttea.games.kartea.gameutil
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/module.rst
+   :recursive:
+
+   alphablit
+   gamesettings
+   gamestate
+   window
+
+
+

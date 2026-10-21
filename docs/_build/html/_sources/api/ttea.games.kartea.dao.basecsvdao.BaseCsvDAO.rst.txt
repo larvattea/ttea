@@ -1,0 +1,23 @@
+BaseCsvDAO
+==========
+
+.. currentmodule:: ttea.games.kartea.dao.basecsvdao
+
+.. autoclass:: BaseCsvDAO
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~BaseCsvDAO.delete
+      ~BaseCsvDAO.get_filename
+      ~BaseCsvDAO.insert
+      ~BaseCsvDAO.list
+      ~BaseCsvDAO.load_all
+      ~BaseCsvDAO.sanitize_filename
+      ~BaseCsvDAO.select
+      ~BaseCsvDAO.update

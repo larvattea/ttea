@@ -1,0 +1,18 @@
+HelpSchemeHandler
+=================
+
+.. currentmodule:: ttea.util.helpschemehandler
+
+.. autoclass:: HelpSchemeHandler
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~HelpSchemeHandler.install
+      ~HelpSchemeHandler.register_scheme
+      ~HelpSchemeHandler.requestStarted

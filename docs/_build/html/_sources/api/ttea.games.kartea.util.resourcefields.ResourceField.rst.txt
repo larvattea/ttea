@@ -1,0 +1,9 @@
+ResourceField
+=============
+
+.. currentmodule:: ttea.games.kartea.util.resourcefields
+
+.. autoclass:: ResourceField
+   :members:
+   :show-inheritance:
+

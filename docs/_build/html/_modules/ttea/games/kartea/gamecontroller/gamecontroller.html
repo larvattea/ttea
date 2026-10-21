@@ -1,0 +1,1097 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.games.kartea.gamecontroller.gamecontroller &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.games.kartea.gamecontroller.gamecontroller</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.games.kartea.gamecontroller.gamecontroller</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Match controller of the KarTEA game: rules and frame flow."""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">cv2</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pygame</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gamecore</span><span class="w"> </span><span class="kn">import</span> <span class="n">OUT_OF_AREA</span><span class="p">,</span> <span class="n">LaneDetector</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gamemodel</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Background</span><span class="p">,</span>
+    <span class="n">Car</span><span class="p">,</span>
+    <span class="n">Image</span><span class="p">,</span>
+    <span class="n">KillResult</span><span class="p">,</span>
+    <span class="n">Line</span><span class="p">,</span>
+    <span class="n">Obstacle</span><span class="p">,</span>
+    <span class="n">Target</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gameui</span><span class="w"> </span><span class="kn">import</span> <span class="n">UI</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gameutil</span><span class="w"> </span><span class="kn">import</span> <span class="n">regain_focus</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gameview</span><span class="w"> </span><span class="kn">import</span> <span class="n">FeedbackView</span><span class="p">,</span> <span class="n">HudView</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerKarteaSessionDetail</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.model.levelrules</span><span class="w"> </span><span class="kn">import</span> <span class="n">OBJ_TYPE_OBSTACLE</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gamecontroller.sessionrecorder</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+        <span class="n">SessionRecorder</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gamecore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Camera</span><span class="p">,</span> <span class="n">PoseTracking</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.gameutil</span><span class="w"> </span><span class="kn">import</span> <span class="n">GameSettings</span><span class="p">,</span> <span class="n">GameState</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LevelRules</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.service</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+        <span class="n">KarteaPhaseService</span><span class="p">,</span>
+        <span class="n">PlayerKarteaConfigService</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="n">EventType</span> <span class="o">=</span> <span class="n">PlayerKarteaSessionDetail</span><span class="o">.</span><span class="n">EventType</span>
+
+
+<div class="viewcode-block" id="GameController">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamecontroller.gamecontroller.GameController.html#ttea.games.kartea.gamecontroller.gamecontroller.GameController">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">GameController</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""KarTEA game controller: match rules and frame flow.</span>
+
+<span class="sd">    Everything arrives by injection (created once in main): GameSettings</span>
+<span class="sd">    (configuration), GameState (match state), the configuration service</span>
+<span class="sd">    (player interface options), the phase service (progression and level</span>
+<span class="sd">    rules), the SessionRecorder (persistence), the camera and the pose</span>
+<span class="sd">    tracking.</span>
+
+<span class="sd">    Delegated responsibilities:</span>
+
+<span class="sd">    - LaneDetector: feet position -&gt; lane;</span>
+<span class="sd">    - HudView: drawing of the HUD;</span>
+<span class="sd">    - FeedbackView: hit/miss sound and image;</span>
+<span class="sd">    - SessionRecorder: session, events and configuration;</span>
+<span class="sd">    - models (Target, Obstacle, Car): return KillResult.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    surface : pygame.Surface</span>
+<span class="sd">        Game screen.</span>
+<span class="sd">    settings : GameSettings</span>
+<span class="sd">        Game configuration.</span>
+<span class="sd">    state : GameState</span>
+<span class="sd">        Match state (phase/level, score, counters...).</span>
+<span class="sd">    config_service : PlayerKarteaConfigService</span>
+<span class="sd">        Player interface options (sound, HUD, feet marker/click).</span>
+<span class="sd">    phase_service : KarteaPhaseService</span>
+<span class="sd">        Phase/level progression and level rules (CSV files).</span>
+<span class="sd">    recorder : SessionRecorder</span>
+<span class="sd">        Recording of the session, events and configuration.</span>
+<span class="sd">    camera : Camera</span>
+<span class="sd">        Video capture.</span>
+<span class="sd">    pose_tracking : PoseTracking</span>
+<span class="sd">        Feet detection (MediaPipe).</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    FINISH_LINE_LEAD_TIME : float, class attribute</span>
+<span class="sd">        Minimum time (s) before the end at which the finish line appears</span>
+<span class="sd">        (12).</span>
+<span class="sd">    FINISH_COUNTDOWN_DURATION : float, class attribute</span>
+<span class="sd">        Duration (s) of the timer animation to zero after the finish</span>
+<span class="sd">        line is crossed (2).</span>
+<span class="sd">    LANE_CHANGE_POINTS : int, class attribute</span>
+<span class="sd">        Points per lane change (2).</span>
+<span class="sd">    LEVEL_COUNTER_BY_EVENT : dict[EventType, str], class attribute</span>
+<span class="sd">        Removal event -&gt; level counter (LevelStats) it increments.</span>
+<span class="sd">    MENU_CHOICE_EVENTS : dict[str, EventType], class attribute</span>
+<span class="sd">        Menu choice made with mouse/keyboard (pause or end of level) -&gt;</span>
+<span class="sd">        "Controle UFE" detail event.</span>
+<span class="sd">    FEET_MENU_CHOICE_EVENTS : dict[str, EventType], class attribute</span>
+<span class="sd">        The same choices made by the player with the feet -&gt;</span>
+<span class="sd">        "Controle do Jogador" event. "game" depends on the screen:</span>
+<span class="sd">        "Jogar" in the start menu, "Continuar" in the pause menu.</span>
+<span class="sd">    INTERFACE_OPTION_EVENTS : dict, class attribute</span>
+<span class="sd">        Interface option -&gt; (event when enabled, event when disabled).</span>
+<span class="sd">    surface : pygame.Surface</span>
+<span class="sd">        Game screen.</span>
+<span class="sd">    settings : GameSettings</span>
+<span class="sd">        Game configuration.</span>
+<span class="sd">    state : GameState</span>
+<span class="sd">        Match state.</span>
+<span class="sd">    config_service : PlayerKarteaConfigService</span>
+<span class="sd">        Configuration service.</span>
+<span class="sd">    phase_service : KarteaPhaseService</span>
+<span class="sd">        Phase service.</span>
+<span class="sd">    recorder : SessionRecorder</span>
+<span class="sd">        Session recorder.</span>
+<span class="sd">    cap : Camera</span>
+<span class="sd">        Video capture.</span>
+<span class="sd">    pose_tracking : PoseTracking</span>
+<span class="sd">        Feet detection.</span>
+<span class="sd">    ui : UI</span>
+<span class="sd">        Drawing helpers shared by HUD and menus.</span>
+<span class="sd">    hud : HudView</span>
+<span class="sd">        HUD drawing.</span>
+<span class="sd">    feedback : FeedbackView</span>
+<span class="sd">        Hit/miss sound and image.</span>
+<span class="sd">    lane_detector : LaneDetector</span>
+<span class="sd">        Feet x -&gt; lane.</span>
+<span class="sd">    awaiting_unpause : bool</span>
+<span class="sd">        True while the game is paused (Space or leaving the game area);</span>
+<span class="sd">        on the first update after the pause the "Controle UFE: Unpause"</span>
+<span class="sd">        event is recorded, which allows measuring the pause time.</span>
+<span class="sd">    pause_requested : bool</span>
+<span class="sd">        Automatic pause requested in this frame (player left the area).</span>
+<span class="sd">    level_rules : LevelRules | None</span>
+<span class="sd">        Rules of the current level (phase CSV).</span>
+<span class="sd">    background : Background</span>
+<span class="sd">        Road and sprites of the level.</span>
+<span class="sd">    car : Car</span>
+<span class="sd">        Player's car.</span>
+<span class="sd">    targets : list[Target]</span>
+<span class="sd">        Active targets and obstacles.</span>
+<span class="sd">    last_lane : int</span>
+<span class="sd">        Lane of the last object created (-1 at the level start).</span>
+<span class="sd">    targets_spawn_timer : float</span>
+<span class="sd">        Time after which the next object may be created.</span>
+<span class="sd">    spawned : int</span>
+<span class="sd">        Objects already created in the level (index in</span>
+<span class="sd">        LevelRules.obj_types).</span>
+<span class="sd">    game_start_time : float</span>
+<span class="sd">        Real time when the level started.</span>
+<span class="sd">    time_left : int</span>
+<span class="sd">        Seconds left in the level (shown in the HUD).</span>
+<span class="sd">    finish : int</span>
+<span class="sd">        1 after the finish line was placed, 0 before.</span>
+<span class="sd">    finish_line_segment : Line | None</span>
+<span class="sd">        Road line holding the finish line.</span>
+<span class="sd">    crossed_finish_line : bool</span>
+<span class="sd">        Whether the car crossed the finish line.</span>
+<span class="sd">    finish_countdown_active : bool</span>
+<span class="sd">        Whether the timer is animating down to zero.</span>
+<span class="sd">    finish_countdown_start_time_left : int</span>
+<span class="sd">        ``time_left`` when the countdown started.</span>
+<span class="sd">    finish_countdown_start_real_time : float</span>
+<span class="sd">        Game time (ms) when the countdown started.</span>
+<span class="sd">    level_complete_pending : bool</span>
+<span class="sd">        True when the countdown reached zero and the level must end.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    ``PoseTracking`` is created once in main: recreating it at each</span>
+<span class="sd">    level would reload the MediaPipe model.</span>
+<span class="sd">    """</span>
+
+    <span class="n">FINISH_LINE_LEAD_TIME</span> <span class="o">=</span> <span class="mf">12.0</span>
+
+    <span class="n">FINISH_COUNTDOWN_DURATION</span> <span class="o">=</span> <span class="mf">2.0</span>
+
+    <span class="n">LANE_CHANGE_POINTS</span> <span class="o">=</span> <span class="mi">2</span>
+
+    <span class="n">LEVEL_COUNTER_BY_EVENT</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">EventType</span><span class="o">.</span><span class="n">COLLIDED_TARGET</span><span class="p">:</span> <span class="s2">"targets_collided"</span><span class="p">,</span>
+        <span class="n">EventType</span><span class="o">.</span><span class="n">AVOIDED_TARGET</span><span class="p">:</span> <span class="s2">"targets_avoided"</span><span class="p">,</span>
+        <span class="n">EventType</span><span class="o">.</span><span class="n">COLLIDED_OBSTACLE</span><span class="p">:</span> <span class="s2">"obstacles_collided"</span><span class="p">,</span>
+        <span class="n">EventType</span><span class="o">.</span><span class="n">AVOIDED_OBSTACLE</span><span class="p">:</span> <span class="s2">"obstacles_avoided"</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">MENU_CHOICE_EVENTS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"next"</span><span class="p">:</span> <span class="n">EventType</span><span class="o">.</span><span class="n">UFE_CONTROL_ADVANCE_LEVEL</span><span class="p">,</span>
+        <span class="s2">"rest"</span><span class="p">:</span> <span class="n">EventType</span><span class="o">.</span><span class="n">UFE_CONTROL_RESTART_LEVEL</span><span class="p">,</span>
+        <span class="s2">"prev"</span><span class="p">:</span> <span class="n">EventType</span><span class="o">.</span><span class="n">UFE_CONTROL_REGRESS_LEVEL</span><span class="p">,</span>
+        <span class="s2">"exit"</span><span class="p">:</span> <span class="n">EventType</span><span class="o">.</span><span class="n">UFE_CONTROL_EXIT_GAME</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">FEET_MENU_CHOICE_EVENTS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"next"</span><span class="p">:</span> <span class="n">EventType</span><span class="o">.</span><span class="n">PLAYER_CONTROL_ADVANCE_LEVEL</span><span class="p">,</span>
+        <span class="s2">"rest"</span><span class="p">:</span> <span class="n">EventType</span><span class="o">.</span><span class="n">PLAYER_CONTROL_RESTART_LEVEL</span><span class="p">,</span>
+        <span class="s2">"prev"</span><span class="p">:</span> <span class="n">EventType</span><span class="o">.</span><span class="n">PLAYER_CONTROL_REGRESS_LEVEL</span><span class="p">,</span>
+        <span class="s2">"exit"</span><span class="p">:</span> <span class="n">EventType</span><span class="o">.</span><span class="n">PLAYER_CONTROL_EXIT_GAME</span><span class="p">,</span>
+        <span class="s2">"play"</span><span class="p">:</span> <span class="n">EventType</span><span class="o">.</span><span class="n">PLAYER_CONTROL_PLAY</span><span class="p">,</span>
+        <span class="s2">"game"</span><span class="p">:</span> <span class="n">EventType</span><span class="o">.</span><span class="n">PLAYER_CONTROL_PLAY</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">INTERFACE_OPTION_EVENTS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"sound"</span><span class="p">:</span> <span class="p">(</span>
+            <span class="n">EventType</span><span class="o">.</span><span class="n">UFE_CONTROL_ENABLE_SOUND</span><span class="p">,</span>
+            <span class="n">EventType</span><span class="o">.</span><span class="n">UFE_CONTROL_DISABLE_SOUND</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="s2">"hud"</span><span class="p">:</span> <span class="p">(</span>
+            <span class="n">EventType</span><span class="o">.</span><span class="n">UFE_CONTROL_ENABLE_HUD</span><span class="p">,</span>
+            <span class="n">EventType</span><span class="o">.</span><span class="n">UFE_CONTROL_DISABLE_HUD</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="s2">"feet_marker"</span><span class="p">:</span> <span class="p">(</span>
+            <span class="n">EventType</span><span class="o">.</span><span class="n">UFE_CONTROL_ENABLE_FEET_MARKER</span><span class="p">,</span>
+            <span class="n">EventType</span><span class="o">.</span><span class="n">UFE_CONTROL_DISABLE_FEET_MARKER</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="s2">"feet_click"</span><span class="p">:</span> <span class="p">(</span>
+            <span class="n">EventType</span><span class="o">.</span><span class="n">UFE_CONTROL_ENABLE_FEET_CLICK</span><span class="p">,</span>
+            <span class="n">EventType</span><span class="o">.</span><span class="n">UFE_CONTROL_DISABLE_FEET_CLICK</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Level state: annotations only (no class value); the attributes are</span>
+    <span class="c1"># set by _start_level() at each level start.</span>
+    <span class="n">background</span><span class="p">:</span> <span class="n">Background</span>
+    <span class="n">car</span><span class="p">:</span> <span class="n">Car</span>
+    <span class="n">targets</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Target</span><span class="p">]</span>
+    <span class="n">last_lane</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">targets_spawn_timer</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">spawned</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">game_start_time</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">time_left</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">finish</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">finish_line_segment</span><span class="p">:</span> <span class="n">Line</span> <span class="o">|</span> <span class="kc">None</span>
+    <span class="n">crossed_finish_line</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">finish_countdown_active</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">finish_countdown_start_time_left</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">finish_countdown_start_real_time</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">level_complete_pending</span><span class="p">:</span> <span class="nb">bool</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">surface</span><span class="p">:</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">,</span>
+        <span class="n">settings</span><span class="p">:</span> <span class="s2">"GameSettings"</span><span class="p">,</span>
+        <span class="n">state</span><span class="p">:</span> <span class="s2">"GameState"</span><span class="p">,</span>
+        <span class="n">config_service</span><span class="p">:</span> <span class="s2">"PlayerKarteaConfigService"</span><span class="p">,</span>
+        <span class="n">phase_service</span><span class="p">:</span> <span class="s2">"KarteaPhaseService"</span><span class="p">,</span>
+        <span class="n">recorder</span><span class="p">:</span> <span class="s2">"SessionRecorder"</span><span class="p">,</span>
+        <span class="n">camera</span><span class="p">:</span> <span class="s2">"Camera"</span><span class="p">,</span>
+        <span class="n">pose_tracking</span><span class="p">:</span> <span class="s2">"PoseTracking"</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">surface</span> <span class="o">=</span> <span class="n">surface</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">settings</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span> <span class="o">=</span> <span class="n">state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_service</span> <span class="o">=</span> <span class="n">config_service</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phase_service</span> <span class="o">=</span> <span class="n">phase_service</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recorder</span> <span class="o">=</span> <span class="n">recorder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cap</span> <span class="o">=</span> <span class="n">camera</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pose_tracking</span> <span class="o">=</span> <span class="n">pose_tracking</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ui</span> <span class="o">=</span> <span class="n">UI</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hud</span> <span class="o">=</span> <span class="n">HudView</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feedback</span> <span class="o">=</span> <span class="n">FeedbackView</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">state</span><span class="o">.</span><span class="n">sound</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lane_detector</span> <span class="o">=</span> <span class="n">LaneDetector</span><span class="p">(</span><span class="n">settings</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">awaiting_unpause</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pause_requested</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">level_rules</span><span class="p">:</span> <span class="n">LevelRules</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_start_level</span><span class="p">()</span>
+
+    <span class="c1"># ======================</span>
+    <span class="c1"># Level</span>
+    <span class="c1"># ======================</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_start_level</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Prepare a new level (components, rules and counters).</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Rebuilds the road and the car, reads the level rules from the</span>
+<span class="sd">        phase CSV, sets the object speed to the level number and the</span>
+<span class="sd">        spawn interval to the CSV ``interval``, clears the previous</span>
+<span class="sd">        feedback image and resets the level counters and the finish line</span>
+<span class="sd">        state.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">background</span> <span class="o">=</span> <span class="n">Background</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">)</span>
+        <span class="c1"># PoseTracking is created once in main: recreating it at each</span>
+        <span class="c1"># level would reload the MediaPipe model.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">car</span> <span class="o">=</span> <span class="n">Car</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">level_rules</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phase_service</span><span class="o">.</span><span class="n">get_level_rules</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">phase</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">level</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">targets_move_speed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">level</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">targets_spawn_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">level_rules</span><span class="o">.</span><span class="n">interval</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">targets</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_lane</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feedback</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">targets_spawn_timer</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spawned</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">game_start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">level_time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">time_past</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">level_stats</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">finish</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">finish_line_segment</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">crossed_finish_line</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">finish_countdown_active</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">finish_countdown_start_time_left</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">finish_countdown_start_real_time</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">level_complete_pending</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_speed_level</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the speed range of the current level."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">level_rules</span><span class="o">.</span><span class="n">speed</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_finish_lead_time</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return how long (s) before the end the finish line appears.</span>
+
+<span class="sd">        The line must appear before the time runs out, with margin to</span>
+<span class="sd">        reach the car: never less than the arrival time of the current</span>
+<span class="sd">        speed + 2 s, even if OBJECT_ARRIVAL_TIME is increased.</span>
+<span class="sd">        """</span>
+        <span class="n">arrival</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">OBJECT_ARRIVAL_TIME</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_speed_level</span><span class="p">()]</span>
+        <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FINISH_LINE_LEAD_TIME</span><span class="p">,</span> <span class="n">arrival</span> <span class="o">+</span> <span class="mf">2.0</span><span class="p">)</span>
+
+<div class="viewcode-block" id="GameController.change_level">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamecontroller.gamecontroller.GameController.html#ttea.games.kartea.gamecontroller.gamecontroller.GameController.change_level">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">change_level</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Apply a level change to the GameState.</span>
+
+<span class="sd">        Used by the end-of-level result (the game's recommendation) and</span>
+<span class="sd">        by the professional's choices in the pause menu. The progression</span>
+<span class="sd">        rule belongs to the service, from the phase CSV files.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        action : str</span>
+<span class="sd">            "next", "prev" or "rest" (see</span>
+<span class="sd">            KarteaPhaseService.change_level).</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">phase</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">phase_service</span><span class="o">.</span><span class="n">change_level</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">phase</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">level</span><span class="p">,</span> <span class="n">action</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GameController.reset">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamecontroller.gamecontroller.GameController.html#ttea.games.kartea.gamecontroller.gamecontroller.GameController.reset">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Start a new level (after advance, regress or restart).</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The session totals are not reset: the score and lane changes of</span>
+<span class="sd">        the ending level are added to the session accumulated values.</span>
+<span class="sd">        Session and configuration are saved right away, since</span>
+<span class="sd">        phase/level just changed.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">session_stats</span><span class="o">.</span><span class="n">close_level</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">level_stats</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_start_level</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_session</span><span class="p">()</span></div>
+
+
+    <span class="c1"># ======================</span>
+    <span class="c1"># Recording (delegated to SessionRecorder)</span>
+    <span class="c1"># ======================</span>
+<div class="viewcode-block" id="GameController.register_menu_choice">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamecontroller.gamecontroller.GameController.html#ttea.games.kartea.gamecontroller.gamecontroller.GameController.register_menu_choice">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_menu_choice</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">choice</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">by_feet</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Record a decision made in a menu.</span>
+
+<span class="sd">        Must be called BEFORE the choice is applied, so that the event</span>
+<span class="sd">        phase and level are those of the level where the decision was</span>
+<span class="sd">        made.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        choice : str</span>
+<span class="sd">            "next", "rest", "prev", "exit", "play" or "game".</span>
+<span class="sd">        by_feet : bool, optional</span>
+<span class="sd">            True when the player chose with the feet (feet click).</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        With mouse or keyboard (``by_feet`` False) the decision is the</span>
+<span class="sd">        professional's ("Controle UFE"); "Jogar" and "Continuar" are not</span>
+<span class="sd">        recorded (the Unpause is recorded when the game resumes). With</span>
+<span class="sd">        the feet (``by_feet`` True) the decision is the player's own</span>
+<span class="sd">        ("Controle do Jogador"), including "Jogar" and "Continuar".</span>
+
+<span class="sd">        Without an open session, exiting records nothing, so that no</span>
+<span class="sd">        empty session is created; "Jogar" with the feet opens the</span>
+<span class="sd">        session, which would start at the first game event anyway. The</span>
+<span class="sd">        session totals are saved before the choice is applied.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">by_feet</span><span class="p">:</span>
+            <span class="n">event_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FEET_MENU_CHOICE_EVENTS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">choice</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"game"</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">menu</span> <span class="o">==</span> <span class="s2">"Pause"</span><span class="p">:</span>
+                <span class="n">event_type</span> <span class="o">=</span> <span class="n">EventType</span><span class="o">.</span><span class="n">PLAYER_CONTROL_CONTINUE</span>
+            <span class="k">if</span> <span class="n">event_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span>
+            <span class="k">if</span> <span class="n">choice</span> <span class="o">==</span> <span class="s2">"exit"</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">has_session</span><span class="p">:</span>
+                <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">event_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">MENU_CHOICE_EVENTS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">choice</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">event_type</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">has_session</span><span class="p">:</span>
+                <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">event_type</span><span class="p">)</span>
+        <span class="c1"># Save the totals before the choice is applied: includes what</span>
+        <span class="c1"># was done in the interrupted level (and, on exit, the current</span>
+        <span class="c1"># level).</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_session</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="GameController.save_session">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamecontroller.gamecontroller.GameController.html#ttea.games.kartea.gamecontroller.gamecontroller.GameController.save_session">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_session</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Save the session and the configuration (current values)."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_register_kill</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">:</span> <span class="n">KillResult</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Apply the result of a removed target/obstacle.</span>
+
+<span class="sd">        Shows the feedback, adds the points, updates the level counter</span>
+<span class="sd">        and records the event (which also updates the session totals).</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feedback</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+        <span class="n">stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">level_stats</span>
+        <span class="n">stats</span><span class="o">.</span><span class="n">score</span> <span class="o">+=</span> <span class="n">result</span><span class="o">.</span><span class="n">points</span>
+        <span class="n">counter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">LEVEL_COUNTER_BY_EVENT</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">event_type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">counter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">counter</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">stats</span><span class="p">,</span> <span class="n">counter</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">event_type</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">road</span><span class="p">)</span>
+
+    <span class="c1"># ======================</span>
+    <span class="c1"># Objects</span>
+    <span class="c1"># ======================</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_next_object_is_obstacle</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return whether the next object is an obstacle (CSV obj_type).</span>
+
+<span class="sd">        Without a type defined for this object, it is drawn at random</span>
+<span class="sd">        (50%).</span>
+<span class="sd">        """</span>
+        <span class="n">obj_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">level_rules</span><span class="o">.</span><span class="n">object_type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spawned</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">obj_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">50</span>
+        <span class="k">return</span> <span class="n">obj_type</span> <span class="o">==</span> <span class="n">OBJ_TYPE_OBSTACLE</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_next_lane</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the lane of the next object, avoiding the last one.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The first object gets a random lane. On odd levels, an object</span>
+<span class="sd">        after a side lane goes to the middle and one after the middle</span>
+<span class="sd">        goes to a random different lane; on even levels, any lane</span>
+<span class="sd">        different from the previous one is drawn.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_lane</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_lane</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">level</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">r</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">r</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">elif</span> <span class="n">r</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">while</span> <span class="n">r</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_lane</span><span class="p">:</span>
+                        <span class="n">r</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">r</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">while</span> <span class="n">r</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_lane</span><span class="p">:</span>
+                    <span class="n">r</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">last_lane</span> <span class="o">=</span> <span class="n">r</span>
+        <span class="k">return</span> <span class="n">r</span>
+
+<div class="viewcode-block" id="GameController.spawn_targets">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamecontroller.gamecontroller.GameController.html#ttea.games.kartea.gamecontroller.gamecontroller.GameController.spawn_targets">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">spawn_targets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Create a target or obstacle according to the level rules.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Interval, maximum amount and type of each object come from the</span>
+<span class="sd">        phase CSV (LevelRules). Nothing is created while the spawn timer</span>
+<span class="sd">        has not expired or the level limit was reached. The object is</span>
+<span class="sd">        attached to the road line ahead of the camera and a "Criou"</span>
+<span class="sd">        event is recorded.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">level_rules</span><span class="o">.</span><span class="n">allows_more</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spawned</span><span class="p">):</span>
+            <span class="k">return</span>
+
+        <span class="n">t</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets_spawn_timer</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">targets_spawn_timer</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">targets_spawn_time</span>
+
+        <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">get_start_pos</span><span class="p">()</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next_lane</span><span class="p">()</span>
+        <span class="n">spawn_obstacle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_next_object_is_obstacle</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spawned</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">speed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">targets_move_speed</span>
+        <span class="k">if</span> <span class="n">spawn_obstacle</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">Obstacle</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">,</span> <span class="n">move_speed</span><span class="o">=</span><span class="n">speed</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">level_stats</span><span class="o">.</span><span class="n">obstacles</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">event_type</span> <span class="o">=</span> <span class="n">EventType</span><span class="o">.</span><span class="n">CREATED_OBSTACLE</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">obj</span> <span class="o">=</span> <span class="n">Target</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="p">,</span> <span class="n">move_speed</span><span class="o">=</span><span class="n">speed</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">level_stats</span><span class="o">.</span><span class="n">targets</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">event_type</span> <span class="o">=</span> <span class="n">EventType</span><span class="o">.</span><span class="n">CREATED_TARGET</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">obj</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">event_type</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GameController.spawn_finish">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamecontroller.gamecontroller.GameController.html#ttea.games.kartea.gamecontroller.gamecontroller.GameController.spawn_finish">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">spawn_finish</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Place the finish line on the road.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The road is a loop: the same line may have been passed on an</span>
+<span class="sd">        earlier lap, so its ``passed`` mark is reset to detect only the</span>
+<span class="sd">        crossing of this finish line.</span>
+<span class="sd">        """</span>
+        <span class="n">pos</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">get_start_pos</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span><span class="o">.</span><span class="n">sprite</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">FINISH_IMAGE</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span><span class="o">.</span><span class="n">sprite_x</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span><span class="o">.</span><span class="n">passed</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">finish_line_segment</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">lines</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">crossed_finish_line</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+
+    <span class="c1"># ======================</span>
+    <span class="c1"># Camera and feet input</span>
+    <span class="c1"># ======================</span>
+<div class="viewcode-block" id="GameController.load_camera">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamecontroller.gamecontroller.GameController.html#ttea.games.kartea.gamecontroller.gamecontroller.GameController.load_camera">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Load/update the camera frame.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if a frame was read.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cap</span><span class="o">.</span><span class="n">load_camera</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="GameController.track_feet_for_menu">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamecontroller.gamecontroller.GameController.html#ttea.games.kartea.gamecontroller.gamecontroller.GameController.track_feet_for_menu">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">track_feet_for_menu</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Read the camera and the pose outside the game (menus).</span>
+
+<span class="sd">        Used by the feet click; keeps the OpenCV capture window</span>
+<span class="sd">        responsive.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple[int, int] | None</span>
+<span class="sd">            Real (x, y) position of the feet on screen, or None without</span>
+<span class="sd">            a camera image or without a detected player.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_camera</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cap</span><span class="o">.</span><span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pose_tracking</span><span class="o">.</span><span class="n">scan_feets</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cap</span><span class="o">.</span><span class="n">frame</span><span class="p">)</span>
+        <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pose_tracking</span><span class="o">.</span><span class="n">get_feet_marker_position</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="GameController.set_feet_position">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamecontroller.gamecontroller.GameController.html#ttea.games.kartea.gamecontroller.gamecontroller.GameController.set_feet_position">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_feet_position</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Position the car from the detected feet position."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cap</span><span class="o">.</span><span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pose_tracking</span><span class="o">.</span><span class="n">scan_feets</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cap</span><span class="o">.</span><span class="n">frame</span><span class="p">)</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pose_tracking</span><span class="o">.</span><span class="n">get_feet_center</span><span class="p">()</span>
+        <span class="n">car_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">CAR_SIZE</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">car</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">car_y</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_lane</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Update the player lane and apply the lane change rules.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        A change between valid lanes gives +2 points, +1 movement and a</span>
+<span class="sd">        "Trocou de Pista" event. Leaving the area records "Saiu da área</span>
+<span class="sd">        do jogo", requests an automatic pause and resets the lane to 0.</span>
+<span class="sd">        """</span>
+        <span class="n">previous</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lane</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lane</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">lane_detector</span><span class="o">.</span><span class="n">lane_for_x</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lane</span> <span class="o">==</span> <span class="n">previous</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lane</span> <span class="o">!=</span> <span class="n">OUT_OF_AREA</span> <span class="ow">and</span> <span class="n">previous</span> <span class="o">!=</span> <span class="n">OUT_OF_AREA</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">level_stats</span><span class="o">.</span><span class="n">score</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">LANE_CHANGE_POINTS</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">level_stats</span><span class="o">.</span><span class="n">movement</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">CHANGED_LANE</span><span class="p">,</span> <span class="n">previous</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lane</span> <span class="o">==</span> <span class="n">OUT_OF_AREA</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">LEFT_GAME_AREA</span><span class="p">,</span> <span class="n">previous</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pause_requested</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lane</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># ======================</span>
+    <span class="c1"># Drawing</span>
+    <span class="c1"># ======================</span>
+<div class="viewcode-block" id="GameController.draw">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamecontroller.gamecontroller.GameController.html#ttea.games.kartea.gamecontroller.gamecontroller.GameController.draw">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Draw the road, the car and the HUD.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The road stops while a pause is requested. The feet dot is drawn</span>
+<span class="sd">        when the player's ``feet_marker`` option is on.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">pause_requested</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">set_speed_level</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_speed_level</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">delta_time</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">car</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">feet_marker</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ui</span><span class="o">.</span><span class="n">draw_player_marker</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">pose_tracking</span><span class="o">.</span><span class="n">get_feet_marker_position</span><span class="p">()</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hud</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_left</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GameController.game_time_update">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamecontroller.gamecontroller.GameController.html#ttea.games.kartea.gamecontroller.gamecontroller.GameController.game_time_update">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">game_time_update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Update the time left in the level from the game clock."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">level_time</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">time_past</span> <span class="o">/</span> <span class="mi">1000</span>
+        <span class="p">)</span></div>
+
+
+    <span class="c1"># ======================</span>
+    <span class="c1"># Frame</span>
+    <span class="c1"># ======================</span>
+<div class="viewcode-block" id="GameController.update">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamecontroller.gamecontroller.GameController.html#ttea.games.kartea.gamecontroller.gamecontroller.GameController.update">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Run one frame of the game (main update loop).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        events : list, optional</span>
+<span class="sd">            Pygame events already read by the main loop (main.py). The</span>
+<span class="sd">            event queue must be read only once per frame; if None, the</span>
+<span class="sd">            queue is read here (compatibility).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str | None</span>
+<span class="sd">            "menu" when the game must go to a menu (pause or end of</span>
+<span class="sd">            level); None to stay in the game.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Order of a frame: clock and autosave, camera and feet, automatic</span>
+<span class="sd">        pause, timer, spawning, finish line and countdown, drawing,</span>
+<span class="sd">        active play (until the finish line), feedback image, end of</span>
+<span class="sd">        level and keyboard events. Without a camera frame, the frame</span>
+<span class="sd">        ends early.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_begin_frame</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_camera</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_feet_position</span><span class="p">()</span>
+
+        <span class="c1"># Automatic pause (player left the game area)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pause_requested</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_auto_pause</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">game_time_update</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_spawn</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_finish_line</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_finish_countdown</span><span class="p">()</span>
+
+        <span class="c1"># Draw elements and HUD with the updated time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+
+        <span class="c1"># Active play until the finish line is crossed</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">crossed_finish_line</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_active_play</span><span class="p">()</span>
+
+        <span class="c1"># Feedback image (hit/miss) on top of everything, for the time</span>
+        <span class="c1"># configured for the player (feedback_image_time)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feedback</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">delta_time</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">crossed_finish_line</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">level_complete_pending</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_finish_level</span><span class="p">()</span>
+
+        <span class="c1"># Pygame events</span>
+        <span class="k">if</span> <span class="n">events</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">events</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_events</span><span class="p">(</span><span class="n">events</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">result</span>
+
+        <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_begin_frame</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Advance the clock, handle the return from pause and autosave.</span>
+
+<span class="sd">        The level clock (ms) advances by the frame delta time; on the</span>
+<span class="sd">        first update after a pause the Unpause event is recorded.</span>
+<span class="sd">        """</span>
+        <span class="c1"># Level clock (ms), by the frame delta time (main)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">time_past</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">delta_time</span> <span class="o">*</span> <span class="mi">1000</span>
+
+        <span class="c1"># First update after a pause: the game is running again</span>
+        <span class="c1"># (Continue, Restart, Advance or Regress in the pause menu).</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">awaiting_unpause</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">awaiting_unpause</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">UFE_CONTROL_UNPAUSE</span><span class="p">)</span>
+
+        <span class="c1"># Periodic autosave during the game</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">autosave_if_due</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_auto_pause</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Open the pause menu when the player leaves the game area.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            "menu".</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">menu</span> <span class="o">=</span> <span class="s2">"Pause"</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pause_requested</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">awaiting_unpause</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_session</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s2">"menu"</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_spawn</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Create targets/obstacles or, at the end, the finish line.</span>
+
+<span class="sd">        The finish line always appears with the same lead time</span>
+<span class="sd">        (_finish_lead_time), regardless of phase/level.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">time_left</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_finish_lead_time</span><span class="p">()</span>
+            <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">crossed_finish_line</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spawn_targets</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">finish</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spawn_finish</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">finish</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_finish_line</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Detect the crossing of the finish line.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Before the line appears, if the clock runs out it is held at 1 s</span>
+<span class="sd">        (the level only ends by crossing the line). The line is crossed</span>
+<span class="sd">        when its y passes the car wheels, when the camera already went</span>
+<span class="sd">        past it (at high speed or low FPS the road may skip right past</span>
+<span class="sd">        it) or when it left the screen. Crossing starts the timer</span>
+<span class="sd">        animation to zero, whatever time was left.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">crossed_finish_line</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">finish_line</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">finish_line_segment</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">finish</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">finish_line</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_left</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">time_left</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">finish_line</span><span class="o">.</span><span class="n">screen_y</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">car</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">bottom</span>
+            <span class="ow">or</span> <span class="n">finish_line</span><span class="o">.</span><span class="n">passed</span>
+            <span class="ow">or</span> <span class="n">finish_line</span><span class="o">.</span><span class="n">sprite</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">crossed_finish_line</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">finish_countdown_active</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">finish_countdown_start_time_left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_left</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">finish_countdown_start_real_time</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">time_past</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_finish_countdown</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Animate the timer down to zero after the finish line.</span>
+
+<span class="sd">        At the end of FINISH_COUNTDOWN_DURATION,</span>
+<span class="sd">        ``level_complete_pending`` becomes True.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">finish_countdown_active</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="n">elapsed</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">time_past</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">finish_countdown_start_real_time</span>
+        <span class="p">)</span> <span class="o">/</span> <span class="mf">1000.0</span>
+        <span class="n">progress</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">elapsed</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">FINISH_COUNTDOWN_DURATION</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_left</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">finish_countdown_start_time_left</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">progress</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">progress</span> <span class="o">&gt;=</span> <span class="mf">1.0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">time_left</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">finish_countdown_active</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">level_complete_pending</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_active_play</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Update lane, car position and collisions of the frame.</span>
+
+<span class="sd">        Objects that left the screen without colliding are always</span>
+<span class="sd">        recorded as avoided.</span>
+<span class="sd">        """</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pose_tracking</span><span class="o">.</span><span class="n">get_feet_center</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_lane</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="c1"># Car position and interaction with targets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">car</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">center</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">car</span><span class="o">.</span><span class="n">left_click</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pose_tracking</span><span class="o">.</span><span class="n">feet_closed</span>
+        <span class="c1"># Lane collision: record the player lane in this frame</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">car</span><span class="o">.</span><span class="n">record_lane</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lane</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">car</span><span class="o">.</span><span class="n">kill_targets</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_register_kill</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+        <span class="n">limit_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">get_height</span><span class="p">()</span> <span class="o">+</span> <span class="mi">100</span>
+        <span class="k">for</span> <span class="n">obj</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">[:]:</span>
+            <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">current_pos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">limit_y</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_register_kill</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">kill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">targets</span><span class="p">,</span> <span class="n">collided</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_finish_level</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""End the level: evaluate, apply and save the result.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            "menu" (the feedback screen).</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The maximum score is 12 points per object created. A score of at</span>
+<span class="sd">        least 3/4 of it advances the level ("Feedback_3"), at least 1/4</span>
+<span class="sd">        keeps it ("Feedback_2") and less regresses it ("Feedback_1").</span>
+<span class="sd">        The event is recorded with the phase/level of the level that</span>
+<span class="sd">        ended, and the result is applied right away, so session and</span>
+<span class="sd">        configuration reflect the new level even if the professional</span>
+<span class="sd">        leaves from the feedback screen.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">level_complete_pending</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_left</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">level_stats</span>
+        <span class="n">max_score</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">targets</span> <span class="o">*</span> <span class="mi">12</span> <span class="o">+</span> <span class="n">stats</span><span class="o">.</span><span class="n">obstacles</span> <span class="o">*</span> <span class="mi">12</span>
+
+        <span class="k">if</span> <span class="n">stats</span><span class="o">.</span><span class="n">score</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">max_score</span><span class="p">)</span> <span class="o">/</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">event_type</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="n">EventType</span><span class="o">.</span><span class="n">GAME_CONTROL_ADVANCE_LEVEL</span><span class="p">,</span> <span class="s2">"next"</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">menu</span> <span class="o">=</span> <span class="s2">"Feedback_3"</span>
+        <span class="k">elif</span> <span class="n">stats</span><span class="o">.</span><span class="n">score</span> <span class="o">&gt;=</span> <span class="n">max_score</span> <span class="o">/</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">event_type</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="n">EventType</span><span class="o">.</span><span class="n">GAME_CONTROL_MAINTAIN_LEVEL</span><span class="p">,</span> <span class="s2">"rest"</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">menu</span> <span class="o">=</span> <span class="s2">"Feedback_2"</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">event_type</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="n">EventType</span><span class="o">.</span><span class="n">GAME_CONTROL_REGRESS_LEVEL</span><span class="p">,</span> <span class="s2">"prev"</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">menu</span> <span class="o">=</span> <span class="s2">"Feedback_1"</span>
+
+        <span class="c1"># Event with the phase/level of the level that ended...</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">event_type</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">lane</span><span class="p">)</span>
+        <span class="c1"># ...and the result is applied right away: session and</span>
+        <span class="c1"># configuration reflect the new level even if the professional</span>
+        <span class="c1"># leaves from the feedback screen, without clicking "Jogar".</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">change_level</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+
+        <span class="c1"># Final session save</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_session</span><span class="p">()</span>
+        <span class="k">return</span> <span class="s2">"menu"</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_handle_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">events</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Handle keyboard and window focus events.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str | None</span>
+<span class="sd">            "menu" when Space pauses the game; None otherwise.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        - Space always pauses (records Pause; Unpause is recorded when</span>
+<span class="sd">          the game resumes).</span>
+<span class="sd">        - S or 1 toggles sound; H or 2 toggles the HUD; T or 3 toggles</span>
+<span class="sd">          the feet marker; C or 4 toggles the feet click.</span>
+<span class="sd">        - Losing window focus calls ``regain_focus``.</span>
+<span class="sd">        - ``pygame.QUIT`` is handled by the main loop (main.py).</span>
+<span class="sd">        """</span>
+        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
+            <span class="c1"># pygame.QUIT is handled by the main loop (main.py), which</span>
+            <span class="c1"># ends the game and calls pygame.quit() safely.</span>
+
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">ACTIVEEVENT</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="s2">"gain"</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">regain_focus</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">!=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">KEYDOWN</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_SPACE</span><span class="p">:</span>
+                <span class="c1"># Space always pauses. Do not set self.pause_requested:</span>
+                <span class="c1"># returning "menu" already shows the pause menu, and</span>
+                <span class="c1"># setting it would make the menu reappear right after</span>
+                <span class="c1"># the player continues.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">EventType</span><span class="o">.</span><span class="n">UFE_CONTROL_PAUSE</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">background</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">menu</span> <span class="o">=</span> <span class="s2">"Pause"</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">awaiting_unpause</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">save_session</span><span class="p">()</span>
+                <span class="k">return</span> <span class="s2">"menu"</span>
+
+            <span class="c1"># Sound and HUD shortcuts</span>
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">K_s</span><span class="p">,</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_1</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">toggle_sound</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">K_h</span><span class="p">,</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_2</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">toggle_hud</span><span class="p">()</span>
+
+            <span class="c1"># Feet marker and feet click shortcuts</span>
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">K_t</span><span class="p">,</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_3</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">toggle_feet_marker</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="n">pygame</span><span class="o">.</span><span class="n">K_c</span><span class="p">,</span> <span class="n">pygame</span><span class="o">.</span><span class="n">K_4</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">toggle_feet_click</span><span class="p">()</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_toggle_interface_option</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">option</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Toggle an interface option, save it and record the event.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        option : str</span>
+<span class="sd">            "sound", "hud", "feet_marker" or "feet_click".</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            The new value of the option.</span>
+<span class="sd">        """</span>
+        <span class="n">enabled</span> <span class="o">=</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">option</span><span class="p">)</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="n">enabled</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config_service</span><span class="o">.</span><span class="n">set_interface_option</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">player_id</span><span class="p">,</span> <span class="n">option</span><span class="p">,</span> <span class="n">enabled</span>
+        <span class="p">)</span>
+        <span class="n">enable_event</span><span class="p">,</span> <span class="n">disable_event</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">INTERFACE_OPTION_EVENTS</span><span class="p">[</span><span class="n">option</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recorder</span><span class="o">.</span><span class="n">record</span><span class="p">(</span><span class="n">enable_event</span> <span class="k">if</span> <span class="n">enabled</span> <span class="k">else</span> <span class="n">disable_event</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">enabled</span>
+
+<div class="viewcode-block" id="GameController.toggle_sound">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamecontroller.gamecontroller.GameController.html#ttea.games.kartea.gamecontroller.gamecontroller.GameController.toggle_sound">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">toggle_sound</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Toggle the sound and apply it to the feedback sounds."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">feedback</span><span class="o">.</span><span class="n">set_sound_enabled</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_toggle_interface_option</span><span class="p">(</span><span class="s2">"sound"</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="GameController.toggle_hud">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamecontroller.gamecontroller.GameController.html#ttea.games.kartea.gamecontroller.gamecontroller.GameController.toggle_hud">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">toggle_hud</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Toggle the HUD."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_toggle_interface_option</span><span class="p">(</span><span class="s2">"hud"</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GameController.toggle_feet_marker">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamecontroller.gamecontroller.GameController.html#ttea.games.kartea.gamecontroller.gamecontroller.GameController.toggle_feet_marker">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">toggle_feet_marker</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Toggle the feet marker (dot at the real feet position)."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_toggle_interface_option</span><span class="p">(</span><span class="s2">"feet_marker"</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GameController.toggle_feet_click">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.gamecontroller.gamecontroller.GameController.html#ttea.games.kartea.gamecontroller.gamecontroller.GameController.toggle_feet_click">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">toggle_feet_click</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Toggle the selection of menu buttons with the feet."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_toggle_interface_option</span><span class="p">(</span><span class="s2">"feet_click"</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

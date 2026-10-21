@@ -1,0 +1,287 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CameraVideoThread &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.core.mediapipefilter" href="ttea.core.mediapipefilter.html" />
+    <link rel="prev" title="ttea.core.cameravideothread" href="ttea.core.cameravideothread.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.core.html">ttea.core</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.core.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.core.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.core.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.core.calibrationmath.html">ttea.core.calibrationmath</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.core.cameravideo.html">ttea.core.cameravideo</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.core.cameravideothread.html">ttea.core.cameravideothread</a><ul class="current">
+<li class="toctree-l5 current"><a class="current reference internal" href="#">CameraVideoThread</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#ttea.core.cameravideothread.CameraVideoThread"><code class="docutils literal notranslate"><span class="pre">CameraVideoThread</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.core.cameravideothread.CameraVideoThread.run"><code class="docutils literal notranslate"><span class="pre">CameraVideoThread.run()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.core.cameravideothread.CameraVideoThread.stop"><code class="docutils literal notranslate"><span class="pre">CameraVideoThread.stop()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.core.cameravideothread.CameraVideoThread.put_text_unicode"><code class="docutils literal notranslate"><span class="pre">CameraVideoThread.put_text_unicode()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.core.mediapipefilter.html">ttea.core.mediapipefilter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.core.mediapipemanager.html">ttea.core.mediapipemanager</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.games.html">ttea.games</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.core.html">ttea.core</a></li>
+          <li class="breadcrumb-item"><a href="ttea.core.cameravideothread.html">ttea.core.cameravideothread</a></li>
+      <li class="breadcrumb-item active">CameraVideoThread</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.core.cameravideothread.CameraVideoThread.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="cameravideothread">
+<h1>CameraVideoThread<a class="headerlink" href="#cameravideothread" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.core.cameravideothread.CameraVideoThread">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CameraVideoThread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">camera_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_low_resolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/core/cameravideothread.html#CameraVideoThread"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.core.cameravideothread.CameraVideoThread" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://doc.qt.io/qtforpython-6/PySide6/QtCore/QThread.html#PySide6.QtCore.QThread" title="(in PySide v6.12.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">QThread</span></code></a>, <a class="reference external" href="https://doc.qt.io/qtforpython-6/PySide6/QtCore/QObject.html#PySide6.QtCore.QObject" title="(in PySide v6.12.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">QObject</span></code></a></p>
+<p>Capture, analyze and annotate camera frames in a thread.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>camera_index</strong><span class="classifier">int</span></dt><dd><p>OpenCV index of the camera.</p>
+</dd>
+<dt><strong>use_low_resolution</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, set the width and height configured in
+<code class="docutils literal notranslate"><span class="pre">CalibrationService</span></code> on the camera. Default is False.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>change_pixmap_signal</strong><span class="classifier">Signal(QImage)</span></dt><dd><p>Emitted for each processed frame with an RGB888 copy of the
+annotated image.</p>
+</dd>
+<dt><strong>error_signal</strong><span class="classifier">Signal(str)</span></dt><dd><p>Emitted with a translated message when the camera cannot be
+opened or a frame cannot be read.</p>
+</dd>
+<dt><strong>camera_index</strong><span class="classifier">int</span></dt><dd><p>OpenCV index of the camera.</p>
+</dd>
+<dt><strong>running</strong><span class="classifier">bool</span></dt><dd><p>Loop flag; True on creation, set to False by <code class="docutils literal notranslate"><span class="pre">stop</span></code>.</p>
+</dd>
+<dt><strong>mp_manager</strong><span class="classifier">MediaPipeManager</span></dt><dd><p>Pose detector.</p>
+</dd>
+<dt><strong>use_low_resolution</strong><span class="classifier">bool</span></dt><dd><p>Whether the configured resolution is applied.</p>
+</dd>
+<dt><strong>filter</strong><span class="classifier">MediaPipeFilter</span></dt><dd><p>Frame enhancement and landmark smoothing.</p>
+</dd>
+<dt><strong>service</strong><span class="classifier">CalibrationService</span></dt><dd><p>Source of the camera, filter, pose and telemetry settings.</p>
+</dd>
+<dt><strong>last_timestamp_ms</strong><span class="classifier">int</span></dt><dd><p>Timestamp of the last frame sent to MediaPipe.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The configured resolution is applied only when
+<code class="docutils literal notranslate"><span class="pre">use_low_resolution</span></code> is True, the opposite of <code class="docutils literal notranslate"><span class="pre">CameraVideo</span></code>.
+TODO(doc): is this inversion intended?</p>
+<p>User-facing texts (error messages and telemetry labels) use
+<code class="docutils literal notranslate"><span class="pre">self.tr()</span></code> (runtime Qt translation).</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.core.cameravideothread.CameraVideoThread.put_text_unicode" title="ttea.core.cameravideothread.CameraVideoThread.put_text_unicode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">put_text_unicode</span></code></a></p></td>
+<td><p>Draw Unicode text on an OpenCV image using PIL.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.core.cameravideothread.CameraVideoThread.run" title="ttea.core.cameravideothread.CameraVideoThread.run"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run</span></code></a></p></td>
+<td><p>Capture and process frames until stopped or the camera fails.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.core.cameravideothread.CameraVideoThread.stop" title="ttea.core.cameravideothread.CameraVideoThread.stop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stop</span></code></a></p></td>
+<td><p>Stop the capture loop and wait for the thread to finish.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.core.cameravideothread.CameraVideoThread.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/core/cameravideothread.html#CameraVideoThread.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.core.cameravideothread.CameraVideoThread.run" title="Link to this definition"></a></dt>
+<dd><p>Capture and process frames until stopped or the camera fails.</p>
+<p>Runs in the thread when <code class="docutils literal notranslate"><span class="pre">start()</span></code> is called.</p>
+<p class="rubric">Notes</p>
+<p>For each frame:</p>
+<ol class="arabic simple">
+<li><p>The mean brightness (V channel in HSV) is measured.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MediaPipeFilter.apply_enhancements</span></code> runs if
+<code class="docutils literal notranslate"><span class="pre">is_filter_enable_filter()</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">is_enable_mediapipe_pose()</span></code>, the pose is detected and
+smoothed, and the skeleton is drawn (green landmarks, red
+connections). Timestamps are forced to increase by at least
+1 ms, as MediaPipe VIDEO mode requires.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">is_telemetry_enable_panel()</span></code>, the panel shows FPS
+(green at 15 or more, red below), brightness and the feet
+tracking confidence: the mean <code class="docutils literal notranslate"><span class="pre">visibility</span></code> of landmarks 31
+and 32, green above 0.5, red otherwise. The confidence is
+shown as a 0-1 value although the label says “%”.</p></li>
+<li><p>The frame is emitted through <code class="docutils literal notranslate"><span class="pre">change_pixmap_signal</span></code>.</p></li>
+</ol>
+<p>When a frame cannot be read, <code class="docutils literal notranslate"><span class="pre">error_signal</span></code> is emitted and the
+loop ends. The camera is released on exit.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.core.cameravideothread.CameraVideoThread.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/core/cameravideothread.html#CameraVideoThread.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.core.cameravideothread.CameraVideoThread.stop" title="Link to this definition"></a></dt>
+<dd><p>Stop the capture loop and wait for the thread to finish.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.core.cameravideothread.CameraVideoThread.put_text_unicode">
+<span class="sig-name descname"><span class="pre">put_text_unicode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(255,</span> <span class="pre">255,</span> <span class="pre">255)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">font_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/core/cameravideothread.html#CameraVideoThread.put_text_unicode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.core.cameravideothread.CameraVideoThread.put_text_unicode" title="Link to this definition"></a></dt>
+<dd><p>Draw Unicode text on an OpenCV image using PIL.</p>
+<p>OpenCV’s <code class="docutils literal notranslate"><span class="pre">putText</span></code> cannot render accented characters, so the
+image is converted to PIL, drawn and converted back.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>img</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>BGR image from OpenCV.</p>
+</dd>
+<dt><strong>text</strong><span class="classifier">str</span></dt><dd><p>Text to draw.</p>
+</dd>
+<dt><strong>position</strong><span class="classifier">tuple[int, int]</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">(x,</span> <span class="pre">y)</span></code> of the top-left corner of the text.</p>
+</dd>
+<dt><strong>font_size</strong><span class="classifier">int, optional</span></dt><dd><p>Font size in points. Default is 20.</p>
+</dd>
+<dt><strong>color</strong><span class="classifier">tuple[int, int, int], optional</span></dt><dd><p>Text color in BGR. Default is white.</p>
+</dd>
+<dt><strong>font_path</strong><span class="classifier">str | None, optional</span></dt><dd><p>TrueType font file. Default is None, which tries
+<code class="docutils literal notranslate"><span class="pre">DejaVuSans.ttf</span></code> (Linux), then <code class="docutils literal notranslate"><span class="pre">arial.ttf</span></code> (Windows),
+then PIL’s default font.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>numpy.ndarray</dt><dd><p>New BGR image with the text drawn.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.core.cameravideothread.html" class="btn btn-neutral float-left" title="ttea.core.cameravideothread" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.core.mediapipefilter.html" class="btn btn-neutral float-right" title="ttea.core.mediapipefilter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

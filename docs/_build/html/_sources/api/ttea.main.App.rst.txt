@@ -1,0 +1,16 @@
+App
+===
+
+.. currentmodule:: ttea.main
+
+.. autoclass:: App
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~App.run

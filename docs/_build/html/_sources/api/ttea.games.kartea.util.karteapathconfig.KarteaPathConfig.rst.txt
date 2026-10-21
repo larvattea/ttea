@@ -1,0 +1,42 @@
+KarteaPathConfig
+================
+
+.. currentmodule:: ttea.games.kartea.util.karteapathconfig
+
+.. autoclass:: KarteaPathConfig
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~KarteaPathConfig.create_default_ini
+      ~KarteaPathConfig.ensure_kartea_dirs
+      ~KarteaPathConfig.ensure_mods_dirs
+      ~KarteaPathConfig.find_builtin_for_field
+      ~KarteaPathConfig.find_mod_for_field
+      ~KarteaPathConfig.game_builtin_image
+      ~KarteaPathConfig.game_builtin_sound
+      ~KarteaPathConfig.game_image
+      ~KarteaPathConfig.game_sound
+      ~KarteaPathConfig.get_phase_source
+      ~KarteaPathConfig.kartea_config
+      ~KarteaPathConfig.kartea_config_file_exists
+      ~KarteaPathConfig.kartea_resource
+      ~KarteaPathConfig.list_builtin_for_field
+      ~KarteaPathConfig.list_builtin_resources
+      ~KarteaPathConfig.list_images
+      ~KarteaPathConfig.list_mod_for_field
+      ~KarteaPathConfig.list_resources_for_field
+      ~KarteaPathConfig.list_sounds
+      ~KarteaPathConfig.log
+      ~KarteaPathConfig.mod_dir_for_field
+      ~KarteaPathConfig.phase
+      ~KarteaPathConfig.player
+      ~KarteaPathConfig.read_config
+      ~KarteaPathConfig.read_phase_data
+      ~KarteaPathConfig.resolve_for_field
+      ~KarteaPathConfig.resolve_for_field_or_default

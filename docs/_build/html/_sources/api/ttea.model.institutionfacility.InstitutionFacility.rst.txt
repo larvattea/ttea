@@ -1,0 +1,18 @@
+InstitutionFacility
+===================
+
+.. currentmodule:: ttea.model.institutionfacility
+
+.. autoclass:: InstitutionFacility
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~InstitutionFacility.get_data
+      ~InstitutionFacility.is_valid
+      ~InstitutionFacility.set_data

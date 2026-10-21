@@ -1,0 +1,405 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CalibrationSetting &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.model.gamemetadata" href="ttea.model.gamemetadata.html" />
+    <link rel="prev" title="ttea.model.calibrationsetting" href="ttea.model.calibrationsetting.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.games.html">ttea.games</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.model.html">ttea.model</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.appmodel.html">ttea.model.appmodel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.calibration.html">ttea.model.calibration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.calibrationpoint.html">ttea.model.calibrationpoint</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.model.calibrationsetting.html">ttea.model.calibrationsetting</a><ul class="current">
+<li class="toctree-l5 current"><a class="current reference internal" href="#">CalibrationSetting</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#ttea.model.calibrationsetting.CalibrationSetting"><code class="docutils literal notranslate"><span class="pre">CalibrationSetting</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.model.calibrationsetting.CalibrationSetting.is_valid"><code class="docutils literal notranslate"><span class="pre">CalibrationSetting.is_valid()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.model.calibrationsetting.CalibrationSetting.set_data"><code class="docutils literal notranslate"><span class="pre">CalibrationSetting.set_data()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.model.calibrationsetting.CalibrationSetting.get_data"><code class="docutils literal notranslate"><span class="pre">CalibrationSetting.get_data()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.model.calibrationsetting.CalibrationSetting.get_proportion_tuple"><code class="docutils literal notranslate"><span class="pre">CalibrationSetting.get_proportion_tuple()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.model.calibrationsetting.CalibrationSetting.get_section_for_property"><code class="docutils literal notranslate"><span class="pre">CalibrationSetting.get_section_for_property()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.model.calibrationsetting.html#ttea.model.calibrationsetting.initialize_reflexive"><code class="docutils literal notranslate"><span class="pre">initialize_reflexive()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.gamemetadata.html">ttea.model.gamemetadata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.institutionfacility.html">ttea.model.institutionfacility</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.language.html">ttea.model.language</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.player.html">ttea.model.player</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.professional.html">ttea.model.professional</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.model.html">ttea.model</a></li>
+          <li class="breadcrumb-item"><a href="ttea.model.calibrationsetting.html">ttea.model.calibrationsetting</a></li>
+      <li class="breadcrumb-item active">CalibrationSetting</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.model.calibrationsetting.CalibrationSetting.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="calibrationsetting">
+<h1>CalibrationSetting<a class="headerlink" href="#calibrationsetting" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.model.calibrationsetting.CalibrationSetting">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CalibrationSetting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mediapipe_model_desktop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mediapipe_model_embedded</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mediapipe_embedded_processing</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mediapipe_linux_processing</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mediapipe_mac_processing</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mediapipe_windows_processing</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mediapipe_execution_mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mediapipe_enable_mediapipe_pose</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mediapipe_detection_position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mediapipe_detection_presence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mediapipe_detection_tracking</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mediapipe_num_position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opencv_embedded_capture</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opencv_linux_capture</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opencv_mac_capture</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opencv_windows_capture</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opencv_buffer_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opencv_custom_camera</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opencv_ratio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opencv_width</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opencv_height</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opencv_fps</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_enable_filter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_average_smooth_frames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_clahe_clip</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_clahe_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_clahe_lum_below</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_gamma_factor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_gamma_lum_above</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter_landmark_limit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">telemetry_enable_telemetry_panel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">automatic_window_position_automatic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">automatic_window_open_automatic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">automatic_open_projector_automatic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">automatic_default_calibration_automatic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">automatic_mirror_mode_automatic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">automatic_num_columns_automatic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">automatic_num_rows_automatic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">automatic_multiplier_automatic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">automatic_dictionary_automatic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">automatic_width_automatic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">automatic_height_automatic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">automatic_margin_automatic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semiautomatic_window_position_semiautomatic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semiautomatic_window_open_semiautomatic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semiautomatic_open_projector_semiautomatic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semiautomatic_default_calibration_semiautomatic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">semiautomatic_mirror_mode_semiautomatic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manual_window_position_manual</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manual_window_open_manual</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manual_open_projector_manual</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manual_default_calibration_manual</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">manual_mirror_mode_manual</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/model/calibrationsetting.html#CalibrationSetting"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.model.calibrationsetting.CalibrationSetting" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Represent the calibration settings of the application.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>mediapipe_model_desktop, mediapipe_model_embedded</strong><span class="classifier">str</span></dt><dd><p>MediaPipe model file names for desktop and embedded systems.</p>
+</dd>
+<dt><strong>mediapipe_embedded_processing, mediapipe_linux_processing</strong><span class="classifier">str</span></dt><dd><p>MediaPipe processing option for embedded systems and Linux.</p>
+</dd>
+<dt><strong>mediapipe_mac_processing, mediapipe_windows_processing</strong><span class="classifier">str</span></dt><dd><p>MediaPipe processing option for macOS and Windows.</p>
+</dd>
+<dt><strong>mediapipe_execution_mode</strong><span class="classifier">str</span></dt><dd><p>MediaPipe running mode.</p>
+</dd>
+<dt><strong>mediapipe_enable_mediapipe_pose</strong><span class="classifier">int</span></dt><dd><p>Pose detection switch.</p>
+</dd>
+<dt><strong>mediapipe_detection_position</strong><span class="classifier">float</span></dt><dd><p>Minimum pose detection confidence.</p>
+</dd>
+<dt><strong>mediapipe_detection_presence</strong><span class="classifier">float</span></dt><dd><p>Minimum pose presence confidence.</p>
+</dd>
+<dt><strong>mediapipe_detection_tracking</strong><span class="classifier">float</span></dt><dd><p>Minimum pose tracking confidence.</p>
+</dd>
+<dt><strong>mediapipe_num_position</strong><span class="classifier">int</span></dt><dd><p>Maximum number of poses detected.</p>
+</dd>
+<dt><strong>opencv_embedded_capture, opencv_linux_capture</strong><span class="classifier">str</span></dt><dd><p>OpenCV capture backend for embedded systems and Linux.</p>
+</dd>
+<dt><strong>opencv_mac_capture, opencv_windows_capture</strong><span class="classifier">str</span></dt><dd><p>OpenCV capture backend for macOS and Windows.</p>
+</dd>
+<dt><strong>opencv_buffer_size</strong><span class="classifier">int</span></dt><dd><p>Capture buffer size.</p>
+</dd>
+<dt><strong>opencv_custom_camera</strong><span class="classifier">int</span></dt><dd><p>Custom camera switch.</p>
+</dd>
+<dt><strong>opencv_ratio</strong><span class="classifier">str</span></dt><dd><p>Capture aspect ratio name.</p>
+</dd>
+<dt><strong>opencv_width, opencv_height, opencv_fps</strong><span class="classifier">int</span></dt><dd><p>Capture resolution in pixels and frame rate.</p>
+</dd>
+<dt><strong>filter_enable_filter</strong><span class="classifier">int</span></dt><dd><p>Image enhancement switch.</p>
+</dd>
+<dt><strong>filter_average_smooth_frames</strong><span class="classifier">int</span></dt><dd><p>Frames averaged when smoothing landmarks.</p>
+</dd>
+<dt><strong>filter_clahe_clip</strong><span class="classifier">int</span></dt><dd><p>CLAHE clip limit.</p>
+</dd>
+<dt><strong>filter_clahe_grid</strong><span class="classifier">str</span></dt><dd><p>CLAHE tile grid size.</p>
+</dd>
+<dt><strong>filter_clahe_lum_below</strong><span class="classifier">int</span></dt><dd><p>Brightness (0-255) below which CLAHE is applied.</p>
+</dd>
+<dt><strong>filter_gamma_factor</strong><span class="classifier">float</span></dt><dd><p>Gamma correction factor.</p>
+</dd>
+<dt><strong>filter_gamma_lum_above</strong><span class="classifier">int</span></dt><dd><p>Brightness (0-255) above which gamma correction is applied.</p>
+</dd>
+<dt><strong>filter_landmark_limit</strong><span class="classifier">float</span></dt><dd><p>Landmark movement (normalized) that resets its smoothing.</p>
+</dd>
+<dt><strong>telemetry_enable_telemetry_panel</strong><span class="classifier">int</span></dt><dd><p>Telemetry panel switch.</p>
+</dd>
+<dt><strong>automatic_window_position_automatic</strong><span class="classifier">str</span></dt><dd><p>Window position of the automatic calibration.</p>
+</dd>
+<dt><strong>automatic_window_open_automatic</strong><span class="classifier">str</span></dt><dd><p>Window opening setting of the automatic calibration.</p>
+</dd>
+<dt><strong>automatic_open_projector_automatic</strong><span class="classifier">int</span></dt><dd><p>Projector opening flag of the automatic mode.</p>
+</dd>
+<dt><strong>automatic_default_calibration_automatic</strong><span class="classifier">int</span></dt><dd><p>Default calibration flag of the automatic mode.</p>
+</dd>
+<dt><strong>automatic_mirror_mode_automatic</strong><span class="classifier">int</span></dt><dd><p>Mirror mode flag of the automatic calibration.</p>
+</dd>
+<dt><strong>automatic_num_columns_automatic, automatic_num_rows_automatic</strong><span class="classifier">int</span></dt><dd><p>Size of the calibration pattern grid.</p>
+</dd>
+<dt><strong>automatic_multiplier_automatic</strong><span class="classifier">float</span></dt><dd><p>Multiplier used by the automatic calibration.</p>
+</dd>
+<dt><strong>automatic_dictionary_automatic</strong><span class="classifier">str</span></dt><dd><p>Dictionary used by the automatic calibration pattern.</p>
+</dd>
+<dt><strong>automatic_width_automatic, automatic_height_automatic</strong><span class="classifier">int</span></dt><dd><p>Size of the automatic calibration pattern.</p>
+</dd>
+<dt><strong>automatic_margin_automatic</strong><span class="classifier">int</span></dt><dd><p>Margin of the automatic calibration pattern.</p>
+</dd>
+<dt><strong>semiautomatic_window_position_semiautomatic</strong><span class="classifier">str</span></dt><dd><p>Window position of the semiautomatic calibration.</p>
+</dd>
+<dt><strong>semiautomatic_window_open_semiautomatic</strong><span class="classifier">str</span></dt><dd><p>Window opening setting of the semiautomatic calibration.</p>
+</dd>
+<dt><strong>semiautomatic_open_projector_semiautomatic</strong><span class="classifier">int</span></dt><dd><p>Projector opening flag of the semiautomatic mode.</p>
+</dd>
+<dt><strong>semiautomatic_default_calibration_semiautomatic</strong><span class="classifier">int</span></dt><dd><p>Default calibration flag of the semiautomatic mode.</p>
+</dd>
+<dt><strong>semiautomatic_mirror_mode_semiautomatic</strong><span class="classifier">int</span></dt><dd><p>Mirror mode flag of the semiautomatic mode.</p>
+</dd>
+<dt><strong>manual_window_position_manual</strong><span class="classifier">str</span></dt><dd><p>Window position of the manual calibration.</p>
+</dd>
+<dt><strong>manual_window_open_manual</strong><span class="classifier">str</span></dt><dd><p>Window opening setting of the manual calibration.</p>
+</dd>
+<dt><strong>manual_open_projector_manual</strong><span class="classifier">int</span></dt><dd><p>Projector opening flag of the manual mode.</p>
+</dd>
+<dt><strong>manual_default_calibration_manual</strong><span class="classifier">int</span></dt><dd><p>Default calibration flag of the manual mode.</p>
+</dd>
+<dt><strong>manual_mirror_mode_manual</strong><span class="classifier">int</span></dt><dd><p>Mirror mode flag of the manual calibration.</p>
+</dd>
+<dt><strong>PROPERTIES</strong><span class="classifier">list[str], class attribute</span></dt><dd><p>Field names, filled by <code class="docutils literal notranslate"><span class="pre">initialize_reflexive</span></code>.</p>
+</dd>
+<dt><strong>DATA_PROPERTIES</strong><span class="classifier">list, class attribute</span></dt><dd><p>Field defaults, filled by <code class="docutils literal notranslate"><span class="pre">initialize_reflexive</span></code>.</p>
+</dd>
+<dt><strong>ID_VALUE</strong><span class="classifier">int, class attribute</span></dt><dd><p>Fixed identifier of the single settings record (1).</p>
+</dd>
+<dt><strong>PROPORTIONS</strong><span class="classifier">dict[str, tuple[int, int]], class attribute</span></dt><dd><p>Supported aspect ratios by name.</p>
+</dd>
+<dt><strong>FULLSCREEN, MAXIMIZED, MAXIMIZED_UTIL</strong><span class="classifier">int, class attribute</span></dt><dd><p>Window display mode codes (1, 2 and 3).</p>
+</dd>
+<dt><strong>SECTIONS_MAP</strong><span class="classifier">dict[str, str], class attribute</span></dt><dd><p>Field name prefix to .ini section.</p>
+</dd>
+<dt><strong>IGNORED_PROPERTIES</strong><span class="classifier">list[str], class attribute</span></dt><dd><p>Class attribute names that must not be saved.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Every field is required by the constructor; there are no
+defaults.</p>
+<p>TODO(doc): confirm the meaning of the <code class="docutils literal notranslate"><span class="pre">*_window_open_*</span></code> and
+<code class="docutils literal notranslate"><span class="pre">*_default_calibration_*</span></code> fields and which field uses the
+window display mode codes.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">CalibrationSetting</span><span class="o">.</span><span class="n">PROPERTIES</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">CalibrationSetting</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">get_section_for_property</span><span class="p">(</span><span class="s2">"filter_gamma_factor"</span><span class="p">)</span>
+<span class="go">'filter'</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">get_section_for_property</span><span class="p">(</span><span class="s2">"other"</span><span class="p">)</span>
+<span class="go">'geral'</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.model.calibrationsetting.CalibrationSetting.get_data" title="ttea.model.calibrationsetting.CalibrationSetting.get_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data</span></code></a></p></td>
+<td><p>Return the field values as a one-item list.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.model.calibrationsetting.CalibrationSetting.get_proportion_tuple" title="ttea.model.calibrationsetting.CalibrationSetting.get_proportion_tuple"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_proportion_tuple</span></code></a></p></td>
+<td><p>Return the <code class="docutils literal notranslate"><span class="pre">(width,</span> <span class="pre">height)</span></code> ratio of a proportion name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.model.calibrationsetting.CalibrationSetting.get_section_for_property" title="ttea.model.calibrationsetting.CalibrationSetting.get_section_for_property"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_section_for_property</span></code></a></p></td>
+<td><p>Return the .ini section of a field, based on its prefix.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.model.calibrationsetting.CalibrationSetting.is_valid" title="ttea.model.calibrationsetting.CalibrationSetting.is_valid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_valid</span></code></a></p></td>
+<td><p>Check that no field is None.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.model.calibrationsetting.CalibrationSetting.set_data" title="ttea.model.calibrationsetting.CalibrationSetting.set_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_data</span></code></a></p></td>
+<td><p>Update the fields from a dictionary.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.model.calibrationsetting.CalibrationSetting.is_valid">
+<span class="sig-name descname"><span class="pre">is_valid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/model/calibrationsetting.html#CalibrationSetting.is_valid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.model.calibrationsetting.CalibrationSetting.is_valid" title="Link to this definition"></a></dt>
+<dd><p>Check that no field is None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>bool</dt><dd><p>False if any field of <code class="docutils literal notranslate"><span class="pre">PROPERTIES</span></code> is None, True
+otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.model.calibrationsetting.CalibrationSetting.set_data">
+<span class="sig-name descname"><span class="pre">set_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/model/calibrationsetting.html#CalibrationSetting.set_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.model.calibrationsetting.CalibrationSetting.set_data" title="Link to this definition"></a></dt>
+<dd><p>Update the fields from a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data</strong><span class="classifier">dict</span></dt><dd><p>Values keyed by field name. Keys that are not fields are
+ignored, and fields missing from <code class="docutils literal notranslate"><span class="pre">data</span></code> keep their value.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>No validation or type conversion is done.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.model.calibrationsetting.CalibrationSetting.get_data">
+<span class="sig-name descname"><span class="pre">get_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/model/calibrationsetting.html#CalibrationSetting.get_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.model.calibrationsetting.CalibrationSetting.get_data" title="Link to this definition"></a></dt>
+<dd><p>Return the field values as a one-item list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>list[dict]</dt><dd><p>A list with one dictionary that maps each name of
+<code class="docutils literal notranslate"><span class="pre">PROPERTIES</span></code> to its current value.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.model.calibrationsetting.CalibrationSetting.get_proportion_tuple">
+<span class="sig-name descname"><span class="pre">get_proportion_tuple</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">proportion</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/model/calibrationsetting.html#CalibrationSetting.get_proportion_tuple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.model.calibrationsetting.CalibrationSetting.get_proportion_tuple" title="Link to this definition"></a></dt>
+<dd><p>Return the <code class="docutils literal notranslate"><span class="pre">(width,</span> <span class="pre">height)</span></code> ratio of a proportion name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>proportion</strong><span class="classifier">str</span></dt><dd><p>Proportion name, <code class="docutils literal notranslate"><span class="pre">&quot;4:3&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;16:9&quot;</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple[int, int]</dt><dd><p>The ratio from <code class="docutils literal notranslate"><span class="pre">PROPORTIONS</span></code>, or <code class="docutils literal notranslate"><span class="pre">(0,</span> <span class="pre">0)</span></code> if the name is
+unknown.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.model.calibrationsetting.CalibrationSetting.get_section_for_property">
+<span class="sig-name descname"><span class="pre">get_section_for_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prop_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/model/calibrationsetting.html#CalibrationSetting.get_section_for_property"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.model.calibrationsetting.CalibrationSetting.get_section_for_property" title="Link to this definition"></a></dt>
+<dd><p>Return the .ini section of a field, based on its prefix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>prop_name</strong><span class="classifier">str</span></dt><dd><p>Field name.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Section from <code class="docutils literal notranslate"><span class="pre">SECTIONS_MAP</span></code> for the first matching prefix,
+or <code class="docutils literal notranslate"><span class="pre">&quot;geral&quot;</span></code> if no prefix matches.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.model.calibrationsetting.html" class="btn btn-neutral float-left" title="ttea.model.calibrationsetting" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.model.gamemetadata.html" class="btn btn-neutral float-right" title="ttea.model.gamemetadata" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

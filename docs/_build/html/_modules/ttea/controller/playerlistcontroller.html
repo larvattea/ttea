@@ -1,0 +1,319 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.controller.playerlistcontroller &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.controller.playerlistcontroller</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.controller.playerlistcontroller</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Controller of the player list window."""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Callable</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">QObject</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.exception</span><span class="w"> </span><span class="kn">import</span> <span class="n">BusinessRuleException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.service</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerService</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">MessageService</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerEditView</span><span class="p">,</span> <span class="n">PlayerListView</span>
+
+
+<div class="viewcode-block" id="PlayerListController">
+<a class="viewcode-back" href="../../../api/ttea.controller.playerlistcontroller.PlayerListController.html#ttea.controller.playerlistcontroller.PlayerListController">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PlayerListController</span><span class="p">(</span><span class="n">QObject</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Controller of the player list window (MVCS).</span>
+
+<span class="sd">    Mediates between ``PlayerListView`` and ``PlayerService``: loads and</span>
+<span class="sd">    filters the table, shows the details of the selected player and</span>
+<span class="sd">    opens the edit dialog to create or update players.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    view : PlayerListView</span>
+<span class="sd">        The list view.</span>
+<span class="sd">    factory : Callable</span>
+<span class="sd">        Creates the edit dialog: ``factory(parent, player=None)``</span>
+<span class="sd">        returns ``PlayerEditView``.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    view : PlayerListView</span>
+<span class="sd">        The list view.</span>
+<span class="sd">    factory : Callable</span>
+<span class="sd">        Factory of the edit dialog.</span>
+<span class="sd">    service : PlayerService</span>
+<span class="sd">        Shared service of players.</span>
+<span class="sd">    msg : MessageService</span>
+<span class="sd">        Service used to show messages.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The table is reloaded automatically when the service emits</span>
+<span class="sd">    ``player_change`` (observer pattern), keeping the current search</span>
+<span class="sd">    text. The buttons, search field and table selection are connected</span>
+<span class="sd">    when the controller is created, and the table is loaded right away.</span>
+<span class="sd">    Messages are translated with ``self.tr()``.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">view</span><span class="p">:</span> <span class="s2">"PlayerListView"</span><span class="p">,</span> <span class="n">factory</span><span class="p">:</span> <span class="n">Callable</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span> <span class="o">=</span> <span class="n">view</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">factory</span> <span class="o">=</span> <span class="n">factory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="n">PlayerService</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">msg</span> <span class="o">=</span> <span class="n">MessageService</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">player_change</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reload_data</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">pb_new</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">create_player</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">pb_edit</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_player</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">pb_delete</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">delete_player</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">led_search</span><span class="o">.</span><span class="n">textChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filter_players</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">tbl_player</span><span class="o">.</span><span class="n">itemSelectionChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">on_table_selection</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_players</span><span class="p">()</span>
+
+<div class="viewcode-block" id="PlayerListController.reload_data">
+<a class="viewcode-back" href="../../../api/ttea.controller.playerlistcontroller.PlayerListController.html#ttea.controller.playerlistcontroller.PlayerListController.reload_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reload_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Reload the table after a change in the service.</span>
+
+<span class="sd">        Slot of ``PlayerService.player_change``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        target_id : int, optional</span>
+<span class="sd">            ID to select after reloading. With 0 (default), the</span>
+<span class="sd">            currently selected row is kept.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">target_id</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">target_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">get_selected_id</span><span class="p">()</span> <span class="ow">or</span> <span class="mi">0</span>
+
+        <span class="n">query</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">led_search</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_players</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">target_id</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">select_row_by_id</span><span class="p">(</span><span class="n">target_id</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PlayerListController.load_players">
+<a class="viewcode-back" href="../../../api/ttea.controller.playerlistcontroller.PlayerListController.html#ttea.controller.playerlistcontroller.PlayerListController.load_players">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_players</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Load the players matching ``query``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        query : str, optional</span>
+<span class="sd">            Search term; empty lists all players. Default is ``""``.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The details panel is cleared.</span>
+<span class="sd">        """</span>
+        <span class="n">players</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">search_players</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">populate_table</span><span class="p">(</span><span class="n">players</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">clear_details</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="PlayerListController.filter_players">
+<a class="viewcode-back" href="../../../api/ttea.controller.playerlistcontroller.PlayerListController.html#ttea.controller.playerlistcontroller.PlayerListController.filter_players">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">filter_players</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Filter the table with the search text.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        text : str</span>
+<span class="sd">            Text typed in the search field; it is stripped.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_players</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="PlayerListController.on_table_selection">
+<a class="viewcode-back" href="../../../api/ttea.controller.playerlistcontroller.PlayerListController.html#ttea.controller.playerlistcontroller.PlayerListController.on_table_selection">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">on_table_selection</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Show the details of the selected player."""</span>
+        <span class="n">player_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">get_selected_id</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">player_id</span><span class="p">:</span>
+            <span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">player</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">display_details</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">clear_details</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="PlayerListController.create_player">
+<a class="viewcode-back" href="../../../api/ttea.controller.playerlistcontroller.PlayerListController.html#ttea.controller.playerlistcontroller.PlayerListController.create_player">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_player</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Create a player through the edit dialog."""</span>
+        <span class="n">dialog</span><span class="p">:</span> <span class="s2">"PlayerEditView"</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dialog</span><span class="o">.</span><span class="n">exec</span><span class="p">():</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">create_player</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+                <span class="c1"># The service signal reloads the list.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Jogador cadastrado com sucesso!"</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Erro ao salvar jogador."</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="PlayerListController.update_player">
+<a class="viewcode-back" href="../../../api/ttea.controller.playerlistcontroller.PlayerListController.html#ttea.controller.playerlistcontroller.PlayerListController.update_player">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_player</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Edit the selected player through the edit dialog.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        A warning is shown when no row is selected.</span>
+<span class="sd">        """</span>
+        <span class="n">player_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">get_selected_id</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">player_id</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Selecione um jogador para editar."</span><span class="p">))</span>
+            <span class="k">return</span>
+
+        <span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">player</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Jogador não encontrado."</span><span class="p">))</span>
+            <span class="k">return</span>
+
+        <span class="n">dialog</span><span class="p">:</span> <span class="s2">"PlayerEditView"</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">factory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="p">,</span> <span class="n">player</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dialog</span><span class="o">.</span><span class="n">exec</span><span class="p">():</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">dialog</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">update_player</span><span class="p">(</span><span class="n">player_id</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
+                <span class="c1"># The service signal reloads the list.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Jogador atualizado com sucesso."</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Erro ao atualizar jogador."</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="PlayerListController.delete_player">
+<a class="viewcode-back" href="../../../api/ttea.controller.playerlistcontroller.PlayerListController.html#ttea.controller.playerlistcontroller.PlayerListController.delete_player">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">delete_player</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Delete the selected player after confirmation.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        A warning is shown when no row is selected.</span>
+<span class="sd">        ``BusinessRuleException`` from the service (e.g. a linked</span>
+<span class="sd">        record) is shown as a warning.</span>
+<span class="sd">        """</span>
+        <span class="n">player_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">get_selected_id</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">player_id</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Selecione um jogador para excluir."</span><span class="p">))</span>
+            <span class="k">return</span>
+
+        <span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">find_by_id</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">player</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">question</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Deseja excluir?</span><span class="se">\n</span><span class="si">{0}</span><span class="s2">"</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">delete_player</span><span class="p">(</span><span class="n">player_id</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">clear_details</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Jogador excluído com sucesso."</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Erro ao excluir jogador."</span><span class="p">))</span>
+            <span class="k">except</span> <span class="n">BusinessRuleException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

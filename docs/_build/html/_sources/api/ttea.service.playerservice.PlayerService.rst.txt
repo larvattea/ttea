@@ -1,0 +1,22 @@
+PlayerService
+=============
+
+.. currentmodule:: ttea.service.playerservice
+
+.. autoclass:: PlayerService
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~PlayerService.create_player
+      ~PlayerService.delete_player
+      ~PlayerService.find_by_id
+      ~PlayerService.get_all_players
+      ~PlayerService.search_players
+      ~PlayerService.update_player
+      ~PlayerService.validate_data

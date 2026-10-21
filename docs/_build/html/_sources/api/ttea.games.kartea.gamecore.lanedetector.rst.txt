@@ -1,0 +1,20 @@
+ttea.games.kartea.gamecore.lanedetector
+=======================================
+
+.. automodule:: ttea.games.kartea.gamecore.lanedetector
+
+.. currentmodule:: ttea.games.kartea.gamecore.lanedetector
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   LaneDetector
+
+

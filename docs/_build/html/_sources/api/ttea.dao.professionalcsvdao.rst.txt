@@ -1,0 +1,20 @@
+ttea.dao.professionalcsvdao
+===========================
+
+.. automodule:: ttea.dao.professionalcsvdao
+
+.. currentmodule:: ttea.dao.professionalcsvdao
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   ProfessionalCsvDAO
+
+

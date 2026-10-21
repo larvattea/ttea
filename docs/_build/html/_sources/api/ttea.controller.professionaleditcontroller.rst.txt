@@ -1,0 +1,20 @@
+ttea.controller.professionaleditcontroller
+==========================================
+
+.. automodule:: ttea.controller.professionaleditcontroller
+
+.. currentmodule:: ttea.controller.professionaleditcontroller
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   ProfessionalEditController
+
+

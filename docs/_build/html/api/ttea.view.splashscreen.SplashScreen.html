@@ -1,0 +1,286 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SplashScreen &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.window" href="ttea.window.html" />
+    <link rel="prev" title="ttea.view.splashscreen" href="ttea.view.splashscreen.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.games.html">ttea.games</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.view.html">ttea.view</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.aboutview.html">ttea.view.aboutview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.automaticcalibrationview.html">ttea.view.automaticcalibrationview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.calibrationsettingview.html">ttea.view.calibrationsettingview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.calibrationview.html">ttea.view.calibrationview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.helpview.html">ttea.view.helpview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.institutionfacilityeditview.html">ttea.view.institutionfacilityeditview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.institutionfacilitylistview.html">ttea.view.institutionfacilitylistview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.languageview.html">ttea.view.languageview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.mainview.html">ttea.view.mainview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.manualcalibrationview.html">ttea.view.manualcalibrationview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.playereditview.html">ttea.view.playereditview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.playergamelaunchview.html">ttea.view.playergamelaunchview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.playerlistview.html">ttea.view.playerlistview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.professionaleditview.html">ttea.view.professionaleditview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.professionallistview.html">ttea.view.professionallistview</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.view.splashscreen.html">ttea.view.splashscreen</a><ul class="current">
+<li class="toctree-l5 current"><a class="current reference internal" href="#">SplashScreen</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#ttea.view.splashscreen.SplashScreen"><code class="docutils literal notranslate"><span class="pre">SplashScreen</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.view.splashscreen.SplashScreen.finish"><code class="docutils literal notranslate"><span class="pre">SplashScreen.finish()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.view.splashscreen.SplashScreen.load_resource"><code class="docutils literal notranslate"><span class="pre">SplashScreen.load_resource()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.view.splashscreen.SplashScreen.resizeEvent"><code class="docutils literal notranslate"><span class="pre">SplashScreen.resizeEvent()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.view.html">ttea.view</a></li>
+          <li class="breadcrumb-item"><a href="ttea.view.splashscreen.html">ttea.view.splashscreen</a></li>
+      <li class="breadcrumb-item active">SplashScreen</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.view.splashscreen.SplashScreen.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="splashscreen">
+<h1>SplashScreen<a class="headerlink" href="#splashscreen" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.view.splashscreen.SplashScreen">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">SplashScreen</span></span><a class="reference internal" href="../_modules/ttea/view/splashscreen.html#SplashScreen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.view.splashscreen.SplashScreen" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://doc.qt.io/qtforpython-6/PySide6/QtWidgets/QSplashScreen.html#PySide6.QtWidgets.QSplashScreen" title="(in PySide v6.12.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">QSplashScreen</span></code></a></p>
+<p>Splash screen with animated progress for the application startup.</p>
+<p>Displays a splash screen during application initialization with a
+status label and animated progress bar. Shows rotating status
+messages every 1.2 seconds and includes sound effect initialization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>status_label</strong><span class="classifier">QLabel</span></dt><dd><p>Label widget displaying current loading status message.</p>
+</dd>
+<dt><strong>progress_bar</strong><span class="classifier">QProgressBar</span></dt><dd><p>Progress bar widget with infinite animation effect during
+startup.</p>
+</dd>
+<dt><strong>animation</strong><span class="classifier">QPropertyAnimation</span></dt><dd><p>Animation object controlling the progress bar’s value with
+infinite loop.</p>
+</dd>
+<dt><strong>messages</strong><span class="classifier">list[str]</span></dt><dd><p>List of rotating status messages to display during loading.</p>
+</dd>
+<dt><strong>msg_index</strong><span class="classifier">int</span></dt><dd><p>Current index in the messages list, used by the timer callback.</p>
+</dd>
+<dt><strong>timer</strong><span class="classifier">QTimer</span></dt><dd><p>Timer object that triggers message updates every 1.2 seconds.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><strong>_update_geometry()</strong></p></td>
+<td><p>Update positions and sizes of child widgets based on splash size.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>_next_message()</strong></p></td>
+<td><p>Rotate to the next status message in the message list.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>finish(main_window)</strong></p></td>
+<td><p>Complete the splash screen animation and close the widget.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>load_resource()</strong></p></td>
+<td><p>Initialize sound effect resources for warm-up.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>resizeEvent(event)</strong></p></td>
+<td><p>Handle resize events by updating widget geometry.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The progress bar operates in “indeterminate” mode (infinite
+animation) during startup. When finish() is called, it switches to
+determinate mode and shows 100% completion. The class supports
+localization: the messages are translated at runtime with
+<code class="docutils literal notranslate"><span class="pre">self.tr()</span></code>.</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.view.splashscreen.SplashScreen.finish" title="ttea.view.splashscreen.SplashScreen.finish"><code class="xref py py-obj docutils literal notranslate"><span class="pre">finish</span></code></a></p></td>
+<td><p>Complete the splash screen animation and close the widget.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.view.splashscreen.SplashScreen.load_resource" title="ttea.view.splashscreen.SplashScreen.load_resource"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_resource</span></code></a></p></td>
+<td><p>Initialize sound effect resources for warm-up.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.view.splashscreen.SplashScreen.resizeEvent" title="ttea.view.splashscreen.SplashScreen.resizeEvent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resizeEvent</span></code></a></p></td>
+<td><p>Handle resize events by updating widget geometry.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.view.splashscreen.SplashScreen.finish">
+<span class="sig-name descname"><span class="pre">finish</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">main_window</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/view/splashscreen.html#SplashScreen.finish"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.view.splashscreen.SplashScreen.finish" title="Link to this definition"></a></dt>
+<dd><p>Complete the splash screen animation and close the widget.</p>
+<p>Stops timers and animations, sets the progress bar to 100%
+completion, displays the final “Concluído!” message, and calls
+the parent QSplashScreen.finish() to properly close the splash
+screen and show the main window.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>main_window</strong><span class="classifier">QWidget</span></dt><dd><p>The main application window to display after splash closes.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.view.splashscreen.SplashScreen.load_resource">
+<span class="sig-name descname"><span class="pre">load_resource</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/view/splashscreen.html#SplashScreen.load_resource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.view.splashscreen.SplashScreen.load_resource" title="Link to this definition"></a></dt>
+<dd><p>Initialize sound effect resources for warm-up.</p>
+<p>Instantiates a QSoundEffect object to ensure audio system
+initialization before the main application starts. This prevents
+audio-related delays during gameplay.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.view.splashscreen.SplashScreen.resizeEvent">
+<span class="sig-name descname"><span class="pre">resizeEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/view/splashscreen.html#SplashScreen.resizeEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.view.splashscreen.SplashScreen.resizeEvent" title="Link to this definition"></a></dt>
+<dd><p>Handle resize events by updating widget geometry.</p>
+<p>Calls the parent resize event handler and updates the positions
+of child widgets (progress bar and status label) to maintain
+proper layout when the splash screen is resized.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>event</strong><span class="classifier">QResizeEvent</span></dt><dd><p>The resize event object containing size information.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.view.splashscreen.html" class="btn btn-neutral float-left" title="ttea.view.splashscreen" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.window.html" class="btn btn-neutral float-right" title="ttea.window" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+KarteaViewFactory
+=================
+
+.. currentmodule:: ttea.games.kartea.factory.karteaviewfactory
+
+.. autoclass:: KarteaViewFactory
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~KarteaViewFactory.create_player_config_edit_view
+      ~KarteaViewFactory.create_player_config_list_view

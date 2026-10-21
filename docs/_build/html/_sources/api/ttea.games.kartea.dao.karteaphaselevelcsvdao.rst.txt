@@ -1,0 +1,20 @@
+ttea.games.kartea.dao.karteaphaselevelcsvdao
+============================================
+
+.. automodule:: ttea.games.kartea.dao.karteaphaselevelcsvdao
+
+.. currentmodule:: ttea.games.kartea.dao.karteaphaselevelcsvdao
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   KarteaPhaseLevelCsvDAO
+
+

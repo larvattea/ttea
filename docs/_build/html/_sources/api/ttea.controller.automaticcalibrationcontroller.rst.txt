@@ -1,0 +1,20 @@
+ttea.controller.automaticcalibrationcontroller
+==============================================
+
+.. automodule:: ttea.controller.automaticcalibrationcontroller
+
+.. currentmodule:: ttea.controller.automaticcalibrationcontroller
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   AutomaticCalibrationController
+
+

@@ -1,0 +1,20 @@
+ttea.util.pathconfig
+====================
+
+.. automodule:: ttea.util.pathconfig
+
+.. currentmodule:: ttea.util.pathconfig
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   PathConfig
+
+

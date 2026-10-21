@@ -1,0 +1,16 @@
+PlayerKarteaSessionCsvDAO
+=========================
+
+.. currentmodule:: ttea.games.kartea.dao.playerkarteasessioncsvdao
+
+.. autoclass:: PlayerKarteaSessionCsvDAO
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~PlayerKarteaSessionCsvDAO.load_all_sessions

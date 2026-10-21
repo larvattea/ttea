@@ -1,0 +1,23 @@
+InstitutionFacilityListController
+=================================
+
+.. currentmodule:: ttea.controller.institutionfacilitylistcontroller
+
+.. autoclass:: InstitutionFacilityListController
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~InstitutionFacilityListController.create_institutionfacility
+      ~InstitutionFacilityListController.delete_institutionfacility
+      ~InstitutionFacilityListController.filter_institutionfacilities
+      ~InstitutionFacilityListController.get_institutionfacility_types
+      ~InstitutionFacilityListController.load_institutionfacilities
+      ~InstitutionFacilityListController.on_table_selection
+      ~InstitutionFacilityListController.reload_data
+      ~InstitutionFacilityListController.update_institutionfacility

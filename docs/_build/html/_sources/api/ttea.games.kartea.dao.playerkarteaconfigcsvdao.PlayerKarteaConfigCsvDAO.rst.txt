@@ -1,0 +1,18 @@
+PlayerKarteaConfigCsvDAO
+========================
+
+.. currentmodule:: ttea.games.kartea.dao.playerkarteaconfigcsvdao
+
+.. autoclass:: PlayerKarteaConfigCsvDAO
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~PlayerKarteaConfigCsvDAO.get_level
+      ~PlayerKarteaConfigCsvDAO.get_phase
+      ~PlayerKarteaConfigCsvDAO.load_all_configs

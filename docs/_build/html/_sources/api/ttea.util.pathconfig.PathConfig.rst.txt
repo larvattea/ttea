@@ -1,0 +1,42 @@
+PathConfig
+==========
+
+.. currentmodule:: ttea.util.pathconfig
+
+.. autoclass:: PathConfig
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~PathConfig.calibration_file_exists
+      ~PathConfig.calibration_hardware
+      ~PathConfig.calibration_point
+      ~PathConfig.calibration_setting
+      ~PathConfig.config
+      ~PathConfig.config_file_exists
+      ~PathConfig.ensure_dirs
+      ~PathConfig.export
+      ~PathConfig.find_resource_built_in
+      ~PathConfig.flag
+      ~PathConfig.game_save
+      ~PathConfig.help_collection
+      ~PathConfig.help_file
+      ~PathConfig.icon_system
+      ~PathConfig.icon_ui_button
+      ~PathConfig.icon_ui_menu
+      ~PathConfig.image
+      ~PathConfig.institutionfacility
+      ~PathConfig.log
+      ~PathConfig.model
+      ~PathConfig.player
+      ~PathConfig.professional
+      ~PathConfig.resource
+      ~PathConfig.set_base_dir
+      ~PathConfig.sounds
+      ~PathConfig.translation
+      ~PathConfig.ui

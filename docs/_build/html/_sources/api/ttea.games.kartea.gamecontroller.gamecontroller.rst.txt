@@ -1,0 +1,20 @@
+ttea.games.kartea.gamecontroller.gamecontroller
+===============================================
+
+.. automodule:: ttea.games.kartea.gamecontroller.gamecontroller
+
+.. currentmodule:: ttea.games.kartea.gamecontroller.gamecontroller
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   GameController
+
+

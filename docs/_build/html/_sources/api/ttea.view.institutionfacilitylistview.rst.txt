@@ -1,0 +1,20 @@
+ttea.view.institutionfacilitylistview
+=====================================
+
+.. automodule:: ttea.view.institutionfacilitylistview
+
+.. currentmodule:: ttea.view.institutionfacilitylistview
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   InstitutionFacilityListView
+
+

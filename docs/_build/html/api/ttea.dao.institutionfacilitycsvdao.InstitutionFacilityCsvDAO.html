@@ -1,0 +1,464 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InstitutionFacilityCsvDAO &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.dao.playercsvdao" href="ttea.dao.playercsvdao.html" />
+    <link rel="prev" title="ttea.dao.institutionfacilitycsvdao" href="ttea.dao.institutionfacilitycsvdao.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.dao.html">ttea.dao</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.dao.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.dao.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.dao.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.dao.calibrationinidao.html">ttea.dao.calibrationinidao</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.dao.calibrationpointcsvdao.html">ttea.dao.calibrationpointcsvdao</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.dao.calibrationsettinginidao.html">ttea.dao.calibrationsettinginidao</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.dao.dao.html">ttea.dao.dao</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.dao.institutionfacilitycsvdao.html">ttea.dao.institutionfacilitycsvdao</a><ul class="current">
+<li class="toctree-l5 current"><a class="current reference internal" href="#">InstitutionFacilityCsvDAO</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO"><code class="docutils literal notranslate"><span class="pre">InstitutionFacilityCsvDAO</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.generate_next_id"><code class="docutils literal notranslate"><span class="pre">InstitutionFacilityCsvDAO.generate_next_id()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.write_with_lock"><code class="docutils literal notranslate"><span class="pre">InstitutionFacilityCsvDAO.write_with_lock()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.insert"><code class="docutils literal notranslate"><span class="pre">InstitutionFacilityCsvDAO.insert()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.update"><code class="docutils literal notranslate"><span class="pre">InstitutionFacilityCsvDAO.update()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.delete"><code class="docutils literal notranslate"><span class="pre">InstitutionFacilityCsvDAO.delete()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.select"><code class="docutils literal notranslate"><span class="pre">InstitutionFacilityCsvDAO.select()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.list"><code class="docutils literal notranslate"><span class="pre">InstitutionFacilityCsvDAO.list()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.sanitize_filename"><code class="docutils literal notranslate"><span class="pre">InstitutionFacilityCsvDAO.sanitize_filename()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.get_filename"><code class="docutils literal notranslate"><span class="pre">InstitutionFacilityCsvDAO.get_filename()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.load_all_institutionfacilities"><code class="docutils literal notranslate"><span class="pre">InstitutionFacilityCsvDAO.load_all_institutionfacilities()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.search_institutionfacilities"><code class="docutils literal notranslate"><span class="pre">InstitutionFacilityCsvDAO.search_institutionfacilities()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.dao.playercsvdao.html">ttea.dao.playercsvdao</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.dao.professionalcsvdao.html">ttea.dao.professionalcsvdao</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.games.html">ttea.games</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.dao.html">ttea.dao</a></li>
+          <li class="breadcrumb-item"><a href="ttea.dao.institutionfacilitycsvdao.html">ttea.dao.institutionfacilitycsvdao</a></li>
+      <li class="breadcrumb-item active">InstitutionFacilityCsvDAO</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="institutionfacilitycsvdao">
+<h1>InstitutionFacilityCsvDAO<a class="headerlink" href="#institutionfacilitycsvdao" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">InstitutionFacilityCsvDAO</span></span><a class="reference internal" href="../_modules/ttea/dao/institutionfacilitycsvdao.html#InstitutionFacilityCsvDAO"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="ttea.dao.dao.DAO.html#ttea.dao.dao.DAO" title="ttea.dao.dao.DAO"><code class="xref py py-class docutils literal notranslate"><span class="pre">DAO</span></code></a>[<a class="reference internal" href="ttea.model.institutionfacility.InstitutionFacility.html#ttea.model.institutionfacility.InstitutionFacility" title="ttea.model.institutionfacility.InstitutionFacility"><code class="xref py py-class docutils literal notranslate"><span class="pre">InstitutionFacility</span></code></a>]</p>
+<p>DAO for InstitutionFacility entities, one CSV file per record.</p>
+<p>Persists each institution facility in its own CSV file named after
+its ID and sanitized name, and keeps all institution facilities in
+an in-memory cache loaded when the DAO is created.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>csv_handler</strong><span class="classifier">CSVHandler</span></dt><dd><p>Utility for reading and writing CSV data.</p>
+</dd>
+<dt><strong>institutionfacilities</strong><span class="classifier">dict[int, InstitutionFacility]</span></dt><dd><p>In-memory cache by ID.</p>
+</dd>
+<dt><strong>file_map</strong><span class="classifier">dict[int, str]</span></dt><dd><p>CSV file path by ID.</p>
+</dd>
+<dt><strong>int_properties</strong><span class="classifier">list[str]</span></dt><dd><p>Names of the <code class="docutils literal notranslate"><span class="pre">InstitutionFacility</span></code> fields typed <code class="docutils literal notranslate"><span class="pre">int</span></code>.</p>
+</dd>
+<dt><strong>bool_properties</strong><span class="classifier">list[str]</span></dt><dd><p>Names of the <code class="docutils literal notranslate"><span class="pre">InstitutionFacility</span></code> fields typed <code class="docutils literal notranslate"><span class="pre">bool</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Files are named <code class="docutils literal notranslate"><span class="pre">&lt;id&gt;_&lt;sanitized</span> <span class="pre">name&gt;_institutionfacility.csv</span></code>
+and stored in the institution facility directory of <code class="docutils literal notranslate"><span class="pre">PathConfig</span></code>.</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.delete" title="ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.delete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete</span></code></a></p></td>
+<td><p>Delete an institution facility and remove its CSV file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.generate_next_id" title="ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.generate_next_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_next_id</span></code></a></p></td>
+<td><p>Return the next available institution facility ID.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.get_filename" title="ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.get_filename"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_filename</span></code></a></p></td>
+<td><p>Return the full path of an institution facility's CSV file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.insert" title="ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.insert"><code class="xref py py-obj docutils literal notranslate"><span class="pre">insert</span></code></a></p></td>
+<td><p>Insert a new institution facility and write its CSV file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.list" title="ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.list"><code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code></a></p></td>
+<td><p>Return all cached institution facilities.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.load_all_institutionfacilities" title="ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.load_all_institutionfacilities"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load_all_institutionfacilities</span></code></a></p></td>
+<td><p>Load every institution facility CSV file into the cache.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.sanitize_filename" title="ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.sanitize_filename"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sanitize_filename</span></code></a></p></td>
+<td><p>Make an institution facility name safe for file names.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.search_institutionfacilities" title="ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.search_institutionfacilities"><code class="xref py py-obj docutils literal notranslate"><span class="pre">search_institutionfacilities</span></code></a></p></td>
+<td><p>Return cached institution facilities, optionally filtered.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.select" title="ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.select"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select</span></code></a></p></td>
+<td><p>Return an institution facility from the in-memory cache.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.update" title="ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.update"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update</span></code></a></p></td>
+<td><p>Update an existing institution facility and rewrite its file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.write_with_lock" title="ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.write_with_lock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_with_lock</span></code></a></p></td>
+<td><p>Write rows to a CSV file while holding an exclusive lock.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.generate_next_id">
+<span class="sig-name descname"><span class="pre">generate_next_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/dao/institutionfacilitycsvdao.html#InstitutionFacilityCsvDAO.generate_next_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.generate_next_id" title="Link to this definition"></a></dt>
+<dd><p>Return the next available institution facility ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>The highest cached ID plus 1, or 1 if the cache is empty.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.write_with_lock">
+<span class="sig-name descname"><span class="pre">write_with_lock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/dao/institutionfacilitycsvdao.html#InstitutionFacilityCsvDAO.write_with_lock"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.write_with_lock" title="Link to this definition"></a></dt>
+<dd><p>Write rows to a CSV file while holding an exclusive lock.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filepath</strong><span class="classifier">str</span></dt><dd><p>Full path to the target CSV file.</p>
+</dd>
+<dt><strong>data</strong><span class="classifier">list[dict]</span></dt><dd><p>Rows to write, one dictionary per row.</p>
+</dd>
+<dt><strong>headers</strong><span class="classifier">list[str]</span></dt><dd><p>Ordered column names; a header row is written first.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>portalocker.exceptions.LockException</dt><dd><p>If the lock cannot be acquired within 10 seconds.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The user directories are created if needed. The file is opened
+by <code class="docutils literal notranslate"><span class="pre">portalocker.Lock</span></code> in mode <code class="docutils literal notranslate"><span class="pre">&quot;w&quot;</span></code> with Python’s defaults,
+so it uses the platform’s default encoding and newline
+translation, unlike <code class="docutils literal notranslate"><span class="pre">CSVHandler.write_csv</span></code> with a path (UTF-8
+with BOM).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.insert">
+<span class="sig-name descname"><span class="pre">insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/dao/institutionfacilitycsvdao.html#InstitutionFacilityCsvDAO.insert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.insert" title="Link to this definition"></a></dt>
+<dd><p>Insert a new institution facility and write its CSV file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>obj</strong><span class="classifier">InstitutionFacility</span></dt><dd><p>The institution facility to persist. An <code class="docutils literal notranslate"><span class="pre">id</span></code> of 0 or less
+is replaced in place by <code class="docutils literal notranslate"><span class="pre">generate_next_id()</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>int</dt><dd><p>The institution facility ID on success, or 0 if <code class="docutils literal notranslate"><span class="pre">obj</span></code> is
+not valid or its ID already exists.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/dao/institutionfacilitycsvdao.html#InstitutionFacilityCsvDAO.update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.update" title="Link to this definition"></a></dt>
+<dd><p>Update an existing institution facility and rewrite its file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>obj</strong><span class="classifier">InstitutionFacility</span></dt><dd><p>The institution facility with updated values.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if updated, False if <code class="docutils literal notranslate"><span class="pre">obj</span></code> is not valid or its ID is
+not cached.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>If the file name changes (the name changed), the old file is
+renamed before being rewritten.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/dao/institutionfacilitycsvdao.html#InstitutionFacilityCsvDAO.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.delete" title="Link to this definition"></a></dt>
+<dd><p>Delete an institution facility and remove its CSV file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>obj_id</strong><span class="classifier">int</span></dt><dd><p>ID of the institution facility to delete.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if deleted, False if the ID is not cached.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.select">
+<span class="sig-name descname"><span class="pre">select</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/dao/institutionfacilitycsvdao.html#InstitutionFacilityCsvDAO.select"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.select" title="Link to this definition"></a></dt>
+<dd><p>Return an institution facility from the in-memory cache.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>obj_id</strong><span class="classifier">int</span></dt><dd><p>The institution facility ID to look up.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>InstitutionFacility | None</dt><dd><p>The institution facility, or None if the ID is not cached.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.list">
+<span class="sig-name descname"><span class="pre">list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/dao/institutionfacilitycsvdao.html#InstitutionFacilityCsvDAO.list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.list" title="Link to this definition"></a></dt>
+<dd><p>Return all cached institution facilities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>list[InstitutionFacility]</dt><dd><p>The cached institution facilities, in cache order.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.sanitize_filename">
+<span class="sig-name descname"><span class="pre">sanitize_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/dao/institutionfacilitycsvdao.html#InstitutionFacilityCsvDAO.sanitize_filename"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.sanitize_filename" title="Link to this definition"></a></dt>
+<dd><p>Make an institution facility name safe for file names.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Original name.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>The name stripped and lowercased, with every character that
+is not a word character or <code class="docutils literal notranslate"><span class="pre">-</span></code> replaced by <code class="docutils literal notranslate"><span class="pre">_</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">dao</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">InstitutionFacilityCsvDAO</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dao</span><span class="o">.</span><span class="n">sanitize_filename</span><span class="p">(</span><span class="s2">" Ana Maria! "</span><span class="p">)</span>
+<span class="go">'ana_maria_'</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.get_filename">
+<span class="sig-name descname"><span class="pre">get_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">institutionfacility</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/dao/institutionfacilitycsvdao.html#InstitutionFacilityCsvDAO.get_filename"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.get_filename" title="Link to this definition"></a></dt>
+<dd><p>Return the full path of an institution facility’s CSV file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>institutionfacility</strong><span class="classifier">InstitutionFacility</span></dt><dd><p>The institution facility.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Path of <code class="docutils literal notranslate"><span class="pre">&lt;id&gt;_&lt;sanitized</span> <span class="pre">name&gt;_institutionfacility.csv</span></code> in
+the institution facility directory.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.load_all_institutionfacilities">
+<span class="sig-name descname"><span class="pre">load_all_institutionfacilities</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/dao/institutionfacilitycsvdao.html#InstitutionFacilityCsvDAO.load_all_institutionfacilities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.load_all_institutionfacilities" title="Link to this definition"></a></dt>
+<dd><p>Load every institution facility CSV file into the cache.</p>
+<p class="rubric">Notes</p>
+<p>Reads each <code class="docutils literal notranslate"><span class="pre">*_institutionfacility.csv</span></code> file of the institution
+facility directory; empty or unreadable files are skipped. Only
+the first row is used. Integer fields that are not plain digits
+(including negative numbers) become 0, and boolean fields are
+True only for <code class="docutils literal notranslate"><span class="pre">&quot;true&quot;</span></code> (any case).</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.search_institutionfacilities">
+<span class="sig-name descname"><span class="pre">search_institutionfacilities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/dao/institutionfacilitycsvdao.html#InstitutionFacilityCsvDAO.search_institutionfacilities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.dao.institutionfacilitycsvdao.InstitutionFacilityCsvDAO.search_institutionfacilities" title="Link to this definition"></a></dt>
+<dd><p>Return cached institution facilities, optionally filtered.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>query</strong><span class="classifier">str, optional</span></dt><dd><p>Text searched, case-insensitively, in the ID and the name. A
+blank query returns every institution facility. Default is
+<code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>list[InstitutionFacility]</dt><dd><p>The matching institution facilities.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.dao.institutionfacilitycsvdao.html" class="btn btn-neutral float-left" title="ttea.dao.institutionfacilitycsvdao" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.dao.playercsvdao.html" class="btn btn-neutral float-right" title="ttea.dao.playercsvdao" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

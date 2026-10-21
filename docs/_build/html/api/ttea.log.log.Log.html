@@ -1,0 +1,439 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.main" href="ttea.main.html" />
+    <link rel="prev" title="ttea.log.log" href="ttea.log.log.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.games.html">ttea.games</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.log.html">ttea.log</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.log.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.log.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.log.html#notes">Notes</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.log.log.html">ttea.log.log</a><ul class="current">
+<li class="toctree-l5 current"><a class="current reference internal" href="#">Log</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#ttea.log.log.Log"><code class="docutils literal notranslate"><span class="pre">Log</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.log.log.Log.get_log"><code class="docutils literal notranslate"><span class="pre">Log.get_log()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.log.log.Log.ensure_log_directory_exists"><code class="docutils literal notranslate"><span class="pre">Log.ensure_log_directory_exists()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.log.log.Log.get_system_info"><code class="docutils literal notranslate"><span class="pre">Log.get_system_info()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.log.log.Log.get_python_info"><code class="docutils literal notranslate"><span class="pre">Log.get_python_info()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.log.log.Log.log_system_info"><code class="docutils literal notranslate"><span class="pre">Log.log_system_info()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.log.log.Log.log_error_with_stack"><code class="docutils literal notranslate"><span class="pre">Log.log_error_with_stack()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.log.log.Log.log_info"><code class="docutils literal notranslate"><span class="pre">Log.log_info()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.log.log.Log.log_warning"><code class="docutils literal notranslate"><span class="pre">Log.log_warning()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.log.log.Log.log_error"><code class="docutils literal notranslate"><span class="pre">Log.log_error()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.log.html">ttea.log</a></li>
+          <li class="breadcrumb-item"><a href="ttea.log.log.html">ttea.log.log</a></li>
+      <li class="breadcrumb-item active">Log</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.log.log.Log.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="log">
+<h1>Log<a class="headerlink" href="#log" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.log.log.Log">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/log/log.html#Log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.log.log.Log" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Logging manager for application diagnostics and exceptions.</p>
+<p>This singleton class configures a rotating log file handler and
+provides methods to record informational events, warnings and
+errors. It also collects system and Python environment data for
+richer diagnostics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>log_file</strong><span class="classifier">str | None, optional</span></dt><dd><p>Path to the log file. Default is None, which uses
+<code class="docutils literal notranslate"><span class="pre">LOG_FILE_PATH</span></code>.</p>
+</dd>
+<dt><strong>log_level</strong><span class="classifier">int, optional</span></dt><dd><p>Logging level of the logger and of the file handler, such as
+<code class="docutils literal notranslate"><span class="pre">logging.DEBUG</span></code> or <code class="docutils literal notranslate"><span class="pre">logging.INFO</span></code>. Default is
+<code class="docutils literal notranslate"><span class="pre">logging.DEBUG</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>LOG_FILE_NAME</strong><span class="classifier">str, class attribute</span></dt><dd><p>Default log file name (<code class="docutils literal notranslate"><span class="pre">&quot;tteaapp.log&quot;</span></code>).</p>
+</dd>
+<dt><strong>LOG_FILE_PATH</strong><span class="classifier">str, class attribute</span></dt><dd><p>Default log file path, resolved by <code class="docutils literal notranslate"><span class="pre">PathConfig.log</span></code> when the
+module is imported.</p>
+</dd>
+<dt><strong>_instance</strong><span class="classifier">Log | None, class attribute</span></dt><dd><p>Cached singleton instance.</p>
+</dd>
+<dt><strong>log_file</strong><span class="classifier">str</span></dt><dd><p>Path of the log file in use.</p>
+</dd>
+<dt><strong>logger</strong><span class="classifier">logging.Logger</span></dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">&quot;Log&quot;</span></code> logger that receives all messages.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><strong>get_log()</strong></p></td>
+<td><p>Retrieve the singleton Log instance.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>ensure_log_directory_exists()</strong></p></td>
+<td><p>Create the log directory if necessary.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>get_system_info()</strong></p></td>
+<td><p>Return system and hardware diagnostics.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>get_python_info()</strong></p></td>
+<td><p>Return Python environment diagnostics.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>log_system_info()</strong></p></td>
+<td><p>Write system and Python environment information to the log.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>log_error_with_stack(exception, variables=None, traceback_obj=None)</strong></p></td>
+<td><p>Log exceptions with stack traces and optional context.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>log_info(message)</strong></p></td>
+<td><p>Write an informational message to the log.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>log_warning(message)</strong></p></td>
+<td><p>Write a warning message to the log.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>log_error(message)</strong></p></td>
+<td><p>Write an error message to the log.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p><code class="docutils literal notranslate"><span class="pre">__new__</span></code> always returns the same instance, but Python still runs
+<code class="docutils literal notranslate"><span class="pre">__init__</span></code> on every <code class="docutils literal notranslate"><span class="pre">Log(...)</span></code> call: each call reconfigures the
+shared instance (file, level and handler). Use <code class="docutils literal notranslate"><span class="pre">get_log()</span></code> to
+reuse the instance without reconfiguring it.</p>
+<p>On initialization the log directory is created if missing, existing
+handlers of the <code class="docutils literal notranslate"><span class="pre">&quot;Log&quot;</span></code> logger are removed to avoid duplicate
+output, and a <code class="docutils literal notranslate"><span class="pre">RotatingFileHandler</span></code> is added (10 MiB per file,
+5 backups, format <code class="docutils literal notranslate"><span class="pre">&quot;%(asctime)s</span> <span class="pre">-</span> <span class="pre">%(levelname)s</span> <span class="pre">-</span> <span class="pre">%(message)s&quot;</span></code>
+with dates as <code class="docutils literal notranslate"><span class="pre">%Y-%m-%d</span> <span class="pre">%H:%M:%S</span></code>). The message
+<code class="docutils literal notranslate"><span class="pre">&quot;Log</span> <span class="pre">instance</span> <span class="pre">initialized.&quot;</span></code> is then written at INFO level.</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.log.log.Log.ensure_log_directory_exists" title="ttea.log.log.Log.ensure_log_directory_exists"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ensure_log_directory_exists</span></code></a></p></td>
+<td><p>Create the log file directory if it does not exist.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.log.log.Log.get_log" title="ttea.log.log.Log.get_log"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_log</span></code></a></p></td>
+<td><p>Retrieve the singleton instance of the Log class.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.log.log.Log.get_python_info" title="ttea.log.log.Log.get_python_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_python_info</span></code></a></p></td>
+<td><p>Retrieve Python and installed package information.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.log.log.Log.get_system_info" title="ttea.log.log.Log.get_system_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_system_info</span></code></a></p></td>
+<td><p>Retrieve system, hardware and memory information.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.log.log.Log.log_error" title="ttea.log.log.Log.log_error"><code class="xref py py-obj docutils literal notranslate"><span class="pre">log_error</span></code></a></p></td>
+<td><p>Log an error message.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.log.log.Log.log_error_with_stack" title="ttea.log.log.Log.log_error_with_stack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">log_error_with_stack</span></code></a></p></td>
+<td><p>Log an error with stack trace and diagnostic context.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.log.log.Log.log_info" title="ttea.log.log.Log.log_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">log_info</span></code></a></p></td>
+<td><p>Log an informational message.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.log.log.Log.log_system_info" title="ttea.log.log.Log.log_system_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">log_system_info</span></code></a></p></td>
+<td><p>Write system and Python environment information to the log.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.log.log.Log.log_warning" title="ttea.log.log.Log.log_warning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">log_warning</span></code></a></p></td>
+<td><p>Log a warning message.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.log.log.Log.get_log">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_log</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/log/log.html#Log.get_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.log.log.Log.get_log" title="Link to this definition"></a></dt>
+<dd><p>Retrieve the singleton instance of the Log class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>Log</dt><dd><p>The singleton instance of the Log class.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>If no instance exists, a new one is created with default
+parameters. An existing instance is returned as is, without
+reconfiguration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.log.log.Log.ensure_log_directory_exists">
+<span class="sig-name descname"><span class="pre">ensure_log_directory_exists</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/log/log.html#Log.ensure_log_directory_exists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.log.log.Log.ensure_log_directory_exists" title="Link to this definition"></a></dt>
+<dd><p>Create the log file directory if it does not exist.</p>
+<p class="rubric">Notes</p>
+<p>Uses <code class="docutils literal notranslate"><span class="pre">os.makedirs</span></code> on the directory of the absolute path of
+<code class="docutils literal notranslate"><span class="pre">log_file</span></code>, creating intermediate directories as needed.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.log.log.Log.get_system_info">
+<span class="sig-name descname"><span class="pre">get_system_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/log/log.html#Log.get_system_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.log.log.Log.get_system_info" title="Link to this definition"></a></dt>
+<dd><p>Retrieve system, hardware and memory information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>dict[str, str]</dt><dd><p>Information keyed by <code class="docutils literal notranslate"><span class="pre">&quot;OS&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;OS</span> <span class="pre">Version&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;Machine&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;Processor&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;CPU</span> <span class="pre">Cores&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;Memory</span> <span class="pre">Total</span> <span class="pre">(GB)&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;Memory</span> <span class="pre">Used</span> <span class="pre">by</span> <span class="pre">App</span> <span class="pre">(MB)&quot;</span></code> and
+<code class="docutils literal notranslate"><span class="pre">&quot;Timestamp&quot;</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Despite the annotation, not every value is a string:
+<code class="docutils literal notranslate"><span class="pre">&quot;CPU</span> <span class="pre">Cores&quot;</span></code> is the logical core count from <code class="docutils literal notranslate"><span class="pre">psutil</span></code>
+(an int, or None if undetermined) and the memory values are
+floats rounded to 2 decimals. <code class="docutils literal notranslate"><span class="pre">&quot;Memory</span> <span class="pre">Total</span> <span class="pre">(GB)&quot;</span></code> is the
+total physical memory divided by 1024**3; <code class="docutils literal notranslate"><span class="pre">&quot;Memory</span> <span class="pre">Used</span> <span class="pre">by</span> <span class="pre">App</span>
+<span class="pre">(MB)&quot;</span></code> is the resident set size (RSS) of the current process
+divided by 1024**2. <code class="docutils literal notranslate"><span class="pre">&quot;Timestamp&quot;</span></code> uses <code class="docutils literal notranslate"><span class="pre">%Y-%m-%d</span> <span class="pre">%H:%M:%S</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.log.log.Log.get_python_info">
+<span class="sig-name descname"><span class="pre">get_python_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/log/log.html#Log.get_python_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.log.log.Log.get_python_info" title="Link to this definition"></a></dt>
+<dd><p>Retrieve Python and installed package information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>dict[str, str]</dt><dd><p>Information keyed by <code class="docutils literal notranslate"><span class="pre">&quot;Python</span> <span class="pre">Version&quot;</span></code> (<code class="docutils literal notranslate"><span class="pre">sys.version</span></code>),
+<code class="docutils literal notranslate"><span class="pre">&quot;Python</span> <span class="pre">Executable&quot;</span></code> (<code class="docutils literal notranslate"><span class="pre">sys.executable</span></code>) and
+<code class="docutils literal notranslate"><span class="pre">&quot;Installed</span> <span class="pre">Packages&quot;</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Installed packages come from <code class="docutils literal notranslate"><span class="pre">importlib.metadata</span></code>,
+formatted as <code class="docutils literal notranslate"><span class="pre">&quot;name==version&quot;</span></code>, sorted alphabetically and
+joined with <code class="docutils literal notranslate"><span class="pre">&quot;,</span> <span class="pre">&quot;</span></code>. If none is found the value is
+<code class="docutils literal notranslate"><span class="pre">&quot;No</span> <span class="pre">packages</span> <span class="pre">found&quot;</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.log.log.Log.log_system_info">
+<span class="sig-name descname"><span class="pre">log_system_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/log/log.html#Log.log_system_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.log.log.Log.log_system_info" title="Link to this definition"></a></dt>
+<dd><p>Write system and Python environment information to the log.</p>
+<p class="rubric">Notes</p>
+<p>Writes a header line followed by each key-value pair of
+<code class="docutils literal notranslate"><span class="pre">get_system_info()</span></code> and of <code class="docutils literal notranslate"><span class="pre">get_python_info()</span></code>, all at INFO
+level.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.log.log.Log.log_error_with_stack">
+<span class="sig-name descname"><span class="pre">log_error_with_stack</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exception</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traceback_obj</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/log/log.html#Log.log_error_with_stack"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.log.log.Log.log_error_with_stack" title="Link to this definition"></a></dt>
+<dd><p>Log an error with stack trace and diagnostic context.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>exception</strong><span class="classifier">Exception</span></dt><dd><p>The exception to log.</p>
+</dd>
+<dt><strong>variables</strong><span class="classifier">dict[str, Any] | None, optional</span></dt><dd><p>Variables to include in the log output. Default is None.</p>
+</dd>
+<dt><strong>traceback_obj</strong><span class="classifier">Any | None, optional</span></dt><dd><p>Traceback object to format. If None, the traceback of the
+exception currently being handled is used. Default is None.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Everything is written at ERROR level, in this order:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">variables</span></code>, if given, each value serialized with
+<code class="docutils literal notranslate"><span class="pre">json.dumps(indent=2,</span> <span class="pre">default=str)</span></code>;</p></li>
+<li><p>the local variables of the caller’s frame
+(<code class="docutils literal notranslate"><span class="pre">sys._getframe(1)</span></code>), skipping names that start with
+<code class="docutils literal notranslate"><span class="pre">__</span></code>, serialized the same way;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">get_system_info()</span></code> and <code class="docutils literal notranslate"><span class="pre">get_python_info()</span></code>;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">str(exception)</span></code> and the execution stack.</p></li>
+</ol>
+<p>With <code class="docutils literal notranslate"><span class="pre">traceback_obj</span></code> the stack comes from
+<code class="docutils literal notranslate"><span class="pre">traceback.format_tb</span></code>; otherwise from
+<code class="docutils literal notranslate"><span class="pre">traceback.format_exc</span></code>, so call it inside the <code class="docutils literal notranslate"><span class="pre">except</span></code>
+block. Outside it, <code class="docutils literal notranslate"><span class="pre">format_exc</span></code> returns <code class="docutils literal notranslate"><span class="pre">&quot;NoneType:</span> <span class="pre">None&quot;</span></code>
+and that is what gets logged.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.log.log.Log.log_info">
+<span class="sig-name descname"><span class="pre">log_info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/log/log.html#Log.log_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.log.log.Log.log_info" title="Link to this definition"></a></dt>
+<dd><p>Log an informational message.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>message</strong><span class="classifier">str</span></dt><dd><p>The message to log at the INFO level.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.log.log.Log.log_warning">
+<span class="sig-name descname"><span class="pre">log_warning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/log/log.html#Log.log_warning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.log.log.Log.log_warning" title="Link to this definition"></a></dt>
+<dd><p>Log a warning message.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>message</strong><span class="classifier">str</span></dt><dd><p>The message to log at the WARNING level.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.log.log.Log.log_error">
+<span class="sig-name descname"><span class="pre">log_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/log/log.html#Log.log_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.log.log.Log.log_error" title="Link to this definition"></a></dt>
+<dd><p>Log an error message.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>message</strong><span class="classifier">str</span></dt><dd><p>The message to log at the ERROR level.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.log.log.html" class="btn btn-neutral float-left" title="ttea.log.log" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.main.html" class="btn btn-neutral float-right" title="ttea.main" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

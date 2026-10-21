@@ -1,0 +1,18 @@
+LanguageController
+==================
+
+.. currentmodule:: ttea.controller.languagecontroller
+
+.. autoclass:: LanguageController
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~LanguageController.handle_close_event
+      ~LanguageController.handle_confirm
+      ~LanguageController.handle_preview

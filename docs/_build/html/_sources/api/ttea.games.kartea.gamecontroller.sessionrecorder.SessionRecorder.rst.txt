@@ -1,0 +1,18 @@
+SessionRecorder
+===============
+
+.. currentmodule:: ttea.games.kartea.gamecontroller.sessionrecorder
+
+.. autoclass:: SessionRecorder
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~SessionRecorder.autosave_if_due
+      ~SessionRecorder.record
+      ~SessionRecorder.save

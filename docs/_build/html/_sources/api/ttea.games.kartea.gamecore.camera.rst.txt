@@ -1,0 +1,20 @@
+ttea.games.kartea.gamecore.camera
+=================================
+
+.. automodule:: ttea.games.kartea.gamecore.camera
+
+.. currentmodule:: ttea.games.kartea.gamecore.camera
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   Camera
+
+

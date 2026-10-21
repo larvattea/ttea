@@ -1,0 +1,18 @@
+CalibrationSettingView
+======================
+
+.. currentmodule:: ttea.view.calibrationsettingview
+
+.. autoclass:: CalibrationSettingView
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~CalibrationSettingView.closeEvent
+      ~CalibrationSettingView.get_data
+      ~CalibrationSettingView.set_data

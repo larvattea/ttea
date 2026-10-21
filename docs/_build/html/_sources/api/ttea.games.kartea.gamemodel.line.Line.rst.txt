@@ -1,0 +1,19 @@
+Line
+====
+
+.. currentmodule:: ttea.games.kartea.gamemodel.line
+
+.. autoclass:: Line
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~Line.draw_sprite
+      ~Line.draw_sprite2
+      ~Line.draw_target
+      ~Line.project

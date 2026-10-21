@@ -1,0 +1,22 @@
+ttea.games.kartea.gamecore
+==========================
+
+.. automodule:: ttea.games.kartea.gamecore
+
+.. currentmodule:: ttea.games.kartea.gamecore
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/module.rst
+   :recursive:
+
+   camera
+   lanedetector
+   posetracking
+
+
+

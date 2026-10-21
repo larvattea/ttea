@@ -1,0 +1,30 @@
+ttea.games.kartea.gamecontroller.sessionrecorder
+================================================
+
+.. automodule:: ttea.games.kartea.gamecontroller.sessionrecorder
+
+.. currentmodule:: ttea.games.kartea.gamecontroller.sessionrecorder
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   SessionRecorder
+
+
+
+.. rubric:: Functions
+
+.. autosummary::
+   :nosignatures:
+
+   utc_offset
+
+
+.. autofunction:: utc_offset

@@ -1,0 +1,771 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.games.kartea.view.playerkarteaconfigeditview &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.games.kartea.view.playerkarteaconfigeditview</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.games.kartea.view.playerkarteaconfigeditview</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""View (Qt dialog) to create or edit a player Kartea configuration."""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">QCoreApplication</span><span class="p">,</span> <span class="n">QEvent</span><span class="p">,</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">QUrl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtGui</span><span class="w"> </span><span class="kn">import</span> <span class="n">QDesktopServices</span><span class="p">,</span> <span class="n">QPixmap</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtMultimedia</span><span class="w"> </span><span class="kn">import</span> <span class="n">QSoundEffect</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtWidgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">QComboBox</span><span class="p">,</span> <span class="n">QDialog</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.ui</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ui_PlayerKarteaConfigEditView</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.util</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">KarteaArrivalTimeFields</span><span class="p">,</span>
+    <span class="n">KarteaPalettes</span><span class="p">,</span>
+    <span class="n">KarteaPathConfig</span><span class="p">,</span>
+    <span class="n">KarteaResourceFields</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.window</span><span class="w"> </span><span class="kn">import</span> <span class="n">WindowConfig</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.controller</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerKarteaConfigEditController</span>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigEditView">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.html#ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PlayerKarteaConfigEditView</span><span class="p">(</span>
+    <span class="n">QDialog</span><span class="p">,</span> <span class="n">Ui_PlayerKarteaConfigEditView</span><span class="p">,</span> <span class="n">WindowConfig</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Modal dialog to create or edit a player Kartea config.</span>
+
+<span class="sd">    Loads the UI from the .ui file, applies consistent styling (icons,</span>
+<span class="sd">    size, title), and delegates all validation and data handling to</span>
+<span class="sd">    PlayerKarteaConfigEditController. The view does not create its</span>
+<span class="sd">    controller: KarteaViewFactory creates both and calls</span>
+<span class="sd">    ``bind(controller)`` to connect the signals. The controller only</span>
+<span class="sd">    uses the methods below; it never touches widgets.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    parent : QWidget | None, optional</span>
+<span class="sd">        Parent widget.</span>
+<span class="sd">    editing : bool, optional</span>
+<span class="sd">        True when editing an existing config (title "Editar"); False</span>
+<span class="sd">        when creating a new one ("Novo"). Defaults to False.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    RESOURCE_COMBOS : dict[str, str], class attribute</span>
+<span class="sd">        Form field -&gt; name of its resource (image/sound) combo box,</span>
+<span class="sd">        built from KarteaResourceFields.ALL.</span>
+<span class="sd">    PREVIEW_COMBOS : dict[str, tuple[str, str, bool]], class attribute</span>
+<span class="sd">        Image combo -&gt; (field, type shown in the preview, is feedback?).</span>
+<span class="sd">        Feedback images use the feedback tab preview; the others, the</span>
+<span class="sd">        Visual Resource tab preview.</span>
+<span class="sd">    SOUND_COMBOS : tuple[tuple[str, str, str], ...], class attribute</span>
+<span class="sd">        (field, sound combo, button that plays the sound).</span>
+<span class="sd">    OPEN_MODS_BUTTONS : dict[str, str], class attribute</span>
+<span class="sd">        "Open resources folder" button of each tab -&gt; mods subfolder it</span>
+<span class="sd">        opens.</span>
+<span class="sd">    controller : PlayerKarteaConfigEditController | None</span>
+<span class="sd">        Handles field initialization, validation, and data extraction;</span>
+<span class="sd">        None until ``bind`` is called.</span>
+<span class="sd">    sound_effects : dict[str, QSoundEffect]</span>
+<span class="sd">        Preloaded sound of each sound combo, created by ``bind``.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    bind(controller)</span>
+<span class="sd">        Connect the widgets' signals to the controller.</span>
+<span class="sd">    set_player_choices(players) / set_resource_choices(resources)</span>
+<span class="sd">        Fill the player and resource combo boxes.</span>
+<span class="sd">    set_phase_choices(phase_ids) / set_level_choices(level_ids)</span>
+<span class="sd">        Fill the phase and level combo boxes.</span>
+<span class="sd">    set_form_data(data) / get_form_data()</span>
+<span class="sd">        Write/read all form fields as a dict (same keys as the service).</span>
+<span class="sd">    set_player_editable(editable)</span>
+<span class="sd">        Enable/disable the player combo box.</span>
+<span class="sd">    open_mods_folder(subdir="")</span>
+<span class="sd">        Open the KarTEA mods folder in the file manager.</span>
+<span class="sd">    update_resource_preview(...) / update_feedback_preview(...)</span>
+<span class="sd">        Show an image preview in the visual resource or feedback tab.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The widgets (``cbx_*``, ``spn_*``, ``chk_*``, ``pb_*``, ``lbl_*``)</span>
+<span class="sd">    come from the generated Ui_PlayerKarteaConfigEditView (``setupUi``).</span>
+
+<span class="sd">    The arrival time spin boxes keep their ranges consistent: each speed</span>
+<span class="sd">    must be faster than the previous one (see KarteaArrivalTimeFields).</span>
+<span class="sd">    The feet click time is enabled only while feet click is checked.</span>
+
+<span class="sd">    Localized texts (title, preview labels, messages) are translated</span>
+<span class="sd">    with ``self.tr()``. The palette names/descriptions and the preview</span>
+<span class="sd">    labels are ``QT_TRANSLATE_NOOP`` source texts of KarteaPalettes and</span>
+<span class="sd">    KarteaResourceFields in this class context</span>
+<span class="sd">    ("PlayerKarteaConfigEditView") (i18n).</span>
+<span class="sd">    """</span>
+
+    <span class="n">RESOURCE_COMBOS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">field</span><span class="o">.</span><span class="n">combo_name</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">KarteaResourceFields</span><span class="o">.</span><span class="n">ALL</span>
+    <span class="p">}</span>
+
+    <span class="n">PREVIEW_COMBOS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">field</span><span class="o">.</span><span class="n">combo_name</span><span class="p">:</span> <span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">preview_label</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">feedback</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">KarteaResourceFields</span><span class="o">.</span><span class="n">images</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="n">SOUND_COMBOS</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">combo_name</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">play_button</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">KarteaResourceFields</span><span class="o">.</span><span class="n">sounds</span><span class="p">()</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Each button opens the mods subfolder that holds the folders of</span>
+    <span class="c1"># its tab's fields.</span>
+    <span class="n">OPEN_MODS_BUTTONS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"pb_open_mods_visual"</span><span class="p">:</span> <span class="s2">"images"</span><span class="p">,</span>
+        <span class="s2">"pb_open_mods_feedback"</span><span class="p">:</span> <span class="s2">"images/feedback"</span><span class="p">,</span>
+        <span class="s2">"pb_open_mods_sound"</span><span class="p">:</span> <span class="s2">"sounds/feedback"</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">editing</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">parent</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">setupUi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="p">:</span> <span class="n">PlayerKarteaConfigEditController</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Arrival times: each speed must be faster than the previous</span>
+        <span class="c1"># one, so each spin box range follows its neighbors.</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">KarteaArrivalTimeFields</span><span class="o">.</span><span class="n">ALL</span><span class="p">:</span>
+            <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">widget_name</span><span class="p">)</span><span class="o">.</span><span class="n">valueChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_update_arrival_time_ranges</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reset_arrival_time_ranges</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_arrival_time_ranges</span><span class="p">()</span>
+
+        <span class="c1"># Color palettes are fixed (KarteaPalettes.ALL): they do not</span>
+        <span class="c1"># depend on the controller</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fill_palette_choices</span><span class="p">()</span>
+
+        <span class="c1"># Feet click time: enabled only while feet click is on</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chk_feet_click</span><span class="o">.</span><span class="n">toggled</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_feet_click_time_enabled</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_feet_click_time_enabled</span><span class="p">()</span>
+
+        <span class="c1"># Window config</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Editar"</span><span class="p">)</span> <span class="k">if</span> <span class="n">editing</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Novo"</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">setup_window</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">windowTitle</span><span class="p">()</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">windowIcon</span><span class="p">(),</span>
+            <span class="n">WindowConfig</span><span class="o">.</span><span class="n">INCREMENT_SIZE_PERCENT</span><span class="p">,</span>
+            <span class="mi">15</span><span class="p">,</span>
+            <span class="mi">55</span><span class="p">,</span>
+            <span class="n">parent</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="PlayerKarteaConfigEditView.bind">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.html#ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.bind">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">bind</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">controller</span><span class="p">:</span> <span class="s2">"PlayerKarteaConfigEditController"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Connect the widgets' signals to the controller.</span>
+
+<span class="sd">        Called by KarteaViewFactory after the controller has filled the</span>
+<span class="sd">        form, so the initial filling does not trigger previews; the</span>
+<span class="sd">        sounds already selected are preloaded here.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        controller : PlayerKarteaConfigEditController</span>
+<span class="sd">            Controller of this view.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Also connects the "Open resources folder" buttons (a screen-only</span>
+<span class="sd">        action), the phase combo (reloads the levels through the</span>
+<span class="sd">        controller), the image previews (on selection change and on</span>
+<span class="sd">        focus) and creates ``sound_effects``.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controller</span> <span class="o">=</span> <span class="n">controller</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb_ok</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">handle_ok</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pb_cancel</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">handle_cancel</span><span class="p">)</span>
+        <span class="c1"># "Open resources folder" buttons do not depend on the</span>
+        <span class="c1"># controller: they are just a screen action.</span>
+        <span class="k">for</span> <span class="n">button_name</span><span class="p">,</span> <span class="n">subdir</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">OPEN_MODS_BUTTONS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">button_name</span><span class="p">)</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+                <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">open_mods_folder</span><span class="p">,</span> <span class="n">subdir</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbx_current_phase</span><span class="o">.</span><span class="n">currentIndexChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">_index</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">controller</span><span class="o">.</span><span class="n">handle_phase_changed</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_int_or_none</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cbx_current_phase</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Image previews: on selection change and on combo focus</span>
+        <span class="k">for</span> <span class="n">combo_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">PREVIEW_COMBOS</span><span class="p">:</span>
+            <span class="n">combo</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">combo_name</span><span class="p">)</span>
+            <span class="n">combo</span><span class="o">.</span><span class="n">installEventFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">combo</span><span class="o">.</span><span class="n">currentTextChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+                <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_preview_combo</span><span class="p">,</span> <span class="n">combo_name</span><span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Sounds: preload on selection change (setSource "unpacks" the</span>
+        <span class="c1"># QRC resource into RAM) so the button plays instantly.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sound_effects</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">QSoundEffect</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">combo_name</span><span class="p">,</span> <span class="n">button_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">SOUND_COMBOS</span><span class="p">:</span>
+            <span class="n">effect</span> <span class="o">=</span> <span class="n">QSoundEffect</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="n">combo</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">combo_name</span><span class="p">)</span>
+            <span class="n">combo</span><span class="o">.</span><span class="n">currentTextChanged</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+                <span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prepare_sound</span><span class="p">,</span> <span class="n">effect</span><span class="p">,</span> <span class="n">field_name</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="c1"># Items already selected when the dialog opens</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_sound</span><span class="p">(</span><span class="n">effect</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">combo</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span>
+            <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">button_name</span><span class="p">)</span><span class="o">.</span><span class="n">clicked</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">effect</span><span class="o">.</span><span class="n">play</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sound_effects</span><span class="p">[</span><span class="n">combo_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">effect</span>
+
+        <span class="c1"># Optional: initial state of the resource preview</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lbl_visual_current_type</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Selecione um recurso visual para visualizar"</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lbl_visual_preview</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_fill_palette_choices</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Fill the palette combo box.</span>
+
+<span class="sd">        Shows the translated name of each palette and keeps its number</span>
+<span class="sd">        as the item data: the number is what goes into the player</span>
+<span class="sd">        config. The palette description appears in the item tooltip.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbx_palette</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">number</span><span class="p">,</span> <span class="n">palette</span> <span class="ow">in</span> <span class="n">KarteaPalettes</span><span class="o">.</span><span class="n">ALL</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cbx_palette</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="n">palette</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="n">number</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cbx_palette</span><span class="o">.</span><span class="n">setItemData</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cbx_palette</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="n">palette</span><span class="o">.</span><span class="n">description</span><span class="p">),</span>
+                <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">ToolTipRole</span><span class="p">,</span>
+            <span class="p">)</span>
+
+<div class="viewcode-block" id="PlayerKarteaConfigEditView.open_mods_folder">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.html#ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.open_mods_folder">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">open_mods_folder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subdir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span> <span class="o">*</span><span class="n">_args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Open the KarTEA mods folder in the file manager.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        subdir : str, optional</span>
+<span class="sd">            Subfolder to open (e.g. "sounds/feedback"); the mods folder</span>
+<span class="sd">            itself if it does not exist.</span>
+<span class="sd">        *_args</span>
+<span class="sd">            Absorbs the ``checked`` sent by the clicked signal.</span>
+<span class="sd">        """</span>
+        <span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">ensure_kartea_dirs</span><span class="p">()</span>
+        <span class="n">folder</span> <span class="o">=</span> <span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">KARTEA_MODS_DIR</span> <span class="o">/</span> <span class="n">subdir</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">folder</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span>
+            <span class="n">folder</span> <span class="o">=</span> <span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">KARTEA_MODS_DIR</span>
+        <span class="n">QDesktopServices</span><span class="o">.</span><span class="n">openUrl</span><span class="p">(</span><span class="n">QUrl</span><span class="o">.</span><span class="n">fromLocalFile</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">folder</span><span class="p">)))</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_resource_url</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">QUrl</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the QUrl of a resource.</span>
+
+<span class="sd">        Uses the qrc scheme for ":/..." and a local file URL for the</span>
+<span class="sd">        mods folder files (a Windows path passed straight to ``QUrl()``</span>
+<span class="sd">        would be an invalid URL).</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">":/"</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">QUrl</span><span class="p">(</span><span class="s2">"qrc"</span> <span class="o">+</span> <span class="n">path</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">QUrl</span><span class="o">.</span><span class="n">fromLocalFile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_prepare_sound</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">effect</span><span class="p">:</span> <span class="n">QSoundEffect</span><span class="p">,</span> <span class="n">field_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Load the chosen sound into the memory buffer.</span>
+
+<span class="sd">        ``filename`` is searched only in field ``field_name``: first</span>
+<span class="sd">        among the built-in ones (QRC), then in the mods folder (e.g. the</span>
+<span class="sd">        "miss" of the negative feedback, not the neutral one). Without a</span>
+<span class="sd">        valid sound the source is cleared, so the button does not play</span>
+<span class="sd">        the previous one.</span>
+<span class="sd">        """</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">resolve_for_field</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+        <span class="n">effect</span><span class="o">.</span><span class="n">setSource</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_resource_url</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">if</span> <span class="n">path</span> <span class="k">else</span> <span class="n">QUrl</span><span class="p">())</span>
+        <span class="n">effect</span><span class="o">.</span><span class="n">setLoopCount</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">QCoreApplication</span><span class="o">.</span><span class="n">processEvents</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_preview_combo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">combo_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Show the preview of the image chosen in ``combo_name``."""</span>
+        <span class="n">field_name</span><span class="p">,</span> <span class="n">resource_type</span><span class="p">,</span> <span class="n">is_feedback</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PREVIEW_COMBOS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">combo_name</span><span class="p">,</span> <span class="p">(</span><span class="s2">""</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Desconhecido"</span><span class="p">),</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="c1"># The name comes from KarteaResourceFields.ALL, marked for</span>
+        <span class="c1"># translation with QT_TRANSLATE_NOOP in this class context.</span>
+        <span class="n">resource_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="n">resource_type</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">is_feedback</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_feedback_preview</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">resource_type</span><span class="p">,</span> <span class="n">field_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">update_resource_preview</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">resource_type</span><span class="p">,</span> <span class="n">field_name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PlayerKarteaConfigEditView.update_resource_preview">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.html#ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.update_resource_preview">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_resource_preview</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">resource_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">field_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Update the single preview of the Visual Resource tab.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            Resource name chosen in the combo.</span>
+<span class="sd">        resource_type : str</span>
+<span class="sd">            Translated resource type shown above the preview.</span>
+<span class="sd">        field_name : str, optional</span>
+<span class="sd">            Config field used to resolve the image (built-in or mods).</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lbl_visual_current_type</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Visualizando: </span><span class="si">{}</span><span class="s2">"</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">resource_type</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_show_preview</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lbl_visual_preview</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">field_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigEditView.update_feedback_preview">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.html#ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.update_feedback_preview">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_feedback_preview</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">feedback_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">field_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Update the single preview of the visual feedback tab.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            Resource name chosen in the combo.</span>
+<span class="sd">        feedback_type : str</span>
+<span class="sd">            Translated feedback type shown above the preview.</span>
+<span class="sd">        field_name : str, optional</span>
+<span class="sd">            Config field used to resolve the image (built-in or mods).</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lbl_current_feedback_type</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Feedback </span><span class="si">{}</span><span class="s2"> – Pré-visualização"</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">feedback_type</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_show_preview</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lbl_feedback_preview</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">field_name</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_show_preview</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">field_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Show image ``filename`` of ``field_name`` in ``label``.</span>
+
+<span class="sd">        The image may be built-in or from the mods folder; without a</span>
+<span class="sd">        field it is searched among all built-in images. Shows a message</span>
+<span class="sd">        when no image is selected or it is not found.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">filename</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+            <span class="n">label</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+            <span class="n">label</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Nenhuma imagem selecionada"</span><span class="p">))</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">field_name</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">resolve_for_field</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">game_builtin_image</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">pixmap</span> <span class="o">=</span> <span class="n">QPixmap</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">if</span> <span class="n">path</span> <span class="k">else</span> <span class="n">QPixmap</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">pixmap</span><span class="o">.</span><span class="n">isNull</span><span class="p">():</span>
+            <span class="n">label</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+            <span class="n">label</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Imagem não encontrada"</span><span class="p">))</span>
+            <span class="k">return</span>
+
+        <span class="n">label</span><span class="o">.</span><span class="n">setPixmap</span><span class="p">(</span>
+            <span class="n">pixmap</span><span class="o">.</span><span class="n">scaled</span><span class="p">(</span>
+                <span class="n">label</span><span class="o">.</span><span class="n">size</span><span class="p">(),</span>
+                <span class="n">Qt</span><span class="o">.</span><span class="n">KeepAspectRatio</span><span class="p">,</span>
+                <span class="n">Qt</span><span class="o">.</span><span class="n">SmoothTransformation</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="c1"># ==================================================================</span>
+    <span class="c1"># API used by the controller (it never touches widgets)</span>
+    <span class="c1"># ==================================================================</span>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_int_or_none</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Convert a widget text to int (None if not digits only)."""</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="p">(</span><span class="n">text</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="k">if</span> <span class="n">text</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="PlayerKarteaConfigEditView.set_player_choices">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.html#ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.set_player_choices">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_player_choices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">players</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Fill the player combo box.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        players : Iterable[tuple[str, int]]</span>
+<span class="sd">            ``(name, id)`` pairs; the id is kept as item data. No player</span>
+<span class="sd">            is selected afterwards.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbx_player</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">player_id</span> <span class="ow">in</span> <span class="n">players</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cbx_player</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">player_id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbx_player</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigEditView.set_resource_choices">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.html#ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.set_resource_choices">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_resource_choices</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">resources</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]]]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Fill the resource combo boxes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        resources : dict[str, list[tuple[str, str]]]</span>
+<span class="sd">            ``{field: [(name, path), ...]}``; the path is kept as item</span>
+<span class="sd">            data.</span>
+<span class="sd">        """</span>
+        <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">combo_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">RESOURCE_COMBOS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">combo</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">combo_name</span><span class="p">)</span>
+            <span class="n">combo</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">resources</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="p">[]):</span>
+                <span class="n">combo</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigEditView.set_phase_choices">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.html#ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.set_phase_choices">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_phase_choices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phase_ids</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Fill the phase combo box (without emitting signals).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        phase_ids : Iterable[int]</span>
+<span class="sd">            Ids of the available phases.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbx_current_phase</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbx_current_phase</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbx_current_phase</span><span class="o">.</span><span class="n">addItems</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">phase_ids</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbx_current_phase</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigEditView.set_level_choices">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.html#ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.set_level_choices">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_level_choices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level_ids</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Fill the level combo box.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        level_ids : Iterable[int]</span>
+<span class="sd">            Ids of the levels of the selected phase.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbx_current_level</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbx_current_level</span><span class="o">.</span><span class="n">addItems</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">level</span><span class="p">)</span> <span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="n">level_ids</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigEditView.set_player_editable">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.html#ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.set_player_editable">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_player_editable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">editable</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Enable or disable the player combo box.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        editable : bool</span>
+<span class="sd">            False when editing (the player cannot be changed).</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbx_player</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="n">editable</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigEditView.set_form_data">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.html#ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.set_form_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_form_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Fill the form.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : dict[str, Any]</span>
+<span class="sd">            Same keys as ``get_form_data``.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The levels of the phase must have been loaded before</span>
+<span class="sd">        (``set_level_choices``). Arrival times are ordered and clamped</span>
+<span class="sd">        (KarteaArrivalTimeFields.order); an unknown palette falls back</span>
+<span class="sd">        to the default one; a missing feet click time becomes 1.2 s.</span>
+<span class="sd">        """</span>
+        <span class="n">player_id</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"player_id"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbx_player</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cbx_player</span><span class="o">.</span><span class="n">findData</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">player_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">else</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="p">)</span>
+        <span class="n">session_id</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"session_id"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lbl_session_value</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">session_id</span><span class="p">)</span> <span class="k">if</span> <span class="n">session_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">""</span>
+        <span class="p">)</span>
+
+        <span class="n">phase_id</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"phase_id"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbx_current_phase</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbx_current_phase</span><span class="o">.</span><span class="n">setCurrentText</span><span class="p">(</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">phase_id</span><span class="p">)</span> <span class="k">if</span> <span class="n">phase_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">""</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbx_current_phase</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">level_id</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"level_id"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbx_current_level</span><span class="o">.</span><span class="n">setCurrentText</span><span class="p">(</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">level_id</span><span class="p">)</span> <span class="k">if</span> <span class="n">level_id</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">""</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">spn_level_time</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"level_time"</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_arrival_times</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">combo_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">RESOURCE_COMBOS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">combo_name</span><span class="p">)</span><span class="o">.</span><span class="n">setCurrentText</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spn_feedback_image_time</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
+            <span class="nb">float</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"feedback_image_time"</span><span class="p">)</span> <span class="ow">or</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="c1"># Unknown palette (e.g. an old spin box value) falls back to the</span>
+        <span class="c1"># default</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cbx_palette</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cbx_palette</span><span class="o">.</span><span class="n">findData</span><span class="p">(</span>
+                <span class="n">KarteaPalettes</span><span class="o">.</span><span class="n">id_of</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"palette"</span><span class="p">))</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chk_hud</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"hud"</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chk_sound</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"sound"</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chk_feet_marker</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"feet_marker"</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chk_feet_click</span><span class="o">.</span><span class="n">setChecked</span><span class="p">(</span><span class="nb">bool</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"feet_click"</span><span class="p">)))</span>
+        <span class="n">feet_click_time</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"feet_click_time"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spn_feet_click_time</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span>
+            <span class="nb">float</span><span class="p">(</span><span class="n">feet_click_time</span><span class="p">)</span> <span class="k">if</span> <span class="n">feet_click_time</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mf">1.2</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_feet_click_time_enabled</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_feet_click_time_enabled</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">_args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Enable the feet click time only with feet click on."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">spn_feet_click_time</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">chk_feet_click</span><span class="o">.</span><span class="n">isChecked</span><span class="p">())</span>
+
+<div class="viewcode-block" id="PlayerKarteaConfigEditView.get_form_data">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.html#ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.get_form_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_form_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return the current form values (same keys as the service).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict[str, Any]</span>
+<span class="sd">            ``player_id``, ``session_id``, ``phase_id``, ``level_id``</span>
+<span class="sd">            and the config fields. Arrival times are returned already</span>
+<span class="sd">            ordered by KarteaArrivalTimeFields.order.</span>
+<span class="sd">        """</span>
+        <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">"player_id"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">cbx_player</span><span class="o">.</span><span class="n">currentData</span><span class="p">(),</span>
+            <span class="s2">"session_id"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_int_or_none</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lbl_session_value</span><span class="o">.</span><span class="n">text</span><span class="p">()),</span>
+            <span class="s2">"phase_id"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_int_or_none</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cbx_current_phase</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
+            <span class="p">),</span>
+            <span class="s2">"level_id"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_int_or_none</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">cbx_current_level</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
+            <span class="p">),</span>
+            <span class="s2">"level_time"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">spn_level_time</span><span class="o">.</span><span class="n">value</span><span class="p">(),</span>
+            <span class="s2">"feedback_image_time"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">spn_feedback_image_time</span><span class="o">.</span><span class="n">value</span><span class="p">(),</span>
+            <span class="s2">"palette"</span><span class="p">:</span> <span class="n">KarteaPalettes</span><span class="o">.</span><span class="n">id_of</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cbx_palette</span><span class="o">.</span><span class="n">currentData</span><span class="p">()),</span>
+            <span class="s2">"hud"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">chk_hud</span><span class="o">.</span><span class="n">isChecked</span><span class="p">(),</span>
+            <span class="s2">"sound"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">chk_sound</span><span class="o">.</span><span class="n">isChecked</span><span class="p">(),</span>
+            <span class="s2">"feet_marker"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">chk_feet_marker</span><span class="o">.</span><span class="n">isChecked</span><span class="p">(),</span>
+            <span class="s2">"feet_click"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">chk_feet_click</span><span class="o">.</span><span class="n">isChecked</span><span class="p">(),</span>
+            <span class="s2">"feet_click_time"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spn_feet_click_time</span><span class="o">.</span><span class="n">value</span><span class="p">(),</span> <span class="mi">2</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">combo_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">RESOURCE_COMBOS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">data</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">combo_name</span><span class="p">)</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+            <span class="n">KarteaArrivalTimeFields</span><span class="o">.</span><span class="n">order</span><span class="p">(</span>
+                <span class="p">{</span>
+                    <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">widget_name</span><span class="p">)</span><span class="o">.</span><span class="n">value</span><span class="p">()</span>
+                    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">KarteaArrivalTimeFields</span><span class="o">.</span><span class="n">ALL</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">data</span></div>
+
+
+    <span class="c1"># ======================</span>
+    <span class="c1"># Arrival times</span>
+    <span class="c1"># ======================</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_arrival_spin_boxes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Return (field, spin box) pairs, slowest speed first."""</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">widget_name</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">KarteaArrivalTimeFields</span><span class="o">.</span><span class="n">ALL</span>
+        <span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_reset_arrival_time_ranges</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Reset each spin box to the fixed range of its field."""</span>
+        <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">spin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_arrival_spin_boxes</span><span class="p">():</span>
+            <span class="n">spin</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">spin</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">minimum</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">maximum</span><span class="p">)</span>
+            <span class="n">spin</span><span class="o">.</span><span class="n">setSingleStep</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">step</span><span class="p">)</span>
+            <span class="n">spin</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_arrival_time_ranges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">_args</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Adjust the ranges so that the speeds do not overlap.</span>
+
+<span class="sd">        The next (faster) speed only accepts values below the previous</span>
+<span class="sd">        one, and the previous one only values above the next, always</span>
+<span class="sd">        with KarteaArrivalTimeFields.GAP of difference and within the</span>
+<span class="sd">        fixed range of each field. This way, advancing a level never</span>
+<span class="sd">        makes the track slower.</span>
+<span class="sd">        """</span>
+        <span class="n">spins</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_arrival_spin_boxes</span><span class="p">()</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">slow_field</span><span class="p">,</span> <span class="n">slow</span><span class="p">),</span> <span class="p">(</span><span class="n">fast_field</span><span class="p">,</span> <span class="n">fast</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">spins</span><span class="p">,</span> <span class="n">spins</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+            <span class="n">fast_max</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span>
+                <span class="n">fast_field</span><span class="o">.</span><span class="n">maximum</span><span class="p">,</span>
+                <span class="nb">round</span><span class="p">(</span><span class="n">slow</span><span class="o">.</span><span class="n">value</span><span class="p">()</span> <span class="o">-</span> <span class="n">KarteaArrivalTimeFields</span><span class="o">.</span><span class="n">GAP</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="n">slow_min</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+                <span class="n">slow_field</span><span class="o">.</span><span class="n">minimum</span><span class="p">,</span>
+                <span class="nb">round</span><span class="p">(</span><span class="n">fast</span><span class="o">.</span><span class="n">value</span><span class="p">()</span> <span class="o">+</span> <span class="n">KarteaArrivalTimeFields</span><span class="o">.</span><span class="n">GAP</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">spin</span><span class="p">,</span> <span class="n">minimum</span><span class="p">,</span> <span class="n">maximum</span> <span class="ow">in</span> <span class="p">(</span>
+                <span class="p">(</span><span class="n">fast</span><span class="p">,</span> <span class="n">fast_field</span><span class="o">.</span><span class="n">minimum</span><span class="p">,</span> <span class="n">fast_max</span><span class="p">),</span>
+                <span class="p">(</span><span class="n">slow</span><span class="p">,</span> <span class="n">slow_min</span><span class="p">,</span> <span class="n">slow_field</span><span class="o">.</span><span class="n">maximum</span><span class="p">),</span>
+            <span class="p">):</span>
+                <span class="n">spin</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">spin</span><span class="o">.</span><span class="n">setRange</span><span class="p">(</span><span class="n">minimum</span><span class="p">,</span> <span class="n">maximum</span><span class="p">)</span>
+                <span class="n">spin</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_arrival_times</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Fill the arrival times, already ordered and valid."""</span>
+        <span class="n">times</span> <span class="o">=</span> <span class="n">KarteaArrivalTimeFields</span><span class="o">.</span><span class="n">order</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">data</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">]</span>
+                <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">KarteaArrivalTimeFields</span><span class="o">.</span><span class="n">ALL</span>
+                <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="c1"># Fixed ranges before filling: the dynamic ones of the previous</span>
+        <span class="c1"># value could clip the new value.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reset_arrival_time_ranges</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">spin</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_arrival_spin_boxes</span><span class="p">():</span>
+            <span class="n">spin</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">spin</span><span class="o">.</span><span class="n">setValue</span><span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">])</span>
+            <span class="n">spin</span><span class="o">.</span><span class="n">blockSignals</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_arrival_time_ranges</span><span class="p">()</span>
+
+<div class="viewcode-block" id="PlayerKarteaConfigEditView.eventFilter">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.html#ttea.games.kartea.view.playerkarteaconfigeditview.PlayerKarteaConfigEditView.eventFilter">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">eventFilter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">watched</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Show the preview of an image combo box when it gets focus.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        watched : QObject</span>
+<span class="sd">            Object that received the event.</span>
+<span class="sd">        event : QEvent</span>
+<span class="sd">            The event.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            Result of the base ``eventFilter`` (the event is not</span>
+<span class="sd">            consumed).</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">watched</span><span class="p">,</span> <span class="n">QComboBox</span><span class="p">)</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span><span class="p">()</span> <span class="o">==</span> <span class="n">QEvent</span><span class="o">.</span><span class="n">FocusIn</span><span class="p">:</span>
+            <span class="n">combo_name</span> <span class="o">=</span> <span class="n">watched</span><span class="o">.</span><span class="n">objectName</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">combo_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">PREVIEW_COMBOS</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_preview_combo</span><span class="p">(</span><span class="n">combo_name</span><span class="p">,</span> <span class="n">watched</span><span class="o">.</span><span class="n">currentText</span><span class="p">())</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">eventFilter</span><span class="p">(</span><span class="n">watched</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

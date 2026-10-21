@@ -1,0 +1,230 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.service &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.service.calibrationservice" href="ttea.service.calibrationservice.html" />
+    <link rel="prev" title="Professional" href="ttea.model.professional.Professional.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.games.html">ttea.games</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">ttea.service</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.service.calibrationservice.html">ttea.service.calibrationservice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.service.calibrationsettingservice.html">ttea.service.calibrationsettingservice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.service.helpservice.html">ttea.service.helpservice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.service.institutionfacilityservice.html">ttea.service.institutionfacilityservice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.service.languageservice.html">ttea.service.languageservice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.service.mainservice.html">ttea.service.mainservice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.service.playergamelaunchservice.html">ttea.service.playergamelaunchservice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.service.playerservice.html">ttea.service.playerservice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.service.professionalservice.html">ttea.service.professionalservice</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+      <li class="breadcrumb-item active">ttea.service</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.service.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ttea.service">
+<span id="ttea-service"></span><h1>ttea.service<a class="headerlink" href="#module-ttea.service" title="Link to this heading"></a></h1>
+<p>Service classes of the T-TEA platform.</p>
+<p>Developed by the Larva UDESC team.</p>
+<p>This package provides the service layer (business rules) used by the
+controllers of the T-TEA platform.</p>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>__version__<span class="classifier">str</span></dt><dd><p>The current version of the package.</p>
+</dd>
+<dt>__date__<span class="classifier">str</span></dt><dd><p>The release date of this version.</p>
+</dd>
+<dt>__author__<span class="classifier">str</span></dt><dd><p>The development team.</p>
+</dd>
+<dt>__license__<span class="classifier">str</span></dt><dd><p>The license under which the package is distributed.</p>
+</dd>
+</dl>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>CalibrationService</dt><dd><p>Screens, cameras and calibration data.</p>
+</dd>
+<dt>CalibrationSettingService</dt><dd><p>Calibration settings (MediaPipe, OpenCV, filters…).</p>
+</dd>
+<dt>HelpService</dt><dd><p>Compiled help files, languages and topics.</p>
+</dd>
+<dt>HelpUnavailableError</dt><dd><p>Raised when the help cannot be opened.</p>
+</dd>
+<dt>InstitutionFacilityService</dt><dd><p>Business rules of institutions/facilities.</p>
+</dd>
+<dt>LanguageService</dt><dd><p>Language detection, persistence and translators.</p>
+</dd>
+<dt>MainService</dt><dd><p>Global actions of the main window.</p>
+</dd>
+<dt>PlayerGameLaunchService</dt><dd><p>Data of the game launch screen.</p>
+</dd>
+<dt>PlayerService</dt><dd><p>Business rules of players.</p>
+</dd>
+<dt>ProfessionalService</dt><dd><p>Business rules of professionals.</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<p>This package is maintained by the Larva UDESC team and is under active
+development. Contributions and bug reports are welcome at:
+<a class="reference external" href="https://github.com/larvattea/ttea">https://github.com/larvattea/ttea</a></p>
+</section>
+<p class="rubric">Modules</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="ttea.service.calibrationservice.html#module-ttea.service.calibrationservice" title="ttea.service.calibrationservice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calibrationservice</span></code></a></p></td>
+<td><p>Calibration service: screens, cameras and calibration data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ttea.service.calibrationsettingservice.html#module-ttea.service.calibrationsettingservice" title="ttea.service.calibrationsettingservice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calibrationsettingservice</span></code></a></p></td>
+<td><p>Access to the calibration settings (MediaPipe, OpenCV, filters...).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="ttea.service.helpservice.html#module-ttea.service.helpservice" title="ttea.service.helpservice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">helpservice</span></code></a></p></td>
+<td><p>Help service: help files, languages and topics.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ttea.service.institutionfacilityservice.html#module-ttea.service.institutionfacilityservice" title="ttea.service.institutionfacilityservice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">institutionfacilityservice</span></code></a></p></td>
+<td><p>Institution/facility service: business rules and persistence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="ttea.service.languageservice.html#module-ttea.service.languageservice" title="ttea.service.languageservice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">languageservice</span></code></a></p></td>
+<td><p>Language service: detection, persistence and Qt translators.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ttea.service.mainservice.html#module-ttea.service.mainservice" title="ttea.service.mainservice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mainservice</span></code></a></p></td>
+<td><p>Global service of the main window (exit and other global actions).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="ttea.service.playergamelaunchservice.html#module-ttea.service.playergamelaunchservice" title="ttea.service.playergamelaunchservice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">playergamelaunchservice</span></code></a></p></td>
+<td><p>Service of the game launch screen: players, professionals, games.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ttea.service.playerservice.html#module-ttea.service.playerservice" title="ttea.service.playerservice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">playerservice</span></code></a></p></td>
+<td><p>Player service: business rules and persistence of players.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="ttea.service.professionalservice.html#module-ttea.service.professionalservice" title="ttea.service.professionalservice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">professionalservice</span></code></a></p></td>
+<td><p>Professional service: business rules and persistence.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.model.professional.Professional.html" class="btn btn-neutral float-left" title="Professional" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.service.calibrationservice.html" class="btn btn-neutral float-right" title="ttea.service.calibrationservice" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

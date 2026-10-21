@@ -1,0 +1,20 @@
+AppConfig
+=========
+
+.. currentmodule:: ttea.app.appconfig
+
+.. autoclass:: AppConfig
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~AppConfig.config_file_exists
+      ~AppConfig.get_geral_date_mask
+      ~AppConfig.get_geral_hour_mask
+      ~AppConfig.get_geral_hour_minute_mask
+      ~AppConfig.get_title

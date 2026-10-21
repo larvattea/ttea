@@ -1,0 +1,485 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.controller.calibrationcontroller &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.controller.calibrationcontroller</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.controller.calibrationcontroller</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Controller of the calibration window (hardware data and camera)."""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">QObject</span><span class="p">,</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">Slot</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtGui</span><span class="w"> </span><span class="kn">import</span> <span class="n">QImage</span><span class="p">,</span> <span class="n">QPixmap</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.app</span><span class="w"> </span><span class="kn">import</span> <span class="n">AppConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">CalibrationMath</span><span class="p">,</span> <span class="n">CameraVideoThread</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.service</span><span class="w"> </span><span class="kn">import</span> <span class="n">CalibrationService</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">CalibrationView</span>
+
+
+<div class="viewcode-block" id="CalibrationController">
+<a class="viewcode-back" href="../../../api/ttea.controller.calibrationcontroller.CalibrationController.html#ttea.controller.calibrationcontroller.CalibrationController">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CalibrationController</span><span class="p">(</span><span class="n">QObject</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Controller of the calibration window.</span>
+
+<span class="sd">    Lists cameras, screens and aspect ratios, previews the camera, opens</span>
+<span class="sd">    the automatic and manual calibrations and saves the hardware data</span>
+<span class="sd">    (``Calibration``) of the chosen camera and screen.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    view : CalibrationView</span>
+<span class="sd">        The calibration dialog.</span>
+<span class="sd">    service : CalibrationService | None, optional</span>
+<span class="sd">        Calibration service. Default is None, which creates a new</span>
+<span class="sd">        ``CalibrationService``.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    view : CalibrationView</span>
+<span class="sd">        The calibration dialog.</span>
+<span class="sd">    service : CalibrationService</span>
+<span class="sd">        Calibration service.</span>
+<span class="sd">    thread : CameraVideoThread | None</span>
+<span class="sd">        Camera preview thread, or None when the camera is stopped.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The combo boxes are filled and the saved camera, screen and</span>
+<span class="sd">    proportion are selected when the controller is created. User</span>
+<span class="sd">    messages and button texts are translated with ``self.tr()``.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">view</span><span class="p">:</span> <span class="s2">"CalibrationView"</span><span class="p">,</span>
+        <span class="n">service</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CalibrationService</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span> <span class="o">=</span> <span class="n">view</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="n">service</span> <span class="ow">or</span> <span class="n">CalibrationService</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_view</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thread</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="CalibrationController.handle_ok">
+<a class="viewcode-back" href="../../../api/ttea.controller.calibrationcontroller.CalibrationController.html#ttea.controller.calibrationcontroller.CalibrationController.handle_ok">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle_ok</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Save the hardware data and close the dialog.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The data from ``get_data`` is saved through</span>
+<span class="sd">        ``create_calibration_hardware``. On success, an information</span>
+<span class="sd">        message is shown, the dialog is accepted and the camera preview</span>
+<span class="sd">        is stopped; otherwise an error message is shown.</span>
+<span class="sd">        """</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+
+        <span class="n">calibration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">create_calibration_hardware</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">calibration</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span>
+                    <span class="s2">"Dados do hardware do ambiente de calibração cadastrados com sucesso!"</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">thread</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">thread</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span>
+                    <span class="s2">"Erro ao salvar os dados do hardware do ambiente de calibração."</span>
+                <span class="p">)</span>
+            <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationController.handle_cancel">
+<a class="viewcode-back" href="../../../api/ttea.controller.calibrationcontroller.CalibrationController.html#ttea.controller.calibrationcontroller.CalibrationController.handle_cancel">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle_cancel</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Stop the camera preview and reject the dialog."""</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">thread</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">thread</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">reject</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="CalibrationController.handle_calibrate_auto">
+<a class="viewcode-back" href="../../../api/ttea.controller.calibrationcontroller.CalibrationController.html#ttea.controller.calibrationcontroller.CalibrationController.handle_calibrate_auto">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle_calibrate_auto</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Open the automatic calibration dialog."""</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.factory</span><span class="w"> </span><span class="kn">import</span> <span class="n">ViewFactory</span>
+
+        <span class="n">dialog</span> <span class="o">=</span> <span class="n">ViewFactory</span><span class="o">.</span><span class="n">get_app_view_factory</span><span class="p">()</span><span class="o">.</span><span class="n">create_automaticcalibration_view</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span>
+        <span class="p">)</span>
+        <span class="n">dialog</span><span class="o">.</span><span class="n">exec</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="CalibrationController.handle_calibrate_semi">
+<a class="viewcode-back" href="../../../api/ttea.controller.calibrationcontroller.CalibrationController.html#ttea.controller.calibrationcontroller.CalibrationController.handle_calibrate_semi">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle_calibrate_semi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Show that semiautomatic calibration is not ready."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Em construção!"</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="CalibrationController.handle_calibrate_manual">
+<a class="viewcode-back" href="../../../api/ttea.controller.calibrationcontroller.CalibrationController.html#ttea.controller.calibrationcontroller.CalibrationController.handle_calibrate_manual">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle_calibrate_manual</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Open the manual calibration dialog."""</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.factory</span><span class="w"> </span><span class="kn">import</span> <span class="n">ViewFactory</span>
+
+        <span class="n">dialog</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">ViewFactory</span><span class="o">.</span><span class="n">get_app_view_factory</span><span class="p">()</span><span class="o">.</span><span class="n">create_manualcalibration_view</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">view</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">dialog</span><span class="o">.</span><span class="n">exec</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_initialize_view</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Fill the combo boxes and select the saved values."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">list_proportions</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">list_monitors</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">list_cameras</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_load_saved_settings</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_load_saved_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Select the saved camera, screen and proportion, if any.</span>
+
+<span class="sd">        The camera and screen are found by their saved index and the</span>
+<span class="sd">        proportion by its text; values not found are left unselected.</span>
+<span class="sd">        """</span>
+        <span class="n">calibration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">dao</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">calibration</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">calibration</span><span class="o">.</span><span class="n">camera_position</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_camera</span><span class="o">.</span><span class="n">findData</span><span class="p">(</span>
+                    <span class="n">calibration</span><span class="o">.</span><span class="n">camera_position</span>
+                <span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">index</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_camera</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">calibration</span><span class="o">.</span><span class="n">screen_position</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_monitor</span><span class="o">.</span><span class="n">findData</span><span class="p">(</span>
+                    <span class="n">calibration</span><span class="o">.</span><span class="n">screen_position</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">index</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_monitor</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">calibration</span><span class="o">.</span><span class="n">content_proportion</span><span class="p">:</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_proportion</span><span class="o">.</span><span class="n">findText</span><span class="p">(</span>
+                    <span class="n">calibration</span><span class="o">.</span><span class="n">content_proportion</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">index</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_proportion</span><span class="o">.</span><span class="n">setCurrentIndex</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CalibrationController.list_cameras">
+<a class="viewcode-back" href="../../../api/ttea.controller.calibrationcontroller.CalibrationController.html#ttea.controller.calibrationcontroller.CalibrationController.list_cameras">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_cameras</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Fill the camera combo box, with the index as data."""</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">camera</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_video_inputs</span><span class="p">()):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_camera</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">camera</span><span class="o">.</span><span class="n">description</span><span class="p">(),</span> <span class="n">i</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationController.list_monitors">
+<a class="viewcode-back" href="../../../api/ttea.controller.calibrationcontroller.CalibrationController.html#ttea.controller.calibrationcontroller.CalibrationController.list_monitors">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_monitors</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Fill the screen combo box (name, with the index as data).</span>
+
+<span class="sd">        The name is ``"&lt;manufacturer&gt; - &lt;model&gt;"``, or ``"Monitor &lt;n&gt;</span>
+<span class="sd">        (&lt;name&gt;)"`` when both are empty.</span>
+<span class="sd">        """</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">monitor</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_screens</span><span class="p">()):</span>
+            <span class="n">manufacturer</span> <span class="o">=</span> <span class="n">monitor</span><span class="o">.</span><span class="n">manufacturer</span><span class="p">()</span>
+            <span class="n">model</span> <span class="o">=</span> <span class="n">monitor</span><span class="o">.</span><span class="n">model</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">manufacturer</span> <span class="ow">or</span> <span class="n">model</span><span class="p">:</span>
+                <span class="n">descricao</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">manufacturer</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">"</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">descricao</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Monitor </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">monitor</span><span class="o">.</span><span class="n">name</span><span class="p">()</span><span class="si">}</span><span class="s2">)"</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_monitor</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">descricao</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationController.list_proportions">
+<a class="viewcode-back" href="../../../api/ttea.controller.calibrationcontroller.CalibrationController.html#ttea.controller.calibrationcontroller.CalibrationController.list_proportions">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">list_proportions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Fill the proportion combo box with the supported ratios."""</span>
+        <span class="k">for</span> <span class="n">text</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_proportions</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_proportion</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationController.control_camera">
+<a class="viewcode-back" href="../../../api/ttea.controller.calibrationcontroller.CalibrationController.html#ttea.controller.calibrationcontroller.CalibrationController.control_camera">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">control_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Start or stop the camera preview (F5 button).</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        While the preview runs, the camera, screen and proportion combo</span>
+<span class="sd">        boxes are disabled. The ``CameraVideoThread`` is created with</span>
+<span class="sd">        ``use_low_resolution`` set to ``is_raspberry_pi()``, so the</span>
+<span class="sd">        configured resolution is applied only on a Raspberry Pi.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">thread</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">thread</span><span class="o">.</span><span class="n">isRunning</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stop_camera_stream</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_proportion</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_monitor</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_camera</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">limit_resolution_raspberry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">is_raspberry_pi</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">thread</span> <span class="o">=</span> <span class="n">CameraVideoThread</span><span class="p">(</span>
+                <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_camera</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()),</span>
+                <span class="n">limit_resolution_raspberry</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">thread</span><span class="o">.</span><span class="n">change_pixmap_signal</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">update_image</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">thread</span><span class="o">.</span><span class="n">error_signal</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_camera_error</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">pb_camera</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Parar Câmera - F5"</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">pb_camera</span><span class="o">.</span><span class="n">setShortcut</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"F5"</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_proportion</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_monitor</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_camera</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationController.stop_camera_stream">
+<a class="viewcode-back" href="../../../api/ttea.controller.calibrationcontroller.CalibrationController.html#ttea.controller.calibrationcontroller.CalibrationController.stop_camera_stream">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">stop_camera_stream</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Stop the preview and reset the camera button and image."""</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">thread</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">thread</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">thread</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">pb_camera</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Iniciar Câmera - F5"</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">pb_camera</span><span class="o">.</span><span class="n">setShortcut</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"F5"</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">lbl_video</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">lbl_video</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Câmera Parada"</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="CalibrationController.handle_camera_error">
+<a class="viewcode-back" href="../../../api/ttea.controller.calibrationcontroller.CalibrationController.html#ttea.controller.calibrationcontroller.CalibrationController.handle_camera_error">[docs]</a>
+    <span class="nd">@Slot</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle_camera_error</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Stop the preview and show a camera error.</span>
+
+<span class="sd">        Slot of ``CameraVideoThread.error_signal``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        message : str</span>
+<span class="sd">            Translated error message.</span>
+<span class="sd">        """</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stop_camera_stream</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationController.update_image">
+<a class="viewcode-back" href="../../../api/ttea.controller.calibrationcontroller.CalibrationController.html#ttea.controller.calibrationcontroller.CalibrationController.update_image">[docs]</a>
+    <span class="nd">@Slot</span><span class="p">(</span><span class="n">QImage</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qt_img</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Show a camera frame, scaled to the video label.</span>
+
+<span class="sd">        Slot of ``CameraVideoThread.change_pixmap_signal``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        qt_img : QImage</span>
+<span class="sd">            Frame to show; the aspect ratio is kept.</span>
+<span class="sd">        """</span>
+        <span class="n">pixmap</span> <span class="o">=</span> <span class="n">QPixmap</span><span class="o">.</span><span class="n">fromImage</span><span class="p">(</span><span class="n">qt_img</span><span class="p">)</span>
+
+        <span class="c1"># Scale to the label's current size (follows window resizes)</span>
+        <span class="n">scaled_pixmap</span> <span class="o">=</span> <span class="n">pixmap</span><span class="o">.</span><span class="n">scaled</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">lbl_video</span><span class="o">.</span><span class="n">size</span><span class="p">(),</span>
+            <span class="n">Qt</span><span class="o">.</span><span class="n">AspectRatioMode</span><span class="o">.</span><span class="n">KeepAspectRatio</span><span class="p">,</span>
+            <span class="n">Qt</span><span class="o">.</span><span class="n">TransformationMode</span><span class="o">.</span><span class="n">SmoothTransformation</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">lbl_video</span><span class="o">.</span><span class="n">setPixmap</span><span class="p">(</span><span class="n">scaled_pixmap</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationController.get_data">
+<a class="viewcode-back" href="../../../api/ttea.controller.calibrationcontroller.CalibrationController.html#ttea.controller.calibrationcontroller.CalibrationController.get_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Build the hardware calibration data from the selection.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict[str, Any]</span>
+<span class="sd">            Values for every ``Calibration`` field.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The camera resolution and frame rates come from the first video</span>
+<span class="sd">        format of the camera (0 if it has none). The content area is the</span>
+<span class="sd">        largest area of the chosen proportion that fits the available</span>
+<span class="sd">        screen area (``CalibrationMath.calculate_projection_area``). The</span>
+<span class="sd">        date uses ``AppConfig.get_geral_date_mask()`` and the time</span>
+<span class="sd">        ``%H:%M:%S``.</span>
+<span class="sd">        """</span>
+        <span class="n">camera_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_camera</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()</span>
+        <span class="n">monitor_idx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_monitor</span><span class="o">.</span><span class="n">currentIndex</span><span class="p">()</span>
+        <span class="n">proportion_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_proportion</span><span class="o">.</span><span class="n">currentText</span><span class="p">()</span>
+
+        <span class="n">camera_device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_video_inputs</span><span class="p">()[</span><span class="n">camera_idx</span><span class="p">]</span>
+        <span class="n">screen</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_screens</span><span class="p">()[</span><span class="n">monitor_idx</span><span class="p">]</span>
+        <span class="n">geometry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_geometry_of_screen</span><span class="p">(</span><span class="n">monitor_idx</span><span class="p">)</span>
+        <span class="n">available_geo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">get_available_geometry_of_screen</span><span class="p">(</span>
+            <span class="n">monitor_idx</span>
+        <span class="p">)</span>
+
+        <span class="n">formats</span> <span class="o">=</span> <span class="n">camera_device</span><span class="o">.</span><span class="n">videoFormats</span><span class="p">()</span>
+        <span class="n">best_format</span> <span class="o">=</span> <span class="n">formats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">formats</span> <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="c1"># e.g. "16:9" -&gt; (16, 9)</span>
+        <span class="n">ratio_parts</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">proportion_text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">":"</span><span class="p">)))</span>
+
+        <span class="n">c_width</span><span class="p">,</span> <span class="n">c_height</span> <span class="o">=</span> <span class="n">CalibrationMath</span><span class="o">.</span><span class="n">calculate_projection_area</span><span class="p">(</span>
+            <span class="n">available_geo</span><span class="o">.</span><span class="n">width</span><span class="p">(),</span> <span class="n">available_geo</span><span class="o">.</span><span class="n">height</span><span class="p">(),</span> <span class="n">ratio_parts</span>
+        <span class="p">)</span>
+
+        <span class="n">date_mask</span> <span class="o">=</span> <span class="n">AppConfig</span><span class="o">.</span><span class="n">get_geral_date_mask</span><span class="p">()</span>
+        <span class="n">current_date</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="n">date_mask</span><span class="p">)</span>
+        <span class="n">current_hour</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%H:%M:%S"</span><span class="p">)</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">"camera_description"</span><span class="p">:</span> <span class="n">camera_device</span><span class="o">.</span><span class="n">description</span><span class="p">(),</span>
+            <span class="s2">"camera_id"</span><span class="p">:</span> <span class="n">camera_device</span><span class="o">.</span><span class="n">id</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(),</span>
+            <span class="s2">"camera_position"</span><span class="p">:</span> <span class="n">camera_idx</span><span class="p">,</span>
+            <span class="s2">"camera_width"</span><span class="p">:</span> <span class="p">(</span>
+                <span class="n">best_format</span><span class="o">.</span><span class="n">resolution</span><span class="p">()</span><span class="o">.</span><span class="n">width</span><span class="p">()</span> <span class="k">if</span> <span class="n">best_format</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="p">),</span>
+            <span class="s2">"camera_height"</span><span class="p">:</span> <span class="p">(</span>
+                <span class="n">best_format</span><span class="o">.</span><span class="n">resolution</span><span class="p">()</span><span class="o">.</span><span class="n">height</span><span class="p">()</span> <span class="k">if</span> <span class="n">best_format</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="p">),</span>
+            <span class="s2">"camera_max_fps"</span><span class="p">:</span> <span class="p">(</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">best_format</span><span class="o">.</span><span class="n">maxFrameRate</span><span class="p">())</span> <span class="k">if</span> <span class="n">best_format</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="p">),</span>
+            <span class="s2">"camera_min_fps"</span><span class="p">:</span> <span class="p">(</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">best_format</span><span class="o">.</span><span class="n">minFrameRate</span><span class="p">())</span> <span class="k">if</span> <span class="n">best_format</span> <span class="k">else</span> <span class="mi">0</span>
+            <span class="p">),</span>
+            <span class="s2">"screen_manufacturer"</span><span class="p">:</span> <span class="n">screen</span><span class="o">.</span><span class="n">manufacturer</span><span class="p">(),</span>
+            <span class="s2">"screen_model"</span><span class="p">:</span> <span class="n">screen</span><span class="o">.</span><span class="n">model</span><span class="p">(),</span>
+            <span class="s2">"screen_position"</span><span class="p">:</span> <span class="n">monitor_idx</span><span class="p">,</span>
+            <span class="s2">"screen_serial_number"</span><span class="p">:</span> <span class="n">screen</span><span class="o">.</span><span class="n">serialNumber</span><span class="p">(),</span>
+            <span class="s2">"screen_width"</span><span class="p">:</span> <span class="n">geometry</span><span class="o">.</span><span class="n">width</span><span class="p">(),</span>
+            <span class="s2">"screen_height"</span><span class="p">:</span> <span class="n">geometry</span><span class="o">.</span><span class="n">height</span><span class="p">(),</span>
+            <span class="s2">"screen_available_width"</span><span class="p">:</span> <span class="n">available_geo</span><span class="o">.</span><span class="n">width</span><span class="p">(),</span>
+            <span class="s2">"screen_available_height"</span><span class="p">:</span> <span class="n">available_geo</span><span class="o">.</span><span class="n">height</span><span class="p">(),</span>
+            <span class="s2">"screen_pos_x"</span><span class="p">:</span> <span class="n">geometry</span><span class="o">.</span><span class="n">x</span><span class="p">(),</span>
+            <span class="s2">"screen_pos_y"</span><span class="p">:</span> <span class="n">geometry</span><span class="o">.</span><span class="n">y</span><span class="p">(),</span>
+            <span class="s2">"content_width"</span><span class="p">:</span> <span class="n">c_width</span><span class="p">,</span>
+            <span class="s2">"content_height"</span><span class="p">:</span> <span class="n">c_height</span><span class="p">,</span>
+            <span class="s2">"content_width_ratio"</span><span class="p">:</span> <span class="n">ratio_parts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s2">"content_height_ratio"</span><span class="p">:</span> <span class="n">ratio_parts</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="s2">"content_proportion"</span><span class="p">:</span> <span class="n">proportion_text</span><span class="p">,</span>
+            <span class="s2">"calibration_date"</span><span class="p">:</span> <span class="n">current_date</span><span class="p">,</span>
+            <span class="s2">"calibration_hour"</span><span class="p">:</span> <span class="n">current_hour</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">data</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+ProfessionalService
+===================
+
+.. currentmodule:: ttea.service.professionalservice
+
+.. autoclass:: ProfessionalService
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~ProfessionalService.create_professional
+      ~ProfessionalService.delete_professional
+      ~ProfessionalService.find_by_id
+      ~ProfessionalService.get_all_institutionfacilities
+      ~ProfessionalService.get_all_professionals
+      ~ProfessionalService.get_institutionfacility_by_id
+      ~ProfessionalService.get_professional_types
+      ~ProfessionalService.search_professionals
+      ~ProfessionalService.update_professional
+      ~ProfessionalService.validate_data

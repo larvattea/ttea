@@ -1,0 +1,18 @@
+Professional
+============
+
+.. currentmodule:: ttea.model.professional
+
+.. autoclass:: Professional
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~Professional.get_data
+      ~Professional.is_valid
+      ~Professional.set_data

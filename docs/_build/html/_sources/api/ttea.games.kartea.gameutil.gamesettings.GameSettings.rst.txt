@@ -1,0 +1,9 @@
+GameSettings
+============
+
+.. currentmodule:: ttea.games.kartea.gameutil.gamesettings
+
+.. autoclass:: GameSettings
+   :members:
+   :show-inheritance:
+

@@ -1,0 +1,20 @@
+ttea.games.kartea.util.karteapathconfig
+=======================================
+
+.. automodule:: ttea.games.kartea.util.karteapathconfig
+
+.. currentmodule:: ttea.games.kartea.util.karteapathconfig
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   KarteaPathConfig
+
+

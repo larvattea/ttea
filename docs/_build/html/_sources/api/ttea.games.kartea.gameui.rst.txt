@@ -1,0 +1,20 @@
+ttea.games.kartea.gameui
+========================
+
+.. automodule:: ttea.games.kartea.gameui
+
+.. currentmodule:: ttea.games.kartea.gameui
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/module.rst
+   :recursive:
+
+   ui
+
+
+

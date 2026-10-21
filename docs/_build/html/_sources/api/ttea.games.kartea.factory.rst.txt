@@ -1,0 +1,20 @@
+ttea.games.kartea.factory
+=========================
+
+.. automodule:: ttea.games.kartea.factory
+
+.. currentmodule:: ttea.games.kartea.factory
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/module.rst
+   :recursive:
+
+   karteaviewfactory
+
+
+

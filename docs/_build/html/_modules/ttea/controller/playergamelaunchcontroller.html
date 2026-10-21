@@ -1,0 +1,636 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.controller.playergamelaunchcontroller &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.controller.playergamelaunchcontroller</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.controller.playergamelaunchcontroller</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Controller of the game launch window: checks and game process.</span>
+
+<span class="sd">Attributes</span>
+<span class="sd">----------</span>
+<span class="sd">PSUTIL_AVAILABLE : bool</span>
+<span class="sd">    Whether ``psutil`` could be imported; without it, the game process</span>
+<span class="sd">    tree is not monitored or terminated as a whole.</span>
+<span class="sd">"""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="c1"># psutil is optional; the app still runs without it</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">psutil</span>
+
+    <span class="n">PSUTIL_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">psutil</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">PSUTIL_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">QObject</span><span class="p">,</span> <span class="n">Qt</span><span class="p">,</span> <span class="n">QTimer</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">AppModel</span><span class="p">,</span> <span class="n">Calibration</span><span class="p">,</span> <span class="n">CalibrationPoint</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.service</span><span class="w"> </span><span class="kn">import</span> <span class="n">CalibrationService</span><span class="p">,</span> <span class="n">PlayerGameLaunchService</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">MessageService</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.view</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerGameLaunchView</span>
+
+
+<div class="viewcode-block" id="PlayerGameLaunchController">
+<a class="viewcode-back" href="../../../api/ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.html#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PlayerGameLaunchController</span><span class="p">(</span><span class="n">QObject</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Controller of the game launch window.</span>
+
+<span class="sd">    Validates the selection and the calibration, starts the chosen game</span>
+<span class="sd">    as a separate process and stops it when the window closes.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    view : PlayerGameLaunchView</span>
+<span class="sd">        The game launch dialog.</span>
+<span class="sd">    message_service : MessageService | None, optional</span>
+<span class="sd">        Service used to show messages. Default is None, which creates</span>
+<span class="sd">        ``MessageService(view)``.</span>
+<span class="sd">    service : PlayerGameLaunchService | None, optional</span>
+<span class="sd">        Launch service. Default is None, which creates a new one.</span>
+<span class="sd">    calibration_service : CalibrationService | None, optional</span>
+<span class="sd">        Calibration service. Default is None, which creates a new one.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    view : PlayerGameLaunchView</span>
+<span class="sd">        The game launch dialog.</span>
+<span class="sd">    msg : MessageService</span>
+<span class="sd">        Service used to show messages.</span>
+<span class="sd">    service : PlayerGameLaunchService</span>
+<span class="sd">        Launch service.</span>
+<span class="sd">    calibration_service : CalibrationService</span>
+<span class="sd">        Calibration service.</span>
+<span class="sd">    current_process : subprocess.Popen | None</span>
+<span class="sd">        Process of the running game, if any.</span>
+<span class="sd">    monitor_timer : QTimer | None</span>
+<span class="sd">        Timer that checks whether the game has started.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    All messages are translated with ``self.tr()``.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">view</span><span class="p">:</span> <span class="s2">"PlayerGameLaunchView"</span><span class="p">,</span>
+        <span class="n">message_service</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">MessageService</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">service</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PlayerGameLaunchService</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">calibration_service</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CalibrationService</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span> <span class="o">=</span> <span class="n">view</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">msg</span> <span class="o">=</span> <span class="n">message_service</span> <span class="ow">or</span> <span class="n">MessageService</span><span class="p">(</span><span class="n">view</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="n">service</span> <span class="ow">or</span> <span class="n">PlayerGameLaunchService</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calibration_service</span> <span class="o">=</span> <span class="n">calibration_service</span> <span class="ow">or</span> <span class="n">CalibrationService</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">monitor_timer</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">QTimer</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="PlayerGameLaunchController.handle_cancel">
+<a class="viewcode-back" href="../../../api/ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.html#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.handle_cancel">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle_cancel</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Close the window, asking first if a game is running.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        "No" is the default answer. The game itself is stopped by</span>
+<span class="sd">        ``cleanup`` when the window closes.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_game_running</span><span class="p">():</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">question</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span>
+                    <span class="s2">"Há um jogo em execução e ele será encerrado. Deseja sair da tela de sessão de jogo?"</span>
+                <span class="p">),</span>
+                <span class="kc">None</span><span class="p">,</span>
+                <span class="kc">True</span><span class="p">,</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">reject</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">reject</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="PlayerGameLaunchController.handle_game_info">
+<a class="viewcode-back" href="../../../api/ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.html#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.handle_game_info">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">handle_game_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Show the developers, version and years of the selected game.</span>
+
+<span class="sd">        A warning is shown when the metadata has no developers or</span>
+<span class="sd">        version.</span>
+<span class="sd">        """</span>
+        <span class="n">game_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_game</span><span class="o">.</span><span class="n">currentData</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">game_data</span> <span class="ow">and</span> <span class="n">game_data</span><span class="o">.</span><span class="n">developers</span> <span class="ow">and</span> <span class="n">game_data</span><span class="o">.</span><span class="n">version</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span>
+                    <span class="s2">"Este jogo foi desenvolvido por:</span><span class="se">\n\n</span><span class="si">{0}</span><span class="se">\n\n</span><span class="s2">"</span>
+                    <span class="s2">"Versão: </span><span class="si">{1}</span><span class="se">\n</span><span class="s2">"</span>
+                    <span class="s2">"Desde: </span><span class="si">{2}</span><span class="s2"> - </span><span class="si">{3}</span><span class="s2">"</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">game_data</span><span class="o">.</span><span class="n">developers</span><span class="p">),</span>
+                    <span class="n">game_data</span><span class="o">.</span><span class="n">version</span><span class="p">,</span>
+                    <span class="n">game_data</span><span class="o">.</span><span class="n">release_year</span> <span class="ow">or</span> <span class="s2">"N/A"</span><span class="p">,</span>
+                    <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y"</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span>
+                    <span class="s2">"Informações de autoria do jogo não estão disponíveis.</span><span class="se">\n</span><span class="s2">"</span>
+                    <span class="s2">"Verifique se os metadados de configuração estão corretos."</span>
+                <span class="p">)</span>
+            <span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_find_by_id_calibration_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">calibration_point_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the saved calibration points, if any."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">calibration_service</span><span class="o">.</span><span class="n">find_by_id_calibration_point</span><span class="p">(</span>
+            <span class="n">calibration_point_id</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_find_by_id_calibration</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">calibration_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the saved hardware calibration, if any."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">calibration_service</span><span class="o">.</span><span class="n">find_by_id_calibration</span><span class="p">(</span><span class="n">calibration_id</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_verify_hardware_configuration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Check that the saved camera and screen are still connected.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if everything matches or the user chooses to start the</span>
+<span class="sd">            game anyway; False otherwise.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The camera matches when a current camera has the saved ID or</span>
+<span class="sd">        description. The screen matches when the screen at the saved</span>
+<span class="sd">        index has the saved width and height and, if a model was saved,</span>
+<span class="sd">        the same model. Mismatches are listed in a question whose</span>
+<span class="sd">        default answer is "No".</span>
+<span class="sd">        """</span>
+        <span class="n">mismatches</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Camera</span>
+        <span class="n">cam_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calibration_service</span><span class="o">.</span><span class="n">get_camera_info</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">cam_info</span><span class="p">:</span>
+            <span class="n">saved_cam_id</span> <span class="o">=</span> <span class="n">cam_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"camera_id"</span><span class="p">)</span>
+            <span class="n">saved_cam_desc</span> <span class="o">=</span> <span class="n">cam_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"camera_description"</span><span class="p">)</span>
+
+            <span class="n">current_cameras</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calibration_service</span><span class="o">.</span><span class="n">get_video_inputs</span><span class="p">()</span>
+            <span class="n">camera_found</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span>
+                <span class="n">cam</span><span class="o">.</span><span class="n">id</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">errors</span><span class="o">=</span><span class="s2">"ignore"</span><span class="p">)</span> <span class="o">==</span> <span class="n">saved_cam_id</span>
+                <span class="ow">or</span> <span class="n">cam</span><span class="o">.</span><span class="n">description</span><span class="p">()</span> <span class="o">==</span> <span class="n">saved_cam_desc</span>
+                <span class="k">for</span> <span class="n">cam</span> <span class="ow">in</span> <span class="n">current_cameras</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">camera_found</span><span class="p">:</span>
+                <span class="n">cam_name</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">saved_cam_desc</span> <span class="ow">or</span> <span class="n">saved_cam_id</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Desconhecida"</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">mismatches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span>
+                        <span class="s2">"- Câmera: O dispositivo '</span><span class="si">{0}</span><span class="s2">' não foi detectado ou foi desconectado."</span>
+                    <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cam_name</span><span class="p">)</span>
+                <span class="p">)</span>
+
+        <span class="c1"># Screen</span>
+        <span class="n">screen_info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calibration_service</span><span class="o">.</span><span class="n">get_screen_info</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">screen_info</span><span class="p">:</span>
+            <span class="n">saved_screen_pos</span> <span class="o">=</span> <span class="n">screen_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"screen_position"</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">saved_screen_model</span> <span class="o">=</span> <span class="n">screen_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"screen_model"</span><span class="p">)</span>
+            <span class="n">saved_width</span> <span class="o">=</span> <span class="n">screen_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"screen_width"</span><span class="p">)</span>
+            <span class="n">saved_height</span> <span class="o">=</span> <span class="n">screen_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"screen_height"</span><span class="p">)</span>
+
+            <span class="n">current_screens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">calibration_service</span><span class="o">.</span><span class="n">get_screens</span><span class="p">()</span>
+            <span class="n">screen_found</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">saved_screen_pos</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">current_screens</span><span class="p">):</span>
+                <span class="n">target_screen</span> <span class="o">=</span> <span class="n">current_screens</span><span class="p">[</span><span class="n">saved_screen_pos</span><span class="p">]</span>
+                <span class="n">geo</span> <span class="o">=</span> <span class="n">target_screen</span><span class="o">.</span><span class="n">geometry</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="n">geo</span><span class="o">.</span><span class="n">width</span><span class="p">()</span> <span class="o">==</span> <span class="n">saved_width</span> <span class="ow">and</span> <span class="n">geo</span><span class="o">.</span><span class="n">height</span><span class="p">()</span> <span class="o">==</span> <span class="n">saved_height</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="ow">not</span> <span class="n">saved_screen_model</span>
+                        <span class="ow">or</span> <span class="n">target_screen</span><span class="o">.</span><span class="n">model</span><span class="p">()</span> <span class="o">==</span> <span class="n">saved_screen_model</span>
+                    <span class="p">):</span>
+                        <span class="n">screen_found</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">screen_found</span><span class="p">:</span>
+                <span class="n">screen_name</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">saved_screen_model</span> <span class="ow">or</span> <span class="sa">f</span><span class="s2">"Display #</span><span class="si">{</span><span class="n">saved_screen_pos</span><span class="si">}</span><span class="s2">"</span>
+                <span class="p">)</span>
+                <span class="n">mismatches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span>
+                        <span class="s2">"- Monitor: A tela configurada ('</span><span class="si">{0}</span><span class="s2">' - </span><span class="si">{1}</span><span class="s2">x</span><span class="si">{2}</span><span class="s2">) não corresponde à disposição atual do sistema."</span>
+                    <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">screen_name</span><span class="p">,</span> <span class="n">saved_width</span><span class="p">,</span> <span class="n">saved_height</span><span class="p">)</span>
+                <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">mismatches</span><span class="p">:</span>
+            <span class="n">details</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">mismatches</span><span class="p">)</span>
+            <span class="n">msg_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span>
+                <span class="s2">"Foram detectadas divergências nos equipamentos configurados:</span><span class="se">\n\n</span><span class="s2">"</span>
+                <span class="s2">"</span><span class="si">{0}</span><span class="se">\n\n</span><span class="s2">"</span>
+                <span class="s2">"Recomenda-se verificar a instalação física, salvar os dados do hardware</span><span class="se">\n</span><span class="s2">"</span>
+                <span class="s2">"atualizados na tela de calibração e/ou realizar a calibração novamente.</span><span class="se">\n\n</span><span class="s2">"</span>
+                <span class="s2">"Deseja iniciar o jogo mesmo assim?"</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">details</span><span class="p">)</span>
+
+            <span class="c1"># "No" is the default answer, to be safe</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">question</span><span class="p">(</span><span class="n">msg_text</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="PlayerGameLaunchController.launch_game">
+<a class="viewcode-back" href="../../../api/ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.html#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.launch_game">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">launch_game</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Validate the selection and start the selected game.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        A player, a professional and a game must be selected, no game</span>
+<span class="sd">        may be running, the game entry point must exist and both the</span>
+<span class="sd">        calibration points and the hardware calibration must be saved;</span>
+<span class="sd">        then ``_verify_hardware_configuration`` is checked.</span>
+
+<span class="sd">        The game runs in its folder with the arguments ``--lang``,</span>
+<span class="sd">        ``--player_id`` and ``--professional_id``; ``.py`` and ``.pyw``</span>
+<span class="sd">        entry points run with the current Python interpreter. On Windows</span>
+<span class="sd">        it starts in a new process group. The buttons stay disabled</span>
+<span class="sd">        until the game is up (checked every 500 ms) or for at most 7 s.</span>
+<span class="sd">        """</span>
+        <span class="n">game_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_game</span><span class="o">.</span><span class="n">currentData</span><span class="p">()</span>
+        <span class="n">player_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_player</span><span class="o">.</span><span class="n">currentData</span><span class="p">()</span>
+        <span class="n">professional_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_professional</span><span class="o">.</span><span class="n">currentData</span><span class="p">()</span>
+
+        <span class="n">language_app</span> <span class="o">=</span> <span class="n">AppModel</span><span class="o">.</span><span class="n">get_instance</span><span class="p">()</span><span class="o">.</span><span class="n">current_language</span>
+
+        <span class="k">if</span> <span class="n">player_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Selecione um jogador antes de iniciar."</span><span class="p">))</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">player_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">professional_id</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Selecione um profissional antes de iniciar."</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">professional_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">professional_id</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">game_data</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Selecione um jogo antes de iniciar."</span><span class="p">))</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_game_running</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span>
+                    <span class="s2">"Já existe um jogo em execução.</span><span class="se">\n</span><span class="s2">"</span>
+                    <span class="s2">"Feche o jogo atual antes de iniciar outro."</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">folder</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">game_data</span><span class="o">.</span><span class="n">folder_path</span><span class="p">)</span>
+        <span class="n">executable</span> <span class="o">=</span> <span class="n">game_data</span><span class="o">.</span><span class="n">entrypoint</span>
+        <span class="n">script_path</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">game_data</span><span class="o">.</span><span class="n">entrypoint_path</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">script_path</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span>
+                    <span class="s2">"Erro: Executável do jogo não encontrado em: </span><span class="si">{0}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">"</span>
+                    <span class="s2">"Verifique se o arquivo existe e se os metadados de configuração estão corretos."</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">script_path</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_by_id_calibration_point</span><span class="p">(</span><span class="n">CalibrationPoint</span><span class="o">.</span><span class="n">ID_VALUE</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span>
+                    <span class="s2">"O arquivo de calibração não foi encontrado.</span><span class="se">\n</span><span class="s2">"</span>
+                    <span class="s2">"Por favor, execute a calibração antes de iniciar o jogo."</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_by_id_calibration</span><span class="p">(</span><span class="n">Calibration</span><span class="o">.</span><span class="n">ID_VALUE</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">msg</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span>
+                    <span class="s2">"O arquivo de configuração do hardware não foi encontrado.</span><span class="se">\n</span><span class="s2">"</span>
+                    <span class="s2">"Por favor, salve a configuração do hardware antes de iniciar o jogo."</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_verify_hardware_configuration</span><span class="p">():</span>
+            <span class="k">return</span>
+
+        <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">executable</span><span class="o">.</span><span class="n">lower</span><span class="p">())[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="n">executable</span> <span class="k">else</span> <span class="s2">""</span>
+        <span class="k">if</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">".py"</span><span class="p">,</span> <span class="s2">".pyw"</span><span class="p">):</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">,</span>
+                <span class="n">script_path</span><span class="p">,</span>
+                <span class="s2">"--lang"</span><span class="p">,</span>
+                <span class="n">language_app</span><span class="p">,</span>
+                <span class="s2">"--player_id"</span><span class="p">,</span>
+                <span class="n">player_id</span><span class="p">,</span>
+                <span class="s2">"--professional_id"</span><span class="p">,</span>
+                <span class="n">professional_id</span><span class="p">,</span>
+            <span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">script_path</span><span class="p">,</span>
+                <span class="s2">"--lang"</span><span class="p">,</span>
+                <span class="n">language_app</span><span class="p">,</span>
+                <span class="s2">"--player_id"</span><span class="p">,</span>
+                <span class="n">player_id</span><span class="p">,</span>
+                <span class="s2">"--professional_id"</span><span class="p">,</span>
+                <span class="n">professional_id</span><span class="p">,</span>
+            <span class="p">]</span>
+
+        <span class="c1"># UX: disable the buttons while the game starts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">pb_play</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">pb_cancel</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">pb_play</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Aguarde..."</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">repaint</span><span class="p">()</span>
+
+        <span class="c1"># A new process group gives better control of the process</span>
+        <span class="c1"># tree on Windows</span>
+        <span class="n">creationflags</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">subprocess</span><span class="o">.</span><span class="n">CREATE_NEW_PROCESS_GROUP</span>
+            <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"win"</span><span class="p">)</span>
+            <span class="k">else</span> <span class="mi">0</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
+            <span class="n">cmd</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="n">folder</span><span class="p">,</span> <span class="n">creationflags</span><span class="o">=</span><span class="n">creationflags</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Poll until the game window is really open</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">monitor_timer</span> <span class="o">=</span> <span class="n">QTimer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">monitor_timer</span><span class="o">.</span><span class="n">timeout</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_check_if_game_is_visible</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">monitor_timer</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+
+        <span class="c1"># Fallback in case the launch fails</span>
+        <span class="n">QTimer</span><span class="o">.</span><span class="n">singleShot</span><span class="p">(</span><span class="mi">7000</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_restore_buttons_after_timeout</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_restore_buttons_after_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Re-enable the buttons if the game is still starting."""</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">monitor_timer</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">monitor_timer</span><span class="o">.</span><span class="n">isActive</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">monitor_timer</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_restore_buttons_state</span><span class="p">()</span>
+
+<div class="viewcode-block" id="PlayerGameLaunchController.is_game_running">
+<a class="viewcode-back" href="../../../api/ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.html#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.is_game_running">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_game_running</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Check whether the game process is still running.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if a game process exists and has not exited.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">poll</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_if_game_is_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Check whether the game is up and re-enable the buttons.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Called by ``monitor_timer``. If the process has exited, the</span>
+<span class="sd">        buttons are restored. Without ``psutil`` the game is considered</span>
+<span class="sd">        ready at once. Otherwise, on Windows a process of the tree must</span>
+<span class="sd">        be running with more than one thread; on other systems it must</span>
+<span class="sd">        be running or sleeping. Errors are ignored.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">poll</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">monitor_timer</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">monitor_timer</span><span class="o">.</span><span class="n">isActive</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">monitor_timer</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_restore_buttons_state</span><span class="p">()</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">PSUTIL_AVAILABLE</span><span class="p">:</span>
+            <span class="c1"># Without psutil the threads cannot be checked, so the</span>
+            <span class="c1"># buttons are released at once.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_game_ready</span><span class="p">()</span>
+            <span class="k">return</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">parent</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span>
+            <span class="n">processes</span> <span class="o">=</span> <span class="p">[</span><span class="n">parent</span><span class="p">]</span> <span class="o">+</span> <span class="n">parent</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">proc</span> <span class="ow">in</span> <span class="n">processes</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"win"</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="n">proc</span><span class="o">.</span><span class="n">num_threads</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">1</span>
+                        <span class="ow">and</span> <span class="n">proc</span><span class="o">.</span><span class="n">status</span><span class="p">()</span> <span class="o">==</span> <span class="n">psutil</span><span class="o">.</span><span class="n">STATUS_RUNNING</span>
+                    <span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_game_ready</span><span class="p">()</span>
+                        <span class="k">return</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">proc</span><span class="o">.</span><span class="n">status</span><span class="p">()</span> <span class="ow">in</span> <span class="p">(</span>
+                        <span class="n">psutil</span><span class="o">.</span><span class="n">STATUS_RUNNING</span><span class="p">,</span>
+                        <span class="n">psutil</span><span class="o">.</span><span class="n">STATUS_SLEEPING</span><span class="p">,</span>
+                    <span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_game_ready</span><span class="p">()</span>
+                        <span class="k">return</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_game_ready</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Stop the monitor timer and re-enable the buttons."""</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">monitor_timer</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">monitor_timer</span><span class="o">.</span><span class="n">isActive</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">monitor_timer</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_restore_buttons_state</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_restore_buttons_state</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Restore the text and state of the Play and Cancel buttons."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">pb_play</span><span class="o">.</span><span class="n">setText</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Jogar"</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">pb_play</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">pb_cancel</span><span class="o">.</span><span class="n">setEnabled</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="PlayerGameLaunchController.update_tooltip">
+<a class="viewcode-back" href="../../../api/ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.html#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.update_tooltip">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_tooltip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Show the tooltip of the selected game on the game combo box.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        index : int</span>
+<span class="sd">            Index of the selected game; negative values are ignored.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">novo_hint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_game</span><span class="o">.</span><span class="n">itemData</span><span class="p">(</span>
+                <span class="n">index</span><span class="p">,</span> <span class="n">Qt</span><span class="o">.</span><span class="n">ItemDataRole</span><span class="o">.</span><span class="n">ToolTipRole</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">view</span><span class="o">.</span><span class="n">cbx_game</span><span class="o">.</span><span class="n">setToolTip</span><span class="p">(</span><span class="n">novo_hint</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PlayerGameLaunchController.cleanup">
+<a class="viewcode-back" href="../../../api/ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.html#ttea.controller.playergamelaunchcontroller.PlayerGameLaunchController.cleanup">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Stop the game and all its child processes.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Called when the window closes. With ``psutil``, the children and</span>
+<span class="sd">        the game are terminated, and those still alive after 2 s are</span>
+<span class="sd">        killed; without it, only the game process is terminated (and</span>
+<span class="sd">        killed on error). The monitor timer is stopped and the buttons</span>
+<span class="sd">        are restored in every case.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_game_running</span><span class="p">():</span>
+            <span class="c1"># Clean up even when no game is running</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">monitor_timer</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">monitor_timer</span><span class="o">.</span><span class="n">isActive</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">monitor_timer</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_restore_buttons_state</span><span class="p">()</span>
+            <span class="k">return</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">PSUTIL_AVAILABLE</span><span class="p">:</span>
+                <span class="n">parent</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">Process</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">pid</span><span class="p">)</span>
+                <span class="n">children</span> <span class="o">=</span> <span class="n">parent</span><span class="o">.</span><span class="n">children</span><span class="p">(</span><span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+                <span class="c1"># Try a graceful shutdown first</span>
+                <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span><span class="p">:</span>
+                    <span class="n">child</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+                <span class="n">parent</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+
+                <span class="n">_</span><span class="p">,</span> <span class="n">alive</span> <span class="o">=</span> <span class="n">psutil</span><span class="o">.</span><span class="n">wait_procs</span><span class="p">(</span><span class="n">children</span> <span class="o">+</span> <span class="p">[</span><span class="n">parent</span><span class="p">],</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+
+                <span class="c1"># Kill whatever is still alive</span>
+                <span class="k">for</span> <span class="n">survivor</span> <span class="ow">in</span> <span class="n">alive</span><span class="p">:</span>
+                    <span class="n">survivor</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Fallback without psutil</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">terminate</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mf">2.0</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span><span class="o">.</span><span class="n">kill</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">monitor_timer</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">monitor_timer</span><span class="o">.</span><span class="n">isActive</span><span class="p">():</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">monitor_timer</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">current_process</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_restore_buttons_state</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

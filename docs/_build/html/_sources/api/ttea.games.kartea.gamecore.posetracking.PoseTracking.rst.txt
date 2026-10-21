@@ -1,0 +1,22 @@
+PoseTracking
+============
+
+.. currentmodule:: ttea.games.kartea.gamecore.posetracking
+
+.. autoclass:: PoseTracking
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~PoseTracking.get_feet1
+      ~PoseTracking.get_feet2
+      ~PoseTracking.get_feet_center
+      ~PoseTracking.get_feet_marker_position
+      ~PoseTracking.is_feet_closed
+      ~PoseTracking.scan_feets
+      ~PoseTracking.to_screen_position

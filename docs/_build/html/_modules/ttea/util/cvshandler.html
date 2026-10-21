@@ -1,0 +1,397 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.util.cvshandler &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.util.cvshandler</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.util.cvshandler</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""CSV file handling utilities for the T-TEA platform.</span>
+
+<span class="sd">This module provides the ``CSVHandler`` class for reading and</span>
+<span class="sd">writing CSV files with a custom dialect and robust error handling.</span>
+<span class="sd">"""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">csv</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">locale</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TextIO</span><span class="p">,</span> <span class="n">Union</span>
+
+
+<div class="viewcode-block" id="CSVHandler">
+<a class="viewcode-back" href="../../../api/ttea.util.cvshandler.CSVHandler.html#ttea.util.cvshandler.CSVHandler">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CSVHandler</span><span class="p">:</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""Read and write CSV files with a custom dialect.</span>
+
+<span class="sd">    Fully integrated with the application's singleton logger. Works</span>
+<span class="sd">    with file paths or already-opened file-like objects (e.g. locked</span>
+<span class="sd">    via portalocker). Handles common real-world issues: file locked by</span>
+<span class="sd">    Excel, wrong encoding, corrupted files, missing directories,</span>
+<span class="sd">    permission errors, etc.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dialect : str, optional</span>
+<span class="sd">        Name of the CSV dialect to register and use. Default is</span>
+<span class="sd">        ``"custom_ttea"``.</span>
+<span class="sd">    delimiter : str, optional</span>
+<span class="sd">        Field delimiter character. Default is ``";"``.</span>
+<span class="sd">    quotechar : str, optional</span>
+<span class="sd">        Character used to quote fields containing special</span>
+<span class="sd">        characters. Default is ``'"'``.</span>
+<span class="sd">    doublequote : bool, optional</span>
+<span class="sd">        Whether a ``quotechar`` inside a field is doubled. Default is</span>
+<span class="sd">        True.</span>
+<span class="sd">    skipinitialspace : bool, optional</span>
+<span class="sd">        When True, whitespace immediately following the delimiter is</span>
+<span class="sd">        ignored. Default is True.</span>
+<span class="sd">    lineterminator : str, optional</span>
+<span class="sd">        String used to terminate lines produced by the writer.</span>
+<span class="sd">        Default is a newline (``"\n"``).</span>
+<span class="sd">    quoting : int, optional</span>
+<span class="sd">        Quoting policy (one of the ``csv.QUOTE_*`` constants).</span>
+<span class="sd">        Default is ``csv.QUOTE_MINIMAL``.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dialect : str</span>
+<span class="sd">        Registered CSV dialect name.</span>
+<span class="sd">    log : Log</span>
+<span class="sd">        Singleton logger instance used by the handler.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    write_csv(file_or_path, data, headers=None)</span>
+<span class="sd">        Write data to a CSV file or an already-opened file object.</span>
+<span class="sd">    read_csv(filename=None, as_dict=False, content=None)</span>
+<span class="sd">        Read CSV data safely, returning an empty list on any error.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The dialect is registered with ``csv.register_dialect`` on every</span>
+<span class="sd">    instantiation, replacing any dialect with the same name.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; handler = CSVHandler()  # doctest: +SKIP</span>
+<span class="sd">    &gt;&gt;&gt; handler.read_csv(content="a;b\n1;2")  # doctest: +SKIP</span>
+<span class="sd">    [['a', 'b'], ['1', '2']]</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">dialect</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"custom_ttea"</span><span class="p">,</span>  <span class="c1"># custom dialect name to avoid conflicts</span>
+        <span class="n">delimiter</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">";"</span><span class="p">,</span>
+        <span class="n">quotechar</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">'"'</span><span class="p">,</span>
+        <span class="n">doublequote</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">skipinitialspace</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">lineterminator</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span>
+        <span class="n">quoting</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">QUOTE_MINIMAL</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.log</span><span class="w"> </span><span class="kn">import</span> <span class="n">Log</span>
+
+        <span class="n">csv</span><span class="o">.</span><span class="n">register_dialect</span><span class="p">(</span>
+            <span class="n">dialect</span><span class="p">,</span>
+            <span class="n">delimiter</span><span class="o">=</span><span class="n">delimiter</span><span class="p">,</span>
+            <span class="n">quotechar</span><span class="o">=</span><span class="n">quotechar</span><span class="p">,</span>
+            <span class="n">doublequote</span><span class="o">=</span><span class="n">doublequote</span><span class="p">,</span>
+            <span class="n">skipinitialspace</span><span class="o">=</span><span class="n">skipinitialspace</span><span class="p">,</span>
+            <span class="n">lineterminator</span><span class="o">=</span><span class="n">lineterminator</span><span class="p">,</span>
+            <span class="n">quoting</span><span class="o">=</span><span class="n">quoting</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dialect</span> <span class="o">=</span> <span class="n">dialect</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">=</span> <span class="n">Log</span><span class="o">.</span><span class="n">get_log</span><span class="p">()</span>
+
+<div class="viewcode-block" id="CSVHandler.write_csv">
+<a class="viewcode-back" href="../../../api/ttea.util.cvshandler.CSVHandler.html#ttea.util.cvshandler.CSVHandler.write_csv">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_csv</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">file_or_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">,</span> <span class="n">TextIO</span><span class="p">],</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">]],</span>
+        <span class="n">headers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Write a list of rows or dictionaries to CSV.</span>
+
+<span class="sd">        Works with a file path or an already-opened file-like object</span>
+<span class="sd">        (e.g. locked with portalocker).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file_or_path : str | os.PathLike | TextIO</span>
+<span class="sd">            Destination file path or an open file object.</span>
+<span class="sd">        data : list[dict | list]</span>
+<span class="sd">            Rows to write. Dictionaries require ``headers``.</span>
+<span class="sd">        headers : list[str] | None, optional</span>
+<span class="sd">            Field names when writing dictionaries. If provided, a header</span>
+<span class="sd">            row is written first. Default is None.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        Exception</span>
+<span class="sd">            Any error while opening or writing is logged and re-raised.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        With a path, parent directories are created if needed and the</span>
+<span class="sd">        file is written in UTF-8 with BOM (``utf-8-sig``), so Excel</span>
+<span class="sd">        detects the encoding. With an open file object, the caller is</span>
+<span class="sd">        responsible for its mode, encoding and ``newline=""``.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">file_or_path</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">)):</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">file_or_path</span><span class="p">)</span>
+            <span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8-sig"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_write_to_file</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
+                <span class="c1"># self.log.log_info(f"CSV saved successfully: {path.name}")</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">log_error</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Failed to save CSV </span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                <span class="k">raise</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># File already open (e.g., portalocker.Lock)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_write_to_file</span><span class="p">(</span><span class="n">file_or_path</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">headers</span><span class="p">)</span>
+                <span class="c1"># The file name is unknown here, so it is not logged.</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">log_error</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Failed to write to locked CSV file: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                <span class="k">raise</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_write_to_file</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">file</span><span class="p">:</span> <span class="n">TextIO</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">]],</span>
+        <span class="n">headers</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Write rows to an open file with the registered dialect.</span>
+
+<span class="sd">        Internal helper of ``write_csv``. It assumes the file is open in</span>
+<span class="sd">        text mode with the proper encoding and ``newline=""``.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        file : TextIO</span>
+<span class="sd">            Open file object ready for writing.</span>
+<span class="sd">        data : list[dict | list]</span>
+<span class="sd">            Data rows to write.</span>
+<span class="sd">        headers : list[str] | None</span>
+<span class="sd">            Field names for ``csv.DictWriter`` (a header row is</span>
+<span class="sd">            written), or None to write plain rows with ``csv.writer``.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">headers</span><span class="p">:</span>
+            <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictWriter</span><span class="p">(</span>
+                <span class="n">file</span><span class="p">,</span> <span class="n">fieldnames</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dialect</span>
+            <span class="p">)</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">writeheader</span><span class="p">()</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">writerows</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dialect</span><span class="p">)</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">writerows</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CSVHandler.read_csv">
+<a class="viewcode-back" href="../../../api/ttea.util.cvshandler.CSVHandler.html#ttea.util.cvshandler.CSVHandler.read_csv">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_csv</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">filename</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">PathLike</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">as_dict</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">content</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">"""Read CSV data with comprehensive error handling.</span>
+
+<span class="sd">        Returns an empty list instead of raising exceptions for any</span>
+<span class="sd">        problem (file missing, locked by Excel, wrong encoding,</span>
+<span class="sd">        corrupted, etc.), so CSV issues never crash the application.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str | os.PathLike | None, optional</span>
+<span class="sd">            Path to the CSV file. Default is None.</span>
+<span class="sd">        as_dict : bool, optional</span>
+<span class="sd">            If True, return a list of dictionaries using the first row</span>
+<span class="sd">            as keys. Default is False.</span>
+<span class="sd">        content : str | None, optional</span>
+<span class="sd">            CSV content provided directly as a string. Default is None.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[dict] | list[list[str]]</span>
+<span class="sd">            Rows as dictionaries if ``as_dict`` is True, otherwise as</span>
+<span class="sd">            lists. Empty list on any read error.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        If ``content`` is provided, ``filename`` is ignored; otherwise</span>
+<span class="sd">        ``filename`` must be given.</span>
+
+<span class="sd">        A missing file is logged at INFO level (normal on the first</span>
+<span class="sd">        run). Encodings are tried in order: ``utf-8-sig``, the system's</span>
+<span class="sd">        preferred encoding (if not already listed), ``cp1252``,</span>
+<span class="sd">        ``utf-8`` and ``latin1``. A ``PermissionError`` (file locked,</span>
+<span class="sd">        e.g. open in Excel) is logged as a warning; other read errors</span>
+<span class="sd">        and a file that no encoding can decode are logged as errors.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; h = CSVHandler()  # doctest: +SKIP</span>
+<span class="sd">        &gt;&gt;&gt; rows = "a;b\n1;2"</span>
+<span class="sd">        &gt;&gt;&gt; h.read_csv(content=rows, as_dict=True)  # doctest: +SKIP</span>
+<span class="sd">        [{'a': '1', 'b': '2'}]</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">content</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">f</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">as_dict</span><span class="p">:</span>
+                    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dialect</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dialect</span><span class="p">)</span>
+                <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">reader</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">log_error</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Error reading CSV content: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">log_info</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"CSV file does not exist (normal on first run): </span><span class="si">{</span><span class="n">path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="p">[]</span>
+
+        <span class="c1"># Order tested with pt-BR/pt-PT, Spanish and English files on</span>
+        <span class="c1"># Windows, Linux and macOS.</span>
+        <span class="n">system_enc</span> <span class="o">=</span> <span class="n">locale</span><span class="o">.</span><span class="n">getpreferredencoding</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">encodings_to_try</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"utf-8-sig"</span><span class="p">,</span> <span class="s2">"cp1252"</span><span class="p">,</span> <span class="s2">"utf-8"</span><span class="p">,</span> <span class="s2">"latin1"</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">system_enc</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">e</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">encodings_to_try</span><span class="p">]:</span>
+            <span class="n">encodings_to_try</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">system_enc</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">encoding</span> <span class="ow">in</span> <span class="n">encodings_to_try</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">newline</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+
+                    <span class="k">if</span> <span class="n">as_dict</span><span class="p">:</span>
+                        <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">DictReader</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dialect</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">dialect</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dialect</span><span class="p">)</span>
+
+                    <span class="n">rows</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">reader</span><span class="p">)</span>
+                    <span class="k">return</span> <span class="n">rows</span>
+            <span class="k">except</span> <span class="ne">PermissionError</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">log_warning</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"CSV file locked (probably open in Excel): </span><span class="si">{</span><span class="n">path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="p">[]</span>
+            <span class="k">except</span> <span class="ne">UnicodeDecodeError</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="n">csv</span><span class="o">.</span><span class="n">Error</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">log_error</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">"Error reading CSV </span><span class="si">{</span><span class="n">path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> with </span><span class="si">{</span><span class="n">encoding</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">"</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="o">.</span><span class="n">log_error</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Could not decode CSV </span><span class="si">{</span><span class="n">path</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">. "</span>
+            <span class="sa">f</span><span class="s2">"Encodings tried: </span><span class="si">{</span><span class="s1">', '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">encodings_to_try</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">[]</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

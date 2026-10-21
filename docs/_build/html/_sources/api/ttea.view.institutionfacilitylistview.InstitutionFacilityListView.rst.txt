@@ -1,0 +1,21 @@
+InstitutionFacilityListView
+===========================
+
+.. currentmodule:: ttea.view.institutionfacilitylistview
+
+.. autoclass:: InstitutionFacilityListView
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~InstitutionFacilityListView.clear_details
+      ~InstitutionFacilityListView.closeEvent
+      ~InstitutionFacilityListView.display_details
+      ~InstitutionFacilityListView.get_selected_id
+      ~InstitutionFacilityListView.populate_table
+      ~InstitutionFacilityListView.select_row_by_id

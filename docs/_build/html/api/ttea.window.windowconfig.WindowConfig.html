@@ -1,0 +1,326 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WindowConfig &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="ttea.window.windowconfig" href="ttea.window.windowconfig.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.games.html">ttea.games</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.window.html">ttea.window</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.window.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.window.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.window.html#notes">Notes</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.window.windowconfig.html">ttea.window.windowconfig</a><ul class="current">
+<li class="toctree-l5 current"><a class="current reference internal" href="#">WindowConfig</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#ttea.window.windowconfig.WindowConfig"><code class="docutils literal notranslate"><span class="pre">WindowConfig</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.window.windowconfig.WindowConfig.setup_window"><code class="docutils literal notranslate"><span class="pre">WindowConfig.setup_window()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.window.windowconfig.WindowConfig.get_base_size"><code class="docutils literal notranslate"><span class="pre">WindowConfig.get_base_size()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.window.windowconfig.WindowConfig.adjust_size"><code class="docutils literal notranslate"><span class="pre">WindowConfig.adjust_size()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.window.windowconfig.WindowConfig.center_window"><code class="docutils literal notranslate"><span class="pre">WindowConfig.center_window()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.window.html">ttea.window</a></li>
+          <li class="breadcrumb-item"><a href="ttea.window.windowconfig.html">ttea.window.windowconfig</a></li>
+      <li class="breadcrumb-item active">WindowConfig</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.window.windowconfig.WindowConfig.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="windowconfig">
+<h1>WindowConfig<a class="headerlink" href="#windowconfig" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.window.windowconfig.WindowConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">WindowConfig</span></span><a class="reference internal" href="../_modules/ttea/window/windowconfig.html#WindowConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.window.windowconfig.WindowConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Mixin that configures title, icon, size and position of a window.</p>
+<p>Used together with a Qt window class (e.g. <code class="docutils literal notranslate"><span class="pre">class</span> <span class="pre">MainView(</span>
+<span class="pre">QMainWindow,</span> <span class="pre">Ui_MainView,</span> <span class="pre">WindowConfig)</span></code>): the size can be changed
+by a percentage relative to the parent window or the screen, and the
+window is centered and gets a fixed size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>STAY_SIZE</strong><span class="classifier">int, class attribute</span></dt><dd><p>Keep the base size (0).</p>
+</dd>
+<dt><strong>INCREMENT_SIZE_PERCENT</strong><span class="classifier">int, class attribute</span></dt><dd><p>Increase the base size by a percentage (1).</p>
+</dd>
+<dt><strong>DECREMENT_SIZE_PERCENT</strong><span class="classifier">int, class attribute</span></dt><dd><p>Decrease the base size by a percentage (2).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><strong>setup_window(title=None, icon=None, status=STAY_SIZE, …)</strong></p></td>
+<td><p>Configure title, icon, size and position.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>get_base_size(parent)</strong></p></td>
+<td><p>Return the base size from the parent window or the screen.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>adjust_size(base, percent, status)</strong></p></td>
+<td><p>Adjust a size by a percentage according to <code class="docutils literal notranslate"><span class="pre">status</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>center_window(parent=None, width=None, height=None)</strong></p></td>
+<td><p>Center the window on the parent window or the screen.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.window.windowconfig.WindowConfig.adjust_size" title="ttea.window.windowconfig.WindowConfig.adjust_size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">adjust_size</span></code></a></p></td>
+<td><p>Adjust a size by a percentage according to <code class="docutils literal notranslate"><span class="pre">status</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.window.windowconfig.WindowConfig.center_window" title="ttea.window.windowconfig.WindowConfig.center_window"><code class="xref py py-obj docutils literal notranslate"><span class="pre">center_window</span></code></a></p></td>
+<td><p>Center the window on the parent window or the screen.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.window.windowconfig.WindowConfig.get_base_size" title="ttea.window.windowconfig.WindowConfig.get_base_size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_base_size</span></code></a></p></td>
+<td><p>Return the base size from the parent window or the screen.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.window.windowconfig.WindowConfig.setup_window" title="ttea.window.windowconfig.WindowConfig.setup_window"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup_window</span></code></a></p></td>
+<td><p>Configure title, icon, size and position of the window.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.window.windowconfig.WindowConfig.setup_window">
+<span class="sig-name descname"><span class="pre">setup_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">icon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/window/windowconfig.html#WindowConfig.setup_window"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.window.windowconfig.WindowConfig.setup_window" title="Link to this definition"></a></dt>
+<dd><p>Configure title, icon, size and position of the window.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>title</strong><span class="classifier">str | None, optional</span></dt><dd><p>Window title; None keeps the current one. Default is None.</p>
+</dd>
+<dt><strong>icon</strong><span class="classifier">str | QIcon | None, optional</span></dt><dd><p>Icon file path (or icon); None keeps the current one.
+Default is None.</p>
+</dd>
+<dt><strong>status</strong><span class="classifier">int, optional</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">STAY_SIZE</span></code>, <code class="docutils literal notranslate"><span class="pre">INCREMENT_SIZE_PERCENT</span></code> or
+<code class="docutils literal notranslate"><span class="pre">DECREMENT_SIZE_PERCENT</span></code>. Default is <code class="docutils literal notranslate"><span class="pre">STAY_SIZE</span></code>.</p>
+</dd>
+<dt><strong>width</strong><span class="classifier">float, optional</span></dt><dd><p>Width change in percent (e.g. 10 means 10%). Default is 0.</p>
+</dd>
+<dt><strong>height</strong><span class="classifier">float, optional</span></dt><dd><p>Height change in percent. Default is 0.</p>
+</dd>
+<dt><strong>parent</strong><span class="classifier">QWidget | None, optional</span></dt><dd><p>Reference window for size and centering; None uses the
+screen. Default is None.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The base size comes from <code class="docutils literal notranslate"><span class="pre">get_base_size</span></code>, each dimension is
+changed by <code class="docutils literal notranslate"><span class="pre">adjust_size</span></code>, the window is centered with
+<code class="docutils literal notranslate"><span class="pre">center_window</span></code> and its size is then fixed (it cannot be
+resized).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.window.windowconfig.WindowConfig.get_base_size">
+<span class="sig-name descname"><span class="pre">get_base_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/window/windowconfig.html#WindowConfig.get_base_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.window.windowconfig.WindowConfig.get_base_size" title="Link to this definition"></a></dt>
+<dd><p>Return the base size from the parent window or the screen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>parent</strong><span class="classifier">QWidget | None, optional</span></dt><dd><p>Reference window. Default is None.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple[int, int]</dt><dd><p>The parent’s width and height, or half the width and height
+of the primary screen when there is no parent (or it has no
+<code class="docutils literal notranslate"><span class="pre">geometry</span></code>).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.window.windowconfig.WindowConfig.adjust_size">
+<span class="sig-name descname"><span class="pre">adjust_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">status</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/window/windowconfig.html#WindowConfig.adjust_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.window.windowconfig.WindowConfig.adjust_size" title="Link to this definition"></a></dt>
+<dd><p>Adjust a size by a percentage according to <code class="docutils literal notranslate"><span class="pre">status</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>base</strong><span class="classifier">float</span></dt><dd><p>Base size (width or height) in pixels.</p>
+</dd>
+<dt><strong>percent</strong><span class="classifier">float</span></dt><dd><p>Percentage to add or remove (e.g. 10 for 10%).</p>
+</dd>
+<dt><strong>status</strong><span class="classifier">int</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">STAY_SIZE</span></code>, <code class="docutils literal notranslate"><span class="pre">INCREMENT_SIZE_PERCENT</span></code> or
+<code class="docutils literal notranslate"><span class="pre">DECREMENT_SIZE_PERCENT</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>float</dt><dd><p>The adjusted size; <code class="docutils literal notranslate"><span class="pre">base</span></code> unchanged when <code class="docutils literal notranslate"><span class="pre">percent</span></code> is 0
+or negative or <code class="docutils literal notranslate"><span class="pre">status</span></code> is <code class="docutils literal notranslate"><span class="pre">STAY_SIZE</span></code> (or unknown).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span> <span class="o">=</span> <span class="n">WindowConfig</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span><span class="o">.</span><span class="n">adjust_size</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">cfg</span><span class="o">.</span><span class="n">DECREMENT_SIZE_PERCENT</span><span class="p">)</span>
+<span class="go">720.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span><span class="o">.</span><span class="n">adjust_size</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="n">cfg</span><span class="o">.</span><span class="n">INCREMENT_SIZE_PERCENT</span><span class="p">)</span>
+<span class="go">1000.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cfg</span><span class="o">.</span><span class="n">adjust_size</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="n">cfg</span><span class="o">.</span><span class="n">STAY_SIZE</span><span class="p">)</span>
+<span class="go">800</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.window.windowconfig.WindowConfig.center_window">
+<span class="sig-name descname"><span class="pre">center_window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/window/windowconfig.html#WindowConfig.center_window"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.window.windowconfig.WindowConfig.center_window" title="Link to this definition"></a></dt>
+<dd><p>Center the window on the parent window or the screen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>parent</strong><span class="classifier">QWidget | None, optional</span></dt><dd><p>Reference window; None (or no <code class="docutils literal notranslate"><span class="pre">geometry</span></code>) uses the primary
+screen. Default is None.</p>
+</dd>
+<dt><strong>width</strong><span class="classifier">float | None, optional</span></dt><dd><p>Window width in pixels; None uses the current width. Default
+is None.</p>
+</dd>
+<dt><strong>height</strong><span class="classifier">float | None, optional</span></dt><dd><p>Window height in pixels; None uses the current height.
+Default is None.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The position and size are set with <code class="docutils literal notranslate"><span class="pre">setGeometry</span></code>. On the
+screen, the position is computed from the screen size only, so
+the screen is assumed to start at (0, 0).</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.window.windowconfig.html" class="btn btn-neutral float-left" title="ttea.window.windowconfig" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

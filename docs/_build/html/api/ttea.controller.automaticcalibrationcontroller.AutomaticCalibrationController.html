@@ -1,0 +1,370 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutomaticCalibrationController &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.controller.calibrationcontroller" href="ttea.controller.calibrationcontroller.html" />
+    <link rel="prev" title="ttea.controller.automaticcalibrationcontroller" href="ttea.controller.automaticcalibrationcontroller.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.controller.html">ttea.controller</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.html#notes">Notes</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.controller.automaticcalibrationcontroller.html">ttea.controller.automaticcalibrationcontroller</a><ul class="current">
+<li class="toctree-l5 current"><a class="current reference internal" href="#">AutomaticCalibrationController</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController"><code class="docutils literal notranslate"><span class="pre">AutomaticCalibrationController</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.numpy_to_pixmap"><code class="docutils literal notranslate"><span class="pre">AutomaticCalibrationController.numpy_to_pixmap()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.generate_board_pixmap"><code class="docutils literal notranslate"><span class="pre">AutomaticCalibrationController.generate_board_pixmap()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.run_auto_calibration"><code class="docutils literal notranslate"><span class="pre">AutomaticCalibrationController.run_auto_calibration()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.get_available_geometry_of_screen"><code class="docutils literal notranslate"><span class="pre">AutomaticCalibrationController.get_available_geometry_of_screen()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.create_calibration_point"><code class="docutils literal notranslate"><span class="pre">AutomaticCalibrationController.create_calibration_point()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.get_data"><code class="docutils literal notranslate"><span class="pre">AutomaticCalibrationController.get_data()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.calibrationcontroller.html">ttea.controller.calibrationcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.calibrationsettingcontroller.html">ttea.controller.calibrationsettingcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.helpcontroller.html">ttea.controller.helpcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.institutionfacilityeditcontroller.html">ttea.controller.institutionfacilityeditcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.institutionfacilitylistcontroller.html">ttea.controller.institutionfacilitylistcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.languagecontroller.html">ttea.controller.languagecontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.maincontroller.html">ttea.controller.maincontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.manualcalibrationcontroller.html">ttea.controller.manualcalibrationcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.playereditcontroller.html">ttea.controller.playereditcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.playergamelaunchcontroller.html">ttea.controller.playergamelaunchcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.playerlistcontroller.html">ttea.controller.playerlistcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.professionaleditcontroller.html">ttea.controller.professionaleditcontroller</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.controller.professionallistcontroller.html">ttea.controller.professionallistcontroller</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.games.html">ttea.games</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.controller.html">ttea.controller</a></li>
+          <li class="breadcrumb-item"><a href="ttea.controller.automaticcalibrationcontroller.html">ttea.controller.automaticcalibrationcontroller</a></li>
+      <li class="breadcrumb-item active">AutomaticCalibrationController</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="automaticcalibrationcontroller">
+<h1>AutomaticCalibrationController<a class="headerlink" href="#automaticcalibrationcontroller" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">AutomaticCalibrationController</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">view</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">camera_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monitor_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">service</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/automaticcalibrationcontroller.html#AutomaticCalibrationController"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://doc.qt.io/qtforpython-6/PySide6/QtCore/QObject.html#PySide6.QtCore.QObject" title="(in PySide v6.12.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">QObject</span></code></a></p>
+<p>Controller of the automatic calibration.</p>
+<p>The view shows a ChArUco board on the projection screen; this
+controller reads the camera, detects the board, estimates where the
+screen corners are in the camera image and saves them as
+<code class="docutils literal notranslate"><span class="pre">CalibrationPoint</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>view</strong><span class="classifier">AutomaticCalibrationView</span></dt><dd><p>The automatic calibration dialog.</p>
+</dd>
+<dt><strong>camera_index</strong><span class="classifier">int</span></dt><dd><p>OpenCV index of the camera.</p>
+</dd>
+<dt><strong>monitor_index</strong><span class="classifier">int</span></dt><dd><p>Index of the projection screen.</p>
+</dd>
+<dt><strong>service</strong><span class="classifier">CalibrationService | None, optional</span></dt><dd><p>Calibration service. Default is None, which creates a new
+<code class="docutils literal notranslate"><span class="pre">CalibrationService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>msg_info_signal</strong><span class="classifier">Signal(str)</span></dt><dd><p>Emitted with a translated information message.</p>
+</dd>
+<dt><strong>msg_warning_signal</strong><span class="classifier">Signal(str)</span></dt><dd><p>Emitted with a translated warning message.</p>
+</dd>
+<dt><strong>msg_critical_signal</strong><span class="classifier">Signal(str)</span></dt><dd><p>Emitted with a translated error message.</p>
+</dd>
+<dt><strong>close_view_signal</strong><span class="classifier">Signal()</span></dt><dd><p>Declared for the view; not emitted by this class.</p>
+</dd>
+<dt><strong>view</strong><span class="classifier">AutomaticCalibrationView</span></dt><dd><p>The automatic calibration dialog.</p>
+</dd>
+<dt><strong>service</strong><span class="classifier">CalibrationService</span></dt><dd><p>Calibration service (settings and saving).</p>
+</dd>
+<dt><strong>monitor_index</strong><span class="classifier">int</span></dt><dd><p>Index of the projection screen.</p>
+</dd>
+<dt><strong>camera_index</strong><span class="classifier">int</span></dt><dd><p>OpenCV index of the camera.</p>
+</dd>
+<dt><strong>camera</strong><span class="classifier">None</span></dt><dd><p>Not used: <code class="docutils literal notranslate"><span class="pre">run_auto_calibration</span></code> opens its own capture.</p>
+</dd>
+<dt><strong>modo_preview</strong><span class="classifier">bool</span></dt><dd><p>True while a captured sample is shown for confirmation.</p>
+</dd>
+<dt><strong>monitor_screen</strong><span class="classifier">str</span></dt><dd><p>Translated title of the OpenCV window.</p>
+</dd>
+<dt><strong>monitor_window</strong><span class="classifier">str</span></dt><dd><p>ASCII name of the OpenCV window (<code class="docutils literal notranslate"><span class="pre">CvText.window_name</span></code>).</p>
+</dd>
+<dt><strong>pose_detector</strong><span class="classifier">vision.PoseLandmarker</span></dt><dd><p>MediaPipe pose landmarker, configured from the settings.</p>
+</dd>
+<dt><strong>calibration_points</strong><span class="classifier">numpy.ndarray</span></dt><dd><p><code class="docutils literal notranslate"><span class="pre">(4,</span> <span class="pre">2)</span></code> int64 array with the corners to save.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Messages are sent through the signals so the view shows them. The
+window title is translated with <code class="docutils literal notranslate"><span class="pre">QCoreApplication.translate</span></code> in
+the <code class="docutils literal notranslate"><span class="pre">&quot;AutomaticCalibrationController&quot;</span></code> context, and messages with
+<code class="docutils literal notranslate"><span class="pre">self.tr()</span></code>.</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.create_calibration_point" title="ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.create_calibration_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_calibration_point</span></code></a></p></td>
+<td><p>Save the corners and report the result.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.generate_board_pixmap" title="ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.generate_board_pixmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_board_pixmap</span></code></a></p></td>
+<td><p>Create the ChArUco board image for the screen.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.get_available_geometry_of_screen" title="ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.get_available_geometry_of_screen"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_available_geometry_of_screen</span></code></a></p></td>
+<td><p>Return the available geometry of a screen.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.get_data" title="ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.get_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data</span></code></a></p></td>
+<td><p>Return the corners as <code class="docutils literal notranslate"><span class="pre">CalibrationPoint</span></code> field values.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.numpy_to_pixmap" title="ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.numpy_to_pixmap"><code class="xref py py-obj docutils literal notranslate"><span class="pre">numpy_to_pixmap</span></code></a></p></td>
+<td><p>Convert an OpenCV image to a <code class="docutils literal notranslate"><span class="pre">QPixmap</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.run_auto_calibration" title="ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.run_auto_calibration"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_auto_calibration</span></code></a></p></td>
+<td><p>Detect the board in the camera and save the corners.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.numpy_to_pixmap">
+<span class="sig-name descname"><span class="pre">numpy_to_pixmap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/automaticcalibrationcontroller.html#AutomaticCalibrationController.numpy_to_pixmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.numpy_to_pixmap" title="Link to this definition"></a></dt>
+<dd><p>Convert an OpenCV image to a <code class="docutils literal notranslate"><span class="pre">QPixmap</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>img</strong><span class="classifier">numpy.ndarray</span></dt><dd><p>Grayscale (2-D) or BGR (3-D) <code class="docutils literal notranslate"><span class="pre">uint8</span></code> image.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>QPixmap</dt><dd><p>The image as a pixmap.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.generate_board_pixmap">
+<span class="sig-name descname"><span class="pre">generate_board_pixmap</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/automaticcalibrationcontroller.html#AutomaticCalibrationController.generate_board_pixmap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.generate_board_pixmap" title="Link to this definition"></a></dt>
+<dd><p>Create the ChArUco board image for the screen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>QPixmap</dt><dd><p>Board with <code class="docutils literal notranslate"><span class="pre">get_automatic_num_columns()</span></code> by
+<code class="docutils literal notranslate"><span class="pre">get_automatic_num_rows()</span></code> squares, stretched to the
+available screen size.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The square size is the mean of the screen width per column and
+the screen height per row; the marker size is that value times
+<code class="docutils literal notranslate"><span class="pre">get_automatic_multiplier()</span></code>. The board is drawn at 100 px per
+square with <code class="docutils literal notranslate"><span class="pre">get_automatic_margin()</span></code> and resized with nearest
+neighbor interpolation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.run_auto_calibration">
+<span class="sig-name descname"><span class="pre">run_auto_calibration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/automaticcalibrationcontroller.html#AutomaticCalibrationController.run_auto_calibration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.run_auto_calibration" title="Link to this definition"></a></dt>
+<dd><p>Detect the board in the camera and save the corners.</p>
+<p class="rubric">Notes</p>
+<p>Keys in the OpenCV window:</p>
+<ul class="simple">
+<li><p>S: close the window, wait 1 s, discard 5 buffered frames and
+detect the board on a clean frame; on success, show it as a
+sample (preview mode).</p></li>
+<li><p>R: discard the sample and resume tracking.</p></li>
+<li><p>ESC: save the sample corners (if any) and finish; without a
+sample, finish without saving.</p></li>
+</ul>
+<p>The corners are saved as the screen’s top-right, top-left,
+bottom-right, bottom-left corners in the camera image. With
+<code class="docutils literal notranslate"><span class="pre">is_automatic_mirror_mode()</span></code>, the x coordinates become <code class="docutils literal notranslate"><span class="pre">frame</span>
+<span class="pre">width</span> <span class="pre">-</span> <span class="pre">x</span></code>, so the saved order is the same in the mirrored
+image. TODO(doc): the manual calibration saves the clicks as
+top-left, top-right, bottom-left, bottom-right; is the different
+order intended?</p>
+<p>Errors are reported through <code class="docutils literal notranslate"><span class="pre">msg_critical_signal</span></code>; the camera
+is released and all OpenCV windows are closed at the end.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.get_available_geometry_of_screen">
+<span class="sig-name descname"><span class="pre">get_available_geometry_of_screen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">monitor_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/automaticcalibrationcontroller.html#AutomaticCalibrationController.get_available_geometry_of_screen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.get_available_geometry_of_screen" title="Link to this definition"></a></dt>
+<dd><p>Return the available geometry of a screen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>monitor_index</strong><span class="classifier">int | None, optional</span></dt><dd><p>Screen index. Default is None, which uses <code class="docutils literal notranslate"><span class="pre">monitor_index</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>QRect | None</dt><dd><p>The available geometry, or None if the index is out of
+range.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.create_calibration_point">
+<span class="sig-name descname"><span class="pre">create_calibration_point</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/automaticcalibrationcontroller.html#AutomaticCalibrationController.create_calibration_point"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.create_calibration_point" title="Link to this definition"></a></dt>
+<dd><p>Save the corners and report the result.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.get_data">
+<span class="sig-name descname"><span class="pre">get_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/controller/automaticcalibrationcontroller.html#AutomaticCalibrationController.get_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.controller.automaticcalibrationcontroller.AutomaticCalibrationController.get_data" title="Link to this definition"></a></dt>
+<dd><p>Return the corners as <code class="docutils literal notranslate"><span class="pre">CalibrationPoint</span></code> field values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>dict[str, int]</dt><dd><p><code class="docutils literal notranslate"><span class="pre">pointx1</span></code>, <code class="docutils literal notranslate"><span class="pre">pointy1</span></code>… <code class="docutils literal notranslate"><span class="pre">pointy4</span></code> from
+<code class="docutils literal notranslate"><span class="pre">calibration_points</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.controller.automaticcalibrationcontroller.html" class="btn btn-neutral float-left" title="ttea.controller.automaticcalibrationcontroller" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.controller.calibrationcontroller.html" class="btn btn-neutral float-right" title="ttea.controller.calibrationcontroller" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

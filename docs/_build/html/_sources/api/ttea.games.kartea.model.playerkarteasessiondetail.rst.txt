@@ -1,0 +1,20 @@
+ttea.games.kartea.model.playerkarteasessiondetail
+=================================================
+
+.. automodule:: ttea.games.kartea.model.playerkarteasessiondetail
+
+.. currentmodule:: ttea.games.kartea.model.playerkarteasessiondetail
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   PlayerKarteaSessionDetail
+
+

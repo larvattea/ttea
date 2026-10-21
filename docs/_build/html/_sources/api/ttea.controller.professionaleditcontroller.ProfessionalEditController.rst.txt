@@ -1,0 +1,20 @@
+ProfessionalEditController
+==========================
+
+.. currentmodule:: ttea.controller.professionaleditcontroller
+
+.. autoclass:: ProfessionalEditController
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~ProfessionalEditController.get_data
+      ~ProfessionalEditController.handle_cancel
+      ~ProfessionalEditController.handle_ok
+      ~ProfessionalEditController.list_institutions
+      ~ProfessionalEditController.list_types

@@ -1,0 +1,20 @@
+ttea.controller.playereditcontroller
+====================================
+
+.. automodule:: ttea.controller.playereditcontroller
+
+.. currentmodule:: ttea.controller.playereditcontroller
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   PlayerEditController
+
+

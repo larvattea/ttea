@@ -1,0 +1,302 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.games.kartea.service.karteahardwareservice &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.games.kartea.service.karteahardwareservice</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.games.kartea.service.karteahardwareservice</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Hardware service of KarTEA (screen, camera, MediaPipe)."""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">CameraConfig</span><span class="p">,</span> <span class="n">PoseTrackingConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">KarteaPathConfig</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">CalibrationPoint</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.service</span><span class="w"> </span><span class="kn">import</span> <span class="n">CalibrationService</span>
+
+
+<div class="viewcode-block" id="KarteaHardwareService">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.karteahardwareservice.KarteaHardwareService.html#ttea.games.kartea.service.karteahardwareservice.KarteaHardwareService">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">KarteaHardwareService</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Hardware service (MVCS) of KarTEA.</span>
+
+<span class="sd">    Covers screen, camera, calibration and MediaPipe. Kept apart from</span>
+<span class="sd">    PlayerKarteaConfigService, which handles only the player</span>
+<span class="sd">    configuration. It hands ready values to the game components</span>
+<span class="sd">    (CameraConfig, PoseTrackingConfig, calibration points), so that</span>
+<span class="sd">    Camera and PoseTracking do not depend on services.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    calibration_service : CalibrationService | None, optional</span>
+<span class="sd">        T-TEA service with the calibration and hardware data. Created if</span>
+<span class="sd">        None. Kept private.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">calibration_service</span><span class="p">:</span> <span class="n">CalibrationService</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calibration</span> <span class="o">=</span> <span class="n">calibration_service</span> <span class="ow">or</span> <span class="n">CalibrationService</span><span class="p">()</span>
+
+    <span class="c1"># ======================</span>
+    <span class="c1"># Screen</span>
+    <span class="c1"># ======================</span>
+<div class="viewcode-block" id="KarteaHardwareService.is_raspberry_pi">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.karteahardwareservice.KarteaHardwareService.html#ttea.games.kartea.service.karteahardwareservice.KarteaHardwareService.is_raspberry_pi">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_raspberry_pi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Check whether the game runs on a Raspberry Pi.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            Value reported by the CalibrationService.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calibration</span><span class="o">.</span><span class="n">is_raspberry_pi</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="KarteaHardwareService.is_fullscreen">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.karteahardwareservice.KarteaHardwareService.html#ttea.games.kartea.service.karteahardwareservice.KarteaHardwareService.is_fullscreen">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_fullscreen</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Check whether the game window is fullscreen.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            Value reported by the CalibrationService.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calibration</span><span class="o">.</span><span class="n">is_fullscreen</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="KarteaHardwareService.get_screen_size">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.karteahardwareservice.KarteaHardwareService.html#ttea.games.kartea.service.karteahardwareservice.KarteaHardwareService.get_screen_size">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_screen_size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return the configured screen size.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict[str, int]</span>
+<span class="sd">            Dictionary from CalibrationService with ``width`` and</span>
+<span class="sd">            ``height``.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calibration</span><span class="o">.</span><span class="n">get_screen_size</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="KarteaHardwareService.get_screen_info">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.karteahardwareservice.KarteaHardwareService.html#ttea.games.kartea.service.karteahardwareservice.KarteaHardwareService.get_screen_info">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_screen_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return the configured screen position.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict[str, int]</span>
+<span class="sd">            Dictionary from CalibrationService with ``screen_position``,</span>
+<span class="sd">            ``screen_pos_x`` and ``screen_pos_y``.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calibration</span><span class="o">.</span><span class="n">get_screen_info</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="KarteaHardwareService.get_screen_settings">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.karteahardwareservice.KarteaHardwareService.html#ttea.games.kartea.service.karteahardwareservice.KarteaHardwareService.get_screen_settings">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_screen_settings</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return the screen settings in the GameSettings format.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict[str, object]</span>
+<span class="sd">            ``screen_width``, ``screen_height``, ``screen_os_index``,</span>
+<span class="sd">            ``screen_pos_x``, ``screen_pos_y`` and ``fullscreen``.</span>
+<span class="sd">        """</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_screen_size</span><span class="p">()</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_screen_info</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">"screen_width"</span><span class="p">:</span> <span class="n">size</span><span class="p">[</span><span class="s2">"width"</span><span class="p">],</span>
+            <span class="s2">"screen_height"</span><span class="p">:</span> <span class="n">size</span><span class="p">[</span><span class="s2">"height"</span><span class="p">],</span>
+            <span class="s2">"screen_os_index"</span><span class="p">:</span> <span class="n">info</span><span class="p">[</span><span class="s2">"screen_position"</span><span class="p">],</span>
+            <span class="s2">"screen_pos_x"</span><span class="p">:</span> <span class="n">info</span><span class="p">[</span><span class="s2">"screen_pos_x"</span><span class="p">],</span>
+            <span class="s2">"screen_pos_y"</span><span class="p">:</span> <span class="n">info</span><span class="p">[</span><span class="s2">"screen_pos_y"</span><span class="p">],</span>
+            <span class="s2">"fullscreen"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_fullscreen</span><span class="p">(),</span>
+        <span class="p">}</span></div>
+
+
+    <span class="c1"># ======================</span>
+    <span class="c1"># Calibration</span>
+    <span class="c1"># ======================</span>
+<div class="viewcode-block" id="KarteaHardwareService.get_calibration_points">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.karteahardwareservice.KarteaHardwareService.html#ttea.games.kartea.service.karteahardwareservice.KarteaHardwareService.get_calibration_points">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_calibration_points</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the 4 points of the calibrated area.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[tuple[int, int]] | None</span>
+<span class="sd">            The (x, y) points 1 to 4 of the saved calibration, or None</span>
+<span class="sd">            if there is no calibration.</span>
+<span class="sd">        """</span>
+        <span class="n">point</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calibration</span><span class="o">.</span><span class="n">find_by_id_calibration_point</span><span class="p">(</span>
+            <span class="n">CalibrationPoint</span><span class="o">.</span><span class="n">ID_VALUE</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">point</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">point</span><span class="o">.</span><span class="n">pointx1</span><span class="p">,</span> <span class="n">point</span><span class="o">.</span><span class="n">pointy1</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">point</span><span class="o">.</span><span class="n">pointx2</span><span class="p">,</span> <span class="n">point</span><span class="o">.</span><span class="n">pointy2</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">point</span><span class="o">.</span><span class="n">pointx3</span><span class="p">,</span> <span class="n">point</span><span class="o">.</span><span class="n">pointy3</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">point</span><span class="o">.</span><span class="n">pointx4</span><span class="p">,</span> <span class="n">point</span><span class="o">.</span><span class="n">pointy4</span><span class="p">),</span>
+        <span class="p">]</span></div>
+
+
+    <span class="c1"># ======================</span>
+    <span class="c1"># Camera, through OpenCV</span>
+    <span class="c1"># ======================</span>
+<div class="viewcode-block" id="KarteaHardwareService.get_camera_config">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.karteahardwareservice.KarteaHardwareService.html#ttea.games.kartea.service.karteahardwareservice.KarteaHardwareService.get_camera_config">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_camera_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CameraConfig</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the camera configuration (OpenCV).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        CameraConfig</span>
+<span class="sd">            Camera index and OpenCV capture backend for the platform.</span>
+<span class="sd">        """</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calibration</span><span class="o">.</span><span class="n">get_camera_info</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">CameraConfig</span><span class="p">(</span>
+            <span class="n">camera_index</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s2">"camera_position"</span><span class="p">],</span>
+            <span class="n">capture_backend</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_calibration</span><span class="o">.</span><span class="n">get_opencv_capture_backend</span><span class="p">(),</span>
+        <span class="p">)</span></div>
+
+
+    <span class="c1"># ======================</span>
+    <span class="c1"># MediaPipe</span>
+    <span class="c1"># ======================</span>
+<div class="viewcode-block" id="KarteaHardwareService.get_pose_tracking_config">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.service.karteahardwareservice.KarteaHardwareService.html#ttea.games.kartea.service.karteahardwareservice.KarteaHardwareService.get_pose_tracking_config">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_pose_tracking_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PoseTrackingConfig</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the Pose Landmarker configuration for the platform.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PoseTrackingConfig</span>
+<span class="sd">            Model path, running mode, number of poses and confidence</span>
+<span class="sd">            thresholds from the CalibrationService.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        On a Raspberry Pi the embedded MediaPipe model is used;</span>
+<span class="sd">        elsewhere, the desktop model.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_raspberry_pi</span><span class="p">():</span>
+            <span class="n">model_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calibration</span><span class="o">.</span><span class="n">get_mediapipe_model_embedded</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">model_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calibration</span><span class="o">.</span><span class="n">get_mediapipe_model_desktop</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">PoseTrackingConfig</span><span class="p">(</span>
+            <span class="n">model_path</span><span class="o">=</span><span class="n">KarteaPathConfig</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">model_name</span><span class="p">),</span>
+            <span class="n">running_mode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_calibration</span><span class="o">.</span><span class="n">get_mediapipe_execution_mode</span><span class="p">(),</span>
+            <span class="n">num_poses</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_calibration</span><span class="o">.</span><span class="n">get_mediapipe_num_position</span><span class="p">(),</span>
+            <span class="n">min_pose_detection_confidence</span><span class="o">=</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_calibration</span><span class="o">.</span><span class="n">get_mediapipe_detection_position</span><span class="p">()</span>
+            <span class="p">),</span>
+            <span class="n">min_pose_presence_confidence</span><span class="o">=</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_calibration</span><span class="o">.</span><span class="n">get_mediapipe_detection_presence</span><span class="p">()</span>
+            <span class="p">),</span>
+            <span class="n">min_tracking_confidence</span><span class="o">=</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_calibration</span><span class="o">.</span><span class="n">get_mediapipe_detection_tracking</span><span class="p">()</span>
+            <span class="p">),</span>
+        <span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

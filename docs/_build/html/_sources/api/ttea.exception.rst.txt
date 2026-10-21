@@ -1,0 +1,20 @@
+ttea.exception
+==============
+
+.. automodule:: ttea.exception
+
+.. currentmodule:: ttea.exception
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/module.rst
+   :recursive:
+
+   businessruleexception
+
+
+

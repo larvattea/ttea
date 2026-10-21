@@ -1,0 +1,21 @@
+ttea.games.kartea.util.resourcefields
+=====================================
+
+.. automodule:: ttea.games.kartea.util.resourcefields
+
+.. currentmodule:: ttea.games.kartea.util.resourcefields
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   KarteaResourceFields
+   ResourceField
+
+

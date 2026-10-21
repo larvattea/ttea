@@ -1,0 +1,27 @@
+ttea.games.kartea.model
+=======================
+
+.. automodule:: ttea.games.kartea.model
+
+.. currentmodule:: ttea.games.kartea.model
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/module.rst
+   :recursive:
+
+   hardwareconfig
+   karteaphase
+   karteaphaselevel
+   levelrules
+   playerkarteaconfig
+   playerkarteasession
+   playerkarteasessiondetail
+   reflexivemodel
+
+
+

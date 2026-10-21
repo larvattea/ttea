@@ -1,0 +1,27 @@
+MainController
+==============
+
+.. currentmodule:: ttea.controller.maincontroller
+
+.. autoclass:: MainController
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~MainController.handle_exit
+      ~MainController.open_about
+      ~MainController.open_calibration
+      ~MainController.open_calibration_setting
+      ~MainController.open_game_action
+      ~MainController.open_help
+      ~MainController.open_institutionfacility_list
+      ~MainController.open_language
+      ~MainController.open_player_list
+      ~MainController.open_playergamelaunch
+      ~MainController.open_professional_list
+      ~MainController.try_close

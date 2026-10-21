@@ -1,0 +1,17 @@
+GameViewFactoryProtocol
+=======================
+
+.. currentmodule:: ttea.factory.gameviewfactoryprotocol
+
+.. autoclass:: GameViewFactoryProtocol
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~GameViewFactoryProtocol.create_player_config_edit_view
+      ~GameViewFactoryProtocol.create_player_config_list_view

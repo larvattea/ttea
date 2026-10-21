@@ -1,0 +1,18 @@
+SplashScreen
+============
+
+.. currentmodule:: ttea.view.splashscreen
+
+.. autoclass:: SplashScreen
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~SplashScreen.finish
+      ~SplashScreen.load_resource
+      ~SplashScreen.resizeEvent

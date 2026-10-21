@@ -1,0 +1,20 @@
+ttea.app
+========
+
+.. automodule:: ttea.app
+
+.. currentmodule:: ttea.app
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/module.rst
+   :recursive:
+
+   appconfig
+
+
+

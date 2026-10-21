@@ -1,0 +1,20 @@
+ttea.controller.institutionfacilitylistcontroller
+=================================================
+
+.. automodule:: ttea.controller.institutionfacilitylistcontroller
+
+.. currentmodule:: ttea.controller.institutionfacilitylistcontroller
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   InstitutionFacilityListController
+
+

@@ -1,0 +1,9 @@
+BusinessRuleException
+=====================
+
+.. currentmodule:: ttea.exception.businessruleexception
+
+.. autoclass:: BusinessRuleException
+   :members:
+   :show-inheritance:
+

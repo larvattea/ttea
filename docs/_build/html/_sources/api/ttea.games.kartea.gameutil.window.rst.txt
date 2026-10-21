@@ -1,0 +1,21 @@
+ttea.games.kartea.gameutil.window
+=================================
+
+.. automodule:: ttea.games.kartea.gameutil.window
+
+.. currentmodule:: ttea.games.kartea.gameutil.window
+
+
+
+
+
+
+.. rubric:: Functions
+
+.. autosummary::
+   :nosignatures:
+
+   regain_focus
+
+
+.. autofunction:: regain_focus

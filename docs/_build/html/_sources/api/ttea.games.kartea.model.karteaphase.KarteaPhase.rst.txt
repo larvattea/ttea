@@ -1,0 +1,9 @@
+KarteaPhase
+===========
+
+.. currentmodule:: ttea.games.kartea.model.karteaphase
+
+.. autoclass:: KarteaPhase
+   :members:
+   :show-inheritance:
+

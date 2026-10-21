@@ -1,0 +1,24 @@
+InstitutionFacilityService
+==========================
+
+.. currentmodule:: ttea.service.institutionfacilityservice
+
+.. autoclass:: InstitutionFacilityService
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~InstitutionFacilityService.create_institutionfacility
+      ~InstitutionFacilityService.delete_institutionfacility
+      ~InstitutionFacilityService.find_by_id
+      ~InstitutionFacilityService.get_all_institutionfacilities
+      ~InstitutionFacilityService.get_dao
+      ~InstitutionFacilityService.get_institutionfacility_types
+      ~InstitutionFacilityService.search_institutionfacilities
+      ~InstitutionFacilityService.update_institutionfacility
+      ~InstitutionFacilityService.validate_data

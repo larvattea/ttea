@@ -1,0 +1,19 @@
+HelpService
+===========
+
+.. currentmodule:: ttea.service.helpservice
+
+.. autoclass:: HelpService
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~HelpService.create_engine
+      ~HelpService.help_language
+      ~HelpService.topic_for_widget
+      ~HelpService.topic_url

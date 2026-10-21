@@ -1,0 +1,18 @@
+Player
+======
+
+.. currentmodule:: ttea.model.player
+
+.. autoclass:: Player
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~Player.get_data
+      ~Player.is_valid
+      ~Player.set_data

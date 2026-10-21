@@ -1,0 +1,20 @@
+ttea.util.criticalhooks
+=======================
+
+.. automodule:: ttea.util.criticalhooks
+
+.. currentmodule:: ttea.util.criticalhooks
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   CriticalHooks
+
+

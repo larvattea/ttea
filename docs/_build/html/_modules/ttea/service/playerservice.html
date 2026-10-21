@@ -1,0 +1,394 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.service.playerservice &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.service.playerservice</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.service.playerservice</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Player service: business rules and persistence of players."""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">QObject</span><span class="p">,</span> <span class="n">Signal</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.dao</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerCsvDAO</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.exception</span><span class="w"> </span><span class="kn">import</span> <span class="n">BusinessRuleException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">Player</span>
+
+
+<div class="viewcode-block" id="PlayerService">
+<a class="viewcode-back" href="../../../api/ttea.service.playerservice.PlayerService.html#ttea.service.playerservice.PlayerService">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PlayerService</span><span class="p">(</span><span class="n">QObject</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Business rules (service layer) of players.</span>
+
+<span class="sd">    A single instance is shared by the whole application.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dao : PlayerCsvDAO | None, optional</span>
+<span class="sd">        DAO used for persistence. Default is None, which creates a new</span>
+<span class="sd">        ``PlayerCsvDAO``.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    player_change : Signal(int)</span>
+<span class="sd">        Emitted after a change: with the ID of the created or updated</span>
+<span class="sd">        player, or with 0 after a deletion.</span>
+<span class="sd">    dao : PlayerCsvDAO</span>
+<span class="sd">        DAO used for persistence.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    get_all_players()</span>
+<span class="sd">        Return all registered players.</span>
+<span class="sd">    validate_data(data)</span>
+<span class="sd">        Return the validation errors of the form data.</span>
+<span class="sd">    create_player(data)</span>
+<span class="sd">        Create a player from a data dictionary.</span>
+<span class="sd">    update_player(player_id, data)</span>
+<span class="sd">        Update an existing player.</span>
+<span class="sd">    delete_player(player_id)</span>
+<span class="sd">        Delete a player by its ID.</span>
+<span class="sd">    find_by_id(player_id)</span>
+<span class="sd">        Return a player by its ID.</span>
+<span class="sd">    search_players(query="")</span>
+<span class="sd">        Search players by name or ID (case-insensitive).</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    ``__new__`` always returns the same instance, and ``__init__`` sets</span>
+<span class="sd">    it up only once: a ``dao`` passed in later calls is ignored.</span>
+<span class="sd">    """</span>
+
+    <span class="n">_instance</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">player_change</span> <span class="o">=</span> <span class="n">Signal</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Return the shared instance, creating it on the first call.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PlayerService</span>
+<span class="sd">            The single instance of the service.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dao</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PlayerCsvDAO</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"_initialized"</span><span class="p">):</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dao</span> <span class="o">=</span> <span class="n">dao</span> <span class="ow">or</span> <span class="n">PlayerCsvDAO</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_initialized</span> <span class="o">=</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="PlayerService.get_all_players">
+<a class="viewcode-back" href="../../../api/ttea.service.playerservice.PlayerService.html#ttea.service.playerservice.PlayerService.get_all_players">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_all_players</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Player</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return all registered players.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[Player]</span>
+<span class="sd">            The players cached by the DAO.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dao</span><span class="o">.</span><span class="n">list</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="PlayerService.validate_data">
+<a class="viewcode-back" href="../../../api/ttea.service.playerservice.PlayerService.html#ttea.service.playerservice.PlayerService.validate_data">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Validate the form data of a player.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : dict[str, Any]</span>
+<span class="sd">            Form data.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[str]</span>
+<span class="sd">            Translated error messages, each ending with a newline; empty</span>
+<span class="sd">            when the data is valid.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The ``id`` is required and must be an ``int``; ``name`` must not</span>
+<span class="sd">        be blank; ``birth_date`` is required.</span>
+
+<span class="sd">        The messages (pt_BR source texts) are translated at runtime with</span>
+<span class="sd">        ``self.tr()``.</span>
+<span class="sd">        """</span>
+        <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"id"</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"ID é obrigatório!</span><span class="se">\n</span><span class="s2">"</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"id"</span><span class="p">),</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"ID deve ser do tipo inteiro!</span><span class="se">\n</span><span class="s2">"</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"name"</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Nome é obrigatório!</span><span class="se">\n</span><span class="s2">"</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"birth_date"</span><span class="p">):</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span><span class="s2">"Data de nascimento é obrigatória!</span><span class="se">\n</span><span class="s2">"</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">errors</span></div>
+
+
+<div class="viewcode-block" id="PlayerService.create_player">
+<a class="viewcode-back" href="../../../api/ttea.service.playerservice.PlayerService.html#ttea.service.playerservice.PlayerService.create_player">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_player</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Player</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Create a player from a dictionary.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : dict[str, Any]</span>
+<span class="sd">            Values for every ``Player`` field. An ``id`` of 0 or less</span>
+<span class="sd">            gets the next free ID.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Player | None</span>
+<span class="sd">            The created player, or None if it is not valid or its ID</span>
+<span class="sd">            already exists.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If ``data`` misses a field or has an unknown key.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        ``player_change`` is emitted with the new ID on success.</span>
+<span class="sd">        """</span>
+        <span class="n">player</span> <span class="o">=</span> <span class="n">Player</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">player</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">new_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dao</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">new_id</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">player_change</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">new_id</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dao</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">new_id</span><span class="p">)</span> <span class="k">if</span> <span class="n">new_id</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="PlayerService.update_player">
+<a class="viewcode-back" href="../../../api/ttea.service.playerservice.PlayerService.html#ttea.service.playerservice.PlayerService.update_player">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_player</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Update an existing player with new values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        player_id : int</span>
+<span class="sd">            ID of the player to update.</span>
+<span class="sd">        data : dict[str, Any]</span>
+<span class="sd">            Updated fields; missing keys keep the current value.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if the player was found, is valid and was saved; False</span>
+<span class="sd">            otherwise.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The cached object is changed in place before validation, so an</span>
+<span class="sd">        invalid update still changes it in memory. ``player_change`` is</span>
+<span class="sd">        emitted with the ID on success.</span>
+<span class="sd">        """</span>
+        <span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dao</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">player</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">player</span><span class="o">.</span><span class="n">set_data</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">player</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">success</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dao</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">player</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">player_change</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">success</span></div>
+
+
+<div class="viewcode-block" id="PlayerService.delete_player">
+<a class="viewcode-back" href="../../../api/ttea.service.playerservice.PlayerService.html#ttea.service.playerservice.PlayerService.delete_player">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">delete_player</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Delete a player by its ID.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        player_id : int</span>
+<span class="sd">            ID of the player to delete.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if deleted, False if the player was not found.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        BusinessRuleException</span>
+<span class="sd">            If the player has a KarTEA configuration</span>
+<span class="sd">            (``PlayerKarteaConfigService``); the message is translated</span>
+<span class="sd">            with ``self.tr()``.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        ``player_change`` is emitted with 0 on success.</span>
+<span class="sd">        """</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.service</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerKarteaConfigService</span>
+
+        <span class="c1"># Referential integrity (business rule)</span>
+        <span class="n">karteaconfig</span> <span class="o">=</span> <span class="n">PlayerKarteaConfigService</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">karteaconfig</span><span class="o">.</span><span class="n">find_config_by_player_id</span><span class="p">(</span><span class="n">player_id</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">BusinessRuleException</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tr</span><span class="p">(</span>
+                    <span class="s2">"Exclusão negada: o jogador possui uma configuração do KarTEA ativa."</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="n">success</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dao</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">player_change</span><span class="o">.</span><span class="n">emit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">success</span></div>
+
+
+<div class="viewcode-block" id="PlayerService.find_by_id">
+<a class="viewcode-back" href="../../../api/ttea.service.playerservice.PlayerService.html#ttea.service.playerservice.PlayerService.find_by_id">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_by_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Player</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return a player by its ID.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        player_id : int</span>
+<span class="sd">            ID of the player.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Player | None</span>
+<span class="sd">            The player, or None if not found.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dao</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PlayerService.search_players">
+<a class="viewcode-back" href="../../../api/ttea.service.playerservice.PlayerService.html#ttea.service.playerservice.PlayerService.search_players">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">search_players</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Player</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Search players by name or ID, ignoring case.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        query : str, optional</span>
+<span class="sd">            Search term. If empty or blank, all players are returned.</span>
+<span class="sd">            Default is ``""``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list[Player]</span>
+<span class="sd">            The players whose ID (as text) or name contains the term.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dao</span><span class="o">.</span><span class="n">search_players</span><span class="p">(</span><span class="n">query</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

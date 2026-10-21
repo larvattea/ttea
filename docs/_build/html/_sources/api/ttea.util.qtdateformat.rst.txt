@@ -1,0 +1,20 @@
+ttea.util.qtdateformat
+======================
+
+.. automodule:: ttea.util.qtdateformat
+
+.. currentmodule:: ttea.util.qtdateformat
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   QtDateFormat
+
+

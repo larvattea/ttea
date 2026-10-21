@@ -1,0 +1,29 @@
+AppViewFactory
+==============
+
+.. currentmodule:: ttea.factory.appviewfactory
+
+.. autoclass:: AppViewFactory
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~AppViewFactory.create_about_view
+      ~AppViewFactory.create_automaticcalibration_view
+      ~AppViewFactory.create_calibration_view
+      ~AppViewFactory.create_calibrationsetting_view
+      ~AppViewFactory.create_institutionfacility_edit_view
+      ~AppViewFactory.create_institutionfacility_list_view
+      ~AppViewFactory.create_language_view
+      ~AppViewFactory.create_main_view
+      ~AppViewFactory.create_manualcalibration_view
+      ~AppViewFactory.create_player_edit_view
+      ~AppViewFactory.create_player_list_view
+      ~AppViewFactory.create_playergamelauch_view
+      ~AppViewFactory.create_professional_edit_view
+      ~AppViewFactory.create_professional_list_view

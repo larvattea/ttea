@@ -1,0 +1,19 @@
+Menu
+====
+
+.. currentmodule:: ttea.games.kartea.gameview.menu
+
+.. autoclass:: Menu
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~Menu.draw
+      ~Menu.draw_feedback
+      ~Menu.draw_player_name
+      ~Menu.update

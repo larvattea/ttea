@@ -1,0 +1,288 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Professional &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.service" href="ttea.service.html" />
+    <link rel="prev" title="ttea.model.professional" href="ttea.model.professional.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.games.html">ttea.games</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.model.html">ttea.model</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.appmodel.html">ttea.model.appmodel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.calibration.html">ttea.model.calibration</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.calibrationpoint.html">ttea.model.calibrationpoint</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.calibrationsetting.html">ttea.model.calibrationsetting</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.gamemetadata.html">ttea.model.gamemetadata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.institutionfacility.html">ttea.model.institutionfacility</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.language.html">ttea.model.language</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.model.player.html">ttea.model.player</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.model.professional.html">ttea.model.professional</a><ul class="current">
+<li class="toctree-l5 current"><a class="current reference internal" href="#">Professional</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#ttea.model.professional.Professional"><code class="docutils literal notranslate"><span class="pre">Professional</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.model.professional.Professional.is_valid"><code class="docutils literal notranslate"><span class="pre">Professional.is_valid()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.model.professional.Professional.set_data"><code class="docutils literal notranslate"><span class="pre">Professional.set_data()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.model.professional.Professional.get_data"><code class="docutils literal notranslate"><span class="pre">Professional.get_data()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.model.professional.html#ttea.model.professional.initialize_reflexive"><code class="docutils literal notranslate"><span class="pre">initialize_reflexive()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.model.html">ttea.model</a></li>
+          <li class="breadcrumb-item"><a href="ttea.model.professional.html">ttea.model.professional</a></li>
+      <li class="breadcrumb-item active">Professional</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.model.professional.Professional.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="professional">
+<h1>Professional<a class="headerlink" href="#professional" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.model.professional.Professional">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Professional</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">institutionfacility</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/model/professional.html#Professional"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.model.professional.Professional" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Represent a professional linked to an institution or facility.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>id</strong><span class="classifier">int</span></dt><dd><p>Unique identifier for the professional.</p>
+</dd>
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Full name of the professional.</p>
+</dd>
+<dt><strong>type</strong><span class="classifier">int</span></dt><dd><p>Professional type code, a key of <code class="docutils literal notranslate"><span class="pre">TYPE_MAP</span></code>.</p>
+</dd>
+<dt><strong>institutionfacility</strong><span class="classifier">InstitutionFacility</span></dt><dd><p>Institution or facility where the professional works. It may
+be None in an incomplete association, but then <code class="docutils literal notranslate"><span class="pre">is_valid</span></code>
+returns False.</p>
+</dd>
+<dt><strong>TYPE_MAP</strong><span class="classifier">dict[int, str], class attribute</span></dt><dd><p>Professional type codes (0 to 20) to pt_BR profession names;
+0 is the empty “no type” entry.</p>
+</dd>
+<dt><strong>PROPERTIES</strong><span class="classifier">list[str], class attribute</span></dt><dd><p>Field names, filled by <code class="docutils literal notranslate"><span class="pre">initialize_reflexive</span></code>.</p>
+</dd>
+<dt><strong>DATA_PROPERTIES</strong><span class="classifier">list, class attribute</span></dt><dd><p>Field defaults, filled by <code class="docutils literal notranslate"><span class="pre">initialize_reflexive</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">TYPE_MAP</span></code> names are marked with <code class="docutils literal notranslate"><span class="pre">QT_TRANSLATE_NOOP</span></code> in
+the <code class="docutils literal notranslate"><span class="pre">&quot;Professional&quot;</span></code> context: this only registers the pt_BR
+source texts for pyside6-lupdate. They are translated at display
+time with <code class="docutils literal notranslate"><span class="pre">QCoreApplication.translate</span></code> in that context, so a
+language change takes effect immediately.</p>
+<p>Serialization (<code class="docutils literal notranslate"><span class="pre">get_data</span></code>) stores the associated facility by
+its identifier.</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.model.professional.Professional.get_data" title="ttea.model.professional.Professional.get_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_data</span></code></a></p></td>
+<td><p>Return the professional data as a one-item list.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.model.professional.Professional.is_valid" title="ttea.model.professional.Professional.is_valid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_valid</span></code></a></p></td>
+<td><p>Validate the professional object.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.model.professional.Professional.set_data" title="ttea.model.professional.Professional.set_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_data</span></code></a></p></td>
+<td><p>Update the fields from a dictionary.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.model.professional.Professional.is_valid">
+<span class="sig-name descname"><span class="pre">is_valid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/model/professional.html#Professional.is_valid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.model.professional.Professional.is_valid" title="Link to this definition"></a></dt>
+<dd><p>Validate the professional object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>bool</dt><dd><p>True if the professional object is valid, False otherwise.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p><code class="docutils literal notranslate"><span class="pre">id</span></code> must be an int, <code class="docutils literal notranslate"><span class="pre">name</span></code> must not be blank and <code class="docutils literal notranslate"><span class="pre">type</span></code>
+must be an int key of <code class="docutils literal notranslate"><span class="pre">TYPE_MAP</span></code>. <code class="docutils literal notranslate"><span class="pre">institutionfacility</span></code>
+must not be None.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleNamespace</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">facility</span> <span class="o">=</span> <span class="n">SimpleNamespace</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hp</span> <span class="o">=</span> <span class="n">Professional</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"Dr. Smith"</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">facility</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hp</span><span class="o">.</span><span class="n">is_valid</span><span class="p">()</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Professional</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"Dr. Smith"</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">is_valid</span><span class="p">()</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Professional</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="mi">99</span><span class="p">,</span> <span class="n">facility</span><span class="p">)</span><span class="o">.</span><span class="n">is_valid</span><span class="p">()</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.model.professional.Professional.set_data">
+<span class="sig-name descname"><span class="pre">set_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/model/professional.html#Professional.set_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.model.professional.Professional.set_data" title="Link to this definition"></a></dt>
+<dd><p>Update the fields from a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data</strong><span class="classifier">dict</span></dt><dd><p>Values keyed by field name. Keys that are not fields are
+ignored, and fields missing from <code class="docutils literal notranslate"><span class="pre">data</span></code> keep their value.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>No validation or type conversion is done.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.model.professional.Professional.get_data">
+<span class="sig-name descname"><span class="pre">get_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/model/professional.html#Professional.get_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.model.professional.Professional.get_data" title="Link to this definition"></a></dt>
+<dd><p>Return the professional data as a one-item list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>list[dict]</dt><dd><p>A list with one dictionary of the field values, where
+<code class="docutils literal notranslate"><span class="pre">institutionfacility</span></code> is replaced by the facility <code class="docutils literal notranslate"><span class="pre">id</span></code>
+(None when there is no facility).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleNamespace</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hp</span> <span class="o">=</span> <span class="n">Professional</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"Dr. Smith"</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">SimpleNamespace</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="mi">3</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hp</span><span class="o">.</span><span class="n">get_data</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"institutionfacility"</span><span class="p">]</span>
+<span class="go">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Professional</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"A"</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">get_data</span><span class="p">()[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"name"</span><span class="p">]</span>
+<span class="go">'A'</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.model.professional.html" class="btn btn-neutral float-left" title="ttea.model.professional" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.service.html" class="btn btn-neutral float-right" title="ttea.service" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

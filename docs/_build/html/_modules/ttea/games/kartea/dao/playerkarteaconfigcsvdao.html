@@ -1,0 +1,284 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.games.kartea.dao.playerkarteaconfigcsvdao &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.games.kartea.dao.playerkarteaconfigcsvdao</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.games.kartea.dao.playerkarteaconfigcsvdao</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""CSV DAO of the players' Kartea game configuration."""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.dao.playercsvdao</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerCsvDAO</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.games.kartea.model</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">KarteaPhase</span><span class="p">,</span>
+    <span class="n">KarteaPhaseLevel</span><span class="p">,</span>
+    <span class="n">PlayerKarteaConfig</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.basecsvdao</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseCsvDAO</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.karteaphasecsvdao</span><span class="w"> </span><span class="kn">import</span> <span class="n">KarteaPhaseCsvDAO</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.karteaphaselevelcsvdao</span><span class="w"> </span><span class="kn">import</span> <span class="n">KarteaPhaseLevelCsvDAO</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.playerkarteasessioncsvdao</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlayerKarteaSessionCsvDAO</span>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigCsvDAO">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.dao.playerkarteaconfigcsvdao.PlayerKarteaConfigCsvDAO.html#ttea.games.kartea.dao.playerkarteaconfigcsvdao.PlayerKarteaConfigCsvDAO">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PlayerKarteaConfigCsvDAO</span><span class="p">(</span><span class="n">BaseCsvDAO</span><span class="p">[</span><span class="n">PlayerKarteaConfig</span><span class="p">]):</span>
+<span class="w">    </span><span class="sd">"""DAO of PlayerKarteaConfig in CSV.</span>
+
+<span class="sd">    Each player has a file</span>
+<span class="sd">    ``{player_id}_{sanitized_name}_kartea_config.csv`` with a single</span>
+<span class="sd">    row; the configuration key is the player id. The CRUD lives in</span>
+<span class="sd">    BaseCsvDAO; this class only builds the references (player, session,</span>
+<span class="sd">    phase and level).</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    model : type, class attribute</span>
+<span class="sd">        PlayerKarteaConfig.</span>
+<span class="sd">    suffix : str, class attribute</span>
+<span class="sd">        "kartea_config".</span>
+<span class="sd">    single_row : bool, class attribute</span>
+<span class="sd">        True: one row per player, keyed by the player id.</span>
+<span class="sd">    configs : dict[int, PlayerKarteaConfig]</span>
+<span class="sd">        Configurations by player id (the same dictionary as ``cache``).</span>
+<span class="sd">    player_dao : PlayerCsvDAO</span>
+<span class="sd">        DAO for accessing Player objects.</span>
+<span class="sd">    session_dao : PlayerKarteaSessionCsvDAO</span>
+<span class="sd">        DAO for accessing PlayerKarteaSession objects.</span>
+<span class="sd">    phase_dao : KarteaPhaseCsvDAO</span>
+<span class="sd">        DAO for accessing KarteaPhase objects.</span>
+<span class="sd">    level_dao : KarteaPhaseLevelCsvDAO</span>
+<span class="sd">        DAO for accessing KarteaPhaseLevel objects (shares</span>
+<span class="sd">        ``phase_dao``).</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    --------</span>
+<span class="sd">    KarteaPhaseService : Lists of phases and levels.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Creating the DAO creates the auxiliary DAOs and then loads the</span>
+<span class="sd">    configurations.</span>
+<span class="sd">    """</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">PlayerKarteaConfig</span>
+    <span class="n">suffix</span> <span class="o">=</span> <span class="s2">"kartea_config"</span>
+    <span class="n">single_row</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_dao</span> <span class="o">=</span> <span class="n">PlayerCsvDAO</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session_dao</span> <span class="o">=</span> <span class="n">PlayerKarteaSessionCsvDAO</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phase_dao</span> <span class="o">=</span> <span class="n">KarteaPhaseCsvDAO</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">level_dao</span> <span class="o">=</span> <span class="n">KarteaPhaseLevelCsvDAO</span><span class="p">(</span><span class="n">phase_dao</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_dao</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>  <span class="c1"># loads the configs; needs the DAOs above</span>
+
+<div class="viewcode-block" id="PlayerKarteaConfigCsvDAO.get_phase">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.dao.playerkarteaconfigcsvdao.PlayerKarteaConfigCsvDAO.html#ttea.games.kartea.dao.playerkarteaconfigcsvdao.PlayerKarteaConfigCsvDAO.get_phase">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_phase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phase_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KarteaPhase</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Retrieve a KarteaPhase by its ID using phase_dao.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        phase_id : int</span>
+<span class="sd">            The ID of the phase to retrieve.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        KarteaPhase | None</span>
+<span class="sd">            The KarteaPhase object if found, None otherwise.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">phase_dao</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">phase_id</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PlayerKarteaConfigCsvDAO.get_level">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.dao.playerkarteaconfigcsvdao.PlayerKarteaConfigCsvDAO.html#ttea.games.kartea.dao.playerkarteaconfigcsvdao.PlayerKarteaConfigCsvDAO.get_level">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_level</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">phase_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">level_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KarteaPhaseLevel</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Retrieve a KarteaPhaseLevel by phase and level ID.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        phase_id : int</span>
+<span class="sd">            The ID of the phase the level belongs to.</span>
+<span class="sd">        level_id : int</span>
+<span class="sd">            The ID of the level within the phase.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        KarteaPhaseLevel | None</span>
+<span class="sd">            The KarteaPhaseLevel object if found, None otherwise.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">level_dao</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">phase_id</span><span class="p">,</span> <span class="n">level_id</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">configs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">PlayerKarteaConfig</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Configurations by player id (the ``cache`` dictionary)."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span>
+
+<div class="viewcode-block" id="PlayerKarteaConfigCsvDAO.load_all_configs">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.dao.playerkarteaconfigcsvdao.PlayerKarteaConfigCsvDAO.html#ttea.games.kartea.dao.playerkarteaconfigcsvdao.PlayerKarteaConfigCsvDAO.load_all_configs">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load_all_configs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Load all configuration files into the cache."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">load_all</span><span class="p">()</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_int_or_none</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Convert a CSV cell to int (None if not digits only)."""</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="p">(</span><span class="n">value</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_deserialize</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">player_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PlayerKarteaConfig</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Build the configuration with its references.</span>
+
+<span class="sd">        Resolves player, session, phase and level.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        row : dict[str, str]</span>
+<span class="sd">            CSV row of the configuration.</span>
+<span class="sd">        player_id : int</span>
+<span class="sd">            Player id taken from the file name.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        PlayerKarteaConfig | None</span>
+<span class="sd">            The configuration, or None if the player does not exist (the</span>
+<span class="sd">            file is ignored).</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        - Empty, zero or unknown session, phase or level ids become</span>
+<span class="sd">          None.</span>
+<span class="sd">        - A level that does not belong to the phase (or without a phase)</span>
+<span class="sd">          is discarded.</span>
+<span class="sd">        """</span>
+        <span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_dao</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">player_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">player</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">session_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_int_or_none</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"session"</span><span class="p">))</span>
+        <span class="n">session</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">session_dao</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">session_id</span><span class="p">)</span> <span class="k">if</span> <span class="n">session_id</span> <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="n">phase</span> <span class="o">=</span> <span class="n">level</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">phase_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_int_or_none</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"phase"</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">phase_id</span><span class="p">:</span>
+            <span class="n">phase</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_phase</span><span class="p">(</span><span class="n">phase_id</span><span class="p">)</span>
+            <span class="n">level_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_int_or_none</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"level"</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">level_id</span><span class="p">:</span>
+                <span class="n">level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_level</span><span class="p">(</span><span class="n">phase_id</span><span class="p">,</span> <span class="n">level_id</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">level</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">phase</span> <span class="ow">or</span> <span class="n">level</span><span class="o">.</span><span class="n">phase</span><span class="o">.</span><span class="n">id</span> <span class="o">!=</span> <span class="n">phase</span><span class="o">.</span><span class="n">id</span><span class="p">):</span>
+                    <span class="n">level</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Ensure level belongs to phase</span>
+
+        <span class="k">return</span> <span class="n">PlayerKarteaConfig</span><span class="p">(</span>
+            <span class="n">player</span><span class="o">=</span><span class="n">player</span><span class="p">,</span>
+            <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span>
+            <span class="n">phase</span><span class="o">=</span><span class="n">phase</span><span class="p">,</span>
+            <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span>
+            <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_plain_kwargs</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">skip</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">REF_PROPERTIES</span><span class="p">),</span>
+        <span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,9 @@
+Palette
+=======
+
+.. currentmodule:: ttea.games.kartea.util.palettes
+
+.. autoclass:: Palette
+   :members:
+   :show-inheritance:
+

@@ -1,0 +1,17 @@
+KarteaPalettes
+==============
+
+.. currentmodule:: ttea.games.kartea.util.palettes
+
+.. autoclass:: KarteaPalettes
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~KarteaPalettes.get
+      ~KarteaPalettes.id_of

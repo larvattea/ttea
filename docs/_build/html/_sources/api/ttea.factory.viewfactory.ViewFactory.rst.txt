@@ -1,0 +1,20 @@
+ViewFactory
+===========
+
+.. currentmodule:: ttea.factory.viewfactory
+
+.. autoclass:: ViewFactory
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~ViewFactory.discover_games
+      ~ViewFactory.get_app_view_factory
+      ~ViewFactory.get_game_metadata
+      ~ViewFactory.get_game_view_factory
+      ~ViewFactory.get_games_metadata

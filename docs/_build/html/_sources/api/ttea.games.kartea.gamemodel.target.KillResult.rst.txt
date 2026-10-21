@@ -1,0 +1,9 @@
+KillResult
+==========
+
+.. currentmodule:: ttea.games.kartea.gamemodel.target
+
+.. autoclass:: KillResult
+   :members:
+   :show-inheritance:
+

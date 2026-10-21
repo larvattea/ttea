@@ -1,0 +1,439 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.games.kartea.util.resourcefields &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.games.kartea.util.resourcefields</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.games.kartea.util.resourcefields</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Single table of the resource fields (image/sound) of the config.</span>
+
+<span class="sd">Each row describes a ``PlayerKarteaConfig`` field that points to a</span>
+<span class="sd">built-in resource. From it are built:</span>
+
+<span class="sd">- the folder of the available resources (KarteaPathConfig / service);</span>
+<span class="sd">- the key and default value in kartea.ini (service);</span>
+<span class="sd">- the combo box, the preview and the sound button of the edit screen</span>
+<span class="sd">  (view);</span>
+<span class="sd">- the matching GameSettings attribute (``name.upper()``);</span>
+<span class="sd">- the validation of the required fields (edit screen controller).</span>
+
+<span class="sd">To add a resource: create the field in the model, a row here, the</span>
+<span class="sd">``cbx_&lt;field&gt;`` widget in the .ui and the folder in the .qrc.</span>
+
+<span class="sd">Besides the built-in resources, each field lists the files the user</span>
+<span class="sd">places in the KarTEA mods folder, in the subfolder that mirrors the</span>
+<span class="sd">built-in one (``mod_subdir``), with the extensions in</span>
+<span class="sd">``mod_extensions``.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">dataclass</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">QT_TRANSLATE_NOOP</span>
+
+
+<div class="viewcode-block" id="ResourceField">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.resourcefields.ResourceField.html#ttea.games.kartea.util.resourcefields.ResourceField">[docs]</a>
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">frozen</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ResourceField</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""One resource field of the player configuration.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name : str</span>
+<span class="sd">        Field name in PlayerKarteaConfig (e.g. "vehicle_image").</span>
+<span class="sd">    kind : str</span>
+<span class="sd">        KarteaResourceFields.IMAGE or KarteaResourceFields.SOUND.</span>
+<span class="sd">    builtin_dir : str</span>
+<span class="sd">        Folder of the built-in resources (Qt), e.g. ":/images/vehicle".</span>
+<span class="sd">    ini_section : str</span>
+<span class="sd">        kartea.ini section of the default value.</span>
+<span class="sd">    ini_key : str</span>
+<span class="sd">        kartea.ini key of the default value.</span>
+<span class="sd">    default : str</span>
+<span class="sd">        Default value when kartea.ini does not have the key.</span>
+<span class="sd">    preview_label : str</span>
+<span class="sd">        Name shown in the edit screen preview (images). Defaults to "".</span>
+<span class="sd">    feedback : bool</span>
+<span class="sd">        True for feedback resources (feedback tab and preview). Defaults</span>
+<span class="sd">        to False.</span>
+<span class="sd">    play_button : str</span>
+<span class="sd">        Button that plays the sound on the edit screen (sounds).</span>
+<span class="sd">        Defaults to "".</span>
+<span class="sd">    required_message : str</span>
+<span class="sd">        Message when the field is empty in the form (translation source</span>
+<span class="sd">        text); empty means an optional field. Fields with the same</span>
+<span class="sd">        message produce a single error line. Defaults to "".</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    ``preview_label`` and ``required_message`` hold pt_BR source texts</span>
+<span class="sd">    marked with ``QT_TRANSLATE_NOOP`` for pyside6-lupdate; they are</span>
+<span class="sd">    translated at display time with ``self.tr()`` by the edit screen and</span>
+<span class="sd">    its controller (i18n).</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; field = KarteaResourceFields.get("vehicle_image")</span>
+<span class="sd">    &gt;&gt;&gt; field.combo_name, field.setting_name</span>
+<span class="sd">    ('cbx_vehicle_image', 'VEHICLE_IMAGE')</span>
+<span class="sd">    &gt;&gt;&gt; field.mod_subdir</span>
+<span class="sd">    'images/vehicle'</span>
+<span class="sd">    """</span>
+
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">kind</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">builtin_dir</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">ini_section</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">ini_key</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">default</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">preview_label</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
+    <span class="n">feedback</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">play_button</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
+    <span class="n">required_message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">required</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Whether the field is required (has ``required_message``)."""</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">required_message</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">combo_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Name of the field's combo box on the edit screen."""</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">"cbx_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setting_name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Name of the matching GameSettings attribute."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mod_subdir</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Subfolder of the field inside the mods folder.</span>
+
+<span class="sd">        Mirrors the built-in folder: ":/images/vehicle" -&gt;</span>
+<span class="sd">        "images/vehicle", ":/sounds/feedback/positive" -&gt;</span>
+<span class="sd">        "sounds/feedback/positive".</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">builtin_dir</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s2">":/"</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mod_extensions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Extensions accepted in the mods folder for this field."""</span>
+        <span class="k">return</span> <span class="n">KarteaResourceFields</span><span class="o">.</span><span class="n">MOD_EXTENSIONS</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">kind</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="KarteaResourceFields">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.resourcefields.KarteaResourceFields.html#ttea.games.kartea.util.resourcefields.KarteaResourceFields">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">KarteaResourceFields</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Single table of the resource fields (image/sound) of the config.</span>
+
+<span class="sd">    Class with only class attributes and class methods, following the</span>
+<span class="sd">    KarteaPathConfig pattern: it is not instantiated.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    IMAGE : str, class attribute</span>
+<span class="sd">        Image resource type ("image", ResourceField.kind).</span>
+<span class="sd">    SOUND : str, class attribute</span>
+<span class="sd">        Sound resource type ("sound", ResourceField.kind).</span>
+<span class="sd">    MOD_EXTENSIONS : dict[str, tuple[str, ...]], class attribute</span>
+<span class="sd">        Extensions accepted in the mods folder, by type (lowercase).</span>
+<span class="sd">        Sounds only in WAV.</span>
+<span class="sd">    ALL : tuple[ResourceField, ...], class attribute</span>
+<span class="sd">        All fields, in the edit screen order.</span>
+<span class="sd">    BY_NAME : dict[str, ResourceField], class attribute</span>
+<span class="sd">        Fields by name.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The preview names and required-field messages of ALL are marked with</span>
+<span class="sd">    ``QT_TRANSLATE_NOOP`` in the ``_TR_VIEW_CONTEXT``</span>
+<span class="sd">    ("PlayerKarteaConfigEditView") and ``_TR_CONTEXT``</span>
+<span class="sd">    ("PlayerKarteaConfigEditController") contexts; they are translated</span>
+<span class="sd">    with ``self.tr()`` where they are shown (i18n).</span>
+<span class="sd">    """</span>
+
+    <span class="n">IMAGE</span> <span class="o">=</span> <span class="s2">"image"</span>
+    <span class="n">SOUND</span> <span class="o">=</span> <span class="s2">"sound"</span>
+
+    <span class="c1"># Sounds only in WAV: the format that plays both in the game</span>
+    <span class="c1"># (pygame) and in the listen button of the config screen</span>
+    <span class="c1"># (QSoundEffect).</span>
+    <span class="n">MOD_EXTENSIONS</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">IMAGE</span><span class="p">:</span> <span class="p">(</span><span class="s2">".png"</span><span class="p">,</span> <span class="s2">".jpg"</span><span class="p">,</span> <span class="s2">".jpeg"</span><span class="p">,</span> <span class="s2">".bmp"</span><span class="p">),</span>
+        <span class="n">SOUND</span><span class="p">:</span> <span class="p">(</span><span class="s2">".wav"</span><span class="p">,),</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Translation context of the required-field messages: they are</span>
+    <span class="c1"># shown by the edit screen controller, with self.tr(). The</span>
+    <span class="c1"># QT_TRANSLATE_NOOP calls below repeat these contexts as literals</span>
+    <span class="c1"># because pyside6-lupdate only extracts texts whose context is a</span>
+    <span class="c1"># string literal.</span>
+    <span class="n">_TR_CONTEXT</span> <span class="o">=</span> <span class="s2">"PlayerKarteaConfigEditController"</span>
+
+    <span class="c1"># Translation context of the preview names: they are shown by the</span>
+    <span class="c1"># edit screen, with self.tr().</span>
+    <span class="n">_TR_VIEW_CONTEXT</span> <span class="o">=</span> <span class="s2">"PlayerKarteaConfigEditView"</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_image</span><span class="p">(</span>
+        <span class="n">name</span><span class="p">,</span>
+        <span class="n">folder</span><span class="p">,</span>
+        <span class="n">section</span><span class="p">,</span>
+        <span class="n">key</span><span class="p">,</span>
+        <span class="n">default</span><span class="p">,</span>
+        <span class="n">label</span><span class="p">,</span>
+        <span class="n">feedback</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">required_message</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
+        <span class="n">kind</span><span class="o">=</span><span class="n">IMAGE</span><span class="p">,</span>  <span class="c1"># default evaluated in the class body</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ResourceField</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Build an image field (used only to fill ALL)."""</span>
+        <span class="k">return</span> <span class="n">ResourceField</span><span class="p">(</span>
+            <span class="n">name</span><span class="p">,</span>
+            <span class="n">kind</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">":/images/</span><span class="si">{</span><span class="n">folder</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="n">section</span><span class="p">,</span>
+            <span class="n">key</span><span class="p">,</span>
+            <span class="n">default</span><span class="p">,</span>
+            <span class="n">preview_label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
+            <span class="n">feedback</span><span class="o">=</span><span class="n">feedback</span><span class="p">,</span>
+            <span class="n">required_message</span><span class="o">=</span><span class="n">required_message</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_feedback_sound</span><span class="p">(</span><span class="n">tone</span><span class="p">,</span> <span class="n">default</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">SOUND</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ResourceField</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Build a feedback sound field (used only to fill ALL)."""</span>
+        <span class="k">return</span> <span class="n">ResourceField</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">tone</span><span class="si">}</span><span class="s2">_feedback_sound"</span><span class="p">,</span>
+            <span class="n">kind</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">":/sounds/feedback/</span><span class="si">{</span><span class="n">tone</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+            <span class="s2">"sound_feedback"</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">tone</span><span class="si">}</span><span class="s2">_feedback_sound_default"</span><span class="p">,</span>
+            <span class="n">default</span><span class="p">,</span>
+            <span class="n">feedback</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">play_button</span><span class="o">=</span><span class="sa">f</span><span class="s2">"pb_</span><span class="si">{</span><span class="n">tone</span><span class="si">}</span><span class="s2">_sound"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">_ENVIRONMENT_REQUIRED</span> <span class="o">=</span> <span class="n">QT_TRANSLATE_NOOP</span><span class="p">(</span>
+        <span class="s2">"PlayerKarteaConfigEditController"</span><span class="p">,</span>
+        <span class="s2">"Imagem do ambiente é obrigatória!</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="c1"># fmt: off</span>
+    <span class="n">ALL</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">ResourceField</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">_image</span><span class="p">(</span><span class="s2">"horizon_image"</span><span class="p">,</span> <span class="s2">"horizon"</span><span class="p">,</span> <span class="s2">"visual_resources"</span><span class="p">,</span>
+               <span class="s2">"horizon_image_default"</span><span class="p">,</span> <span class="s2">"horizon"</span><span class="p">,</span>
+               <span class="n">QT_TRANSLATE_NOOP</span><span class="p">(</span><span class="s2">"PlayerKarteaConfigEditView"</span><span class="p">,</span> <span class="s2">"Horizonte"</span><span class="p">),</span>
+               <span class="n">required_message</span><span class="o">=</span><span class="n">QT_TRANSLATE_NOOP</span><span class="p">(</span>
+                   <span class="s2">"PlayerKarteaConfigEditController"</span><span class="p">,</span>
+                   <span class="s2">"Imagem do horizonte é obrigatória!</span><span class="se">\n</span><span class="s2">"</span><span class="p">)),</span>
+        <span class="n">_image</span><span class="p">(</span><span class="s2">"vehicle_image"</span><span class="p">,</span> <span class="s2">"vehicle"</span><span class="p">,</span> <span class="s2">"visual_resources"</span><span class="p">,</span>
+               <span class="s2">"vehicle_image_default"</span><span class="p">,</span> <span class="s2">"defaultvehicle"</span><span class="p">,</span>
+               <span class="n">QT_TRANSLATE_NOOP</span><span class="p">(</span><span class="s2">"PlayerKarteaConfigEditView"</span><span class="p">,</span> <span class="s2">"Veículo"</span><span class="p">),</span>
+               <span class="n">required_message</span><span class="o">=</span><span class="n">QT_TRANSLATE_NOOP</span><span class="p">(</span>
+                   <span class="s2">"PlayerKarteaConfigEditController"</span><span class="p">,</span>
+                   <span class="s2">"Imagem do veículo é obrigatória!</span><span class="se">\n</span><span class="s2">"</span><span class="p">)),</span>
+        <span class="n">_image</span><span class="p">(</span><span class="s2">"environment_image_right"</span><span class="p">,</span> <span class="s2">"environment"</span><span class="p">,</span> <span class="s2">"visual_resources"</span><span class="p">,</span>
+               <span class="s2">"environment_image_default_right"</span><span class="p">,</span> <span class="s2">"right"</span><span class="p">,</span>
+               <span class="n">QT_TRANSLATE_NOOP</span><span class="p">(</span><span class="s2">"PlayerKarteaConfigEditView"</span><span class="p">,</span> <span class="s2">"Ambiente"</span><span class="p">),</span>
+               <span class="n">required_message</span><span class="o">=</span><span class="n">_ENVIRONMENT_REQUIRED</span><span class="p">),</span>
+        <span class="n">_image</span><span class="p">(</span><span class="s2">"environment_image_left"</span><span class="p">,</span> <span class="s2">"environment"</span><span class="p">,</span> <span class="s2">"visual_resources"</span><span class="p">,</span>
+               <span class="s2">"environment_image_default_left"</span><span class="p">,</span> <span class="s2">"left"</span><span class="p">,</span>
+               <span class="n">QT_TRANSLATE_NOOP</span><span class="p">(</span><span class="s2">"PlayerKarteaConfigEditView"</span><span class="p">,</span> <span class="s2">"Ambiente"</span><span class="p">),</span>
+               <span class="n">required_message</span><span class="o">=</span><span class="n">_ENVIRONMENT_REQUIRED</span><span class="p">),</span>
+        <span class="n">_image</span><span class="p">(</span><span class="s2">"target_image"</span><span class="p">,</span> <span class="s2">"target"</span><span class="p">,</span> <span class="s2">"visual_resources"</span><span class="p">,</span>
+               <span class="s2">"target_image_default"</span><span class="p">,</span> <span class="s2">"defaultstar"</span><span class="p">,</span>
+               <span class="n">QT_TRANSLATE_NOOP</span><span class="p">(</span><span class="s2">"PlayerKarteaConfigEditView"</span><span class="p">,</span> <span class="s2">"Alvo"</span><span class="p">),</span>
+               <span class="n">required_message</span><span class="o">=</span><span class="n">QT_TRANSLATE_NOOP</span><span class="p">(</span>
+                   <span class="s2">"PlayerKarteaConfigEditController"</span><span class="p">,</span>
+                   <span class="s2">"Imagem do alvo é obrigatória!</span><span class="se">\n</span><span class="s2">"</span><span class="p">)),</span>
+        <span class="n">_image</span><span class="p">(</span><span class="s2">"obstacle_image"</span><span class="p">,</span> <span class="s2">"obstacle"</span><span class="p">,</span> <span class="s2">"visual_resources"</span><span class="p">,</span>
+               <span class="s2">"obstacle_image_default"</span><span class="p">,</span> <span class="s2">"defaultobstacle"</span><span class="p">,</span>
+               <span class="n">QT_TRANSLATE_NOOP</span><span class="p">(</span><span class="s2">"PlayerKarteaConfigEditView"</span><span class="p">,</span> <span class="s2">"Obstáculo"</span><span class="p">),</span>
+               <span class="n">required_message</span><span class="o">=</span><span class="n">QT_TRANSLATE_NOOP</span><span class="p">(</span>
+                   <span class="s2">"PlayerKarteaConfigEditController"</span><span class="p">,</span>
+                   <span class="s2">"Imagem do obstáculo é obrigatória!</span><span class="se">\n</span><span class="s2">"</span><span class="p">)),</span>
+        <span class="n">_image</span><span class="p">(</span><span class="s2">"positive_feedback_image"</span><span class="p">,</span> <span class="s2">"feedback/positive"</span><span class="p">,</span>
+               <span class="s2">"visual_feedback"</span><span class="p">,</span>
+               <span class="s2">"positive_feedback_image_default"</span><span class="p">,</span> <span class="s2">"positive"</span><span class="p">,</span>
+               <span class="n">QT_TRANSLATE_NOOP</span><span class="p">(</span><span class="s2">"PlayerKarteaConfigEditView"</span><span class="p">,</span>
+                                 <span class="s2">"Positivo"</span><span class="p">),</span> <span class="kc">True</span><span class="p">),</span>
+        <span class="n">_image</span><span class="p">(</span><span class="s2">"neutral_feedback_image"</span><span class="p">,</span> <span class="s2">"feedback/neutral"</span><span class="p">,</span> <span class="s2">"visual_feedback"</span><span class="p">,</span>
+               <span class="s2">"neutral_feedback_image_default"</span><span class="p">,</span> <span class="s2">"neutral"</span><span class="p">,</span>
+               <span class="n">QT_TRANSLATE_NOOP</span><span class="p">(</span><span class="s2">"PlayerKarteaConfigEditView"</span><span class="p">,</span>
+                                 <span class="s2">"Neutro"</span><span class="p">),</span> <span class="kc">True</span><span class="p">),</span>
+        <span class="n">_image</span><span class="p">(</span><span class="s2">"negative_feedback_image"</span><span class="p">,</span> <span class="s2">"feedback/negative"</span><span class="p">,</span>
+               <span class="s2">"visual_feedback"</span><span class="p">,</span>
+               <span class="s2">"negative_feedback_image_default"</span><span class="p">,</span> <span class="s2">"negative"</span><span class="p">,</span>
+               <span class="n">QT_TRANSLATE_NOOP</span><span class="p">(</span><span class="s2">"PlayerKarteaConfigEditView"</span><span class="p">,</span>
+                                 <span class="s2">"Negativo"</span><span class="p">),</span> <span class="kc">True</span><span class="p">),</span>
+        <span class="n">_feedback_sound</span><span class="p">(</span><span class="s2">"positive"</span><span class="p">,</span> <span class="s2">"point"</span><span class="p">),</span>
+        <span class="n">_feedback_sound</span><span class="p">(</span><span class="s2">"neutral"</span><span class="p">,</span> <span class="s2">"miss"</span><span class="p">),</span>
+        <span class="n">_feedback_sound</span><span class="p">(</span><span class="s2">"negative"</span><span class="p">,</span> <span class="s2">"miss"</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="c1"># fmt: on</span>
+
+    <span class="n">BY_NAME</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ResourceField</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">field</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">ALL</span><span class="p">}</span>
+
+<div class="viewcode-block" id="KarteaResourceFields.get">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.resourcefields.KarteaResourceFields.html#ttea.games.kartea.util.resourcefields.KarteaResourceFields.get">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ResourceField</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the field with the given name.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Field name, e.g. "vehicle_image".</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        ResourceField</span>
+<span class="sd">            The field.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        KeyError</span>
+<span class="sd">            If there is no field with this name.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">BY_NAME</span><span class="p">[</span><span class="n">name</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="KarteaResourceFields.images">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.resourcefields.KarteaResourceFields.html#ttea.games.kartea.util.resourcefields.KarteaResourceFields.images">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">images</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">ResourceField</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return the image fields, in table order.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple[ResourceField, ...]</span>
+<span class="sd">            Fields whose kind is IMAGE.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; len(KarteaResourceFields.images())</span>
+<span class="sd">        9</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">field</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">ALL</span> <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="bp">cls</span><span class="o">.</span><span class="n">IMAGE</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="KarteaResourceFields.sounds">
+<a class="viewcode-back" href="../../../../../api/ttea.games.kartea.util.resourcefields.KarteaResourceFields.html#ttea.games.kartea.util.resourcefields.KarteaResourceFields.sounds">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sounds</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">ResourceField</span><span class="p">,</span> <span class="o">...</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return the sound fields, in table order.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple[ResourceField, ...]</span>
+<span class="sd">            Fields whose kind is SOUND.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; KarteaResourceFields.sounds()[0].name</span>
+<span class="sd">        'positive_feedback_sound'</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">field</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">ALL</span> <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="bp">cls</span><span class="o">.</span><span class="n">SOUND</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

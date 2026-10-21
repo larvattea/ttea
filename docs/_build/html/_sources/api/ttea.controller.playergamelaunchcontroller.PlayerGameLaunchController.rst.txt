@@ -1,0 +1,21 @@
+PlayerGameLaunchController
+==========================
+
+.. currentmodule:: ttea.controller.playergamelaunchcontroller
+
+.. autoclass:: PlayerGameLaunchController
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~PlayerGameLaunchController.cleanup
+      ~PlayerGameLaunchController.handle_cancel
+      ~PlayerGameLaunchController.handle_game_info
+      ~PlayerGameLaunchController.is_game_running
+      ~PlayerGameLaunchController.launch_game
+      ~PlayerGameLaunchController.update_tooltip

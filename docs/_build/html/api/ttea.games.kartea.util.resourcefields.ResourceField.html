@@ -1,0 +1,271 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ResourceField &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.games.kartea.view" href="ttea.games.kartea.view.html" />
+    <link rel="prev" title="KarteaResourceFields" href="ttea.games.kartea.util.resourcefields.KarteaResourceFields.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.games.html">ttea.games</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.gametheme.html">ttea.games.gametheme</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.games.kartea.html">ttea.games.kartea</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.controller.html">ttea.games.kartea.controller</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.dao.html">ttea.games.kartea.dao</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.factory.html">ttea.games.kartea.factory</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamecontroller.html">ttea.games.kartea.gamecontroller</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamecore.html">ttea.games.kartea.gamecore</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamemodel.html">ttea.games.kartea.gamemodel</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gametheme.html">ttea.games.kartea.gametheme</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameui.html">ttea.games.kartea.gameui</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameutil.html">ttea.games.kartea.gameutil</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameview.html">ttea.games.kartea.gameview</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.main.html">ttea.games.kartea.main</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.model.html">ttea.games.kartea.model</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.service.html">ttea.games.kartea.service</a></li>
+<li class="toctree-l5 current"><a class="reference internal" href="ttea.games.kartea.util.html">ttea.games.kartea.util</a><ul class="current">
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.util.html#attributes">Attributes</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.util.html#see-also">See Also</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.util.html#notes">Notes</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.util.arrivaltimefields.html">ttea.games.kartea.util.arrivaltimefields</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.util.inidefaults.html">ttea.games.kartea.util.inidefaults</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.util.karteapathconfig.html">ttea.games.kartea.util.karteapathconfig</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.util.palettes.html">ttea.games.kartea.util.palettes</a></li>
+<li class="toctree-l6 current"><a class="reference internal" href="ttea.games.kartea.util.resourcefields.html">ttea.games.kartea.util.resourcefields</a><ul class="current">
+<li class="toctree-l7"><a class="reference internal" href="ttea.games.kartea.util.resourcefields.KarteaResourceFields.html">KarteaResourceFields</a></li>
+<li class="toctree-l7 current"><a class="current reference internal" href="#">ResourceField</a><ul>
+<li class="toctree-l8"><a class="reference internal" href="#ttea.games.kartea.util.resourcefields.ResourceField"><code class="docutils literal notranslate"><span class="pre">ResourceField</span></code></a><ul>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.util.resourcefields.ResourceField.required"><code class="docutils literal notranslate"><span class="pre">ResourceField.required</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.util.resourcefields.ResourceField.combo_name"><code class="docutils literal notranslate"><span class="pre">ResourceField.combo_name</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.util.resourcefields.ResourceField.setting_name"><code class="docutils literal notranslate"><span class="pre">ResourceField.setting_name</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.util.resourcefields.ResourceField.mod_subdir"><code class="docutils literal notranslate"><span class="pre">ResourceField.mod_subdir</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.util.resourcefields.ResourceField.mod_extensions"><code class="docutils literal notranslate"><span class="pre">ResourceField.mod_extensions</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.view.html">ttea.games.kartea.view</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.html">ttea.games</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.html">ttea.games.kartea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.util.html">ttea.games.kartea.util</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.util.resourcefields.html">ttea.games.kartea.util.resourcefields</a></li>
+      <li class="breadcrumb-item active">ResourceField</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.games.kartea.util.resourcefields.ResourceField.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="resourcefield">
+<h1>ResourceField<a class="headerlink" href="#resourcefield" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.games.kartea.util.resourcefields.ResourceField">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ResourceField</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kind</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">builtin_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ini_section</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ini_key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preview_label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feedback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">play_button</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">required_message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/util/resourcefields.html#ResourceField"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.util.resourcefields.ResourceField" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>One resource field of the player configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Field name in PlayerKarteaConfig (e.g. “vehicle_image”).</p>
+</dd>
+<dt><strong>kind</strong><span class="classifier">str</span></dt><dd><p>KarteaResourceFields.IMAGE or KarteaResourceFields.SOUND.</p>
+</dd>
+<dt><strong>builtin_dir</strong><span class="classifier">str</span></dt><dd><p>Folder of the built-in resources (Qt), e.g. “:/images/vehicle”.</p>
+</dd>
+<dt><strong>ini_section</strong><span class="classifier">str</span></dt><dd><p>kartea.ini section of the default value.</p>
+</dd>
+<dt><strong>ini_key</strong><span class="classifier">str</span></dt><dd><p>kartea.ini key of the default value.</p>
+</dd>
+<dt><strong>default</strong><span class="classifier">str</span></dt><dd><p>Default value when kartea.ini does not have the key.</p>
+</dd>
+<dt><strong>preview_label</strong><span class="classifier">str</span></dt><dd><p>Name shown in the edit screen preview (images). Defaults to “”.</p>
+</dd>
+<dt><strong>feedback</strong><span class="classifier">bool</span></dt><dd><p>True for feedback resources (feedback tab and preview). Defaults
+to False.</p>
+</dd>
+<dt><strong>play_button</strong><span class="classifier">str</span></dt><dd><p>Button that plays the sound on the edit screen (sounds).
+Defaults to “”.</p>
+</dd>
+<dt><strong>required_message</strong><span class="classifier">str</span></dt><dd><p>Message when the field is empty in the form (translation source
+text); empty means an optional field. Fields with the same
+message produce a single error line. Defaults to “”.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p><code class="docutils literal notranslate"><span class="pre">preview_label</span></code> and <code class="docutils literal notranslate"><span class="pre">required_message</span></code> hold pt_BR source texts
+marked with <code class="docutils literal notranslate"><span class="pre">QT_TRANSLATE_NOOP</span></code> for pyside6-lupdate; they are
+translated at display time with <code class="docutils literal notranslate"><span class="pre">self.tr()</span></code> by the edit screen and
+its controller (i18n).</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">field</span> <span class="o">=</span> <span class="n">KarteaResourceFields</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"vehicle_image"</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">field</span><span class="o">.</span><span class="n">combo_name</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">setting_name</span>
+<span class="go">('cbx_vehicle_image', 'VEHICLE_IMAGE')</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">field</span><span class="o">.</span><span class="n">mod_subdir</span>
+<span class="go">'images/vehicle'</span>
+</pre></div>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="ttea.games.kartea.util.resourcefields.ResourceField.required">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">required</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><span class="pre">bool</span></a></em><a class="headerlink" href="#ttea.games.kartea.util.resourcefields.ResourceField.required" title="Link to this definition"></a></dt>
+<dd><p>Whether the field is required (has <code class="docutils literal notranslate"><span class="pre">required_message</span></code>).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ttea.games.kartea.util.resourcefields.ResourceField.combo_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">combo_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></em><a class="headerlink" href="#ttea.games.kartea.util.resourcefields.ResourceField.combo_name" title="Link to this definition"></a></dt>
+<dd><p>Name of the field’s combo box on the edit screen.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ttea.games.kartea.util.resourcefields.ResourceField.setting_name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setting_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></em><a class="headerlink" href="#ttea.games.kartea.util.resourcefields.ResourceField.setting_name" title="Link to this definition"></a></dt>
+<dd><p>Name of the matching GameSettings attribute.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ttea.games.kartea.util.resourcefields.ResourceField.mod_subdir">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mod_subdir</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a></em><a class="headerlink" href="#ttea.games.kartea.util.resourcefields.ResourceField.mod_subdir" title="Link to this definition"></a></dt>
+<dd><p>Subfolder of the field inside the mods folder.</p>
+<p>Mirrors the built-in folder: “:/images/vehicle” -&gt;
+“images/vehicle”, “:/sounds/feedback/positive” -&gt;
+“sounds/feedback/positive”.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="ttea.games.kartea.util.resourcefields.ResourceField.mod_extensions">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mod_extensions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#tuple" title="(in Python v3.15)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#ttea.games.kartea.util.resourcefields.ResourceField.mod_extensions" title="Link to this definition"></a></dt>
+<dd><p>Extensions accepted in the mods folder for this field.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.games.kartea.util.resourcefields.KarteaResourceFields.html" class="btn btn-neutral float-left" title="KarteaResourceFields" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.games.kartea.view.html" class="btn btn-neutral float-right" title="ttea.games.kartea.view" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

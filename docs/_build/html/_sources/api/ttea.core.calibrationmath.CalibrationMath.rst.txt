@@ -1,0 +1,20 @@
+CalibrationMath
+===============
+
+.. currentmodule:: ttea.core.calibrationmath
+
+.. autoclass:: CalibrationMath
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~CalibrationMath.calculate_centered_destination_points
+      ~CalibrationMath.calculate_destination_points_with_flip
+      ~CalibrationMath.calculate_projection_area
+      ~CalibrationMath.get_inverse_transform
+      ~CalibrationMath.get_perspective_transform

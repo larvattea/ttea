@@ -1,0 +1,20 @@
+ttea.games.kartea.factory.karteaviewfactory
+===========================================
+
+.. automodule:: ttea.games.kartea.factory.karteaviewfactory
+
+.. currentmodule:: ttea.games.kartea.factory.karteaviewfactory
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   KarteaViewFactory
+
+

@@ -1,0 +1,20 @@
+ttea.factory.gameviewfactoryprotocol
+====================================
+
+.. automodule:: ttea.factory.gameviewfactoryprotocol
+
+.. currentmodule:: ttea.factory.gameviewfactoryprotocol
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   GameViewFactoryProtocol
+
+

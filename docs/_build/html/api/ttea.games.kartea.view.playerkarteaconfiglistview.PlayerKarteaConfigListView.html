@@ -1,0 +1,397 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PlayerKarteaConfigListView &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.log" href="ttea.log.html" />
+    <link rel="prev" title="ttea.games.kartea.view.playerkarteaconfiglistview" href="ttea.games.kartea.view.playerkarteaconfiglistview.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.games.html">ttea.games</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.games.gametheme.html">ttea.games.gametheme</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.games.kartea.html">ttea.games.kartea</a><ul class="current">
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.controller.html">ttea.games.kartea.controller</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.dao.html">ttea.games.kartea.dao</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.factory.html">ttea.games.kartea.factory</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamecontroller.html">ttea.games.kartea.gamecontroller</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamecore.html">ttea.games.kartea.gamecore</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gamemodel.html">ttea.games.kartea.gamemodel</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gametheme.html">ttea.games.kartea.gametheme</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameui.html">ttea.games.kartea.gameui</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameutil.html">ttea.games.kartea.gameutil</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.gameview.html">ttea.games.kartea.gameview</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.main.html">ttea.games.kartea.main</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.model.html">ttea.games.kartea.model</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.service.html">ttea.games.kartea.service</a></li>
+<li class="toctree-l5"><a class="reference internal" href="ttea.games.kartea.util.html">ttea.games.kartea.util</a></li>
+<li class="toctree-l5 current"><a class="reference internal" href="ttea.games.kartea.view.html">ttea.games.kartea.view</a><ul class="current">
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.view.html#attributes">Attributes</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.view.html#see-also">See Also</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.view.html#notes">Notes</a></li>
+<li class="toctree-l6"><a class="reference internal" href="ttea.games.kartea.view.playerkarteaconfigeditview.html">ttea.games.kartea.view.playerkarteaconfigeditview</a></li>
+<li class="toctree-l6 current"><a class="reference internal" href="ttea.games.kartea.view.playerkarteaconfiglistview.html">ttea.games.kartea.view.playerkarteaconfiglistview</a><ul class="current">
+<li class="toctree-l7 current"><a class="current reference internal" href="#">PlayerKarteaConfigListView</a><ul>
+<li class="toctree-l8"><a class="reference internal" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigListView</span></code></a><ul>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.bind"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigListView.bind()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.get_search_text"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigListView.get_search_text()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.populate_table"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigListView.populate_table()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.clear_details"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigListView.clear_details()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.display_config_details"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigListView.display_config_details()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.get_selected_player_id"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigListView.get_selected_player_id()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.select_row_by_id"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigListView.select_row_by_id()</span></code></a></li>
+<li class="toctree-l9"><a class="reference internal" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.closeEvent"><code class="docutils literal notranslate"><span class="pre">PlayerKarteaConfigListView.closeEvent()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.html">ttea.games</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.html">ttea.games.kartea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.view.html">ttea.games.kartea.view</a></li>
+          <li class="breadcrumb-item"><a href="ttea.games.kartea.view.playerkarteaconfiglistview.html">ttea.games.kartea.view.playerkarteaconfiglistview</a></li>
+      <li class="breadcrumb-item active">PlayerKarteaConfigListView</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="playerkarteaconfiglistview">
+<h1>PlayerKarteaConfigListView<a class="headerlink" href="#playerkarteaconfiglistview" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PlayerKarteaConfigListView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/view/playerkarteaconfiglistview.html#PlayerKarteaConfigListView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://doc.qt.io/qtforpython-6/PySide6/QtWidgets/QDialog.html#PySide6.QtWidgets.QDialog" title="(in PySide v6.12.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">QDialog</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Ui_PlayerKarteaConfigListView</span></code>, <a class="reference internal" href="ttea.window.windowconfig.WindowConfig.html#ttea.window.windowconfig.WindowConfig" title="ttea.window.windowconfig.WindowConfig"><code class="xref py py-class docutils literal notranslate"><span class="pre">WindowConfig</span></code></a></p>
+<p>Dialog that lists and manages PlayerKarteaConfig records.</p>
+<p>Modal window that shows a searchable table of configs with quick
+actions for creating, editing and deleting records. Follows the MVC
+pattern: all business logic and data access are delegated to
+PlayerKarteaConfigListController. The view does not create its
+controller: KarteaViewFactory creates both and calls
+<code class="docutils literal notranslate"><span class="pre">bind(controller)</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>parent</strong><span class="classifier">QDialog | None, optional</span></dt><dd><p>Parent widget; used for translator and icon inheritance.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>msg</strong><span class="classifier">MessageService</span></dt><dd><p>Helper service used to show info/warning/question dialogs.</p>
+</dd>
+<dt><strong>controller</strong><span class="classifier">PlayerKarteaConfigListController | None</span></dt><dd><p>Controller that handles all CRUD operations and data flow; None
+until <code class="docutils literal notranslate"><span class="pre">bind</span></code> is called.</p>
+</dd>
+<dt><strong>tbl_config</strong><span class="classifier">QTableWidget</span></dt><dd><p>Table displaying ID and name of each player config.</p>
+</dd>
+<dt><strong>pb_new</strong><span class="classifier">QPushButton</span></dt><dd><p>Button that opens the config creation dialog.</p>
+</dd>
+<dt><strong>pb_edit</strong><span class="classifier">QPushButton</span></dt><dd><p>Button that opens the edit dialog for the selected config.</p>
+</dd>
+<dt><strong>pb_delete</strong><span class="classifier">QPushButton</span></dt><dd><p>Button that removes the selected config after confirmation.</p>
+</dd>
+<dt><strong>led_search</strong><span class="classifier">QLineEdit</span></dt><dd><p>Line edit used to filter configs by ID or name.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><strong>bind(controller)</strong></p></td>
+<td><p>Connect signals to the controller and load the initial data.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>get_search_text()</strong></p></td>
+<td><p>Return the current search text.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>populate_table(configs)</strong></p></td>
+<td><p>Fill the table with configs.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>clear_details() / display_config_details(config)</strong></p></td>
+<td><p>Clear or fill the details panel.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>get_selected_player_id() / select_row_by_id(player_id)</strong></p></td>
+<td><p>Read or set the selected row.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>closeEvent(event)</strong></p></td>
+<td><p>Ask for confirmation before closing the dialog.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The widgets come from the generated Ui_PlayerKarteaConfigListView
+(<code class="docutils literal notranslate"><span class="pre">setupUi</span></code>). User texts are translated with <code class="docutils literal notranslate"><span class="pre">self.tr()</span></code> (i18n).</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.bind" title="ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.bind"><code class="xref py py-obj docutils literal notranslate"><span class="pre">bind</span></code></a></p></td>
+<td><p>Connect the signals to the controller and load the data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.clear_details" title="ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.clear_details"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear_details</span></code></a></p></td>
+<td><p>Clear all fields in the details panel.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.closeEvent" title="ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.closeEvent"><code class="xref py py-obj docutils literal notranslate"><span class="pre">closeEvent</span></code></a></p></td>
+<td><p>Confirm before closing the dialog.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.display_config_details" title="ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.display_config_details"><code class="xref py py-obj docutils literal notranslate"><span class="pre">display_config_details</span></code></a></p></td>
+<td><p>Show the selected config's details in the right panel.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.get_search_text" title="ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.get_search_text"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_search_text</span></code></a></p></td>
+<td><p>Return the current text of the search field.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.get_selected_player_id" title="ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.get_selected_player_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_selected_player_id</span></code></a></p></td>
+<td><p>Return the player ID of the selected row.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.populate_table" title="ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.populate_table"><code class="xref py py-obj docutils literal notranslate"><span class="pre">populate_table</span></code></a></p></td>
+<td><p>Fill the table with a list of configs.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.select_row_by_id" title="ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.select_row_by_id"><code class="xref py py-obj docutils literal notranslate"><span class="pre">select_row_by_id</span></code></a></p></td>
+<td><p>Programmatically select the row with the given player ID.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.bind">
+<span class="sig-name descname"><span class="pre">bind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">controller</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/view/playerkarteaconfiglistview.html#PlayerKarteaConfigListView.bind"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.bind" title="Link to this definition"></a></dt>
+<dd><p>Connect the signals to the controller and load the data.</p>
+<p>Called by KarteaViewFactory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>controller</strong><span class="classifier">PlayerKarteaConfigListController</span></dt><dd><p>Controller of this view.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.get_search_text">
+<span class="sig-name descname"><span class="pre">get_search_text</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/view/playerkarteaconfiglistview.html#PlayerKarteaConfigListView.get_search_text"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.get_search_text" title="Link to this definition"></a></dt>
+<dd><p>Return the current text of the search field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>Text typed in <code class="docutils literal notranslate"><span class="pre">led_search</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.populate_table">
+<span class="sig-name descname"><span class="pre">populate_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">configs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/view/playerkarteaconfiglistview.html#PlayerKarteaConfigListView.populate_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.populate_table" title="Link to this definition"></a></dt>
+<dd><p>Fill the table with a list of configs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>configs</strong><span class="classifier">list[PlayerKarteaConfig]</span></dt><dd><p>Configs shown as rows (player ID and name).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Table signals are blocked while filling, so the selection
+handler is not triggered.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.clear_details">
+<span class="sig-name descname"><span class="pre">clear_details</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/view/playerkarteaconfiglistview.html#PlayerKarteaConfigListView.clear_details"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.clear_details" title="Link to this definition"></a></dt>
+<dd><p>Clear all fields in the details panel.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.display_config_details">
+<span class="sig-name descname"><span class="pre">display_config_details</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/view/playerkarteaconfiglistview.html#PlayerKarteaConfigListView.display_config_details"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.display_config_details" title="Link to this definition"></a></dt>
+<dd><p>Show the selected config’s details in the right panel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>config</strong><span class="classifier">PlayerKarteaConfig | None</span></dt><dd><p>Config to show (ID, name, phase, level and level time); None
+clears the panel.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.get_selected_player_id">
+<span class="sig-name descname"><span class="pre">get_selected_player_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/view/playerkarteaconfiglistview.html#PlayerKarteaConfigListView.get_selected_player_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.get_selected_player_id" title="Link to this definition"></a></dt>
+<dd><p>Return the player ID of the selected row.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int | None</dt><dd><p>The ID in the first selected cell, or None if nothing is
+selected or the text is not a number.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.select_row_by_id">
+<span class="sig-name descname"><span class="pre">select_row_by_id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">player_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/view/playerkarteaconfiglistview.html#PlayerKarteaConfigListView.select_row_by_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.select_row_by_id" title="Link to this definition"></a></dt>
+<dd><p>Programmatically select the row with the given player ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>player_id</strong><span class="classifier">int</span></dt><dd><p>Player ID to select; the table scrolls to it. Signals are
+blocked while selecting.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.closeEvent">
+<span class="sig-name descname"><span class="pre">closeEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/games/kartea/view/playerkarteaconfiglistview.html#PlayerKarteaConfigListView.closeEvent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.games.kartea.view.playerkarteaconfiglistview.PlayerKarteaConfigListView.closeEvent" title="Link to this definition"></a></dt>
+<dd><p>Confirm before closing the dialog.</p>
+<p>Shows a confirmation question before allowing the window to
+close.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>event</strong><span class="classifier">QCloseEvent</span></dt><dd><p>The close event to accept or ignore.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.games.kartea.view.playerkarteaconfiglistview.html" class="btn btn-neutral float-left" title="ttea.games.kartea.view.playerkarteaconfiglistview" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.log.html" class="btn btn-neutral float-right" title="ttea.log" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

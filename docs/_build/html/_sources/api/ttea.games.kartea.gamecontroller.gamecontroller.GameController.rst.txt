@@ -1,0 +1,31 @@
+GameController
+==============
+
+.. currentmodule:: ttea.games.kartea.gamecontroller.gamecontroller
+
+.. autoclass:: GameController
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~GameController.change_level
+      ~GameController.draw
+      ~GameController.game_time_update
+      ~GameController.load_camera
+      ~GameController.register_menu_choice
+      ~GameController.reset
+      ~GameController.save_session
+      ~GameController.set_feet_position
+      ~GameController.spawn_finish
+      ~GameController.spawn_targets
+      ~GameController.toggle_feet_click
+      ~GameController.toggle_feet_marker
+      ~GameController.toggle_hud
+      ~GameController.toggle_sound
+      ~GameController.track_feet_for_menu
+      ~GameController.update

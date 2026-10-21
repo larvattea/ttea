@@ -1,0 +1,17 @@
+PlayerGameLaunchView
+====================
+
+.. currentmodule:: ttea.view.playergamelaunchview
+
+.. autoclass:: PlayerGameLaunchView
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~PlayerGameLaunchView.closeEvent
+      ~PlayerGameLaunchView.populate_comboboxes

@@ -1,17 +1,9 @@
-T-TEA2.0-1
-==========
+API reference
+=============
 
-.. toctree::
-   :maxdepth: 4
+.. autosummary::
+   :toctree: api
+   :template: autosummary/module.rst
+   :recursive:
 
-   main
-   mainnovo
-   mainnovoiagoogle
-   udescjoinvilletteaapp
-   udescjoinvilletteacontroller
-   udescjoinvilletteacore
-   udescjoinvilletteadao
-   udescjoinvilletteagames
-   udescjoinvilletteamodel
-   udescjoinvilletteautil
-   udescjoinvilletteaview
+   ttea

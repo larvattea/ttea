@@ -1,0 +1,30 @@
+ttea.model.calibrationpoint
+===========================
+
+.. automodule:: ttea.model.calibrationpoint
+
+.. currentmodule:: ttea.model.calibrationpoint
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   CalibrationPoint
+
+
+
+.. rubric:: Functions
+
+.. autosummary::
+   :nosignatures:
+
+   initialize_reflexive
+
+
+.. autofunction:: initialize_reflexive

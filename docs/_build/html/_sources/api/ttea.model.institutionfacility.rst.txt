@@ -1,0 +1,30 @@
+ttea.model.institutionfacility
+==============================
+
+.. automodule:: ttea.model.institutionfacility
+
+.. currentmodule:: ttea.model.institutionfacility
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   InstitutionFacility
+
+
+
+.. rubric:: Functions
+
+.. autosummary::
+   :nosignatures:
+
+   initialize_reflexive
+
+
+.. autofunction:: initialize_reflexive

@@ -1,0 +1,20 @@
+ttea.exception.businessruleexception
+====================================
+
+.. automodule:: ttea.exception.businessruleexception
+
+.. currentmodule:: ttea.exception.businessruleexception
+
+
+
+
+
+.. rubric:: Exceptions
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   BusinessRuleException
+

@@ -1,0 +1,24 @@
+ttea.core
+=========
+
+.. automodule:: ttea.core
+
+.. currentmodule:: ttea.core
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/module.rst
+   :recursive:
+
+   calibrationmath
+   cameravideo
+   cameravideothread
+   mediapipefilter
+   mediapipemanager
+
+
+

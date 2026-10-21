@@ -1,0 +1,1287 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.service.calibrationsettingservice &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.service.calibrationsettingservice</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.service.calibrationsettingservice</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Access to the calibration settings (MediaPipe, OpenCV, filters...).</span>
+
+<span class="sd">Reads each tuning parameter from the calibration settings INI file, with</span>
+<span class="sd">a default value and a type conversion per setting.</span>
+<span class="sd">"""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">cv2</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mediapipe.tasks.python</span><span class="w"> </span><span class="kn">import</span> <span class="n">vision</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">PySide6.QtCore</span><span class="w"> </span><span class="kn">import</span> <span class="n">QSettings</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.dao</span><span class="w"> </span><span class="kn">import</span> <span class="n">CalibrationSettingIniDAO</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.model</span><span class="w"> </span><span class="kn">import</span> <span class="n">CalibrationSetting</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ttea.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">PathConfig</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.service</span><span class="w"> </span><span class="kn">import</span> <span class="n">CalibrationService</span>
+
+
+<div class="viewcode-block" id="CalibrationSettingService">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CalibrationSettingService</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Read and save the calibration settings.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dao : CalibrationSettingIniDAO | None, optional</span>
+<span class="sd">        DAO used to save the settings record. Default is None, which</span>
+<span class="sd">        creates a new ``CalibrationSettingIniDAO``.</span>
+<span class="sd">    calibration_service : CalibrationService | None, optional</span>
+<span class="sd">        Calibration service to reuse. Default is None, which creates one</span>
+<span class="sd">        on first use (see ``calibration_service``).</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    settings : QSettings</span>
+<span class="sd">        INI file at ``PathConfig.calibration_setting()``, read by the</span>
+<span class="sd">        getters.</span>
+<span class="sd">    dao : CalibrationSettingIniDAO</span>
+<span class="sd">        DAO used to save the settings record.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Each getter reads its key from ``settings`` on every call, so</span>
+<span class="sd">    changes saved by the DAO are seen immediately. Values are read as</span>
+<span class="sd">    text, stripped and converted; a value that cannot be converted</span>
+<span class="sd">    raises ``ValueError``.</span>
+
+<span class="sd">    The ``is_*`` getters return the ``int`` value of the setting (0 or 1</span>
+<span class="sd">    in practice), not a ``bool``.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">dao</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CalibrationSettingIniDAO</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">calibration_service</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">"CalibrationService"</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">settings</span> <span class="o">=</span> <span class="n">QSettings</span><span class="p">(</span>
+            <span class="n">PathConfig</span><span class="o">.</span><span class="n">calibration_setting</span><span class="p">(),</span> <span class="n">QSettings</span><span class="o">.</span><span class="n">IniFormat</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dao</span> <span class="o">=</span> <span class="n">dao</span> <span class="ow">or</span> <span class="n">CalibrationSettingIniDAO</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_service</span> <span class="o">=</span> <span class="n">calibration_service</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calibration_service</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Calibration service, created on first use if not injected."""</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_service</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">ttea.service</span><span class="w"> </span><span class="kn">import</span> <span class="n">CalibrationService</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_service</span> <span class="o">=</span> <span class="n">CalibrationService</span><span class="p">(</span>
+                <span class="n">calibration_setting_service</span><span class="o">=</span><span class="bp">self</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calibration_service</span>
+
+<div class="viewcode-block" id="CalibrationSettingService.create_calibration_setting">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.create_calibration_setting">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_calibration_setting</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">CalibrationSetting</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Save a settings record built from a dictionary.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        data : dict[str, Any]</span>
+<span class="sd">            Values for every ``CalibrationSetting`` field.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        CalibrationSetting | None</span>
+<span class="sd">            The record read back from the INI file, or None if it is not</span>
+<span class="sd">            valid (a field is None).</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If ``data`` misses a field or has an unknown key.</span>
+<span class="sd">        """</span>
+        <span class="n">calibration_setting</span> <span class="o">=</span> <span class="n">CalibrationSetting</span><span class="p">(</span><span class="o">**</span><span class="n">data</span><span class="p">)</span>
+
+        <span class="n">new_id</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dao</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">calibration_setting</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dao</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="n">new_id</span><span class="p">)</span> <span class="k">if</span> <span class="n">new_id</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_proportions">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_proportions">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_proportions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">"""Return the supported aspect ratios.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        dict_items</span>
+<span class="sd">            ``CalibrationSetting.PROPORTIONS.items()``: pairs of name</span>
+<span class="sd">            (e.g. ``"16:9"``) and ``(width, height)``, despite the</span>
+<span class="sd">            ``dict`` annotation.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="n">CalibrationSetting</span><span class="o">.</span><span class="n">PROPORTIONS</span><span class="o">.</span><span class="n">items</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.is_raspberry_pi">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.is_raspberry_pi">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_raspberry_pi</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Check whether the hardware is a Raspberry Pi.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            Result of ``CalibrationService.is_raspberry_pi()``.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">calibration_service</span><span class="o">.</span><span class="n">is_raspberry_pi</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_window_open_mode">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_window_open_mode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_window_open_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the window display mode of the default calibration.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The ``*_window_open_*`` setting of the first calibration</span>
+<span class="sd">            (automatic, semiautomatic, manual) flagged as default, or 1</span>
+<span class="sd">            (``CalibrationSetting.FULLSCREEN``) if none is.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_automatic_default_calibration</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_automatic_window_open_mode</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_semiautomatic_default_calibration</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_semiautomatic_window_open_mode</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_manual_default_calibration</span><span class="p">():</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_manual_window_open_mode</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span></div>
+
+
+    <span class="c1"># ======================</span>
+    <span class="c1"># MEDIAPIPE</span>
+    <span class="c1"># ======================</span>
+
+<div class="viewcode-block" id="CalibrationSettingService.get_mediapipe_model_desktop">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_mediapipe_model_desktop">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_mediapipe_model_desktop</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the MediaPipe model file name for desktop systems.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Setting ``mediapipe_model_desktop`` of section</span>
+<span class="sd">            ``[mediapipe]`` (default ``"pose_landmarker_full.task"``),</span>
+<span class="sd">            stripped and lowercased.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="s2">"mediapipe/mediapipe_model_desktop"</span><span class="p">,</span>
+                <span class="s2">"pose_landmarker_full.task"</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_mediapipe_model_embedded">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_mediapipe_model_embedded">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_mediapipe_model_embedded</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the MediaPipe model file name for embedded systems.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Setting ``mediapipe_model_embedded`` of section</span>
+<span class="sd">            ``[mediapipe]`` (default ``"pose_landmarker_lite.task"``),</span>
+<span class="sd">            stripped and lowercased.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="s2">"mediapipe/mediapipe_model_embedded"</span><span class="p">,</span>
+                <span class="s2">"pose_landmarker_lite.task"</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_mediapipe_embedded_processing">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_mediapipe_embedded_processing">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_mediapipe_embedded_processing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the MediaPipe processing option for embedded systems.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Setting ``mediapipe_embedded_processing`` of section</span>
+<span class="sd">            ``[mediapipe]`` (default ``"cpu"``), stripped and</span>
+<span class="sd">            lowercased.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="s2">"mediapipe/mediapipe_embedded_processing"</span><span class="p">,</span> <span class="s2">"cpu"</span>
+            <span class="p">)</span>
+            <span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_mediapipe_linux_processing">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_mediapipe_linux_processing">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_mediapipe_linux_processing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the MediaPipe processing option for Linux.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Setting ``mediapipe_linux_processing`` of section</span>
+<span class="sd">            ``[mediapipe]`` (default ``"cpu"``), stripped and</span>
+<span class="sd">            lowercased.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"mediapipe/mediapipe_linux_processing"</span><span class="p">,</span> <span class="s2">"cpu"</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_mediapipe_mac_processing">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_mediapipe_mac_processing">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_mediapipe_mac_processing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the MediaPipe processing option for macOS.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Setting ``mediapipe_mac_processing`` of section</span>
+<span class="sd">            ``[mediapipe]`` (default ``"cpu"``), stripped and</span>
+<span class="sd">            lowercased.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"mediapipe/mediapipe_mac_processing"</span><span class="p">,</span> <span class="s2">"cpu"</span><span class="p">)</span>
+            <span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_mediapipe_windows_processing">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_mediapipe_windows_processing">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_mediapipe_windows_processing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the MediaPipe processing option for Windows.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Setting ``mediapipe_windows_processing`` of section</span>
+<span class="sd">            ``[mediapipe]`` (default ``"cpu"``), stripped and</span>
+<span class="sd">            lowercased.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="s2">"mediapipe/mediapipe_windows_processing"</span><span class="p">,</span> <span class="s2">"cpu"</span>
+            <span class="p">)</span>
+            <span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_mediapipe_execution_mode">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_mediapipe_execution_mode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_mediapipe_execution_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the MediaPipe running mode.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        vision.RunningMode</span>
+<span class="sd">            Always ``vision.RunningMode.VIDEO`` at present.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The code looks up ``"vision.RunningMode.&lt;value&gt;"`` (value of</span>
+<span class="sd">        ``mediapipe/mediapipe_execution_mode``, default ``"VIDEO"``) as</span>
+<span class="sd">        an attribute of ``cv2``. No such attribute exists, so the</span>
+<span class="sd">        fallback ``vision.RunningMode.VIDEO`` is always returned and the</span>
+<span class="sd">        setting has no effect.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="s2">"vision.RunningMode."</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="s2">"mediapipe/mediapipe_execution_mode"</span><span class="p">,</span> <span class="s2">"VIDEO"</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">cv2</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">vision</span><span class="o">.</span><span class="n">RunningMode</span><span class="o">.</span><span class="n">VIDEO</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.is_mediapipe_enable_pose">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.is_mediapipe_enable_pose">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_mediapipe_enable_pose</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Check whether pose detection is enabled.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``mediapipe_enable_mediapipe_pose`` of section</span>
+<span class="sd">            ``[mediapipe]`` (default ``"1"``), converted to ``int``:</span>
+<span class="sd">            non-zero means yes.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="s2">"mediapipe/mediapipe_enable_mediapipe_pose"</span><span class="p">,</span> <span class="s2">"1"</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_mediapipe_detection_position">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_mediapipe_detection_position">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_mediapipe_detection_position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the minimum pose detection confidence.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            Setting ``mediapipe_detection_position`` of section</span>
+<span class="sd">            ``[mediapipe]`` (default ``"0.5"``), converted to ``float``.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="s2">"mediapipe/mediapipe_detection_position"</span><span class="p">,</span> <span class="s2">"0.5"</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_mediapipe_detection_presence">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_mediapipe_detection_presence">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_mediapipe_detection_presence</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the minimum pose presence confidence.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            Setting ``mediapipe_detection_presence`` of section</span>
+<span class="sd">            ``[mediapipe]`` (default ``"0.5"``), converted to ``float``.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="s2">"mediapipe/mediapipe_detection_presence"</span><span class="p">,</span> <span class="s2">"0.5"</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_mediapipe_detection_tracking">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_mediapipe_detection_tracking">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_mediapipe_detection_tracking</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the minimum pose tracking confidence.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            Setting ``mediapipe_detection_tracking`` of section</span>
+<span class="sd">            ``[mediapipe]`` (default ``"0.5"``), converted to ``float``.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="s2">"mediapipe/mediapipe_detection_tracking"</span><span class="p">,</span> <span class="s2">"0.5"</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_mediapipe_num_position">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_mediapipe_num_position">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_mediapipe_num_position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the maximum number of poses detected.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``mediapipe_num_position`` of section</span>
+<span class="sd">            ``[mediapipe]`` (default ``"1"``), converted to ``int``.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"mediapipe/mediapipe_num_position"</span><span class="p">,</span> <span class="s2">"1"</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+    <span class="c1"># ======================</span>
+    <span class="c1"># OPENCV</span>
+    <span class="c1"># ======================</span>
+
+<div class="viewcode-block" id="CalibrationSettingService.get_opencv_capture_backend">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_opencv_capture_backend">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_opencv_capture_backend</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the OpenCV capture backend for the current platform.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            The ``cv2`` constant named by the setting (e.g.</span>
+<span class="sd">            ``"CAP_DSHOW"``), or ``cv2.CAP_ANY`` if the name is missing</span>
+<span class="sd">            or unknown.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The key depends on the platform:</span>
+<span class="sd">        ``opencv/opencv_windows_capture`` on Windows,</span>
+<span class="sd">        ``opencv/opencv_mac_capture`` on macOS,</span>
+<span class="sd">        ``opencv/opencv_embedded_capture`` on a Raspberry Pi and</span>
+<span class="sd">        ``opencv/opencv_linux_capture`` on other systems.</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"win"</span><span class="p">):</span>
+            <span class="n">key_name</span> <span class="o">=</span> <span class="s2">"opencv/opencv_windows_capture"</span>
+        <span class="k">elif</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"darwin"</span><span class="p">):</span>
+            <span class="n">key_name</span> <span class="o">=</span> <span class="s2">"opencv/opencv_mac_capture"</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_raspberry_pi</span><span class="p">():</span>
+            <span class="n">key_name</span> <span class="o">=</span> <span class="s2">"opencv/opencv_embedded_capture"</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># other Linux systems</span>
+            <span class="n">key_name</span> <span class="o">=</span> <span class="s2">"opencv/opencv_linux_capture"</span>
+
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="n">key_name</span><span class="p">,</span> <span class="s2">"CAP_ANY"</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">cv2</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">CAP_ANY</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_opencv_buffer_size">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_opencv_buffer_size">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_opencv_buffer_size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the camera capture buffer size.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``opencv_buffer_size`` of section ``[opencv]``</span>
+<span class="sd">            (default ``"1"``), converted to ``int``.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"opencv/opencv_buffer_size"</span><span class="p">,</span> <span class="s2">"1"</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.is_opencv_custom_camera">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.is_opencv_custom_camera">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_opencv_custom_camera</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Check whether a custom camera is used.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``opencv_custom_camera`` of section ``[opencv]``</span>
+<span class="sd">            (default ``"0"``), converted to ``int``: non-zero means yes.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"opencv/opencv_custom_camera"</span><span class="p">,</span> <span class="s2">"0"</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_opencv_ratio">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_opencv_ratio">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_opencv_ratio</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the capture aspect ratio name.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Setting ``opencv_ratio`` of section ``[opencv]``, stripped;</span>
+<span class="sd">            ``"None"`` when the key is missing.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"opencv/opencv_ratio"</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">value</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_opencv_width">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_opencv_width">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_opencv_width</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the capture width in pixels.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``opencv_width`` of section ``[opencv]`` (default</span>
+<span class="sd">            ``"640"``), converted to ``int``.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"opencv/opencv_width"</span><span class="p">,</span> <span class="s2">"640"</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_opencv_height">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_opencv_height">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_opencv_height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the capture height in pixels.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``opencv_height`` of section ``[opencv]`` (default</span>
+<span class="sd">            ``"480"``), converted to ``int``.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"opencv/opencv_height"</span><span class="p">,</span> <span class="s2">"480"</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_opencv_fps">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_opencv_fps">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_opencv_fps</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the capture frame rate.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``opencv_fps`` of section ``[opencv]`` (default</span>
+<span class="sd">            ``"30"``), converted to ``int``.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"opencv/opencv_fps"</span><span class="p">,</span> <span class="s2">"30"</span><span class="p">))</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+    <span class="c1"># ======================</span>
+    <span class="c1"># FILTER</span>
+    <span class="c1"># ======================</span>
+<div class="viewcode-block" id="CalibrationSettingService.is_filter_enable_filter">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.is_filter_enable_filter">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_filter_enable_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Check whether image enhancement is enabled.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``filter_enable_filter`` of section ``[filter]``</span>
+<span class="sd">            (default ``"0"``), converted to ``int``: non-zero means yes.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"filter/filter_enable_filter"</span><span class="p">,</span> <span class="s2">"0"</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_filter_average_smooth_frames">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_filter_average_smooth_frames">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_filter_average_smooth_frames</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the number of frames averaged per landmark.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``filter_average_smooth_frames`` of section</span>
+<span class="sd">            ``[filter]`` (default ``"5"``), converted to ``int``.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"filter/filter_average_smooth_frames"</span><span class="p">,</span> <span class="s2">"5"</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_filter_clahe_clip">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_filter_clahe_clip">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_filter_clahe_clip</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the CLAHE clip limit.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``filter_clahe_clip`` of section ``[filter]``</span>
+<span class="sd">            (default ``"2"``), converted to ``int``.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"filter/filter_clahe_clip"</span><span class="p">,</span> <span class="s2">"2"</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_filter_clahe_grid">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_filter_clahe_grid">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_filter_clahe_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Return the CLAHE tile grid size.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple[int, ...]</span>
+<span class="sd">            Setting ``filter_clahe_grid`` of section ``[filter]``</span>
+<span class="sd">            (default ``"8:8"``), the ``"x:y"`` text split on ``":"`` and</span>
+<span class="sd">            converted to ints.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"filter/filter_clahe_grid"</span><span class="p">,</span> <span class="s2">"8:8"</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="n">grid</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">":"</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="n">grid</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_filter_clahe_lum_below">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_filter_clahe_lum_below">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_filter_clahe_lum_below</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the brightness (0-255) below which CLAHE runs.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``filter_clahe_lum_below`` of section ``[filter]``</span>
+<span class="sd">            (default ``"100"``), converted to ``int``.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"filter/filter_clahe_lum_below"</span><span class="p">,</span> <span class="s2">"100"</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_filter_gamma_factor">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_filter_gamma_factor">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_filter_gamma_factor</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the gamma correction factor.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            Setting ``filter_gamma_factor`` of section ``[filter]``</span>
+<span class="sd">            (default ``"1.2"``), converted to ``float``.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"filter/filter_gamma_factor"</span><span class="p">,</span> <span class="s2">"1.2"</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_filter_gamma_lum_above">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_filter_gamma_lum_above">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_filter_gamma_lum_above</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the brightness (0-255) above which gamma runs.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``filter_gamma_lum_above`` of section ``[filter]``</span>
+<span class="sd">            (default ``"100"``), converted to ``int``.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"filter/filter_gamma_lum_above"</span><span class="p">,</span> <span class="s2">"100"</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_filter_landmark_limit">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_filter_landmark_limit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_filter_landmark_limit</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the landmark jump that resets its smoothing.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            Setting ``filter_landmark_limit`` of section ``[filter]``</span>
+<span class="sd">            (default ``"0.15"``), converted to ``float``.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"filter/filter_landmark_limit"</span><span class="p">,</span> <span class="s2">"0.15"</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+    <span class="c1"># ======================</span>
+    <span class="c1"># TELEMETRY</span>
+    <span class="c1"># ======================</span>
+<div class="viewcode-block" id="CalibrationSettingService.is_telemetry_enable_panel">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.is_telemetry_enable_panel">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_telemetry_enable_panel</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Check whether the telemetry panel is shown.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``telemetry_enable_telemetry_panel`` of section</span>
+<span class="sd">            ``[telemetry]`` (default ``"1"``), converted to ``int``:</span>
+<span class="sd">            non-zero means yes.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="s2">"telemetry/telemetry_enable_telemetry_panel"</span><span class="p">,</span> <span class="s2">"1"</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+    <span class="c1"># ======================</span>
+    <span class="c1"># AUTOMATIC CALIBRATION</span>
+    <span class="c1"># ======================</span>
+<div class="viewcode-block" id="CalibrationSettingService.get_automatic_window_position">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_automatic_window_position">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_automatic_window_position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the window position of the automatic mode.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Setting ``automatic_window_position_automatic`` of section</span>
+<span class="sd">            ``[automatic]``, stripped; ``"None"`` when the key is</span>
+<span class="sd">            missing.</span>
+<span class="sd">        """</span>
+        <span class="n">key_name</span> <span class="o">=</span> <span class="s2">"automatic/automatic_window_position_automatic"</span>
+
+        <span class="n">method_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="n">key_name</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">method_name</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_automatic_window_open_mode">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_automatic_window_open_mode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_automatic_window_open_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the window display mode of the automatic mode.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``automatic_window_open_automatic`` of section</span>
+<span class="sd">            ``[automatic]`` (default ``"1"``), converted to ``int``.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="s2">"automatic/automatic_window_open_automatic"</span><span class="p">,</span> <span class="s2">"1"</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.is_automatic_open_projector">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.is_automatic_open_projector">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_automatic_open_projector</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the the open-projector flag of the automatic mode.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``automatic_open_projector_automatic`` of section</span>
+<span class="sd">            ``[automatic]`` (default ``"0"``), converted to ``int``:</span>
+<span class="sd">            non-zero means yes.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="s2">"automatic/automatic_open_projector_automatic"</span><span class="p">,</span> <span class="s2">"0"</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.is_automatic_default_calibration">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.is_automatic_default_calibration">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_automatic_default_calibration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Check whether the automatic mode is the default.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``automatic_default_calibration_automatic`` of</span>
+<span class="sd">            section ``[automatic]`` (default ``"0"``), converted to</span>
+<span class="sd">            ``int``: non-zero means yes.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="s2">"automatic/automatic_default_calibration_automatic"</span><span class="p">,</span> <span class="s2">"0"</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.is_automatic_mirror_mode">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.is_automatic_mirror_mode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_automatic_mirror_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Check whether the automatic mode mirrors the image.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``automatic_mirror_mode_automatic`` of section</span>
+<span class="sd">            ``[automatic]`` (default ``"1"``), converted to ``int``:</span>
+<span class="sd">            non-zero means yes.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="s2">"automatic/automatic_mirror_mode_automatic"</span><span class="p">,</span> <span class="s2">"1"</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_automatic_num_columns">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_automatic_num_columns">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_automatic_num_columns</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the column count of the calibration pattern.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``automatic_num_columns_automatic`` of section</span>
+<span class="sd">            ``[automatic]`` (default ``"6"``), converted to ``int``.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="s2">"automatic/automatic_num_columns_automatic"</span><span class="p">,</span> <span class="s2">"6"</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_automatic_num_rows">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_automatic_num_rows">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_automatic_num_rows</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the row count of the calibration pattern.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``automatic_num_rows_automatic`` of section</span>
+<span class="sd">            ``[automatic]`` (default ``"4"``), converted to ``int``.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"automatic/automatic_num_rows_automatic"</span><span class="p">,</span> <span class="s2">"4"</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_automatic_multiplier">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_automatic_multiplier">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_automatic_multiplier</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the multiplier of the automatic calibration.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        float</span>
+<span class="sd">            Setting ``automatic_multiplier_automatic`` of section</span>
+<span class="sd">            ``[automatic]`` (default ``"0.75"``), converted to</span>
+<span class="sd">            ``float``.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="s2">"automatic/automatic_multiplier_automatic"</span><span class="p">,</span> <span class="s2">"0.75"</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_automatic_dictionary">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_automatic_dictionary">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_automatic_dictionary</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the ArUco dictionary of the calibration pattern.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``automatic_dictionary_automatic`` of section</span>
+<span class="sd">            ``[automatic]`` (default ``"DICT_4X4_250"``), the</span>
+<span class="sd">            ``cv2.aruco`` constant named by the setting;</span>
+<span class="sd">            ``cv2.aruco.DICT_4X4_250`` if the name is unknown.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="s2">"automatic/automatic_dictionary_automatic"</span><span class="p">,</span> <span class="s2">"DICT_4X4_250"</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">cv2</span><span class="o">.</span><span class="n">aruco</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">cv2</span><span class="o">.</span><span class="n">aruco</span><span class="o">.</span><span class="n">DICT_4X4_250</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_automatic_width">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_automatic_width">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_automatic_width</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the width of the calibration pattern.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``automatic_width_automatic`` of section</span>
+<span class="sd">            ``[automatic]`` (default ``"100"``), converted to ``int``.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"automatic/automatic_width_automatic"</span><span class="p">,</span> <span class="s2">"100"</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_automatic_height">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_automatic_height">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_automatic_height</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the height of the calibration pattern.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``automatic_height_automatic`` of section</span>
+<span class="sd">            ``[automatic]`` (default ``"100"``), converted to ``int``.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"automatic/automatic_height_automatic"</span><span class="p">,</span> <span class="s2">"100"</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_automatic_margin">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_automatic_margin">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_automatic_margin</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the margin of the calibration pattern.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``automatic_margin_automatic`` of section</span>
+<span class="sd">            ``[automatic]`` (default ``"0"``), converted to ``int``.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"automatic/automatic_margin_automatic"</span><span class="p">,</span> <span class="s2">"0"</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+    <span class="c1"># ======================</span>
+    <span class="c1"># SEMIAUTOMATIC CALIBRATION</span>
+    <span class="c1"># ======================</span>
+
+<div class="viewcode-block" id="CalibrationSettingService.get_semiautomatic_window_position">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_semiautomatic_window_position">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_semiautomatic_window_position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the window position of the semiautomatic mode.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Setting ``semiautomatic_window_position_semiautomatic`` of</span>
+<span class="sd">            section ``[semiautomatic]``, stripped; ``"None"`` when the</span>
+<span class="sd">            key is missing.</span>
+<span class="sd">        """</span>
+        <span class="n">key_name</span> <span class="o">=</span> <span class="s2">"semiautomatic/semiautomatic_window_position_semiautomatic"</span>
+
+        <span class="n">method_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="n">key_name</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">method_name</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_semiautomatic_window_open_mode">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_semiautomatic_window_open_mode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_semiautomatic_window_open_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the window display mode of the semiautomatic mode.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``semiautomatic_window_open_semiautomatic`` of</span>
+<span class="sd">            section ``[semiautomatic]`` (default ``"1"``), converted to</span>
+<span class="sd">            ``int``.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="s2">"semiautomatic/semiautomatic_window_open_semiautomatic"</span><span class="p">,</span> <span class="s2">"1"</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.is_semiautomatic_open_projector">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.is_semiautomatic_open_projector">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_semiautomatic_open_projector</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the the open-projector flag of the semiautomatic mode.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``semiautomatic_open_projector_semiautomatic`` of</span>
+<span class="sd">            section ``[semiautomatic]`` (default ``"0"``), converted to</span>
+<span class="sd">            ``int``: non-zero means yes.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="s2">"semiautomatic/semiautomatic_open_projector_semiautomatic"</span><span class="p">,</span> <span class="s2">"0"</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.is_semiautomatic_default_calibration">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.is_semiautomatic_default_calibration">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_semiautomatic_default_calibration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Check whether the semiautomatic mode is the default.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``semiautomatic_default_calibration_semiautomatic``</span>
+<span class="sd">            of section ``[semiautomatic]`` (default ``"0"``), converted</span>
+<span class="sd">            to ``int``: non-zero means yes.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="s2">"semiautomatic/semiautomatic_default_calibration_semiautomatic"</span><span class="p">,</span>
+                <span class="s2">"0"</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.is_semiautomatic_mirror_mode">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.is_semiautomatic_mirror_mode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_semiautomatic_mirror_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Check whether the semiautomatic mode mirrors the image.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``semiautomatic_mirror_mode_semiautomatic`` of</span>
+<span class="sd">            section ``[semiautomatic]`` (default ``"1"``), converted to</span>
+<span class="sd">            ``int``: non-zero means yes.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="s2">"semiautomatic/semiautomatic_mirror_mode_semiautomatic"</span><span class="p">,</span> <span class="s2">"1"</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+    <span class="c1"># ======================</span>
+    <span class="c1"># MANUAL CALIBRATION</span>
+    <span class="c1"># ======================</span>
+
+<div class="viewcode-block" id="CalibrationSettingService.get_manual_window_position">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_manual_window_position">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_manual_window_position</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the window position of the manual mode.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Setting ``manual_window_position_manual`` of section</span>
+<span class="sd">            ``[manual]``, stripped; ``"None"`` when the key is missing.</span>
+<span class="sd">        """</span>
+        <span class="n">key_name</span> <span class="o">=</span> <span class="s2">"manual/manual_window_position_manual"</span>
+
+        <span class="n">method_name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="n">key_name</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">method_name</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.get_manual_window_open_mode">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.get_manual_window_open_mode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_manual_window_open_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the window display mode of the manual mode.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``manual_window_open_manual`` of section</span>
+<span class="sd">            ``[manual]`` (default ``"1"``), converted to ``int``.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"manual/manual_window_open_manual"</span><span class="p">,</span> <span class="s2">"1"</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.is_manual_open_projector">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.is_manual_open_projector">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_manual_open_projector</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the the open-projector flag of the manual mode.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``manual_open_projector_manual`` of section</span>
+<span class="sd">            ``[manual]`` (default ``"0"``), converted to ``int``:</span>
+<span class="sd">            non-zero means yes.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"manual/manual_open_projector_manual"</span><span class="p">,</span> <span class="s2">"0"</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.is_manual_default_calibration">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.is_manual_default_calibration">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_manual_default_calibration</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Check whether the manual mode is the default.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``manual_default_calibration_manual`` of section</span>
+<span class="sd">            ``[manual]`` (default ``"0"``), converted to ``int``:</span>
+<span class="sd">            non-zero means yes.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span>
+                <span class="s2">"manual/manual_default_calibration_manual"</span><span class="p">,</span> <span class="s2">"0"</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationSettingService.is_manual_mirror_mode">
+<a class="viewcode-back" href="../../../api/ttea.service.calibrationsettingservice.CalibrationSettingService.html#ttea.service.calibrationsettingservice.CalibrationSettingService.is_manual_mirror_mode">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_manual_mirror_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Check whether the manual mode mirrors the image.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Setting ``manual_mirror_mode_manual`` of section</span>
+<span class="sd">            ``[manual]`` (default ``"1"``), converted to ``int``:</span>
+<span class="sd">            non-zero means yes.</span>
+<span class="sd">        """</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">value</span><span class="p">(</span><span class="s2">"manual/manual_mirror_mode_manual"</span><span class="p">,</span> <span class="s2">"1"</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

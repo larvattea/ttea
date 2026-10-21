@@ -1,0 +1,17 @@
+PlayerKarteaSessionService
+==========================
+
+.. currentmodule:: ttea.games.kartea.service.playerkarteasessionservice
+
+.. autoclass:: PlayerKarteaSessionService
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~PlayerKarteaSessionService.create_player_kartea_session
+      ~PlayerKarteaSessionService.update_player_kartea_session

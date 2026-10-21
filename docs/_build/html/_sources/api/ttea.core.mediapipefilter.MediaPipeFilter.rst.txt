@@ -1,0 +1,19 @@
+MediaPipeFilter
+===============
+
+.. currentmodule:: ttea.core.mediapipefilter
+
+.. autoclass:: MediaPipeFilter
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~MediaPipeFilter.apply_clahe
+      ~MediaPipeFilter.apply_enhancements
+      ~MediaPipeFilter.apply_gamma
+      ~MediaPipeFilter.smooth_landmarks

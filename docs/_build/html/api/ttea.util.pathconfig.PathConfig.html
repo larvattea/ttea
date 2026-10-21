@@ -1,0 +1,1017 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PathConfig &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.util.qtdateformat" href="ttea.util.qtdateformat.html" />
+    <link rel="prev" title="ttea.util.pathconfig" href="ttea.util.pathconfig.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.games.html">ttea.games</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.util.html">ttea.util</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.util.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.util.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.util.html#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.util.criticalhooks.html">ttea.util.criticalhooks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.util.cvshandler.html">ttea.util.cvshandler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.util.cvtext.html">ttea.util.cvtext</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.util.helpkeyfilter.html">ttea.util.helpkeyfilter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.util.helpschemehandler.html">ttea.util.helpschemehandler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.util.image.html">ttea.util.image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.util.messageservice.html">ttea.util.messageservice</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.util.pathconfig.html">ttea.util.pathconfig</a><ul class="current">
+<li class="toctree-l5 current"><a class="current reference internal" href="#">PathConfig</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig"><code class="docutils literal notranslate"><span class="pre">PathConfig</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.resource"><code class="docutils literal notranslate"><span class="pre">PathConfig.resource()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.icon_system"><code class="docutils literal notranslate"><span class="pre">PathConfig.icon_system()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.icon_ui_button"><code class="docutils literal notranslate"><span class="pre">PathConfig.icon_ui_button()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.icon_ui_menu"><code class="docutils literal notranslate"><span class="pre">PathConfig.icon_ui_menu()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.flag"><code class="docutils literal notranslate"><span class="pre">PathConfig.flag()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.image"><code class="docutils literal notranslate"><span class="pre">PathConfig.image()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.ui"><code class="docutils literal notranslate"><span class="pre">PathConfig.ui()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.translation"><code class="docutils literal notranslate"><span class="pre">PathConfig.translation()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.sounds"><code class="docutils literal notranslate"><span class="pre">PathConfig.sounds()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.ensure_dirs"><code class="docutils literal notranslate"><span class="pre">PathConfig.ensure_dirs()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.config"><code class="docutils literal notranslate"><span class="pre">PathConfig.config()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.calibration_hardware"><code class="docutils literal notranslate"><span class="pre">PathConfig.calibration_hardware()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.calibration_setting"><code class="docutils literal notranslate"><span class="pre">PathConfig.calibration_setting()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.calibration_point"><code class="docutils literal notranslate"><span class="pre">PathConfig.calibration_point()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.professional"><code class="docutils literal notranslate"><span class="pre">PathConfig.professional()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.institutionfacility"><code class="docutils literal notranslate"><span class="pre">PathConfig.institutionfacility()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.player"><code class="docutils literal notranslate"><span class="pre">PathConfig.player()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.model"><code class="docutils literal notranslate"><span class="pre">PathConfig.model()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.export"><code class="docutils literal notranslate"><span class="pre">PathConfig.export()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.log"><code class="docutils literal notranslate"><span class="pre">PathConfig.log()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.help_file"><code class="docutils literal notranslate"><span class="pre">PathConfig.help_file()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.help_collection"><code class="docutils literal notranslate"><span class="pre">PathConfig.help_collection()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.game_save"><code class="docutils literal notranslate"><span class="pre">PathConfig.game_save()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.set_base_dir"><code class="docutils literal notranslate"><span class="pre">PathConfig.set_base_dir()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.config_file_exists"><code class="docutils literal notranslate"><span class="pre">PathConfig.config_file_exists()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.calibration_file_exists"><code class="docutils literal notranslate"><span class="pre">PathConfig.calibration_file_exists()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.find_resource_built_in"><code class="docutils literal notranslate"><span class="pre">PathConfig.find_resource_built_in()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.util.qtdateformat.html">ttea.util.qtdateformat</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.util.html">ttea.util</a></li>
+          <li class="breadcrumb-item"><a href="ttea.util.pathconfig.html">ttea.util.pathconfig</a></li>
+      <li class="breadcrumb-item active">PathConfig</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.util.pathconfig.PathConfig.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pathconfig">
+<h1>PathConfig<a class="headerlink" href="#pathconfig" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">PathConfig</span></span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Centralized application path settings.</p>
+<p>This class exposes directory constants and helper methods for
+configuration, calibration, logs, exports, and Qt resources.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>APP_NAME</strong><span class="classifier">str, class attribute</span></dt><dd><p>Application name used for platform-specific data directories.</p>
+</dd>
+<dt><strong>APP_AUTHOR</strong><span class="classifier">str, class attribute</span></dt><dd><p>Application author name used for platform-specific data
+directories.</p>
+</dd>
+<dt><strong>CONFIG_FILENAME</strong><span class="classifier">str, class attribute</span></dt><dd><p>Default file name for configuration files.</p>
+</dd>
+<dt><strong>CALIBRATION_HARDWARE_FILENAME</strong><span class="classifier">str, class attribute</span></dt><dd><p>Default file name for calibration hardware settings.</p>
+</dd>
+<dt><strong>CALIBRATION_SETTING_FILENAME</strong><span class="classifier">str, class attribute</span></dt><dd><p>Default file name for calibration settings.</p>
+</dd>
+<dt><strong>CALIBRATION_POINT_FILENAME</strong><span class="classifier">str, class attribute</span></dt><dd><p>Default file name for calibration point CSV data.</p>
+</dd>
+<dt><strong>HELP_BASENAME</strong><span class="classifier">str, class attribute</span></dt><dd><p>Base name of the compiled help files
+(<code class="docutils literal notranslate"><span class="pre">ttea_&lt;language&gt;.qch</span></code>).</p>
+</dd>
+<dt><strong>PROJECT_DIR</strong><span class="classifier">Path, class attribute</span></dt><dd><p>Repository root. Defined only in development mode.</p>
+</dd>
+<dt><strong>BASE_DIR</strong><span class="classifier">Path, class attribute</span></dt><dd><p>Base application data directory: <code class="docutils literal notranslate"><span class="pre">&lt;project&gt;/data</span></code> in
+development, the platform user data folder when frozen.</p>
+</dd>
+<dt><strong>EXERGAME_DIR</strong><span class="classifier">Path, class attribute</span></dt><dd><p>Base directory for exergame save data:
+<code class="docutils literal notranslate"><span class="pre">&lt;project&gt;/src/ttea/games</span></code> in development,
+<code class="docutils literal notranslate"><span class="pre">BASE_DIR</span> <span class="pre">/</span> <span class="pre">&quot;exergames&quot;</span></code> when frozen.</p>
+</dd>
+<dt><strong>RESOURCES_ROOT</strong><span class="classifier">Path, class attribute</span></dt><dd><p>Installed resources: <code class="docutils literal notranslate"><span class="pre">&lt;project&gt;/resources</span></code> in development,
+<code class="docutils literal notranslate"><span class="pre">resources</span></code> inside the PyInstaller bundle when frozen.</p>
+</dd>
+<dt><strong>CONFIG_DIR</strong><span class="classifier">Path, class attribute</span></dt><dd><p>Directory for configuration files.</p>
+</dd>
+<dt><strong>CALIBRATION_DIR</strong><span class="classifier">Path, class attribute</span></dt><dd><p>Directory for calibration files.</p>
+</dd>
+<dt><strong>EXPORTS_DIR</strong><span class="classifier">Path, class attribute</span></dt><dd><p>Directory for exported files.</p>
+</dd>
+<dt><strong>INSTITUTIONFACILITY_DIR</strong><span class="classifier">Path, class attribute</span></dt><dd><p>Directory for institution facility data.</p>
+</dd>
+<dt><strong>LOG_DIR</strong><span class="classifier">Path, class attribute</span></dt><dd><p>Directory for log files.</p>
+</dd>
+<dt><strong>MODELS_DIR</strong><span class="classifier">Path, class attribute</span></dt><dd><p>Directory containing the bundled MediaPipe models.</p>
+</dd>
+<dt><strong>HELP_ROOT</strong><span class="classifier">Path, class attribute</span></dt><dd><p>Directory containing the compiled help files (.qch), one per
+language. Read-only in installed builds.</p>
+</dd>
+<dt><strong>HELP_CACHE_DIR</strong><span class="classifier">Path, class attribute</span></dt><dd><p>Writable directory for the help collections and search
+index.</p>
+</dd>
+<dt><strong>PLAYERS_DIR</strong><span class="classifier">Path, class attribute</span></dt><dd><p>Directory for player files.</p>
+</dd>
+<dt><strong>PROFESSIONAL_DIR</strong><span class="classifier">Path, class attribute</span></dt><dd><p>Directory for professional files.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><strong>resource(path=’’)</strong></p></td>
+<td><p>Build a Qt resource path.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>icon_system(name)</strong></p></td>
+<td><p>Return a Qt system icon resource path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>icon_ui_button(name)</strong></p></td>
+<td><p>Return a Qt UI button icon resource path.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>icon_ui_menu(name)</strong></p></td>
+<td><p>Return a Qt UI menu icon resource path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>flag(name)</strong></p></td>
+<td><p>Return a Qt flag resource path.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>image(name)</strong></p></td>
+<td><p>Return a Qt image resource path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>ui(name)</strong></p></td>
+<td><p>Return a Qt UI resource path.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>translation(name)</strong></p></td>
+<td><p>Return a Qt translation resource path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>sounds(name)</strong></p></td>
+<td><p>Return a Qt sound resource path.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>ensure_dirs()</strong></p></td>
+<td><p>Create all user directories.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>config(filename=CONFIG_FILENAME)</strong></p></td>
+<td><p>Return application config file path.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>calibration_hardware(filename=CALIBRATION_HARDWARE_FILENAME)</strong></p></td>
+<td><p>Return calibration hardware file path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>calibration_setting(filename=CALIBRATION_SETTING_FILENAME)</strong></p></td>
+<td><p>Return calibration setting file path.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>calibration_point(filename=CALIBRATION_POINT_FILENAME)</strong></p></td>
+<td><p>Return calibration point CSV file path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>professional(filename)</strong></p></td>
+<td><p>Return professional data file path.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>institutionfacility(filename)</strong></p></td>
+<td><p>Return institution facility data file path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>player(filename)</strong></p></td>
+<td><p>Return player data file path.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>model(filename)</strong></p></td>
+<td><p>Return Mediapipe model file path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>export(filename)</strong></p></td>
+<td><p>Return export file path.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>log(filename)</strong></p></td>
+<td><p>Return log file path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>help_file(language)</strong></p></td>
+<td><p>Return the compiled help file of a language.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>help_collection(language)</strong></p></td>
+<td><p>Return the help collection file of a language.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>game_save(game_name, filename)</strong></p></td>
+<td><p>Return game save file path.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>set_base_dir(path)</strong></p></td>
+<td><p>Set a different base directory for tests.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>config_file_exists(filename=CONFIG_FILENAME)</strong></p></td>
+<td><p>Check if configuration file exists.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>calibration_file_exists(filename=CALIBRATION_HARDWARE_FILENAME)</strong></p></td>
+<td><p>Check if calibration file exists.</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>find_resource_built_in(base_path, name)</strong></p></td>
+<td><p>Find an embedded Qt resource from a base path.</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Every class attribute whose name ends in <code class="docutils literal notranslate"><span class="pre">_DIR</span></code> is treated as a
+user directory: <code class="docutils literal notranslate"><span class="pre">ensure_dirs</span></code> creates it and <code class="docutils literal notranslate"><span class="pre">set_base_dir</span></code>
+moves it. That includes <code class="docutils literal notranslate"><span class="pre">MODELS_DIR</span></code> and, in development,
+<code class="docutils literal notranslate"><span class="pre">PROJECT_DIR</span></code>; <code class="docutils literal notranslate"><span class="pre">HELP_ROOT</span></code> and <code class="docutils literal notranslate"><span class="pre">RESOURCES_ROOT</span></code> are
+deliberately named otherwise.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">PathConfig</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s1">'images/logo.png'</span><span class="p">)</span>
+<span class="go">':/images/logo.png'</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PathConfig</span><span class="o">.</span><span class="n">help_file</span><span class="p">(</span><span class="s1">'en_US'</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
+<span class="go">'ttea_en_US.qch'</span>
+</pre></div>
+</div>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.calibration_file_exists" title="ttea.util.pathconfig.PathConfig.calibration_file_exists"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calibration_file_exists</span></code></a></p></td>
+<td><p>Return whether the calibration file exists.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.calibration_hardware" title="ttea.util.pathconfig.PathConfig.calibration_hardware"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calibration_hardware</span></code></a></p></td>
+<td><p>Return the calibration hardware file path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.calibration_point" title="ttea.util.pathconfig.PathConfig.calibration_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calibration_point</span></code></a></p></td>
+<td><p>Return the calibration point CSV file path.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.calibration_setting" title="ttea.util.pathconfig.PathConfig.calibration_setting"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calibration_setting</span></code></a></p></td>
+<td><p>Return the calibration setting file path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.config" title="ttea.util.pathconfig.PathConfig.config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">config</span></code></a></p></td>
+<td><p>Return the configuration file path.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.config_file_exists" title="ttea.util.pathconfig.PathConfig.config_file_exists"><code class="xref py py-obj docutils literal notranslate"><span class="pre">config_file_exists</span></code></a></p></td>
+<td><p>Return whether the configuration file exists.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.ensure_dirs" title="ttea.util.pathconfig.PathConfig.ensure_dirs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ensure_dirs</span></code></a></p></td>
+<td><p>Create all configured directories if they do not exist.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.export" title="ttea.util.pathconfig.PathConfig.export"><code class="xref py py-obj docutils literal notranslate"><span class="pre">export</span></code></a></p></td>
+<td><p>Return the export file path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.find_resource_built_in" title="ttea.util.pathconfig.PathConfig.find_resource_built_in"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_resource_built_in</span></code></a></p></td>
+<td><p>Find an embedded Qt resource from a base path.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.flag" title="ttea.util.pathconfig.PathConfig.flag"><code class="xref py py-obj docutils literal notranslate"><span class="pre">flag</span></code></a></p></td>
+<td><p>Return a Qt resource path for a flag image.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.game_save" title="ttea.util.pathconfig.PathConfig.game_save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">game_save</span></code></a></p></td>
+<td><p>Return the game save file path.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.help_collection" title="ttea.util.pathconfig.PathConfig.help_collection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">help_collection</span></code></a></p></td>
+<td><p>Return the help collection file of a language.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.help_file" title="ttea.util.pathconfig.PathConfig.help_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">help_file</span></code></a></p></td>
+<td><p>Return the compiled help file of a language.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.icon_system" title="ttea.util.pathconfig.PathConfig.icon_system"><code class="xref py py-obj docutils literal notranslate"><span class="pre">icon_system</span></code></a></p></td>
+<td><p>Return a Qt resource path for a system icon.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.icon_ui_button" title="ttea.util.pathconfig.PathConfig.icon_ui_button"><code class="xref py py-obj docutils literal notranslate"><span class="pre">icon_ui_button</span></code></a></p></td>
+<td><p>Return a Qt resource path for a UI button icon.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.icon_ui_menu" title="ttea.util.pathconfig.PathConfig.icon_ui_menu"><code class="xref py py-obj docutils literal notranslate"><span class="pre">icon_ui_menu</span></code></a></p></td>
+<td><p>Return a Qt resource path for a UI menu icon.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.image" title="ttea.util.pathconfig.PathConfig.image"><code class="xref py py-obj docutils literal notranslate"><span class="pre">image</span></code></a></p></td>
+<td><p>Return a Qt resource path for an image.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.institutionfacility" title="ttea.util.pathconfig.PathConfig.institutionfacility"><code class="xref py py-obj docutils literal notranslate"><span class="pre">institutionfacility</span></code></a></p></td>
+<td><p>Return the institution facility data file path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.log" title="ttea.util.pathconfig.PathConfig.log"><code class="xref py py-obj docutils literal notranslate"><span class="pre">log</span></code></a></p></td>
+<td><p>Return the log file path.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.model" title="ttea.util.pathconfig.PathConfig.model"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model</span></code></a></p></td>
+<td><p>Return the MediaPipe model file path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.player" title="ttea.util.pathconfig.PathConfig.player"><code class="xref py py-obj docutils literal notranslate"><span class="pre">player</span></code></a></p></td>
+<td><p>Return the player data file path.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.professional" title="ttea.util.pathconfig.PathConfig.professional"><code class="xref py py-obj docutils literal notranslate"><span class="pre">professional</span></code></a></p></td>
+<td><p>Return the professional data file path.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.resource" title="ttea.util.pathconfig.PathConfig.resource"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resource</span></code></a></p></td>
+<td><p>Return a Qt resource path.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.set_base_dir" title="ttea.util.pathconfig.PathConfig.set_base_dir"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_base_dir</span></code></a></p></td>
+<td><p>Set a different base directory, primarily for tests.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.sounds" title="ttea.util.pathconfig.PathConfig.sounds"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sounds</span></code></a></p></td>
+<td><p>Return a Qt resource path for a sound file.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.translation" title="ttea.util.pathconfig.PathConfig.translation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">translation</span></code></a></p></td>
+<td><p>Return a Qt resource path for a translation file.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.util.pathconfig.PathConfig.ui" title="ttea.util.pathconfig.PathConfig.ui"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ui</span></code></a></p></td>
+<td><p>Return a Qt resource path for a UI file.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.resource">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">resource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.resource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.resource" title="Link to this definition"></a></dt>
+<dd><p>Return a Qt resource path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>path</strong><span class="classifier">str, optional</span></dt><dd><p>Resource path segment. Default is empty string.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Qt resource path starting with <code class="docutils literal notranslate"><span class="pre">:/</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Trailing slashes are removed from the generated resource path,
+so an empty <code class="docutils literal notranslate"><span class="pre">path</span></code> gives <code class="docutils literal notranslate"><span class="pre">&quot;:&quot;</span></code>.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">PathConfig</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s1">'images/logo.png'</span><span class="p">)</span>
+<span class="go">':/images/logo.png'</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PathConfig</span><span class="o">.</span><span class="n">resource</span><span class="p">()</span>
+<span class="go">':'</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.icon_system">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">icon_system</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.icon_system"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.icon_system" title="Link to this definition"></a></dt>
+<dd><p>Return a Qt resource path for a system icon.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Icon file name.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Qt path for the system icon.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.icon_ui_button">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">icon_ui_button</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.icon_ui_button"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.icon_ui_button" title="Link to this definition"></a></dt>
+<dd><p>Return a Qt resource path for a UI button icon.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Button icon file name.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Qt path for the UI button icon.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.icon_ui_menu">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">icon_ui_menu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.icon_ui_menu"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.icon_ui_menu" title="Link to this definition"></a></dt>
+<dd><p>Return a Qt resource path for a UI menu icon.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Menu icon file name.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Qt path for the UI menu icon.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.flag">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">flag</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.flag"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.flag" title="Link to this definition"></a></dt>
+<dd><p>Return a Qt resource path for a flag image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Flag file name.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Qt path for the flag resource.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.image">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.image" title="Link to this definition"></a></dt>
+<dd><p>Return a Qt resource path for an image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Image file name.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Qt path for the image resource.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.ui">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ui</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.ui"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.ui" title="Link to this definition"></a></dt>
+<dd><p>Return a Qt resource path for a UI file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>UI file name.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Qt path for the UI resource.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.translation">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">translation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.translation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.translation" title="Link to this definition"></a></dt>
+<dd><p>Return a Qt resource path for a translation file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Translation file name.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Qt path for the translation resource.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.sounds">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">sounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.sounds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.sounds" title="Link to this definition"></a></dt>
+<dd><p>Return a Qt resource path for a sound file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>Sound file name.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Qt path for the sound resource.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.ensure_dirs">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ensure_dirs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.ensure_dirs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.ensure_dirs" title="Link to this definition"></a></dt>
+<dd><p>Create all configured directories if they do not exist.</p>
+<p class="rubric">Notes</p>
+<p>Creates every directory of <code class="docutils literal notranslate"><span class="pre">_get_user_dirs</span></code> with its parents.</p>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.config">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'config.ini'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.config" title="Link to this definition"></a></dt>
+<dd><p>Return the configuration file path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filename</strong><span class="classifier">str, optional</span></dt><dd><p>Name of the configuration file. Default is
+<code class="docutils literal notranslate"><span class="pre">CONFIG_FILENAME</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Full path to the configuration file.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Creates the user directories if needed (see <code class="docutils literal notranslate"><span class="pre">_user_file</span></code>).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.calibration_hardware">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calibration_hardware</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'calibration_hardware.ini'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.calibration_hardware"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.calibration_hardware" title="Link to this definition"></a></dt>
+<dd><p>Return the calibration hardware file path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filename</strong><span class="classifier">str, optional</span></dt><dd><p>Name of the calibration hardware file. Default is
+<code class="docutils literal notranslate"><span class="pre">CALIBRATION_HARDWARE_FILENAME</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Full path to the calibration hardware file.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.calibration_setting">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calibration_setting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'calibration_setting.ini'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.calibration_setting"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.calibration_setting" title="Link to this definition"></a></dt>
+<dd><p>Return the calibration setting file path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filename</strong><span class="classifier">str, optional</span></dt><dd><p>Name of the calibration setting file. Default is
+<code class="docutils literal notranslate"><span class="pre">CALIBRATION_SETTING_FILENAME</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Full path to the calibration setting file.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.calibration_point">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calibration_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'calibration_point.csv'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.calibration_point"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.calibration_point" title="Link to this definition"></a></dt>
+<dd><p>Return the calibration point CSV file path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filename</strong><span class="classifier">str, optional</span></dt><dd><p>Name of the calibration point CSV file. Default is
+<code class="docutils literal notranslate"><span class="pre">CALIBRATION_POINT_FILENAME</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Full path to the calibration point CSV file.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.professional">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">professional</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.professional"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.professional" title="Link to this definition"></a></dt>
+<dd><p>Return the professional data file path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filename</strong><span class="classifier">str</span></dt><dd><p>Name of the professional file.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Full path to the professional file.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.institutionfacility">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">institutionfacility</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.institutionfacility"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.institutionfacility" title="Link to this definition"></a></dt>
+<dd><p>Return the institution facility data file path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filename</strong><span class="classifier">str</span></dt><dd><p>Name of the institution facility file.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Full path to the institution facility file.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.player">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">player</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.player"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.player" title="Link to this definition"></a></dt>
+<dd><p>Return the player data file path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filename</strong><span class="classifier">str</span></dt><dd><p>Name of the player file.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Full path to the player file.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.model">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.model" title="Link to this definition"></a></dt>
+<dd><p>Return the MediaPipe model file path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filename</strong><span class="classifier">str</span></dt><dd><p>Name of the model file.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Full path to the model file.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.export">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">export</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.export"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.export" title="Link to this definition"></a></dt>
+<dd><p>Return the export file path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filename</strong><span class="classifier">str</span></dt><dd><p>Name of the export file.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Full path to the export file.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.log">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.log" title="Link to this definition"></a></dt>
+<dd><p>Return the log file path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filename</strong><span class="classifier">str</span></dt><dd><p>Name of the log file.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Full path to the log file.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.help_file">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">help_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">language</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.help_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.help_file" title="Link to this definition"></a></dt>
+<dd><p>Return the compiled help file of a language.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>language</strong><span class="classifier">str</span></dt><dd><p>Language code, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;pt_BR&quot;</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>Path</dt><dd><p>Path of <code class="docutils literal notranslate"><span class="pre">ttea_&lt;language&gt;.qch</span></code>. The file may not exist.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">PathConfig</span><span class="o">.</span><span class="n">help_file</span><span class="p">(</span><span class="s1">'en_US'</span><span class="p">)</span><span class="o">.</span><span class="n">name</span>
+<span class="go">'ttea_en_US.qch'</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.help_collection">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">help_collection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">language</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.help_collection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.help_collection" title="Link to this definition"></a></dt>
+<dd><p>Return the help collection file of a language.</p>
+<p>The collection and the search index are created on first use,
+in a writable user folder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>language</strong><span class="classifier">str</span></dt><dd><p>Language code, e.g. <code class="docutils literal notranslate"><span class="pre">&quot;pt_BR&quot;</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Full path of <code class="docutils literal notranslate"><span class="pre">ttea_&lt;language&gt;.qhc</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.game_save">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">game_save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">game_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.game_save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.game_save" title="Link to this definition"></a></dt>
+<dd><p>Return the game save file path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>game_name</strong><span class="classifier">str</span></dt><dd><p>Identifier for the game save directory.</p>
+</dd>
+<dt><strong>filename</strong><span class="classifier">str</span></dt><dd><p>Name of the save file.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Full path to the game save file.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Creates the user directories and <code class="docutils literal notranslate"><span class="pre">EXERGAME_DIR</span> <span class="pre">/</span> <span class="pre">game_name</span></code>
+if needed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.set_base_dir">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set_base_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.set_base_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.set_base_dir" title="Link to this definition"></a></dt>
+<dd><p>Set a different base directory, primarily for tests.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>path</strong><span class="classifier">str | Path</span></dt><dd><p>New base directory path; it is resolved to an absolute path.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p><code class="docutils literal notranslate"><span class="pre">BASE_DIR</span></code> becomes the new base and <code class="docutils literal notranslate"><span class="pre">EXERGAME_DIR</span></code> its
+<code class="docutils literal notranslate"><span class="pre">exergames</span></code> subfolder. Every other <code class="docutils literal notranslate"><span class="pre">*_DIR</span></code> attribute becomes
+<code class="docutils literal notranslate"><span class="pre">&lt;base&gt;/&lt;name&gt;</span></code>, where <code class="docutils literal notranslate"><span class="pre">name</span></code> is the attribute name without
+<code class="docutils literal notranslate"><span class="pre">_DIR</span></code> in lower case. These names do not always match the
+defaults (<code class="docutils literal notranslate"><span class="pre">help_cache</span></code>, <code class="docutils literal notranslate"><span class="pre">institutionfacility</span></code>,
+<code class="docutils literal notranslate"><span class="pre">professional</span></code>), and <code class="docutils literal notranslate"><span class="pre">MODELS_DIR</span></code> and <code class="docutils literal notranslate"><span class="pre">PROJECT_DIR</span></code> are
+moved too. Directories are not created here.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">PathConfig</span><span class="o">.</span><span class="n">set_base_dir</span><span class="p">(</span><span class="s1">'tests_data'</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">PathConfig</span><span class="o">.</span><span class="n">HELP_CACHE_DIR</span><span class="o">.</span><span class="n">name</span>
+<span class="go">'help_cache'</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.config_file_exists">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">config_file_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'config.ini'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.config_file_exists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.config_file_exists" title="Link to this definition"></a></dt>
+<dd><p>Return whether the configuration file exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filename</strong><span class="classifier">str, optional</span></dt><dd><p>Name of the configuration file. Default is
+<code class="docutils literal notranslate"><span class="pre">CONFIG_FILENAME</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if the configuration file exists, otherwise False.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Creates the user directories if needed (see <code class="docutils literal notranslate"><span class="pre">config</span></code>).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.calibration_file_exists">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calibration_file_exists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'calibration_hardware.ini'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.calibration_file_exists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.calibration_file_exists" title="Link to this definition"></a></dt>
+<dd><p>Return whether the calibration file exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>filename</strong><span class="classifier">str, optional</span></dt><dd><p>Name of the calibration file. Default is
+<code class="docutils literal notranslate"><span class="pre">CALIBRATION_HARDWARE_FILENAME</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if the calibration file exists, otherwise False.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Looks in <code class="docutils literal notranslate"><span class="pre">CALIBRATION_DIR</span></code> and creates the user directories if
+needed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.util.pathconfig.PathConfig.find_resource_built_in">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">find_resource_built_in</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/util/pathconfig.html#PathConfig.find_resource_built_in"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.util.pathconfig.PathConfig.find_resource_built_in" title="Link to this definition"></a></dt>
+<dd><p>Find an embedded Qt resource from a base path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>base_path</strong><span class="classifier">str</span></dt><dd><p>Base resource path to search in.</p>
+</dd>
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>File name to locate.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>Full resource path of the first match, otherwise an empty
+string.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Searches <code class="docutils literal notranslate"><span class="pre">base_path</span></code> and its subdirectories for a file whose
+name matches <code class="docutils literal notranslate"><span class="pre">name</span></code> (a <code class="docutils literal notranslate"><span class="pre">QDir</span></code> name filter, so wildcards
+work).</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.util.pathconfig.html" class="btn btn-neutral float-left" title="ttea.util.pathconfig" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.util.qtdateformat.html" class="btn btn-neutral float-right" title="ttea.util.qtdateformat" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

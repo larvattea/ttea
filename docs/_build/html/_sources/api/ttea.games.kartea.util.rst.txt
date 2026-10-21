@@ -1,0 +1,24 @@
+ttea.games.kartea.util
+======================
+
+.. automodule:: ttea.games.kartea.util
+
+.. currentmodule:: ttea.games.kartea.util
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/module.rst
+   :recursive:
+
+   arrivaltimefields
+   inidefaults
+   karteapathconfig
+   palettes
+   resourcefields
+
+
+

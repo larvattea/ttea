@@ -1,0 +1,16 @@
+HelpKeyFilter
+=============
+
+.. currentmodule:: ttea.util.helpkeyfilter
+
+.. autoclass:: HelpKeyFilter
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~HelpKeyFilter.eventFilter

@@ -1,0 +1,18 @@
+KarteaPhaseLevelCsvDAO
+======================
+
+.. currentmodule:: ttea.games.kartea.dao.karteaphaselevelcsvdao
+
+.. autoclass:: KarteaPhaseLevelCsvDAO
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~KarteaPhaseLevelCsvDAO.list
+      ~KarteaPhaseLevelCsvDAO.load_levels_from_csv
+      ~KarteaPhaseLevelCsvDAO.select

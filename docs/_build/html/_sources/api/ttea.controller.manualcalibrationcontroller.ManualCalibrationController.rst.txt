@@ -1,0 +1,19 @@
+ManualCalibrationController
+===========================
+
+.. currentmodule:: ttea.controller.manualcalibrationcontroller
+
+.. autoclass:: ManualCalibrationController
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~ManualCalibrationController.create_calibration_point
+      ~ManualCalibrationController.get_available_geometry_of_screen
+      ~ManualCalibrationController.get_data
+      ~ManualCalibrationController.keyPressEvent

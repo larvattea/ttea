@@ -1,0 +1,17 @@
+CameraVideo
+===========
+
+.. currentmodule:: ttea.core.cameravideo
+
+.. autoclass:: CameraVideo
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~CameraVideo.run
+      ~CameraVideo.stop

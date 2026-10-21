@@ -1,0 +1,420 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.core.calibrationmath &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../../../_static/copybutton.js?v=f281be69"></script>
+      <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">API reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">ttea.core.calibrationmath</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for ttea.core.calibrationmath</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Geometry helpers for projection (keystone) calibration.</span>
+
+<span class="sd">The projected game content is fitted into the screen with a fixed</span>
+<span class="sd">aspect ratio and mapped onto four destination corners through a</span>
+<span class="sd">perspective (homography) transform built with OpenCV.</span>
+<span class="sd">"""</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">cv2</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+
+<div class="viewcode-block" id="CalibrationMath">
+<a class="viewcode-back" href="../../../api/ttea.core.calibrationmath.CalibrationMath.html#ttea.core.calibrationmath.CalibrationMath">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">CalibrationMath</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Mathematical utilities for projection / keystone calibration.</span>
+
+<span class="sd">    All methods are classmethods; the class holds no state.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Corner points are always ordered top-left, top-right, bottom-left,</span>
+<span class="sd">    bottom-right (TL, TR, BL, BR), both in the source rectangle of</span>
+<span class="sd">    ``get_perspective_transform`` and in the destination points.</span>
+<span class="sd">    """</span>
+
+<div class="viewcode-block" id="CalibrationMath.calculate_projection_area">
+<a class="viewcode-back" href="../../../api/ttea.core.calibrationmath.CalibrationMath.html#ttea.core.calibrationmath.CalibrationMath.calculate_projection_area">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_projection_area</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">screen_width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">screen_height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">aspect_ratio</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Compute the content size that fits the screen at a ratio.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        screen_width : int</span>
+<span class="sd">            Screen width in pixels.</span>
+<span class="sd">        screen_height : int</span>
+<span class="sd">            Screen height in pixels.</span>
+<span class="sd">        aspect_ratio : tuple[int, int]</span>
+<span class="sd">            Desired width/height ratio, e.g. ``(4, 3)`` or ``(16, 9)``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        tuple[int, int]</span>
+<span class="sd">            ``(content_width, content_height)`` in pixels.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If ``aspect_ratio`` is not a tuple of two positive values.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Height has priority: the content takes the full screen height</span>
+<span class="sd">        and the width follows the ratio. Only when that width exceeds</span>
+<span class="sd">        the screen width is the content fitted to the full width</span>
+<span class="sd">        instead.</span>
+<span class="sd">        Integer division is used, so sizes are rounded down.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; calc = CalibrationMath.calculate_projection_area</span>
+<span class="sd">        &gt;&gt;&gt; calc(1920, 1080, (4, 3))</span>
+<span class="sd">        (1440, 1080)</span>
+<span class="sd">        &gt;&gt;&gt; calc(1280, 1024, (16, 9))</span>
+<span class="sd">        (1280, 720)</span>
+<span class="sd">        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span>
+            <span class="nb">isinstance</span><span class="p">(</span><span class="n">aspect_ratio</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">aspect_ratio</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span>
+            <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span><span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">aspect_ratio</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">"The parameter aspect_ratio must be a tuple of two positive "</span>
+                <span class="s2">"integers (e.g., (4, 3))"</span>
+            <span class="p">)</span>
+
+        <span class="n">ratio_w</span><span class="p">,</span> <span class="n">ratio_h</span> <span class="o">=</span> <span class="n">aspect_ratio</span>
+        <span class="n">content_height</span> <span class="o">=</span> <span class="n">screen_height</span>
+        <span class="n">content_width</span> <span class="o">=</span> <span class="p">(</span><span class="n">screen_height</span> <span class="o">*</span> <span class="n">ratio_w</span><span class="p">)</span> <span class="o">//</span> <span class="n">ratio_h</span>
+
+        <span class="c1"># Width overflow is rare in 16:9; it happens on narrow screens.</span>
+        <span class="k">if</span> <span class="n">content_width</span> <span class="o">&gt;</span> <span class="n">screen_width</span><span class="p">:</span>
+            <span class="n">content_width</span> <span class="o">=</span> <span class="n">screen_width</span>
+            <span class="n">content_height</span> <span class="o">=</span> <span class="p">(</span><span class="n">screen_width</span> <span class="o">*</span> <span class="n">ratio_h</span><span class="p">)</span> <span class="o">//</span> <span class="n">ratio_w</span>
+
+        <span class="k">return</span> <span class="n">content_width</span><span class="p">,</span> <span class="n">content_height</span></div>
+
+
+<div class="viewcode-block" id="CalibrationMath.calculate_centered_destination_points">
+<a class="viewcode-back" href="../../../api/ttea.core.calibrationmath.CalibrationMath.html#ttea.core.calibrationmath.CalibrationMath.calculate_centered_destination_points">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_centered_destination_points</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">screen_width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">screen_height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">content_width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">content_height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">center_horizontally</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">center_vertically</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Compute the corners of the content area on the screen.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        screen_width : int</span>
+<span class="sd">            Screen width in pixels.</span>
+<span class="sd">        screen_height : int</span>
+<span class="sd">            Screen height in pixels.</span>
+<span class="sd">        content_width : int</span>
+<span class="sd">            Content width in pixels.</span>
+<span class="sd">        content_height : int</span>
+<span class="sd">            Content height in pixels.</span>
+<span class="sd">        center_horizontally : bool, optional</span>
+<span class="sd">            Center the content horizontally; otherwise align it to the</span>
+<span class="sd">            left edge. Default is True.</span>
+<span class="sd">        center_vertically : bool, optional</span>
+<span class="sd">            Center the content vertically; otherwise align it to the top</span>
+<span class="sd">            edge. Default is True.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            ``float32`` array of shape (4, 2) with the ``(x, y)``</span>
+<span class="sd">            corners in TL, TR, BL, BR order.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; pts = CalibrationMath.calculate_centered_destination_points(</span>
+<span class="sd">        ...     1920, 1080, 1440, 1080</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; pts.tolist()</span>
+<span class="sd">        [[240.0, 0.0], [1680.0, 0.0], [240.0, 1080.0], [1680.0, 1080.0]]</span>
+<span class="sd">        """</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">screen_width</span> <span class="o">-</span> <span class="n">content_width</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span> <span class="k">if</span> <span class="n">center_horizontally</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="p">)</span>
+        <span class="n">top</span> <span class="o">=</span> <span class="p">(</span><span class="n">screen_height</span> <span class="o">-</span> <span class="n">content_height</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span> <span class="k">if</span> <span class="n">center_vertically</span> <span class="k">else</span> <span class="mi">0</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">[</span><span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">],</span>  <span class="c1"># TL</span>
+                <span class="p">[</span><span class="n">left</span> <span class="o">+</span> <span class="n">content_width</span><span class="p">,</span> <span class="n">top</span><span class="p">],</span>  <span class="c1"># TR</span>
+                <span class="p">[</span><span class="n">left</span><span class="p">,</span> <span class="n">top</span> <span class="o">+</span> <span class="n">content_height</span><span class="p">],</span>  <span class="c1"># BL</span>
+                <span class="p">[</span><span class="n">left</span> <span class="o">+</span> <span class="n">content_width</span><span class="p">,</span> <span class="n">top</span> <span class="o">+</span> <span class="n">content_height</span><span class="p">],</span>  <span class="c1"># BR</span>
+            <span class="p">]</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationMath.calculate_destination_points_with_flip">
+<a class="viewcode-back" href="../../../api/ttea.core.calibrationmath.CalibrationMath.html#ttea.core.calibrationmath.CalibrationMath.calculate_destination_points_with_flip">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">calculate_destination_points_with_flip</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">screen_width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">screen_height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">content_width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">content_height</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">flip_h</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">flip_v</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">center_horizontally</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">center_vertically</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Compute the content corners with optional mirroring.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        screen_width : int</span>
+<span class="sd">            Screen width in pixels.</span>
+<span class="sd">        screen_height : int</span>
+<span class="sd">            Screen height in pixels.</span>
+<span class="sd">        content_width : int</span>
+<span class="sd">            Content width in pixels.</span>
+<span class="sd">        content_height : int</span>
+<span class="sd">            Content height in pixels.</span>
+<span class="sd">        flip_h : bool, optional</span>
+<span class="sd">            Mirror the content horizontally. Default is False.</span>
+<span class="sd">        flip_v : bool, optional</span>
+<span class="sd">            Mirror the content vertically. Default is False.</span>
+<span class="sd">        center_horizontally : bool, optional</span>
+<span class="sd">            Center the content horizontally. Default is True.</span>
+<span class="sd">        center_vertically : bool, optional</span>
+<span class="sd">            Center the content vertically. Default is True.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            ``float32`` array of shape (4, 2) with the corners of</span>
+<span class="sd">            ``calculate_centered_destination_points`` reordered for the</span>
+<span class="sd">            requested mirroring.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Mirroring only reorders the corners (TL, TR, BL, BR = 0, 1, 2,</span>
+<span class="sd">        3): horizontal uses ``[1, 0, 3, 2]``, vertical ``[2, 3, 0, 1]``</span>
+<span class="sd">        and both ``[3, 2, 1, 0]``. Used as destination points of</span>
+<span class="sd">        ``get_perspective_transform``, this flips the warped image.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; cm = CalibrationMath</span>
+<span class="sd">        &gt;&gt;&gt; pts = cm.calculate_destination_points_with_flip(</span>
+<span class="sd">        ...     100, 50, 100, 50, flip_h=True</span>
+<span class="sd">        ... )</span>
+<span class="sd">        &gt;&gt;&gt; pts.tolist()</span>
+<span class="sd">        [[100.0, 0.0], [0.0, 0.0], [100.0, 50.0], [0.0, 50.0]]</span>
+<span class="sd">        """</span>
+        <span class="n">points</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">calculate_centered_destination_points</span><span class="p">(</span>
+            <span class="n">screen_width</span><span class="p">,</span>
+            <span class="n">screen_height</span><span class="p">,</span>
+            <span class="n">content_width</span><span class="p">,</span>
+            <span class="n">content_height</span><span class="p">,</span>
+            <span class="n">center_horizontally</span><span class="p">,</span>
+            <span class="n">center_vertically</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">flip_h</span> <span class="ow">or</span> <span class="n">flip_v</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">points</span>
+
+        <span class="n">order</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">flip_h</span><span class="p">:</span>
+            <span class="n">order</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>  <span class="c1"># horizontal mirror</span>
+        <span class="k">if</span> <span class="n">flip_v</span><span class="p">:</span>
+            <span class="n">order</span> <span class="o">=</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>  <span class="c1"># vertical mirror</span>
+            <span class="k">if</span> <span class="n">flip_h</span><span class="p">:</span>
+                <span class="n">order</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>  <span class="c1"># both</span>
+
+        <span class="k">return</span> <span class="n">points</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">order</span><span class="p">)]</span></div>
+
+
+<div class="viewcode-block" id="CalibrationMath.get_perspective_transform">
+<a class="viewcode-back" href="../../../api/ttea.core.calibrationmath.CalibrationMath.html#ttea.core.calibrationmath.CalibrationMath.get_perspective_transform">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_perspective_transform</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span>
+        <span class="n">content_size</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span>
+        <span class="n">dst_points</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Build the 3x3 homography from content to destination points.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        content_size : tuple[int, int]</span>
+<span class="sd">            ``(width, height)`` of the source content in pixels.</span>
+<span class="sd">        dst_points : numpy.ndarray</span>
+<span class="sd">            ``float32`` array of shape (4, 2) with the destination</span>
+<span class="sd">            corners in TL, TR, BL, BR order.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            3x3 perspective matrix from ``cv2.getPerspectiveTransform``.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; dst = np.float32([[0, 0], [100, 0], [0, 50], [100, 50]])</span>
+<span class="sd">        &gt;&gt;&gt; calc = CalibrationMath.get_perspective_transform</span>
+<span class="sd">        &gt;&gt;&gt; m = calc((100, 50), dst)</span>
+<span class="sd">        &gt;&gt;&gt; bool(np.allclose(m, np.eye(3)))</span>
+<span class="sd">        True</span>
+<span class="sd">        """</span>
+        <span class="n">src_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                <span class="p">[</span><span class="n">content_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">content_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+                <span class="p">[</span><span class="n">content_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">content_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">cv2</span><span class="o">.</span><span class="n">getPerspectiveTransform</span><span class="p">(</span><span class="n">src_points</span><span class="p">,</span> <span class="n">dst_points</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="CalibrationMath.get_inverse_transform">
+<a class="viewcode-back" href="../../../api/ttea.core.calibrationmath.CalibrationMath.html#ttea.core.calibrationmath.CalibrationMath.get_inverse_transform">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_inverse_transform</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">matrix</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Return the inverse of a transform matrix.</span>
+
+<span class="sd">        Used to map screen/camera points back to game coordinates.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        matrix : numpy.ndarray</span>
+<span class="sd">            Square transform matrix, usually from</span>
+<span class="sd">            ``get_perspective_transform``.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        numpy.ndarray</span>
+<span class="sd">            Inverse matrix computed by ``numpy.linalg.inv``.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        numpy.linalg.LinAlgError</span>
+<span class="sd">            If the matrix is singular.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">        &gt;&gt;&gt; m = np.array([[2.0, 0, 0], [0, 2.0, 0], [0, 0, 1.0]])</span>
+<span class="sd">        &gt;&gt;&gt; CalibrationMath.get_inverse_transform(m).diagonal().tolist()</span>
+<span class="sd">        [0.5, 0.5, 1.0]</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">matrix</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

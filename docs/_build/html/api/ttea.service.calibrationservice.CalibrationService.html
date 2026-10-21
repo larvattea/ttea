@@ -1,0 +1,1440 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CalibrationService &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.service.calibrationsettingservice" href="ttea.service.calibrationsettingservice.html" />
+    <link rel="prev" title="ttea.service.calibrationservice" href="ttea.service.calibrationservice.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.games.html">ttea.games</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="ttea.service.html">ttea.service</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="ttea.service.html#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.service.html#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.service.html#notes">Notes</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="ttea.service.calibrationservice.html">ttea.service.calibrationservice</a><ul class="current">
+<li class="toctree-l5 current"><a class="current reference internal" href="#">CalibrationService</a><ul>
+<li class="toctree-l6"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService"><code class="docutils literal notranslate"><span class="pre">CalibrationService</span></code></a><ul>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.calibration_setting_service"><code class="docutils literal notranslate"><span class="pre">CalibrationService.calibration_setting_service</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_proportions"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_proportions()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_screens"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_screens()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_video_inputs"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_video_inputs()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_geometry_of_screen"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_geometry_of_screen()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_available_geometry_of_screen"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_available_geometry_of_screen()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_raspberry_pi"><code class="docutils literal notranslate"><span class="pre">CalibrationService.is_raspberry_pi()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_windows"><code class="docutils literal notranslate"><span class="pre">CalibrationService.is_windows()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.create_calibration_hardware"><code class="docutils literal notranslate"><span class="pre">CalibrationService.create_calibration_hardware()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.find_by_id_calibration"><code class="docutils literal notranslate"><span class="pre">CalibrationService.find_by_id_calibration()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.create_calibration_point"><code class="docutils literal notranslate"><span class="pre">CalibrationService.create_calibration_point()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.find_by_id_calibration_point"><code class="docutils literal notranslate"><span class="pre">CalibrationService.find_by_id_calibration_point()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_fullscreen"><code class="docutils literal notranslate"><span class="pre">CalibrationService.is_fullscreen()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_screen_size"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_screen_size()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_camera_info"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_camera_info()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_screen_info"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_screen_info()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_model_desktop"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_mediapipe_model_desktop()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_model_embedded"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_mediapipe_model_embedded()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_embedded_processing"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_mediapipe_embedded_processing()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_linux_processing"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_mediapipe_linux_processing()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_mac_processing"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_mediapipe_mac_processing()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_windows_processing"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_mediapipe_windows_processing()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_execution_mode"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_mediapipe_execution_mode()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_enable_mediapipe_pose"><code class="docutils literal notranslate"><span class="pre">CalibrationService.is_enable_mediapipe_pose()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_detection_position"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_mediapipe_detection_position()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_detection_presence"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_mediapipe_detection_presence()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_detection_tracking"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_mediapipe_detection_tracking()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_num_position"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_mediapipe_num_position()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_opencv_capture_backend"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_opencv_capture_backend()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_opencv_buffer_size"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_opencv_buffer_size()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_opencv_custom_camera"><code class="docutils literal notranslate"><span class="pre">CalibrationService.is_opencv_custom_camera()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_opencv_ratio"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_opencv_ratio()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_opencv_width"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_opencv_width()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_opencv_height"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_opencv_height()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_opencv_fps"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_opencv_fps()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_filter_enable_filter"><code class="docutils literal notranslate"><span class="pre">CalibrationService.is_filter_enable_filter()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_filter_average_smooth_frames"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_filter_average_smooth_frames()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_filter_clahe_clip"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_filter_clahe_clip()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_filter_clahe_grid"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_filter_clahe_grid()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_filter_clahe_lum_below"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_filter_clahe_lum_below()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_filter_gamma_factor"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_filter_gamma_factor()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_filter_gamma_lum_above"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_filter_gamma_lum_above()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_filter_landmark_limit"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_filter_landmark_limit()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_telemetry_enable_panel"><code class="docutils literal notranslate"><span class="pre">CalibrationService.is_telemetry_enable_panel()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_window_position"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_automatic_window_position()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_window_open_mode"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_automatic_window_open_mode()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_automatic_open_projector"><code class="docutils literal notranslate"><span class="pre">CalibrationService.is_automatic_open_projector()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_automatic_default_calibration"><code class="docutils literal notranslate"><span class="pre">CalibrationService.is_automatic_default_calibration()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_automatic_mirror_mode"><code class="docutils literal notranslate"><span class="pre">CalibrationService.is_automatic_mirror_mode()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_num_columns"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_automatic_num_columns()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_num_rows"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_automatic_num_rows()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_multiplier"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_automatic_multiplier()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_dictionary"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_automatic_dictionary()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_width"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_automatic_width()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_height"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_automatic_height()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_margin"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_automatic_margin()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_semiautomatic_window_position"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_semiautomatic_window_position()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_semiautomatic_window_open_mode"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_semiautomatic_window_open_mode()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_semiautomatic_open_projector"><code class="docutils literal notranslate"><span class="pre">CalibrationService.is_semiautomatic_open_projector()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_semiautomatic_default_calibration"><code class="docutils literal notranslate"><span class="pre">CalibrationService.is_semiautomatic_default_calibration()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_semiautomatic_mirror_mode"><code class="docutils literal notranslate"><span class="pre">CalibrationService.is_semiautomatic_mirror_mode()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_manual_window_position"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_manual_window_position()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_manual_window_open_mode"><code class="docutils literal notranslate"><span class="pre">CalibrationService.get_manual_window_open_mode()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_manual_open_projector"><code class="docutils literal notranslate"><span class="pre">CalibrationService.is_manual_open_projector()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_manual_default_calibration"><code class="docutils literal notranslate"><span class="pre">CalibrationService.is_manual_default_calibration()</span></code></a></li>
+<li class="toctree-l7"><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_manual_mirror_mode"><code class="docutils literal notranslate"><span class="pre">CalibrationService.is_manual_mirror_mode()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.service.calibrationsettingservice.html">ttea.service.calibrationsettingservice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.service.helpservice.html">ttea.service.helpservice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.service.institutionfacilityservice.html">ttea.service.institutionfacilityservice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.service.languageservice.html">ttea.service.languageservice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.service.mainservice.html">ttea.service.mainservice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.service.playergamelaunchservice.html">ttea.service.playergamelaunchservice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.service.playerservice.html">ttea.service.playerservice</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.service.professionalservice.html">ttea.service.professionalservice</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.view.html">ttea.view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+          <li class="breadcrumb-item"><a href="ttea.service.html">ttea.service</a></li>
+          <li class="breadcrumb-item"><a href="ttea.service.calibrationservice.html">ttea.service.calibrationservice</a></li>
+      <li class="breadcrumb-item active">CalibrationService</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.service.calibrationservice.CalibrationService.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="calibrationservice">
+<h1>CalibrationService<a class="headerlink" href="#calibrationservice" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CalibrationService</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dao</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dao_calibration_point</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calibration_setting_service</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/builtins/functions.html#object" title="(in Python v3.15)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>Business logic of the projection and camera calibration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>dao</strong><span class="classifier">CalibrationIniDAO | None, optional</span></dt><dd><p>DAO of the hardware calibration. Default is None, which creates
+a new <code class="docutils literal notranslate"><span class="pre">CalibrationIniDAO</span></code>.</p>
+</dd>
+<dt><strong>dao_calibration_point</strong><span class="classifier">CalibrationPointCsvDAO | None, optional</span></dt><dd><p>DAO of the calibration points. Default is None, which creates a
+new <code class="docutils literal notranslate"><span class="pre">CalibrationPointCsvDAO</span></code>.</p>
+</dd>
+<dt><strong>calibration_setting_service</strong><span class="classifier">CalibrationSettingService, optional</span></dt><dd><p>Settings service to reuse. Default is None, which creates one on
+first use.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Attributes<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>dao</strong><span class="classifier">CalibrationIniDAO</span></dt><dd><p>DAO of the hardware calibration.</p>
+</dd>
+<dt><strong>dao_calibration_point</strong><span class="classifier">CalibrationPointCsvDAO</span></dt><dd><p>DAO of the calibration points.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">get_mediapipe_*</span></code>, <code class="docutils literal notranslate"><span class="pre">get_opencv_*</span></code>, <code class="docutils literal notranslate"><span class="pre">get_filter_*</span></code>,
+<code class="docutils literal notranslate"><span class="pre">is_*</span></code> and calibration-mode getters only delegate to
+<code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.create_calibration_hardware" title="ttea.service.calibrationservice.CalibrationService.create_calibration_hardware"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_calibration_hardware</span></code></a></p></td>
+<td><p>Save the hardware calibration built from a dictionary.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.create_calibration_point" title="ttea.service.calibrationservice.CalibrationService.create_calibration_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_calibration_point</span></code></a></p></td>
+<td><p>Save the calibration points built from a dictionary.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.find_by_id_calibration" title="ttea.service.calibrationservice.CalibrationService.find_by_id_calibration"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_by_id_calibration</span></code></a></p></td>
+<td><p>Return the saved hardware calibration.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.find_by_id_calibration_point" title="ttea.service.calibrationservice.CalibrationService.find_by_id_calibration_point"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_by_id_calibration_point</span></code></a></p></td>
+<td><p>Return the saved calibration points.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_dictionary" title="ttea.service.calibrationservice.CalibrationService.get_automatic_dictionary"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_automatic_dictionary</span></code></a></p></td>
+<td><p>Return the ArUco dictionary of the calibration pattern.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_height" title="ttea.service.calibrationservice.CalibrationService.get_automatic_height"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_automatic_height</span></code></a></p></td>
+<td><p>Return the height of the calibration pattern.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_margin" title="ttea.service.calibrationservice.CalibrationService.get_automatic_margin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_automatic_margin</span></code></a></p></td>
+<td><p>Return the margin of the calibration pattern.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_multiplier" title="ttea.service.calibrationservice.CalibrationService.get_automatic_multiplier"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_automatic_multiplier</span></code></a></p></td>
+<td><p>Return the multiplier of the automatic calibration.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_num_columns" title="ttea.service.calibrationservice.CalibrationService.get_automatic_num_columns"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_automatic_num_columns</span></code></a></p></td>
+<td><p>Return the column count of the calibration pattern.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_num_rows" title="ttea.service.calibrationservice.CalibrationService.get_automatic_num_rows"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_automatic_num_rows</span></code></a></p></td>
+<td><p>Return the row count of the calibration pattern.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_width" title="ttea.service.calibrationservice.CalibrationService.get_automatic_width"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_automatic_width</span></code></a></p></td>
+<td><p>Return the width of the calibration pattern.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_window_open_mode" title="ttea.service.calibrationservice.CalibrationService.get_automatic_window_open_mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_automatic_window_open_mode</span></code></a></p></td>
+<td><p>Return the window display mode of the automatic mode.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_window_position" title="ttea.service.calibrationservice.CalibrationService.get_automatic_window_position"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_automatic_window_position</span></code></a></p></td>
+<td><p>Return the window position of the automatic mode.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_available_geometry_of_screen" title="ttea.service.calibrationservice.CalibrationService.get_available_geometry_of_screen"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_available_geometry_of_screen</span></code></a></p></td>
+<td><p>Return the available geometry of a screen.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_camera_info" title="ttea.service.calibrationservice.CalibrationService.get_camera_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_camera_info</span></code></a></p></td>
+<td><p>Return the camera fields of the saved calibration.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_filter_average_smooth_frames" title="ttea.service.calibrationservice.CalibrationService.get_filter_average_smooth_frames"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_filter_average_smooth_frames</span></code></a></p></td>
+<td><p>Return the number of frames averaged per landmark.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_filter_clahe_clip" title="ttea.service.calibrationservice.CalibrationService.get_filter_clahe_clip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_filter_clahe_clip</span></code></a></p></td>
+<td><p>Return the CLAHE clip limit.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_filter_clahe_grid" title="ttea.service.calibrationservice.CalibrationService.get_filter_clahe_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_filter_clahe_grid</span></code></a></p></td>
+<td><p>Return the CLAHE tile grid size.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_filter_clahe_lum_below" title="ttea.service.calibrationservice.CalibrationService.get_filter_clahe_lum_below"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_filter_clahe_lum_below</span></code></a></p></td>
+<td><p>Return the brightness (0-255) below which CLAHE runs.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_filter_gamma_factor" title="ttea.service.calibrationservice.CalibrationService.get_filter_gamma_factor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_filter_gamma_factor</span></code></a></p></td>
+<td><p>Return the gamma correction factor.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_filter_gamma_lum_above" title="ttea.service.calibrationservice.CalibrationService.get_filter_gamma_lum_above"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_filter_gamma_lum_above</span></code></a></p></td>
+<td><p>Return the brightness (0-255) above which gamma runs.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_filter_landmark_limit" title="ttea.service.calibrationservice.CalibrationService.get_filter_landmark_limit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_filter_landmark_limit</span></code></a></p></td>
+<td><p>Return the landmark jump that resets its smoothing.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_geometry_of_screen" title="ttea.service.calibrationservice.CalibrationService.get_geometry_of_screen"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_geometry_of_screen</span></code></a></p></td>
+<td><p>Return the full geometry of a screen.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_manual_window_open_mode" title="ttea.service.calibrationservice.CalibrationService.get_manual_window_open_mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_manual_window_open_mode</span></code></a></p></td>
+<td><p>Return the window display mode of the manual mode.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_manual_window_position" title="ttea.service.calibrationservice.CalibrationService.get_manual_window_position"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_manual_window_position</span></code></a></p></td>
+<td><p>Return the window position of the manual mode.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_detection_position" title="ttea.service.calibrationservice.CalibrationService.get_mediapipe_detection_position"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_mediapipe_detection_position</span></code></a></p></td>
+<td><p>Return the minimum pose detection confidence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_detection_presence" title="ttea.service.calibrationservice.CalibrationService.get_mediapipe_detection_presence"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_mediapipe_detection_presence</span></code></a></p></td>
+<td><p>Return the minimum pose presence confidence.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_detection_tracking" title="ttea.service.calibrationservice.CalibrationService.get_mediapipe_detection_tracking"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_mediapipe_detection_tracking</span></code></a></p></td>
+<td><p>Return the minimum pose tracking confidence.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_embedded_processing" title="ttea.service.calibrationservice.CalibrationService.get_mediapipe_embedded_processing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_mediapipe_embedded_processing</span></code></a></p></td>
+<td><p>Return the MediaPipe processing option for embedded systems.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_execution_mode" title="ttea.service.calibrationservice.CalibrationService.get_mediapipe_execution_mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_mediapipe_execution_mode</span></code></a></p></td>
+<td><p>Return the MediaPipe running mode.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_linux_processing" title="ttea.service.calibrationservice.CalibrationService.get_mediapipe_linux_processing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_mediapipe_linux_processing</span></code></a></p></td>
+<td><p>Return the MediaPipe processing option for Linux.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_mac_processing" title="ttea.service.calibrationservice.CalibrationService.get_mediapipe_mac_processing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_mediapipe_mac_processing</span></code></a></p></td>
+<td><p>Return the MediaPipe processing option for macOS.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_model_desktop" title="ttea.service.calibrationservice.CalibrationService.get_mediapipe_model_desktop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_mediapipe_model_desktop</span></code></a></p></td>
+<td><p>Return the MediaPipe model file name for desktop systems.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_model_embedded" title="ttea.service.calibrationservice.CalibrationService.get_mediapipe_model_embedded"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_mediapipe_model_embedded</span></code></a></p></td>
+<td><p>Return the MediaPipe model file name for embedded systems.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_num_position" title="ttea.service.calibrationservice.CalibrationService.get_mediapipe_num_position"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_mediapipe_num_position</span></code></a></p></td>
+<td><p>Return the maximum number of poses detected.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_windows_processing" title="ttea.service.calibrationservice.CalibrationService.get_mediapipe_windows_processing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_mediapipe_windows_processing</span></code></a></p></td>
+<td><p>Return the MediaPipe processing option for Windows.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_opencv_buffer_size" title="ttea.service.calibrationservice.CalibrationService.get_opencv_buffer_size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_opencv_buffer_size</span></code></a></p></td>
+<td><p>Return the camera capture buffer size.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_opencv_capture_backend" title="ttea.service.calibrationservice.CalibrationService.get_opencv_capture_backend"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_opencv_capture_backend</span></code></a></p></td>
+<td><p>Return the OpenCV capture backend for the current platform.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_opencv_fps" title="ttea.service.calibrationservice.CalibrationService.get_opencv_fps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_opencv_fps</span></code></a></p></td>
+<td><p>Return the capture frame rate.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_opencv_height" title="ttea.service.calibrationservice.CalibrationService.get_opencv_height"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_opencv_height</span></code></a></p></td>
+<td><p>Return the capture height in pixels.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_opencv_ratio" title="ttea.service.calibrationservice.CalibrationService.get_opencv_ratio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_opencv_ratio</span></code></a></p></td>
+<td><p>Return the capture aspect ratio name.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_opencv_width" title="ttea.service.calibrationservice.CalibrationService.get_opencv_width"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_opencv_width</span></code></a></p></td>
+<td><p>Return the capture width in pixels.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_proportions" title="ttea.service.calibrationservice.CalibrationService.get_proportions"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_proportions</span></code></a></p></td>
+<td><p>Return the supported aspect ratios.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_screen_info" title="ttea.service.calibrationservice.CalibrationService.get_screen_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_screen_info</span></code></a></p></td>
+<td><p>Return the screen fields of the saved calibration.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_screen_size" title="ttea.service.calibrationservice.CalibrationService.get_screen_size"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_screen_size</span></code></a></p></td>
+<td><p>Return the window size for the default calibration mode.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_screens" title="ttea.service.calibrationservice.CalibrationService.get_screens"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_screens</span></code></a></p></td>
+<td><p>Return the screens currently connected.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_semiautomatic_window_open_mode" title="ttea.service.calibrationservice.CalibrationService.get_semiautomatic_window_open_mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_semiautomatic_window_open_mode</span></code></a></p></td>
+<td><p>Return the window display mode of the semiautomatic mode.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_semiautomatic_window_position" title="ttea.service.calibrationservice.CalibrationService.get_semiautomatic_window_position"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_semiautomatic_window_position</span></code></a></p></td>
+<td><p>Return the window position of the semiautomatic mode.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.get_video_inputs" title="ttea.service.calibrationservice.CalibrationService.get_video_inputs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_video_inputs</span></code></a></p></td>
+<td><p>Return the cameras currently available.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_automatic_default_calibration" title="ttea.service.calibrationservice.CalibrationService.is_automatic_default_calibration"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_automatic_default_calibration</span></code></a></p></td>
+<td><p>Check whether the automatic mode is the default.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_automatic_mirror_mode" title="ttea.service.calibrationservice.CalibrationService.is_automatic_mirror_mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_automatic_mirror_mode</span></code></a></p></td>
+<td><p>Check whether the automatic mode mirrors the image.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_automatic_open_projector" title="ttea.service.calibrationservice.CalibrationService.is_automatic_open_projector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_automatic_open_projector</span></code></a></p></td>
+<td><p>Return the the open-projector flag of the automatic mode.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_enable_mediapipe_pose" title="ttea.service.calibrationservice.CalibrationService.is_enable_mediapipe_pose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_enable_mediapipe_pose</span></code></a></p></td>
+<td><p>Check whether pose detection is enabled.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_filter_enable_filter" title="ttea.service.calibrationservice.CalibrationService.is_filter_enable_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_filter_enable_filter</span></code></a></p></td>
+<td><p>Check whether image enhancement is enabled.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_fullscreen" title="ttea.service.calibrationservice.CalibrationService.is_fullscreen"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_fullscreen</span></code></a></p></td>
+<td><p>Check whether the default calibration opens in full screen.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_manual_default_calibration" title="ttea.service.calibrationservice.CalibrationService.is_manual_default_calibration"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_manual_default_calibration</span></code></a></p></td>
+<td><p>Check whether the manual mode is the default.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_manual_mirror_mode" title="ttea.service.calibrationservice.CalibrationService.is_manual_mirror_mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_manual_mirror_mode</span></code></a></p></td>
+<td><p>Check whether the manual mode mirrors the image.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_manual_open_projector" title="ttea.service.calibrationservice.CalibrationService.is_manual_open_projector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_manual_open_projector</span></code></a></p></td>
+<td><p>Return the the open-projector flag of the manual mode.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_opencv_custom_camera" title="ttea.service.calibrationservice.CalibrationService.is_opencv_custom_camera"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_opencv_custom_camera</span></code></a></p></td>
+<td><p>Check whether a custom camera is used.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_raspberry_pi" title="ttea.service.calibrationservice.CalibrationService.is_raspberry_pi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_raspberry_pi</span></code></a></p></td>
+<td><p>Check whether the hardware is a Raspberry Pi.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_semiautomatic_default_calibration" title="ttea.service.calibrationservice.CalibrationService.is_semiautomatic_default_calibration"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_semiautomatic_default_calibration</span></code></a></p></td>
+<td><p>Check whether the semiautomatic mode is the default.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_semiautomatic_mirror_mode" title="ttea.service.calibrationservice.CalibrationService.is_semiautomatic_mirror_mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_semiautomatic_mirror_mode</span></code></a></p></td>
+<td><p>Check whether the semiautomatic mode mirrors the image.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_semiautomatic_open_projector" title="ttea.service.calibrationservice.CalibrationService.is_semiautomatic_open_projector"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_semiautomatic_open_projector</span></code></a></p></td>
+<td><p>Return the the open-projector flag of the semiautomatic mode.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_telemetry_enable_panel" title="ttea.service.calibrationservice.CalibrationService.is_telemetry_enable_panel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_telemetry_enable_panel</span></code></a></p></td>
+<td><p>Check whether the telemetry panel is shown.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ttea.service.calibrationservice.CalibrationService.is_windows" title="ttea.service.calibrationservice.CalibrationService.is_windows"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_windows</span></code></a></p></td>
+<td><p>Check whether the operating system is Windows.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py property">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.calibration_setting_service">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calibration_setting_service</span></span><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.calibration_setting_service" title="Link to this definition"></a></dt>
+<dd><p>Settings service, created on first access if not injected.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_proportions">
+<span class="sig-name descname"><span class="pre">get_proportions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_proportions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_proportions" title="Link to this definition"></a></dt>
+<dd><p>Return the supported aspect ratios.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>dict_items</dt><dd><p><code class="docutils literal notranslate"><span class="pre">Calibration.PROPORTIONS.items()</span></code>: pairs of name (e.g.
+<code class="docutils literal notranslate"><span class="pre">&quot;16:9&quot;</span></code>) and <code class="docutils literal notranslate"><span class="pre">(width,</span> <span class="pre">height)</span></code>, despite the <code class="docutils literal notranslate"><span class="pre">dict</span></code>
+annotation.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_screens">
+<span class="sig-name descname"><span class="pre">get_screens</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_screens"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_screens" title="Link to this definition"></a></dt>
+<dd><p>Return the screens currently connected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>list[QScreen]</dt><dd><p><code class="docutils literal notranslate"><span class="pre">QGuiApplication.screens()</span></code>, read on every call.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_video_inputs">
+<span class="sig-name descname"><span class="pre">get_video_inputs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_video_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_video_inputs" title="Link to this definition"></a></dt>
+<dd><p>Return the cameras currently available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>list[QCameraDevice]</dt><dd><p><code class="docutils literal notranslate"><span class="pre">QMediaDevices.videoInputs()</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_geometry_of_screen">
+<span class="sig-name descname"><span class="pre">get_geometry_of_screen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_geometry_of_screen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_geometry_of_screen" title="Link to this definition"></a></dt>
+<dd><p>Return the full geometry of a screen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>index</strong><span class="classifier">int</span></dt><dd><p>Screen index in <code class="docutils literal notranslate"><span class="pre">get_screens()</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>QRect | None</dt><dd><p><code class="docutils literal notranslate"><span class="pre">QScreen.geometry()</span></code>, or None if the index is out of
+range.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_available_geometry_of_screen">
+<span class="sig-name descname"><span class="pre">get_available_geometry_of_screen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_available_geometry_of_screen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_available_geometry_of_screen" title="Link to this definition"></a></dt>
+<dd><p>Return the available geometry of a screen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>index</strong><span class="classifier">int</span></dt><dd><p>Screen index in <code class="docutils literal notranslate"><span class="pre">get_screens()</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>QRect | None</dt><dd><p><code class="docutils literal notranslate"><span class="pre">QScreen.availableGeometry()</span></code> (without task bars and
+docks), or None if the index is out of range.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.is_raspberry_pi">
+<span class="sig-name descname"><span class="pre">is_raspberry_pi</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.is_raspberry_pi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.is_raspberry_pi" title="Link to this definition"></a></dt>
+<dd><p>Check whether the hardware is a Raspberry Pi.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>bool</dt><dd><p>True on Linux when <code class="docutils literal notranslate"><span class="pre">/proc/device-tree/model</span></code> contains
+“raspberry pi” (any case); False otherwise or on read
+errors.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.is_windows">
+<span class="sig-name descname"><span class="pre">is_windows</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.is_windows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.is_windows" title="Link to this definition"></a></dt>
+<dd><p>Check whether the operating system is Windows.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>bool</dt><dd><p>True if <code class="docutils literal notranslate"><span class="pre">sys.platform</span></code> starts with <code class="docutils literal notranslate"><span class="pre">&quot;win&quot;</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.create_calibration_hardware">
+<span class="sig-name descname"><span class="pre">create_calibration_hardware</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.create_calibration_hardware"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.create_calibration_hardware" title="Link to this definition"></a></dt>
+<dd><p>Save the hardware calibration built from a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data</strong><span class="classifier">dict[str, Any]</span></dt><dd><p>Values for every <code class="docutils literal notranslate"><span class="pre">Calibration</span></code> field.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>int | None</dt><dd><p><code class="docutils literal notranslate"><span class="pre">Calibration.ID_VALUE</span></code> (the ID returned by the DAO), or
+None if the calibration is not valid. The <code class="docutils literal notranslate"><span class="pre">Calibration</span> <span class="pre">|</span>
+<span class="pre">None</span></code> annotation does not match this.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>TypeError</dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">data</span></code> misses a field or has an unknown key.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.find_by_id_calibration">
+<span class="sig-name descname"><span class="pre">find_by_id_calibration</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">calibration_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.find_by_id_calibration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.find_by_id_calibration" title="Link to this definition"></a></dt>
+<dd><p>Return the saved hardware calibration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>calibration_id</strong><span class="classifier">int</span></dt><dd><p>Ignored by the INI DAO: there is only one record.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>Calibration | None</dt><dd><p>The calibration, or None if no camera is saved.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.create_calibration_point">
+<span class="sig-name descname"><span class="pre">create_calibration_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.create_calibration_point"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.create_calibration_point" title="Link to this definition"></a></dt>
+<dd><p>Save the calibration points built from a dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>data</strong><span class="classifier">dict[str, Any]</span></dt><dd><p>Values for every <code class="docutils literal notranslate"><span class="pre">CalibrationPoint</span></code> field
+(<code class="docutils literal notranslate"><span class="pre">pointx1</span></code>…``pointy4``).</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>CalibrationPoint | None</dt><dd><p>The saved points read back from the cache.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>TypeError</dt><dd><p>If <code class="docutils literal notranslate"><span class="pre">data</span></code> misses a field or has an unknown key.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.find_by_id_calibration_point">
+<span class="sig-name descname"><span class="pre">find_by_id_calibration_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">calibration_point_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.find_by_id_calibration_point"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.find_by_id_calibration_point" title="Link to this definition"></a></dt>
+<dd><p>Return the saved calibration points.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>calibration_point_id</strong><span class="classifier">int</span></dt><dd><p>Record ID, normally <code class="docutils literal notranslate"><span class="pre">CalibrationPoint.ID_VALUE</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>CalibrationPoint | None</dt><dd><p>The points, or None if none were saved.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.is_fullscreen">
+<span class="sig-name descname"><span class="pre">is_fullscreen</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.is_fullscreen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.is_fullscreen" title="Link to this definition"></a></dt>
+<dd><p>Check whether the default calibration opens in full screen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>bool</dt><dd><p>True if <code class="docutils literal notranslate"><span class="pre">get_window_open_mode()</span></code> of the settings service
+is <code class="docutils literal notranslate"><span class="pre">CalibrationSetting.FULLSCREEN</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_screen_size">
+<span class="sig-name descname"><span class="pre">get_screen_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_screen_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_screen_size" title="Link to this definition"></a></dt>
+<dd><p>Return the window size for the default calibration mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>dict[str, int] | None</dt><dd><p><code class="docutils literal notranslate"><span class="pre">{&quot;width&quot;:</span> <span class="pre">...,</span> <span class="pre">&quot;height&quot;:</span> <span class="pre">...}</span></code>: the screen size for
+<code class="docutils literal notranslate"><span class="pre">FULLSCREEN</span></code> and <code class="docutils literal notranslate"><span class="pre">MAXIMIZED</span></code>, the available screen size
+for <code class="docutils literal notranslate"><span class="pre">MAXIMIZED_UTIL</span></code>. None if there is no saved
+calibration or the mode is none of these.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_camera_info">
+<span class="sig-name descname"><span class="pre">get_camera_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_camera_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_camera_info" title="Link to this definition"></a></dt>
+<dd><p>Return the camera fields of the saved calibration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>dict[str, Any] | None</dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">camera_*</span></code> fields by name, or None if there is no
+saved calibration.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_screen_info">
+<span class="sig-name descname"><span class="pre">get_screen_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_screen_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_screen_info" title="Link to this definition"></a></dt>
+<dd><p>Return the screen fields of the saved calibration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>dict[str, Any] | None</dt><dd><p>The <code class="docutils literal notranslate"><span class="pre">screen_*</span></code> fields by name, or None if there is no
+saved calibration.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_mediapipe_model_desktop">
+<span class="sig-name descname"><span class="pre">get_mediapipe_model_desktop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_mediapipe_model_desktop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_model_desktop" title="Link to this definition"></a></dt>
+<dd><p>Return the MediaPipe model file name for desktop systems.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_mediapipe_model_embedded">
+<span class="sig-name descname"><span class="pre">get_mediapipe_model_embedded</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_mediapipe_model_embedded"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_model_embedded" title="Link to this definition"></a></dt>
+<dd><p>Return the MediaPipe model file name for embedded systems.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_mediapipe_embedded_processing">
+<span class="sig-name descname"><span class="pre">get_mediapipe_embedded_processing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_mediapipe_embedded_processing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_embedded_processing" title="Link to this definition"></a></dt>
+<dd><p>Return the MediaPipe processing option for embedded systems.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_mediapipe_linux_processing">
+<span class="sig-name descname"><span class="pre">get_mediapipe_linux_processing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_mediapipe_linux_processing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_linux_processing" title="Link to this definition"></a></dt>
+<dd><p>Return the MediaPipe processing option for Linux.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_mediapipe_mac_processing">
+<span class="sig-name descname"><span class="pre">get_mediapipe_mac_processing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_mediapipe_mac_processing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_mac_processing" title="Link to this definition"></a></dt>
+<dd><p>Return the MediaPipe processing option for macOS.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_mediapipe_windows_processing">
+<span class="sig-name descname"><span class="pre">get_mediapipe_windows_processing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_mediapipe_windows_processing"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_windows_processing" title="Link to this definition"></a></dt>
+<dd><p>Return the MediaPipe processing option for Windows.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_mediapipe_execution_mode">
+<span class="sig-name descname"><span class="pre">get_mediapipe_execution_mode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_mediapipe_execution_mode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_execution_mode" title="Link to this definition"></a></dt>
+<dd><p>Return the MediaPipe running mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>vision.RunningMode</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.is_enable_mediapipe_pose">
+<span class="sig-name descname"><span class="pre">is_enable_mediapipe_pose</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.is_enable_mediapipe_pose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.is_enable_mediapipe_pose" title="Link to this definition"></a></dt>
+<dd><p>Check whether pose detection is enabled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>
+(<code class="docutils literal notranslate"><span class="pre">is_mediapipe_enable_pose</span></code>).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_mediapipe_detection_position">
+<span class="sig-name descname"><span class="pre">get_mediapipe_detection_position</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_mediapipe_detection_position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_detection_position" title="Link to this definition"></a></dt>
+<dd><p>Return the minimum pose detection confidence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>float</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_mediapipe_detection_presence">
+<span class="sig-name descname"><span class="pre">get_mediapipe_detection_presence</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_mediapipe_detection_presence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_detection_presence" title="Link to this definition"></a></dt>
+<dd><p>Return the minimum pose presence confidence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>float</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_mediapipe_detection_tracking">
+<span class="sig-name descname"><span class="pre">get_mediapipe_detection_tracking</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_mediapipe_detection_tracking"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_detection_tracking" title="Link to this definition"></a></dt>
+<dd><p>Return the minimum pose tracking confidence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>float</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_mediapipe_num_position">
+<span class="sig-name descname"><span class="pre">get_mediapipe_num_position</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_mediapipe_num_position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_mediapipe_num_position" title="Link to this definition"></a></dt>
+<dd><p>Return the maximum number of poses detected.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_opencv_capture_backend">
+<span class="sig-name descname"><span class="pre">get_opencv_capture_backend</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_opencv_capture_backend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_opencv_capture_backend" title="Link to this definition"></a></dt>
+<dd><p>Return the OpenCV capture backend for the current platform.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_opencv_buffer_size">
+<span class="sig-name descname"><span class="pre">get_opencv_buffer_size</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_opencv_buffer_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_opencv_buffer_size" title="Link to this definition"></a></dt>
+<dd><p>Return the camera capture buffer size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.is_opencv_custom_camera">
+<span class="sig-name descname"><span class="pre">is_opencv_custom_camera</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.is_opencv_custom_camera"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.is_opencv_custom_camera" title="Link to this definition"></a></dt>
+<dd><p>Check whether a custom camera is used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_opencv_ratio">
+<span class="sig-name descname"><span class="pre">get_opencv_ratio</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_opencv_ratio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_opencv_ratio" title="Link to this definition"></a></dt>
+<dd><p>Return the capture aspect ratio name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_opencv_width">
+<span class="sig-name descname"><span class="pre">get_opencv_width</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_opencv_width"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_opencv_width" title="Link to this definition"></a></dt>
+<dd><p>Return the capture width in pixels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_opencv_height">
+<span class="sig-name descname"><span class="pre">get_opencv_height</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_opencv_height"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_opencv_height" title="Link to this definition"></a></dt>
+<dd><p>Return the capture height in pixels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_opencv_fps">
+<span class="sig-name descname"><span class="pre">get_opencv_fps</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_opencv_fps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_opencv_fps" title="Link to this definition"></a></dt>
+<dd><p>Return the capture frame rate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.is_filter_enable_filter">
+<span class="sig-name descname"><span class="pre">is_filter_enable_filter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.is_filter_enable_filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.is_filter_enable_filter" title="Link to this definition"></a></dt>
+<dd><p>Check whether image enhancement is enabled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_filter_average_smooth_frames">
+<span class="sig-name descname"><span class="pre">get_filter_average_smooth_frames</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_filter_average_smooth_frames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_filter_average_smooth_frames" title="Link to this definition"></a></dt>
+<dd><p>Return the number of frames averaged per landmark.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_filter_clahe_clip">
+<span class="sig-name descname"><span class="pre">get_filter_clahe_clip</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_filter_clahe_clip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_filter_clahe_clip" title="Link to this definition"></a></dt>
+<dd><p>Return the CLAHE clip limit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_filter_clahe_grid">
+<span class="sig-name descname"><span class="pre">get_filter_clahe_grid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_filter_clahe_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_filter_clahe_grid" title="Link to this definition"></a></dt>
+<dd><p>Return the CLAHE tile grid size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>tuple[int, …]</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_filter_clahe_lum_below">
+<span class="sig-name descname"><span class="pre">get_filter_clahe_lum_below</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_filter_clahe_lum_below"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_filter_clahe_lum_below" title="Link to this definition"></a></dt>
+<dd><p>Return the brightness (0-255) below which CLAHE runs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_filter_gamma_factor">
+<span class="sig-name descname"><span class="pre">get_filter_gamma_factor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_filter_gamma_factor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_filter_gamma_factor" title="Link to this definition"></a></dt>
+<dd><p>Return the gamma correction factor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>float</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_filter_gamma_lum_above">
+<span class="sig-name descname"><span class="pre">get_filter_gamma_lum_above</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_filter_gamma_lum_above"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_filter_gamma_lum_above" title="Link to this definition"></a></dt>
+<dd><p>Return the brightness (0-255) above which gamma runs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_filter_landmark_limit">
+<span class="sig-name descname"><span class="pre">get_filter_landmark_limit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_filter_landmark_limit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_filter_landmark_limit" title="Link to this definition"></a></dt>
+<dd><p>Return the landmark jump that resets its smoothing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>float</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.is_telemetry_enable_panel">
+<span class="sig-name descname"><span class="pre">is_telemetry_enable_panel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.is_telemetry_enable_panel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.is_telemetry_enable_panel" title="Link to this definition"></a></dt>
+<dd><p>Check whether the telemetry panel is shown.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_automatic_window_position">
+<span class="sig-name descname"><span class="pre">get_automatic_window_position</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_automatic_window_position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_window_position" title="Link to this definition"></a></dt>
+<dd><p>Return the window position of the automatic mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_automatic_window_open_mode">
+<span class="sig-name descname"><span class="pre">get_automatic_window_open_mode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_automatic_window_open_mode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_window_open_mode" title="Link to this definition"></a></dt>
+<dd><p>Return the window display mode of the automatic mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.is_automatic_open_projector">
+<span class="sig-name descname"><span class="pre">is_automatic_open_projector</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.is_automatic_open_projector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.is_automatic_open_projector" title="Link to this definition"></a></dt>
+<dd><p>Return the the open-projector flag of the automatic mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.is_automatic_default_calibration">
+<span class="sig-name descname"><span class="pre">is_automatic_default_calibration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.is_automatic_default_calibration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.is_automatic_default_calibration" title="Link to this definition"></a></dt>
+<dd><p>Check whether the automatic mode is the default.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.is_automatic_mirror_mode">
+<span class="sig-name descname"><span class="pre">is_automatic_mirror_mode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.is_automatic_mirror_mode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.is_automatic_mirror_mode" title="Link to this definition"></a></dt>
+<dd><p>Check whether the automatic mode mirrors the image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_automatic_num_columns">
+<span class="sig-name descname"><span class="pre">get_automatic_num_columns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_automatic_num_columns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_num_columns" title="Link to this definition"></a></dt>
+<dd><p>Return the column count of the calibration pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_automatic_num_rows">
+<span class="sig-name descname"><span class="pre">get_automatic_num_rows</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_automatic_num_rows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_num_rows" title="Link to this definition"></a></dt>
+<dd><p>Return the row count of the calibration pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_automatic_multiplier">
+<span class="sig-name descname"><span class="pre">get_automatic_multiplier</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_automatic_multiplier"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_multiplier" title="Link to this definition"></a></dt>
+<dd><p>Return the multiplier of the automatic calibration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>float</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_automatic_dictionary">
+<span class="sig-name descname"><span class="pre">get_automatic_dictionary</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_automatic_dictionary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_dictionary" title="Link to this definition"></a></dt>
+<dd><p>Return the ArUco dictionary of the calibration pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_automatic_width">
+<span class="sig-name descname"><span class="pre">get_automatic_width</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_automatic_width"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_width" title="Link to this definition"></a></dt>
+<dd><p>Return the width of the calibration pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_automatic_height">
+<span class="sig-name descname"><span class="pre">get_automatic_height</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_automatic_height"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_height" title="Link to this definition"></a></dt>
+<dd><p>Return the height of the calibration pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_automatic_margin">
+<span class="sig-name descname"><span class="pre">get_automatic_margin</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_automatic_margin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_automatic_margin" title="Link to this definition"></a></dt>
+<dd><p>Return the margin of the calibration pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_semiautomatic_window_position">
+<span class="sig-name descname"><span class="pre">get_semiautomatic_window_position</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_semiautomatic_window_position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_semiautomatic_window_position" title="Link to this definition"></a></dt>
+<dd><p>Return the window position of the semiautomatic mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_semiautomatic_window_open_mode">
+<span class="sig-name descname"><span class="pre">get_semiautomatic_window_open_mode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_semiautomatic_window_open_mode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_semiautomatic_window_open_mode" title="Link to this definition"></a></dt>
+<dd><p>Return the window display mode of the semiautomatic mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.is_semiautomatic_open_projector">
+<span class="sig-name descname"><span class="pre">is_semiautomatic_open_projector</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.is_semiautomatic_open_projector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.is_semiautomatic_open_projector" title="Link to this definition"></a></dt>
+<dd><p>Return the the open-projector flag of the semiautomatic mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.is_semiautomatic_default_calibration">
+<span class="sig-name descname"><span class="pre">is_semiautomatic_default_calibration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.is_semiautomatic_default_calibration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.is_semiautomatic_default_calibration" title="Link to this definition"></a></dt>
+<dd><p>Check whether the semiautomatic mode is the default.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.is_semiautomatic_mirror_mode">
+<span class="sig-name descname"><span class="pre">is_semiautomatic_mirror_mode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.is_semiautomatic_mirror_mode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.is_semiautomatic_mirror_mode" title="Link to this definition"></a></dt>
+<dd><p>Check whether the semiautomatic mode mirrors the image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_manual_window_position">
+<span class="sig-name descname"><span class="pre">get_manual_window_position</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_manual_window_position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_manual_window_position" title="Link to this definition"></a></dt>
+<dd><p>Return the window position of the manual mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.get_manual_window_open_mode">
+<span class="sig-name descname"><span class="pre">get_manual_window_open_mode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.get_manual_window_open_mode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.get_manual_window_open_mode" title="Link to this definition"></a></dt>
+<dd><p>Return the window display mode of the manual mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.is_manual_open_projector">
+<span class="sig-name descname"><span class="pre">is_manual_open_projector</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.is_manual_open_projector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.is_manual_open_projector" title="Link to this definition"></a></dt>
+<dd><p>Return the the open-projector flag of the manual mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.is_manual_default_calibration">
+<span class="sig-name descname"><span class="pre">is_manual_default_calibration</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.is_manual_default_calibration"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.is_manual_default_calibration" title="Link to this definition"></a></dt>
+<dd><p>Check whether the manual mode is the default.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ttea.service.calibrationservice.CalibrationService.is_manual_mirror_mode">
+<span class="sig-name descname"><span class="pre">is_manual_mirror_mode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ttea/service/calibrationservice.html#CalibrationService.is_manual_mirror_mode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#ttea.service.calibrationservice.CalibrationService.is_manual_mirror_mode" title="Link to this definition"></a></dt>
+<dd><p>Check whether the manual mode mirrors the image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>int</dt><dd><p>Value from <code class="docutils literal notranslate"><span class="pre">CalibrationSettingService</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.service.calibrationservice.html" class="btn btn-neutral float-left" title="ttea.service.calibrationservice" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.service.calibrationsettingservice.html" class="btn btn-neutral float-right" title="ttea.service.calibrationsettingservice" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

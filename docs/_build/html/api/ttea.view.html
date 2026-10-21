@@ -1,0 +1,271 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ttea.view &mdash; T-TEA 2.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=51b770b3"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+      <script src="../_static/copybutton.js?v=f281be69"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ttea.view.aboutview" href="ttea.view.aboutview.html" />
+    <link rel="prev" title="QtDateFormat" href="ttea.util.qtdateformat.QtDateFormat.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search"  style="background: #2980B9" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            T-TEA
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">API reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="ttea.html">ttea</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="ttea.app.html">ttea.app</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.controller.html">ttea.controller</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.core.html">ttea.core</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.dao.html">ttea.dao</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.exception.html">ttea.exception</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.factory.html">ttea.factory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.games.html">ttea.games</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.log.html">ttea.log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.main.html">ttea.main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.model.html">ttea.model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.service.html">ttea.service</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.testrunner.html">ttea.testrunner</a></li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.util.html">ttea.util</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">ttea.view</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#attributes">Attributes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#see-also">See Also</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.aboutview.html">ttea.view.aboutview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.automaticcalibrationview.html">ttea.view.automaticcalibrationview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.calibrationsettingview.html">ttea.view.calibrationsettingview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.calibrationview.html">ttea.view.calibrationview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.helpview.html">ttea.view.helpview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.institutionfacilityeditview.html">ttea.view.institutionfacilityeditview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.institutionfacilitylistview.html">ttea.view.institutionfacilitylistview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.languageview.html">ttea.view.languageview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.mainview.html">ttea.view.mainview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.manualcalibrationview.html">ttea.view.manualcalibrationview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.playereditview.html">ttea.view.playereditview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.playergamelaunchview.html">ttea.view.playergamelaunchview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.playerlistview.html">ttea.view.playerlistview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.professionaleditview.html">ttea.view.professionaleditview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.professionallistview.html">ttea.view.professionallistview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ttea.view.splashscreen.html">ttea.view.splashscreen</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="ttea.window.html">ttea.window</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu"  style="background: #2980B9" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">T-TEA</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../modules.html">API reference</a></li>
+          <li class="breadcrumb-item"><a href="ttea.html">ttea</a></li>
+      <li class="breadcrumb-item active">ttea.view</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/ttea.view.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-ttea.view">
+<span id="ttea-view"></span><h1>ttea.view<a class="headerlink" href="#module-ttea.view" title="Link to this heading"></a></h1>
+<p>Views (Qt windows and dialogs) of the T-TEA platform.</p>
+<p>Developed by the Larva UDESC team.</p>
+<p>This package provides the windows and dialogs of the platform. Each view
+builds its widgets from the <code class="docutils literal notranslate"><span class="pre">ttea.ui</span></code> classes generated by pyside6-uic
+and delegates its logic to a controller.</p>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>__version__<span class="classifier">str</span></dt><dd><p>The current version of the package.</p>
+</dd>
+<dt>__date__<span class="classifier">str</span></dt><dd><p>The release date of this version.</p>
+</dd>
+<dt>__author__<span class="classifier">str</span></dt><dd><p>The development team.</p>
+</dd>
+<dt>__license__<span class="classifier">str</span></dt><dd><p>The license under which the package is distributed.</p>
+</dd>
+</dl>
+</section>
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>AboutView</dt><dd><p>Information about the project.</p>
+</dd>
+<dt>AutomaticCalibrationView</dt><dd><p>Automatic calibration with a ChArUco board.</p>
+</dd>
+<dt>CalibrationSettingView</dt><dd><p>Calibration settings.</p>
+</dd>
+<dt>CalibrationView</dt><dd><p>Hardware data and calibration modes.</p>
+</dd>
+<dt>InstitutionFacilityEditView</dt><dd><p>Create or edit an institution/facility.</p>
+</dd>
+<dt>InstitutionFacilityListView</dt><dd><p>List of institutions/facilities.</p>
+</dd>
+<dt>LanguageView</dt><dd><p>Language selection.</p>
+</dd>
+<dt>MainView</dt><dd><p>Main window.</p>
+</dd>
+<dt>ManualCalibrationView</dt><dd><p>Manual calibration.</p>
+</dd>
+<dt>PlayerEditView</dt><dd><p>Create or edit a player.</p>
+</dd>
+<dt>PlayerGameLaunchView</dt><dd><p>Game launch (game session).</p>
+</dd>
+<dt>PlayerListView</dt><dd><p>List of players.</p>
+</dd>
+<dt>ProfessionalEditView</dt><dd><p>Create or edit a professional.</p>
+</dd>
+<dt>ProfessionalListView</dt><dd><p>List of professionals.</p>
+</dd>
+<dt>SplashScreen</dt><dd><p>Splash screen shown during startup.</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">HelpView</span></code> is not exported here, so Qt WebEngine is loaded only when
+the help is opened.</p>
+<p>This package is maintained by the Larva UDESC team and is under active
+development. Contributions and bug reports are welcome at:
+<a class="reference external" href="https://github.com/larvattea/ttea">https://github.com/larvattea/ttea</a></p>
+</section>
+<p class="rubric">Modules</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="ttea.view.aboutview.html#module-ttea.view.aboutview" title="ttea.view.aboutview"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aboutview</span></code></a></p></td>
+<td><p>About dialog view for the T-TEA application.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ttea.view.automaticcalibrationview.html#module-ttea.view.automaticcalibrationview" title="ttea.view.automaticcalibrationview"><code class="xref py py-obj docutils literal notranslate"><span class="pre">automaticcalibrationview</span></code></a></p></td>
+<td><p>Dialog of the automatic calibration (ChArUco board).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="ttea.view.calibrationsettingview.html#module-ttea.view.calibrationsettingview" title="ttea.view.calibrationsettingview"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calibrationsettingview</span></code></a></p></td>
+<td><p>Calibration settings dialog.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ttea.view.calibrationview.html#module-ttea.view.calibrationview" title="ttea.view.calibrationview"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calibrationview</span></code></a></p></td>
+<td><p>Calibration dialog: hardware data, camera preview and modes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="ttea.view.helpview.html#module-ttea.view.helpview" title="ttea.view.helpview"><code class="xref py py-obj docutils literal notranslate"><span class="pre">helpview</span></code></a></p></td>
+<td><p>Help window: contents, index and search beside a web view.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ttea.view.institutionfacilityeditview.html#module-ttea.view.institutionfacilityeditview" title="ttea.view.institutionfacilityeditview"><code class="xref py py-obj docutils literal notranslate"><span class="pre">institutionfacilityeditview</span></code></a></p></td>
+<td><p>Dialog to create or edit an institution facility.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="ttea.view.institutionfacilitylistview.html#module-ttea.view.institutionfacilitylistview" title="ttea.view.institutionfacilitylistview"><code class="xref py py-obj docutils literal notranslate"><span class="pre">institutionfacilitylistview</span></code></a></p></td>
+<td><p>Window that lists and manages the institution facilities.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ttea.view.languageview.html#module-ttea.view.languageview" title="ttea.view.languageview"><code class="xref py py-obj docutils literal notranslate"><span class="pre">languageview</span></code></a></p></td>
+<td><p>Language selection dialog.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="ttea.view.mainview.html#module-ttea.view.mainview" title="ttea.view.mainview"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mainview</span></code></a></p></td>
+<td><p>Main window of the T-TEA platform.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ttea.view.manualcalibrationview.html#module-ttea.view.manualcalibrationview" title="ttea.view.manualcalibrationview"><code class="xref py py-obj docutils literal notranslate"><span class="pre">manualcalibrationview</span></code></a></p></td>
+<td><p>Dialog of the manual calibration.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="ttea.view.playereditview.html#module-ttea.view.playereditview" title="ttea.view.playereditview"><code class="xref py py-obj docutils literal notranslate"><span class="pre">playereditview</span></code></a></p></td>
+<td><p>Dialog to create or edit a player.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ttea.view.playergamelaunchview.html#module-ttea.view.playergamelaunchview" title="ttea.view.playergamelaunchview"><code class="xref py py-obj docutils literal notranslate"><span class="pre">playergamelaunchview</span></code></a></p></td>
+<td><p>Game launch (game session) dialog.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="ttea.view.playerlistview.html#module-ttea.view.playerlistview" title="ttea.view.playerlistview"><code class="xref py py-obj docutils literal notranslate"><span class="pre">playerlistview</span></code></a></p></td>
+<td><p>Window that lists and manages the players.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ttea.view.professionaleditview.html#module-ttea.view.professionaleditview" title="ttea.view.professionaleditview"><code class="xref py py-obj docutils literal notranslate"><span class="pre">professionaleditview</span></code></a></p></td>
+<td><p>Dialog to create or edit a professional.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="ttea.view.professionallistview.html#module-ttea.view.professionallistview" title="ttea.view.professionallistview"><code class="xref py py-obj docutils literal notranslate"><span class="pre">professionallistview</span></code></a></p></td>
+<td><p>Window that lists and manages the professionals.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="ttea.view.splashscreen.html#module-ttea.view.splashscreen" title="ttea.view.splashscreen"><code class="xref py py-obj docutils literal notranslate"><span class="pre">splashscreen</span></code></a></p></td>
+<td><p>Splash screen module for application startup display.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ttea.util.qtdateformat.QtDateFormat.html" class="btn btn-neutral float-left" title="QtDateFormat" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ttea.view.aboutview.html" class="btn btn-neutral float-right" title="ttea.view.aboutview" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025-2026, Udesc - Larva.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+KarteaArrivalTimeFields
+=======================
+
+.. currentmodule:: ttea.games.kartea.util.arrivaltimefields
+
+.. autoclass:: KarteaArrivalTimeFields
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~KarteaArrivalTimeFields.order

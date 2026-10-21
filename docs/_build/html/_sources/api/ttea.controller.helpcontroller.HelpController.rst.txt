@@ -1,0 +1,17 @@
+HelpController
+==============
+
+.. currentmodule:: ttea.controller.helpcontroller
+
+.. autoclass:: HelpController
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~HelpController.instance
+      ~HelpController.show_help

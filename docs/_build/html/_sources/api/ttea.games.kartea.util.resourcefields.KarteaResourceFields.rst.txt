@@ -1,0 +1,18 @@
+KarteaResourceFields
+====================
+
+.. currentmodule:: ttea.games.kartea.util.resourcefields
+
+.. autoclass:: KarteaResourceFields
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~KarteaResourceFields.get
+      ~KarteaResourceFields.images
+      ~KarteaResourceFields.sounds

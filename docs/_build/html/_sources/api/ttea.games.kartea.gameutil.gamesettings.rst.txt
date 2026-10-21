@@ -1,0 +1,20 @@
+ttea.games.kartea.gameutil.gamesettings
+=======================================
+
+.. automodule:: ttea.games.kartea.gameutil.gamesettings
+
+.. currentmodule:: ttea.games.kartea.gameutil.gamesettings
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   GameSettings
+
+

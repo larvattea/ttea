@@ -1,0 +1,26 @@
+InstitutionFacilityCsvDAO
+=========================
+
+.. currentmodule:: ttea.dao.institutionfacilitycsvdao
+
+.. autoclass:: InstitutionFacilityCsvDAO
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~InstitutionFacilityCsvDAO.delete
+      ~InstitutionFacilityCsvDAO.generate_next_id
+      ~InstitutionFacilityCsvDAO.get_filename
+      ~InstitutionFacilityCsvDAO.insert
+      ~InstitutionFacilityCsvDAO.list
+      ~InstitutionFacilityCsvDAO.load_all_institutionfacilities
+      ~InstitutionFacilityCsvDAO.sanitize_filename
+      ~InstitutionFacilityCsvDAO.search_institutionfacilities
+      ~InstitutionFacilityCsvDAO.select
+      ~InstitutionFacilityCsvDAO.update
+      ~InstitutionFacilityCsvDAO.write_with_lock

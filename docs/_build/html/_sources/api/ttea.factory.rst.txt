@@ -1,0 +1,22 @@
+ttea.factory
+============
+
+.. automodule:: ttea.factory
+
+.. currentmodule:: ttea.factory
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/module.rst
+   :recursive:
+
+   appviewfactory
+   gameviewfactoryprotocol
+   viewfactory
+
+
+

@@ -1,0 +1,20 @@
+ttea.games.kartea.dao.readonlydao
+=================================
+
+.. automodule:: ttea.games.kartea.dao.readonlydao
+
+.. currentmodule:: ttea.games.kartea.dao.readonlydao
+
+
+
+
+.. rubric:: Classes
+
+.. autosummary::
+   :toctree:
+   :template: autosummary/class.rst
+   :nosignatures:
+
+   ReadOnlyDAO
+
+

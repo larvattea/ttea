@@ -1,0 +1,19 @@
+CriticalHooks
+=============
+
+.. currentmodule:: ttea.util.criticalhooks
+
+.. autoclass:: CriticalHooks
+   :members:
+   :show-inheritance:
+
+
+   .. rubric:: Methods
+
+   .. autosummary::
+      :nosignatures:
+
+      ~CriticalHooks.global_exception_hook
+      ~CriticalHooks.setup_exception_hooks
+      ~CriticalHooks.show_critical_error
+      ~CriticalHooks.threading_exception_hook
