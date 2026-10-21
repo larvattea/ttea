@@ -58,7 +58,7 @@ class Camera:
         cv2.namedWindow("Tela de Captura")
 
     def load_camera(self) -> bool:
-        """Read a camera frame and show it with the calibration area.
+        """Read a camera frame and draw the calibration area on it.
 
         Returns
         -------
@@ -68,10 +68,10 @@ class Camera:
 
         Notes
         -----
-        The frame is mirrored horizontally, the 4 sides and 4 points of
-        the calibration area are drawn on it (``CALIBRATION_LINE_COLOR``
-        and ``CALIBRATION_POINT_COLOR``) and it is shown in the "Tela de
-        Captura" window.
+        The frame is mirrored horizontally and the 4 sides and 4 points
+        of the calibration area are drawn on it
+        (``CALIBRATION_LINE_COLOR`` and ``CALIBRATION_POINT_COLOR``).
+        ``show`` displays it, once the pose is drawn too.
         """
         self.ret, self.frame = self.cap.read()
 
@@ -146,16 +146,19 @@ class Camera:
                 3,
             )
 
-            # Show the capture window
-            cv2.imshow("Tela de Captura", self.frame)
-
-            # The first imshow resizes the window, and Windows activates
-            # it: give the focus back to the game window once.
-            if not self._window_shown:
-                self._window_shown = True
-                regain_focus()
-
         return True
+
+    def show(self) -> None:
+        """Show the last frame in the "Tela de Captura" window."""
+        if self.frame is None:
+            return
+        cv2.imshow("Tela de Captura", self.frame)
+
+        # The first imshow resizes the window, and Windows activates
+        # it: give the focus back to the game window once.
+        if not self._window_shown:
+            self._window_shown = True
+            regain_focus()
 
     def close_camera(self):
         """Release the camera and close the capture window."""

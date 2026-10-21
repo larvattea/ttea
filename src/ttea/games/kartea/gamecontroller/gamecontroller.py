@@ -537,8 +537,8 @@ class GameController:
     def track_feet_for_menu(self) -> tuple[int, int] | None:
         """Read the camera and the pose outside the game (menus).
 
-        Used by the feet click; keeps the OpenCV capture window
-        responsive.
+        Keeps the OpenCV capture window live, with the skeleton, and
+        gives the feet position to the feet click.
 
         Returns
         -------
@@ -549,12 +549,14 @@ class GameController:
         if not self.load_camera():
             return None
         self.cap.frame = self.pose_tracking.scan_feets(self.cap.frame)
+        self.cap.show()
         cv2.waitKey(1)
         return self.pose_tracking.get_feet_marker_position()
 
     def set_feet_position(self):
         """Position the car from the detected feet position."""
         self.cap.frame = self.pose_tracking.scan_feets(self.cap.frame)
+        self.cap.show()
         x, y = self.pose_tracking.get_feet_center()
         car_y = self.surface.get_height() - self.settings.CAR_SIZE / 2
         self.car.rect.center = (x, car_y)

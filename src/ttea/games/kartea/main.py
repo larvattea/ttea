@@ -258,9 +258,9 @@ class KarTEA:
 
         Notes
         -----
-        - With feet click enabled (``GameState.feet_click``), the camera
-          and feet tracking keep running in the menus, so the feet can
-          trigger the buttons.
+        - The camera and feet tracking keep running in the menus, so the
+          capture window shows the player; with feet click enabled
+          (``GameState.feet_click``), the feet can trigger the buttons.
         - Choices made with the feet are recorded as "Controle do
           Jogador"; with mouse/keyboard, as "Controle UFE".
         - ``"game"`` (Play or Continue) and ``"play"`` (feedback screen)
