@@ -139,6 +139,10 @@ py -3.12 -m venv .venv
 
 O pip instala as versões fixadas no `pyproject.toml`. As dependências indiretas não são fixadas, como no `uv.lock`, então prefira o uv sempre que possível.
 
+### Desenvolvimento de jogos
+
+Para criar jogos para o T-TEA, use o [TSDK](https://github.com/larvattea/tsdk). Ele cuida da câmera, do rastreamento e da calibração, e empacota cada jogo em um cartucho `.ttea`.
+
 ### Importante
 
 No primeiro uso, permita o acesso à câmera nas configurações de privacidade do sistema.
