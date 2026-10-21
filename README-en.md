@@ -103,6 +103,19 @@ This command downloads the correct Python version, creates the `.venv`, syncs de
 uv run tests
 ```
 
+### `.ttea` games
+
+Games distributed as `.ttea` cartridges run on TSDK, installed separately as a uv tool:
+
+```bash
+uv tool install --python 3.14 git+https://github.com/laurogripa/tsdk
+```
+
+If the `tsdk` command is not found, run `uv tool update-shell` and restart T-TEA. Then copy the `.ttea` file into the games folder and it shows up on the game session screen:
+
+- With `uv run dev`: `src/ttea/games`
+- Packaged build: `%LOCALAPPDATA%\udesc\ttea\exergames` (Windows), `~/Library/Application Support/ttea/exergames` (macOS) or `~/.local/share/ttea/exergames` (Linux)
+
 ### Running without uv (manual venv)
 
 With Python 3.10, 3.11 or 3.12 installed, from the project root:

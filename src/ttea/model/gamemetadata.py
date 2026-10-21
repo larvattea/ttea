@@ -1,14 +1,19 @@
 """Model for game metadata read from each game's metadata.json.
 
 This module provides the GameMetadata class, which loads and validates the
-metadata file (schema 1.x) of a game and exposes the data needed by the
-platform to list, configure and launch the game.
+metadata file (schema 1.x) of a game, or the manifest of a ``.ttea``
+cartridge, and exposes the data needed by the platform to list, configure
+and launch the game.
 """
 
 import json
+import zipfile
+import zlib
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, ClassVar, Dict, List, Optional
+
+from .language import Language
 
 
 @dataclass
@@ -47,6 +52,8 @@ class GameMetadata:
 
     SUPPORTED_SCHEMA_MAJOR: ClassVar[str] = "1"
     FILENAME: ClassVar[str] = "metadata.json"
+    CARTRIDGE_EXTENSION: ClassVar[str] = ".ttea"
+    CARTRIDGE_MANIFEST: ClassVar[str] = "manifest.json"
 
     id: str
     version: str
@@ -126,6 +133,119 @@ class GameMetadata:
             default_language=loc.get("default", "en_US"),
             raw=d,
         )
+
+    @classmethod
+    def load_cartridge(cls, path: Path) -> "GameMetadata":
+        """Lê o manifest.json de um cartucho .ttea e devolve um GameMetadata.
+
+        O cartucho é executado pelo comando externo ``tsdk``; aqui só são
+        lidos os dados exibidos na tela de sessão de jogo.
+
+        Parameters
+        ----------
+        path : Path
+            Caminho do arquivo .ttea.
+
+        Returns
+        -------
+        GameMetadata
+            Metadados do jogo, com ``entrypoint`` igual ao nome do arquivo.
+
+        Raises
+        ------
+        ValueError
+            Se o arquivo não for um cartucho válido ou faltar um campo
+            obrigatório no manifest.json.
+        """
+        path = Path(path)
+        try:
+            with zipfile.ZipFile(path) as zf:
+                data = json.loads(zf.read(cls.CARTRIDGE_MANIFEST))
+        except (
+            zipfile.BadZipFile,
+            zlib.error,
+            EOFError,
+            KeyError,
+            ValueError,
+            NotImplementedError,
+            RuntimeError,
+            OSError,
+        ) as e:
+            raise ValueError(f"{path}: cartucho inválido: {e}") from e
+        if not isinstance(data, dict):
+            raise ValueError(f"{path}: manifest.json deve ser um objeto")
+
+        for key in ("id", "version"):
+            if not isinstance(data.get(key), str) or not data[key]:
+                raise ValueError(f"{path}: campo obrigatório ausente: '{key}'")
+
+        localization: Dict[str, Dict[str, str]] = {}
+        for manifest_key, key in (
+            ("name", "name"),
+            ("description", "short_description"),
+        ):
+            if manifest_key == "description" and manifest_key not in data:
+                continue
+            texts = cls._cartridge_texts(data.get(manifest_key))
+            if texts is None:
+                raise ValueError(
+                    f"{path}: '{manifest_key}' deve ser um texto ou um "
+                    f"mapa de idioma para texto"
+                )
+            for code, value in texts.items():
+                localization.setdefault(code, {})[key] = value
+
+        default_language = (
+            "en_US" if "en_US" in localization else next(iter(localization))
+        )
+        return cls(
+            id=data["id"],
+            version=data["version"],
+            folder_path=path.parent,
+            entrypoint=path.name,
+            view_factory=None,
+            menu_actions={},
+            icon=None,
+            developers=[],
+            release_date=None,
+            required_peripherals=[],
+            localization=localization,
+            default_language=default_language,
+            raw=data,
+        )
+
+    @staticmethod
+    def _cartridge_texts(value: Any) -> Optional[Dict[str, str]]:
+        """Converte name/description do manifest em textos por idioma.
+
+        Um texto simples vale para o idioma padrão ("en_US"). Num mapa, as
+        tags BCP 47 ("pt-BR", "es") viram os códigos da plataforma
+        ("pt_BR", "es_ES"); a tag exata prevalece sobre o prefixo.
+        """
+        if isinstance(value, str) and value.strip():
+            return {"en_US": value}
+        if not isinstance(value, dict) or not value:
+            return None
+
+        codes = [lang["code"] for lang in Language.LANGUAGES]
+        exact: Dict[str, str] = {}
+        by_prefix: Dict[str, str] = {}
+        for tag, text in value.items():
+            if not isinstance(tag, str) or not isinstance(text, str):
+                return None
+            if not text.strip():
+                return None
+            tag = tag.replace("-", "_")
+            match = next((c for c in codes if c.lower() == tag.lower()), None)
+            if match:
+                exact[match] = text
+                continue
+            prefix = tag.split("_")[0].lower()
+            match = next(
+                (c for c in codes if c.lower().startswith(prefix + "_")), tag
+            )
+            by_prefix.setdefault(match, text)
+        return {**by_prefix, **exact}
 
     # ---------- acesso ----------
     def text(self, lang: str, key: str, default: str = "") -> str:

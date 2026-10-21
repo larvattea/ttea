@@ -1,8 +1,10 @@
 import os
+import shutil
 import subprocess
 import sys
 from datetime import datetime
-from typing import TYPE_CHECKING, Optional
+from pathlib import Path
+from typing import TYPE_CHECKING, List, Optional
 
 # Import opcional do psutil (não quebra o programa se não estiver instalado)
 try:
@@ -15,11 +17,11 @@ except ImportError:
 
 from PySide6.QtCore import QObject, Qt, QTimer
 
-from ttea.model import AppModel, Calibration, CalibrationPoint
+from ttea.model import AppModel, Calibration, CalibrationPoint, GameMetadata
 from ttea.service import CalibrationService, PlayerGameLaunchService
 
 # Local module imports
-from ttea.util import MessageService
+from ttea.util import MessageService, PathConfig
 
 if TYPE_CHECKING:
     from ttea.view import PlayerGameLaunchView
@@ -169,6 +171,51 @@ class PlayerGameLaunchController(QObject):
 
         return True
 
+    @staticmethod
+    def build_game_command(
+        game_data: GameMetadata,
+        language: str,
+        player_id: str,
+        professional_id: str,
+    ) -> Optional[List[str]]:
+        """Monta o comando que inicia o jogo.
+
+        Cartuchos .ttea são executados pelo comando externo ``tsdk``,
+        procurado no PATH e na pasta de ferramentas do uv
+        (``~/.local/bin``), pois apps abertos pelo Finder não herdam o PATH
+        do shell. Retorna None se o jogo for um cartucho e o ``tsdk`` não
+        estiver instalado.
+        """
+        executable = game_data.entrypoint
+        script_path = str(game_data.entrypoint_path)
+        args = [
+            "--lang",
+            language,
+            "--player_id",
+            player_id,
+            "--professional_id",
+            professional_id,
+        ]
+
+        ext = os.path.splitext(executable.lower())[1] if executable else ""
+        if ext == GameMetadata.CARTRIDGE_EXTENSION:
+            tsdk = shutil.which("tsdk") or shutil.which(
+                "tsdk", path=str(Path.home() / ".local" / "bin")
+            )
+            if tsdk is None:
+                return None
+            return [
+                tsdk,
+                "play",
+                script_path,
+                *args,
+                "--data-dir",
+                str(PathConfig.BASE_DIR),
+            ]
+        if ext in (".py", ".pyw"):
+            return [sys.executable, script_path, *args]
+        return [script_path, *args]
+
     def launch_game(self):
         """Valida e inicia o processo do jogo selecionado."""
         game_data = self.view.cbx_game.currentData()
@@ -205,7 +252,6 @@ class PlayerGameLaunchController(QObject):
             return
 
         folder = str(game_data.folder_path)
-        executable = game_data.entrypoint
         script_path = str(game_data.entrypoint_path)
 
         if not os.path.exists(script_path):
@@ -214,6 +260,18 @@ class PlayerGameLaunchController(QObject):
                     "Erro: Executável do jogo não encontrado em: {0}.\n"
                     "Verifique se o arquivo existe e se os metadados de configuração estão corretos."
                 ).format(script_path)
+            )
+            return
+
+        cmd = self.build_game_command(
+            game_data, language_app, player_id, professional_id
+        )
+        if cmd is None:
+            self.msg.warning(
+                self.tr(
+                    "O comando 'tsdk', necessário para jogos .ttea, não foi encontrado.\n"
+                    "Instale o TSDK e reinicie o T-TEA."
+                )
             )
             return
 
@@ -240,29 +298,6 @@ class PlayerGameLaunchController(QObject):
         # Validação do hardware antes de iniciar o jogo
         if not self._verify_hardware_configuration():
             return
-
-        ext = os.path.splitext(executable.lower())[1] if executable else ""
-        if ext in (".py", ".pyw"):
-            cmd = [
-                sys.executable,
-                script_path,
-                "--lang",
-                language_app,
-                "--player_id",
-                player_id,
-                "--professional_id",
-                professional_id,
-            ]
-        else:
-            cmd = [
-                script_path,
-                "--lang",
-                language_app,
-                "--player_id",
-                player_id,
-                "--professional_id",
-                professional_id,
-            ]
 
         # UX: desabilita botões durante o lançamento
         self.view.pb_play.setEnabled(False)
