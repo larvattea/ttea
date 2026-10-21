@@ -108,7 +108,7 @@ uv run tests
 Los juegos distribuidos como cartucho `.ttea` se ejecutan con TSDK, instalado por separado como herramienta de uv:
 
 ```bash
-uv tool install --python 3.14 git+https://github.com/laurogripa/tsdk
+uv tool install --python 3.14 git+https://github.com/larvattea/tsdk
 ```
 
 Si no se encuentra el comando `tsdk`, ejecute `uv tool update-shell` y reinicie T-TEA. Luego, copie el archivo `.ttea` a la carpeta de juegos y aparecerá en la pantalla de sesión de juego:

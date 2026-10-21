@@ -108,7 +108,7 @@ uv run tests
 Games distributed as `.ttea` cartridges run on TSDK, installed separately as a uv tool:
 
 ```bash
-uv tool install --python 3.14 git+https://github.com/laurogripa/tsdk
+uv tool install --python 3.14 git+https://github.com/larvattea/tsdk
 ```
 
 If the `tsdk` command is not found, run `uv tool update-shell` and restart T-TEA. Then copy the `.ttea` file into the games folder and it shows up on the game session screen:
