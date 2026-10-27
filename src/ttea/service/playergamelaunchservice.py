@@ -54,23 +54,28 @@ class PlayerGameLaunchService:
         )
 
     def get_games_metadata(self) -> List[GameMetadata]:
-        """Read the ``metadata.json`` of each installed game.
+        """Read the metadata of each installed game.
 
         Returns
         -------
         list[GameMetadata]
-            Metadata of the games, in folder name order.
+            Metadata of the folder games, in folder name order, followed
+            by the ``.ttea`` cartridges, in file name order.
 
         Notes
         -----
         Every subfolder of ``PathConfig.EXERGAME_DIR`` that has a
-        ``metadata.json`` is read. Games with invalid metadata
+        ``metadata.json`` is read, and so is the ``manifest.json`` of
+        every ``.ttea`` file there. Games with invalid metadata
         (``ValueError``) are skipped and the reason is logged as a
-        warning; other errors (e.g. ``OSError``) are not caught.
+        warning; other errors (e.g. ``OSError``) are not caught. A
+        cartridge whose ID is already used by a folder game or an
+        earlier cartridge is skipped with a warning.
         """
         from ttea.log import Log
 
         games = []
+        cartridges = []
         exergame_dir = PathConfig.EXERGAME_DIR
 
         for d in sorted(exergame_dir.iterdir()):
@@ -80,4 +85,23 @@ class PlayerGameLaunchService:
                     games.append(GameMetadata.load(meta_path))
                 except ValueError as e:
                     Log.get_log().log_warning(f"Jogo ignorado: {e}")
+            elif (
+                d.is_file()
+                and d.suffix.lower() == GameMetadata.CARTRIDGE_EXTENSION
+            ):
+                try:
+                    cartridges.append(GameMetadata.load_cartridge(d))
+                except ValueError as e:
+                    Log.get_log().log_warning(f"Jogo ignorado: {e}")
+
+        ids = {g.id for g in games}
+        for c in cartridges:
+            if c.id in ids:
+                Log.get_log().log_warning(
+                    f"Jogo ignorado: {c.entrypoint_path}: id '{c.id}' "
+                    f"já usado por outro jogo"
+                )
+            else:
+                ids.add(c.id)
+                games.append(c)
         return games

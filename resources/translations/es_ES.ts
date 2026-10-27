@@ -1743,6 +1743,13 @@ Verifique se o arquivo existe e se os metadados de configuração estão correto
 Compruebe que el archivo exista y que los metadatos de configuración sean correctos.</translation>
     </message>
     <message>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="266"/>
+        <source>O comando &apos;tsdk&apos;, necessário para jogos .ttea, não foi encontrado.
+Instale o TSDK e reinicie o T-TEA.</source>
+        <translation>No se encontró el comando &apos;tsdk&apos;, necesario para los juegos .ttea.
+Instale TSDK y reinicie T-TEA.</translation>
+    </message>
+    <message>
         <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="224"/>
         <source>O arquivo de calibração não foi encontrado.
 Por favor, execute a calibração antes de iniciar o jogo.</source>

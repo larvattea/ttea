@@ -8,10 +8,12 @@ PSUTIL_AVAILABLE : bool
 """
 
 import os
+import shutil
 import subprocess
 import sys
 from datetime import datetime
-from typing import TYPE_CHECKING, Optional
+from pathlib import Path
+from typing import TYPE_CHECKING, List, Optional
 
 # psutil is optional; the app still runs without it
 try:
@@ -24,10 +26,10 @@ except ImportError:
 
 from PySide6.QtCore import QObject, Qt, QTimer
 
-from ttea.model import AppModel, Calibration, CalibrationPoint
+from ttea.model import AppModel, Calibration, CalibrationPoint, GameMetadata
 from ttea.service import CalibrationService, PlayerGameLaunchService
 
-from ttea.util import MessageService
+from ttea.util import MessageService, PathConfig
 
 if TYPE_CHECKING:
     from ttea.view import PlayerGameLaunchView
@@ -236,6 +238,72 @@ class PlayerGameLaunchController(QObject):
 
         return True
 
+    @staticmethod
+    def build_game_command(
+        game_data: GameMetadata,
+        language: str,
+        player_id: str,
+        professional_id: str,
+    ) -> Optional[List[str]]:
+        """Build the command that starts a game.
+
+        Parameters
+        ----------
+        game_data : GameMetadata
+            The game to start.
+        language : str
+            Language code passed as ``--lang``.
+        player_id : str
+            Player ID passed as ``--player_id``.
+        professional_id : str
+            Professional ID passed as ``--professional_id``.
+
+        Returns
+        -------
+        list[str] | None
+            The command, or None if the game is a ``.ttea`` cartridge
+            and the ``tsdk`` command is not installed.
+
+        Notes
+        -----
+        ``.ttea`` cartridges run with ``tsdk play``, adding
+        ``--data-dir PathConfig.BASE_DIR`` so TSDK reads the platform
+        calibration. ``tsdk`` is looked up on ``PATH`` and in the uv
+        tool folder (``~/.local/bin``), since apps opened from Finder do
+        not inherit the shell ``PATH``. ``.py`` and ``.pyw`` entry points
+        run with the current Python interpreter; any other entry point
+        is run directly.
+        """
+        executable = game_data.entrypoint
+        script_path = str(game_data.entrypoint_path)
+        args = [
+            "--lang",
+            language,
+            "--player_id",
+            player_id,
+            "--professional_id",
+            professional_id,
+        ]
+
+        ext = os.path.splitext(executable.lower())[1] if executable else ""
+        if ext == GameMetadata.CARTRIDGE_EXTENSION:
+            tsdk = shutil.which("tsdk") or shutil.which(
+                "tsdk", path=str(Path.home() / ".local" / "bin")
+            )
+            if tsdk is None:
+                return None
+            return [
+                tsdk,
+                "play",
+                script_path,
+                *args,
+                "--data-dir",
+                str(PathConfig.BASE_DIR),
+            ]
+        if ext in (".py", ".pyw"):
+            return [sys.executable, script_path, *args]
+        return [script_path, *args]
+
     def launch_game(self):
         """Validate the selection and start the selected game.
 
@@ -247,8 +315,9 @@ class PlayerGameLaunchController(QObject):
         then ``_verify_hardware_configuration`` is checked.
 
         The game runs in its folder with the arguments ``--lang``,
-        ``--player_id`` and ``--professional_id``; ``.py`` and ``.pyw``
-        entry points run with the current Python interpreter. On Windows
+        ``--player_id`` and ``--professional_id``; the command comes
+        from ``build_game_command``, and a ``.ttea`` cartridge without
+        ``tsdk`` installed is not started. On Windows
         it starts in a new process group. The buttons stay disabled
         until the game is up (checked every 500 ms) or for at most 7 s.
         """
@@ -286,7 +355,6 @@ class PlayerGameLaunchController(QObject):
             return
 
         folder = str(game_data.folder_path)
-        executable = game_data.entrypoint
         script_path = str(game_data.entrypoint_path)
 
         if not os.path.exists(script_path):
@@ -298,6 +366,17 @@ class PlayerGameLaunchController(QObject):
             )
             return
 
+        cmd = self.build_game_command(
+            game_data, language_app, player_id, professional_id
+        )
+        if cmd is None:
+            self.msg.warning(
+                self.tr(
+                    "O comando 'tsdk', necessário para jogos .ttea, não foi encontrado.\n"
+                    "Instale o TSDK e reinicie o T-TEA."
+                )
+            )
+            return
         if not self._find_by_id_calibration_point(CalibrationPoint.ID_VALUE):
             self.msg.warning(
                 self.tr(
@@ -318,29 +397,6 @@ class PlayerGameLaunchController(QObject):
 
         if not self._verify_hardware_configuration():
             return
-
-        ext = os.path.splitext(executable.lower())[1] if executable else ""
-        if ext in (".py", ".pyw"):
-            cmd = [
-                sys.executable,
-                script_path,
-                "--lang",
-                language_app,
-                "--player_id",
-                player_id,
-                "--professional_id",
-                professional_id,
-            ]
-        else:
-            cmd = [
-                script_path,
-                "--lang",
-                language_app,
-                "--player_id",
-                player_id,
-                "--professional_id",
-                professional_id,
-            ]
 
         # UX: disable the buttons while the game starts
         self.view.pb_play.setEnabled(False)
