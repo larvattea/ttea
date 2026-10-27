@@ -1696,6 +1696,30 @@ Verifique se o arquivo existe e se os metadados de configuração estão correto
         <translation></translation>
     </message>
     <message>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="465"/>
+        <source>Os jogos .ttea precisam do TSDK, que é baixado da internet uma única vez (cerca de 150 MB; 500 MB no disco). Depois disso, os jogos funcionam sem internet.
+
+Deseja preparar o TSDK agora?</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="486"/>
+        <source>Preparando o TSDK para os jogos .ttea...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="487"/>
+        <source>Cancelar</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="552"/>
+        <source>Não foi possível preparar o TSDK. Verifique a conexão com a internet e tente novamente.
+
+{0}</source>
+        <translation></translation>
+    </message>
+    <message>
         <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="224"/>
         <source>O arquivo de calibração não foi encontrado.
 Por favor, execute a calibração antes de iniciar o jogo.</source>

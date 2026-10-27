@@ -38,6 +38,8 @@ PlayerService
     Business rules of players.
 ProfessionalService
     Business rules of professionals.
+TsdkService
+    TSDK, the runtime of ``.ttea`` games, run through uv.
 
 Notes
 -----
@@ -57,6 +59,7 @@ __all__ = [
     "MainService",
     "PlayerGameLaunchService",
     "PlayerService",
+    "TsdkService",
 ]
 
 __version__ = "1.0.0"
@@ -73,3 +76,4 @@ from .mainservice import MainService
 from .playergamelaunchservice import PlayerGameLaunchService
 from .playerservice import PlayerService
 from .professionalservice import ProfessionalService
+from .tsdkservice import TsdkService

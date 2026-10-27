@@ -71,6 +71,9 @@ class PathConfig:
         Directory for player files.
     PROFESSIONAL_DIR : Path, class attribute
         Directory for professional files.
+    RUNTIME_DIR : Path, class attribute
+        Directory where uv keeps the TSDK environment that runs
+        ``.ttea`` games (Python, packages and cache).
 
     Methods
     -------
@@ -184,6 +187,7 @@ class PathConfig:
     LOG_DIR: Path = BASE_DIR / "log"
     PLAYERS_DIR: Path = BASE_DIR / "players"
     PROFESSIONAL_DIR: Path = BASE_DIR / "professionals"
+    RUNTIME_DIR: Path = BASE_DIR / "runtime"
 
     # ==================================================================
     # Built-in Resources (Qt)

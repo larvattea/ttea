@@ -11,7 +11,7 @@ import os
 import subprocess
 import sys
 from datetime import datetime
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Callable, Dict, List, Optional
 
 # psutil is optional; the app still runs without it
 try:
@@ -22,11 +22,15 @@ except ImportError:
     psutil = None
     PSUTIL_AVAILABLE = False
 
-from PySide6.QtCore import QObject, Qt, QTimer
+from PySide6.QtCore import QObject, QProcess, QProcessEnvironment, Qt, QTimer
+from PySide6.QtWidgets import QProgressDialog
 
-from ttea.model import AppModel, Calibration, CalibrationPoint
-from ttea.service import CalibrationService, PlayerGameLaunchService
-
+from ttea.model import AppModel, Calibration, CalibrationPoint, GameMetadata
+from ttea.service import (
+    CalibrationService,
+    PlayerGameLaunchService,
+    TsdkService,
+)
 from ttea.util import MessageService
 
 if TYPE_CHECKING:
@@ -50,6 +54,9 @@ class PlayerGameLaunchController(QObject):
         Launch service. Default is None, which creates a new one.
     calibration_service : CalibrationService | None, optional
         Calibration service. Default is None, which creates a new one.
+    tsdk_service : TsdkService | None, optional
+        Runtime of ``.ttea`` games. Default is None, which creates a
+        new one.
 
     Attributes
     ----------
@@ -61,10 +68,14 @@ class PlayerGameLaunchController(QObject):
         Launch service.
     calibration_service : CalibrationService
         Calibration service.
+    tsdk : TsdkService
+        Runtime of ``.ttea`` games.
     current_process : subprocess.Popen | None
         Process of the running game, if any.
     monitor_timer : QTimer | None
         Timer that checks whether the game has started.
+    prepare_process : QProcess | None
+        Process preparing the TSDK environment, while it runs.
 
     Notes
     -----
@@ -77,14 +88,17 @@ class PlayerGameLaunchController(QObject):
         message_service: Optional[MessageService] = None,
         service: Optional[PlayerGameLaunchService] = None,
         calibration_service: Optional[CalibrationService] = None,
+        tsdk_service: Optional[TsdkService] = None,
     ):
         super().__init__()
         self.view = view
         self.msg = message_service or MessageService(view)
         self.service = service or PlayerGameLaunchService()
         self.calibration_service = calibration_service or CalibrationService()
+        self.tsdk = tsdk_service or TsdkService()
         self.current_process: Optional[subprocess.Popen] = None
         self.monitor_timer: Optional[QTimer] = None
+        self.prepare_process: Optional[QProcess] = None
 
     def handle_cancel(self) -> None:
         """Close the window, asking first if a game is running.
@@ -236,6 +250,52 @@ class PlayerGameLaunchController(QObject):
 
         return True
 
+    def build_game_command(
+        self,
+        game_data: GameMetadata,
+        language: str,
+        player_id: str,
+        professional_id: str,
+    ) -> List[str]:
+        """Build the command that starts a game.
+
+        Parameters
+        ----------
+        game_data : GameMetadata
+            The game to start.
+        language : str
+            Language code passed as ``--lang``.
+        player_id : str
+            Player ID passed as ``--player_id``.
+        professional_id : str
+            Professional ID passed as ``--professional_id``.
+
+        Returns
+        -------
+        list[str]
+            The command. ``.ttea`` cartridges run with
+            ``TsdkService.play_command``; ``.py`` and ``.pyw`` entry
+            points run with the current Python interpreter; any other
+            entry point is run directly.
+        """
+        executable = game_data.entrypoint
+        script_path = str(game_data.entrypoint_path)
+        args = [
+            "--lang",
+            language,
+            "--player_id",
+            player_id,
+            "--professional_id",
+            professional_id,
+        ]
+
+        if game_data.is_cartridge:
+            return self.tsdk.play_command(game_data.entrypoint_path, args)
+        ext = os.path.splitext(executable.lower())[1] if executable else ""
+        if ext in (".py", ".pyw"):
+            return [sys.executable, script_path, *args]
+        return [script_path, *args]
+
     def launch_game(self):
         """Validate the selection and start the selected game.
 
@@ -247,10 +307,13 @@ class PlayerGameLaunchController(QObject):
         then ``_verify_hardware_configuration`` is checked.
 
         The game runs in its folder with the arguments ``--lang``,
-        ``--player_id`` and ``--professional_id``; ``.py`` and ``.pyw``
-        entry points run with the current Python interpreter. On Windows
-        it starts in a new process group. The buttons stay disabled
-        until the game is up (checked every 500 ms) or for at most 7 s.
+        ``--player_id`` and ``--professional_id`` (see
+        ``build_game_command``). A ``.ttea`` cartridge first needs the
+        TSDK environment: if it is not ready, the user is asked to
+        prepare it (see ``_prepare_runtime``) and the game starts once
+        it is. On Windows the game starts in a new process group. The
+        buttons stay disabled until the game is up (checked every
+        500 ms) or for at most 7 s.
         """
         game_data = self.view.cbx_game.currentData()
         player_id = self.view.cbx_player.currentData()
@@ -286,7 +349,6 @@ class PlayerGameLaunchController(QObject):
             return
 
         folder = str(game_data.folder_path)
-        executable = game_data.entrypoint
         script_path = str(game_data.entrypoint_path)
 
         if not os.path.exists(script_path):
@@ -319,29 +381,44 @@ class PlayerGameLaunchController(QObject):
         if not self._verify_hardware_configuration():
             return
 
-        ext = os.path.splitext(executable.lower())[1] if executable else ""
-        if ext in (".py", ".pyw"):
-            cmd = [
-                sys.executable,
-                script_path,
-                "--lang",
-                language_app,
-                "--player_id",
-                player_id,
-                "--professional_id",
-                professional_id,
-            ]
+        cmd = self.build_game_command(
+            game_data, language_app, player_id, professional_id
+        )
+        if game_data.is_cartridge:
+            self._start_cartridge(cmd, folder)
         else:
-            cmd = [
-                script_path,
-                "--lang",
-                language_app,
-                "--player_id",
-                player_id,
-                "--professional_id",
-                professional_id,
-            ]
+            self._start_game(cmd, folder, None)
 
+    def _start_cartridge(self, cmd: List[str], folder: str) -> None:
+        """Start a ``.ttea`` cartridge, preparing TSDK first if needed.
+
+        Parameters
+        ----------
+        cmd : list[str]
+            Command that plays the cartridge.
+        folder : str
+            Working directory of the game.
+        """
+        env = self.tsdk.environment()
+        if self.tsdk.is_ready():
+            self._start_game(cmd, folder, env)
+        else:
+            self._prepare_runtime(lambda: self._start_game(cmd, folder, env))
+
+    def _start_game(
+        self, cmd: List[str], folder: str, env: Optional[Dict[str, str]]
+    ) -> None:
+        """Start the game process and watch until it is up.
+
+        Parameters
+        ----------
+        cmd : list[str]
+            Command that starts the game.
+        folder : str
+            Working directory of the game.
+        env : dict[str, str] | None
+            Process environment; None inherits the platform's.
+        """
         # UX: disable the buttons while the game starts
         self.view.pb_play.setEnabled(False)
         self.view.pb_cancel.setEnabled(False)
@@ -357,7 +434,7 @@ class PlayerGameLaunchController(QObject):
         )
 
         self.current_process = subprocess.Popen(
-            cmd, cwd=folder, creationflags=creationflags
+            cmd, cwd=folder, env=env, creationflags=creationflags
         )
 
         # Poll until the game window is really open
@@ -367,6 +444,116 @@ class PlayerGameLaunchController(QObject):
 
         # Fallback in case the launch fails
         QTimer.singleShot(7000, self._restore_buttons_after_timeout)
+
+    def _prepare_runtime(self, on_ready: Callable[[], None]) -> None:
+        """Ask to prepare the TSDK environment and prepare it.
+
+        Parameters
+        ----------
+        on_ready : Callable[[], None]
+            Called once the environment is ready.
+
+        Notes
+        -----
+        "No" is the default answer. ``TsdkService.prepare_command`` runs
+        in a ``QProcess`` behind a busy progress dialog whose Cancel
+        button kills it; the result is handled by
+        ``_runtime_prepared``.
+        """
+        if not self.msg.question(
+            self.tr(
+                "Os jogos .ttea precisam do TSDK, que é baixado da "
+                "internet uma única vez (cerca de 150 MB; 500 MB no disco). "
+                "Depois disso, os jogos funcionam sem internet.\n\n"
+                "Deseja preparar o TSDK agora?"
+            )
+        ):
+            return
+
+        cmd = self.tsdk.prepare_command()
+        env = QProcessEnvironment()
+        for key, value in self.tsdk.environment().items():
+            env.insert(key, value)
+
+        process = QProcess(self)
+        process.setProgram(cmd[0])
+        process.setArguments(cmd[1:])
+        process.setProcessEnvironment(env)
+        process.setProcessChannelMode(
+            QProcess.ProcessChannelMode.MergedChannels
+        )
+
+        dialog = QProgressDialog(
+            self.tr("Preparando o TSDK para os jogos .ttea..."),
+            self.tr("Cancelar"),
+            0,
+            0,
+            self.view,
+        )
+        dialog.setWindowModality(Qt.WindowModality.WindowModal)
+        dialog.setMinimumDuration(0)
+        dialog.canceled.connect(process.kill)
+
+        def finished(*_args) -> None:
+            self._runtime_prepared(process, dialog, on_ready)
+
+        def failed(error: QProcess.ProcessError) -> None:
+            # A process that cannot start never emits ``finished``
+            if error == QProcess.ProcessError.FailedToStart:
+                finished()
+
+        process.finished.connect(finished)
+        process.errorOccurred.connect(failed)
+
+        self.prepare_process = process
+        dialog.show()
+        process.start()
+
+    def _runtime_prepared(
+        self,
+        process: QProcess,
+        dialog: QProgressDialog,
+        on_ready: Callable[[], None],
+    ) -> None:
+        """Close the progress dialog and continue or report the error.
+
+        Parameters
+        ----------
+        process : QProcess
+            The finished preparation process.
+        dialog : QProgressDialog
+            Its progress dialog.
+        on_ready : Callable[[], None]
+            Called if the preparation succeeded.
+
+        Notes
+        -----
+        Nothing is reported when the user canceled. On failure, the
+        last lines of uv's output are shown.
+        """
+        canceled = dialog.wasCanceled()
+        dialog.reset()
+        dialog.deleteLater()
+        self.prepare_process = None
+
+        if (
+            process.error() != QProcess.ProcessError.FailedToStart
+            and process.exitStatus() == QProcess.ExitStatus.NormalExit
+            and process.exitCode() == 0
+        ):
+            on_ready()
+            return
+        if canceled:
+            return
+
+        output = bytes(process.readAll().data()).decode(errors="replace")
+        details = "\n".join(output.strip().splitlines()[-5:])
+        self.msg.critical(
+            self.tr(
+                "Não foi possível preparar o TSDK. "
+                "Verifique a conexão com a internet e tente novamente.\n\n{0}"
+            ).format(details or process.errorString())
+        )
 
     def _restore_buttons_after_timeout(self) -> None:
         """Re-enable the buttons if the game is still starting."""
@@ -466,8 +653,17 @@ class PlayerGameLaunchController(QObject):
         the game are terminated, and those still alive after 2 s are
         killed; without it, only the game process is terminated (and
         killed on error). The monitor timer is stopped and the buttons
-        are restored in every case.
+        are restored in every case. A TSDK preparation still running is
+        killed, and the game it was preparing does not start.
         """
+        if self.prepare_process is not None:
+            process = self.prepare_process
+            self.prepare_process = None
+            process.finished.disconnect()
+            process.errorOccurred.disconnect()
+            process.kill()
+            process.waitForFinished(2000)
+
         if not self.is_game_running():
             # Clean up even when no game is running
             if self.monitor_timer and self.monitor_timer.isActive():
