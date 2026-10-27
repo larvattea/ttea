@@ -463,7 +463,7 @@ class PlayerGameLaunchController(QObject):
         if not self.msg.question(
             self.tr(
                 "Os jogos .ttea precisam do TSDK, que é baixado da "
-                "internet uma única vez (cerca de 2 GB). "
+                "internet uma única vez (cerca de 150 MB; 500 MB no disco). "
                 "Depois disso, os jogos funcionam sem internet.\n\n"
                 "Deseja preparar o TSDK agora?"
             )

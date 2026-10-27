@@ -1744,10 +1744,10 @@ Compruebe que el archivo exista y que los metadatos de configuración sean corre
     </message>
     <message>
         <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="465"/>
-        <source>Os jogos .ttea precisam do TSDK, que é baixado da internet uma única vez (cerca de 2 GB). Depois disso, os jogos funcionam sem internet.
+        <source>Os jogos .ttea precisam do TSDK, que é baixado da internet uma única vez (cerca de 150 MB; 500 MB no disco). Depois disso, os jogos funcionam sem internet.
 
 Deseja preparar o TSDK agora?</source>
-        <translation>Los juegos .ttea necesitan TSDK, que se descarga de internet una sola vez (unos 2 GB). Después, los juegos funcionan sin internet.
+        <translation>Los juegos .ttea necesitan TSDK, que se descarga de internet una sola vez (unos 150 MB; 500 MB en disco). Después, los juegos funcionan sin internet.
 
 ¿Desea preparar TSDK ahora?</translation>
     </message>

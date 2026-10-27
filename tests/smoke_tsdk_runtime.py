@@ -1,6 +1,6 @@
 """End-to-end smoke of ``.ttea`` games on the real TSDK runtime.
 
-Not run by ``uv run tests``: it downloads TSDK (about 2 GB) on first
+Not run by ``uv run tests``: it downloads TSDK (about 150 MB) on first
 use. CI runs it on Windows; run it anywhere with::
 
     uv run python tests/smoke_tsdk_runtime.py [BASE_DIR]
@@ -42,7 +42,7 @@ FIXTURE = Path(__file__).with_name("fixtures") / "smoke-0.1.0.ttea"
 DEAD_PROXY = "http://127.0.0.1:9"
 
 SIMULATION = """
-import sys, tempfile
+import importlib.util, sys, tempfile
 from pathlib import Path
 import numpy as np
 import mediapipe as mp
@@ -63,6 +63,7 @@ with vision.PoseLandmarker.create_from_options(options) as detector:
     image = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame)
     result = detector.detect_for_video(image, 0)
 print("tracking: poses on a blank frame =", len(result.pose_landmarks))
+print("PySide6 installed:", importlib.util.find_spec("PySide6") is not None)
 
 with tempfile.TemporaryDirectory() as tmp:
     project = Path(tmp) / "game"
@@ -193,6 +194,22 @@ def simulate(tsdk, game):
     )
     print(result.stdout.strip()[-1500:], result.stderr.strip()[-1500:])
     check(result.returncode == 0, "tracking and simulated game run in TSDK")
+    check(
+        "PySide6 installed: False" in result.stdout,
+        "TSDK runtime without PySide6",
+    )
+
+
+def report_runtime_size():
+    """Print the size of the TSDK environment, hardlinks counted once."""
+    seen = set()
+    total = 0
+    for path in PathConfig.RUNTIME_DIR.rglob("*"):
+        stat = path.stat(follow_symlinks=False)
+        if path.is_file() and (stat.st_dev, stat.st_ino) not in seen:
+            seen.add((stat.st_dev, stat.st_ino))
+            total += stat.st_size
+    print(f"runtime size: {total / 2**20:.0f} MiB")
 
 
 def main(base):
@@ -220,6 +237,7 @@ def main(base):
     launch_from_controller(app, game)
     play_offline(tsdk, game)
     simulate(tsdk, game)
+    report_runtime_size()
     print("SMOKE PASSED")
 
 

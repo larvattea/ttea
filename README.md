@@ -126,7 +126,7 @@ Copie o arquivo `.ttea` para a pasta de jogos e ele aparecerá na tela de sessã
 
 Esses jogos são executados pelo [TSDK](https://github.com/larvattea/tsdk), que não precisa ser instalado: o T-TEA o executa com o `uv`, que já vem nas suas dependências. Como o TSDK usa Python 3.14 e versões do MediaPipe, NumPy, OpenCV e pygame incompatíveis com as do T-TEA, ele roda num ambiente separado, na pasta `runtime` dos dados do T-TEA (`data/runtime` com `uv run dev`). A versão do TSDK é fixada em `TsdkService.REQUIREMENT`.
 
-Na primeira vez que um jogo `.ttea` é iniciado, o T-TEA pede para preparar esse ambiente: o `uv` baixa o Python e os pacotes (cerca de 2 GB, uma única vez, com internet). Depois disso, os jogos `.ttea` iniciam sem internet.
+Na primeira vez que um jogo `.ttea` é iniciado, o T-TEA pede para preparar esse ambiente: o `uv` baixa o Python e os pacotes (cerca de 150 MB, que ocupam 500 MB no disco; uma única vez, com internet). Depois disso, os jogos `.ttea` iniciam sem internet.
 
 A versão empacotada precisa levar o executável do `uv` (`uv.exe` no Windows) na raiz do pacote (`sys._MEIPASS`). Com o PyInstaller: `--add-binary "$(python -c 'import uv; print(uv.find_uv_bin())')":.` (no Windows, `;.` em vez de `:.`).
 
