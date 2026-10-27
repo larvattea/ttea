@@ -33,7 +33,7 @@ class TsdkService:
     PYTHON = "3.14"
     REQUIREMENT = (
         "tsdk @ https://github.com/larvattea/tsdk/archive/"
-        "83e419f7485f5535b04316c87f3451430c6ee65a.zip"
+        "284db8e978531e537d976d92f2b2fec72fe70ed2.zip"
     )
 
     @staticmethod
