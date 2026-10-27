@@ -119,16 +119,16 @@ uv run tests
 
 ### Jogos `.ttea`
 
-Jogos distribuídos como cartucho `.ttea` são executados pelo TSDK, instalado à parte como ferramenta do uv:
-
-```bash
-uv tool install --python 3.14 git+https://github.com/larvattea/tsdk
-```
-
-Se o comando `tsdk` não for encontrado, rode `uv tool update-shell` e reinicie o T-TEA. Depois, copie o arquivo `.ttea` para a pasta de jogos e ele aparecerá na tela de sessão de jogo:
+Copie o arquivo `.ttea` para a pasta de jogos e ele aparecerá na tela de sessão de jogo:
 
 - Com `uv run dev`: `src/ttea/games`
 - Versão empacotada: `%LOCALAPPDATA%\udesc\ttea\exergames` (Windows), `~/Library/Application Support/ttea/exergames` (macOS) ou `~/.local/share/ttea/exergames` (Linux)
+
+Esses jogos são executados pelo [TSDK](https://github.com/larvattea/tsdk), que não precisa ser instalado: o T-TEA o executa com o `uv`, que já vem nas suas dependências. Como o TSDK usa Python 3.14 e versões do MediaPipe, NumPy, OpenCV e pygame incompatíveis com as do T-TEA, ele roda num ambiente separado, na pasta `runtime` dos dados do T-TEA (`data/runtime` com `uv run dev`). A versão do TSDK é fixada em `TsdkService.REQUIREMENT`.
+
+Na primeira vez que um jogo `.ttea` é iniciado, o T-TEA pede para preparar esse ambiente: o `uv` baixa o Python e os pacotes (cerca de 2 GB, uma única vez, com internet). Depois disso, os jogos `.ttea` iniciam sem internet.
+
+A versão empacotada precisa levar o executável do `uv` (`uv.exe` no Windows) na raiz do pacote (`sys._MEIPASS`). Com o PyInstaller: `--add-binary "$(python -c 'import uv; print(uv.find_uv_bin())')":.` (no Windows, `;.` em vez de `:.`).
 
 ### Executar sem uv (venv manual)
 

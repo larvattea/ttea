@@ -18,6 +18,7 @@ data/institutionfacilities/
 data/log/
 data/players/
 data/professionals/
+data/runtime/
 
 # Tests and analysis
 .pytest_cache/

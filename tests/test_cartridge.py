@@ -2,6 +2,7 @@ import json
 import os
 import sys
 import tempfile
+import time
 import unittest
 import zipfile
 from pathlib import Path
@@ -15,7 +16,7 @@ from ttea.controller.playergamelaunchcontroller import (
     PlayerGameLaunchController,
 )
 from ttea.model import GameMetadata
-from ttea.service import PlayerGameLaunchService
+from ttea.service import PlayerGameLaunchService, TsdkService
 from ttea.util import PathConfig
 
 CONTROLLER = "ttea.controller.playergamelaunchcontroller"
@@ -124,9 +125,12 @@ class CartridgeDiscoveryTest(unittest.TestCase):
             at = data.index(signature) + offset
             data[at : at + 2] = (99).to_bytes(2, "little")
         stored.write_bytes(bytes(data))
+        write_cartridge(
+            self.games_dir / "future.ttea", {**MANIFEST, "format_version": 2}
+        )
 
         self.assertEqual(set(self.games()), {"br.udesc.test.folder"})
-        self.assertEqual(self.log.log_warning.call_count, 4)
+        self.assertEqual(self.log.log_warning.call_count, 5)
 
     def test_folder_game_wins_over_cartridge_with_same_id(self):
         write_cartridge(
@@ -162,85 +166,114 @@ class CartridgeLaunchTest(unittest.TestCase):
         calibration.get_camera_info.return_value = None
         calibration.get_screen_info.return_value = None
         self.msg = MagicMock()
-        self.calibration = calibration
+        self.tsdk = TsdkService()
         self.controller = PlayerGameLaunchController(
             view,
             message_service=self.msg,
             service=MagicMock(),
             calibration_service=calibration,
+            tsdk_service=self.tsdk,
         )
         self.addCleanup(self.controller.cleanup)
 
+        patcher = patch.object(
+            TsdkService, "uv_executable", return_value="/bin/uv"
+        )
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        patcher = patch(f"{CONTROLLER}.QProgressDialog")
+        dialog = patcher.start().return_value
+        dialog.wasCanceled.return_value = False
+        self.addCleanup(patcher.stop)
         patcher = patch(f"{CONTROLLER}.AppModel")
         patcher.start().get_instance.return_value.current_language = "es_ES"
         self.addCleanup(patcher.stop)
+        patcher = patch(f"{CONTROLLER}.subprocess.Popen")
+        self.popen = patcher.start()
+        self.popen.return_value.poll.return_value = 0
+        self.addCleanup(patcher.stop)
 
-    def expected_command(self, tsdk):
-        return [
-            tsdk,
-            "play",
-            str(self.cartridge_path),
-            "--lang",
-            "es_ES",
-            "--player_id",
-            "7",
-            "--professional_id",
-            "3",
-            "--data-dir",
-            str(PathConfig.BASE_DIR),
-        ]
-
-    def test_cartridge_launches_through_tsdk(self):
-        tsdk = "/opt/bin/tsdk"
-        with patch("shutil.which", return_value=tsdk) as which:
-            self.assertEqual(
-                PlayerGameLaunchController.build_game_command(
-                    self.game, "es_ES", "7", "3"
-                ),
-                self.expected_command(tsdk),
-            )
-            which.assert_called_once_with("tsdk")
-
-            with patch(f"{CONTROLLER}.subprocess.Popen") as popen:
-                popen.return_value.poll.return_value = 0
-                self.controller.launch_game()
-
-        popen.assert_called_once()
-        args, kwargs = popen.call_args
-        self.assertEqual(args[0], self.expected_command(tsdk))
-        self.assertEqual(kwargs["cwd"], str(self.cartridge_path.parent))
-        self.msg.warning.assert_not_called()
-
-    def test_missing_tsdk_does_not_launch(self):
+    def launch(self, ready, prepare=None, answer=True):
+        """Launch the cartridge and wait for any runtime preparation."""
+        self.msg.question.return_value = answer
         with (
-            patch("shutil.which", return_value=None),
-            patch(f"{CONTROLLER}.subprocess.Popen") as popen,
+            patch.object(self.tsdk, "is_ready", return_value=ready),
+            patch.object(self.tsdk, "prepare_command", return_value=prepare),
         ):
-            self.assertIsNone(
-                PlayerGameLaunchController.build_game_command(
-                    self.game, "es_ES", "7", "3"
-                )
-            )
             self.controller.launch_game()
+            deadline = time.monotonic() + 30
+            while (
+                self.controller.prepare_process is not None
+                and time.monotonic() < deadline
+            ):
+                self.qt_app.processEvents()
+                time.sleep(0.01)
 
-        popen.assert_not_called()
-        self.msg.warning.assert_called_once()
-        self.calibration.find_by_id_calibration_point.assert_not_called()
+    def assert_played(self):
+        self.popen.assert_called_once()
+        args, kwargs = self.popen.call_args
+        self.assertEqual(
+            args[0],
+            [
+                "/bin/uv",
+                "tool",
+                "run",
+                "--offline",
+                "--python",
+                TsdkService.PYTHON,
+                "--from",
+                TsdkService.REQUIREMENT,
+                "tsdk",
+                "play",
+                str(self.cartridge_path),
+                "--lang",
+                "es_ES",
+                "--player_id",
+                "7",
+                "--professional_id",
+                "3",
+                "--data-dir",
+                str(PathConfig.BASE_DIR),
+            ],
+        )
+        self.assertEqual(kwargs["cwd"], str(self.cartridge_path.parent))
+        runtime = PathConfig.RUNTIME_DIR
+        env = kwargs["env"]
+        self.assertEqual(env["UV_CACHE_DIR"], str(runtime / "cache"))
+        self.assertEqual(env["UV_PYTHON_INSTALL_DIR"], str(runtime / "python"))
+        self.assertEqual(env["UV_PYTHON_PREFERENCE"], "only-managed")
 
-    def test_tsdk_found_in_uv_tool_dir_off_path(self):
-        uv_bin = str(Path.home() / ".local" / "bin")
-        tsdk = os.path.join(uv_bin, "tsdk")
+    def test_prepared_runtime_plays_cartridge_offline(self):
+        self.launch(ready=True)
 
-        def which(name, path=None):
-            return tsdk if path == uv_bin else None
+        self.assert_played()
+        self.msg.question.assert_not_called()
 
-        with patch("shutil.which", side_effect=which):
-            self.assertEqual(
-                PlayerGameLaunchController.build_game_command(
-                    self.game, "es_ES", "7", "3"
-                ),
-                self.expected_command(tsdk),
-            )
+    def test_declined_preparation_does_not_launch(self):
+        self.launch(ready=False, answer=False)
+
+        self.msg.question.assert_called_once()
+        self.popen.assert_not_called()
+
+    def test_successful_preparation_then_plays(self):
+        self.launch(ready=False, prepare=[sys.executable, "-c", "pass"])
+
+        self.assert_played()
+        self.msg.critical.assert_not_called()
+
+    def test_failed_preparation_shows_uv_output(self):
+        script = "print('no network'); raise SystemExit(2)"
+        self.launch(ready=False, prepare=[sys.executable, "-c", script])
+
+        self.popen.assert_not_called()
+        self.msg.critical.assert_called_once()
+        self.assertIn("no network", self.msg.critical.call_args[0][0])
+
+    def test_missing_uv_is_reported(self):
+        self.launch(ready=False, prepare=["/nonexistent/uv", "--version"])
+
+        self.popen.assert_not_called()
+        self.msg.critical.assert_called_once()
 
     def test_python_games_keep_their_command(self):
         game = GameMetadata(
@@ -258,9 +291,7 @@ class CartridgeLaunchTest(unittest.TestCase):
             default_language="en_US",
         )
         self.assertEqual(
-            PlayerGameLaunchController.build_game_command(
-                game, "pt_BR", "1", "2"
-            ),
+            self.controller.build_game_command(game, "pt_BR", "1", "2"),
             [
                 sys.executable,
                 str(Path("/games/py/main.py")),

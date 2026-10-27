@@ -1741,11 +1741,32 @@ Verifique se o arquivo existe e se os metadados de configuração estão correto
 Verify that the file exists and the configuration metadata is correct.</translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="266"/>
-        <source>O comando &apos;tsdk&apos;, necessário para jogos .ttea, não foi encontrado.
-Instale o TSDK e reinicie o T-TEA.</source>
-        <translation>The &apos;tsdk&apos; command, required for .ttea games, was not found.
-Install TSDK and restart T-TEA.</translation>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="465"/>
+        <source>Os jogos .ttea precisam do TSDK, que é baixado da internet uma única vez (cerca de 2 GB). Depois disso, os jogos funcionam sem internet.
+
+Deseja preparar o TSDK agora?</source>
+        <translation>.ttea games need TSDK, which is downloaded from the internet only once (about 2 GB). After that, the games work without internet.
+
+Do you want to prepare TSDK now?</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="486"/>
+        <source>Preparando o TSDK para os jogos .ttea...</source>
+        <translation>Preparing TSDK for .ttea games...</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="487"/>
+        <source>Cancelar</source>
+        <translation>Cancel</translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="552"/>
+        <source>Não foi possível preparar o TSDK. Verifique a conexão com a internet e tente novamente.
+
+{0}</source>
+        <translation>TSDK could not be prepared. Check the internet connection and try again.
+
+{0}</translation>
     </message>
     <message>
         <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="224"/>

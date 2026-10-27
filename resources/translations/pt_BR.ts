@@ -1696,9 +1696,27 @@ Verifique se o arquivo existe e se os metadados de configuração estão correto
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="266"/>
-        <source>O comando &apos;tsdk&apos;, necessário para jogos .ttea, não foi encontrado.
-Instale o TSDK e reinicie o T-TEA.</source>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="465"/>
+        <source>Os jogos .ttea precisam do TSDK, que é baixado da internet uma única vez (cerca de 2 GB). Depois disso, os jogos funcionam sem internet.
+
+Deseja preparar o TSDK agora?</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="486"/>
+        <source>Preparando o TSDK para os jogos .ttea...</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="487"/>
+        <source>Cancelar</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../src/ttea/controller/playergamelaunchcontroller.py" line="552"/>
+        <source>Não foi possível preparar o TSDK. Verifique a conexão com a internet e tente novamente.
+
+{0}</source>
         <translation></translation>
     </message>
     <message>

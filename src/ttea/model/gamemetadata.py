@@ -58,12 +58,15 @@ class GameMetadata:
         Extension of TSDK game cartridges (``".ttea"``).
     CARTRIDGE_MANIFEST : str, class attribute
         Manifest file name inside a cartridge (``"manifest.json"``).
+    CARTRIDGE_FORMAT_VERSION : int, class attribute
+        Supported cartridge ``format_version`` (``1``).
     """
 
     SUPPORTED_SCHEMA_MAJOR: ClassVar[str] = "1"
     FILENAME: ClassVar[str] = "metadata.json"
     CARTRIDGE_EXTENSION: ClassVar[str] = ".ttea"
     CARTRIDGE_MANIFEST: ClassVar[str] = "manifest.json"
+    CARTRIDGE_FORMAT_VERSION: ClassVar[int] = 1
 
     id: str
     version: str
@@ -196,13 +199,14 @@ class GameMetadata:
         ------
         ValueError
             If the file is not a readable ZIP with a ``manifest.json``
-            object, ``id`` or ``version`` is missing, or ``name`` (or
-            ``description``, when present) is neither a text nor a map
-            of language to text.
+            object, its ``format_version`` is not
+            ``CARTRIDGE_FORMAT_VERSION``, ``id`` or ``version`` is
+            missing, or ``name`` (or ``description``, when present) is
+            neither a text nor a map of language to text.
 
         Notes
         -----
-        The cartridge runs with the external ``tsdk`` command; only the
+        The cartridge runs with TSDK (see ``TsdkService``); only the
         data shown on the game launch screen is read here. A cartridge
         has no view factory, menu actions or icon.
         """
@@ -223,6 +227,12 @@ class GameMetadata:
             raise ValueError(f"{path}: cartucho inválido: {e}") from e
         if not isinstance(data, dict):
             raise ValueError(f"{path}: manifest.json deve ser um objeto")
+        if data.get("format_version") != cls.CARTRIDGE_FORMAT_VERSION:
+            raise ValueError(
+                f"{path}: format_version "
+                f"'{data.get('format_version')}' não suportado "
+                f"(esperado {cls.CARTRIDGE_FORMAT_VERSION})"
+            )
 
         for key in ("id", "version"):
             if not isinstance(data.get(key), str) or not data[key]:
@@ -374,6 +384,11 @@ class GameMetadata:
     def entrypoint_path(self) -> Path:
         """Absolute path of the file that starts the game."""
         return self.folder_path / self.entrypoint
+
+    @property
+    def is_cartridge(self) -> bool:
+        """Whether the game is a ``.ttea`` cartridge run by TSDK."""
+        return self.entrypoint.lower().endswith(self.CARTRIDGE_EXTENSION)
 
     @property
     def release_year(self) -> str:
