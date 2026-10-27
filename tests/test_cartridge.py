@@ -275,6 +275,26 @@ class CartridgeLaunchTest(unittest.TestCase):
         self.popen.assert_not_called()
         self.msg.critical.assert_called_once()
 
+    def test_closing_during_preparation_stops_it_without_playing(self):
+        self.msg.question.return_value = True
+        slow = [sys.executable, "-c", "import time; time.sleep(30)"]
+        with (
+            patch.object(self.tsdk, "is_ready", return_value=False),
+            patch.object(self.tsdk, "prepare_command", return_value=slow),
+        ):
+            self.controller.launch_game()
+            process = self.controller.prepare_process
+            self.assertTrue(process.waitForStarted(5000))
+            self.controller.cleanup()
+            for _ in range(20):
+                self.qt_app.processEvents()
+                time.sleep(0.01)
+
+        self.assertIsNone(self.controller.prepare_process)
+        self.assertEqual(process.state(), process.ProcessState.NotRunning)
+        self.popen.assert_not_called()
+        self.msg.critical.assert_not_called()
+
     def test_python_games_keep_their_command(self):
         game = GameMetadata(
             id="py",

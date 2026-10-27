@@ -653,8 +653,17 @@ class PlayerGameLaunchController(QObject):
         the game are terminated, and those still alive after 2 s are
         killed; without it, only the game process is terminated (and
         killed on error). The monitor timer is stopped and the buttons
-        are restored in every case.
+        are restored in every case. A TSDK preparation still running is
+        killed, and the game it was preparing does not start.
         """
+        if self.prepare_process is not None:
+            process = self.prepare_process
+            self.prepare_process = None
+            process.finished.disconnect()
+            process.errorOccurred.disconnect()
+            process.kill()
+            process.waitForFinished(2000)
+
         if not self.is_game_running():
             # Clean up even when no game is running
             if self.monitor_timer and self.monitor_timer.isActive():
